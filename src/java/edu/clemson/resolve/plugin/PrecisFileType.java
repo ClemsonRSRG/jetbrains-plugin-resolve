@@ -8,7 +8,11 @@ import javax.swing.*;
 
 public class PrecisFileType extends LanguageFileType {
 
-    public static final SimpleFileType INSTANCE = new SimpleFileType();
+    public static final PrecisFileType INSTANCE = new PrecisFileType();
+
+    private PrecisFileType() {
+        super(RESOLVELanguage.INSTANCE);
+    }
 
     @NotNull
     @Override
