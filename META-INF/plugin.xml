@@ -1,8 +1,8 @@
 <idea-plugin version="2">
-  <id>com.yourcompany.unique.plugin.id</id>
-  <name>Plugin display name here</name>
+  <id>edu.clemson.resolve.plugin</id>
+  <name>RESOLVE langauge plugin</name>
   <version>1.0</version>
-  <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+  <vendor email="dtw.welch@gmail.com" url="https://github.com/Welchd1/resolve-intellij-plugin-v4">RESOLVE Project</vendor>
 
   <description><![CDATA[
       Enter short description for your plugin here.<br>
@@ -25,7 +25,9 @@
   -->
 
   <extensions defaultExtensionNs="com.intellij">
-    <!-- Add your extensions here -->
+      <fileTypeFactory implementation="edu.clemson.resolve.plugin.RESOLVEFileTypeFactory"/>
+
+      <!-- Add your extensions here -->
   </extensions>
 
   <application-components>

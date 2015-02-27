@@ -1,4 +1,4 @@
-package java.edu.clemson.resolve.plugin;
+package edu.clemson.resolve.plugin;
 
 import com.intellij.openapi.fileTypes.FileTypeConsumer;
 import com.intellij.openapi.fileTypes.FileTypeFactory;
