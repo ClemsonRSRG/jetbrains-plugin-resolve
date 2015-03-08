@@ -5,8 +5,11 @@
   <vendor email="dtw.welch@gmail.com" url="https://github.com/Welchd1/resolve-intellij-plugin-v4">RESOLVE Project</vendor>
 
   <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
+      <p>
+      This plugin is designed to provide Intellij support for the RESOLVE
+      specification and programming language. Currently supported features
+      inclue: syntax highlighting, goto-declaration, and usage search for
+      operations, variables, modules, and facilities.
     ]]></description>
 
   <change-notes><![CDATA[
