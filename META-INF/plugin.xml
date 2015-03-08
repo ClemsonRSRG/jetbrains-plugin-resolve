@@ -25,7 +25,7 @@
   -->
 
   <extensions defaultExtensionNs="com.intellij">
-      <fileTypeFactory implementation="edu.clemson.resolve.plugin.RESOLVEFileTypeFactory"/>
+      <fileTypeFactory implementation="java.edu.clemson.resolve.plugin.RESOLVEFileTypeFactory"/>
 
       <!-- Add your extensions here -->
   </extensions>
