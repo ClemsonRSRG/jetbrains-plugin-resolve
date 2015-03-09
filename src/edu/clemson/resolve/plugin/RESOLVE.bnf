@@ -13,8 +13,8 @@
   tokenTypeClass="edu.clemson.resolve.plugin.psi.RESOLVETokenType"
 }
 
-simpleFile ::= item_*
+module ::= precisModule
 
-private item_ ::= (property|COMMENT|CRLF)
+precisModule ::= 'Precis' KEY ';'
+                 'end' KEY ';'
 
-property ::= (KEY? SEPARATOR VALUE?) | KEY

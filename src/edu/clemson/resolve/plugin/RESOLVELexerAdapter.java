@@ -6,6 +6,6 @@ import java.io.Reader;
 
 public class RESOLVELexerAdapter extends FlexAdapter {
     public RESOLVELexerAdapter() {
-        super(new RESOLVELexer((Reader) null));
+        super(new _RESOLVELexer((Reader) null));
     }
 }
