@@ -8,9 +8,9 @@
   psiPackage="edu.clemson.resolve.plugin.psi"
   psiImplPackage="edu.clemson.resolve.plugin.psi.impl"
 
-  elementTypeHolderClass="edu.clemson.resolve.plugin.psi.SimpleTypes"
-  elementTypeClass="edu.clemson.resolve.plugin.psi.SimpleElementType"
-  tokenTypeClass="edu.clemson.resolve.plugin.psi.SimpleTokenType"
+  elementTypeHolderClass="edu.clemson.resolve.plugin.psi.RESOLVETypes"
+  elementTypeClass="edu.clemson.resolve.plugin.psi.RESOLVEElementType"
+  tokenTypeClass="edu.clemson.resolve.plugin.psi.RESOLVETokenType"
 }
 
 simpleFile ::= item_*

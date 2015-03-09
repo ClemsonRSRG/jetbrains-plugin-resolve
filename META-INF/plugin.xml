@@ -29,6 +29,7 @@
 
   <extensions defaultExtensionNs="com.intellij">
       <fileTypeFactory implementation="edu.clemson.resolve.plugin.RESOLVEFileTypeFactory"/>
+      <lang.parserDefinition language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.RESOLVEParserDefinition"/>
 
       <!-- Add your extensions here -->
   </extensions>
