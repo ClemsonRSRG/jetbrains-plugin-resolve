@@ -31,7 +31,7 @@ public class RESOLVEParserDefinition implements ParserDefinition {
     @NotNull
     @Override
     public Lexer createLexer(Project project) {
-        return new FlexAdapter(new RESOLVELexer((Reader) null));
+        return new FlexAdapter(new _RESOLVELexer((Reader) null));
     }
 
     @NotNull
@@ -41,7 +41,7 @@ public class RESOLVEParserDefinition implements ParserDefinition {
 
     @NotNull
     public TokenSet getCommentTokens() {
-        return null;
+        return COMMENTS;
     }
 
     @NotNull
