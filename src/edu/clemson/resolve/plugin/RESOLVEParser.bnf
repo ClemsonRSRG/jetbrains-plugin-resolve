@@ -1,0 +1,20 @@
+{
+  parserClass="edu.clemson.resolve.plugin.parser.RESOLVEParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="RESOLVE"
+  psiImplClassSuffix="Impl"
+  psiPackage="edu.clemson.resolve.plugin.psi"
+  psiImplPackage="edu.clemson.resolve.plugin.psi.impl"
+
+  elementTypeHolderClass="edu.clemson.resolve.plugin.psi.SimpleTypes"
+  elementTypeClass="edu.clemson.resolve.plugin.psi.SimpleElementType"
+  tokenTypeClass="edu.clemson.resolve.plugin.psi.SimpleTokenType"
+}
+
+simpleFile ::= item_*
+
+private item_ ::= (property|COMMENT|CRLF)
+
+property ::= (KEY? SEPARATOR VALUE?) | KEY

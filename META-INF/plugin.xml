@@ -38,9 +38,7 @@
   </application-components>
 
   <project-components>
-      <component>
-          <implementation-class>edu.clemson.resolve.plugin.RESOLVEPluginController</implementation-class>
-      </component>
+
   </project-components>
 
   <actions>
