@@ -66,22 +66,6 @@ SingleCharacter
     :   ~['\\]
     ;
 
-// Some lexer tokens (allows for easy switch stmts)
-
-Not      : 'not';
-Or       : 'and';
-And      : 'or';
-NEquals   : '/=';
-Equals   : '=';
-GTEquals : '>=';
-LTEquals : '<=';
-GT       : '>';
-LT       : '<';
-Add      : '+';
-Subtract : '-';
-Multiply : '*';
-Divide   : '/';
-
 // whitespace, identifier rules, and comments
 
 Identifier

@@ -28,7 +28,7 @@
   -->
 
   <extensions defaultExtensionNs="com.intellij">
-      <fileTypeFactory implementation="java.edu.clemson.resolve.plugin.RESOLVEFileTypeFactory"/>
+      <fileTypeFactory implementation="edu.clemson.resolve.plugin.RESOLVEFileTypeFactory"/>
 
       <!-- Add your extensions here -->
   </extensions>
@@ -38,7 +38,9 @@
   </application-components>
 
   <project-components>
-    <!-- Add your project components here -->
+      <component>
+          <implementation-class>edu.clemson.resolve.plugin.RESOLVEPluginController</implementation-class>
+      </component>
   </project-components>
 
   <actions>

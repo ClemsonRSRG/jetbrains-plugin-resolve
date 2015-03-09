@@ -2,5 +2,18 @@
 <project version="4">
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
     <file url="file://$PROJECT_DIR$/lib" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/adaptor/org/antlr/intellij/adaptor/lexer/AntlrLexerAdapter.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/adaptor/org/antlr/intellij/adaptor/lexer/AntlrLexerState.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/adaptor/org/antlr/intellij/adaptor/lexer/CharSequenceCharStream.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/adaptor/org/antlr/intellij/adaptor/lexer/ElementTypeFactory.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/adaptor/org/antlr/intellij/adaptor/lexer/PsiTokenSource.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/adaptor/org/antlr/intellij/adaptor/lexer/RuleElementType.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/adaptor/org/antlr/intellij/adaptor/lexer/SimpleAntlrAdapter.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/adaptor/org/antlr/intellij/adaptor/lexer/TokenElementType.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/adaptor/org/antlr/intellij/adaptor/parser/AntlrParser.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/adaptor/org/antlr/intellij/adaptor/parser/AstBuilderListener.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/adaptor/org/antlr/intellij/adaptor/parser/PsiElementFactory.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/adaptor/org/antlr/intellij/adaptor/parser/SyntaxError.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/adaptor/org/antlr/intellij/adaptor/parser/SyntaxErrorListener.java" charset="UTF-8" />
   </component>
 </project>

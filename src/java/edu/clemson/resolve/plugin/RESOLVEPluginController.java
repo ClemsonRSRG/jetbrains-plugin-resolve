@@ -7,8 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class RESOLVEPluginController implements ProjectComponent {
 
-    public static final Logger LOG =
-            Logger.getInstance("RESOLVE RESOLVEPluginController");
+    public static final Logger LOG = Logger.getInstance("RESOLVE RESOLVEPluginController");
     public Project project;
 
     public RESOLVEPluginController(Project project) {
