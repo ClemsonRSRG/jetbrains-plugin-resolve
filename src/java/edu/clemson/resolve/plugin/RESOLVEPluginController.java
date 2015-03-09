@@ -21,22 +21,18 @@ public class RESOLVEPluginController implements ProjectComponent {
 
     @Override
     public void projectOpened() {
-
     }
 
     @Override
     public void projectClosed() {
-
     }
 
     @Override
     public void initComponent() {
-
     }
 
     @Override
     public void disposeComponent() {
-
     }
 
     @NotNull
