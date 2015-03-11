@@ -37,6 +37,6 @@ public class RESOLVEPluginController implements ProjectComponent {
     @NotNull
     @Override
     public String getComponentName() {
-        return "resolve.ProjectComponent";
+        return "edu.ProjectComponent";
     }
 }

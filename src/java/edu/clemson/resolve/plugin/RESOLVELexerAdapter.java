@@ -1,6 +1,7 @@
 package edu.clemson.resolve.plugin;
 
 import com.intellij.lexer.FlexAdapter;
+import grammars.edu.plugin._RESOLVELexer;
 
 import java.io.Reader;
 

@@ -4,12 +4,12 @@ import com.intellij.lexer.FlexAdapter;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.editor.HighlighterColors;
-import com.intellij.openapi.editor.SyntaxHighlighterColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
-import edu.clemson.resolve.plugin.psi.RESOLVETypes;
+import grammars.edu.plugin._RESOLVELexer;
+import grammars.edu.plugin.psi.RESOLVETypes;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Reader;
@@ -42,7 +42,7 @@ public class RESOLVESyntaxHighlighter extends SyntaxHighlighterBase {
     @NotNull
     @Override
     public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
-        if (RESOLVETokenKeywords.KEYWORDS.contains(tokenType)) {
+        if (RESOLVETokenTypes.KEYWORDS.contains(tokenType)) {
             return new TextAttributesKey[]{KEYWORD};
         } else if (tokenType.equals(RESOLVETypes.COMMENT)) {
             return COMMENT_KEYS;

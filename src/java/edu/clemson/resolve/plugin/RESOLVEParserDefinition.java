@@ -13,9 +13,10 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
-import edu.clemson.resolve.plugin.parser.RESOLVEParser;
-import edu.clemson.resolve.plugin.psi.RESOLVEPrecisFile;
-import edu.clemson.resolve.plugin.psi.RESOLVETypes;
+import grammars.edu.plugin._RESOLVELexer;
+import grammars.edu.plugin.parser.RESOLVEParser;
+import java.edu.clemson.resolve.plugin.psi.RESOLVEPrecisFile;
+import grammars.edu.plugin.psi.RESOLVETypes;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Reader;
