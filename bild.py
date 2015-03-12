@@ -33,7 +33,7 @@ def latest_antlr4_sources():
 def parsers():
     require(latest_antlr4)
     antlr4("src/grammars", "gen", version="4.5",
-           package="org.antlr.intellij.plugin.parser")
+           package="edu.clemson.resolve.plugin.parser")
 
 
 def clean():
