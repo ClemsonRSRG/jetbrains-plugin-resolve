@@ -24,15 +24,15 @@ import java.io.Reader;
 public class RESOLVEParserDefinition implements ParserDefinition {
     public static final TokenSet WHITE_SPACES =
             TokenSet.create(TokenType.WHITE_SPACE);
-    public static final TokenSet COMMENTS =
-        TokenSet.create(RESOLVETypes.COMMENT);
+    //public static final TokenSet COMMENTS =
+    //    TokenSet.create(RESOLVETypes.COMMENT);
     public static final IFileElementType FILE =
             new IFileElementType(Language.
                     <RESOLVELanguage>findInstance(RESOLVELanguage.class));
     @NotNull
     @Override
     public Lexer createLexer(Project project) {
-        return new FlexAdapter(new _RESOLVELexer((Reader) null));
+        //return new FlexAdapter(new _RESOLVELexer((Reader) null));
     }
 
     @NotNull
@@ -42,7 +42,7 @@ public class RESOLVEParserDefinition implements ParserDefinition {
 
     @NotNull
     public TokenSet getCommentTokens() {
-        return COMMENTS;
+        return null;//COMMENTS;
     }
 
     @NotNull
@@ -52,7 +52,7 @@ public class RESOLVEParserDefinition implements ParserDefinition {
 
     @NotNull
     public PsiParser createParser(final Project project) {
-        return new RESOLVEParser();
+        return null;//new RESOLVEParser();
     }
 
     @Override
@@ -61,7 +61,7 @@ public class RESOLVEParserDefinition implements ParserDefinition {
     }
 
     public PsiFile createFile(FileViewProvider viewProvider) {
-        return new RESOLVEPrecisFile(viewProvider);
+        return null;//new RESOLVEPrecisFile(viewProvider);
     }
 
     public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) {
@@ -75,6 +75,6 @@ public class RESOLVEParserDefinition implements ParserDefinition {
      */
     @NotNull
     public PsiElement createElement(ASTNode node) {
-        return RESOLVETypes.Factory.createElement(node);
+        return null; //RESOLVETypes.Factory.createElement(node);
     }
 }

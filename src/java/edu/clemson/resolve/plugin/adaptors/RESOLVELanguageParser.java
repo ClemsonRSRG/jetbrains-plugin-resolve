@@ -26,7 +26,8 @@ public class RESOLVELanguageParser extends AntlrParser<ResolveParser> {
     }
 
     @Override
-    protected ParseTree parseImpl(ResolveParser parser, IElementType root, PsiBuilder builder) {
+    protected ParseTree parseImpl(ResolveParser parser,
+                                  IElementType root, PsiBuilder builder) {
         return null;
     }
 }
