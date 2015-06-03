@@ -30,7 +30,7 @@
   <extensions defaultExtensionNs="com.intellij">
       <fileTypeFactory implementation="java.edu.clemson.resolve.plugin.RESOLVEFileTypeFactory"/>
       <lang.parserDefinition language="RESOLVE" implementationClass="java.edu.clemson.resolve.plugin.RESOLVEParserDefinition"/>
-      <lang.syntaxHighlighterFactory key="RESOLVE" implementationClass="java.edu.clemson.resolve.plugin.RESOLVESyntaxHighlighterFactory"/>
+    <!--  <lang.syntaxHighlighterFactory key="RESOLVE" implementationClass="java.edu.clemson.resolve.plugin.RESOLVESyntaxHighlighterFactory"/> -->
       <colorSettingsPage implementation="grammars.edu.plugin.configdialogs.RESOLVEColorsPage"/>
       <!-- Add your extensions here -->
   </extensions>

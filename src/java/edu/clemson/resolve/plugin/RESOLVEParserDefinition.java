@@ -13,55 +13,47 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
-import grammars.edu.plugin._RESOLVELexer;
-import grammars.edu.plugin.parser.RESOLVEParser;
-import java.edu.clemson.resolve.plugin.psi.RESOLVEPrecisFile;
-import grammars.edu.plugin.psi.RESOLVETypes;
+import edu.clemson.resolve.plugin.adaptors.RESOLVEFileRoot;
+import edu.clemson.resolve.plugin.adaptors.RESOLVELanguageParser;
+import edu.clemson.resolve.plugin.adaptors.RESOLVELexerAdaptor;
+import edu.clemson.resolve.plugin.parser.ResolveLexer;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Reader;
 
 public class RESOLVEParserDefinition implements ParserDefinition {
-    public static final TokenSet WHITE_SPACES =
-            TokenSet.create(TokenType.WHITE_SPACE);
-    //public static final TokenSet COMMENTS =
-    //    TokenSet.create(RESOLVETypes.COMMENT);
+
     public static final IFileElementType FILE =
             new IFileElementType(Language.
                     <RESOLVELanguage>findInstance(RESOLVELanguage.class));
-    @NotNull
-    @Override
-    public Lexer createLexer(Project project) {
-        //return new FlexAdapter(new _RESOLVELexer((Reader) null));
+
+    @NotNull @Override public Lexer createLexer(Project project) {
+        ResolveLexer lexer = new ResolveLexer(null);
+        return new RESOLVELexerAdaptor(RESOLVELanguage.INSTANCE, lexer);
     }
 
-    @NotNull
-    public TokenSet getWhitespaceTokens() {
-        return WHITE_SPACES;
+    @NotNull public TokenSet getWhitespaceTokens() {
+        return RESOLVETokenTypes.WHITESPACES;
     }
 
-    @NotNull
-    public TokenSet getCommentTokens() {
+    @NotNull public TokenSet getCommentTokens() {
         return null;//COMMENTS;
     }
 
-    @NotNull
-    public TokenSet getStringLiteralElements() {
+    @NotNull public TokenSet getStringLiteralElements() {
         return TokenSet.EMPTY;
     }
 
-    @NotNull
-    public PsiParser createParser(final Project project) {
-        return null;//new RESOLVEParser();
+    @NotNull public PsiParser createParser(final Project project) {
+        return new RESOLVELanguageParser();
     }
 
-    @Override
-    public IFileElementType getFileNodeType() {
+    @Override public IFileElementType getFileNodeType() {
         return FILE;
     }
 
     public PsiFile createFile(FileViewProvider viewProvider) {
-        return null;//new RESOLVEPrecisFile(viewProvider);
+        return new RESOLVEFileRoot(viewProvider);
     }
 
     public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) {
@@ -75,6 +67,7 @@ public class RESOLVEParserDefinition implements ParserDefinition {
      */
     @NotNull
     public PsiElement createElement(ASTNode node) {
-        return null; //RESOLVETypes.Factory.createElement(node);
+        return null;
+        //return ANTLRv4ASTFactory.createInternalParseTreeNode(node);
     }
 }
