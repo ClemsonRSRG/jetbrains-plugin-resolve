@@ -2,7 +2,11 @@ lexer grammar ResolveLexer;
 
 PRECIS      :   'Precis'                        ;
 END         :   'end'                           ;
+USES		:	'uses'							;
+
 SEMI        :   ';'                             ;
+COMMA		:	','								;
+
 IDENTIFIER	:	NameStartChar NameChar*         ;
 WS          :	[ \t\r\n\f]+ -> channel(HIDDEN)	;
 
