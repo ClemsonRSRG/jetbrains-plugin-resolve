@@ -11,9 +11,9 @@ import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import edu.clemson.resolve.plugin.parser.Resolve;
-import edu.clemson.resolve.plugin.parser.ResolveLexer;
-import edu.clemson.resolve.plugin.psi.ModuleSpecNode;
+import edu.clemson.resolve.plugin.psi.ModuleNode;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +22,7 @@ public class RESOLVEASTFactory extends ASTFactory {
 
     private static final Map<IElementType, PsiElementFactory> ruleElementTypeToPsiFactory = new HashMap<IElementType, PsiElementFactory>();
     static {
-        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_module), ModuleSpecNode.Factory.INSTANCE);
+        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_module), ModuleNode.Factory.INSTANCE);
     }
 
     /**
@@ -36,7 +36,8 @@ public class RESOLVEASTFactory extends ASTFactory {
         return new CompositeElement(type);
     }
 
-    @Override public LeafElement createLeaf(IElementType type, CharSequence text) {
+    @Override public LeafElement createLeaf(
+                        @NotNull IElementType type, CharSequence text) {
         LeafElement t;
        /*if ( type == ANTLRv4TokenTypes.TOKEN_ELEMENT_TYPES.get(ANTLRv4Lexer.RULE_REF) ) {
             t = new ParserRuleRefNode(type, text);

@@ -25,9 +25,7 @@ public class RESOLVEParserDefinition implements ParserDefinition {
     public static final IFileElementType FILE =
             new IFileElementType(RESOLVELanguage.INSTANCE);
 
-    @NotNull
-    @Override
-    public Lexer createLexer(Project project) {
+    @NotNull @Override public Lexer createLexer(Project project) {
         ResolveLexer lexer = new ResolveLexer(null);
         return new RESOLVELexerAdaptor(RESOLVELanguage.INSTANCE, lexer);
     }

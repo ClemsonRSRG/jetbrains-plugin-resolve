@@ -1,5 +1,5 @@
 <idea-plugin version="2">
-  <id>grammars.edu.plugin</id>
+  <id>edu.clemson.resolve.plugin</id>
   <name>RESOLVE langauge plugin</name>
   <version>1.0</version>
   <vendor email="dtw.welch@gmail.com" url="https://github.com/Welchd1/resolve-intellij-plugin-v4">RESOLVE Project</vendor>
@@ -30,7 +30,7 @@
   <extensions defaultExtensionNs="com.intellij">
       <fileTypeFactory implementation="edu.clemson.resolve.plugin.RESOLVEFileTypeFactory"/>
       <lang.parserDefinition language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.RESOLVEParserDefinition"/>
-    <!--  <lang.syntaxHighlighterFactory key="RESOLVE" implementationClass="java.edu.clemson.resolve.plugin.RESOLVESyntaxHighlighterFactory"/> -->
+      <lang.syntaxHighlighterFactory key="RESOLVE" implementationClass="edu.clemson.resolve.plugin.RESOLVESyntaxHighlighterFactory"/>
      <!-- <colorSettingsPage implementation="grammars.edu.plugin.configdialogs.RESOLVEColorsPage"/> -->
       <!-- Add your extensions here -->
   </extensions>
