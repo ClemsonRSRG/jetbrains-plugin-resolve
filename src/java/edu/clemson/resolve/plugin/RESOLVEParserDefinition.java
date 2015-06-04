@@ -37,7 +37,7 @@ public class RESOLVEParserDefinition implements ParserDefinition {
     }
 
     @NotNull public TokenSet getCommentTokens() {
-        return null;//COMMENTS;
+        return RESOLVETokenTypes.COMMENTS;
     }
 
     @NotNull public TokenSet getStringLiteralElements() {

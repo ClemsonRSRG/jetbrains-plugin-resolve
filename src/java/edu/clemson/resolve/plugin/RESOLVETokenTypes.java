@@ -19,6 +19,13 @@ public class RESOLVETokenTypes {
             ElementTypeFactory.getRuleElementTypes(RESOLVELanguage.INSTANCE,
                     Arrays.asList(Resolve.ruleNames));
 
+    public static final TokenSet COMMENTS =
+            ElementTypeFactory.createTokenSet(
+                    RESOLVELanguage.INSTANCE,
+                    Arrays.asList(ResolveLexer.tokenNames),
+                    ResolveLexer.DOC_COMMENT,
+                    ResolveLexer.LINE_COMMENT);
+
     public static final TokenSet WHITESPACES =
             ElementTypeFactory.createTokenSet(
                     RESOLVELanguage.INSTANCE,

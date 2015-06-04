@@ -10,5 +10,5 @@ module
 
 precisModule
     :   PRECIS IDENTIFIER SEMI
-        END IDENTIFIER SEMI
+        END IDENTIFIER SEMI EOF
     ;

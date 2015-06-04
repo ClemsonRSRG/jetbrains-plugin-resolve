@@ -6,6 +6,14 @@ SEMI        :   ';'                             ;
 IDENTIFIER	:	NameStartChar NameChar*         ;
 WS          :	[ \t\r\n\f]+ -> channel(HIDDEN)	;
 
+DOC_COMMENT
+	:	'/**' .*? ('*/' | EOF)
+	;
+
+LINE_COMMENT
+	:	'//' ~[\r\n]*  -> channel(HIDDEN)
+	;
+
 fragment
 NameChar
 	:   NameStartChar
