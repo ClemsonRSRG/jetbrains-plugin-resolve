@@ -22,12 +22,12 @@ import org.jetbrains.annotations.NotNull;
 import java.io.Reader;
 
 public class RESOLVEParserDefinition implements ParserDefinition {
-
     public static final IFileElementType FILE =
-            new IFileElementType(Language.
-                    <RESOLVELanguage>findInstance(RESOLVELanguage.class));
+            new IFileElementType(RESOLVELanguage.INSTANCE);
 
-    @NotNull @Override public Lexer createLexer(Project project) {
+    @NotNull
+    @Override
+    public Lexer createLexer(Project project) {
         ResolveLexer lexer = new ResolveLexer(null);
         return new RESOLVELexerAdaptor(RESOLVELanguage.INSTANCE, lexer);
     }
@@ -65,9 +65,7 @@ public class RESOLVEParserDefinition implements ParserDefinition {
      * This converts only internal rule nodes apparently, not leaf nodes. Leafs
      * are just tokens I guess.
      */
-    @NotNull
-    public PsiElement createElement(ASTNode node) {
-        return null;
-        //return ANTLRv4ASTFactory.createInternalParseTreeNode(node);
+    @NotNull public PsiElement createElement(ASTNode node) {
+        return RESOLVEASTFactory.createInternalParseTreeNode(node);
     }
 }

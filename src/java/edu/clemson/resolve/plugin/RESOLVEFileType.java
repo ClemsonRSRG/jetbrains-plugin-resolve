@@ -25,7 +25,7 @@ public class RESOLVEFileType extends LanguageFileType {
     }
 
     @NotNull @Override public String getDefaultExtension() {
-        return "resolve";
+        return "precis";
     }
 
     @Nullable @Override public Icon getIcon() {
