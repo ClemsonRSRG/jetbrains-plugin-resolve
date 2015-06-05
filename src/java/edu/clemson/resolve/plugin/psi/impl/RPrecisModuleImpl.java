@@ -21,8 +21,4 @@ public class RPrecisModuleImpl extends RModuleImpl {
             return new RPrecisModuleImpl(node);
         }
     }
-
-    @Override public Icon getIcon(int flags) {
-        return RESOLVEIcons.PRECIS;
-    }
 }

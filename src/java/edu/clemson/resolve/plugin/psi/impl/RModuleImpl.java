@@ -16,30 +16,5 @@ public abstract class RModuleImpl extends ASTWrapperPsiElement {
     public RModuleImpl(@NotNull ASTNode node) {
         super(node);
     }
-
- /*   @Override public ItemPresentation getPresentation() {
-        final String text = UsageViewUtil.createNodeText(this);
-        if (text != null) {
-            return new ItemPresentation() {
-                @Nullable
-                @Override
-                public String getPresentableText() {
-                    return getName();
-                }
-
-                @Nullable
-                @Override
-                public String getLocationString() {
-                    return getContainingFile().getName();
-                }
-
-                @Nullable
-                @Override
-                public Icon getIcon(boolean b) {
-                    return RModuleImpl.this.getIcon(0);
-                }
-            };
-        }
-        return super.getPresentation();
-    }*/
+    
 }

@@ -21,8 +21,4 @@ public class RFacilityModuleImpl extends RModuleImpl {
             return new RFacilityModuleImpl(node);
         }
     }
-
-    @Override public Icon getIcon(int flags) {
-        return RESOLVEIcons.FACILITY;
-    }
 }
