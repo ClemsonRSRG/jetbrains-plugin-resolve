@@ -1,6 +1,7 @@
 lexer grammar ResolveLexer;
 
 PRECIS      :   'Precis'                        ;
+FACILITY	:	'Facility'						;
 END         :   'end'                           ;
 USES		:	'uses'							;
 

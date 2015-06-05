@@ -32,8 +32,6 @@ public class RESOLVECreateFileAction extends CreateFileFromTemplateAction implem
 
     @Override protected PsiFile createFile(String name,
                    @NotNull String templateName, @NotNull PsiDirectory dir) {
-
-        System.out.println("HERERERe: " + dir.getProject().getBasePath());
         FileTemplate template = FileTemplateManager
                 .getInstance(dir.getProject())
                 .getInternalTemplate(templateName);
@@ -56,8 +54,8 @@ public class RESOLVECreateFileAction extends CreateFileFromTemplateAction implem
                         PsiDirectory directory,
                         CreateFileFromTemplateDialog.Builder builder) {
         builder.setTitle(NEW_RESOLVE_FILE)
-                .addKind("Client facility", Icons.FILE, "Facility Module")
-                .addKind("Mathematical precis", Icons.FILE, "Precis Module");
+                .addKind("Client facility", Icons.FACILITY, "Facility Module")
+                .addKind("Mathematical precis", Icons.PRECIS, "Precis Module");
     }
 
     @Override protected String getActionName(PsiDirectory directory,

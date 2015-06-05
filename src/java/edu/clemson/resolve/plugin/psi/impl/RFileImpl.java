@@ -1,4 +1,4 @@
-package edu.clemson.resolve.plugin.adaptors;
+package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.lang.Language;
@@ -12,9 +12,9 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
-public class RESOLVEFileRoot extends PsiFileBase {
+public class RFileImpl extends PsiFileBase {
 
-    public RESOLVEFileRoot(@NotNull FileViewProvider viewProvider) {
+    public RFileImpl(@NotNull FileViewProvider viewProvider) {
         super(viewProvider, RESOLVELanguage.INSTANCE);
     }
 
@@ -27,7 +27,7 @@ public class RESOLVEFileRoot extends PsiFileBase {
     }
 
     @Override public Icon getIcon(int flags) {
-        return Icons.FILE;
+        return Icons.PRECIS;
     }
 
     @NotNull @Override public PsiElement[] getChildren() {
