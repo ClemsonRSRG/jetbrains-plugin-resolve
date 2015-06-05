@@ -1,5 +1,6 @@
-package edu.clemson.resolve.plugin.psi.impl;
+package edu.clemson.resolve.plugin.psi;
 
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.lang.Language;
 import com.intellij.openapi.fileTypes.FileType;
@@ -12,9 +13,9 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
-public class RFileImpl extends PsiFileBase {
+public class RFile extends PsiFileBase {
 
-    public RFileImpl(@NotNull FileViewProvider viewProvider) {
+    public RFile(@NotNull FileViewProvider viewProvider) {
         super(viewProvider, RESOLVELanguage.INSTANCE);
     }
 
@@ -27,7 +28,17 @@ public class RFileImpl extends PsiFileBase {
     }
 
     @Override public Icon getIcon(int flags) {
-        return Icons.PRECIS;
+        PsiElement rootChild = getChildren()[0];
+        PsiElement[] kids = getChildren();
+        if (rootChild instanceof ASTWrapperPsiElement) {
+            if (rootChild.getFirstChild() == null) {
+                return Icons.FILE;
+            }
+            return rootChild.getFirstChild().getIcon(0);
+        }
+        else {
+            return Icons.FILE;
+        }
     }
 
     @NotNull @Override public PsiElement[] getChildren() {

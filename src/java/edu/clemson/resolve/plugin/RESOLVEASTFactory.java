@@ -11,7 +11,6 @@ import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import edu.clemson.resolve.plugin.parser.Resolve;
-import edu.clemson.resolve.plugin.psi.impl.RAbstractModuleImpl;
 import edu.clemson.resolve.plugin.psi.impl.RFacilityModuleImpl;
 import edu.clemson.resolve.plugin.psi.impl.RPrecisModuleImpl;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;

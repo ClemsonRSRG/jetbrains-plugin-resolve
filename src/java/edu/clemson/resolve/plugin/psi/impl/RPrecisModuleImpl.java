@@ -1,11 +1,15 @@
 package edu.clemson.resolve.plugin.psi.impl;
 
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import edu.clemson.resolve.plugin.Icons;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 
-public class RPrecisModuleImpl extends RAbstractModuleImpl {
+import javax.swing.*;
+
+public class RPrecisModuleImpl extends RModuleImpl {
 
     public RPrecisModuleImpl(@NotNull ASTNode node) {
         super(node);
@@ -17,5 +21,9 @@ public class RPrecisModuleImpl extends RAbstractModuleImpl {
         @Override public PsiElement createElement(ASTNode node) {
             return new RPrecisModuleImpl(node);
         }
+    }
+
+    @Override public Icon getIcon(int flags) {
+        return Icons.PRECIS;
     }
 }

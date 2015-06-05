@@ -2,10 +2,13 @@ package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import edu.clemson.resolve.plugin.Icons;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 
-public class RFacilityModuleImpl extends RAbstractModuleImpl {
+import javax.swing.*;
+
+public class RFacilityModuleImpl extends RModuleImpl {
 
     public RFacilityModuleImpl(@NotNull ASTNode node) {
         super(node);
@@ -17,5 +20,9 @@ public class RFacilityModuleImpl extends RAbstractModuleImpl {
         @Override public PsiElement createElement(ASTNode node) {
             return new RFacilityModuleImpl(node);
         }
+    }
+
+    @Override public Icon getIcon(int flags) {
+        return Icons.FACILITY;
     }
 }
