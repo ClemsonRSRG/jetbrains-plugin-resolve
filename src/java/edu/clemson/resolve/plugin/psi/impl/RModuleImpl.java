@@ -17,7 +17,7 @@ public abstract class RModuleImpl extends ASTWrapperPsiElement {
         super(node);
     }
 
-    @Override public ItemPresentation getPresentation() {
+ /*   @Override public ItemPresentation getPresentation() {
         final String text = UsageViewUtil.createNodeText(this);
         if (text != null) {
             return new ItemPresentation() {
@@ -41,5 +41,5 @@ public abstract class RModuleImpl extends ASTWrapperPsiElement {
             };
         }
         return super.getPresentation();
-    }
+    }*/
 }

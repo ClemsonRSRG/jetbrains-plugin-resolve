@@ -29,9 +29,10 @@
 
   <extensions defaultExtensionNs="com.intellij">
       <internalFileTemplate name="Precis Module"/>
-      <!--<internalFileTemplate name="Facility Module"/> -->
-
+      <internalFileTemplate name="Facility Module"/>
+      <fileIconPatcher implementation="edu.clemson.resolve.plugin.RESOLVEFileIconPatcher"/>
       <fileTypeFactory implementation="edu.clemson.resolve.plugin.RESOLVEFileTypeFactory"/>
+
       <lang.parserDefinition language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.RESOLVEParserDefinition"/>
       <lang.syntaxHighlighterFactory key="RESOLVE" implementationClass="edu.clemson.resolve.plugin.RESOLVESyntaxHighlighterFactory"/>
      <!-- <colorSettingsPage implementation="grammars.edu.plugin.configdialogs.RESOLVEColorsPage"/> -->

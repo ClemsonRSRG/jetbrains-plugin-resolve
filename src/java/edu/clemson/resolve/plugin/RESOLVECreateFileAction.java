@@ -5,8 +5,6 @@ import com.intellij.ide.actions.CreateFileFromTemplateDialog;
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.ide.fileTemplates.FileTemplateUtil;
-import com.intellij.openapi.module.ModuleTypeManager;
-import com.intellij.openapi.module.impl.ModuleTypeManagerImpl;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
@@ -14,10 +12,8 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.containers.ContainerUtil;
-import edu.clemson.resolve.plugin.Icons;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
 import java.util.Properties;
 
 //Todo: move this to actions package.
@@ -27,7 +23,7 @@ public class RESOLVECreateFileAction extends CreateFileFromTemplateAction implem
     private static final String FILE = "FILE";
 
     public RESOLVECreateFileAction() {
-        super(NEW_RESOLVE_FILE, "", Icons.FILE);
+        super(NEW_RESOLVE_FILE, "", RESOLVEIcons.FILE);
     }
 
     @Override protected PsiFile createFile(String name,
@@ -54,8 +50,8 @@ public class RESOLVECreateFileAction extends CreateFileFromTemplateAction implem
                         PsiDirectory directory,
                         CreateFileFromTemplateDialog.Builder builder) {
         builder.setTitle(NEW_RESOLVE_FILE)
-                .addKind("Client facility", Icons.FACILITY, "Facility Module")
-                .addKind("Mathematical precis", Icons.PRECIS, "Precis Module");
+                .addKind("Client facility", RESOLVEIcons.FACILITY, "Facility Module")
+                .addKind("Mathematical precis", RESOLVEIcons.PRECIS, "Precis Module");
     }
 
     @Override protected String getActionName(PsiDirectory directory,

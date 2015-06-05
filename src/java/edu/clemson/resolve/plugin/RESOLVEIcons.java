@@ -4,7 +4,7 @@ import com.intellij.openapi.util.IconLoader;
 
 import javax.swing.*;
 
-public class Icons {
+public class RESOLVEIcons {
 
     public static final Icon FILE = IconLoader.getIcon("/edu/clemson/resolve/icons/resolveFile.png");
     public static final Icon CONCEPT = IconLoader.getIcon("/edu/clemson/resolve/icons/concept.png");

@@ -2,7 +2,7 @@ package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
-import edu.clemson.resolve.plugin.Icons;
+import edu.clemson.resolve.plugin.RESOLVEIcons;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,6 +23,6 @@ public class RFacilityModuleImpl extends RModuleImpl {
     }
 
     @Override public Icon getIcon(int flags) {
-        return Icons.FACILITY;
+        return RESOLVEIcons.FACILITY;
     }
 }
