@@ -1,25 +1,20 @@
 package edu.clemson.resolve.plugin;
 
 import com.intellij.lang.ASTNode;
-import com.intellij.lang.Language;
 import com.intellij.lang.ParserDefinition;
 import com.intellij.lang.PsiParser;
-import com.intellij.lexer.FlexAdapter;
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
-import edu.clemson.resolve.plugin.adaptors.RESOLVEFileRoot;
+import edu.clemson.resolve.plugin.psi.RFile;
 import edu.clemson.resolve.plugin.adaptors.RESOLVELanguageParser;
 import edu.clemson.resolve.plugin.adaptors.RESOLVELexerAdaptor;
 import edu.clemson.resolve.plugin.parser.ResolveLexer;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.Reader;
 
 public class RESOLVEParserDefinition implements ParserDefinition {
     public static final IFileElementType FILE =
@@ -51,7 +46,7 @@ public class RESOLVEParserDefinition implements ParserDefinition {
     }
 
     public PsiFile createFile(FileViewProvider viewProvider) {
-        return new RESOLVEFileRoot(viewProvider);
+        return new RFile(viewProvider);
     }
 
     public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) {

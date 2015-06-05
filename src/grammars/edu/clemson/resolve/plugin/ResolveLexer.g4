@@ -1,8 +1,13 @@
 lexer grammar ResolveLexer;
 
 PRECIS      :   'Precis'                        ;
+FACILITY	:	'Facility'						;
 END         :   'end'                           ;
+USES		:	'uses'							;
+
 SEMI        :   ';'                             ;
+COMMA		:	','								;
+
 IDENTIFIER	:	NameStartChar NameChar*         ;
 WS          :	[ \t\r\n\f]+ -> channel(HIDDEN)	;
 

@@ -6,8 +6,6 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-//Todo: Somehow we're going to need this to be able to support multiple file
-//types (maybe we can even do different icons for them!)
 public class RESOLVEFileType extends LanguageFileType {
 
     public static final RESOLVEFileType INSTANCE = new RESOLVEFileType();
@@ -21,14 +19,14 @@ public class RESOLVEFileType extends LanguageFileType {
     }
 
     @NotNull @Override public String getDescription() {
-        return "RESOLVE Precis file";
+        return "a RESOLVE file";
     }
 
     @NotNull @Override public String getDefaultExtension() {
-        return "precis";
+        return "resolve";
     }
 
     @Nullable @Override public Icon getIcon() {
-        return Icons.FILE;
+        return RESOLVEIcons.FILE;
     }
 }
