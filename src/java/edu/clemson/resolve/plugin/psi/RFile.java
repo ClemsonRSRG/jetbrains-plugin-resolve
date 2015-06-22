@@ -22,20 +22,6 @@ public class RFile extends PsiFileBase {
         return "RESOLVE file";
     }
 
-  /*  @Override public Icon getIcon(int flags) {
-        PsiElement rootChild = getChildren()[0];
-        if (rootChild instanceof ASTWrapperPsiElement) {
-            if (rootChild.getFirstChild() == null ||
-                    rootChild.getFirstChild() instanceof PsiErrorElement) {
-                return Icons.FILE;
-            }
-            return rootChild.getFirstChild().getIcon(0);
-        }
-        else {
-            return Icons.FILE;
-        }
-    }*/
-
     @NotNull @Override public PsiElement[] getChildren() {
         return super.getChildren();
     }

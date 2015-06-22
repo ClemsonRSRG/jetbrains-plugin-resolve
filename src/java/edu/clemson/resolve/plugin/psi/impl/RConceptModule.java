@@ -2,15 +2,12 @@ package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
-import edu.clemson.resolve.plugin.RESOLVEIcons;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
+public class RConceptModule extends RModuleImpl {
 
-public class RFacilityModuleImpl extends RModuleImpl {
-
-    public RFacilityModuleImpl(@NotNull ASTNode node) {
+    public RConceptModule(@NotNull ASTNode node) {
         super(node);
     }
 
@@ -18,7 +15,7 @@ public class RFacilityModuleImpl extends RModuleImpl {
         public static Factory INSTANCE = new Factory();
 
         @Override public PsiElement createElement(ASTNode node) {
-            return new RFacilityModuleImpl(node);
+            return new RConceptModule(node);
         }
     }
 }

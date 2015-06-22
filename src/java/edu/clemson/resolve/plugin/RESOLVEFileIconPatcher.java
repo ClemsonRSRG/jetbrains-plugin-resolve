@@ -6,8 +6,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
-import edu.clemson.resolve.plugin.psi.impl.RFacilityModuleImpl;
-import edu.clemson.resolve.plugin.psi.impl.RPrecisModuleImpl;
+import edu.clemson.resolve.plugin.psi.impl.RConceptModule;
+import edu.clemson.resolve.plugin.psi.impl.RPrecisModule;
 
 import javax.swing.*;
 
@@ -33,12 +33,12 @@ public class RESOLVEFileIconPatcher implements FileIconPatcher {
         //is doing a depth first search). Though in the future hopefully our
         //psi structure will be better defined so we can just do the following:
         // PsiTreeUtil.getChildOfType(f, ParserClass.class);
-        if (PsiTreeUtil.findChildOfAnyType(f, RPrecisModuleImpl.class) != null) {
+        if (PsiTreeUtil.findChildOfAnyType(f, RPrecisModule.class) != null) {
             return RESOLVEIcons.PRECIS;
         }
         else if (PsiTreeUtil.findChildOfAnyType(f,
-                RFacilityModuleImpl.class) != null) {
-            return RESOLVEIcons.FACILITY;
+                RConceptModule.class) != null) {
+            return RESOLVEIcons.CONCEPT;
         }
         return baseIcon;
     }

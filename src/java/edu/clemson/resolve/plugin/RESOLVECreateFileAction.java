@@ -50,7 +50,7 @@ public class RESOLVECreateFileAction extends CreateFileFromTemplateAction implem
                         PsiDirectory directory,
                         CreateFileFromTemplateDialog.Builder builder) {
         builder.setTitle(NEW_RESOLVE_FILE)
-                .addKind("Client facility", RESOLVEIcons.FACILITY, "Facility Module")
+                .addKind("Mathematical concept", RESOLVEIcons.CONCEPT, "Concept Module")
                 .addKind("Mathematical precis", RESOLVEIcons.PRECIS, "Precis Module");
     }
 

@@ -11,8 +11,8 @@ import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import edu.clemson.resolve.plugin.parser.Resolve;
-import edu.clemson.resolve.plugin.psi.impl.RFacilityModuleImpl;
-import edu.clemson.resolve.plugin.psi.impl.RPrecisModuleImpl;
+import edu.clemson.resolve.plugin.psi.impl.RConceptModule;
+import edu.clemson.resolve.plugin.psi.impl.RPrecisModule;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,8 +23,8 @@ public class RESOLVEASTFactory extends ASTFactory {
 
     private static final Map<IElementType, PsiElementFactory> ruleElementTypeToPsiFactory = new HashMap<IElementType, PsiElementFactory>();
     static {
-        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_precisModule), RPrecisModuleImpl.Factory.INSTANCE);
-        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_facilityModule), RFacilityModuleImpl.Factory.INSTANCE);
+        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_precisModule), RPrecisModule.Factory.INSTANCE);
+        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_conceptModule), RConceptModule.Factory.INSTANCE);
     }
 
     /**

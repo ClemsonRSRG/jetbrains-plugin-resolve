@@ -38,5 +38,5 @@ public class RESOLVETokenTypes {
             ElementTypeFactory.createTokenSet(RESOLVELanguage.INSTANCE,
                     Arrays.asList(ResolveLexer.tokenNames),
                     ResolveLexer.PRECIS,ResolveLexer.END,ResolveLexer.USES,
-                    ResolveLexer.FACILITY);
+                    ResolveLexer.CONCEPT);
 }
