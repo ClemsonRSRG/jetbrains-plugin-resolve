@@ -33,6 +33,8 @@ lexer grammar ResolveLexer;
 PRECIS		:   'Precis'						;
 CONCEPT		:	'Concept'						;
 END         :   'end'							;
+FOR			:	'for'							;
+IMPL		:	'Implementation'				;
 USES		:	'uses'							;
 
 SEMI		:	';'								;

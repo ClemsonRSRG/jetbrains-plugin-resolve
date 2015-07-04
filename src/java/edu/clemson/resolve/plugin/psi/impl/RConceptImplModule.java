@@ -5,9 +5,9 @@ import com.intellij.psi.PsiElement;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 
-public class RConceptModule extends RModule {
+public class RConceptImplModule extends RModule {
 
-    public RConceptModule(@NotNull ASTNode node) {
+    public RConceptImplModule(@NotNull ASTNode node) {
         super(node);
     }
 

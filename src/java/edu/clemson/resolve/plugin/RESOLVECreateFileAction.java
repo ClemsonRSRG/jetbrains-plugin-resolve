@@ -31,7 +31,9 @@ public class RESOLVECreateFileAction extends CreateFileFromTemplateAction implem
         FileTemplate template = FileTemplateManager
                 .getInstance(dir.getProject())
                 .getInternalTemplate(templateName);
+
         Properties properties = new Properties();
+
         properties.setProperty(FILE,
                 ContainerUtil.getLastItem(StringUtil.split(dir.getName(), "-")));
         try {
@@ -51,7 +53,8 @@ public class RESOLVECreateFileAction extends CreateFileFromTemplateAction implem
                         CreateFileFromTemplateDialog.Builder builder) {
         builder.setTitle(NEW_RESOLVE_FILE)
                 .addKind("Mathematical concept", RESOLVEIcons.CONCEPT, "Concept Module")
-                .addKind("Mathematical precis", RESOLVEIcons.PRECIS, "Precis Module");
+                .addKind("Mathematical precis", RESOLVEIcons.PRECIS, "Precis Module")
+                .addKind("Concept implementation", RESOLVEIcons.IMPL, "Concept Implementation Module");
     }
 
     @Override protected String getActionName(PsiDirectory directory,

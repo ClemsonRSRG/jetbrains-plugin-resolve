@@ -37,6 +37,7 @@ options {
 module
     :   precisModule
     |   conceptModule
+    |   conceptImplModule
     ;
 
 usesList
@@ -45,6 +46,12 @@ usesList
 
 conceptModule
     :   CONCEPT name=ID SEMI
+        (usesList)?
+        END closename=ID SEMI EOF
+    ;
+
+conceptImplModule
+    :   IMPL name=ID FOR concept=ID SEMI
         (usesList)?
         END closename=ID SEMI EOF
     ;
