@@ -1,5 +1,3 @@
 package resolve
 
-func  {
-	
-}
+const sdsds  =  end sdsds

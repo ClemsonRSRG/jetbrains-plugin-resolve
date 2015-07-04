@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<templateSet group="RESOLVEHiddenTemplate">
+
+    <!-- KEYWORDS -->
+    <template description='Precis module declaration' id='resolve_lang_Precis' name='resolve_lang_Precis' toReformat='true' toShortenFQNames='true'
+              value='Precis $NAME$;&#10;    $END$ &#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+</templateSet>

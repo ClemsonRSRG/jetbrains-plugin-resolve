@@ -28,8 +28,7 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
     public RESOLVEKeywordCompletionContributor() {
         extend(CompletionType.BASIC, topLevelPattern(),
                 new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                        "Concept", "Precis", "Implementation"));
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Precis"));
     }
 
     private static PsiElementPattern.Capture<PsiElement> topLevelPattern() {
