@@ -2,10 +2,26 @@
 
 <templateSet group="RESOLVEHiddenTemplate">
 
-    <!-- KEYWORDS -->
     <template description='Precis module declaration' id='resolve_lang_Precis' name='resolve_lang_Precis' toReformat='true' toShortenFQNames='true'
               value='Precis $NAME$;&#10;    $END$ &#10;end $NAME$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Concept module declaration' id='resolve_lang_Concept' name='resolve_lang_Concept' toReformat='true' toShortenFQNames='true'
+              value='Concept $NAME$;&#10;    $END$ &#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Implementation module declaration' id='resolve_lang_Implementation' name='resolve_lang_Implementation' toReformat='true' toShortenFQNames='true'
+              value='Implementation $NAME$ for $SPEC$;&#10;    $END$ &#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;specification&quot;' expression='' name='SPEC'/>
         <context>
             <option name='RESOLVE' value='true'/>
         </context>

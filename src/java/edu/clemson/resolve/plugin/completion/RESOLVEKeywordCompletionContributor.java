@@ -15,6 +15,7 @@ import edu.clemson.resolve.plugin.RESOLVETokenTypes;
 import edu.clemson.resolve.plugin.parser.Resolve;
 import edu.clemson.resolve.plugin.parser.ResolveLexer;
 import edu.clemson.resolve.plugin.psi.RFile;
+import edu.clemson.resolve.plugin.psi.impl.RModule;
 import org.antlr.intellij.adaptor.lexer.TokenElementType;
 
 import java.util.Collection;
@@ -29,6 +30,18 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
         extend(CompletionType.BASIC, topLevelPattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "Precis"));
+
+        extend(CompletionType.BASIC, topLevelPattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Implementation"));
+
+        extend(CompletionType.BASIC, topLevelPattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Concept"));
+
+        extend(CompletionType.BASIC, usesPattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "uses"));
     }
 
     private static PsiElementPattern.Capture<PsiElement> topLevelPattern() {
@@ -38,11 +51,14 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
                                 .withParent(resolveFile())));
     }
 
+    private static PsiElementPattern.Capture<PsiElement> usesPattern() {
+        return psiElement(RESOLVETokenTypes.getTokenElementType(ResolveLexer.ID))
+                .withParent(psiElement(PsiErrorElement.class)
+                        .withParent(RModule.class).isFirstAcceptedChild(psiElement()));
+    }
+
     private static PsiFilePattern.Capture<RFile> resolveFile() {
         return psiFile(RFile.class);
     }
-
-    //then global module pattern, etc.
-
-    //operation procedure body pattern
+    
 }
