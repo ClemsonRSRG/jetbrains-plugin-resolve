@@ -23,6 +23,24 @@ public class RESOLVETokenTypes {
             ElementTypeFactory.getRuleElementTypes(RESOLVELanguage.INSTANCE,
                     Arrays.asList(Resolve.ruleNames));
 
+    public static TokenElementType getTokenElementType(int type) {
+        for (TokenElementType t : TOKEN_ELEMENT_TYPES) {
+            if (t.getType() == type) {
+                return t;
+            }
+        }
+        throw new IllegalArgumentException("NOT FOUND");
+    }
+
+    public static RuleElementType getRuleElementType(int index) {
+        for (RuleElementType t : RULE_ELEMENT_TYPES) {
+            if (t.getRuleIndex() == index) {
+                return t;
+            }
+        }
+        throw new IllegalArgumentException("NOT FOUND");
+    }
+
     public static final TokenSet COMMENTS =
             ElementTypeFactory.createTokenSet(RESOLVELanguage.INSTANCE,
                     Arrays.asList(ResolveLexer.tokenNames),

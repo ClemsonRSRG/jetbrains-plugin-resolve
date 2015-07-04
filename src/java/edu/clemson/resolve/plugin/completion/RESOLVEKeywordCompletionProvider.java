@@ -54,9 +54,8 @@ public class RESOLVEKeywordCompletionProvider extends CompletionProvider<Complet
         myKeywords = keywords;
     }
 
-    @Override
-    protected void addCompletions(@NotNull CompletionParameters parameters,
-                          ProcessingContext context,
+    @Override protected void addCompletions(
+            @NotNull CompletionParameters parameters, ProcessingContext context,
                                   @NotNull CompletionResultSet result) {
         for (String keyword : myKeywords) {
             result.addElement(createKeywordLookupElement(keyword));

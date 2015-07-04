@@ -60,6 +60,7 @@ public class RESOLVEASTFactory extends ASTFactory {
         PsiElement t;
         IElementType tokenType = node.getElementType();
         PsiElementFactory factory = ruleElementTypeToPsiFactory.get(tokenType);
+
         if (factory != null) {
             t = factory.createElement(node);
         }
