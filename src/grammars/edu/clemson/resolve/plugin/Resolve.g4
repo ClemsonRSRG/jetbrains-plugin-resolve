@@ -37,10 +37,8 @@ options {
 module
     :   precisModule
     |   conceptModule
-    ;
-
-usesList
-    :   USES ID (COMMA ID)* SEMI
+    |   conceptImplModule
+    |   facilityModule
     ;
 
 conceptModule
@@ -49,8 +47,76 @@ conceptModule
         END closename=ID SEMI EOF
     ;
 
+// implementation modules
+
+conceptImplModule
+    :   IMPL name=ID FOR concept=ID SEMI
+        (usesList)?
+        END closename=ID SEMI EOF
+    ;
+
+// facility modules
+
+facilityModule
+    :   FACILITY name=ID SEMI
+        (usesList)?
+        //(requiresClause)?
+        (facilityBlock)?
+        END closename=ID SEMI EOF
+    ;
+
+facilityBlock
+    :   ( operationProcedureDecl
+        )+
+    ;
+
 precisModule
     :   PRECIS name=ID SEMI
         (usesList)?
         END closename=ID SEMI EOF
+    ;
+
+// uses, imports
+
+usesList
+    :   USES ID (COMMA ID)* SEMI
+    ;
+
+// parameter and parameter-list related rules
+
+operationParameterList
+    :   LPAREN (parameterDeclGroup (SEMI parameterDeclGroup)*)?  RPAREN
+    ;
+
+parameterDeclGroup
+    :   parameterMode ID (COMMA ID)* COLON type
+    ;
+
+parameterMode
+    :   ( ALTERS
+        | UPDATES
+        | CLEARS
+        | RESTORES
+        | PRESERVES
+        | REPLACES
+        | EVALUATES )
+    ;
+
+// type and record related rules
+
+type
+    :   (qualifier=ID COLONCOLON)? name=ID
+    ;
+
+// functions
+
+operationProcedureDecl
+    :   (recursive=RECURSIVE)? OPERATION
+        name=ID operationParameterList (COLON type)? SEMI
+       // (requiresClause)?
+       // (ensuresClause)?
+        PROCEDURE
+       // (variableDeclGroup)*
+       // (stmt)*
+        END closename=ID SEMI
     ;

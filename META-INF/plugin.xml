@@ -28,15 +28,23 @@
   -->
 
   <extensions defaultExtensionNs="com.intellij">
+      <internalFileTemplate name="Concept Module"/>
+      <internalFileTemplate name="Concept Implementation Module"/>
       <internalFileTemplate name="Precis Module"/>
       <internalFileTemplate name="Facility Module"/>
+
       <fileIconPatcher implementation="edu.clemson.resolve.plugin.RESOLVEFileIconPatcher"/>
       <fileTypeFactory implementation="edu.clemson.resolve.plugin.RESOLVEFileTypeFactory"/>
 
       <lang.parserDefinition language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.RESOLVEParserDefinition"/>
       <lang.syntaxHighlighterFactory key="RESOLVE" implementationClass="edu.clemson.resolve.plugin.RESOLVESyntaxHighlighterFactory"/>
-     <!-- <colorSettingsPage implementation="grammars.edu.plugin.configdialogs.RESOLVEColorsPage"/> -->
-      <!-- Add your extensions here -->
+      <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVEKeywordCompletionContributor"/>
+
+      <!-- <colorSettingsPage implementation="grammars.edu.plugin.configdialogs.RESOLVEColorsPage"/> -->
+      <externalAnnotator language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.annotations.RESOLVEExternalAnnotator"/>
+
+      <defaultLiveTemplatesProvider implementation="edu.clemson.resolve.plugin.template.RESOLVELiveTemplatesProvider"/>
+      <liveTemplateContext implementation="edu.clemson.resolve.plugin.template.RESOLVEGenericContext"/>
   </extensions>
 
   <application-components>
@@ -48,11 +56,7 @@
   </project-components>
 
   <actions>
-      <action id="RESOLVE.NewRESOLVEFile"
-              class="edu.clemson.resolve.plugin.RESOLVECreateFileAction"
-              text="RESOLVE File" description="Create new RESOLVE file">
-          <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
-      </action>
+
   </actions>
 
 </idea-plugin>

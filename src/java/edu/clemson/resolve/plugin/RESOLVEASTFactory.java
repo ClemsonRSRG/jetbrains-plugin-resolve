@@ -11,7 +11,9 @@ import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import edu.clemson.resolve.plugin.parser.Resolve;
+import edu.clemson.resolve.plugin.psi.impl.RConceptImplModule;
 import edu.clemson.resolve.plugin.psi.impl.RConceptModule;
+import edu.clemson.resolve.plugin.psi.impl.RFacilityModule;
 import edu.clemson.resolve.plugin.psi.impl.RPrecisModule;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +27,9 @@ public class RESOLVEASTFactory extends ASTFactory {
     static {
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_precisModule), RPrecisModule.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_conceptModule), RConceptModule.Factory.INSTANCE);
+        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_conceptImplModule), RConceptImplModule.Factory.INSTANCE);
+        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_facilityModule), RFacilityModule.Factory.INSTANCE);
+
     }
 
     /**
@@ -58,6 +63,7 @@ public class RESOLVEASTFactory extends ASTFactory {
         PsiElement t;
         IElementType tokenType = node.getElementType();
         PsiElementFactory factory = ruleElementTypeToPsiFactory.get(tokenType);
+
         if (factory != null) {
             t = factory.createElement(node);
         }

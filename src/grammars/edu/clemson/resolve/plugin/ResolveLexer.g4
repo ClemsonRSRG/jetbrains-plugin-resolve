@@ -30,13 +30,37 @@
  */
 lexer grammar ResolveLexer;
 
+// keywords
+
 PRECIS		:   'Precis'						;
 CONCEPT		:	'Concept'						;
 END         :   'end'							;
+FACILITY	:	'Facility'						;
+FOR			:	'for'							;
+IMPL		:	'Implementation'				;
+OPERATION	:	'Operation'						;
+PROCEDURE	:	'Procedure'						;
+RECURSIVE	:	'Recursive'						;
 USES		:	'uses'							;
 
-SEMI		:	';'								;
+// parameter modes
+
+ALTERS		:	'alters'						;
+UPDATES		:	'updates'						;
+CLEARS		:	'clears'						;
+RESTORES	:	'restores'						;
+PRESERVES	:	'preserves'						;
+REPLACES	:	'replaces'						;
+EVALUATES	:	'evaluates'						;
+
+// punctuation
+
+COLON		:	':'								;
+COLONCOLON	:	'::'							;
 COMMA		:	','								;
+LPAREN		:	'('								;
+RPAREN		:	')'								;
+SEMI		:	';'								;
 
 ID			:	NameStartChar NameChar*			;
 WS          :	[ \t\r\n\f]+ -> channel(HIDDEN)	;

@@ -5,7 +5,7 @@ import com.intellij.psi.PsiElement;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 
-public class RPrecisModule extends RModuleImpl {
+public class RPrecisModule extends RModule {
 
     public RPrecisModule(@NotNull ASTNode node) {
         super(node);

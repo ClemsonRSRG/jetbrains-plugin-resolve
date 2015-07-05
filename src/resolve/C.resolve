@@ -1,4 +1,0 @@
-Facility C;
-    uses x,y,z;
-
-end C;
