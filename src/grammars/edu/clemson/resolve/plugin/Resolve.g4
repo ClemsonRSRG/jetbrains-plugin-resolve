@@ -38,10 +38,7 @@ module
     :   precisModule
     |   conceptModule
     |   conceptImplModule
-    ;
-
-usesList
-    :   USES ID (COMMA ID)* SEMI
+    |   facilityModule
     ;
 
 conceptModule
@@ -50,14 +47,37 @@ conceptModule
         END closename=ID SEMI EOF
     ;
 
+// implementation modules
+
 conceptImplModule
     :   IMPL name=ID FOR concept=ID SEMI
         (usesList)?
         END closename=ID SEMI EOF
     ;
 
+// facility modules
+
+facilityModule
+    :   FACILITY name=ID SEMI
+        (usesList)?
+        //(requiresClause)?
+        (facilityBlock)?
+        END closename=ID SEMI EOF
+    ;
+
+facilityBlock
+    :   ( operationProcedureDecl
+        )+
+    ;
+
 precisModule
     :   PRECIS name=ID SEMI
         (usesList)?
         END closename=ID SEMI EOF
+    ;
+
+// uses, imports
+
+usesList
+    :   USES ID (COMMA ID)* SEMI
     ;

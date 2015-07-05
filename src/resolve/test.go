@@ -1,1 +1,5 @@
 package resolve
+
+func foo() {
+
+}
