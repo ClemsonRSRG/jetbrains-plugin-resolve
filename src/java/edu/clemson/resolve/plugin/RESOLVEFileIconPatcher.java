@@ -8,7 +8,9 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import edu.clemson.resolve.plugin.parser.ResolveLexer;
+import edu.clemson.resolve.plugin.psi.impl.RConceptImplModule;
 import edu.clemson.resolve.plugin.psi.impl.RConceptModule;
+import edu.clemson.resolve.plugin.psi.impl.RFacilityModule;
 import edu.clemson.resolve.plugin.psi.impl.RPrecisModule;
 import org.antlr.intellij.adaptor.lexer.TokenElementType;
 
@@ -42,6 +44,14 @@ public class RESOLVEFileIconPatcher implements FileIconPatcher {
         else if (PsiTreeUtil.findChildOfAnyType(f,
                 RConceptModule.class) != null) {
             return RESOLVEIcons.CONCEPT;
+        }
+        else if (PsiTreeUtil.findChildOfAnyType(f,
+                RConceptImplModule.class) != null) {
+            return RESOLVEIcons.IMPL;
+        }
+        else if (PsiTreeUtil.findChildOfAnyType(f,
+                RFacilityModule.class) != null) {
+            return RESOLVEIcons.FACILITY;
         }
         return baseIcon;
     }

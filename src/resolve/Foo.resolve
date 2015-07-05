@@ -1,0 +1,7 @@
+Facility zz;
+
+    Operation Foo();
+        Procedure
+
+    end Foo;
+end zz;

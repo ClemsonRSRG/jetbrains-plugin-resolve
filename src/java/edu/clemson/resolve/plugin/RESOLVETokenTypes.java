@@ -55,6 +55,21 @@ public class RESOLVETokenTypes {
     public static final TokenSet KEYWORDS =
             ElementTypeFactory.createTokenSet(RESOLVELanguage.INSTANCE,
                     Arrays.asList(ResolveLexer.tokenNames),
-                    ResolveLexer.PRECIS,ResolveLexer.END,ResolveLexer.USES,
-                    ResolveLexer.CONCEPT,ResolveLexer.IMPL,ResolveLexer.FOR);
+                    ResolveLexer.ALTERS,
+                    ResolveLexer.CLEARS,
+                    ResolveLexer.CONCEPT,
+                    ResolveLexer.END,
+                    ResolveLexer.EVALUATES,
+                    ResolveLexer.FACILITY,
+                    ResolveLexer.FOR,
+                    ResolveLexer.IMPL,
+                    ResolveLexer.OPERATION,
+                    ResolveLexer.PRECIS,
+                    ResolveLexer.PRESERVES,
+                    ResolveLexer.PROCEDURE,
+                    ResolveLexer.RECURSIVE,
+                    ResolveLexer.REPLACES,
+                    ResolveLexer.RESTORES,
+                    ResolveLexer.UPDATES,
+                    ResolveLexer.USES);
 }

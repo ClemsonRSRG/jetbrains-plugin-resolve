@@ -81,3 +81,42 @@ precisModule
 usesList
     :   USES ID (COMMA ID)* SEMI
     ;
+
+// parameter and parameter-list related rules
+
+operationParameterList
+    :   LPAREN (parameterDeclGroup (SEMI parameterDeclGroup)*)?  RPAREN
+    ;
+
+parameterDeclGroup
+    :   parameterMode ID (COMMA ID)* COLON type
+    ;
+
+parameterMode
+    :   ( ALTERS
+        | UPDATES
+        | CLEARS
+        | RESTORES
+        | PRESERVES
+        | REPLACES
+        | EVALUATES )
+    ;
+
+// type and record related rules
+
+type
+    :   (qualifier=ID COLONCOLON)? name=ID
+    ;
+
+// functions
+
+operationProcedureDecl
+    :   (recursive=RECURSIVE)? OPERATION
+        name=ID operationParameterList (COLON type)? SEMI
+       // (requiresClause)?
+       // (ensuresClause)?
+        PROCEDURE
+       // (variableDeclGroup)*
+       // (stmt)*
+        END closename=ID SEMI
+    ;
