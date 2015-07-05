@@ -38,9 +38,10 @@ public class RunRESOLVEOnModuleFile extends Task.Modal {
 
     public static Map<String,String> getANTLRArgs(Project project, VirtualFile vfile) {
         Map<String,String> args = new HashMap<String, String>();
+        String sourcePath = vfile.getParent().getPath();
         args.put("T.resolve", "");
-        args.put("-o", "/Users/daniel/Documents/resolve-intellij-plugin/gen");
-        args.put("-lib", "-lib /Users/daniel/Documents/resolve-intellij-plugin/src/");
+        args.put("-o", sourcePath+"/gen/");
+        args.put("-lib", sourcePath);
         args.put("-noStdUses", "");
 
         return args;

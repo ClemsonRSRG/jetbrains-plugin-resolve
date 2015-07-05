@@ -10,7 +10,7 @@ import edu.clemson.resolve.compiler.LanguageSyntaxMessage;
 import edu.clemson.resolve.compiler.RESOLVECompiler;
 import edu.clemson.resolve.compiler.RESOLVEMessage;
 import edu.clemson.resolve.plugin.parsing.RunRESOLVEOnModuleFile;
-import org.antlr.runtime.CommonToken;
+import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -58,12 +58,16 @@ public class RESOLVEExternalAnnotator
         try {
             resolve.processCommandLineTargets();
 
+            System.out.println("ISSUES SIZE: " + listener.issues.size());
+            for (Issue issue : listener.issues) {
+                System.out.println(issue.msg.toString());
+            }
             for (Issue issue : listener.issues) {
                 processIssue(file, issue);
             }
         }
         catch (Exception e) {
-            LOG.error("antlr can't process "+file.getName(), e);
+            LOG.error("resolve can't process "+file.getName(), e);
         }
         return listener.issues;
     }
@@ -107,10 +111,7 @@ public class RESOLVEExternalAnnotator
 
     public void processIssue(final PsiFile file, Issue issue) {
         File moduleFile = new File(file.getVirtualFile().getPath());
-        File issueFile = new File(issue.msg.fileName);
-        if ( !moduleFile.getName().equals(issueFile.getName()) ) {
-            return; // ignore errors from external files
-        }
+
         if ( issue.msg instanceof LanguageSemanticsMessage) {
             Token t = ((LanguageSemanticsMessage)issue.msg).offendingToken;
             issue.offendingTokens.add(t);
