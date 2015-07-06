@@ -15,6 +15,9 @@ import edu.clemson.resolve.plugin.RESOLVETokenTypes;
 import edu.clemson.resolve.plugin.parser.Resolve;
 import edu.clemson.resolve.plugin.parser.ResolveLexer;
 import edu.clemson.resolve.plugin.psi.RFile;
+import edu.clemson.resolve.plugin.psi.impl.RConceptModule;
+import edu.clemson.resolve.plugin.psi.impl.REnhancementModule;
+import edu.clemson.resolve.plugin.psi.impl.RFacilityModule;
 import edu.clemson.resolve.plugin.psi.impl.RModule;
 import org.antlr.intellij.adaptor.lexer.TokenElementType;
 
@@ -39,6 +42,10 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "Concept"));
 
+        extend(CompletionType.BASIC, specificationBodyPattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Type Family", "Operation"));
+
         extend(CompletionType.BASIC, usesPattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "uses"));
@@ -49,6 +56,14 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
                 .withParent(psiElement(PsiErrorElement.class)
                         .withParent(psiElement(ASTWrapperPsiElement.class)
                                 .withParent(resolveFile())));
+    }
+
+    private static PsiElementPattern.Capture<PsiElement> specificationBodyPattern() {
+        return psiElement(RESOLVETokenTypes.getTokenElementType(ResolveLexer.ID))
+                .withParent(psiElement(PsiErrorElement.class)
+                        .withParent(psiElement().withParent(psiElement()
+                                .andOr(psiElement(RConceptModule.class),
+                                        psiElement(REnhancementModule.class)))));
     }
 
     private static PsiElementPattern.Capture<PsiElement> usesPattern() {

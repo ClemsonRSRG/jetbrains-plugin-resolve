@@ -14,12 +14,14 @@ import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class RESOLVEKeywordCompletionProvider extends CompletionProvider<CompletionParameters> {
+public class RESOLVEKeywordCompletionProvider
+        extends
+            CompletionProvider<CompletionParameters> {
 
-    public static final InsertHandler<LookupElement> EMPTY_INSERT_HANDLER = new InsertHandler<LookupElement>() {
-        @Override
-        public void handleInsert(InsertionContext context, LookupElement element) {
-
+    public static final InsertHandler<LookupElement> EMPTY_INSERT_HANDLER =
+            new InsertHandler<LookupElement>() {
+        @Override public void handleInsert(InsertionContext context,
+                                           LookupElement element) {
         }
     };
 
@@ -45,9 +47,9 @@ public class RESOLVEKeywordCompletionProvider extends CompletionProvider<Complet
     }
 
     public RESOLVEKeywordCompletionProvider(int priority,
-                                            @Nullable InsertHandler<LookupElement> insertHandler,
-                                            @Nullable AutoCompletionPolicy completionPolicy,
-                                            @NotNull String... keywords) {
+                        @Nullable InsertHandler<LookupElement> insertHandler,
+                        @Nullable AutoCompletionPolicy completionPolicy,
+                        @NotNull String... keywords) {
         myPriority = priority;
         myInsertHandler = insertHandler;
         myCompletionPolicy = completionPolicy;
@@ -62,36 +64,48 @@ public class RESOLVEKeywordCompletionProvider extends CompletionProvider<Complet
         }
     }
 
-    @NotNull
-    private LookupElement createKeywordLookupElement(@NotNull final String keyword) {
-        final InsertHandler<LookupElement> insertHandler = ObjectUtils.chooseNotNull(myInsertHandler,
+    @NotNull private LookupElement createKeywordLookupElement(
+            @NotNull String keyword) {
+        if (keyword.contains(" ")) {
+            keyword = keyword.replace(" ", "_");
+        }
+        final InsertHandler<LookupElement> insertHandler =
+                ObjectUtils.chooseNotNull(myInsertHandler,
                 createTemplateBasedInsertHandler("resolve_lang_" + keyword));
-        LookupElement result = createKeywordLookupElement(keyword, myPriority, insertHandler);
-        return myCompletionPolicy != null ? myCompletionPolicy.applyPolicy(result) : result;
+        LookupElement result = createKeywordLookupElement(keyword,
+                myPriority, insertHandler);
+        return myCompletionPolicy != null ?
+                myCompletionPolicy.applyPolicy(result) : result;
     }
 
-    public static LookupElement createKeywordLookupElement(@NotNull final String keyword,
-                                                           int priority,
-                                                           @Nullable InsertHandler<LookupElement> insertHandler) {
-        LookupElementBuilder builder = LookupElementBuilder.create(keyword).withBoldness(true).withInsertHandler(insertHandler);
+    public static LookupElement createKeywordLookupElement(
+            @NotNull final String keyword, int priority,
+            @Nullable InsertHandler<LookupElement> insertHandler) {
+        LookupElementBuilder builder = LookupElementBuilder.create(keyword)
+                .withBoldness(true).withInsertHandler(insertHandler);
         return PrioritizedLookupElement.withPriority(builder, priority);
     }
 
-    @Nullable
-    public static InsertHandler<LookupElement> createTemplateBasedInsertHandler(@NotNull final String templateId) {
+    @Nullable public static InsertHandler<LookupElement>
+        createTemplateBasedInsertHandler(@NotNull final String templateId) {
         return new InsertHandler<LookupElement>() {
-            @Override
-            public void handleInsert(@NotNull InsertionContext context, LookupElement item) {
-                Template template = TemplateSettings.getInstance().getTemplateById(templateId);
+            @Override public void handleInsert(
+                    @NotNull InsertionContext context, LookupElement item) {
+                Template template = TemplateSettings.getInstance()
+                        .getTemplateById(templateId);
                 Editor editor = context.getEditor();
                 if (template != null) {
-                    editor.getDocument().deleteString(context.getStartOffset(), context.getTailOffset());
-                    TemplateManager.getInstance(context.getProject()).startTemplate(editor, template);
+                    editor.getDocument().deleteString(context.getStartOffset(),
+                            context.getTailOffset());
+                    TemplateManager.getInstance(context.getProject())
+                            .startTemplate(editor, template);
                 }
                 else {
                     final int currentOffset = editor.getCaretModel().getOffset();
-                    final CharSequence documentText = editor.getDocument().getImmutableCharSequence();
-                    if (documentText.length() <= currentOffset || documentText.charAt(currentOffset) != ' ') {
+                    final CharSequence documentText = editor.getDocument()
+                            .getImmutableCharSequence();
+                    if (documentText.length() <= currentOffset ||
+                            documentText.charAt(currentOffset) != ' ') {
                         EditorModificationUtil.insertStringAtCaret(editor, " ");
                     }
                     else {
