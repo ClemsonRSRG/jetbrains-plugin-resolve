@@ -26,4 +26,22 @@
             <option name='RESOLVE' value='true'/>
         </context>
     </template>
+
+    <template description='Type family declaration' id='resolve_lang_Type_Family' name='resolve_lang_Type_Family' toReformat='true' toShortenFQNames='true'
+              value='Type Family $NAME$ is modeled by $TYPE$;&#10;    exemplar $EXEMPLAR$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;type&quot;' expression='' name='TYPE'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;e&quot;' expression='' name='EXEMPLAR'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Operation declaration' id='resolve_lang_Operation' name='resolve_lang_Operation' toReformat='true' toShortenFQNames='true'
+              value='Operation $NAME$();'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
 </templateSet>

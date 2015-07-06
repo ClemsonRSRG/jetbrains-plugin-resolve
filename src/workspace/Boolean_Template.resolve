@@ -1,5 +1,8 @@
 Concept Boolean_Template;
 
-    Typ
+    Type Family C is modeled by B;
+        exemplar b;
+
+    Operation Foo();
 
 end Boolean_Template;

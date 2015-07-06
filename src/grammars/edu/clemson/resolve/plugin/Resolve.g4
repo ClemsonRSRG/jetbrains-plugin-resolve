@@ -44,13 +44,15 @@ module
 conceptModule
     :   CONCEPT name=ID SEMI
         (usesList)?
-        (conceptBlock)?
+        (requiresClause)?
+        conceptBlock
         END closename=ID SEMI EOF
     ;
 
 conceptBlock
     :   ( typeModelDecl
-        )+
+        | operationDecl
+        )*
     ;
 
 // implementation modules
@@ -67,14 +69,14 @@ conceptImplModule
 facilityModule
     :   FACILITY name=ID SEMI
         (usesList)?
-        //(requiresClause)?
-        (facilityBlock)?
+        (requiresClause)?
+        facilityBlock
         END closename=ID SEMI EOF
     ;
 
 facilityBlock
     :   ( operationProcedureDecl
-        )+
+        )*
     ;
 
 precisModule
@@ -130,11 +132,16 @@ typeModelInit
 
 // functions
 
+operationDecl
+    :   OPERATION name=ID operationParameterList (COLON type)? SEMI
+        (requiresClause)? (ensuresClause)?
+    ;
+
 operationProcedureDecl
     :   (recursive=RECURSIVE)? OPERATION
         name=ID operationParameterList (COLON type)? SEMI
-       // (requiresClause)?
-       // (ensuresClause)?
+        (requiresClause)?
+        (ensuresClause)?
         PROCEDURE
        // (variableDeclGroup)*
        // (stmt)*
@@ -171,8 +178,6 @@ correspondenceClause
     :   CORRESPONDENCE mathAssertionExp SEMI
     ;
 
-//within the compiler we'll restrict this guy to be a
-//mathTypeAssertionExp
 entailsClause
     :   ENTAILS mathExp (COMMA mathExp)* COLON mathTypeExp
     ;
