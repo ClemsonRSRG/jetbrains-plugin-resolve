@@ -44,8 +44,13 @@ module
 conceptModule
     :   CONCEPT name=ID SEMI
         (usesList)?
-
+        (conceptBlock)?
         END closename=ID SEMI EOF
+    ;
+
+conceptBlock
+    :   ( typeModelDecl
+        )+
     ;
 
 // implementation modules
@@ -53,6 +58,7 @@ conceptModule
 conceptImplModule
     :   IMPL name=ID FOR concept=ID SEMI
         (usesList)?
+        (requiresClause)?
         END closename=ID SEMI EOF
     ;
 
@@ -113,7 +119,13 @@ typeModelDecl
     :   TYPE FAMILY name=ID IS MODELED BY mathTypeExp SEMI
         EXEMPLAR exemplar=ID SEMI
         (constraintClause)?
-        //(typeModelInit)?
+        (typeModelInit)?
+    ;
+
+// type initialization rules
+
+typeModelInit
+    :   INITIALIZATION (ensuresClause)?
     ;
 
 // functions
