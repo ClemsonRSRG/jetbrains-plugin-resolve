@@ -52,25 +52,38 @@ public class RESOLVETokenTypes {
                     Arrays.asList(ResolveLexer.tokenNames),
                     ResolveLexer.WS);
 
+    //Todo: Put the parameter mode keywords in their own set so and eventually
+    //add an appropriate option to set them (as distinct from keywords) in the
+    //colors page. Maybe a set for built-in ('o', '+', '||', 'union') operators would be good as well..
     public static final TokenSet KEYWORDS =
             ElementTypeFactory.createTokenSet(RESOLVELanguage.INSTANCE,
                     Arrays.asList(ResolveLexer.tokenNames),
                     ResolveLexer.ALTERS,
+                    ResolveLexer.BY,
                     ResolveLexer.CLEARS,
                     ResolveLexer.CART_PROD,
                     ResolveLexer.CONCEPT,
                     ResolveLexer.END,
+                    ResolveLexer.ENSURES,
                     ResolveLexer.EVALUATES,
+                    ResolveLexer.EXEMPLAR,
+                    ResolveLexer.EXTERNALLY,
                     ResolveLexer.FACILITY,
+                    ResolveLexer.FAMILY,
                     ResolveLexer.FOR,
-                    ResolveLexer.IMPL,
+                    ResolveLexer.IMPLEMENTATION,
+                    ResolveLexer.IMPLEMENTED,
+                    ResolveLexer.IS,
                     ResolveLexer.OPERATION,
+                    ResolveLexer.MODELED,
                     ResolveLexer.PRECIS,
                     ResolveLexer.PRESERVES,
                     ResolveLexer.PROCEDURE,
                     ResolveLexer.RECURSIVE,
                     ResolveLexer.REPLACES,
+                    ResolveLexer.REQUIRES,
                     ResolveLexer.RESTORES,
+                    ResolveLexer.TYPE,
                     ResolveLexer.UPDATES,
                     ResolveLexer.USES);
 }

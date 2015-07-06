@@ -49,7 +49,7 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
 
         extend(CompletionType.BASIC, moduleBodyPattern(psiElement(RFacilityModule.class)),
                 new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Operation Procedure"));
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Operation Procedure", "Facility Decl"));
 
         extend(CompletionType.BASIC, usesPattern(),
                 new RESOLVEKeywordCompletionProvider(

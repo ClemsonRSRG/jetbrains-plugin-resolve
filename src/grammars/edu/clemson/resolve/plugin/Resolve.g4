@@ -58,7 +58,7 @@ conceptBlock
 // implementation modules
 
 conceptImplModule
-    :   IMPL name=ID FOR concept=ID SEMI
+    :   IMPLEMENTATION name=ID FOR concept=ID SEMI
         (usesList)?
         (requiresClause)?
         END closename=ID SEMI EOF
@@ -76,6 +76,7 @@ facilityModule
 
 facilityBlock
     :   ( operationProcedureDecl
+        | facilityDecl
         )*
     ;
 
@@ -128,6 +129,22 @@ typeModelDecl
 
 typeModelInit
     :   INITIALIZATION (ensuresClause)?
+    ;
+
+// facilitydecls, enhancements, etc
+
+facilityDecl
+    :   FACILITY name=ID IS spec=ID (LT type (COMMA type)* GT)?
+        (specArgs=moduleArgumentList)? (externally=EXTERNALLY)? IMPLEMENTED
+        BY impl=ID (implArgs=moduleArgumentList)? SEMI
+    ;
+
+moduleArgumentList
+    :   LPAREN moduleArgument (COMMA moduleArgument)* RPAREN
+    ;
+
+moduleArgument
+    :   progExp
     ;
 
 // functions
@@ -268,4 +285,40 @@ mathTupleExp
 
 mathSegmentsExp
     :   mathFunctionApplicationExp (DOT mathFunctionApplicationExp)+
+    ;
+
+// program expressions
+
+progExp
+    :   op=MINUS progExp                        #progInfixExp
+    |   progExp op=(MULT|DIVIDE) progExp        #progInfixExp
+    |   progExp op=(PLUS|MINUS) progExp         #progInfixExp
+    |   progExp op=(LTE|GTE|LT|GT) progExp      #progInfixExp
+    |   progExp op=(EQUALS|NEQUALS) progExp     #progInfixExp
+    |   LPAREN progExp RPAREN                   #progNestedExp
+    |   progPrimary                             #progPrimaryExp
+    ;
+
+progPrimary
+    :   progLiteralExp
+    |   progNamedExp
+    |   progParamExp
+    |   progMemberExp
+    ;
+
+progParamExp
+    :   (qualifier=ID COLONCOLON)? name=ID
+        LPAREN (progExp (COMMA progExp)*)? RPAREN
+    ;
+
+progNamedExp
+    :   (qualifier=ID COLONCOLON)? name=ID
+    ;
+
+progMemberExp
+    :   (progParamExp|progNamedExp) (DOT ID)+
+    ;
+
+progLiteralExp
+    :   INT      #progIntegerExp
     ;
