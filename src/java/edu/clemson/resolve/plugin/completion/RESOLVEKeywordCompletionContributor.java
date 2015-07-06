@@ -42,9 +42,14 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "Concept"));
 
-        extend(CompletionType.BASIC, specificationBodyPattern(),
+        extend(CompletionType.BASIC, moduleBodyPattern(
+                        psiElement(RConceptModule.class), psiElement(REnhancementModule.class)),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "Type Family", "Operation"));
+
+        extend(CompletionType.BASIC, moduleBodyPattern(psiElement(RFacilityModule.class)),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Operation Procedure"));
 
         extend(CompletionType.BASIC, usesPattern(),
                 new RESOLVEKeywordCompletionProvider(
@@ -58,18 +63,18 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
                                 .withParent(resolveFile())));
     }
 
-    private static PsiElementPattern.Capture<PsiElement> specificationBodyPattern() {
+    private static PsiElementPattern.Capture<PsiElement> moduleBodyPattern(
+            PsiElementPattern.Capture<?> ... e) {
         return psiElement(RESOLVETokenTypes.getTokenElementType(ResolveLexer.ID))
                 .withParent(psiElement(PsiErrorElement.class)
                         .withParent(psiElement().withParent(psiElement()
-                                .andOr(psiElement(RConceptModule.class),
-                                        psiElement(REnhancementModule.class)))));
+                                .andOr(e))));
     }
 
     private static PsiElementPattern.Capture<PsiElement> usesPattern() {
         return psiElement(RESOLVETokenTypes.getTokenElementType(ResolveLexer.ID))
-                .withParent(psiElement(PsiErrorElement.class)
-                        .withParent(RModule.class).isFirstAcceptedChild(psiElement()));
+                .withParent(psiElement(PsiErrorElement.class).withParent(psiElement()
+                        .withParent(RModule.class).isFirstAcceptedChild(psiElement())));
     }
 
     private static PsiFilePattern.Capture<RFile> resolveFile() {
