@@ -1,10 +1,8 @@
 package edu.clemson.resolve.plugin.parsing;
 
-import com.google.common.base.Strings;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 
 import java.util.ArrayList;
@@ -24,7 +22,7 @@ public class RunRESOLVEOnModuleFile extends Task.Modal {
 
     public static List<String> getRESOLVEArgsAsList(
             Project project, VirtualFile vfile) {
-        Map<String,String> argMap = getANTLRArgs(project, vfile);
+        Map<String,String> argMap = getRESOLVEArgs(project, vfile);
         List<String> args = new ArrayList<>();
         for (String option : argMap.keySet()) {
             args.add(option);
@@ -36,13 +34,12 @@ public class RunRESOLVEOnModuleFile extends Task.Modal {
         return args;
     }
 
-    public static Map<String,String> getANTLRArgs(Project project, VirtualFile vfile) {
+    public static Map<String,String> getRESOLVEArgs(Project project, VirtualFile vfile) {
         Map<String,String> args = new HashMap<String, String>();
         String sourcePath = vfile.getParent().getPath();
         args.put("T.resolve", "");
         args.put("-o", sourcePath+"/gen/");
         args.put("-lib", sourcePath);
-        args.put("-noStdUses", "");
 
         return args;
     }

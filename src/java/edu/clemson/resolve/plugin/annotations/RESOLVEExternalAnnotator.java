@@ -50,7 +50,7 @@ public class RESOLVEExternalAnnotator
         String fileContents = file.getText();
         List<String> args = RunRESOLVEOnModuleFile
                 .getRESOLVEArgsAsList(file.getProject(), file.getVirtualFile());
-
+        args.add(moduleFileName);
         final RESOLVECompiler resolve =
                 new RESOLVECompiler(args.toArray(new String[args.size()]));
         AnnotatorCompilerListener listener = new AnnotatorCompilerListener();
