@@ -71,6 +71,15 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
                                 .andOr(e))));
     }
 
+    /*private static PsiElementPattern.Capture<PsiElement> cartesianModelTypePattern() {
+        return psiElement(RESOLVETokenTypes.getTokenElementType(ResolveLexer.ID))
+                .withParent(psiElement().withParent(psiElement()
+                        .withParent(psiElement()
+                                .withParent(psiElement()
+                                        .withElementType(
+                                                RESOLVETokenTypes.getRuleElementType(Resolve.RULE_typeModelDecl))))));
+    }*/
+
     private static PsiElementPattern.Capture<PsiElement> usesPattern() {
         return psiElement(RESOLVETokenTypes.getTokenElementType(ResolveLexer.ID))
                 .withParent(psiElement(PsiErrorElement.class).withParent(psiElement()

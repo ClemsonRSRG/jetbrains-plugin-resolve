@@ -57,6 +57,7 @@ public class RESOLVETokenTypes {
                     Arrays.asList(ResolveLexer.tokenNames),
                     ResolveLexer.ALTERS,
                     ResolveLexer.CLEARS,
+                    ResolveLexer.CART_PROD,
                     ResolveLexer.CONCEPT,
                     ResolveLexer.END,
                     ResolveLexer.EVALUATES,
