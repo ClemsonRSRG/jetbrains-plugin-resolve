@@ -85,5 +85,6 @@ public class RESOLVETokenTypes {
                     ResolveLexer.RESTORES,
                     ResolveLexer.TYPE,
                     ResolveLexer.UPDATES,
-                    ResolveLexer.USES);
+                    ResolveLexer.USES,
+                    ResolveLexer.VAR);
 }

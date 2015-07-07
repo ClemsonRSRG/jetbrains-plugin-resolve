@@ -112,6 +112,41 @@ parameterMode
         | EVALUATES )
     ;
 
+variableDeclGroup
+    :   VAR ID (COMMA ID)* COLON type SEMI
+    ;
+
+// statements
+
+stmtBlock
+    :   stmt+
+    ;
+
+stmt
+    :   assignStmt
+    |   swapStmt
+    |   callStmt
+    |   whileStmt
+    ;
+
+assignStmt
+    :   left=progExp ASSIGN right=progExp SEMI
+    ;
+
+swapStmt
+    :   left=progExp SWAP right=progExp SEMI
+    ;
+
+callStmt
+    :   progParamExp SEMI
+    ;
+
+whileStmt
+    :   WHILE progExp DO
+        (stmt)*
+        END SEMI
+    ;
+
 // type and record related rules
 
 type
@@ -160,8 +195,8 @@ operationProcedureDecl
         (requiresClause)?
         (ensuresClause)?
         PROCEDURE
-       // (variableDeclGroup)*
-       // (stmt)*
+        (variableDeclGroup)*
+        (stmtBlock)?
         END closename=ID SEMI
     ;
 

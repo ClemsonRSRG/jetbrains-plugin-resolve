@@ -15,10 +15,7 @@ import edu.clemson.resolve.plugin.RESOLVETokenTypes;
 import edu.clemson.resolve.plugin.parser.Resolve;
 import edu.clemson.resolve.plugin.parser.ResolveLexer;
 import edu.clemson.resolve.plugin.psi.RFile;
-import edu.clemson.resolve.plugin.psi.impl.RConceptModule;
-import edu.clemson.resolve.plugin.psi.impl.REnhancementModule;
-import edu.clemson.resolve.plugin.psi.impl.RFacilityModule;
-import edu.clemson.resolve.plugin.psi.impl.RModule;
+import edu.clemson.resolve.plugin.psi.impl.*;
 import org.antlr.intellij.adaptor.lexer.TokenElementType;
 
 import java.util.Collection;
@@ -54,6 +51,11 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
         extend(CompletionType.BASIC, usesPattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "uses"));
+
+        //Todo: couldn't get working
+        extend(CompletionType.BASIC, variableSectionPattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Var"));
     }
 
     private static PsiElementPattern.Capture<PsiElement> topLevelPattern() {
@@ -69,6 +71,18 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
                 .withParent(psiElement(PsiErrorElement.class)
                         .withParent(psiElement().withParent(psiElement()
                                 .andOr(e))));
+    }
+
+    //variables should be something like: I'm ok if my previous sibling is anything BUT a statement (and we're within a block).
+    //Todo: couldn't get this working. Make sure you're using PsiViewer Esme, you're going to need it.
+
+
+    //CLOSER FOR VARS: But this still allows stmts and vars to be interleaved. Which is wrong.
+    private static PsiElementPattern.Capture<PsiElement> variableSectionPattern() {
+        return psiElement(RESOLVETokenTypes.getTokenElementType(ResolveLexer.ID))
+                .withParent(psiElement()
+                        .withParent(psiElement().withParent(psiElement(
+                                RESOLVETokenTypes.getRuleElementType(Resolve.RULE_operationProcedureDecl)))));
     }
 
     /*private static PsiElementPattern.Capture<PsiElement> cartesianModelTypePattern() {

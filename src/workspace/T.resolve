@@ -1,3 +1,8 @@
 Facility T;
+    Operation name();
+        Procedure
+            Var x, y, z : Integer;
+    end name;
+
 
 end T;

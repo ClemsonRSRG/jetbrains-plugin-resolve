@@ -51,6 +51,8 @@ CONCEPT			:	'Concept'			;
 CONSTRAINT		:	'constraint'		;
 CONVENTION		:	'convention'		;
 CORRESPONDENCE 	:	'correspondence'	;
+DO 				:	'do'				;
+ELSE			:	'else'				;
 END         	:   'end'				;
 ENSURES			:	'ensures'			;
 ENTAILS			:	'which_entails'		;
@@ -75,6 +77,8 @@ RECURSIVE		:	'Recursive'			;
 REQUIRES		:	'requires'			;
 TYPE			:	'Type'				;
 USES			:	'uses'				;
+VAR				:	'Var'				;
+WHILE			:	'While'				;
 
 // parameter modes
 
@@ -104,6 +108,7 @@ SEMI			:	';'				;
 // operators
 
 AND				:	'and'			;
+ASSIGN			:	':='			;
 BAR				:	'|'				;
 CAT				:	'o'				;
 CUTMINUS		:	'.-.'			;
@@ -125,6 +130,7 @@ OR 				:	'or'			;
 PLUS			:	'+'				;
 RANGE			:	'..'			;
 RARROW			:	'->'			;
+SWAP			:	':=:'			;
 TILDE			:	'~'				;
 TRIPLEDOT		:	'...'			;
 UNION			:	'union'			;
