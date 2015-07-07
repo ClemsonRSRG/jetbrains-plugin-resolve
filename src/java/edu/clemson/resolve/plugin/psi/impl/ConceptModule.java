@@ -5,8 +5,9 @@ import com.intellij.psi.PsiElement;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 
-public class REnhancementModule extends RModule {
-    public REnhancementModule(@NotNull ASTNode node) {
+public class ConceptModule extends Module {
+
+    public ConceptModule(@NotNull ASTNode node) {
         super(node);
     }
 
@@ -14,7 +15,7 @@ public class REnhancementModule extends RModule {
         public static Factory INSTANCE = new Factory();
 
         @Override public PsiElement createElement(ASTNode node) {
-            return new REnhancementModule(node);
+            return new ConceptModule(node);
         }
     }
 }

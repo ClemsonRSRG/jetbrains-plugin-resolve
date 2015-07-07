@@ -11,9 +11,9 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-public abstract class RModule extends ASTWrapperPsiElement {
+public abstract class Module extends ASTWrapperPsiElement {
 
-    public RModule(@NotNull ASTNode node) {
+    public Module(@NotNull ASTNode node) {
         super(node);
     }
     

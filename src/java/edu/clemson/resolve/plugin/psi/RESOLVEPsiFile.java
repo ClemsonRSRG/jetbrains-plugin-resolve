@@ -8,9 +8,9 @@ import edu.clemson.resolve.plugin.RESOLVEFileType;
 import edu.clemson.resolve.plugin.RESOLVELanguage;
 import org.jetbrains.annotations.NotNull;
 
-public class RFile extends PsiFileBase {
+public class RESOLVEPsiFile extends PsiFileBase {
 
-    public RFile(@NotNull FileViewProvider viewProvider) {
+    public RESOLVEPsiFile(@NotNull FileViewProvider viewProvider) {
         super(viewProvider, RESOLVELanguage.INSTANCE);
     }
 
