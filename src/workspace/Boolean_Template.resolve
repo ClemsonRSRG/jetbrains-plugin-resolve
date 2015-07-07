@@ -1,8 +1,9 @@
 Concept Boolean_Template;
 
-    Type Family C is modeled by B;
+    Type Family Boolean is modeled by B;
         exemplar b;
+        initialization ensures b = true;
 
-    Operation Foo();
+    Operation Foo() : Boolean;
 
 end Boolean_Template;

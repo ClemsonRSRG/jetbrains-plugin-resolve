@@ -40,13 +40,16 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "Concept"));
 
         extend(CompletionType.BASIC, moduleBodyPattern(
-                        psiElement(RConceptModule.class), psiElement(REnhancementModule.class)),
+                        psiElement(RConceptModule.class),
+                        psiElement(REnhancementModule.class)),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "Type Family", "Operation"));
 
-        extend(CompletionType.BASIC, moduleBodyPattern(psiElement(RFacilityModule.class)),
+        extend(CompletionType.BASIC, moduleBodyPattern(
+                        psiElement(RFacilityModule.class)),
                 new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Operation Procedure", "Facility Decl"));
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY,
+                        "Operation Procedure", "Facility Decl"));
 
         extend(CompletionType.BASIC, usesPattern(),
                 new RESOLVEKeywordCompletionProvider(
@@ -73,26 +76,14 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
                                 .andOr(e))));
     }
 
-    //variables should be something like: I'm ok if my previous sibling is anything BUT a statement (and we're within a block).
-    //Todo: couldn't get this working. Make sure you're using PsiViewer Esme, you're going to need it.
-
-
-    //CLOSER FOR VARS: But this still allows stmts and vars to be interleaved. Which is wrong.
+    //Todo: This is a bit closer for vars.. but this still allows stmts and vars to be interleaved
+    // --which shouldn't be permitted.
     private static PsiElementPattern.Capture<PsiElement> variableSectionPattern() {
         return psiElement(RESOLVETokenTypes.getTokenElementType(ResolveLexer.ID))
                 .withParent(psiElement()
                         .withParent(psiElement().withParent(psiElement(
                                 RESOLVETokenTypes.getRuleElementType(Resolve.RULE_operationProcedureDecl)))));
     }
-
-    /*private static PsiElementPattern.Capture<PsiElement> cartesianModelTypePattern() {
-        return psiElement(RESOLVETokenTypes.getTokenElementType(ResolveLexer.ID))
-                .withParent(psiElement().withParent(psiElement()
-                        .withParent(psiElement()
-                                .withParent(psiElement()
-                                        .withElementType(
-                                                RESOLVETokenTypes.getRuleElementType(Resolve.RULE_typeModelDecl))))));
-    }*/
 
     private static PsiElementPattern.Capture<PsiElement> usesPattern() {
         return psiElement(RESOLVETokenTypes.getTokenElementType(ResolveLexer.ID))
