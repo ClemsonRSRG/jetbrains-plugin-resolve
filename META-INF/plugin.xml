@@ -56,7 +56,11 @@
   </project-components>
 
   <actions>
-
+      <!--<action id="RESOLVE.NewRESOLVEFile"
+              class="edu.clemson.resolve.plugin.RESOLVECreateFileAction"
+              text="RESOLVE File" description="Create new RESOLVE file">
+          <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
+      </action>-->
   </actions>
 
 </idea-plugin>

@@ -18,6 +18,8 @@ public class RESOLVESyntaxHighlighter extends SyntaxHighlighterBase {
 
     public static final TextAttributesKey KEYWORD =
             createTextAttributesKey("KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
+    public static final TextAttributesKey PARAMETER_MODE =
+            createTextAttributesKey("PARAMETER_MODE", DefaultLanguageHighlighterColors.KEYWORD);
     public static final TextAttributesKey LINE_COMMENT =
             createTextAttributesKey("LINE_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
     public static final TextAttributesKey JAVADOC_COMMENT =

@@ -52,6 +52,7 @@ conceptModule
 conceptBlock
     :   ( typeModelDecl
         | operationDecl
+        | mathDefinitionDecl
         )*
     ;
 
@@ -77,13 +78,23 @@ facilityModule
 facilityBlock
     :   ( operationProcedureDecl
         | facilityDecl
+        | typeRepresentationDecl
         )*
     ;
 
 precisModule
     :   PRECIS name=ID SEMI
         (usesList)?
+        precisBlock
         END closename=ID SEMI EOF
+    ;
+
+precisBlock
+    :   ( mathDefinitionDecl
+        | mathCategoricalDefinitionDecl
+        | mathInductiveDefinitionDecl
+        | mathTheoremDecl
+        )*
     ;
 
 // uses, imports
@@ -153,6 +164,14 @@ type
     :   (qualifier=ID COLONCOLON)? name=ID
     ;
 
+record
+    :   RECORD (recordVariableDeclGroup)+ END
+    ;
+
+recordVariableDeclGroup
+    :   ID (COMMA ID)* COLON type SEMI
+    ;
+
 typeModelDecl
     :   TYPE FAMILY name=ID IS MODELED BY mathTypeExp SEMI
         EXEMPLAR exemplar=ID SEMI
@@ -160,10 +179,74 @@ typeModelDecl
         (typeModelInit)?
     ;
 
+typeRepresentationDecl
+    :   TYPE name=ID EQUALS (type|record) SEMI
+        (conventionClause)?
+        (correspondenceClause)?
+        (typeImplInit)?
+    ;
+
 // type initialization rules
 
 typeModelInit
     :   INITIALIZATION (ensuresClause)?
+    ;
+
+typeImplInit
+    :   INITIALIZATION (ensuresClause)?
+        (variableDeclGroup)* (stmtBlock)?
+        END SEMI
+    ;
+
+// math constructs
+
+mathTheoremDecl
+    :   (COROLLARY|THEOREM) name=ID COLON mathAssertionExp SEMI
+    ;
+
+//The '(COMMA ID)?' is reserved for the variable we're inducting over
+//in the context of an inductive defn
+mathDefinitionSig
+    :   name=mathSymbol (LPAREN
+            mathDefinitionParameter (COMMA mathDefinitionParameter)* RPAREN)?
+            COLON mathTypeExp
+    ;
+
+mathDefinitionParameter
+    :   mathVariableDeclGroup
+    |   ID
+    ;
+
+mathCategoricalDefinitionDecl
+    :   CATEGORICAL DEFINITION FOR
+        mathDefinitionSig (COMMA mathDefinitionSig)+
+        IS mathAssertionExp SEMI
+    ;
+
+mathDefinitionDecl
+    :   (IMPLICIT)? DEFINITION mathDefinitionSig
+        (IS mathAssertionExp)? SEMI
+    ;
+
+mathInductiveDefinitionDecl
+    :   INDUCTIVE DEFINITION ON mathVariableDecl OF mathDefinitionSig IS
+        BASE_CASE mathAssertionExp SEMI
+        INDUCTIVE_CASE mathAssertionExp SEMI
+    ;
+
+mathSymbol
+    :   (PLUS|MINUS|CUTMINUS|DIVIDE|CAT|MULT|BOOL|INT|LTE|LT|GT|GTE)
+    |   BAR TRIPLEDOT BAR
+    |   LT TRIPLEDOT GT
+    |   ID
+    ;
+
+mathVariableDeclGroup
+    :   ID (COMMA ID)* COLON mathTypeExp
+    ;
+
+mathVariableDecl
+    :   ID COLON mathTypeExp
     ;
 
 // facilitydecls, enhancements, etc
@@ -200,12 +283,12 @@ operationProcedureDecl
         END closename=ID SEMI
     ;
 
-mathVariableDeclGroup
-    :   ID (COMMA ID)* COLON mathTypeExp
-    ;
-
-mathVariableDecl
-    :   ID COLON mathTypeExp
+procedureDecl
+    :   (recursive=RECURSIVE)? PROCEDURE name=ID operationParameterList
+        (COLON type)? SEMI
+        (variableDeclGroup)*
+        (stmtBlock)?
+        END closename=ID SEMI
     ;
 
 // mathematical clauses

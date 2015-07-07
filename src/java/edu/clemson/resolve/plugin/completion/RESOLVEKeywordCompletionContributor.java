@@ -47,7 +47,6 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "uses"));
 
-        //Todo: couldn't get working
         extend(CompletionType.BASIC, variableSectionPattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "Var"));
