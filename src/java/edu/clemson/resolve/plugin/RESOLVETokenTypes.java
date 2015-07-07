@@ -23,38 +23,37 @@ public class RESOLVETokenTypes {
             ElementTypeFactory.getRuleElementTypes(RESOLVELanguage.INSTANCE,
                     Arrays.asList(Resolve.ruleNames));
 
-    public static TokenElementType getTokenElementType(int type) {
-        for (TokenElementType t : TOKEN_ELEMENT_TYPES) {
-            if (t.getType() == type) {
-                return t;
-            }
-        }
-        throw new IllegalArgumentException("NOT FOUND");
-    }
-
-    public static RuleElementType getRuleElementType(int index) {
-        for (RuleElementType t : RULE_ELEMENT_TYPES) {
-            if (t.getRuleIndex() == index) {
-                return t;
-            }
-        }
-        throw new IllegalArgumentException("NOT FOUND");
-    }
-
     public static final TokenSet COMMENTS =
             ElementTypeFactory.createTokenSet(RESOLVELanguage.INSTANCE,
                     Arrays.asList(ResolveLexer.tokenNames),
                     ResolveLexer.DOC_COMMENT,
                     ResolveLexer.LINE_COMMENT);
 
+    public static final TokenSet PARAMETER_MODES =
+            ElementTypeFactory.createTokenSet(RESOLVELanguage.INSTANCE,
+                    Arrays.asList(ResolveLexer.tokenNames),
+                    ResolveLexer.UPDATES, ResolveLexer.RESTORES, ResolveLexer.REPLACES,
+                    ResolveLexer.CLEARS, ResolveLexer.EVALUATES, ResolveLexer.ALTERS,
+                    ResolveLexer.PRESERVES);
+
+    public static final TokenSet BUILTIN_OPERATORS =
+            ElementTypeFactory.createTokenSet(RESOLVELanguage.INSTANCE,
+                    Arrays.asList(ResolveLexer.tokenNames), ResolveLexer.AND,
+                    ResolveLexer.ASSIGN, ResolveLexer.BAR, ResolveLexer.CAT,
+                    ResolveLexer.CUTMINUS, ResolveLexer.DBL_BAR, ResolveLexer.DIVIDE,
+                    ResolveLexer.EQUALS, ResolveLexer.GT, ResolveLexer.GTE,
+                    ResolveLexer.IMPLIES, ResolveLexer.INTERSECT, ResolveLexer.IS_IN,
+                    ResolveLexer.IS_NOT_IN, ResolveLexer.LT, ResolveLexer.LTE,
+                    ResolveLexer.MINUS, ResolveLexer.MULT, ResolveLexer.NEQUALS,
+                    ResolveLexer.OR, ResolveLexer.PLUS, ResolveLexer.RANGE,
+                    ResolveLexer.RARROW, ResolveLexer.SWAP, ResolveLexer.TILDE,
+                    ResolveLexer.TRIPLEDOT, ResolveLexer.UNION);
+
     public static final TokenSet WHITESPACES =
             ElementTypeFactory.createTokenSet(RESOLVELanguage.INSTANCE,
                     Arrays.asList(ResolveLexer.tokenNames),
                     ResolveLexer.WS);
 
-    //Todo: Put the parameter mode keywords in their own set so and eventually
-    //add an appropriate option to set them (as distinct from keywords) in the
-    //colors page. Maybe a set for built-in ('o', '+', '||', 'union') operators would be good as well..
     public static final TokenSet KEYWORDS =
             ElementTypeFactory.createTokenSet(RESOLVELanguage.INSTANCE,
                     Arrays.asList(ResolveLexer.tokenNames),

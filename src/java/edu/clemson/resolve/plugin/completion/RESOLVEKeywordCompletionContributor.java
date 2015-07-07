@@ -62,7 +62,7 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
     }
 
     private static PsiElementPattern.Capture<PsiElement> topLevelPattern() {
-        return psiElement(RESOLVETokenTypes.getTokenElementType(ResolveLexer.ID))
+        return psiElement(RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.ID))
                 .withParent(psiElement(PsiErrorElement.class)
                         .withParent(psiElement(ASTWrapperPsiElement.class)
                                 .withParent(resolveFile())));
@@ -70,7 +70,7 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
 
     private static PsiElementPattern.Capture<PsiElement> moduleBodyPattern(
             PsiElementPattern.Capture<?> ... e) {
-        return psiElement(RESOLVETokenTypes.getTokenElementType(ResolveLexer.ID))
+        return psiElement(RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.ID))
                 .withParent(psiElement(PsiErrorElement.class)
                         .withParent(psiElement().withParent(psiElement()
                                 .andOr(e))));
@@ -79,14 +79,14 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
     //Todo: This is a bit closer for vars.. but this still allows stmts and vars to be interleaved
     // --which shouldn't be permitted.
     private static PsiElementPattern.Capture<PsiElement> variableSectionPattern() {
-        return psiElement(RESOLVETokenTypes.getTokenElementType(ResolveLexer.ID))
+        return psiElement(RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.ID))
                 .withParent(psiElement()
                         .withParent(psiElement().withParent(psiElement(
-                                RESOLVETokenTypes.getRuleElementType(Resolve.RULE_operationProcedureDecl)))));
+                                RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_operationProcedureDecl)))));
     }
 
     private static PsiElementPattern.Capture<PsiElement> usesPattern() {
-        return psiElement(RESOLVETokenTypes.getTokenElementType(ResolveLexer.ID))
+        return psiElement(RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.ID))
                 .withParent(psiElement(PsiErrorElement.class).withParent(psiElement()
                         .withParent(RModule.class).isFirstAcceptedChild(psiElement())));
     }
