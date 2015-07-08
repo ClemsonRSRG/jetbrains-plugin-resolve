@@ -5,14 +5,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
-import edu.clemson.resolve.plugin.parser.ResolveLexer;
-import edu.clemson.resolve.plugin.psi.impl.RConceptImplModule;
-import edu.clemson.resolve.plugin.psi.impl.RConceptModule;
-import edu.clemson.resolve.plugin.psi.impl.RFacilityModule;
-import edu.clemson.resolve.plugin.psi.impl.RPrecisModule;
-import org.antlr.intellij.adaptor.lexer.TokenElementType;
+import edu.clemson.resolve.plugin.psi.impl.*;
 
 import javax.swing.*;
 
@@ -38,20 +32,28 @@ public class RESOLVEFileIconPatcher implements FileIconPatcher {
         //is doing a depth first search). Though in the future hopefully our
         //psi structure will be better defined so we can just do the following:
         // PsiTreeUtil.getChildOfType(f, ParserClass.class);
-        if (PsiTreeUtil.findChildOfAnyType(f, RPrecisModule.class) != null) {
+        if (PsiTreeUtil.findChildOfAnyType(f, PrecisModule.class) != null) {
             return RESOLVEIcons.PRECIS;
         }
         else if (PsiTreeUtil.findChildOfAnyType(f,
-                RConceptModule.class) != null) {
+                ConceptModule.class) != null) {
             return RESOLVEIcons.CONCEPT;
         }
         else if (PsiTreeUtil.findChildOfAnyType(f,
-                RConceptImplModule.class) != null) {
+                ConceptImplModule.class) != null) {
             return RESOLVEIcons.IMPL;
         }
         else if (PsiTreeUtil.findChildOfAnyType(f,
-                RFacilityModule.class) != null) {
+                FacilityModule.class) != null) {
             return RESOLVEIcons.FACILITY;
+        }
+        else if (PsiTreeUtil.findChildOfAnyType(f,
+                EnhancementModule.class) != null) {
+            return RESOLVEIcons.ENHANCEMENT;
+        }
+        else if (PsiTreeUtil.findChildOfAnyType(f,
+                EnhancementImplModule.class) != null) {
+            return RESOLVEIcons.IMPL;
         }
         return baseIcon;
     }

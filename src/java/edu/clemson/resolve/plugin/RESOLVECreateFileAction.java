@@ -15,6 +15,7 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Properties;
+import java.util.Set;
 
 //Todo: move this to actions package.
 public class RESOLVECreateFileAction extends CreateFileFromTemplateAction implements DumbAware {
@@ -31,11 +32,8 @@ public class RESOLVECreateFileAction extends CreateFileFromTemplateAction implem
         FileTemplate template = FileTemplateManager
                 .getInstance(dir.getProject())
                 .getInternalTemplate(templateName);
-
         Properties properties = new Properties();
 
-        properties.setProperty(FILE,
-                ContainerUtil.getLastItem(StringUtil.split(dir.getName(), "-")));
         try {
             PsiElement element = FileTemplateUtil.createFromTemplate(template,
                     name, properties, dir);

@@ -34,55 +34,114 @@ options {
 	tokenVocab=ResolveLexer;
 }
 
+//test comment
 module
     :   precisModule
     |   conceptModule
     |   conceptImplModule
     |   facilityModule
+    |   enhancementImplModule
+    |   enhancementModule
     ;
 
 conceptModule
-    :   CONCEPT name=ID SEMI
+    :   CONCEPT name=ID (LT genericType (COMMA genericType)* GT)?
+        (specModuleParameterList)? SEMI
+        (dependentTermOptions)?
         (usesList)?
         (requiresClause)?
-        conceptBlock
+        (conceptBlock)
         END closename=ID SEMI EOF
     ;
 
 conceptBlock
     :   ( typeModelDecl
         | operationDecl
+        | mathDefinitionDecl
+        )*
+    ;
+
+// enhancement module
+
+enhancementModule
+    :   ENHANCEMENT name=ID (specModuleParameterList)?
+        FOR concept=ID SEMI
+        (dependentTermOptions)?
+        (usesList)?
+        (requiresClause)?
+        (enhancementBlock)
+        END closename=ID SEMI
+    ;
+
+enhancementBlock
+    :   ( operationDecl
+        | typeModelDecl
+        | mathDefinitionDecl
         )*
     ;
 
 // implementation modules
 
 conceptImplModule
-    :   IMPL name=ID FOR concept=ID SEMI
+    :   IMPLEMENTATION name=ID (implModuleParameterList)?
+        (dependentTermOptions)?
+        FOR concept=ID SEMI
         (usesList)?
         (requiresClause)?
-        END closename=ID SEMI EOF
+        (implBlock)
+        END closename=ID SEMI
+    ;
+
+enhancementImplModule
+   :   IMPLEMENTATION name=ID (specModuleParameterList)?
+       (dependentTermOptions)?
+       FOR enhancement=ID OF concept=ID SEMI
+       (usesList)?
+       (requiresClause)?
+       (implBlock)
+       END closename=ID SEMI
+   ;
+
+implBlock
+    :   ( typeRepresentationDecl
+        | operationProcedureDecl
+        | procedureDecl
+        | facilityDecl
+        )*
     ;
 
 // facility modules
 
 facilityModule
     :   FACILITY name=ID SEMI
+        (dependentTermOptions)?
         (usesList)?
         (requiresClause)?
-        facilityBlock
+        (facilityBlock)
         END closename=ID SEMI EOF
     ;
 
 facilityBlock
     :   ( operationProcedureDecl
+        | facilityDecl
+        | typeRepresentationDecl
         )*
     ;
 
 precisModule
     :   PRECIS name=ID SEMI
+        (dependentTermOptions)?
         (usesList)?
+        precisBlock
         END closename=ID SEMI EOF
+    ;
+
+precisBlock
+    :   ( mathDefinitionDecl
+        | mathCategoricalDefinitionDecl
+        | mathInductiveDefinitionDecl
+        | mathTheoremDecl
+        )*
     ;
 
 // uses, imports
@@ -91,10 +150,33 @@ usesList
     :   USES ID (COMMA ID)* SEMI
     ;
 
+// temp soln.
+dependentTermOptions
+    :   AT DEPENDENT LBRACE ID (COMMA ID)* RBRACE
+    ;
+
 // parameter and parameter-list related rules
 
 operationParameterList
     :   LPAREN (parameterDeclGroup (SEMI parameterDeclGroup)*)?  RPAREN
+    ;
+
+specModuleParameterList
+    :   LPAREN specModuleParameterDecl (SEMI specModuleParameterDecl)* RPAREN
+    ;
+
+implModuleParameterList
+    :   LPAREN implModuleParameterDecl (SEMI implModuleParameterDecl)* RPAREN
+    ;
+
+specModuleParameterDecl
+    :   parameterDeclGroup
+    |   mathDefinitionDecl
+    ;
+
+implModuleParameterDecl
+    :   parameterDeclGroup
+    |   operationDecl
     ;
 
 parameterDeclGroup
@@ -111,10 +193,57 @@ parameterMode
         | EVALUATES )
     ;
 
+variableDeclGroup
+    :   VAR ID (COMMA ID)* COLON type SEMI
+    ;
+
+// statements
+
+stmtBlock
+    :   stmt+
+    ;
+
+stmt
+    :   assignStmt
+    |   swapStmt
+    |   callStmt
+    |   whileStmt
+    ;
+
+assignStmt
+    :   left=progExp ASSIGN right=progExp SEMI
+    ;
+
+swapStmt
+    :   left=progExp SWAP right=progExp SEMI
+    ;
+
+callStmt
+    :   progParamExp SEMI
+    ;
+
+whileStmt
+    :   WHILE progExp DO
+        (stmt)*
+        END SEMI
+    ;
+
 // type and record related rules
 
 type
     :   (qualifier=ID COLONCOLON)? name=ID
+    ;
+
+genericType
+    :   ID
+    ;
+
+record
+    :   RECORD (recordVariableDeclGroup)+ END
+    ;
+
+recordVariableDeclGroup
+    :   ID (COMMA ID)* COLON type SEMI
     ;
 
 typeModelDecl
@@ -124,10 +253,90 @@ typeModelDecl
         (typeModelInit)?
     ;
 
+typeRepresentationDecl
+    :   TYPE name=ID EQUALS (type|record) SEMI
+        (conventionClause)?
+        (correspondenceClause)?
+        (typeImplInit)?
+    ;
+
 // type initialization rules
 
 typeModelInit
     :   INITIALIZATION (ensuresClause)?
+    ;
+
+typeImplInit
+    :   INITIALIZATION (ensuresClause)?
+        (variableDeclGroup)* (stmtBlock)?
+        END SEMI
+    ;
+
+// math constructs
+
+mathTheoremDecl
+    :   (COROLLARY|THEOREM) name=ID COLON mathAssertionExp SEMI
+    ;
+
+//The '(COMMA ID)?' is reserved for the variable we're inducting over
+//in the context of an inductive defn
+mathDefinitionSig
+    :   name=mathSymbol (LPAREN
+            mathDefinitionParameter (COMMA mathDefinitionParameter)* RPAREN)?
+            COLON mathTypeExp
+    ;
+
+mathDefinitionParameter
+    :   mathVariableDeclGroup
+    |   ID
+    ;
+
+mathCategoricalDefinitionDecl
+    :   CATEGORICAL DEFINITION FOR
+        mathDefinitionSig (COMMA mathDefinitionSig)+
+        IS mathAssertionExp SEMI
+    ;
+
+mathDefinitionDecl
+    :   (IMPLICIT)? DEFINITION mathDefinitionSig
+        (IS mathAssertionExp)? SEMI
+    ;
+
+mathInductiveDefinitionDecl
+    :   INDUCTIVE DEFINITION ON mathVariableDecl OF mathDefinitionSig IS
+        BASE_CASE mathAssertionExp SEMI
+        INDUCTIVE_CASE mathAssertionExp SEMI
+    ;
+
+mathSymbol
+    :   (PLUS|MINUS|CUTMINUS|DIVIDE|CAT|MULT|BOOL|INT|LTE|LT|GT|GTE)
+    |   BAR TRIPLEDOT BAR
+    |   LT TRIPLEDOT GT
+    |   ID
+    ;
+
+mathVariableDeclGroup
+    :   ID (COMMA ID)* COLON mathTypeExp
+    ;
+
+mathVariableDecl
+    :   ID COLON mathTypeExp
+    ;
+
+// facilitydecls, enhancements, etc
+
+facilityDecl
+    :   FACILITY name=ID IS spec=ID (LT type (COMMA type)* GT)?
+        (specArgs=moduleArgumentList)? (externally=EXTERNALLY)? IMPLEMENTED
+        BY impl=ID (implArgs=moduleArgumentList)? SEMI
+    ;
+
+moduleArgumentList
+    :   LPAREN moduleArgument (COMMA moduleArgument)* RPAREN
+    ;
+
+moduleArgument
+    :   progExp
     ;
 
 // functions
@@ -143,17 +352,17 @@ operationProcedureDecl
         (requiresClause)?
         (ensuresClause)?
         PROCEDURE
-       // (variableDeclGroup)*
-       // (stmt)*
+        (variableDeclGroup)*
+        (stmtBlock)?
         END closename=ID SEMI
     ;
 
-mathVariableDeclGroup
-    :   ID (COMMA ID)* COLON mathTypeExp
-    ;
-
-mathVariableDecl
-    :   ID COLON mathTypeExp
+procedureDecl
+    :   (recursive=RECURSIVE)? PROCEDURE name=ID operationParameterList
+        (COLON type)? SEMI
+        (variableDeclGroup)*
+        (stmtBlock)?
+        END closename=ID SEMI
     ;
 
 // mathematical clauses
@@ -268,4 +477,40 @@ mathTupleExp
 
 mathSegmentsExp
     :   mathFunctionApplicationExp (DOT mathFunctionApplicationExp)+
+    ;
+
+// program expressions
+
+progExp
+    :   op=MINUS progExp                        #progInfixExp
+    |   progExp op=(MULT|DIVIDE) progExp        #progInfixExp
+    |   progExp op=(PLUS|MINUS) progExp         #progInfixExp
+    |   progExp op=(LTE|GTE|LT|GT) progExp      #progInfixExp
+    |   progExp op=(EQUALS|NEQUALS) progExp     #progInfixExp
+    |   LPAREN progExp RPAREN                   #progNestedExp
+    |   progPrimary                             #progPrimaryExp
+    ;
+
+progPrimary
+    :   progLiteralExp
+    |   progNamedExp
+    |   progParamExp
+    |   progMemberExp
+    ;
+
+progParamExp
+    :   (qualifier=ID COLONCOLON)? name=ID
+        LPAREN (progExp (COMMA progExp)*)? RPAREN
+    ;
+
+progNamedExp
+    :   (qualifier=ID COLONCOLON)? name=ID
+    ;
+
+progMemberExp
+    :   (progParamExp|progNamedExp) (DOT ID)+
+    ;
+
+progLiteralExp
+    :   INT      #progIntegerExp
     ;

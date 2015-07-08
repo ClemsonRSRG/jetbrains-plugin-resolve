@@ -23,29 +23,31 @@ public class RESOLVETokenTypes {
             ElementTypeFactory.getRuleElementTypes(RESOLVELanguage.INSTANCE,
                     Arrays.asList(Resolve.ruleNames));
 
-    public static TokenElementType getTokenElementType(int type) {
-        for (TokenElementType t : TOKEN_ELEMENT_TYPES) {
-            if (t.getType() == type) {
-                return t;
-            }
-        }
-        throw new IllegalArgumentException("NOT FOUND");
-    }
-
-    public static RuleElementType getRuleElementType(int index) {
-        for (RuleElementType t : RULE_ELEMENT_TYPES) {
-            if (t.getRuleIndex() == index) {
-                return t;
-            }
-        }
-        throw new IllegalArgumentException("NOT FOUND");
-    }
-
     public static final TokenSet COMMENTS =
             ElementTypeFactory.createTokenSet(RESOLVELanguage.INSTANCE,
                     Arrays.asList(ResolveLexer.tokenNames),
                     ResolveLexer.DOC_COMMENT,
                     ResolveLexer.LINE_COMMENT);
+
+    public static final TokenSet PARAMETER_MODES =
+            ElementTypeFactory.createTokenSet(RESOLVELanguage.INSTANCE,
+                    Arrays.asList(ResolveLexer.tokenNames),
+                    ResolveLexer.UPDATES, ResolveLexer.RESTORES, ResolveLexer.REPLACES,
+                    ResolveLexer.CLEARS, ResolveLexer.EVALUATES, ResolveLexer.ALTERS,
+                    ResolveLexer.PRESERVES);
+
+    public static final TokenSet BUILTIN_OPERATORS =
+            ElementTypeFactory.createTokenSet(RESOLVELanguage.INSTANCE,
+                    Arrays.asList(ResolveLexer.tokenNames), ResolveLexer.AND,
+                    ResolveLexer.ASSIGN, ResolveLexer.BAR, ResolveLexer.CAT,
+                    ResolveLexer.CUTMINUS, ResolveLexer.DBL_BAR, ResolveLexer.DIVIDE,
+                    ResolveLexer.EQUALS, ResolveLexer.GT, ResolveLexer.GTE,
+                    ResolveLexer.IMPLIES, ResolveLexer.INTERSECT, ResolveLexer.IS_IN,
+                    ResolveLexer.IS_NOT_IN, ResolveLexer.LT, ResolveLexer.LTE,
+                    ResolveLexer.MINUS, ResolveLexer.MULT, ResolveLexer.NEQUALS,
+                    ResolveLexer.OR, ResolveLexer.PLUS, ResolveLexer.RANGE,
+                    ResolveLexer.RARROW, ResolveLexer.SWAP, ResolveLexer.TILDE,
+                    ResolveLexer.TRIPLEDOT, ResolveLexer.UNION);
 
     public static final TokenSet WHITESPACES =
             ElementTypeFactory.createTokenSet(RESOLVELanguage.INSTANCE,
@@ -55,21 +57,48 @@ public class RESOLVETokenTypes {
     public static final TokenSet KEYWORDS =
             ElementTypeFactory.createTokenSet(RESOLVELanguage.INSTANCE,
                     Arrays.asList(ResolveLexer.tokenNames),
-                    ResolveLexer.ALTERS,
-                    ResolveLexer.CLEARS,
-                    ResolveLexer.CONCEPT,
-                    ResolveLexer.END,
-                    ResolveLexer.EVALUATES,
-                    ResolveLexer.FACILITY,
-                    ResolveLexer.FOR,
-                    ResolveLexer.IMPL,
-                    ResolveLexer.OPERATION,
                     ResolveLexer.PRECIS,
-                    ResolveLexer.PRESERVES,
+                    ResolveLexer.BY,
+                    ResolveLexer.CART_PROD,
+                    ResolveLexer.CATEGORICAL,
+                    ResolveLexer.CONCEPT,
+                    ResolveLexer.CONSTRAINT,
+                    ResolveLexer.CONVENTION,
+                    ResolveLexer.COROLLARY,
+                    ResolveLexer.CORRESPONDENCE,
+                    ResolveLexer.DEFINITION,
+                    ResolveLexer.DO,
+                    ResolveLexer.ELSE,
+                    ResolveLexer.END,
+                    ResolveLexer.ENSURES,
+                    ResolveLexer.ENTAILS,
+                    ResolveLexer.EXEMPLAR,
+                    ResolveLexer.EXISTS,
+                    ResolveLexer.EXTERNALLY,
+                    ResolveLexer.FACILITY,
+                    ResolveLexer.FAMILY,
+                    ResolveLexer.FOR,
+                    ResolveLexer.FORALL,
+                    ResolveLexer.IF,
+                    ResolveLexer.IMPLICIT,
+                    ResolveLexer.INITIALIZATION,
+                    ResolveLexer.IS,
+                    ResolveLexer.IMPLEMENTATION,
+                    ResolveLexer.IMPLEMENTED,
+                    ResolveLexer.INDUCTIVE,
+                    ResolveLexer.LAMBDA,
+                    ResolveLexer.MODELED,
+                    ResolveLexer.OF,
+                    ResolveLexer.ON,
+                    ResolveLexer.OTHERWISE,
+                    ResolveLexer.OPERATION,
                     ResolveLexer.PROCEDURE,
+                    ResolveLexer.RECORD,
                     ResolveLexer.RECURSIVE,
-                    ResolveLexer.REPLACES,
-                    ResolveLexer.RESTORES,
-                    ResolveLexer.UPDATES,
-                    ResolveLexer.USES);
+                    ResolveLexer.REQUIRES,
+                    ResolveLexer.THEOREM,
+                    ResolveLexer.TYPE,
+                    ResolveLexer.USES,
+                    ResolveLexer.VAR,
+                    ResolveLexer.WHILE);
 }

@@ -47,32 +47,49 @@ LINE_COMMENT
 PRECIS			:   'Precis'			;
 BY				:	'by'				;
 CART_PROD		:	'Cart_Prod'			;
+CATEGORICAL		:	'Categorical'		;
 CONCEPT			:	'Concept'			;
-CONSTRAINT		:	'constraint'		;
+CONSTRAINT		:	'constraints'		;
 CONVENTION		:	'convention'		;
+COROLLARY		:	'Corollary'			;
 CORRESPONDENCE 	:	'correspondence'	;
+DEFINITION		:	'Definition'		;
+DEPENDENT		:	'Dependent_Terms'	;
+DO 				:	'do'				;
+ELSE			:	'else'				;
 END         	:   'end'				;
 ENSURES			:	'ensures'			;
 ENTAILS			:	'which_entails'		;
+ENHANCEMENT		:	'Enhancement'		;
 EXEMPLAR		:	'exemplar'			;
 EXISTS			:	'Exists'			;
+EXTERNALLY		:	'externally'		;
 FACILITY		:	'Facility'			;
 FAMILY			:	'Family'			;
 FOR				:	'for'				;
 FORALL			:	'Forall'			;
 IF				:	'if'				;
+IMPLICIT		:	'Implicit'			;
 INITIALIZATION	:	'initialization'	;
 IS 				:	'is'				;
-IMPL			:	'Implementation'	;
+IMPLEMENTATION	:	'Implementation'	;
+IMPLEMENTED		:	'implemented'		;
+INDUCTIVE		:	'Inductive'			;
 LAMBDA			:	'lambda'			;
 MODELED			:	'modeled'			;
+OF				:	'of'				;
+ON 				:	'on'				;
 OTHERWISE		:	'otherwise'			;
 OPERATION		:	'Operation'			;
 PROCEDURE		:	'Procedure'			;
+RECORD			:	'Record'			;
 RECURSIVE		:	'Recursive'			;
 REQUIRES		:	'requires'			;
+THEOREM			:	'Theorem'			;
 TYPE			:	'Type'				;
 USES			:	'uses'				;
+VAR				:	'Var'				;
+WHILE			:	'While'				;
 
 // parameter modes
 
@@ -87,12 +104,14 @@ EVALUATES		:	'evaluates'		;
 // punctuation
 
 AT				:	'@'				;
+BASE_CASE		:	'(i.)'			;
 COLON			:	':'				;
 COLONCOLON		:	'::'			;
 COMMA			:	','				;
 DOT 			:	'.'				;
 DBL_RBRACE		:	'}}'			;
 DBL_LBRACE		:	'{{'			;
+INDUCTIVE_CASE	:	'(ii.)'			;
 LBRACE 			:	'{'				;
 RBRACE  		:	'}'				;
 LPAREN			:	'('				;
@@ -102,6 +121,7 @@ SEMI			:	';'				;
 // operators
 
 AND				:	'and'			;
+ASSIGN			:	':='			;
 BAR				:	'|'				;
 CAT				:	'o'				;
 CUTMINUS		:	'.-.'			;
@@ -123,6 +143,7 @@ OR 				:	'or'			;
 PLUS			:	'+'				;
 RANGE			:	'..'			;
 RARROW			:	'->'			;
+SWAP			:	':=:'			;
 TILDE			:	'~'				;
 TRIPLEDOT		:	'...'			;
 UNION			:	'union'			;

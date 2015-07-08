@@ -1,4 +1,4 @@
-package edu.clemson.resolve.plugin;
+package edu.clemson.resolve.plugin.highlighting;
 
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory;

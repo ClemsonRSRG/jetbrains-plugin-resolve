@@ -1,4 +1,4 @@
-package edu.clemson.resolve.plugin;
+package edu.clemson.resolve.plugin.highlighting;
 
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
@@ -6,6 +6,8 @@ import com.intellij.openapi.editor.HighlighterColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.tree.IElementType;
+import edu.clemson.resolve.plugin.RESOLVELanguage;
+import edu.clemson.resolve.plugin.RESOLVETokenTypes;
 import edu.clemson.resolve.plugin.adaptors.RESOLVELexerAdaptor;
 import edu.clemson.resolve.plugin.parser.ResolveLexer;
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +18,8 @@ public class RESOLVESyntaxHighlighter extends SyntaxHighlighterBase {
 
     public static final TextAttributesKey KEYWORD =
             createTextAttributesKey("KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
+    public static final TextAttributesKey PARAMETER_MODE =
+            createTextAttributesKey("PARAMETER_MODE", DefaultLanguageHighlighterColors.KEYWORD);
     public static final TextAttributesKey LINE_COMMENT =
             createTextAttributesKey("LINE_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
     public static final TextAttributesKey JAVADOC_COMMENT =
