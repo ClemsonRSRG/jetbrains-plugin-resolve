@@ -32,6 +32,7 @@ def latest_antlr4_sources():
 
 def parsers():
     require(latest_antlr4)
+    require(grammars)
     antlr4("src/grammars", "gen", version="4.5",
            package="edu.clemson.resolve.plugin.parser")
 
@@ -40,7 +41,18 @@ def clean():
     rmdir("gen")
 
 
+#TODO: Once this grammar makes it to master, this should stay fixed.
+def grammars():
+    urllib.urlretrieve(
+        "https://raw.githubusercontent.com/Welchd1/resolve-lite/plugin-compiler/compiler/src/edu/clemson/resolve/parser/Resolve.g4",
+        "src/grammars/edu/clemson/resolve/plugin/Resolve.g4")
+    urllib.urlretrieve(
+        "https://raw.githubusercontent.com/Welchd1/resolve-lite/plugin-compiler/compiler/src/edu/clemson/resolve/parser/ResolveLexer.g4",
+        "src/grammars/edu/clemson/resolve/plugin/ResolveLexer.g4")
+
+
 def all():
+    require(grammars)
     require(parsers)
     require(latest_antlr4_sources)
 
