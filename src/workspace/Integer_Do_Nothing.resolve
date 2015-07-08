@@ -1,5 +1,5 @@
 Facility Integer_Do_Nothing;
-    uses Standard_Booleans;
+        uses Standard_Booleans;
 
     Operation Do_Nothing (alters b : Std_Boolean_Fac :: Boolean);
             requires true; ensures true;

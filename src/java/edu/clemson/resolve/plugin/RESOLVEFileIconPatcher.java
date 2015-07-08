@@ -6,10 +6,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
-import edu.clemson.resolve.plugin.psi.impl.ConceptImplModule;
-import edu.clemson.resolve.plugin.psi.impl.ConceptModule;
-import edu.clemson.resolve.plugin.psi.impl.FacilityModule;
-import edu.clemson.resolve.plugin.psi.impl.PrecisModule;
+import edu.clemson.resolve.plugin.psi.impl.*;
 
 import javax.swing.*;
 
@@ -49,6 +46,14 @@ public class RESOLVEFileIconPatcher implements FileIconPatcher {
         else if (PsiTreeUtil.findChildOfAnyType(f,
                 FacilityModule.class) != null) {
             return RESOLVEIcons.FACILITY;
+        }
+        else if (PsiTreeUtil.findChildOfAnyType(f,
+                EnhancementModule.class) != null) {
+            return RESOLVEIcons.ENHANCEMENT;
+        }
+        else if (PsiTreeUtil.findChildOfAnyType(f,
+                EnhancementImplModule.class) != null) {
+            return RESOLVEIcons.IMPL;
         }
         return baseIcon;
     }

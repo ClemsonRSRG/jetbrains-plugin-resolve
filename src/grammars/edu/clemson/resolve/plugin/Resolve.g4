@@ -39,13 +39,17 @@ module
     |   conceptModule
     |   conceptImplModule
     |   facilityModule
+    |   enhancementImplModule
+    |   enhancementModule
     ;
 
 conceptModule
-    :   CONCEPT name=ID SEMI
+    :   CONCEPT name=ID (LT genericType (COMMA genericType)* GT)?
+        (specModuleParameterList)? SEMI
+        (dependentTermOptions)?
         (usesList)?
         (requiresClause)?
-        conceptBlock
+        (conceptBlock)
         END closename=ID SEMI EOF
     ;
 
@@ -56,13 +60,50 @@ conceptBlock
         )*
     ;
 
+// enhancement module
+
+enhancementModule
+    :   ENHANCEMENT name=ID (specModuleParameterList)?
+        FOR concept=ID SEMI
+        (usesList)?
+        (requiresClause)?
+        (enhancementBlock)
+        END closename=ID SEMI
+    ;
+
+enhancementBlock
+    :   ( operationDecl
+        | typeModelDecl
+        | mathDefinitionDecl
+        )*
+    ;
+
 // implementation modules
 
 conceptImplModule
-    :   IMPLEMENTATION name=ID FOR concept=ID SEMI
+    :   IMPLEMENTATION name=ID (implModuleParameterList)?
+        FOR concept=ID SEMI
         (usesList)?
         (requiresClause)?
-        END closename=ID SEMI EOF
+        (implBlock)
+        END closename=ID SEMI
+    ;
+
+enhancementImplModule
+   :   IMPLEMENTATION name=ID (specModuleParameterList)?
+       FOR enhancement=ID OF concept=ID SEMI
+       (usesList)?
+       (requiresClause)?
+       (implBlock)
+       END closename=ID SEMI
+   ;
+
+implBlock
+    :   ( typeRepresentationDecl
+        | operationProcedureDecl
+        | procedureDecl
+        | facilityDecl
+        )*
     ;
 
 // facility modules
@@ -71,7 +112,7 @@ facilityModule
     :   FACILITY name=ID SEMI
         (usesList)?
         (requiresClause)?
-        facilityBlock
+        (facilityBlock)
         END closename=ID SEMI EOF
     ;
 
@@ -103,10 +144,33 @@ usesList
     :   USES ID (COMMA ID)* SEMI
     ;
 
+// temp soln.
+dependentTermOptions
+    :   AT DEPENDENT LBRACE ID (COMMA ID)* RBRACE
+    ;
+
 // parameter and parameter-list related rules
 
 operationParameterList
     :   LPAREN (parameterDeclGroup (SEMI parameterDeclGroup)*)?  RPAREN
+    ;
+
+specModuleParameterList
+    :   LPAREN specModuleParameterDecl (SEMI specModuleParameterDecl)* RPAREN
+    ;
+
+implModuleParameterList
+    :   LPAREN implModuleParameterDecl (SEMI implModuleParameterDecl)* RPAREN
+    ;
+
+specModuleParameterDecl
+    :   parameterDeclGroup
+    |   mathDefinitionDecl
+    ;
+
+implModuleParameterDecl
+    :   parameterDeclGroup
+    |   operationDecl
     ;
 
 parameterDeclGroup
@@ -162,6 +226,10 @@ whileStmt
 
 type
     :   (qualifier=ID COLONCOLON)? name=ID
+    ;
+
+genericType
+    :   ID
     ;
 
 record

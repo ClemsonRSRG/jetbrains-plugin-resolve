@@ -30,6 +30,8 @@
   <extensions defaultExtensionNs="com.intellij">
       <internalFileTemplate name="Concept Module"/>
       <internalFileTemplate name="Concept Implementation Module"/>
+      <internalFileTemplate name="Enhancement Module"/>
+      <internalFileTemplate name="Enhancement Implementation Module"/>
       <internalFileTemplate name="Precis Module"/>
       <internalFileTemplate name="Facility Module"/>
 
@@ -41,7 +43,7 @@
       <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVEKeywordCompletionContributor"/>
 
       <!-- <colorSettingsPage implementation="grammars.edu.plugin.configdialogs.RESOLVEColorsPage"/> -->
-      <externalAnnotator language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.annotations.RESOLVEExternalAnnotator"/>
+      <!-- <externalAnnotator language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.annotations.RESOLVEExternalAnnotator"/> -->
 
     <defaultLiveTemplatesProvider implementation="edu.clemson.resolve.plugin.template.RESOLVELiveTemplatesProvider"/>
     <liveTemplateContext implementation="edu.clemson.resolve.plugin.template.RESOLVEGenericContext"/>
