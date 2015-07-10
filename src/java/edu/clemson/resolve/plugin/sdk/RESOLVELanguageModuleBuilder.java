@@ -41,7 +41,7 @@ public class RESOLVELanguageModuleBuilder
      */
     @Override public void moduleCreated(@NotNull Module module) {
         // create the dub project
-        createDub(module.getProject().getBaseDir().getCanonicalPath());
+       /* createDub(module.getProject().getBaseDir().getCanonicalPath());
 
         // Update the ignored files and folders to avoid file search showing compiled files.
         FileTypeManager fileTypeManager = FileTypeManager.getInstance();
@@ -55,6 +55,6 @@ public class RESOLVELanguageModuleBuilder
                 builder.append(ignore).append(';');
             }
         }
-        fileTypeManager.setIgnoredFilesList(builder.toString());
+        fileTypeManager.setIgnoredFilesList(builder.toString());*/
     }
 }

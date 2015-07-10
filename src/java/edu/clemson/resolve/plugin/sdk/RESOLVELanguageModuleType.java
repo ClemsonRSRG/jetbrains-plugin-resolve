@@ -31,7 +31,7 @@ public class RESOLVELanguageModuleType
 
     @NotNull @Override public String getDescription() {
         return "RESOLVE modules are used for developing and grouping RESOLVE" +
-                "specifications and implementations.";
+                " code ranging from specifications to implementations.";
     }
 
     @Override public Icon getBigIcon() {
