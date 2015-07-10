@@ -12,5 +12,6 @@ public class RESOLVEIcons {
     public static final Icon FACILITY = IconLoader.getIcon("/edu/clemson/resolve/icons/facility.png");
     public static final Icon PRECIS = IconLoader.getIcon("/edu/clemson/resolve/icons/precis.png");
     public static final Icon IMPL = IconLoader.getIcon("/edu/clemson/resolve/icons/implementation.png");
+    public static final Icon MODULE = IconLoader.getIcon("/edu/clemson/resolve/icons/module.png");
 
 }
