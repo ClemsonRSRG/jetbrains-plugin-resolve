@@ -11,49 +11,30 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.io.File;
 
-public class RESOLVELanguageSdkType extends SdkType {
+public class RESOLVESdkType extends SdkType {
 
     public static final String RESOLVE_LANGUAGE_SDK_TYPE_ID = "RESOLVE Language SDK";
 
-    public static final File DEFAULT_SDK_PATH_WINDOWS = new File("c:/resolve/");
-    public static final File DEFAULT_SDK_PATH_OSX = new File("/usr/local/resolve");
-    public static final File DEFAULT_SDK_PATH_LINUX = new File("/usr/");
-
-    // Messages go to the log available in Help -> Show log in finder.
-    private final static Logger LOG = Logger.getInstance(RESOLVELanguageSdkType.class);
-
-    public RESOLVELanguageSdkType() {
+    public RESOLVESdkType() {
         super(RESOLVE_LANGUAGE_SDK_TYPE_ID);
     }
 
-    /**
-     * Returns the RESOLVE Language SDK.
-     */
-    @NotNull public static RESOLVELanguageSdkType getInstance() {
-        return SdkType.findInstance(RESOLVELanguageSdkType.class);
+    @NotNull public static RESOLVESdkType getInstance() {
+        final RESOLVESdkType instance =
+                SdkType.findInstance(RESOLVESdkType.class);
+        assert instance != null;
+        return instance;
     }
 
-    /**
-     * Returns the icon to be used for RESOLVE things in general.
-     */
-    @Override public Icon getIcon() {
+    @NotNull @Override public Icon getIcon() {
         return RESOLVEIcons.MODULE;
     }
 
+    @NotNull @Override public Icon getIconForAddAction() {
+        return getIcon();
+    }
+
     @Nullable @Override public String suggestHomePath() {
-        if (SystemInfo.isWindows) {
-            if (DEFAULT_SDK_PATH_WINDOWS.exists()) {
-                return DEFAULT_SDK_PATH_WINDOWS.getAbsolutePath();
-            }
-        } else if (SystemInfo.isMac) {
-            if (DEFAULT_SDK_PATH_OSX.exists()) {
-                return DEFAULT_SDK_PATH_OSX.getAbsolutePath();
-            }
-        } else if (SystemInfo.isLinux) {
-            if (DEFAULT_SDK_PATH_LINUX.exists()) {
-                return DEFAULT_SDK_PATH_LINUX.getAbsolutePath();
-            }
-        }
         return null;
     }
 

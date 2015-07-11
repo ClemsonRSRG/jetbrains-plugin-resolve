@@ -36,8 +36,8 @@
       <internalFileTemplate name="Facility Module"/>
 
       <!-- RESOLVE Language support -->
-    <moduleType id="RESOLVE_LANGUAGE_MODULE" implementationClass="edu.clemson.resolve.plugin.sdk.RESOLVELanguageModuleType"/>
-      <sdkType implementation="edu.clemson.resolve.plugin.sdk.RESOLVELanguageSdkType"/>
+    <moduleType id="RESOLVE_LANGUAGE_MODULE" implementationClass="edu.clemson.resolve.plugin.RESOLVEModuleType"/>
+      <sdkType implementation="edu.clemson.resolve.plugin.sdk.RESOLVESdkType"/>
 
       <fileIconPatcher implementation="edu.clemson.resolve.plugin.RESOLVEFileIconPatcher"/>
       <fileTypeFactory implementation="edu.clemson.resolve.plugin.RESOLVEFileTypeFactory"/>
