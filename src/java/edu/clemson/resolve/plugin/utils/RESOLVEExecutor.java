@@ -42,26 +42,4 @@ public class RESOLVEExecutor {
         myModule = module;
     }
 
-    public static RESOLVEExecutor in(@NotNull Project project, @Nullable Module module) {
-        return module != null ? in(module) : in(project);
-    }
-
-    @NotNull
-    public static RESOLVEExecutor in(@NotNull Project project) {
-        return new RESOLVEExecutor(project, null)
-                .withGoRoot(GoSdkService.getInstance(project).getSdkHomePath(null))
-                .withGoPath(GoSdkUtil.retrieveGoPath(project, null))
-                .withGoPath(GoSdkUtil.retrieveEnvironmentPathForGo(project, null));
-    }
-
-    @NotNull
-    public static GoExecutor in(@NotNull Module module) {
-        Project project = module.getProject();
-        return new GoExecutor(project, module)
-                .withGoRoot(GoSdkService.getInstance(project).getSdkHomePath(module))
-                .withGoPath(GoSdkUtil.retrieveGoPath(project, module))
-                .withEnvPath(GoSdkUtil.retrieveEnvironmentPathForGo(project, module));
-    }
-
-
 }

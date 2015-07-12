@@ -58,7 +58,7 @@ public class RESOLVESdkType extends SdkType {
             @NotNull String sdkHome) {
         File f = RESOLVESdkUtil.getCompilerExecutable(sdkHome);
         if (f == null) {
-            throw new IllegalStateException("executable is null here!??");
+            return null;
         }
         String name = f.getName();
         return name.substring(name.indexOf('-',0)+1, name.indexOf('-',0)+6);
