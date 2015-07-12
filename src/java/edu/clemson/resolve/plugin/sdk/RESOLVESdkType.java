@@ -2,6 +2,7 @@ package edu.clemson.resolve.plugin.sdk;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.projectRoots.*;
+import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.vfs.VirtualFile;
 import edu.clemson.resolve.plugin.RESOLVEIcons;
@@ -42,8 +43,10 @@ public class RESOLVESdkType extends SdkType {
 
     @Override public boolean isValidSdkHome(String path) {
         File resolve = RESOLVESdkUtil.getCompilerExecutable(path);
-        boolean result = resolve.exists();
-        return result; //canExecute() will always fail cause we're dealing with a jar
+        if (resolve == null) {
+            return false;
+        }
+        return resolve.exists();
     }
 
     @Override public String suggestSdkName(
@@ -53,9 +56,12 @@ public class RESOLVESdkType extends SdkType {
 
     @Nullable @Override public String getVersionString(
             @NotNull String sdkHome) {
-        String name = RESOLVESdkUtil.getCompilerExecutable(sdkHome).getName();
-        String version = name.substring(name.indexOf('-', 0)+1, name.indexOf('-', 0)+6);
-        return version;
+        File f = RESOLVESdkUtil.getCompilerExecutable(sdkHome);
+        if (f == null) {
+            throw new IllegalStateException("executable is null here!??");
+        }
+        String name = f.getName();
+        return name.substring(name.indexOf('-',0)+1, name.indexOf('-',0)+6);
     }
 
     @Nullable @Override public AdditionalDataConfigurable
@@ -64,12 +70,31 @@ public class RESOLVESdkType extends SdkType {
         return null;
     }
 
-    @Override public String getPresentableName() {
-        return RESOLVE_LANGUAGE_SDK_TYPE_ID;
-    }
-
     @Override public void saveAdditionalData(
             @NotNull SdkAdditionalData additionalData,
             @NotNull Element additional) {
     }
+
+    @Override public String getPresentableName() {
+        return RESOLVE_LANGUAGE_SDK_TYPE_ID;
+    }
+
+    @Override
+    public void setupSdkPaths(@NotNull Sdk sdk) {
+        String versionString = sdk.getVersionString();
+        if (versionString == null) throw new RuntimeException("SDK version is not defined");
+        SdkModificator modificator = sdk.getSdkModificator();
+        String path = sdk.getHomePath();
+        if (path == null) return;
+        modificator.setHomePath(path);
+
+        for (VirtualFile file : RESOLVESdkUtil
+                .getSdkDirectoriesToAttach(path, versionString)) {
+            modificator.addRoot(file, OrderRootType.CLASSES);
+            modificator.addRoot(file, OrderRootType.SOURCES);
+        }
+        modificator.commitChanges();
+    }
+
+
 }

@@ -3,13 +3,17 @@ package edu.clemson.resolve.plugin.sdk;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
+import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.util.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
 
 public class RESOLVESdkUtil {
 
@@ -46,7 +50,24 @@ public class RESOLVESdkUtil {
                 // Do something with child
             }
         }
-        throw new IllegalStateException("directory listing==null");
+        return null;
     }
+
+    @NotNull public static Collection<VirtualFile> getSdkDirectoriesToAttach(
+            @NotNull String sdkPath, @NotNull String versionString) {
+        String srcPath = getSrcLocation(versionString);
+        // scr is enough at the moment, possible process binaries from pkg
+        VirtualFile src = VirtualFileManager.getInstance().findFileByUrl(
+                VfsUtilCore.pathToUrl(FileUtil.join(sdkPath, srcPath)));
+        if (src != null && src.isDirectory()) {
+            return Collections.singletonList(src);
+        }
+        return Collections.emptyList();
+    }
+
+    @NotNull static String getSrcLocation(@NotNull String version) {
+        return "src";
+    }
+
 
 }
