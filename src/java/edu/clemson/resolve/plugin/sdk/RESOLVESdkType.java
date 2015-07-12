@@ -3,6 +3,7 @@ package edu.clemson.resolve.plugin.sdk;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.projectRoots.*;
 import com.intellij.openapi.util.SystemInfo;
+import com.intellij.openapi.vfs.VirtualFile;
 import edu.clemson.resolve.plugin.RESOLVEIcons;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
@@ -35,19 +36,26 @@ public class RESOLVESdkType extends SdkType {
     }
 
     @Nullable @Override public String suggestHomePath() {
-        return null;
+        VirtualFile suggestSdkDirectory = RESOLVESdkUtil.suggestSdkDirectory();
+        return suggestSdkDirectory != null ? suggestSdkDirectory.getPath() : null;
     }
 
     @Override public boolean isValidSdkHome(String path) {
-       /* File resolve = getCompilerExecutable(path);
-        resolve.setExecutable(true);
-        boolean result = resolve.canExecute();*/
-        return true;
+        File resolve = RESOLVESdkUtil.getCompilerExecutable(path);
+        boolean result = resolve.exists();
+        return result; //canExecute() will always fail cause we're dealing with a jar
     }
 
-    @Override public String suggestSdkName(String currentSdkName,
-                                       String sdkHome) {
+    @Override public String suggestSdkName(
+            String currentSdkName, String sdkHome) {
         return "RESOLVE";
+    }
+
+    @Nullable @Override public String getVersionString(
+            @NotNull String sdkHome) {
+        String name = RESOLVESdkUtil.getCompilerExecutable(sdkHome).getName();
+        String version = name.substring(name.indexOf('-', 0)+1, name.indexOf('-', 0)+6);
+        return version;
     }
 
     @Nullable @Override public AdditionalDataConfigurable
@@ -63,17 +71,5 @@ public class RESOLVESdkType extends SdkType {
     @Override public void saveAdditionalData(
             @NotNull SdkAdditionalData additionalData,
             @NotNull Element additional) {
-    }
-
-    /**
-     * Gets a file reference to compiler executable
-     *
-     * @param SDKPath path to SDK
-     * @return File reference to compiler executable
-     */
-    public static File getCompilerExecutable(@NotNull String SDKPath) {
-        File SDKfolder = new File(SDKPath);
-        File binaryFolder = new File(SDKfolder, "bin");
-        return new File(binaryFolder, "resolve-0.0.1-SNAPSHOT-jar-with-dependencies");
     }
 }
