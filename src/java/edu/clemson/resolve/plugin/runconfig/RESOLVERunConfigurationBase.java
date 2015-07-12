@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Created by daniel on 7/11/15.
  */
-public abstract class RESOLVERunConfigurationBase<RunningState extends GoRunningState> {
+public abstract class RESOLVERunConfigurationBase<RunningState> {
     @NotNull private String myWorkingDirectory = "";
 
     @NotNull
