@@ -12,8 +12,7 @@ public class RESOLVERunner extends DefaultProgramRunner {
         return ID;
     }
 
-    @Override public boolean canRun(@NotNull String executorId,
-                            @NotNull RunProfile profile) {
+    @Override public boolean canRun(@NotNull String executorId, @NotNull RunProfile profile) {
         return DefaultRunExecutor.EXECUTOR_ID.equals(executorId) && profile instanceof RESOLVERunConfigurationBase;
     }
 }

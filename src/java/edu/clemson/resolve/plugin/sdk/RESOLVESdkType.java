@@ -65,7 +65,7 @@ public class RESOLVESdkType extends SdkType {
     }
 
     @Nullable @Override public AdditionalDataConfigurable
-    createAdditionalDataConfigurable(
+                createAdditionalDataConfigurable(
             SdkModel sdkModel, SdkModificator sdkModificator) {
         return null;
     }
@@ -79,8 +79,7 @@ public class RESOLVESdkType extends SdkType {
         return RESOLVE_LANGUAGE_SDK_TYPE_ID;
     }
 
-    @Override
-    public void setupSdkPaths(@NotNull Sdk sdk) {
+    @Override public void setupSdkPaths(@NotNull Sdk sdk) {
         String versionString = sdk.getVersionString();
         if (versionString == null) throw new RuntimeException("SDK version is not defined");
         SdkModificator modificator = sdk.getSdkModificator();

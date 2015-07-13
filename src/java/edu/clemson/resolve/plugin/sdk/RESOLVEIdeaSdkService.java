@@ -18,8 +18,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Most (if not all) of this has been ripped from the go plugin. Once we get our
- * feet on the ground and get something working, we'll have to go back through this
- * and figuring out what we (for our thing) truly need and what we don't.
+ * feet on the ground and get something working, we can always  go back through this
+ * and sort through (for our purposes) what we truly need and what we don't.
  */
 public class RESOLVEIdeaSdkService extends RESOLVESdkService {
 

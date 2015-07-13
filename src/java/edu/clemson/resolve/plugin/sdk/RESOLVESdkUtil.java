@@ -1,5 +1,9 @@
 package edu.clemson.resolve.plugin.sdk;
 
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleManager;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -7,6 +11,7 @@ import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.util.ObjectUtils;
+import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,6 +72,19 @@ public class RESOLVESdkUtil {
 
     @NotNull static String getSrcLocation(@NotNull String version) {
         return "src";
+    }
+
+    @NotNull public static Collection<Module> getRESOLVEModules(
+            @NotNull Project project) {
+        if (project.isDefault()) return Collections.emptyList();
+        final RESOLVESdkService sdkService =
+                RESOLVESdkService.getInstance(project);
+        return ContainerUtil.filter(ModuleManager.getInstance(project)
+                .getModules(), new Condition<Module>() {
+            @Override public boolean value(Module module) {
+                return sdkService.isRESOLVEModule(module);
+            }
+        });
     }
 
 
