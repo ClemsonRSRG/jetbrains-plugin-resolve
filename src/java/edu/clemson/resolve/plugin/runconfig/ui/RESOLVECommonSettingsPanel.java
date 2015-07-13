@@ -15,7 +15,6 @@ import javax.swing.*;
 public class RESOLVECommonSettingsPanel extends JPanel {
 
     private RawCommandLineEditor resolveToolParamsField;
-    private RawCommandLineEditor paramsField;
     private TextFieldWithBrowseButton workingDirectoryField;
     private ModulesComboBox modulesComboBox;
     @SuppressWarnings("unused") private JPanel root;
@@ -23,7 +22,6 @@ public class RESOLVECommonSettingsPanel extends JPanel {
     public void init(@NotNull Project project) {
         RESOLVERunUtil.installFileChooser(project, workingDirectoryField, true);
         resolveToolParamsField.setDialogCaption("RESOLVE tool arguments");
-        paramsField.setDialogCaption("Program arguments");
     }
 
     public void resetEditorFrom(
