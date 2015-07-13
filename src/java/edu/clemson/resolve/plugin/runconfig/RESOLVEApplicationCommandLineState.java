@@ -7,12 +7,16 @@ import com.intellij.execution.jar.JarApplicationCommandLineState;
 import com.intellij.execution.jar.JarApplicationConfiguration;
 import com.intellij.execution.runners.ExecutionEnvironment;
 
-public class RESOLVEApplicationCommandLineState extends JarApplicationCommandLineState {
+public class RESOLVEApplicationCommandLineState extends JavaCommandLineState {
 
-    //Todo: check out JarApplicationConfiguration
-    public RESOLVEApplicationCommandLineState(
-            JarApplicationConfiguration configuration,
-            ExecutionEnvironment environment) {
-        super(configuration, environment);
+    protected RESOLVEApplicationCommandLineState(
+            ExecutionEnvironment environment) { super(environment); }
+
+    @Override protected JavaParameters createJavaParameters()
+            throws ExecutionException {
+        final JavaParameters parameters = new JavaParameters();
+        int i;
+        i = 0;
+        return null;
     }
 }

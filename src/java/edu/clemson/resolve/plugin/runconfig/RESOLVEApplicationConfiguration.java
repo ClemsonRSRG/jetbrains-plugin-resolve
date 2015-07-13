@@ -37,16 +37,15 @@ public class RESOLVEApplicationConfiguration
         return RESOLVESdkUtil.getRESOLVEModules(getProject());
     }
 
-    @Nullable @Override public RunProfileState getState(
-            @NotNull Executor executor,
-            @NotNull ExecutionEnvironment executionEnvironment)
-            throws ExecutionException {
-        return null;
-    }
-
     @NotNull @Override public SettingsEditor<? extends RunConfiguration>
             getConfigurationEditor() {
         return new RESOLVEApplicationConfigurationEditorForm(getProject());
+    }
+
+    @NotNull @Override protected RESOLVEApplicationCommandLineState
+                newCommandLineState(@NotNull ExecutionEnvironment env,
+                                    @NotNull Module module) {
+        return new RESOLVEApplicationCommandLineState(env);
     }
 
     @Override public void checkConfiguration() throws RuntimeConfigurationException {

@@ -52,6 +52,7 @@
 
         <!-- run application -->
         <configurationType implementation="edu.clemson.resolve.plugin.runconfig.RESOLVEApplicationRunConfigurationType"/>
+        <programRunner id="RESOLVERunner" implementation="edu.clemson.resolve.plugin.runconfig.RESOLVERunner"/>
 
         <defaultLiveTemplatesProvider implementation="edu.clemson.resolve.plugin.template.RESOLVELiveTemplatesProvider"/>
         <liveTemplateContext implementation="edu.clemson.resolve.plugin.template.RESOLVEGenericContext"/>

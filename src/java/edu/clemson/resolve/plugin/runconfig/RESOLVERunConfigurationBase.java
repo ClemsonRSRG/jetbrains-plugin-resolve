@@ -1,13 +1,17 @@
 package edu.clemson.resolve.plugin.runconfig;
 
 import com.intellij.execution.ExecutionBundle;
+import com.intellij.execution.ExecutionException;
+import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.*;
+import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.PathUtil;
 import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.plugin.sdk.RESOLVESdkService;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -41,6 +45,29 @@ public abstract class RESOLVERunConfigurationBase
                     configurationModule.getProject().getBasePath());
         }
     }
+
+    @Nullable @Override public RunProfileState getState(
+            @NotNull Executor executor,
+            @NotNull ExecutionEnvironment environment)
+            throws ExecutionException {
+        System.out.println("Calling getState!");
+        return createCommandLineState(environment);
+    }
+
+    @NotNull public final JavaCommandLineState createCommandLineState(
+            ExecutionEnvironment env) throws ExecutionException {
+        RESOLVEModuleBasedConfiguration configuration = getConfigurationModule();
+        Module module = configuration.getModule();
+        if (module == null) {
+            throw new ExecutionException(
+                    "RESOLVE isn't configured for run configuration: "
+                            + getName());
+        }
+        return newCommandLineState(env, module);
+    }
+
+    @NotNull protected abstract JavaCommandLineState newCommandLineState(
+            ExecutionEnvironment env, Module module);
 
     @Override public void checkConfiguration()
             throws RuntimeConfigurationException {
