@@ -1,7 +1,6 @@
 package edu.clemson.resolve.plugin.runconfig.ui;
 
 import com.intellij.application.options.ModulesComboBox;
-import com.intellij.execution.configuration.EnvironmentVariablesTextFieldWithBrowseButton;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
@@ -18,8 +17,8 @@ public class RESOLVECommonSettingsPanel extends JPanel {
     private RawCommandLineEditor resolveToolParamsField;
     private RawCommandLineEditor paramsField;
     private TextFieldWithBrowseButton workingDirectoryField;
-    private EnvironmentVariablesTextFieldWithBrowseButton environmentField;
     private ModulesComboBox modulesComboBox;
+    @SuppressWarnings("unused") private JPanel root;
 
     public void init(@NotNull Project project) {
         RESOLVERunUtil.installFileChooser(project, workingDirectoryField, true);
@@ -32,7 +31,6 @@ public class RESOLVECommonSettingsPanel extends JPanel {
         modulesComboBox.setModules(configuration.getValidModules());
         modulesComboBox.setSelectedModule(configuration.getConfigurationModule().getModule());
         resolveToolParamsField.setText(configuration.getRESOLVEToolParams());
-        paramsField.setText(configuration.getParams());
         workingDirectoryField.setText(configuration.getWorkingDirectory());
     }
 
@@ -40,7 +38,6 @@ public class RESOLVECommonSettingsPanel extends JPanel {
             @NotNull RESOLVERunConfigurationBase configuration) {
         configuration.setModule(modulesComboBox.getSelectedModule());
         configuration.setRESOLVEToolParams(resolveToolParamsField.getText());
-        configuration.setParams(paramsField.getText());
         configuration.setWorkingDirectory(workingDirectoryField.getText());
     }
 

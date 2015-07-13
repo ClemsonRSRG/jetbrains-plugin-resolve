@@ -68,4 +68,8 @@ public class RESOLVEApplicationConfiguration
     @NotNull public String getFilePath() {
         return filePath;
     }
+
+    public void setFilePath(@NotNull String filePath) {
+        this.filePath = filePath;
+    }
 }

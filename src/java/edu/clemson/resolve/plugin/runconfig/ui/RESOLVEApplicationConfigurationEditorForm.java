@@ -3,7 +3,10 @@ package edu.clemson.resolve.plugin.runconfig.ui;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.openapi.util.text.StringUtil;
 import edu.clemson.resolve.plugin.runconfig.RESOLVEApplicationConfiguration;
+import edu.clemson.resolve.plugin.runconfig.RESOLVERunUtil;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -13,40 +16,44 @@ public class RESOLVEApplicationConfigurationEditorForm
             SettingsEditor<RESOLVEApplicationConfiguration> {
 
     @NotNull private final Project project;
+    private JPanel component;
+    private JLabel fileLabel;
+    private TextFieldWithBrowseButton fileField;
+    private TextFieldWithBrowseButton outputDirectoryField;
+    private JLabel outputDirectoryLabel;
+    private RESOLVECommonSettingsPanel commonSettingsPanel;
 
     public RESOLVEApplicationConfigurationEditorForm(
             @NotNull final Project project) {
         super(null);
         this.project = project;
-        myCommonSettingsPanel.init(project);
-
-        installRunKindComboBox();
-        GoRunUtil.installGoWithMainFileChooser(myProject, myFileField);
-        GoRunUtil.installFileChooser(myProject, myOutputFilePathField, true);
+        this.commonSettingsPanel.init(project);
+        RESOLVERunUtil.installFileChooser(this.project, fileField, false);
+        RESOLVERunUtil.installFileChooser(project, outputDirectoryField, true);
     }
 
-    @Override protected void resetEditorFrom(Object o) {
-
+    @Override protected void resetEditorFrom(
+            @NotNull RESOLVEApplicationConfiguration configuration) {
+        fileField.setText(configuration.getFilePath());
+        outputDirectoryField.setText(StringUtil.notNullize(
+                configuration.getOutputFilePath()));
+        commonSettingsPanel.resetEditorFrom(configuration);
     }
 
-    @Override protected void applyEditorTo(Object o)
+    @Override protected void applyEditorTo(
+            @NotNull RESOLVEApplicationConfiguration configuration)
             throws ConfigurationException {
-
-    }
-
-    @Override
-    protected void resetEditorFrom(RESOLVEApplicationConfiguration resolveApplicationConfiguration) {
-
-    }
-
-    @Override
-    protected void applyEditorTo(RESOLVEApplicationConfiguration resolveApplicationConfiguration) throws ConfigurationException {
-
+        configuration.setFilePath(fileField.getText());
+        configuration.setFileOutputPath(StringUtil.nullize(
+                outputDirectoryField.getText()));
+        commonSettingsPanel.applyEditorTo(configuration);
     }
 
     @NotNull @Override protected JComponent createEditor() {
-        return null;
+        return component;
     }
 
-
+    @Override protected void disposeEditor() {
+        component.setVisible(false);
+    }
 }
