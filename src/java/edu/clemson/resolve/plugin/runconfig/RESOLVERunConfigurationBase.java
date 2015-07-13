@@ -15,7 +15,7 @@ public abstract class RESOLVERunConfigurationBase
         extends
             ModuleBasedConfiguration<RESOLVEModuleBasedConfiguration> {
 
-    @NotNull private String resolveParams = "";
+    @NotNull private String resolveToolParams = "";
     @NotNull private String workingDirectory = "";
     @NotNull private String params = "";
 
@@ -75,11 +75,11 @@ public abstract class RESOLVERunConfigurationBase
     }
 
     @NotNull public String getRESOLVEToolParams() {
-        return resolveParams;
+        return resolveToolParams;
     }
 
     public void setRESOLVEToolParams(@NotNull String params) {
-        resolveParams = params;
+        resolveToolParams = params;
     }
 
     public void setWorkingDirectory(@NotNull String workingDirectory) {
