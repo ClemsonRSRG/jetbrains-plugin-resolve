@@ -45,7 +45,7 @@ public class RESOLVEApplicationConfiguration
     @NotNull @Override protected RESOLVEApplicationCommandLineState
                 newCommandLineState(@NotNull ExecutionEnvironment env,
                                     @NotNull Module module) {
-        return new RESOLVEApplicationCommandLineState(env);
+        return new RESOLVEApplicationCommandLineState(this, env);
     }
 
     @Override public void checkConfiguration() throws RuntimeConfigurationException {
