@@ -19,6 +19,7 @@ public abstract class RESOLVERunConfigurationBase
         extends
             ModuleBasedConfiguration<RESOLVEModuleBasedConfiguration> {
 
+    @NotNull private String filePath = "";
     @NotNull private String resolveToolParams = "";
     @NotNull private String workingDirectory = "";
     @NotNull private String params = "";
@@ -44,6 +45,7 @@ public abstract class RESOLVERunConfigurationBase
             this.workingDirectory = StringUtil.notNullize(
                     configurationModule.getProject().getBasePath());
         }
+        this.filePath = getWorkingDirectory();
     }
 
     @Nullable @Override public RunProfileState getState(
@@ -111,5 +113,13 @@ public abstract class RESOLVERunConfigurationBase
 
     public void setWorkingDirectory(@NotNull String workingDirectory) {
         this.workingDirectory = workingDirectory;
+    }
+
+    @NotNull public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(@NotNull String filePath) {
+        this.filePath = filePath;
     }
 }

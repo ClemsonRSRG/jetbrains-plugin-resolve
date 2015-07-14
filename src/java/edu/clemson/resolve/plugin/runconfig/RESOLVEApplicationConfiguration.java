@@ -24,13 +24,10 @@ public class RESOLVEApplicationConfiguration
         extends
             RESOLVERunConfigurationBase {
 
-    private String filePath = "";
-
     public RESOLVEApplicationConfiguration(Project project, String name,
                            @NotNull ConfigurationType configurationType) {
         super(name, new RESOLVEModuleBasedConfiguration(project),
                 configurationType.getConfigurationFactories()[0]);
-        this.filePath = getWorkingDirectory();
     }
 
     @Override public Collection<Module> getValidModules() {
@@ -64,11 +61,5 @@ public class RESOLVEApplicationConfiguration
      //   }
     }
 
-    @NotNull public String getFilePath() {
-        return filePath;
-    }
 
-    public void setFilePath(@NotNull String filePath) {
-        this.filePath = filePath;
-    }
 }
