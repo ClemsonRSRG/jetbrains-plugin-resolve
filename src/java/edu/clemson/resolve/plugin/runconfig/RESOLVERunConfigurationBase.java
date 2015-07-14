@@ -3,13 +3,18 @@ package edu.clemson.resolve.plugin.runconfig;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
+import com.intellij.execution.configuration.EnvironmentVariablesComponent;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.util.InvalidDataException;
+import com.intellij.openapi.util.JDOMExternalizerUtil;
+import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.PathUtil;
 import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.plugin.sdk.RESOLVESdkService;
+import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,10 +24,13 @@ public abstract class RESOLVERunConfigurationBase
         extends
             ModuleBasedConfiguration<RESOLVEModuleBasedConfiguration> {
 
+    private static final String FILE_PATH_ATTRIBUTE_NAME = "file_path";
+    private static final String WORKING_DIRECTORY_NAME = "working_directory";
+    private static final String RESOLVE_PARAMETERS_NAME = "resolve_parameters";
+
     @NotNull private String filePath = "";
     @NotNull private String resolveToolParams = "";
     @NotNull private String workingDirectory = "";
-    @NotNull private String params = "";
 
     public RESOLVERunConfigurationBase(String name,
                    RESOLVEModuleBasedConfiguration configurationModule,
@@ -46,6 +54,42 @@ public abstract class RESOLVERunConfigurationBase
                     configurationModule.getProject().getBasePath());
         }
         this.filePath = getWorkingDirectory();
+    }
+
+    @Override public void writeExternal(final Element element)
+            throws WriteExternalException {
+        super.writeExternal(element);
+        writeModule(element);
+        if (StringUtil.isNotEmpty(filePath)) {
+            JDOMExternalizerUtil.addElementWithValueAttribute(element,
+                    FILE_PATH_ATTRIBUTE_NAME, filePath);
+        }
+        if (StringUtil.isNotEmpty(workingDirectory)) {
+            JDOMExternalizerUtil.addElementWithValueAttribute(element,
+                    WORKING_DIRECTORY_NAME, workingDirectory);
+        }
+        if (StringUtil.isNotEmpty(resolveToolParams)) {
+            JDOMExternalizerUtil.addElementWithValueAttribute(element,
+                    RESOLVE_PARAMETERS_NAME, resolveToolParams);
+        }
+    }
+
+    @Override public void readExternal(
+            @NotNull final Element element) throws InvalidDataException {
+        super.readExternal(element);
+        readModule(element);
+
+        filePath = StringUtil.notNullize(JDOMExternalizerUtil
+                .getFirstChildValueAttribute(element, FILE_PATH_ATTRIBUTE_NAME));
+
+        resolveToolParams = StringUtil.notNullize(JDOMExternalizerUtil
+                .getFirstChildValueAttribute(element, RESOLVE_PARAMETERS_NAME));
+
+        String workingDirectoryValue = JDOMExternalizerUtil
+                .getFirstChildValueAttribute(element, WORKING_DIRECTORY_NAME);
+        if (workingDirectoryValue != null) {
+            workingDirectory = workingDirectoryValue;
+        }
     }
 
     @Nullable @Override public RunProfileState getState(

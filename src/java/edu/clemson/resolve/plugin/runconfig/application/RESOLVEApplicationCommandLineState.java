@@ -33,7 +33,6 @@ public class RESOLVEApplicationCommandLineState extends JavaCommandLineState {
     }
     private static Sdk ourDefaultSdk;
 
-    //Todo: I'm probably doing something really dumb here.
     private static synchronized Sdk getDefaultSdk() {
         if (ourDefaultSdk == null) {
             final String jdkHome = SystemProperties.getJavaHome();
