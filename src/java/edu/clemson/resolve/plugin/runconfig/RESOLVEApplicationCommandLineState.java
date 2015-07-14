@@ -23,8 +23,6 @@ import java.io.File;
 
 public class RESOLVEApplicationCommandLineState extends JavaCommandLineState {
     @NotNull private final RESOLVERunConfigurationBase runConfiguration;
-    public String VM_PARAMETERS;
-    public String PROGRAM_PARAMETERS;
 
     protected RESOLVEApplicationCommandLineState(
             @NotNull RESOLVERunConfigurationBase runConfiguration,
@@ -52,8 +50,6 @@ public class RESOLVEApplicationCommandLineState extends JavaCommandLineState {
         final JavaParameters parameters = new JavaParameters();
 
         ParametersList vm = parameters.getVMParametersList();
-        fillParameterList(vm, VM_PARAMETERS);
-        fillParameterList(parameters.getProgramParametersList(), PROGRAM_PARAMETERS);
         Sdk jdk = getDefaultSdk();
 
         Module m = runConfiguration.getModules()[0];
@@ -68,8 +64,7 @@ public class RESOLVEApplicationCommandLineState extends JavaCommandLineState {
         parameters.setJdk(jdk);
         parameters.setMainClass("edu.clemson.resolve.compiler.RESOLVECompiler");
         String toolParams = runConfiguration.getRESOLVEToolParams();
-        vm.add(runConfiguration.getFilePath());
-
+        parameters.getProgramParametersList().add(runConfiguration.getFilePath());
         int i;
         i = 0;
         return parameters;

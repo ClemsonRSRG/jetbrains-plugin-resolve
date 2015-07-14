@@ -1,6 +1,0 @@
-Facility Standard_Booleans;
-
-    Facility Std_Boolean_Fac is
-            Boolean_Template
-        externally implemented by Boolean_Impl;
-end Standard_Booleans;

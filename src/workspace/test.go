@@ -1,5 +1,1 @@
-package resolve
 
-func foo() {
-
-}
