@@ -52,7 +52,6 @@ public abstract class RESOLVERunConfigurationBase
             @NotNull Executor executor,
             @NotNull ExecutionEnvironment environment)
             throws ExecutionException {
-        System.out.println("Calling getState!");
         return createCommandLineState(environment);
     }
 
