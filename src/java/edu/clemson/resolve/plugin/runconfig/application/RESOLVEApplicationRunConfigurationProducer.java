@@ -24,8 +24,8 @@ public class RESOLVEApplicationRunConfigurationProducer
         super(RESOLVEApplicationRunConfigurationType.getInstance());
     }
 
-    @Override
-    public boolean isConfigurationFromContext(@NotNull RESOLVEApplicationConfiguration configuration, ConfigurationContext context) {
+    @Override public boolean isConfigurationFromContext(
+            @NotNull RESOLVEApplicationConfiguration configuration, ConfigurationContext context) {
         PsiElement contextElement = RESOLVERunUtil.getContextElement(context);
         if (contextElement == null) return false;
 
@@ -37,7 +37,6 @@ public class RESOLVEApplicationRunConfigurationProducer
 
     @NotNull @Override protected String getConfigurationName(
             @NotNull PsiFile file) {
-        return "Run " + file.getName();
+        return "" + file.getName();
     }
-
 }

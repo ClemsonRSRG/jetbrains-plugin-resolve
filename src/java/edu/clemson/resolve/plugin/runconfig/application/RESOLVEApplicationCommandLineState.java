@@ -64,20 +64,8 @@ public class RESOLVEApplicationCommandLineState extends JavaCommandLineState {
         vm.add("-Xbootclasspath/a:" + libPath + File.separator + "resolve-0.0.1-SNAPSHOT-jar-with-dependencies.jar");
         parameters.setJdk(jdk);
         parameters.setMainClass("edu.clemson.resolve.compiler.RESOLVECompiler");
-        String toolParams = runConfiguration.getRESOLVEToolParams();
         parameters.getProgramParametersList().add(runConfiguration.getFilePath());
-        int i;
-        i = 0;
+        parameters.getProgramParametersList().addParametersString(" -lib " + runConfiguration.getWorkingDirectory());
         return parameters;
-    }
-
-    private static void fillParameterList(ParametersList list, @Nullable String value) {
-        if (value == null) return;
-
-        for (String parameter : value.split(" ")) {
-            if (parameter != null && parameter.length() > 0) {
-                list.add(parameter);
-            }
-        }
     }
 }
