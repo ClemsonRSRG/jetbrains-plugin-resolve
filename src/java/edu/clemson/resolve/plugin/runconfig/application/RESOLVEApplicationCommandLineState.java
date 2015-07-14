@@ -1,4 +1,4 @@
-package edu.clemson.resolve.plugin.runconfig;
+package edu.clemson.resolve.plugin.runconfig.application;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.application.ApplicationConfiguration;
@@ -15,6 +15,7 @@ import com.intellij.openapi.projectRoots.*;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.util.SystemProperties;
+import edu.clemson.resolve.plugin.runconfig.RESOLVERunConfigurationBase;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

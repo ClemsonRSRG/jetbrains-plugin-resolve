@@ -5,7 +5,7 @@ import com.intellij.openapi.options.SettingsEditor;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.text.StringUtil;
-import edu.clemson.resolve.plugin.runconfig.RESOLVEApplicationConfiguration;
+import edu.clemson.resolve.plugin.runconfig.application.RESOLVEApplicationConfiguration;
 import edu.clemson.resolve.plugin.runconfig.RESOLVERunUtil;
 import org.jetbrains.annotations.NotNull;
 

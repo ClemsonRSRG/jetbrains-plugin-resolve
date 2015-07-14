@@ -1,10 +1,11 @@
-package edu.clemson.resolve.plugin.runconfig;
+package edu.clemson.resolve.plugin.runconfig.application;
 
 import com.intellij.execution.configurations.ConfigurationTypeBase;
 import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
 import edu.clemson.resolve.plugin.RESOLVEIcons;
+import edu.clemson.resolve.plugin.runconfig.RESOLVEConfigurationFactoryBase;
 import org.jetbrains.annotations.NotNull;
 
 public class RESOLVEApplicationRunConfigurationType

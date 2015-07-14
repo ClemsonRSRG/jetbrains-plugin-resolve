@@ -1,7 +1,5 @@
-package edu.clemson.resolve.plugin.runconfig;
+package edu.clemson.resolve.plugin.runconfig.application;
 
-import com.intellij.execution.ExecutionException;
-import com.intellij.execution.Executor;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
@@ -13,16 +11,17 @@ import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import edu.clemson.resolve.plugin.psi.RESOLVEPsiFile;
+import edu.clemson.resolve.plugin.runconfig.RESOLVEModuleBasedConfiguration;
+import edu.clemson.resolve.plugin.runconfig.RESOLVERunConfigurationBase;
 import edu.clemson.resolve.plugin.runconfig.ui.RESOLVEApplicationConfigurationEditorForm;
 import edu.clemson.resolve.plugin.sdk.RESOLVESdkUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
 public class RESOLVEApplicationConfiguration
         extends
-            RESOLVERunConfigurationBase {
+        RESOLVERunConfigurationBase {
 
     public RESOLVEApplicationConfiguration(Project project, String name,
                            @NotNull ConfigurationType configurationType) {

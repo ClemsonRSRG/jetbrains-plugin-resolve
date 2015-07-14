@@ -51,8 +51,9 @@
         <!-- <externalAnnotator language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.annotations.RESOLVEExternalAnnotator"/> -->
 
         <!-- run application -->
-        <configurationType implementation="edu.clemson.resolve.plugin.runconfig.RESOLVEApplicationRunConfigurationType"/>
+        <configurationType implementation="edu.clemson.resolve.plugin.runconfig.application.RESOLVEApplicationRunConfigurationType"/>
         <programRunner id="RESOLVERunner" implementation="edu.clemson.resolve.plugin.runconfig.RESOLVERunner"/>
+        <runConfigurationProducer implementation="edu.clemson.resolve.plugin.runconfig.application.RESOLVEApplicationRunConfigurationProducer"/>
 
         <defaultLiveTemplatesProvider implementation="edu.clemson.resolve.plugin.template.RESOLVELiveTemplatesProvider"/>
         <liveTemplateContext implementation="edu.clemson.resolve.plugin.template.RESOLVEGenericContext"/>
