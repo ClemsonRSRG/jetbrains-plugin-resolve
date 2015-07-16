@@ -1,25 +1,53 @@
 package edu.clemson.resolve.plugin.runconfig.before;
 
+import com.intellij.execution.BeforeRunTaskProvider;
 import com.intellij.execution.configurations.RunConfiguration;
-import com.intellij.openapi.externalSystem.model.ProjectSystemId;
-import com.intellij.openapi.externalSystem.service.execution.ExternalSystemBeforeRunTask;
-import com.intellij.openapi.externalSystem.service.execution.ExternalSystemBeforeRunTaskProvider;
-import com.intellij.openapi.project.Project;
+import com.intellij.execution.runners.ExecutionEnvironment;
+import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.util.Key;
 import org.jetbrains.annotations.Nullable;
 
-public class RESOLVEGenCodeBeforeRunTaskProvider extends ExternalSystemBeforeRunTaskProvider {
+public class RESOLVEGenCodeBeforeRunTaskProvider
+        extends
+            BeforeRunTaskProvider<RESOLVEGenCodeBeforeRunTask> {
 
-    public static final Key<RESOLVEGenCodeBeforeRunTask> ID = Key.create("RESOLVEGenCodeBeforeRunTask");
+    public static final Key<RESOLVEGenCodeBeforeRunTask> ID =
+            Key.create("RESOLVEGenCodeBeforeRunTask");
 
-    public RESOLVEGenCodeBeforeRunTaskProvider(ProjectSystemId systemId,
-                       Project project, Key<ExternalSystemBeforeRunTask> id) {
-        super(systemId, project, id);
+    @Override public Key<RESOLVEGenCodeBeforeRunTask> getId() {
+        return ID;
     }
 
-    @Nullable
-    @Override
-    public ExternalSystemBeforeRunTask createTask(RunConfiguration runConfiguration) {
-        return new RESOLVEGenCodeBeforeRunTask();
+    @Override public String getName() {
+        return "RESOLVE gencode";
+    }
+
+    @Override public String getDescription(RESOLVEGenCodeBeforeRunTask task) {
+        return null;
+    }
+
+    @Override public boolean isConfigurable() {
+        return false;
+    }
+
+    @Nullable @Override public RESOLVEGenCodeBeforeRunTask createTask(
+            RunConfiguration runConfiguration) {
+        return null;
+    }
+
+    @Override public boolean configureTask(RunConfiguration runConfiguration,
+                                           RESOLVEGenCodeBeforeRunTask task) {
+        return false;
+    }
+
+    @Override public boolean canExecuteTask(RunConfiguration configuration,
+                                            RESOLVEGenCodeBeforeRunTask task) {
+        return false;
+    }
+
+    @Override public boolean executeTask(DataContext context,
+         RunConfiguration configuration, ExecutionEnvironment env,
+         RESOLVEGenCodeBeforeRunTask task) {
+        return false;
     }
 }

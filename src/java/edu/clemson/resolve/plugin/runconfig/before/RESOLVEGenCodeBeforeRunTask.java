@@ -1,14 +1,27 @@
 package edu.clemson.resolve.plugin.runconfig.before;
 
-import com.intellij.openapi.externalSystem.model.ProjectSystemId;
-import com.intellij.openapi.externalSystem.service.execution.ExternalSystemBeforeRunTask;
-import com.intellij.openapi.util.Key;
+import com.intellij.execution.BeforeRunTask;
+import com.intellij.openapi.util.text.StringUtil;
+import org.jdom.Element;
+import org.jetbrains.annotations.NonNls;
 
-public class RESOLVEGenCodeBeforeRunTask extends ExternalSystemBeforeRunTask {
+public class RESOLVEGenCodeBeforeRunTask
+        extends
+            BeforeRunTask<RESOLVEGenCodeBeforeRunTask> {
 
-    public RESOLVEGenCodeBeforeRunTask(
-            Key<ExternalSystemBeforeRunTask> providerId,
-            ProjectSystemId systemId) {
-        super(providerId, systemId);
+    @NonNls private static final String COMMAND_ATTRIBUTE = "translate";
+    private final String command = "-genCode Java";
+
+    protected RESOLVEGenCodeBeforeRunTask() {
+        super(RESOLVEGenCodeBeforeRunTaskProvider.ID);
     }
+
+    public String getTranslateCommand() {
+        return command;
+    }
+
+    @Override public String toString() {
+        return "resolve codegen: " + StringUtil.notNullize(command);
+    }
+
 }
