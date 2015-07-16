@@ -1,5 +1,6 @@
 package edu.clemson.resolve.plugin.runconfig.application;
 
+import com.intellij.execution.application.ApplicationConfiguration;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
@@ -36,12 +37,6 @@ public class RESOLVEApplicationConfiguration
     @NotNull @Override public SettingsEditor<? extends RunConfiguration>
             getConfigurationEditor() {
         return new RESOLVEApplicationConfigurationEditorForm(getProject());
-    }
-
-    @NotNull @Override protected RESOLVEApplicationCommandLineState
-                newCommandLineState(@NotNull ExecutionEnvironment env,
-                                    @NotNull Module module) {
-        return new RESOLVEApplicationCommandLineState(this, env);
     }
 
     @Override public void checkConfiguration() throws RuntimeConfigurationException {

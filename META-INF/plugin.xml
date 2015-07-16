@@ -53,7 +53,7 @@
         <!-- run application -->
         <configurationType implementation="edu.clemson.resolve.plugin.runconfig.application.RESOLVEApplicationRunConfigurationType"/>
         <programRunner id="RESOLVERunner" implementation="edu.clemson.resolve.plugin.runconfig.RESOLVERunner"/>
-        <runConfigurationProducer implementation="edu.clemson.resolve.plugin.runconfig.application.RESOLVEApplicationRunConfigurationProducer"/>
+       <!-- <runConfigurationProducer implementation="edu.clemson.resolve.plugin.runconfig.application.RESOLVEApplicationRunConfigurationProducer"/> -->
 
         <defaultLiveTemplatesProvider implementation="edu.clemson.resolve.plugin.template.RESOLVELiveTemplatesProvider"/>
         <liveTemplateContext implementation="edu.clemson.resolve.plugin.template.RESOLVEGenericContext"/>

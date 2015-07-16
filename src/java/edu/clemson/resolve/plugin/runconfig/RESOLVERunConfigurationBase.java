@@ -96,23 +96,8 @@ public abstract class RESOLVERunConfigurationBase
             @NotNull Executor executor,
             @NotNull ExecutionEnvironment environment)
             throws ExecutionException {
-        return createCommandLineState(environment);
+        return null;
     }
-
-    @NotNull public final JavaCommandLineState createCommandLineState(
-            ExecutionEnvironment env) throws ExecutionException {
-        RESOLVEModuleBasedConfiguration configuration = getConfigurationModule();
-        Module module = configuration.getModule();
-        if (module == null) {
-            throw new ExecutionException(
-                    "RESOLVE isn't configured for run configuration: "
-                            + getName());
-        }
-        return newCommandLineState(env, module);
-    }
-
-    @NotNull protected abstract JavaCommandLineState newCommandLineState(
-            ExecutionEnvironment env, Module module);
 
     @Override public void checkConfiguration()
             throws RuntimeConfigurationException {
