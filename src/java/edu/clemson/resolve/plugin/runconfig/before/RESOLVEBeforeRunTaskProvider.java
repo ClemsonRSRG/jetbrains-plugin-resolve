@@ -9,6 +9,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.rt.compiler.JavacRunner;
 import edu.clemson.resolve.plugin.RESOLVEIcons;
 import edu.clemson.resolve.plugin.runconfig.RESOLVERunConfigurationBase;
 import edu.clemson.resolve.plugin.sdk.RESOLVESdkService;
@@ -98,6 +99,7 @@ public class RESOLVEBeforeRunTaskProvider
     @Override public boolean executeTask(DataContext context,
          RunConfiguration configuration, ExecutionEnvironment env,
          RESOLVECommandBeforeRunTask task) {
+     //   Runner
         return false;
     }
 
