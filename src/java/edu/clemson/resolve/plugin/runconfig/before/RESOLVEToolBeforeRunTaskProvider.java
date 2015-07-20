@@ -36,6 +36,19 @@ public class RESOLVEToolBeforeRunTaskProvider
         return getIcon();
     }
 
+    @Override public boolean configureTask(RunConfiguration runConfiguration,
+                                 RESOLVEToolBeforeRunTask task) {
+        super.configureTask(runConfiguration, task);
+        Tool x = task.findCorrespondingTool();
+        assert x != null;
+        x.setParameters("-jar resolve-0.0.1-SNAPSHOT-jar-with-dependencies.jar $");
+        return true;
+    }
+
+    @Override public boolean isConfigurable() {
+        return false;
+    }
+
     @Nullable @Override public RESOLVEToolBeforeRunTask createTask(
             RunConfiguration runConfiguration) {
         return new RESOLVEToolBeforeRunTask();

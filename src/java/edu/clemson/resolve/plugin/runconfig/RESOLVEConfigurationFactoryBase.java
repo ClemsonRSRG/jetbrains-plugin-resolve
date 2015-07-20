@@ -17,8 +17,8 @@ public abstract class RESOLVEConfigurationFactoryBase
 
     @Override public void configureBeforeRunTaskDefaults(
             Key<? extends BeforeRunTask> providerID, BeforeRunTask task) {
-        if (providerID.equals(RESOLVEToolBeforeRunTaskProvider.ID)) {
-            task.setEnabled(true);
+        if (!providerID.equals(RESOLVEToolBeforeRunTaskProvider.ID)) {
+            task.setEnabled(false);
         }
     }
 }
