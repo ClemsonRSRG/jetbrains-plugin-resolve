@@ -6,6 +6,7 @@ import com.intellij.execution.Executor;
 import com.intellij.execution.configuration.EnvironmentVariablesComponent;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.runners.ExecutionEnvironment;
+import com.intellij.execution.runners.RunConfigurationWithSuppressedDefaultRunAction;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.JDOMExternalizerUtil;
@@ -22,7 +23,9 @@ import java.util.Collection;
 
 public abstract class RESOLVERunConfigurationBase
         extends
-            ModuleBasedConfiguration<RESOLVEModuleBasedConfiguration> {
+            ModuleBasedConfiguration<RESOLVEModuleBasedConfiguration>
+        implements RunConfigurationWithSuppressedDefaultRunAction,
+                    RunConfigurationWithSuppressedDefaultDebugAction {
 
     private static final String FILE_PATH_ATTRIBUTE_NAME = "file_path";
     private static final String WORKING_DIRECTORY_NAME = "working_directory";

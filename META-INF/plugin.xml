@@ -50,7 +50,7 @@
         <!-- <colorSettingsPage implementation="grammars.edu.plugin.configdialogs.RESOLVEColorsPage"/> -->
         <!-- <externalAnnotator language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.annotations.RESOLVEExternalAnnotator"/> -->
 
-        <stepsBeforeRunProvider implementation="edu.clemson.resolve.plugin.runconfig.before.RESOLVEBeforeRunTaskProvider"/>
+        <stepsBeforeRunProvider implementation="edu.clemson.resolve.plugin.runconfig.before.RESOLVEToolBeforeRunTaskProvider"/>
 
         <!-- run application -->
         <configurationType implementation="edu.clemson.resolve.plugin.runconfig.application.RESOLVEApplicationRunConfigurationType"/>
