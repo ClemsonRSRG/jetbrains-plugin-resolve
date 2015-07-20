@@ -3,6 +3,7 @@ package edu.clemson.resolve.plugin.runconfig;
 import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
+import com.intellij.execution.application.ApplicationConfiguration;
 import com.intellij.execution.configuration.EnvironmentVariablesComponent;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.runners.ExecutionEnvironment;
@@ -99,8 +100,23 @@ public abstract class RESOLVERunConfigurationBase
             @NotNull Executor executor,
             @NotNull ExecutionEnvironment environment)
             throws ExecutionException {
-        return null;
+        return createCommandLineState(environment);
     }
+
+    @NotNull public final JavaCommandLineState createCommandLineState(
+            ExecutionEnvironment env) throws ExecutionException {
+        RESOLVEModuleBasedConfiguration configuration = getConfigurationModule();
+        Module module = configuration.getModule();
+        if (module == null) {
+            throw new ExecutionException(
+                    "RESOLVE isn't configured for run configuration: "
+                            + getName());
+        }
+        return newCommandLineState(env, module);
+    }
+
+    @NotNull protected abstract JavaCommandLineState newCommandLineState(
+            ExecutionEnvironment env, Module module);
 
     @Override public void checkConfiguration()
             throws RuntimeConfigurationException {

@@ -39,6 +39,11 @@ public class RESOLVEApplicationConfiguration
         return new RESOLVEApplicationConfigurationEditorForm(getProject());
     }
 
+    @NotNull @Override protected JavaCommandLineState newCommandLineState(
+            ExecutionEnvironment env, Module module) {
+        return new RESOLVEApplicationCommandLineState(this, env);
+    }
+
     @Override public void checkConfiguration() throws RuntimeConfigurationException {
         super.checkConfiguration();
         VirtualFile file = VirtualFileManager.getInstance()
