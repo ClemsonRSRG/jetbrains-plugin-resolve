@@ -57,11 +57,14 @@ public class RESOLVEApplicationCommandLineState extends JavaCommandLineState {
 
         //our favorite jar (the compiler) must be on the classpath for us to set the
         //Main class.. TODO : Don't hardcode jar name.
-        //vm.add("-Xbootclasspath/a:" + libPath + File.separator + "resolve-0.0.1-SNAPSHOT-jar-with-dependencies.jar");
+        String filePath = runConfiguration.getFilePath();
+        String plainFileName = filePath.substring(filePath.lastIndexOf("/")+1,
+                filePath.lastIndexOf("."));
+        String workingDir = runConfiguration.getWorkingDirectory();
+        vm.add("-Xbootclasspath/a:" + workingDir + File.separator + "out"
+                + File.separator + plainFileName + ".jar");
         parameters.setJdk(jdk);
-       String full = runConfiguration.getFilePath();
-        String fileName = full.substring(full.lastIndexOf("/")+1, full.lastIndexOf(".")) + ".java";
-        parameters.setMainClass(runConfiguration.getWorkingDirectory() + "/gen/" +fileName);
+        parameters.setMainClass(plainFileName);
         //parameters.getProgramParametersList().add(runConfiguration.getFilePath());
         //parameters.getProgramParametersList().addParametersString(" -lib " + runConfiguration.getWorkingDirectory());
         return parameters;
