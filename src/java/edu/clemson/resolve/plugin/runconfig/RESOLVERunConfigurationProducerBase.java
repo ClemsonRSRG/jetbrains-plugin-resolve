@@ -27,14 +27,14 @@ public abstract class RESOLVERunConfigurationProducerBase
               ConfigurationContext configurationContext, Ref<PsiElement> ref) {
         PsiFile file = getFileFromContext(configurationContext);
         if (file == null) return false;
-        //if (RESOLVERunUtil.isMainRESOLVEFacilityFile(file)) {
-        configuration.setName(getConfigurationName(file));
-        configuration.setFilePath(file.getVirtualFile().getPath());
-        Module module = configurationContext.getModule();
-        if (module != null) configuration.setModule(module);
-        return true;
-        //}
-        //return false;
+        if (RESOLVERunUtil.isMainRESOLVEFile(file)) {
+            configuration.setName(getConfigurationName(file));
+            configuration.setFilePath(file.getVirtualFile().getPath());
+            Module module = configurationContext.getModule();
+            if (module != null) configuration.setModule(module);
+            return true;
+        }
+        return false;
     }
 
     @NotNull protected abstract String getConfigurationName(

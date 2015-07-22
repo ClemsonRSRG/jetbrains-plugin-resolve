@@ -28,7 +28,8 @@ public class RESOLVEApplicationConfigurationEditorForm
         super(null);
         this.project = project;
         this.commonSettingsPanel.init(project);
-        RESOLVERunUtil.installFileChooser(this.project, fileField, false);
+        RESOLVERunUtil.installRESOLVEWithMainFileChooser(this.project, this.fileField);
+        //RESOLVERunUtil.installFileChooser(this.project, fileField, false);
         RESOLVERunUtil.installFileChooser(project, outputDirectoryField, true);
     }
 

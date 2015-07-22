@@ -14,6 +14,7 @@ import com.intellij.psi.PsiManager;
 import edu.clemson.resolve.plugin.psi.RESOLVEPsiFile;
 import edu.clemson.resolve.plugin.runconfig.RESOLVEModuleBasedConfiguration;
 import edu.clemson.resolve.plugin.runconfig.RESOLVERunConfigurationBase;
+import edu.clemson.resolve.plugin.runconfig.RESOLVERunUtil;
 import edu.clemson.resolve.plugin.runconfig.ui.RESOLVEApplicationConfigurationEditorForm;
 import edu.clemson.resolve.plugin.sdk.RESOLVESdkUtil;
 import org.jetbrains.annotations.NotNull;
@@ -55,9 +56,10 @@ public class RESOLVEApplicationConfiguration
         if (psiFile == null || !(psiFile instanceof RESOLVEPsiFile)) {
             throw new RuntimeConfigurationError("RESOLVE file is invalid");
         }
-     //   if (!RESOLVERunUtil.isMainGoFile(psiFile)) {
-     //       throw new RuntimeConfigurationError("Main file has non-main package or doesn't contain main function");
-     //   }
+        if (!RESOLVERunUtil.isMainRESOLVEFile(psiFile)) {
+            throw new RuntimeConfigurationError("Non executable module " +
+                    "specified; must be a facility with a main function");
+        }
     }
 
 

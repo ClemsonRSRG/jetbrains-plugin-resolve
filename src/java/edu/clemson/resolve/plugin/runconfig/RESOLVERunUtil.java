@@ -13,41 +13,53 @@ import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileSystemItem;
+import com.intellij.psi.PsiManager;
+import edu.clemson.resolve.plugin.RESOLVEFileType;
+import edu.clemson.resolve.plugin.psi.RESOLVEPsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class RESOLVERunUtil {
 
+    public static boolean isMainRESOLVEFile(PsiFile psiFile) {
+        if (psiFile != null && psiFile instanceof RESOLVEPsiFile) {
+            return ((RESOLVEPsiFile)psiFile).holdsValidExecutableModule();
+        }
+        return false;
+    }
+
+    public static void installRESOLVEWithMainFileChooser(final Project project,
+                                @NotNull TextFieldWithBrowseButton fileField) {
+        installFileChooser(project, fileField, false, new Condition<VirtualFile>() {
+            @Override public boolean value(VirtualFile file) {
+                if (file.getFileType() != RESOLVEFileType.INSTANCE) {
+                    return false;
+                }
+                final PsiFile psiFile = PsiManager.getInstance(project)
+                        .findFile(file);
+                return isMainRESOLVEFile(psiFile);
+            }
+        });
+    }
+
     public static void installFileChooser(@NotNull Project project,
-              @NotNull ComponentWithBrowseButton field, boolean directory) {
+            @NotNull TextFieldWithBrowseButton field, boolean directory) {
         installFileChooser(project, field, directory, null);
     }
 
     public static void installFileChooser(@NotNull Project project,
-                              @NotNull ComponentWithBrowseButton field,
-                              boolean directory,
-                              @Nullable Condition<VirtualFile> fileFilter) {
+            @NotNull TextFieldWithBrowseButton field, boolean directory,
+            @Nullable Condition<VirtualFile> fileFilter) {
         FileChooserDescriptor chooseDirectoryDescriptor = directory
-                ? FileChooserDescriptorFactory.createSingleFolderDescriptor()
-                : FileChooserDescriptorFactory.createSingleLocalFileDescriptor();
+            ? FileChooserDescriptorFactory.createSingleFolderDescriptor()
+            : FileChooserDescriptorFactory.createSingleLocalFileDescriptor();
         chooseDirectoryDescriptor.setRoots(project.getBaseDir());
         chooseDirectoryDescriptor.setShowFileSystemRoots(false);
         chooseDirectoryDescriptor.withFileFilter(fileFilter);
-
-        if (field instanceof TextFieldWithBrowseButton) {
-            ((TextFieldWithBrowseButton)field).addBrowseFolderListener(
-                    new TextBrowseFolderListener(chooseDirectoryDescriptor,
-                            project));
-        }
-        else {
-            //noinspection unchecked
-            field.addBrowseFolderListener(project,
-                    new ComponentWithBrowseButton.BrowseFolderActionListener(
-                            null, null, field, project,
-                    chooseDirectoryDescriptor,
-                    TextComponentAccessor.TEXT_FIELD_WITH_HISTORY_WHOLE_TEXT));
-        }
+        field.addBrowseFolderListener(
+                new TextBrowseFolderListener(chooseDirectoryDescriptor));
     }
 
     @Nullable public static PsiElement getContextElement(
