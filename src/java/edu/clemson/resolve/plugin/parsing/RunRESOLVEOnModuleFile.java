@@ -38,7 +38,7 @@ public class RunRESOLVEOnModuleFile extends Task.Modal {
         Map<String,String> args = new HashMap<String, String>();
         String sourcePath = vfile.getParent().getPath();
         args.put("-o", sourcePath+"/gen/");
-        args.put("-lib", sourcePath);
+        args.put("-lib", project.getBasePath());
 
         return args;
     }
