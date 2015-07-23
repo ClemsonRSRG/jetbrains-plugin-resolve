@@ -43,9 +43,9 @@ public abstract class RESOLVESdkService extends SimpleModificationTracker {
     public abstract void chooseAndSetSdk(@Nullable Module module);
 
     /**
-    * Use this method in order to check whether the method is appropriate for
-    * providing res code insight.
-    */
+     * Use this method in order to check whether the method is appropriate for
+     * providing RESOLVE code insight.
+     */
     @Contract("null -> false")
     public boolean isRESOLVEModule(@Nullable Module module) {
         return module != null && !module.isDisposed();
