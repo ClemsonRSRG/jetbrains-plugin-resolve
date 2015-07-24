@@ -15,7 +15,7 @@ public class RESOLVEFileType extends LanguageFileType {
     }
 
     @NotNull @Override public String getName() {
-        return "a RESOLVE file";
+        return "RESOLVE";
     }
 
     @NotNull @Override public String getDescription() {
