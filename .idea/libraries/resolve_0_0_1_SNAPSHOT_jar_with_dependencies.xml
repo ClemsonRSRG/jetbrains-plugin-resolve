@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="resolve-0.0.1-SNAPSHOT-jar-with-dependencies">
     <CLASSES>
-      <root url="jar:///usr/local/lib/resolve-0.0.1-SNAPSHOT-jar-with-dependencies.jar!/" />
+      <root url="jar:///usr/local/resolve/tool/resolve-0.0.1-SNAPSHOT-jar-with-dependencies.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

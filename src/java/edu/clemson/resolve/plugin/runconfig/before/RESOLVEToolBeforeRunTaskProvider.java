@@ -66,13 +66,14 @@ public class RESOLVEToolBeforeRunTaskProvider
         File f = new File(config.getFilePath());
         File workDir = new File(config.getWorkingDirectory());
         String fileToCompile = FileUtil.getRelativePath(workDir, f);
+
         x.setParameters(
                 "-jar resolve-0.0.1-SNAPSHOT-jar-with-dependencies.jar "
                         + fileToCompile + " -lib "
                         + config.getWorkingDirectory() + " -o "
                         + workDir.getAbsolutePath()
                         + "/out -genCode Java -jar");
-        x.setWorkingDirectory("/usr/local/lib");
+        x.setWorkingDirectory("/usr/local/resolve/tool");
 
         return !task.isExecutable()?false:task.execute(context, env.getExecutionId());
     }

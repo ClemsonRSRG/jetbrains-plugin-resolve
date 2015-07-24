@@ -14,6 +14,7 @@ import com.intellij.openapi.projectRoots.SimpleJavaSdkType;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.util.SystemProperties;
 import edu.clemson.resolve.plugin.runconfig.RESOLVERunConfigurationBase;
+import edu.clemson.resolve.plugin.sdk.RESOLVESdkService;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -64,6 +65,8 @@ public class RESOLVEApplicationCommandLineState extends JavaCommandLineState {
         vm.add("-Xbootclasspath/a:" + workingDir + File.separator + "out"
                 + File.separator + plainFileName + ".jar");
         parameters.setJdk(jdk);
+        String resolveroot = RESOLVESdkService.getInstance(runConfiguration
+                .getProject()).getSdkHomePath(null);
         parameters.setMainClass(plainFileName);
         //parameters.getProgramParametersList().add(runConfiguration.getFilePath());
         //parameters.getProgramParametersList().addParametersString(" -lib " + runConfiguration.getWorkingDirectory());
