@@ -42,6 +42,10 @@
       <lang.syntaxHighlighterFactory key="RESOLVE" implementationClass="edu.clemson.resolve.plugin.highlighting.RESOLVESyntaxHighlighterFactory"/>
       <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVEKeywordCompletionContributor"/>
 
+      <colorSettingsPage implementation="edu.clemson.resolve.plugin.highlighting.RESOLVEColorsAndFontsPage"/>
+
+      <spellchecker.support language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.inspections.RESOLVESpellcheckingStrategy"/>
+      <lang.foldingBuilder language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.editor.RESOLVEFoldingBuilder"/>
       <!-- <colorSettingsPage implementation="grammars.edu.plugin.configdialogs.RESOLVEColorsPage"/> -->
       <!-- <externalAnnotator language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.annotations.RESOLVEExternalAnnotator"/> -->
 
