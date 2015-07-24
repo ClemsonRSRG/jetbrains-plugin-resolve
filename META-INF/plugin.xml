@@ -38,8 +38,9 @@
         <!-- sdk -->
         <moduleType id="RESOLVE_LANGUAGE_MODULE" implementationClass="edu.clemson.resolve.plugin.RESOLVEModuleType"/>
         <sdkType implementation="edu.clemson.resolve.plugin.sdk.RESOLVESdkType"/>
-        <projectService serviceInterface="edu.clemson.resolve.plugin.sdk.RESOLVESdkService" serviceImplementation="edu.clemson.resolve.plugin.sdk.RESOLVEIdeaSdkService"
-                        overrides="false"/>
+        <projectService serviceInterface="edu.clemson.resolve.plugin.sdk.RESOLVESdkService" serviceImplementation="edu.clemson.resolve.plugin.sdk.RESOLVESmallIDEsSdkService" overrides="false"/>
+        <library.presentationProvider implementation="edu.clemson.resolve.plugin.sdk.RESOLVESdkLibraryProvider"/>
+
         <fileIconPatcher implementation="edu.clemson.resolve.plugin.RESOLVEFileIconPatcher"/>
         <fileTypeFactory implementation="edu.clemson.resolve.plugin.RESOLVEFileTypeFactory"/>
 

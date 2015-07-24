@@ -2,6 +2,7 @@ package edu.clemson.resolve.plugin.sdk;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.SystemInfo;
@@ -10,8 +11,10 @@ import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.psi.PsiElement;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.text.VersionComparatorUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,44 +27,47 @@ public class RESOLVESdkUtil {
 
     @Nullable public static VirtualFile suggestSdkDirectory() {
         if (SystemInfo.isWindows) {
-            return ObjectUtils.chooseNotNull(LocalFileSystem.getInstance().findFileByPath("C:\\resolve"),
-                    LocalFileSystem.getInstance().findFileByPath("C:\\cygwin"));
+            throw new UnsupportedOperationException("windows currently not " +
+                    "supported as of plugin release v1.0.0");
         }
         if (SystemInfo.isMac || SystemInfo.isLinux) {
-         //   String fromEnv = suggestSdkDirectoryPathFromEnv();
-         //   if (fromEnv != null) {
-         //       return LocalFileSystem.getInstance().findFileByPath(fromEnv);
-         //   }
-            return LocalFileSystem.getInstance().findFileByPath("/usr/local/lib/");
+            return LocalFileSystem.getInstance()
+                    .findFileByPath("/usr/local/resolve");
         }
         return null;
     }
 
-    /**
-     * Gets a file reference to compiler executable
-     *
-     * @param SDKPath path to SDK
-     * @return File reference to compiler executable
-     */
-    public static File getCompilerExecutable(@NotNull String SDKPath) {
-        File SDKfolder = new File(SDKPath);
+    public static int compareVersions(@NotNull String lhs,
+                                      @NotNull String rhs) {
+        return VersionComparatorUtil.compare(lhs, rhs);
+    }
 
-        File[] directoryListing = SDKfolder.listFiles();
-        if (directoryListing != null) {
-            for (File child : directoryListing) {
-                if (child.getName().startsWith("resolve-")) {
-                    return child;
-                }
-                // Do something with child
-            }
+    @Nullable public static VirtualFile getSdkSrcDir(
+            @NotNull PsiElement context) {
+        Module module = ModuleUtilCore.findModuleForPsiElement(context);
+        VirtualFile sdkSrcDir = getSdkSrcDir(context.getProject(), module);
+        return sdkSrcDir != null ? sdkSrcDir : null; //TODO TODO: Shouldn't return null here. 'Guess' it instead
+    }
+
+    @Nullable private static VirtualFile getSdkSrcDir(@NotNull Project project,
+                                                      @Nullable Module module) {
+        String sdkHomePath = RESOLVESdkService.getInstance(project)
+                .getSdkHomePath(module);
+        String sdkVersionString = RESOLVESdkService.getInstance(project)
+                .getSdkVersion(module);
+        VirtualFile sdkSrcDir = null;
+        if (sdkHomePath != null && sdkVersionString != null) {
+            File sdkSrcDirFile =
+                    new File(sdkHomePath, getSrcLocation(sdkVersionString));
+            sdkSrcDir = LocalFileSystem
+                    .getInstance().findFileByIoFile(sdkSrcDirFile);
         }
-        return null;
+        return sdkSrcDir;
     }
 
     @NotNull public static Collection<VirtualFile> getSdkDirectoriesToAttach(
             @NotNull String sdkPath, @NotNull String versionString) {
         String srcPath = getSrcLocation(versionString);
-        // scr is enough at the moment, possible process binaries from pkg
         VirtualFile src = VirtualFileManager.getInstance().findFileByUrl(
                 VfsUtilCore.pathToUrl(FileUtil.join(sdkPath, srcPath)));
         if (src != null && src.isDirectory()) {
@@ -70,6 +76,19 @@ public class RESOLVESdkUtil {
         return Collections.emptyList();
     }
 
+    //Todo: Hardcode for now.
+    @Nullable public static String retrieveRESOLVEVersion(
+            @NotNull final String sdkPath) {
+        return "0.0.1";
+    }
+
+
+    /**
+     * This includes a version parameter if someone down the road decides to
+     * change structure or names of our core library's "src" directory. This
+     * way we can compare the version string and return the appropriate location,
+     * preserving compatibility with older versions.
+     */
     @NotNull static String getSrcLocation(@NotNull String version) {
         return "src";
     }

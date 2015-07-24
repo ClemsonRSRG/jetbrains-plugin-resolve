@@ -28,9 +28,7 @@ public class RESOLVESdkLibraryProvider
     @Nullable public DummyLibraryProperties detect(
             @NotNull List<VirtualFile> classesRoots) {
         for (VirtualFile root : classesRoots) {
-            if (GoSmallIDEsSdkService.isGoSdkLibRoot(root) &&
-                    !GoSdkService.isAppEngineSdkPath(
-                            GoSdkService.libraryRootToSdkPath(root))) {
+            if (RESOLVESmallIDEsSdkService.isRESOLVESdkLibRoot(root)) {
                 return DummyLibraryProperties.INSTANCE;
             }
         }
