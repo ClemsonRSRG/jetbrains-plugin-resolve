@@ -13,7 +13,7 @@ public class TypeModelDeclNode extends AbstractDeclNode {
         super(node);
     }
 
-    @Override public AbstractNamedElementRefNode getId() {
+    @Override public PsiElement getId() {
         return findNotNullChildByType(RESOLVETokenTypes.TOKEN_ELEMENT_TYPES
                 .get(ResolveLexer.ID));
     }
