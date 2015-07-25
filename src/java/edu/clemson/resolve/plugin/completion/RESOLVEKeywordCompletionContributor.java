@@ -10,7 +10,7 @@ import com.intellij.psi.PsiErrorElement;
 import edu.clemson.resolve.plugin.RESOLVETokenTypes;
 import edu.clemson.resolve.plugin.parser.Resolve;
 import edu.clemson.resolve.plugin.parser.ResolveLexer;
-import edu.clemson.resolve.plugin.psi.RESOLVEPsiFile;
+import edu.clemson.resolve.plugin.psi.ResolveFile;
 import edu.clemson.resolve.plugin.psi.impl.*;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
@@ -84,8 +84,8 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
                         .withParent(Module.class).isFirstAcceptedChild(psiElement())));
     }
 
-    private static PsiFilePattern.Capture<RESOLVEPsiFile> resolveFile() {
-        return psiFile(RESOLVEPsiFile.class);
+    private static PsiFilePattern.Capture<ResolveFile> resolveFile() {
+        return psiFile(ResolveFile.class);
     }
     
 }

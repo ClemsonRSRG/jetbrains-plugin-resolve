@@ -10,7 +10,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
-import edu.clemson.resolve.plugin.psi.RESOLVEPsiFile;
+import edu.clemson.resolve.plugin.psi.ResolveFile;
 import edu.clemson.resolve.plugin.adaptors.RESOLVELanguageParser;
 import edu.clemson.resolve.plugin.adaptors.RESOLVELexerAdaptor;
 import edu.clemson.resolve.plugin.parser.ResolveLexer;
@@ -46,7 +46,7 @@ public class RESOLVEParserDefinition implements ParserDefinition {
     }
 
     public PsiFile createFile(FileViewProvider viewProvider) {
-        return new RESOLVEPsiFile(viewProvider);
+        return new ResolveFile(viewProvider);
     }
 
     public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) {

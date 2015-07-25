@@ -1,6 +1,5 @@
 package edu.clemson.resolve.plugin.runconfig.application;
 
-import com.intellij.execution.application.ApplicationConfiguration;
 import com.intellij.execution.configurations.*;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
@@ -11,7 +10,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
-import edu.clemson.resolve.plugin.psi.RESOLVEPsiFile;
+import edu.clemson.resolve.plugin.psi.ResolveFile;
 import edu.clemson.resolve.plugin.runconfig.RESOLVEModuleBasedConfiguration;
 import edu.clemson.resolve.plugin.runconfig.RESOLVERunConfigurationBase;
 import edu.clemson.resolve.plugin.runconfig.RESOLVERunUtil;
@@ -53,7 +52,7 @@ public class RESOLVEApplicationConfiguration
             throw new RuntimeConfigurationError("RESOLVE file not specified");
         }
         PsiFile psiFile = PsiManager.getInstance(getProject()).findFile(file);
-        if (psiFile == null || !(psiFile instanceof RESOLVEPsiFile)) {
+        if (psiFile == null || !(psiFile instanceof ResolveFile)) {
             throw new RuntimeConfigurationError("RESOLVE file is invalid");
         }
         if (!RESOLVERunUtil.isMainRESOLVEFile(psiFile)) {

@@ -6,9 +6,7 @@ import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.FileIndexFacade;
-import com.intellij.openapi.ui.ComponentWithBrowseButton;
 import com.intellij.openapi.ui.TextBrowseFolderListener;
-import com.intellij.openapi.ui.TextComponentAccessor;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -17,15 +15,15 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileSystemItem;
 import com.intellij.psi.PsiManager;
 import edu.clemson.resolve.plugin.RESOLVEFileType;
-import edu.clemson.resolve.plugin.psi.RESOLVEPsiFile;
+import edu.clemson.resolve.plugin.psi.ResolveFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class RESOLVERunUtil {
 
     public static boolean isMainRESOLVEFile(PsiFile psiFile) {
-        if (psiFile != null && psiFile instanceof RESOLVEPsiFile) {
-            return ((RESOLVEPsiFile)psiFile).holdsValidExecutableModule();
+        if (psiFile != null && psiFile instanceof ResolveFile) {
+            return ((ResolveFile)psiFile).holdsValidExecutableModule();
         }
         return false;
     }
