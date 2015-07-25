@@ -40,6 +40,7 @@
         <sdkType implementation="edu.clemson.resolve.plugin.sdk.RESOLVESdkType"/>
         <projectService serviceInterface="edu.clemson.resolve.plugin.sdk.RESOLVESdkService" serviceImplementation="edu.clemson.resolve.plugin.sdk.RESOLVESmallIDEsSdkService" overrides="false"/>
         <library.presentationProvider implementation="edu.clemson.resolve.plugin.sdk.RESOLVESdkLibraryProvider"/>
+        <lang.ast.factory language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.RESOLVEASTFactory"/>
 
         <fileIconPatcher implementation="edu.clemson.resolve.plugin.RESOLVEFileIconPatcher"/>
         <fileTypeFactory implementation="edu.clemson.resolve.plugin.RESOLVEFileTypeFactory"/>
@@ -49,7 +50,7 @@
         <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVEKeywordCompletionContributor"/>
 
         <!-- <colorSettingsPage implementation="grammars.edu.plugin.configdialogs.RESOLVEColorsPage"/> -->
-        <externalAnnotator language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.annotations.RESOLVEExternalAnnotator"/>
+        <!-- <externalAnnotator language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.annotations.RESOLVEExternalAnnotator"/> -->
 
 
         <psi.referenceContributor implementation="edu.clemson.resolve.plugin.RESOLVEReferenceContributor"/>

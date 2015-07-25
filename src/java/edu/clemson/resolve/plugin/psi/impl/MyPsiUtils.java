@@ -38,8 +38,12 @@ public class MyPsiUtils {
             public boolean isAccepted(PsiElement element) {
                 PsiElement nameNode = element.getFirstChild();
                 if ( nameNode==null ) return false;
-                return (element instanceof TypeModelDeclNode &&
-                        nameNode.getText().equals(ruleName));
+                boolean result = false;
+                if (element instanceof TypeModelDeclNode) {
+                    String typeName = ((TypeModelDeclNode)element).getId().getText();
+                    result = typeName.equals(ruleName);
+                }
+                return result;
             }
         };
         PsiElement[] ruleSpec = PsiTreeUtil.collectElements(rules, declNode);

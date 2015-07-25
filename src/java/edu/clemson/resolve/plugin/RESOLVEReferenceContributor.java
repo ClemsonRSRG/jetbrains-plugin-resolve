@@ -9,8 +9,12 @@ import edu.clemson.resolve.plugin.psi.impl.TypeRefNode;
 import org.jetbrains.annotations.NotNull;
 
 public class RESOLVEReferenceContributor extends PsiReferenceContributor {
+    @Override
+    public void registerReferenceProviders(@NotNull PsiReferenceRegistrar registrar) {
+        
+    }
 
-    @Override public void registerReferenceProviders(PsiReferenceRegistrar registrar) {
+  /*  @Override public void registerReferenceProviders(PsiReferenceRegistrar registrar) {
         PsiReferenceProvider provider = new PsiReferenceProvider() {
             @NotNull @Override public PsiReference[] getReferencesByElement(
                     @NotNull PsiElement element, @NotNull ProcessingContext context) {
@@ -22,5 +26,5 @@ public class RESOLVEReferenceContributor extends PsiReferenceContributor {
         registrar.registerReferenceProvider(PlatformPatterns.psiElement(TypeRefNode.class),
                 provider);
 
-    }
+    }*/
 }

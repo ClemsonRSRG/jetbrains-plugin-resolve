@@ -1,5 +1,7 @@
 package edu.clemson.resolve.plugin.psi.impl;
 
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
@@ -10,12 +12,12 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class AbstractNamedElementRefNode
         extends
-            LeafPsiElement implements PsiNamedElement {
+            ASTWrapperPsiElement implements PsiNamedElement {
 
     protected String name = null; // an override to input text ID if we rename via intellij
 
-    public AbstractNamedElementRefNode(IElementType type, CharSequence text) {
-        super(type, text);
+    public AbstractNamedElementRefNode(@NotNull ASTNode node) {
+        super(node);
     }
 
     @Override public String getName() {
@@ -42,8 +44,4 @@ public abstract class AbstractNamedElementRefNode
 
     public abstract IElementType getNamedRefType();
 
-    @Override public String toString() {
-        return getClass().getSimpleName() +
-                "(" + getElementType().toString() + ")";
-    }
 }

@@ -5,17 +5,19 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.tree.IElementType;
 import edu.clemson.resolve.plugin.RESOLVETokenTypes;
+import edu.clemson.resolve.plugin.parser.Resolve;
 import edu.clemson.resolve.plugin.parser.ResolveLexer;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
+import org.jetbrains.annotations.NotNull;
 
 public class TypeRefNode extends AbstractNamedElementRefNode {
 
-    public TypeRefNode(IElementType type, CharSequence text) {
-        super(type, text);
+    public TypeRefNode(@NotNull ASTNode node) {
+        super(node);
     }
 
     @Override public IElementType getNamedRefType() {
-        return RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.TYPE_REF);
+        return RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_type);
     }
 
     @Override public PsiReference getReference() {
@@ -26,8 +28,7 @@ public class TypeRefNode extends AbstractNamedElementRefNode {
         public static Factory INSTANCE = new Factory();
 
         @Override public PsiElement createElement(ASTNode node) {
-            return new TypeRefNode(RESOLVETokenTypes.TOKEN_ELEMENT_TYPES
-                    .get(ResolveLexer.TYPE_REF), node.getText());
+            return new TypeRefNode(node);
         }
     }
 }

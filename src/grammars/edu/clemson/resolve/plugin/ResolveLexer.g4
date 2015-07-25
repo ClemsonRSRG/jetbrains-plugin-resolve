@@ -30,10 +30,6 @@
  */
 lexer grammar ResolveLexer;
 
-tokens {
-	TYPE_REF
-}
-
 DOC_COMMENT
 	:	'(**' .*? ('*)' | EOF)
 	;
