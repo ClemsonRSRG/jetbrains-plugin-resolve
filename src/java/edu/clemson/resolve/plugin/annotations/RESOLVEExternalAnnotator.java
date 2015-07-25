@@ -99,7 +99,6 @@ public class RESOLVEExternalAnnotator
                         case WARNING_ONE_OFF:
                         case INFO:
                             holder.createWeakWarningAnnotation(range, issue.annotation);
-
                         default:
                             break;
                     }

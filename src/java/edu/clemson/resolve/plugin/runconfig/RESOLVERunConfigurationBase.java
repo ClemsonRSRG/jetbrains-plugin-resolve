@@ -122,8 +122,9 @@ public abstract class RESOLVERunConfigurationBase
                 getConfigurationModule();
         final Module module = configurationModule.getModule();
         if (module != null) {
-            if (RESOLVESdkService.getInstance(module.getProject())
-                    .getSdkHomePath(module) == null) {
+            String sdkHomePath = RESOLVESdkService.getInstance(module.getProject())
+                    .getSdkHomePath(module);
+            if (sdkHomePath == null) {
                 throw new RuntimeConfigurationWarning(
                         "RESOLVE SDK is not specified for module '" +
                                 module.getName() + "'");

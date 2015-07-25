@@ -5,8 +5,10 @@ import com.intellij.openapi.components.ComponentManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ModuleRootModificationUtil;
 import com.intellij.openapi.roots.OrderRootType;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.roots.libraries.Library;
 import com.intellij.openapi.roots.libraries.LibraryTable;
 import com.intellij.openapi.roots.libraries.LibraryTablesRegistrar;
@@ -31,32 +33,14 @@ public class RESOLVESmallIDEsSdkService extends RESOLVESdkService {
         ComponentManager holder = ObjectUtils.notNull(module, this.project);
         return CachedValuesManager.getManager(this.project)
                 .getCachedValue(holder, new CachedValueProvider<String>() {
-
-            @Nullable @Override public Result<String> compute() {
-                return Result.create(ApplicationManager.getApplication()
-                        .runReadAction(new Computable<String>() {
-                            @Nullable
-                            @Override
-                            public String compute() {
-                                LibraryTable table = LibraryTablesRegistrar
-                                        .getInstance().getLibraryTable(project);
-                                for (Library library : table.getLibraries()) {
-                                    final String libraryName = library.getName();
-                                    if (libraryName != null && libraryName
-                                            .startsWith(LIBRARY_NAME)) {
-                                        for (final VirtualFile root :
-                                                library.getFiles(OrderRootType.CLASSES)) {
-                                            if (isRESOLVESdkLibRoot(root)) {
-                                                return libraryRootToSdkPath(root);
-                                            }
-                                        }
-                                    }
-                                }
-                                return null;
-                            }
-                        }), RESOLVESmallIDEsSdkService.this);
-            }
-        });
+                    @Nullable
+                    @Override
+                    public Result<String> compute() {
+                        Sdk sdk = getRESOLVESdk(module);
+                        return Result.create(sdk != null ? sdk.getHomePath() :
+                                null, RESOLVESmallIDEsSdkService.this);
+                    }
+                });
     }
 
     @Nullable @Override public String getSdkVersion(@Nullable Module module) {
@@ -99,4 +83,17 @@ public class RESOLVESmallIDEsSdkService extends RESOLVESdkService {
     public static boolean isRESOLVESdkLibRoot(@NotNull VirtualFile root) {
         return root.isInLocalFileSystem() && root.isDirectory();
     }
+
+    private Sdk getRESOLVESdk(@Nullable Module module) {
+        if (module != null) {
+            Sdk sdk = ModuleRootManager.getInstance(module).getSdk();
+            if (sdk != null && sdk.getSdkType() instanceof RESOLVESdkType) {
+                return sdk;
+            }
+        }
+        Sdk sdk = ProjectRootManager.getInstance(project).getProjectSdk();
+        return sdk != null && sdk.getSdkType() instanceof RESOLVESdkType ?
+                sdk : null;
+    }
+
 }
