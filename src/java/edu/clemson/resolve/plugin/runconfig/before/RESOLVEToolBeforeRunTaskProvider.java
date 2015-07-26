@@ -9,6 +9,7 @@ import com.intellij.tools.*;
 import com.intellij.xml.XmlCoreEnvironment;
 import edu.clemson.resolve.plugin.RESOLVEIcons;
 import edu.clemson.resolve.plugin.runconfig.RESOLVERunConfigurationBase;
+import edu.clemson.resolve.plugin.sdk.RESOLVESdkService;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -66,7 +67,10 @@ public class RESOLVEToolBeforeRunTaskProvider
         File f = new File(config.getFilePath());
         File workDir = new File(config.getWorkingDirectory());
         String fileToCompile = FileUtil.getRelativePath(workDir, f);
-
+        File outDir = new File(workDir.getAbsolutePath() + File.separator + "out");
+        if (!outDir.exists()) {
+            outDir.mkdir();
+        }
         x.setParameters(
                 "-jar resolve-0.0.1-SNAPSHOT-jar-with-dependencies.jar "
                         + fileToCompile + " -lib "
