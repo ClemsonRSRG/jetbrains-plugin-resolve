@@ -26,12 +26,15 @@ public class MyPsiUtils {
 
     public static PsiElement findDeclNodeAbove(
             AbstractNamedElementRefNode element, final String ruleName) {
-        ModuleBlockNode moduleEls =
-                PsiTreeUtil.getContextOfType(element, ModuleBlockNode.class);
-        return findDeclNode(ruleName, moduleEls);
+        if (element instanceof TypeRefNode) {
+            ModuleBlockNode moduleEls =
+                    PsiTreeUtil.getContextOfType(element, ModuleBlockNode.class);
+            return findTypeLikeNode(ruleName, moduleEls);
+        }
+        return null;
     }
 
-    public static PsiElement findDeclNode(final String ruleName,
+    public static PsiElement findTypeLikeNode(final String ruleName,
                                               ModuleBlockNode rules) {
         PsiElementFilter declNode = new PsiElementFilter() {
             @Override

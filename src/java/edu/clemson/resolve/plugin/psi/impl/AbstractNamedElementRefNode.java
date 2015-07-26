@@ -2,13 +2,21 @@ package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
+import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNamedElement;
+import com.intellij.psi.impl.ElementBase;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.ui.RowIcon;
 import com.intellij.util.IncorrectOperationException;
+import com.intellij.util.PlatformIcons;
+import edu.clemson.resolve.plugin.RESOLVEIcons;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
 
 public abstract class AbstractNamedElementRefNode
         extends
@@ -23,6 +31,10 @@ public abstract class AbstractNamedElementRefNode
     @Override public String getName() {
         if ( name!=null ) return name;
         return getText();
+    }
+
+    public PsiElement getQualifier() {
+        throw new UnsupportedOperationException("need to implement");
     }
 
     @Override public PsiElement setName(@NonNls @NotNull String name)
@@ -40,6 +52,10 @@ public abstract class AbstractNamedElementRefNode
                 name, getNamedRefType()));
         this.name = name;
         return this;
+    }
+
+    @Nullable @Override public Icon getIcon(int flags) {
+        return RESOLVEIcons.MODULE;
     }
 
     public abstract IElementType getNamedRefType();

@@ -53,7 +53,7 @@
         <!-- <externalAnnotator language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.annotations.RESOLVEExternalAnnotator"/> -->
 
 
-        <psi.referenceContributor implementation="edu.clemson.resolve.plugin.RESOLVEReferenceContributor"/>
+        <!-- <psi.referenceContributor implementation="edu.clemson.resolve.plugin.RESOLVEReferenceContributor"/> -->
 
         <stepsBeforeRunProvider implementation="edu.clemson.resolve.plugin.runconfig.before.RESOLVEToolBeforeRunTaskProvider"/>
         <!-- run application -->

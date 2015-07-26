@@ -1,5 +1,6 @@
 package edu.clemson.resolve.plugin;
 
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.ide.FileIconPatcher;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -28,10 +29,6 @@ public class RESOLVEFileIconPatcher implements FileIconPatcher {
             VirtualFile file, int flags, Project project, Icon baseIcon) {
         final PsiFile f = PsiManager.getInstance(project).findFile(file);
 
-        //Todo: this might be prohibitively expensive (as findChildOfAnyType
-        //is doing a depth first search). Though in the future hopefully our
-        //psi structure will be better defined so we can just do the following:
-        // PsiTreeUtil.getChildOfType(f, ParserClass.class);
         if (PsiTreeUtil.findChildOfAnyType(f, PrecisModule.class) != null) {
             return RESOLVEIcons.PRECIS;
         }
