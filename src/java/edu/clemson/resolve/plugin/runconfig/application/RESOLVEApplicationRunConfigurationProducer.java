@@ -29,7 +29,6 @@ public class RESOLVEApplicationRunConfigurationProducer
 
         Module module = ModuleUtilCore.findModuleForPsiElement(contextElement);
         if (!Comparing.equal(module, configuration.getConfigurationModule().getModule())) return false;
-
         return super.isConfigurationFromContext(configuration, context);
     }
 

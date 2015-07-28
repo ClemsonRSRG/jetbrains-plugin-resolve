@@ -31,12 +31,6 @@ public abstract class RESOLVESdkService extends SimpleModificationTracker {
 
     @Nullable public abstract String getSdkHomePath(@Nullable Module module);
 
-    @NotNull public static String libraryRootToSdkPath(
-            @NotNull VirtualFile root) {
-        throw new UnsupportedOperationException("haven't implemented " +
-                "library root to sdk path yet");
-    }
-
     @Nullable public abstract String getSdkVersion(@Nullable Module module);
 
     public abstract void chooseAndSetSdk(@Nullable Module module);

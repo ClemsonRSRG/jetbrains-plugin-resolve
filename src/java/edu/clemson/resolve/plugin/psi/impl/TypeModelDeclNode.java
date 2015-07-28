@@ -13,6 +13,10 @@ public class TypeModelDeclNode extends AbstractDeclNode {
         super(node);
     }
 
+    @Override public boolean isPublic() {
+        return true;
+    }
+
     @Override public PsiElement getId() {
         return findNotNullChildByType(RESOLVETokenTypes.TOKEN_ELEMENT_TYPES
                 .get(ResolveLexer.ID));

@@ -44,7 +44,7 @@ public class RESOLVEToolBeforeRunTaskProvider
     }
 
     @Override public boolean isConfigurable() {
-        return true;
+        return false;
     }
 
     @Nullable @Override public RESOLVEToolBeforeRunTask createTask(
