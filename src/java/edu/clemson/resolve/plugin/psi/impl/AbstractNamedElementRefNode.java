@@ -54,10 +54,6 @@ public abstract class AbstractNamedElementRefNode
         return this;
     }
 
-    @Nullable @Override public Icon getIcon(int flags) {
-        return RESOLVEIcons.MODULE;
-    }
-
     public abstract IElementType getNamedRefType();
 
 }
