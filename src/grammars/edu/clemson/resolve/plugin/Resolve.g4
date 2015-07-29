@@ -512,5 +512,7 @@ progMemberExp
     ;
 
 progLiteralExp
-    :   INT      #progIntegerExp
+    :   INT     #progIntegerExp
+    |   CHAR    #progCharacterExp
+    |   STRING  #progStringExp
     ;

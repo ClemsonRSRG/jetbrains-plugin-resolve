@@ -166,6 +166,10 @@ NameStartChar
 INT	: [0-9]+
 	;
 
+CHAR: '\'' . '\'' ;
+
+STRING: '"' ~( '"' | '\r' | '\n' )* '"';
+
 BOOL
 	:	'B'
 	|	'true'

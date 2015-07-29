@@ -12,6 +12,7 @@ import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.projectRoots.SdkModificator;
 import com.intellij.openapi.projectRoots.SimpleJavaSdkType;
 import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.SystemProperties;
 import edu.clemson.resolve.plugin.runconfig.RESOLVERunConfigurationBase;
 import edu.clemson.resolve.plugin.sdk.RESOLVESdkService;
@@ -62,7 +63,11 @@ public class RESOLVEApplicationCommandLineState extends JavaCommandLineState {
         String plainFileName = filePath.substring(filePath.lastIndexOf("/")+1,
                 filePath.lastIndexOf("."));
         String workingDir = runConfiguration.getWorkingDirectory();
-        vm.add("-Xbootclasspath/a:" + workingDir + File.separator + "out"
+        String outDir = workingDir + File.separator + "out";
+        if (StringUtil.isNotEmpty(runConfiguration.getOutputFilePath())) {
+            outDir = runConfiguration.getOutputFilePath();
+        }
+        vm.add("-Xbootclasspath/a:" + outDir
                 + File.separator + plainFileName + ".jar");
         parameters.setJdk(jdk);
         String resolveroot = RESOLVESdkService.getInstance(runConfiguration

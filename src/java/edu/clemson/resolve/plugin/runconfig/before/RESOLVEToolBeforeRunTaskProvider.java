@@ -5,6 +5,7 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.tools.*;
 import com.intellij.xml.XmlCoreEnvironment;
 import edu.clemson.resolve.plugin.RESOLVEIcons;
@@ -67,16 +68,19 @@ public class RESOLVEToolBeforeRunTaskProvider
         File f = new File(config.getFilePath());
         File workDir = new File(config.getWorkingDirectory());
         String fileToCompile = FileUtil.getRelativePath(workDir, f);
-        File outDir = new File(workDir.getAbsolutePath() + File.separator + "out");
-        if (!outDir.exists()) {
-            outDir.mkdir();
+        String outDir = workDir.getAbsolutePath() + File.separator + "out";
+        if (StringUtil.isNotEmpty(config.getOutputFilePath())) {
+            outDir = config.getOutputFilePath();
+        }
+        File outDirAsFile = new File(outDir);
+        if (!outDirAsFile.exists()) {
+            outDirAsFile.mkdir();
         }
         x.setParameters(
                 "-jar resolve-0.0.1-SNAPSHOT-jar-with-dependencies.jar "
                         + fileToCompile + " -lib "
                         + config.getWorkingDirectory() + " -o "
-                        + workDir.getAbsolutePath()
-                        + "/out -genCode Java -jar");
+                        + outDir + " -genCode Java -jar");
         x.setWorkingDirectory("/usr/local/resolve/tool");
 
         return !task.isExecutable()?false:task.execute(context, env.getExecutionId());
