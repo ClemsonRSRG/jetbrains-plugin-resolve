@@ -54,7 +54,14 @@ public abstract class RESOLVESdkService extends SimpleModificationTracker {
 
     public static String getRESOLVEToolJarPath(@Nullable String sdkHomePath) {
         File toolDirectory = new File(sdkHomePath, "tool");
-        String jarName = "resolve-0.0.1-SNAPSHOT-jar-with-dependencies.jar";
-        return FileUtil.join(sdkHomePath, "tool", jarName);
+        File[] toolDirFiles = toolDirectory.listFiles();
+        String toolJarName = null;
+        for (File f : toolDirFiles) {
+            if (f.getName().endsWith(".jar")) {
+                toolJarName = f.getName();
+            }
+        }
+        return FileUtil.join(sdkHomePath, "tool", toolJarName != null ?
+                toolJarName : null);
     }
 }

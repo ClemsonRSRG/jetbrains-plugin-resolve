@@ -79,7 +79,8 @@ public class RESOLVESdkUtil {
     //Todo: Hardcode for now.
     @Nullable public static String retrieveRESOLVEVersion(
             @NotNull final String sdkPath) {
-        return "0.0.1";
+        String curJarName = RESOLVESdkService.getRESOLVEToolJarPath(sdkPath);
+        return cutoutVersion(curJarName);
     }
 
 
@@ -91,6 +92,11 @@ public class RESOLVESdkUtil {
      */
     @NotNull static String getSrcLocation(@NotNull String version) {
         return "src";
+    }
+
+    public static String cutoutVersion(String jarName) {
+        return jarName.substring(jarName.indexOf('-',0)+1,
+                jarName.indexOf('-',0)+6);
     }
 
     @NotNull public static Collection<Module> getRESOLVEModules(

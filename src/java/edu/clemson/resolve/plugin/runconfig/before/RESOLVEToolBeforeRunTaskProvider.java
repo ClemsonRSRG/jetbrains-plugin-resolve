@@ -77,7 +77,7 @@ public class RESOLVEToolBeforeRunTaskProvider
             outDirAsFile.mkdir();
         }
         x.setParameters(
-                "-jar resolve-0.0.1-SNAPSHOT-jar-with-dependencies.jar "
+                "-jar resolve-0.0.1-complete.jar "
                         + fileToCompile + " -lib "
                         + config.getWorkingDirectory() + " -o "
                         + outDir + " -genCode Java -jar");

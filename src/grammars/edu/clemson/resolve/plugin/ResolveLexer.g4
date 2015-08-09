@@ -31,15 +31,15 @@
 lexer grammar ResolveLexer;
 
 DOC_COMMENT
-	:	'(**' .*? ('*)' | EOF)
+	:	'/**' .*? ('*/' | EOF)
 	;
 
 BLOCK_COMMENT
 	:	'/*' .*? ('*/' | EOF)  -> channel(HIDDEN)
-    ;
+	;
 
 LINE_COMMENT
-	:	'--' ~[\r\n]*  -> channel(HIDDEN)
+	:	'//' ~[\r\n]*  -> channel(HIDDEN)
 	;
 
 // keywords
@@ -57,6 +57,7 @@ DEFINITION		:	'Definition'		;
 DEPENDENT		:	'Dependent_Terms'	;
 DO 				:	'do'				;
 ELSE			:	'else'				;
+ENHANCED		:	'enhanced'			;
 END         	:   'end'				;
 ENSURES			:	'ensures'			;
 ENTAILS			:	'which_entails'		;
@@ -68,7 +69,7 @@ FACILITY		:	'Facility'			;
 FAMILY			:	'Family'			;
 FOR				:	'for'				;
 FORALL			:	'Forall'			;
-IF				:	'if'				;
+IF				:	('if'|'If')			;
 IMPLICIT		:	'Implicit'			;
 INITIALIZATION	:	'initialization'	;
 IS 				:	'is'				;
@@ -86,6 +87,7 @@ RECORD			:	'Record'			;
 RECURSIVE		:	'Recursive'			;
 REQUIRES		:	'requires'			;
 THEOREM			:	'Theorem'			;
+THEN            :   'then'              ;
 TYPE			:	'Type'				;
 USES			:	'uses'				;
 VAR				:	'Var'				;
@@ -141,6 +143,7 @@ MULT			:	'*'				;
 NEQUALS			:	'/='			;
 OR 				:	'or'			;
 PLUS			:	'+'				;
+PLUSPLUS		:	'++'			;
 RANGE			:	'..'			;
 RARROW			:	'->'			;
 SWAP			:	':=:'			;

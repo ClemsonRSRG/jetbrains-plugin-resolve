@@ -63,7 +63,7 @@ public class RESOLVESdkType extends SdkType {
             return null;
         }
         String name = tool.getName();
-        return name.substring(name.indexOf('-',0)+1, name.indexOf('-',0)+6);
+        return RESOLVESdkUtil.cutoutVersion(name);
     }
 
     @Nullable @Override public AdditionalDataConfigurable
