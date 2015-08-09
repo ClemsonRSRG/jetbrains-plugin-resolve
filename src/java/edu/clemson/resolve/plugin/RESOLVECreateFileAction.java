@@ -17,7 +17,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Properties;
 import java.util.Set;
 
-//Todo: move this to actions package.
+//Todo: not currently activated. Need to figure out how to use templates better with this approach
+//to file creation (which I would personally prefer long term over the current mechansism)
 public class RESOLVECreateFileAction extends CreateFileFromTemplateAction implements DumbAware {
 
     private static final String NEW_RESOLVE_FILE = "New RESOLVE File";
