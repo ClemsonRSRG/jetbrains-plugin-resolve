@@ -76,7 +76,6 @@ public class RESOLVESdkUtil {
         return Collections.emptyList();
     }
 
-    //Todo: Hardcode for now.
     @Nullable public static String retrieveRESOLVEVersion(
             @NotNull final String sdkPath) {
         String curJarName = RESOLVESdkService.getRESOLVEToolJarPath(sdkPath);
