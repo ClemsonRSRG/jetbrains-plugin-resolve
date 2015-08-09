@@ -72,6 +72,8 @@ public class RESOLVETokenTypes {
                     ResolveLexer.END,
                     ResolveLexer.ENSURES,
                     ResolveLexer.ENTAILS,
+                    ResolveLexer.ENHANCEMENT,
+                    ResolveLexer.ENHANCED,
                     ResolveLexer.EXEMPLAR,
                     ResolveLexer.EXISTS,
                     ResolveLexer.EXTERNALLY,
