@@ -22,6 +22,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Set;
 
+/**
+ *
+ * @author esmek
+ */
 public class RESOLVEFoldingBuilder
         extends
             FoldingBuilderEx implements DumbAware {
@@ -152,16 +156,17 @@ public class RESOLVEFoldingBuilder
     }
 
     @Override public boolean isCollapsedByDefault(@NotNull ASTNode node) {
-        IElementType type = node.getElementType();
-        if (type == RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.BLOCK_COMMENT) ||
-                type == RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.DOC_COMMENT) ||
-                type == RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.LINE_COMMENT)) {
-            return CodeFoldingSettings.getInstance().COLLAPSE_DOC_COMMENTS;
-        }
+        return false;
+     //   IElementType type = node.getElementType();
+     //   if (type == RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.BLOCK_COMMENT) ||
+     //           type == RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.DOC_COMMENT) ||
+     //           type == RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.LINE_COMMENT)) {
+     //       return CodeFoldingSettings.getInstance().COLLAPSE_DOC_COMMENTS;
+     //   }
 //        if (type == RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.PROCEDURE) && CodeFoldingSettings.getInstance().COLLAPSE_METHODS) {
 //            ASTNode parent = node.getTreeParent();
 //            return parent != null && parent.getPsi() instanceof ResolveOperationDeclaration;
 //        }
-        return CodeFoldingSettings.getInstance().COLLAPSE_IMPORTS;// && node.getElementType() == GoTypes.IMPORT_LIST;
+   //     return CodeFoldingSettings.getInstance().COLLAPSE_IMPORTS;// && node.getElementType() == GoTypes.IMPORT_LIST;
     }
 }
