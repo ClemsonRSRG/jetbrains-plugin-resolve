@@ -20,6 +20,8 @@ public class RESOLVESyntaxHighlighter extends SyntaxHighlighterBase {
             createTextAttributesKey("KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
     public static final TextAttributesKey PARAMETER_MODE =
             createTextAttributesKey("PARAMETER_MODE", DefaultLanguageHighlighterColors.KEYWORD);
+    public static final TextAttributesKey STRING =
+            createTextAttributesKey("STRING", DefaultLanguageHighlighterColors.STRING);
     public static final TextAttributesKey LINE_COMMENT =
             createTextAttributesKey("LINE_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
     public static final TextAttributesKey JAVADOC_COMMENT =
@@ -28,7 +30,7 @@ public class RESOLVESyntaxHighlighter extends SyntaxHighlighterBase {
             createTextAttributesKey("BLOCK_COMMENT", DefaultLanguageHighlighterColors.BLOCK_COMMENT);
 
     private static final TextAttributesKey[] BAD_CHAR_KEYS = new TextAttributesKey[]{HighlighterColors.BAD_CHARACTER};
-    //private static final TextAttributesKey[] STRING_KEYS = new TextAttributesKey[]{STRING};
+    private static final TextAttributesKey[] STRING_KEYS = new TextAttributesKey[]{STRING};
     private static final TextAttributesKey[] COMMENT_KEYS = new TextAttributesKey[]{LINE_COMMENT, JAVADOC_COMMENT, BLOCK_COMMENT};
     private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
 
@@ -37,9 +39,17 @@ public class RESOLVESyntaxHighlighter extends SyntaxHighlighterBase {
         return new RESOLVELexerAdaptor(RESOLVELanguage.INSTANCE, lexer);
     }
 
-    @NotNull @Override public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
+    @NotNull @Override public TextAttributesKey[] getTokenHighlights(
+            IElementType tokenType) {
         if ( RESOLVETokenTypes.KEYWORDS.contains(tokenType) ){
             return new TextAttributesKey[]{KEYWORD};
+        }
+
+        if (tokenType == RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.STRING)) {
+            return STRING_KEYS;
+        }
+        else if (tokenType == RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.BLOCK_COMMENT)) {
+            return COMMENT_KEYS;
         }
         else if (tokenType == RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.DOC_COMMENT)) {
             return COMMENT_KEYS;
