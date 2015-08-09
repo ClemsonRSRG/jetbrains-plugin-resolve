@@ -20,6 +20,8 @@ public class RESOLVESyntaxHighlighter extends SyntaxHighlighterBase {
             createTextAttributesKey("KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
     public static final TextAttributesKey PARAMETER_MODE =
             createTextAttributesKey("PARAMETER_MODE", DefaultLanguageHighlighterColors.KEYWORD);
+    public static final TextAttributesKey OPERATOR =
+            createTextAttributesKey("BUILTIN_OPERATOR", DefaultLanguageHighlighterColors.OPERATION_SIGN);
     public static final TextAttributesKey STRING =
             createTextAttributesKey("STRING", DefaultLanguageHighlighterColors.STRING);
     public static final TextAttributesKey LINE_COMMENT =
@@ -43,6 +45,12 @@ public class RESOLVESyntaxHighlighter extends SyntaxHighlighterBase {
             IElementType tokenType) {
         if ( RESOLVETokenTypes.KEYWORDS.contains(tokenType) ){
             return new TextAttributesKey[]{KEYWORD};
+        }
+        else if ( RESOLVETokenTypes.PARAMETER_MODES.contains(tokenType) ) {
+            return new TextAttributesKey[]{PARAMETER_MODE};
+        }
+        else if (RESOLVETokenTypes.BUILTIN_OPERATORS.contains(tokenType)) {
+            return new TextAttributesKey[]{OPERATOR};
         }
 
         if (tokenType == RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.STRING)) {
