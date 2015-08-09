@@ -1,12 +1,14 @@
 package edu.clemson.resolve.plugin.annotations;
 
-import edu.clemson.resolve.compiler.RESOLVECompilerListener;
-import edu.clemson.resolve.compiler.RESOLVEMessage;
+//import edu.clemson.resolve.compiler.RESOLVECompilerListener;
+//import edu.clemson.resolve.compiler.RESOLVEMessage;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnnotatorCompilerListener implements RESOLVECompilerListener {
+public class AnnotatorCompilerListener {
+
+}/*implements RESOLVECompilerListener {
 
     public final List<RESOLVEExternalAnnotator.Issue> issues = new ArrayList<>();
 
@@ -20,4 +22,4 @@ public class AnnotatorCompilerListener implements RESOLVECompilerListener {
     @Override public void warning(RESOLVEMessage msg) {
         issues.add(new RESOLVEExternalAnnotator.Issue(msg));
     }
-}
+}*/

@@ -5,10 +5,10 @@ import com.intellij.lang.annotation.ExternalAnnotator;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiFile;
-import edu.clemson.resolve.compiler.LanguageSemanticsMessage;
-import edu.clemson.resolve.compiler.LanguageSyntaxMessage;
-import edu.clemson.resolve.compiler.RESOLVECompiler;
-import edu.clemson.resolve.compiler.RESOLVEMessage;
+//import edu.clemson.resolve.compiler.LanguageSemanticsMessage;
+//import edu.clemson.resolve.compiler.LanguageSyntaxMessage;
+//import edu.clemson.resolve.compiler.RESOLVECompiler;
+//import edu.clemson.resolve.compiler.RESOLVEMessage;
 import edu.clemson.resolve.plugin.parsing.RunRESOLVEOnModuleFile;
 import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.Token;
@@ -25,24 +25,24 @@ public class RESOLVEExternalAnnotator
         extends
             ExternalAnnotator<PsiFile, List<RESOLVEExternalAnnotator.Issue>> {
 
-    public static final Logger LOG = Logger.getInstance("RESOLVEExternalAnnotator");
+   public static final Logger LOG = Logger.getInstance("RESOLVEExternalAnnotator");
 
     public static class Issue {
         String annotation;
         List<Token> offendingTokens = new ArrayList<>();
-        RESOLVEMessage msg;
-        public Issue(RESOLVEMessage msg) {
-            this.msg = msg;
-        }
+        //RESOLVEMessage msg;
+        ///public Issue(RESOLVEMessage msg) {
+        //    this.msg = msg;
+        //}
     }
-
-    /** Called first; return file */
+ /*
+    //Called first; return file
     @Override @Nullable public PsiFile collectInformation(
             @NotNull PsiFile file) {
         return file;
     }
 
-    /** Called 2nd; run resolve on file */
+    // Called 2nd; run resolve on file
     @Nullable @Override public List<RESOLVEExternalAnnotator.Issue> doAnnotate(
             final PsiFile file) {
         String moduleFileName = file.getVirtualFile().getPath();
@@ -72,7 +72,7 @@ public class RESOLVEExternalAnnotator
         return listener.issues;
     }
 
-    /** Called 3rd */
+    // Called 3rd
     @Override public void apply(@NotNull PsiFile file,
                       List<RESOLVEExternalAnnotator.Issue> issues,
                       @NotNull AnnotationHolder holder) {
@@ -130,5 +130,5 @@ public class RESOLVEExternalAnnotator
             outputMsg = outputMsg.replace('\n', ' ');
         }
         issue.annotation = outputMsg;
-    }
+    }*/
 }
