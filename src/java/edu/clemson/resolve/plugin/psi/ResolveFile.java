@@ -8,7 +8,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import edu.clemson.resolve.plugin.RESOLVEFileType;
 import edu.clemson.resolve.plugin.RESOLVELanguage;
 import edu.clemson.resolve.plugin.RESOLVETokenTypes;
-import edu.clemson.resolve.plugin.parser.Resolve;
 import edu.clemson.resolve.plugin.psi.impl.FacilityModule;
 import edu.clemson.resolve.plugin.psi.impl.OperationProcedureDeclImpl;
 import org.jetbrains.annotations.NotNull;

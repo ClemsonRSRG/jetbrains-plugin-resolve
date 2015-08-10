@@ -45,9 +45,9 @@ public class RESOLVETokenTypes {
                     ResolveLexer.IMPLIES, ResolveLexer.INTERSECT, ResolveLexer.IS_IN,
                     ResolveLexer.IS_NOT_IN, ResolveLexer.LT, ResolveLexer.LTE,
                     ResolveLexer.MINUS, ResolveLexer.MULT, ResolveLexer.NEQUALS,
-                    ResolveLexer.OR, ResolveLexer.PLUS, ResolveLexer.RANGE,
-                    ResolveLexer.RARROW, ResolveLexer.SWAP, ResolveLexer.TILDE,
-                    ResolveLexer.TRIPLEDOT, ResolveLexer.UNION);
+                    ResolveLexer.OR, ResolveLexer.PLUS, ResolveLexer.PLUSPLUS,
+                    ResolveLexer.RANGE, ResolveLexer.RARROW, ResolveLexer.SWAP,
+                    ResolveLexer.TILDE, ResolveLexer.TRIPLEDOT, ResolveLexer.UNION);
 
     public static final TokenSet WHITESPACES =
             ElementTypeFactory.createTokenSet(RESOLVELanguage.INSTANCE,

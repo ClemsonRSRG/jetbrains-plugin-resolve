@@ -17,6 +17,7 @@ public class RESOLVEColorSettingsPage implements ColorSettingsPage {
     private static final AttributesDescriptor[] ATTRIBUTES =
             {
                 new AttributesDescriptor("Keywords", RESOLVESyntaxHighlighter.KEYWORD),
+                new AttributesDescriptor("Numbers", RESOLVESyntaxHighlighter.NUMBER),
                 new AttributesDescriptor("Parameter modes", RESOLVESyntaxHighlighter.PARAMETER_MODE),
                 new AttributesDescriptor("Builtin operator", RESOLVESyntaxHighlighter.OPERATOR),
                 new AttributesDescriptor("String literal", RESOLVESyntaxHighlighter.STRING),
@@ -35,7 +36,7 @@ public class RESOLVEColorSettingsPage implements ColorSettingsPage {
 
     @NotNull @Override public String getDemoText() {
         return
-                "Facility Foo;\n\n" +
+                "Facility Foo;\n" +
                         "        uses Far, Fizz;\n\n" +
                         "    /**\n" +
                         "     * A doc-style comment.\n" +

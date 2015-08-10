@@ -29,7 +29,7 @@ public class RESOLVESmallIDEsSdkService extends RESOLVESdkService {
         super(project);
     }
 
-    @Nullable @Override public String getSdkHomePath(@Nullable Module module) {
+    @Nullable @Override public String getSdkHomePath(@Nullable final Module module) {
         ComponentManager holder = ObjectUtils.notNull(module, this.project);
         return CachedValuesManager.getManager(this.project)
                 .getCachedValue(holder, new CachedValueProvider<String>() {
@@ -43,7 +43,7 @@ public class RESOLVESmallIDEsSdkService extends RESOLVESdkService {
                 });
     }
 
-    @Nullable @Override public String getSdkVersion(@Nullable Module module) {
+    @Nullable @Override public String getSdkVersion(@Nullable final Module module) {
         ComponentManager holder = ObjectUtils.notNull(module, project);
         return CachedValuesManager.getManager(project)
                 .getCachedValue(holder, new CachedValueProvider<String>() {

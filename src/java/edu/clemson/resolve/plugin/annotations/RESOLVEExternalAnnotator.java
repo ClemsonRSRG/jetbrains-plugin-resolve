@@ -10,11 +10,11 @@ import com.intellij.psi.PsiFile;
 //import edu.clemson.resolve.compiler.RESOLVECompiler;
 //import edu.clemson.resolve.compiler.RESOLVEMessage;
 import edu.clemson.resolve.plugin.parsing.RunRESOLVEOnModuleFile;
-import org.antlr.v4.runtime.CommonToken;
-import org.antlr.v4.runtime.Token;
+//import org.antlr.v4.runtime.CommonToken;
+//import org.antlr.v4.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.stringtemplate.v4.ST;
+//import org.stringtemplate.v4.ST;
 
 import java.io.File;
 import java.io.StringReader;
@@ -29,7 +29,7 @@ public class RESOLVEExternalAnnotator
 
     public static class Issue {
         String annotation;
-        List<Token> offendingTokens = new ArrayList<>();
+        //List<Token> offendingTokens = new ArrayList<Token>();
         //RESOLVEMessage msg;
         ///public Issue(RESOLVEMessage msg) {
         //    this.msg = msg;

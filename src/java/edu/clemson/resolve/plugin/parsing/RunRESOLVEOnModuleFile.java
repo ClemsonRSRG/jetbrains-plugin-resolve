@@ -23,7 +23,7 @@ public class RunRESOLVEOnModuleFile extends Task.Modal {
     public static List<String> getRESOLVEArgsAsList(
             Project project, VirtualFile vfile) {
         Map<String,String> argMap = getRESOLVEArgs(project, vfile);
-        List<String> args = new ArrayList<>();
+        List<String> args = new ArrayList<String>();
         for (String option : argMap.keySet()) {
             args.add(option);
             String value = argMap.get(option);
