@@ -38,7 +38,7 @@
     </template>
 
     <template description='Operation declaration' id='resolve_lang_Operation' name='resolve_lang_Operation' toReformat='true' toShortenFQNames='true'
-              value='Operation $NAME$();'>
+              value='Operation $NAME$ ();'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
         <context>
             <option name='RESOLVE' value='true'/>
@@ -46,7 +46,15 @@
     </template>
 
     <template description='Operation procedure declaration' id='resolve_lang_Operation_Procedure' name='resolve_lang_Operation_Procedure' toReformat='true' toShortenFQNames='true'
-              value='Operation $NAME$();&#10;    Procedure&#10;        $END$&#10;end $NAME$;'>
+              value='Operation $NAME$ ();&#10;$END$&#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Procedure declaration' id='resolve_lang_Procedure' name='resolve_lang_Procedure' toReformat='true' toShortenFQNames='true'
+              value='Procedure $NAME$ ();&#10; $END$&#10;end $NAME$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
         <context>
             <option name='RESOLVE' value='true'/>
@@ -63,4 +71,20 @@
         </context>
     </template>
 
+    <template description='Type record rep declaration' id='resolve_lang_Type_Record_Rep' name='resolve_lang_Type_Record_Rep' toReformat='true' toShortenFQNames='true'
+              value='Type $NAME$ = Record &#10;        $END$ &#10;    end;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Type rep declaration' id='resolve_lang_Type_Rep' name='resolve_lang_Type_Rep' toReformat='true' toShortenFQNames='true'
+              value='Type $NAME$ = $REP$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;representation&quot;' expression='' name='REP'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
 </templateSet>

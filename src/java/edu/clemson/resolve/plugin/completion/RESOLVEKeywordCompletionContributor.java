@@ -43,7 +43,14 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
                         psiElement(EnhancementImplModule.class)),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                        "Operation Procedure", "Facility Decl"));
+                        "Operation Procedure", "Facility Decl", "Type Record Rep", "Type Rep"));
+
+        //need this extension since
+        extend(CompletionType.BASIC, moduleBodyPattern(
+                        psiElement(ConceptImplModule.class),
+                        psiElement(EnhancementImplModule.class)),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Procedure"));
 
         extend(CompletionType.BASIC, usesPattern(),
                 new RESOLVEKeywordCompletionProvider(
