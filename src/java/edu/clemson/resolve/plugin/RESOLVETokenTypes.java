@@ -26,6 +26,7 @@ public class RESOLVETokenTypes {
     public static final TokenSet COMMENTS =
             ElementTypeFactory.createTokenSet(RESOLVELanguage.INSTANCE,
                     Arrays.asList(ResolveLexer.tokenNames),
+                    ResolveLexer.BLOCK_COMMENT,
                     ResolveLexer.DOC_COMMENT,
                     ResolveLexer.LINE_COMMENT);
 
