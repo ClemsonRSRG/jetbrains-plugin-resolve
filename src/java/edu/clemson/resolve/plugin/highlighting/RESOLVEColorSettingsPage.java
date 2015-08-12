@@ -47,14 +47,14 @@ public class RESOLVEColorSettingsPage implements ColorSettingsPage {
                         "         Procedure\n" +
                         "             Var x : Integer;\n" +
                         "             Var y, z : Std_String_Fac :: String;\n" +
-                        "             y:=\"cat\"; z =:=\"dog\";\n" +
+                        "             y:=\"cat\"; z:=\"dog\";\n" +
                         "             z:= y++z;\n" +
                         "             Zoo(x);\n" +
                         "     end Boo;\n" +
                         "     Operation Zoo (alters p : Integer);\n" +
                         "         Procedure\n" +
                         "             p := p + 1;" +
-                        "     end;\n" +
+                        "     end Zoo;\n" +
                         "end Foo;\n";
     }
 
