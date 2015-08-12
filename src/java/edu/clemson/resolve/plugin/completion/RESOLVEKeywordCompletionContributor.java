@@ -156,7 +156,7 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
                                         .withLastChild(or(psiElement(REQUIRES_CLAUSE),
                                                 psiElement(OP_PARAM_LIST), psiElement(TYPE)))));
     }
-    
+
     private static PsiFilePattern.Capture<ResolveFile> resolveFile() {
         return psiFile(ResolveFile.class);
     }
