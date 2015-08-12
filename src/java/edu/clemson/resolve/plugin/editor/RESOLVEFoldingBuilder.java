@@ -61,6 +61,29 @@ public class RESOLVEFoldingBuilder
                         addTypeBlock(element, element.getNextSibling().getNextSibling().getNextSibling(), element.getParent().getLastChild(), result);
                     }
 
+                    //Folding for TypeModelDecl
+                    //Basically, if there is the keyword Type with the keyword Family after it, it's a TypeModelDecl, and you can fold it.
+                    if (type == RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.TYPE) && element.getNextSibling().getNextSibling().getNode().getElementType() == RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.FAMILY)) {
+                        //Type Family NAME...
+                        addTypeBlock(element, element.getNextSibling().getNextSibling().getNextSibling().getNextSibling().getNextSibling(), element.getParent().getLastChild(), result);
+                    }
+
+                    //Folding for TypeModelRepr
+                    //Basically, if there is the keyword Type without the keyword Family after it, it's a TypeModelRepr, and you can fold it.
+                    if (type == RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.TYPE) && element.getNextSibling().getNextSibling().getNode().getElementType() != RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.FAMILY)) {
+                        //Type NAME...
+                        addTypeBlock(element, element.getNextSibling().getNextSibling().getNextSibling(), element.getParent().getLastChild(), result);
+                    }
+
+                    //Folding for FacilityDecl
+                    // Identify if there is an IS after the id to separate facility Decls from Facility Modules
+                    if (type == RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.FACILITY) &&
+                            element.getNextSibling().getNextSibling().getNextSibling().getNextSibling().getNode().getElementType() ==
+                                    RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.IS)) {
+                        //Facility NAME...
+                        addTypeBlock(element, element.getNextSibling().getNextSibling().getNextSibling(), element.getParent().getLastChild(), result);
+                    }
+
                     //Folding for loops
                     if (type == RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.WHILE)) {
                         //While...;
