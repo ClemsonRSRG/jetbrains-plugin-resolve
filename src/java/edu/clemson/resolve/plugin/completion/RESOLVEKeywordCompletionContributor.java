@@ -7,29 +7,59 @@ import com.intellij.patterns.PsiElementPattern;
 import com.intellij.patterns.PsiFilePattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import edu.clemson.resolve.plugin.RESOLVETokenTypes;
 import edu.clemson.resolve.plugin.parser.Resolve;
 import edu.clemson.resolve.plugin.parser.ResolveLexer;
 import edu.clemson.resolve.plugin.psi.ResolveFile;
 import edu.clemson.resolve.plugin.psi.impl.*;
+import org.antlr.intellij.adaptor.lexer.RuleElementType;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.PlatformPatterns.psiFile;
+import static com.intellij.patterns.StandardPatterns.or;
 
 public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
+
+    protected static RuleElementType OP_DECL = RESOLVETokenTypes
+            .RULE_ELEMENT_TYPES.get(Resolve.RULE_operationDecl);
+    protected static RuleElementType REQUIRES_CLAUSE = RESOLVETokenTypes
+            .RULE_ELEMENT_TYPES.get(Resolve.RULE_requiresClause);
+    protected static RuleElementType TYPE_MODEL_DECL = RESOLVETokenTypes
+            .RULE_ELEMENT_TYPES.get(Resolve.RULE_typeModelDecl);
+    protected static RuleElementType TYPE = RESOLVETokenTypes
+            .RULE_ELEMENT_TYPES.get(Resolve.RULE_type);
+    protected static RuleElementType MATH_TYPE_EXP = RESOLVETokenTypes
+            .RULE_ELEMENT_TYPES.get(Resolve.RULE_mathTypeExp);
+    protected static RuleElementType OP_PROC_DECL = RESOLVETokenTypes
+            .RULE_ELEMENT_TYPES.get(Resolve.RULE_operationDecl);
+    protected static RuleElementType OP_PARAM_LIST = RESOLVETokenTypes
+            .RULE_ELEMENT_TYPES.get(Resolve.RULE_operationParameterList);
 
     public RESOLVEKeywordCompletionContributor() {
         extend(CompletionType.BASIC, topLevelPattern(),
                 new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Precis"));
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Precis", "Implementation", "Enhancement", "Concept", "Facility"));
 
-        extend(CompletionType.BASIC, topLevelPattern(),
+       /* extend(CompletionType.BASIC, constraintPattern(),
                 new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Implementation"));
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "constraints"));*/
 
-        extend(CompletionType.BASIC, topLevelPattern(),
+        extend(CompletionType.BASIC, requiresOpProcPattern(),
                 new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Concept"));
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "requires"));
+
+        extend(CompletionType.BASIC, requiresPattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "requires"));
+
+        extend(CompletionType.BASIC, ensuresPattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "ensures"));
+
+        extend(CompletionType.BASIC, ensuresOpProcPattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "ensures"));
 
         extend(CompletionType.BASIC, moduleBodyPattern(
                         psiElement(ConceptModule.class),
@@ -91,8 +121,43 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
                         .withParent(Module.class).isFirstAcceptedChild(psiElement())));
     }
 
+    private static PsiElementPattern.Capture<PsiElement> constraintPattern() {
+        return psiElement(RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.ID))
+                .withParent(psiElement(PsiErrorElement.class).withParent(ModuleBlockNode.class)
+                        .afterSibling(psiElement(TYPE_MODEL_DECL)
+                                .withLastChild(psiElement(MATH_TYPE_EXP))));
+    }
+
+    private static PsiElementPattern.Capture<PsiElement> requiresOpProcPattern() {
+        return psiElement(RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.ID))
+                .withParent(psiElement(PsiErrorElement.class).withParent(OperationProcedureDeclImpl.class)
+                        .afterSibling(or(psiElement(OP_PARAM_LIST), psiElement(TYPE))));
+    }
+
+    private static PsiElementPattern.Capture<PsiElement> ensuresOpProcPattern() {
+        return psiElement(RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.ID))
+                .withParent(psiElement(PsiErrorElement.class)
+                        .withParent(OperationProcedureDeclImpl.class)
+                        .afterSibling(or(psiElement(OP_PARAM_LIST),
+                                psiElement(REQUIRES_CLAUSE), psiElement(TYPE))));
+    }
+
+    private static PsiElementPattern.Capture<PsiElement> requiresPattern() {
+        return psiElement(RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.ID))
+                .withParent(psiElement(PsiErrorElement.class).withParent(ModuleBlockNode.class)
+                        .afterSibling(psiElement(OP_DECL).withLastChild(
+                                or(psiElement(OP_PARAM_LIST), psiElement(TYPE)))));
+    }
+
+    private static PsiElementPattern.Capture<PsiElement> ensuresPattern() {
+        return psiElement(RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.ID))
+                .withParent(psiElement(PsiErrorElement.class).withParent(psiElement(ModuleBlockNode.class))
+                                .afterSibling(psiElement(OP_DECL)
+                                        .withLastChild(or(psiElement(REQUIRES_CLAUSE),
+                                                psiElement(OP_PARAM_LIST), psiElement(TYPE)))));
+    }
+    
     private static PsiFilePattern.Capture<ResolveFile> resolveFile() {
         return psiFile(ResolveFile.class);
     }
-    
 }

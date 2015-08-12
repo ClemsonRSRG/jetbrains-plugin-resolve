@@ -10,9 +10,26 @@
         </context>
     </template>
 
+    <template description='Facility module declaration' id='resolve_lang_Facility' name='resolve_lang_Facility' toReformat='true' toShortenFQNames='true'
+              value='Facility $NAME$;&#10;    $END$ &#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+
     <template description='Concept module declaration' id='resolve_lang_Concept' name='resolve_lang_Concept' toReformat='true' toShortenFQNames='true'
               value='Concept $NAME$;&#10;    $END$ &#10;end $NAME$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Enhancement module declaration' id='resolve_lang_Enhancement' name='resolve_lang_Enhancement' toReformat='true' toShortenFQNames='true'
+              value='Enhancement $NAME$ for $CONCEPT$;&#10;    $END$ &#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;concept&quot;' expression='' name='CONCEPT'/>
         <context>
             <option name='RESOLVE' value='true'/>
         </context>
@@ -46,7 +63,7 @@
     </template>
 
     <template description='Operation procedure declaration' id='resolve_lang_Operation_Procedure' name='resolve_lang_Operation_Procedure' toReformat='true' toShortenFQNames='true'
-              value='Operation $NAME$ ();&#10;$END$&#10;end $NAME$;'>
+              value='Operation $NAME$ ();&#10;    Procedure &#10;        $END$&#10;end $NAME$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
         <context>
             <option name='RESOLVE' value='true'/>
