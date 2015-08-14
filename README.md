@@ -41,7 +41,7 @@ users to fill-in each one incrementally.
 
 ## History
 
-See our [github releases]() page.
+See our [github releases](https://github.com/Welchd1/resolve-intellij-plugin/releases) page.
 
 ## Screenshots
 
