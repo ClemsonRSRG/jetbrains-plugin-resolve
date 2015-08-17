@@ -41,7 +41,7 @@ users to fill-in each one incrementally.
 
 ## History
 
-See our [github releases]() page.
+See our [github releases](https://github.com/Welchd1/resolve-intellij-plugin/releases) page.
 
 ## Screenshots
 
@@ -76,7 +76,7 @@ We currently support live templates for the following constructs:
 
 ![Goto declaration](resources/images/basic-goto-decl.png)
 
-### Sdk type, resolve files, and run configurations
+### Custom Sdk type
 
 All RESOLVE files should be rolled into our custom Sdk package type:
 
