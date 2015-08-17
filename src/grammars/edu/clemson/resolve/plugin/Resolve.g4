@@ -199,10 +199,6 @@ variableDeclGroup
 
 // statements
 
-stmtBlock
-    :   stmt+
-    ;
-
 stmt
     :   assignStmt
     |   swapStmt
@@ -219,8 +215,9 @@ swapStmt
     :   left=progExp SWAP right=progExp SEMI
     ;
 
+//semantically restrict things like 1++ (<literal>++/--, etc)
 callStmt
-    :   progParamExp SEMI
+    :   progExp SEMI
     ;
 
 whileStmt
@@ -277,7 +274,7 @@ typeModelInit
 
 typeImplInit
     :   INITIALIZATION (ensuresClause)?
-        (variableDeclGroup)* (stmtBlock)?
+        (variableDeclGroup)* (stmt)*
         END SEMI
     ;
 
@@ -370,7 +367,7 @@ operationProcedureDecl
         (ensuresClause)?
         PROCEDURE
         (variableDeclGroup)*
-        (stmtBlock)?
+        (stmt)*
         END closename=ID SEMI
     ;
 
@@ -378,7 +375,7 @@ procedureDecl
     :   (recursive=RECURSIVE)? PROCEDURE name=ID operationParameterList
         (COLON type)? SEMI
         (variableDeclGroup)*
-        (stmtBlock)?
+        (stmt)*
         END closename=ID SEMI
     ;
 
@@ -432,11 +429,12 @@ mathExp
     |   mathExp op=(IS_IN|IS_NOT_IN) mathExp            #mathInfixExp
     |   mathExp op=(LTE|GTE|GT|LT) mathExp              #mathInfixExp
     |   mathExp op=(EQUALS|NEQUALS) mathExp             #mathInfixExp
-    |   mathExp op=(AND|OR) mathExp                     #mathInfixExp
     |   mathExp op=IMPLIES mathExp                      #mathInfixExp
+    |   mathExp op=(AND|OR) mathExp                     #mathInfixExp
     |   mathExp op=COLON mathTypeExp                    #mathTypeAssertionExp
     |   LPAREN mathAssertionExp RPAREN                  #mathNestedExp
     ;
+
 mathPrimaryExp
     :   mathLiteralExp
     |   mathFunctionApplicationExp
@@ -446,6 +444,7 @@ mathPrimaryExp
     |   mathSetExp
     |   mathTupleExp
     |   mathAlternativeExp
+    |   mathFunctionRestrictionExp
     |   mathLambdaExp
     ;
 
@@ -495,16 +494,21 @@ mathSegmentsExp
     :   mathFunctionApplicationExp (DOT mathFunctionApplicationExp)+
     ;
 
+mathFunctionRestrictionExp
+    :   (qualifier=ID)? name=ID LBRACKET mathExp RBRACKET
+    ;
+
 // program expressions
 
 progExp
-    :   op=MINUS progExp                            #progUnaryExp
-    |   progExp op=(MULT|DIVIDE|PLUSPLUS) progExp   #progInfixExp
-    |   progExp op=(PLUS|MINUS) progExp             #progInfixExp
-    |   progExp op=(LTE|GTE|LT|GT) progExp          #progInfixExp
-    |   progExp op=(EQUALS|NEQUALS) progExp         #progInfixExp
-    |   LPAREN progExp RPAREN                       #progNestedExp
-    |   progPrimary                                 #progPrimaryExp
+    :   progPrimary                                     #progPrimaryExp
+    |   LPAREN progExp RPAREN                           #progNestedExp
+    |   op=MINUS progExp                                #progUnaryExp
+    |   progExp op=(PLUSPLUS|MINUSMINUS)                #progPostfixExp
+    |   progExp op=(MULT|DIVIDE|PLUSPLUSPLUS) progExp   #progInfixExp
+    |   progExp op=(PLUS|MINUS) progExp                 #progInfixExp
+    |   progExp op=(LTE|GTE|LT|GT) progExp              #progInfixExp
+    |   progExp op=(EQUALS|NEQUALS) progExp             #progInfixExp
     ;
 
 progPrimary
