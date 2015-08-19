@@ -491,7 +491,7 @@ mathTupleExp
     ;
 
 mathSegmentsExp
-    :   mathFunctionApplicationExp (DOT mathFunctionApplicationExp)+
+    :   (AT)? mathFunctionApplicationExp (DOT mathFunctionApplicationExp)+
     ;
 
 mathFunctionRestrictionExp

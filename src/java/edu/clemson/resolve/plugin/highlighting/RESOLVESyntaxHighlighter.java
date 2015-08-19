@@ -23,10 +23,10 @@ public class RESOLVESyntaxHighlighter extends SyntaxHighlighterBase {
             createTextAttributesKey("PARAMETER_MODE", DefaultLanguageHighlighterColors.KEYWORD);
     public static final TextAttributesKey OPERATOR =
             createTextAttributesKey("BUILTIN_OPERATOR", DefaultLanguageHighlighterColors.OPERATION_SIGN);
-    public static final TextAttributesKey STRING =
-            createTextAttributesKey("STRING", DefaultLanguageHighlighterColors.STRING);
     public static final TextAttributesKey NUMBER =
             createTextAttributesKey("NUMBER", DefaultLanguageHighlighterColors.NUMBER);
+    public static final TextAttributesKey STRING =
+            createTextAttributesKey("STRING", DefaultLanguageHighlighterColors.STRING);
     public static final TextAttributesKey LINE_COMMENT =
             createTextAttributesKey("LINE_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
     public static final TextAttributesKey JAVADOC_COMMENT =

@@ -17,13 +17,11 @@ public class RESOLVEColorSettingsPage implements ColorSettingsPage {
     private static final AttributesDescriptor[] ATTRIBUTES =
             {
                 new AttributesDescriptor("Keywords", RESOLVESyntaxHighlighter.KEYWORD),
-                new AttributesDescriptor("Numbers", RESOLVESyntaxHighlighter.NUMBER),
                 new AttributesDescriptor("Parameter modes", RESOLVESyntaxHighlighter.PARAMETER_MODE),
-                new AttributesDescriptor("Builtin operator", RESOLVESyntaxHighlighter.OPERATOR),
-                new AttributesDescriptor("String literal", RESOLVESyntaxHighlighter.STRING),
-                new AttributesDescriptor("Line comments", RESOLVESyntaxHighlighter.LINE_COMMENT),
-                new AttributesDescriptor("Doc comments", RESOLVESyntaxHighlighter.JAVADOC_COMMENT),
-                new AttributesDescriptor("Block comments", RESOLVESyntaxHighlighter.BLOCK_COMMENT),
+                new AttributesDescriptor("Builtin operators", RESOLVESyntaxHighlighter.OPERATOR),
+                new AttributesDescriptor("Numeric literals", RESOLVESyntaxHighlighter.NUMBER),
+                new AttributesDescriptor("String literals", RESOLVESyntaxHighlighter.STRING),
+                new AttributesDescriptor("Comments", RESOLVESyntaxHighlighter.BLOCK_COMMENT),
             };
 
     @Nullable @Override public Icon getIcon() {
