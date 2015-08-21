@@ -45,11 +45,12 @@ public class RESOLVETokenTypes {
                     ResolveLexer.EQUALS, ResolveLexer.GT, ResolveLexer.GTE,
                     ResolveLexer.IMPLIES, ResolveLexer.INTERSECT, ResolveLexer.IS_IN,
                     ResolveLexer.IS_NOT_IN, ResolveLexer.LT, ResolveLexer.LTE,
-                    ResolveLexer.MINUS, ResolveLexer.MINUSMINUS,
-                    ResolveLexer.MULT, ResolveLexer.NEQUALS,ResolveLexer.OR,
-                    ResolveLexer.PLUS, ResolveLexer.PLUSPLUS,ResolveLexer.PLUSPLUSPLUS,
-                    ResolveLexer.RANGE,ResolveLexer.RARROW, ResolveLexer.SWAP,
-                    ResolveLexer.TILDE,ResolveLexer.TRIPLEDOT, ResolveLexer.UNION);
+                    ResolveLexer.MINUS, ResolveLexer.MINUSMINUS, ResolveLexer.MULT,
+                    ResolveLexer.NEQUALS, ResolveLexer.NOT, ResolveLexer.OR,
+                    ResolveLexer.PLUS, ResolveLexer.PLUSPLUS,
+                    ResolveLexer.PLUSPLUSPLUS, ResolveLexer.RANGE, ResolveLexer.RARROW,
+                    ResolveLexer.SWAP, ResolveLexer.TILDE,  ResolveLexer.TRIPLEDOT,
+                    ResolveLexer.UNION);
 
     public static final TokenSet WHITESPACES =
             ElementTypeFactory.createTokenSet(RESOLVELanguage.INSTANCE,
@@ -69,6 +70,7 @@ public class RESOLVETokenTypes {
                     ResolveLexer.COROLLARY,
                     ResolveLexer.CORRESPONDENCE,
                     ResolveLexer.DEFINITION,
+                    ResolveLexer.DEFINES,
                     ResolveLexer.DO,
                     ResolveLexer.ELSE,
                     ResolveLexer.END,
@@ -101,6 +103,7 @@ public class RESOLVETokenTypes {
                     ResolveLexer.RECURSIVE,
                     ResolveLexer.REQUIRES,
                     ResolveLexer.THEOREM,
+                    ResolveLexer.THEN,
                     ResolveLexer.TYPE,
                     ResolveLexer.USES,
                     ResolveLexer.VAR,

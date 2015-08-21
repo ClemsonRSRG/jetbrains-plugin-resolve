@@ -11,6 +11,7 @@ import edu.clemson.resolve.plugin.RESOLVETokenTypes;
 import edu.clemson.resolve.plugin.adaptors.RESOLVELexerAdaptor;
 import edu.clemson.resolve.plugin.parser.Resolve;
 import edu.clemson.resolve.plugin.parser.ResolveLexer;
+import org.antlr.intellij.adaptor.lexer.TokenElementType;
 import org.jetbrains.annotations.NotNull;
 
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
@@ -48,6 +49,11 @@ public class RESOLVESyntaxHighlighter extends SyntaxHighlighterBase {
     @NotNull @Override public TextAttributesKey[] getTokenHighlights(
             IElementType tokenType) {
         if ( RESOLVETokenTypes.KEYWORDS.contains(tokenType) ){
+            /*TokenElementType ThenType = RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.THEN);
+            if (ThenType.equals(tokenType)) {
+                int i;
+                i=0;
+            }*/
             return new TextAttributesKey[]{KEYWORD};
         }
         else if ( RESOLVETokenTypes.PARAMETER_MODES.contains(tokenType) ) {

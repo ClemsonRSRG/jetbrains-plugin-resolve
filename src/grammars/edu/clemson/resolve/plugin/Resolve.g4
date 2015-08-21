@@ -57,6 +57,8 @@ conceptBlock
     :   ( typeModelDecl
         | operationDecl
         | mathDefinitionDecl
+        | mathDefinesDefinitionDecl
+        | constraintClause
         )*
     ;
 
@@ -303,6 +305,10 @@ mathCategoricalDefinitionDecl
         IS mathAssertionExp SEMI
     ;
 
+mathDefinesDefinitionDecl
+    :   DEFINES ID (COMMA ID)* COLON mathTypeExp SEMI
+    ;
+
 mathDefinitionDecl
     :   (IMPLICIT)? DEFINITION mathDefinitionSig
         (IS mathAssertionExp)? SEMI
@@ -421,7 +427,7 @@ mathQuantifiedExp
     ;
 
 mathExp
-    :   mathPrimaryExp                                  #mathPrimeExp
+    :   op=NOT mathExp                                  #mathUnaryExp
     |   mathExp op=(MULT|DIVIDE|TILDE) mathExp          #mathInfixExp
     |   mathExp op=(PLUS|MINUS|CUTMINUS) mathExp        #mathInfixExp
     |   mathExp op=(RANGE|RARROW) mathExp               #mathInfixExp
@@ -433,6 +439,7 @@ mathExp
     |   mathExp op=(AND|OR) mathExp                     #mathInfixExp
     |   mathExp op=COLON mathTypeExp                    #mathTypeAssertionExp
     |   LPAREN mathAssertionExp RPAREN                  #mathNestedExp
+    |   mathPrimaryExp                                  #mathPrimeExp
     ;
 
 mathPrimaryExp
@@ -454,7 +461,7 @@ mathLiteralExp
     ;
 
 mathFunctionApplicationExp
-    :   (AT)? name=ID (LPAREN mathExp (COMMA mathExp)* RPAREN)+ #mathFunctionExp
+    :   (AT)? (qualifier=ID COLONCOLON)? name=ID (LPAREN mathExp (COMMA mathExp)* RPAREN)+ #mathFunctionExp
     |   (AT)? (qualifier=ID COLONCOLON)? name=ID #mathVariableExp
     ;
 
@@ -503,7 +510,7 @@ mathFunctionRestrictionExp
 progExp
     :   progPrimary                                     #progPrimaryExp
     |   LPAREN progExp RPAREN                           #progNestedExp
-    |   op=MINUS progExp                                #progUnaryExp
+    |   op=(MINUS|NOT) progExp                          #progUnaryExp
     |   progExp op=(PLUSPLUS|MINUSMINUS)                #progPostfixExp
     |   progExp op=(MULT|DIVIDE|PLUSPLUSPLUS) progExp   #progInfixExp
     |   progExp op=(PLUS|MINUS) progExp                 #progInfixExp
