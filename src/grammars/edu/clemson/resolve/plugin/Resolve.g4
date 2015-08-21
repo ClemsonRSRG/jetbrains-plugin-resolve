@@ -321,7 +321,7 @@ mathInductiveDefinitionDecl
     ;
 
 mathSymbol
-    :   (PLUS|MINUS|CUTMINUS|DIVIDE|CAT|MULT|BOOL|INT|LTE|LT|GT|GTE)
+    :   (PLUS|MINUS|CUTMINUS|DIVIDE|CAT|MULT|INT|LTE|LT|GT|GTE)
     |   BAR TRIPLEDOT BAR
     |   LT TRIPLEDOT GT
     |   DBL_BAR TRIPLEDOT DBL_BAR
@@ -456,8 +456,8 @@ mathPrimaryExp
     ;
 
 mathLiteralExp
-    :   (qualifier=ID COLONCOLON)? bool=BOOL        #mathBooleanExp
-    |   (qualifier=ID COLONCOLON)? num=INT         #mathIntegerExp
+    :   (qualifier=ID COLONCOLON)? (TRUE|FALSE)     #mathBooleanLiteralExp
+    |   (qualifier=ID COLONCOLON)? num=INT          #mathIntegerLiteralExp
     ;
 
 mathFunctionApplicationExp
@@ -512,7 +512,8 @@ progExp
     |   LPAREN progExp RPAREN                           #progNestedExp
     |   op=(MINUS|NOT) progExp                          #progUnaryExp
     |   progExp op=(PLUSPLUS|MINUSMINUS)                #progPostfixExp
-    |   progExp op=(MULT|DIVIDE|PLUSPLUSPLUS) progExp   #progInfixExp
+    |   progExp op=(AND|OR) progExp                     #progInfixExp
+    |   progExp op=(MULT|DIVIDE|PLUSPLUS) progExp       #progInfixExp
     |   progExp op=(PLUS|MINUS) progExp                 #progInfixExp
     |   progExp op=(LTE|GTE|LT|GT) progExp              #progInfixExp
     |   progExp op=(EQUALS|NEQUALS) progExp             #progInfixExp
@@ -539,7 +540,8 @@ progMemberExp
     ;
 
 progLiteralExp
-    :   INT     #progIntegerExp
-    |   CHAR    #progCharacterExp
-    |   STRING  #progStringExp
+    :   (TRUE|FALSE)    #progBooleanLiteralExp
+    |   INT             #progIntegerLiteralExp
+    |   CHAR            #progCharacterLiteralExp
+    |   STRING          #progStringLiteralExp
     ;

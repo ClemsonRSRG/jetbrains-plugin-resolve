@@ -19,6 +19,7 @@ public class RESOLVEColorSettingsPage implements ColorSettingsPage {
                 new AttributesDescriptor("Keywords", RESOLVESyntaxHighlighter.KEYWORD),
                 new AttributesDescriptor("Parameter modes", RESOLVESyntaxHighlighter.PARAMETER_MODE),
                 new AttributesDescriptor("Builtin operators", RESOLVESyntaxHighlighter.OPERATOR),
+                new AttributesDescriptor("Boolean literals", RESOLVESyntaxHighlighter.BOOLEAN),
                 new AttributesDescriptor("Numeric literals", RESOLVESyntaxHighlighter.NUMBER),
                 new AttributesDescriptor("String literals", RESOLVESyntaxHighlighter.STRING),
                 new AttributesDescriptor("Comments", RESOLVESyntaxHighlighter.BLOCK_COMMENT),
@@ -40,19 +41,19 @@ public class RESOLVEColorSettingsPage implements ColorSettingsPage {
                         "     * A doc-style comment.\n" +
                         "     */\n" +
                         "     Facility F is T<G, U>(5, 10) implemented by T_I;\n\n" +
-                        "     // the quick brown fox jumps of the lazy dog\n" +
+                        "     // a line comment\n" +
                         "     Operation Boo (evaluates I : Integer);\n" +
                         "         Procedure\n" +
                         "             Var x : Integer;\n" +
-                        "             Var y, z : Std_String_Fac :: String;\n" +
+                        "             Var y,z : Std_String_Fac :: String;\n" +
                         "             y:=\"cat\"; z:=\"dog\";\n" +
-                        "             z:= y+++z;\n" +
-                        "             Zoo(x);\n" +
+                        "             z:= y++z;\n" +
+                        "             Zoo(x,true);\n" +
                         "     end Boo;\n" +
-                        "     Operation Zoo (alters p : Integer);\n" +
+                        "     /* a block-style comment */\n" +
+                        "     Operation Zoo (alters p : Integer; updates z : Boolean);\n" +
                         "         Procedure\n" +
-                        "             p++;" +
-                        "             p--;" +
+                        "             p++;p--;\n" +
                         "     end Zoo;\n" +
                         "end Foo;\n";
     }

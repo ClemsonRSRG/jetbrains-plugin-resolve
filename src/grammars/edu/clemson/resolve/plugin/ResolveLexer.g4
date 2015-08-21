@@ -67,6 +67,7 @@ EXEMPLAR		:	'exemplar'			;
 EXISTS			:	'Exists'			;
 EXTERNALLY		:	'externally'		;
 FACILITY		:	'Facility'			;
+FALSE			:	'false'				;
 FAMILY			:	'Family'			;
 FOR				:	'for'				;
 FORALL			:	'Forall'			;
@@ -90,6 +91,7 @@ RECURSIVE		:	'Recursive'			;
 REQUIRES		:	'requires'			;
 THEOREM			:	'Theorem'			;
 THEN            :   'then'              ;
+TRUE			:	'true'				;
 TYPE			:	'Type'				;
 USES			:	'uses'				;
 VAR				:	'Var'				;
@@ -179,11 +181,10 @@ CHAR: '\'' . '\'' ;
 
 STRING: '"' ~( '"' | '\r' | '\n' )* '"';
 
-BOOL
-	:	'B'
-	|	'true'
-	|	'false'
-	;
+PROG_BOOL
+    :   TRUE
+    |   FALSE
+    ;
 
 WS  :	[ \t\r\n\f]+ -> channel(HIDDEN)	;
 

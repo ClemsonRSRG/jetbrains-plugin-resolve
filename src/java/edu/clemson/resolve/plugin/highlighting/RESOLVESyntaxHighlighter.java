@@ -24,6 +24,8 @@ public class RESOLVESyntaxHighlighter extends SyntaxHighlighterBase {
             createTextAttributesKey("PARAMETER_MODE", DefaultLanguageHighlighterColors.KEYWORD);
     public static final TextAttributesKey OPERATOR =
             createTextAttributesKey("BUILTIN_OPERATOR", DefaultLanguageHighlighterColors.OPERATION_SIGN);
+    public static final TextAttributesKey BOOLEAN =
+            createTextAttributesKey("BOOLEAN", DefaultLanguageHighlighterColors.NUMBER);
     public static final TextAttributesKey NUMBER =
             createTextAttributesKey("NUMBER", DefaultLanguageHighlighterColors.NUMBER);
     public static final TextAttributesKey STRING =
@@ -38,6 +40,7 @@ public class RESOLVESyntaxHighlighter extends SyntaxHighlighterBase {
     private static final TextAttributesKey[] BAD_CHAR_KEYS = new TextAttributesKey[]{HighlighterColors.BAD_CHARACTER};
     private static final TextAttributesKey[] STRING_KEYS = new TextAttributesKey[]{STRING};
     private static final TextAttributesKey[] NUMBER_KEYS = new TextAttributesKey[]{NUMBER};
+    private static final TextAttributesKey[] BOOLEAN_KEYS = new TextAttributesKey[]{BOOLEAN};
     private static final TextAttributesKey[] COMMENT_KEYS = new TextAttributesKey[]{LINE_COMMENT, JAVADOC_COMMENT, BLOCK_COMMENT};
     private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
 
@@ -49,11 +52,6 @@ public class RESOLVESyntaxHighlighter extends SyntaxHighlighterBase {
     @NotNull @Override public TextAttributesKey[] getTokenHighlights(
             IElementType tokenType) {
         if ( RESOLVETokenTypes.KEYWORDS.contains(tokenType) ){
-            /*TokenElementType ThenType = RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.THEN);
-            if (ThenType.equals(tokenType)) {
-                int i;
-                i=0;
-            }*/
             return new TextAttributesKey[]{KEYWORD};
         }
         else if ( RESOLVETokenTypes.PARAMETER_MODES.contains(tokenType) ) {
@@ -68,6 +66,12 @@ public class RESOLVESyntaxHighlighter extends SyntaxHighlighterBase {
         }
         else if (tokenType == RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.INT)) {
             return NUMBER_KEYS;
+        }
+        else if (tokenType == RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.TRUE)) {
+            return BOOLEAN_KEYS;
+        }
+        else if (tokenType == RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.FALSE)) {
+            return BOOLEAN_KEYS;
         }
         else if (tokenType == RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.BLOCK_COMMENT)) {
             return COMMENT_KEYS;
