@@ -146,6 +146,7 @@ LT 				:	'<'				;
 LTE				:	'<='			;
 MINUS			:	'-'				;
 MINUSMINUS		:	'--'			;
+MOD				:	'%'				;
 MULT			:	'*'				;
 NEQUALS			:	'/='			;
 OR 				:	'or'			;

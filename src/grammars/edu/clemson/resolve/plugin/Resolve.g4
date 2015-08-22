@@ -512,6 +512,7 @@ progExp
     |   LPAREN progExp RPAREN                           #progNestedExp
     |   op=(MINUS|NOT) progExp                          #progUnaryExp
     |   progExp op=(PLUSPLUS|MINUSMINUS)                #progPostfixExp
+    |   progExp op=MOD progExp                          #progInfixExp
     |   progExp op=(AND|OR) progExp                     #progInfixExp
     |   progExp op=(MULT|DIVIDE|PLUSPLUS) progExp       #progInfixExp
     |   progExp op=(PLUS|MINUS) progExp                 #progInfixExp
