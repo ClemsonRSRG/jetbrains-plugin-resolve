@@ -55,7 +55,7 @@
     </template>
 
     <template description='Operation declaration' id='resolve_lang_Operation' name='resolve_lang_Operation' toReformat='true' toShortenFQNames='true'
-              value='Operation $NAME$ ();'>
+              value='Operation $NAME$ ($END$);'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
         <context>
             <option name='RESOLVE' value='true'/>
@@ -63,7 +63,7 @@
     </template>
 
     <template description='Operation procedure declaration' id='resolve_lang_Operation_Procedure' name='resolve_lang_Operation_Procedure' toReformat='true' toShortenFQNames='true'
-              value='Operation $NAME$ ();&#10;    Procedure &#10;        $END$&#10;end $NAME$;'>
+              value='Operation $NAME$ ($END$);&#10;    Procedure &#10;        &#10;end $NAME$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
         <context>
             <option name='RESOLVE' value='true'/>
@@ -71,7 +71,7 @@
     </template>
 
     <template description='Procedure declaration' id='resolve_lang_Procedure' name='resolve_lang_Procedure' toReformat='true' toShortenFQNames='true'
-              value='Procedure $NAME$ ();&#10; $END$&#10;end $NAME$;'>
+              value='Procedure $NAME$ ($END$);&#10; &#10;end $NAME$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
         <context>
             <option name='RESOLVE' value='true'/>
