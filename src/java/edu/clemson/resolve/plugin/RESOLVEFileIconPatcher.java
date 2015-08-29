@@ -32,6 +32,9 @@ public class RESOLVEFileIconPatcher implements FileIconPatcher {
         if (PsiTreeUtil.findChildOfAnyType(f, PrecisModule.class) != null) {
             return RESOLVEIcons.PRECIS;
         }
+        if (PsiTreeUtil.findChildOfAnyType(f, PrecisExtensionModule.class) != null) {
+            return RESOLVEIcons.PRECIS_EXTENSION;
+        }
         else if (PsiTreeUtil.findChildOfAnyType(f,
                 ConceptModule.class) != null) {
             return RESOLVEIcons.CONCEPT;
@@ -46,7 +49,7 @@ public class RESOLVEFileIconPatcher implements FileIconPatcher {
         }
         else if (PsiTreeUtil.findChildOfAnyType(f,
                 EnhancementModule.class) != null) {
-            return RESOLVEIcons.ENHANCEMENT;
+            return RESOLVEIcons.SPEC_EXTENSION;
         }
         else if (PsiTreeUtil.findChildOfAnyType(f,
                 EnhancementImplModule.class) != null) {

@@ -36,6 +36,7 @@ options {
 
 module
     :   precisModule
+    |   precisExtensionModule
     |   conceptModule
     |   conceptImplModule
     |   facilityModule
@@ -65,7 +66,7 @@ conceptBlock
 // enhancement module
 
 enhancementModule
-    :   ENHANCEMENT name=ID (specModuleParameterList)?
+    :   EXTENSION name=ID (specModuleParameterList)?
         FOR concept=ID SEMI
         (dependentTermOptions)?
         (usesList)?
@@ -146,6 +147,16 @@ precisBlock
         )*
     ;
 
+// precis extension
+
+precisExtensionModule
+    :   PRECIS EXTENSION name=ID FOR precis=ID
+        (EXTENDED BY (ID (COMMA ID)*))? SEMI
+        (usesList)?
+        precisBlock
+        END closename=ID SEMI
+    ;
+
 // uses, imports
 
 usesList
@@ -210,11 +221,11 @@ stmt
     ;
 
 assignStmt
-    :   left=progExp ASSIGN right=progExp SEMI
+    :   left=progVarExp ASSIGN right=progExp SEMI
     ;
 
 swapStmt
-    :   left=progExp SWAP right=progExp SEMI
+    :   left=progVarExp SWAP right=progVarExp SEMI
     ;
 
 //semantically restrict things like 1++ (<literal>++/--, etc)
@@ -345,7 +356,7 @@ facilityDecl
     ;
 
 enhancementPairDecl
-    :   ENHANCED BY spec=ID (LT type (COMMA type)* GT)?
+    :   EXTENDED BY spec=ID (LT type (COMMA type)* GT)?
         (specArgs=moduleArgumentList)?
         (externally=EXTERNALLY)? IMPLEMENTED BY impl=ID
         (implArgs=moduleArgumentList)?
@@ -367,11 +378,11 @@ operationDecl
     ;
 
 operationProcedureDecl
-    :   (recursive=RECURSIVE)? OPERATION
+    :   OPERATION
         name=ID operationParameterList (COLON type)? SEMI
         (requiresClause)?
         (ensuresClause)?
-        PROCEDURE
+        (recursive=RECURSIVE)? PROCEDURE
         (variableDeclGroup)*
         (stmt)*
         END closename=ID SEMI
@@ -451,7 +462,6 @@ mathPrimaryExp
     |   mathSetExp
     |   mathTupleExp
     |   mathAlternativeExp
-    |   mathFunctionRestrictionExp
     |   mathLambdaExp
     ;
 
@@ -462,6 +472,7 @@ mathLiteralExp
 
 mathFunctionApplicationExp
     :   (AT)? (qualifier=ID COLONCOLON)? name=ID (LPAREN mathExp (COMMA mathExp)* RPAREN)+ #mathFunctionExp
+    |         (qualifier=ID COLONCOLON)? name=ID LBRACKET mathExp RBRACKET #mathFunctionRestrictionExp
     |   (AT)? (qualifier=ID COLONCOLON)? name=ID #mathVariableExp
     ;
 
@@ -501,10 +512,6 @@ mathSegmentsExp
     :   (AT)? mathFunctionApplicationExp (DOT mathFunctionApplicationExp)+
     ;
 
-mathFunctionRestrictionExp
-    :   (qualifier=ID)? name=ID LBRACKET mathExp RBRACKET
-    ;
-
 // program expressions
 
 progExp
@@ -522,8 +529,12 @@ progExp
 
 progPrimary
     :   progLiteralExp
-    |   progNamedExp
+    |   progVarExp
     |   progParamExp
+    ;
+
+progVarExp
+    :   progNamedExp
     |   progMemberExp
     ;
 

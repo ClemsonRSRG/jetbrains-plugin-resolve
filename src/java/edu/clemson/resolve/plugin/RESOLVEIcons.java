@@ -10,13 +10,15 @@ import javax.swing.*;
 
 public interface RESOLVEIcons {
 
+    public static final Icon MODULE = IconLoader.getIcon("/edu/clemson/resolve/icons/module.png");
     public static final Icon FILE = IconLoader.getIcon("/edu/clemson/resolve/icons/file.png");
     public static final Icon CONCEPT = IconLoader.getIcon("/edu/clemson/resolve/icons/concept.png");
     public static final Icon ENHANCEMENT = IconLoader.getIcon("/edu/clemson/resolve/icons/enhancement.png");
+    public static final Icon SPEC_EXTENSION = IconLoader.getIcon("/edu/clemson/resolve/icons/spec_extension.png");
     public static final Icon FACILITY = IconLoader.getIcon("/edu/clemson/resolve/icons/facility.png");
-    public static final Icon PRECIS = IconLoader.getIcon("/edu/clemson/resolve/icons/precis.png");
     public static final Icon IMPL = IconLoader.getIcon("/edu/clemson/resolve/icons/implementation.png");
-    public static final Icon MODULE = IconLoader.getIcon("/edu/clemson/resolve/icons/module.png");
+    public static final Icon PRECIS = IconLoader.getIcon("/edu/clemson/resolve/icons/precis.png");
+    public static final Icon PRECIS_EXTENSION = IconLoader.getIcon("/edu/clemson/resolve/icons/precis_extension.png");
     public static final Icon APPLICATION_RUN = Helper.createIconWithShift(MODULE, AllIcons.Nodes.RunnableMark);
 
     class Helper {
