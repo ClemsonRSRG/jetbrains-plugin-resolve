@@ -5,9 +5,9 @@ import com.intellij.psi.PsiElement;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 
-public class EnhancementImplModule extends Module {
+public class PrecisModuleNode extends AbstractModuleNode {
 
-    public EnhancementImplModule(@NotNull ASTNode node) {
+    public PrecisModuleNode(@NotNull ASTNode node) {
         super(node);
     }
 
@@ -15,7 +15,7 @@ public class EnhancementImplModule extends Module {
         public static Factory INSTANCE = new Factory();
 
         @Override public PsiElement createElement(ASTNode node) {
-            return new EnhancementImplModule(node);
+            return new PrecisModuleNode(node);
         }
     }
 }

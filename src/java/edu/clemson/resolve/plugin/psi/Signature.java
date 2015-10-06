@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface Signature extends ResolveCompositeElement {
 
-    @NotNull List<ParameterDeclaration> getParameterDeclarationList();
+    @NotNull List<ParameterDeclarationGroup> getParameterDeclarationList();
 
     @Nullable Type getType();
 }

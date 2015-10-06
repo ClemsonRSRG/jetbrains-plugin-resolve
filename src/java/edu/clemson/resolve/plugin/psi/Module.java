@@ -13,7 +13,4 @@ public interface Module
     boolean isPublic();
 
     @Nullable PsiElement getIdentifier();
-
-    @NotNull
-    FileNode getContainingFile();
 }

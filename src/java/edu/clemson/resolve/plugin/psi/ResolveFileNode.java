@@ -8,15 +8,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import edu.clemson.resolve.plugin.RESOLVEFileType;
 import edu.clemson.resolve.plugin.RESOLVELanguage;
 import edu.clemson.resolve.plugin.RESOLVETokenTypes;
-import edu.clemson.resolve.plugin.psi.impl.FacilityModule;
-import edu.clemson.resolve.plugin.psi.impl.OperationProcedureDeclImpl;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public class FileNode extends PsiFileBase {
+public class ResolveFileNode extends PsiFileBase {
 
-    public FileNode(@NotNull FileViewProvider viewProvider) {
+    public ResolveFileNode(@NotNull FileViewProvider viewProvider) {
         super(viewProvider, RESOLVELanguage.INSTANCE);
     }
 
@@ -32,8 +31,12 @@ public class FileNode extends PsiFileBase {
         return super.getChildren();
     }
 
+    @Nullable public Module getEnclosedModule() {
+        return PsiTreeUtil.findChildOfType(this, Module.class);
+    }
+
     public boolean holdsValidExecutableModule() {
-        boolean result = PsiTreeUtil.findChildOfType(this,
+       /* boolean result = PsiTreeUtil.findChildOfType(this,
                 FacilityModule.class) != null;
         Collection<OperationProcedureDeclImpl> operations = PsiTreeUtil
                 .findChildrenOfType(this, OperationProcedureDeclImpl.class);
@@ -46,6 +49,7 @@ public class FileNode extends PsiFileBase {
             }
             result = false;
         }
-        return result;
+        return result;*/
+        return false;
     }
 }

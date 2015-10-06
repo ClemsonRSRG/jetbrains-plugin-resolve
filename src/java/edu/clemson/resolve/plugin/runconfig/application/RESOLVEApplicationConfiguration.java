@@ -10,7 +10,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
-import edu.clemson.resolve.plugin.psi.FileNode;
+import edu.clemson.resolve.plugin.psi.ResolveFileNode;
 import edu.clemson.resolve.plugin.runconfig.RESOLVEModuleBasedConfiguration;
 import edu.clemson.resolve.plugin.runconfig.RESOLVERunConfigurationBase;
 import edu.clemson.resolve.plugin.runconfig.RESOLVERunUtil;
@@ -52,7 +52,7 @@ public class RESOLVEApplicationConfiguration
             throw new RuntimeConfigurationError("RESOLVE file not specified");
         }
         PsiFile psiFile = PsiManager.getInstance(getProject()).findFile(file);
-        if (psiFile == null || !(psiFile instanceof FileNode)) {
+        if (psiFile == null || !(psiFile instanceof ResolveFileNode)) {
             throw new RuntimeConfigurationError("RESOLVE file is invalid");
         }
         if (!RESOLVERunUtil.isMainRESOLVEFile(psiFile)) {

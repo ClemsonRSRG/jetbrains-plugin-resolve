@@ -10,7 +10,7 @@ import com.intellij.psi.PsiErrorElement;
 import edu.clemson.resolve.plugin.RESOLVETokenTypes;
 import edu.clemson.resolve.plugin.parser.Resolve;
 import edu.clemson.resolve.plugin.parser.ResolveLexer;
-import edu.clemson.resolve.plugin.psi.FileNode;
+import edu.clemson.resolve.plugin.psi.ResolveFileNode;
 import edu.clemson.resolve.plugin.psi.impl.*;
 import org.antlr.intellij.adaptor.lexer.RuleElementType;
 import org.antlr.intellij.adaptor.lexer.TokenElementType;
@@ -131,7 +131,7 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
 
     private static PsiElementPattern.Capture<PsiElement> usesPattern() {
         return psiElement(ID).withParent(psiElement(PsiErrorElement.class)
-                .withParent(psiElement().withParent(Module.class)
+                .withParent(psiElement().withParent(AbstractModuleNode.class)
                         .isFirstAcceptedChild(psiElement())));
     }
 
@@ -181,7 +181,7 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
                         psiElement(PARAM_DECL_GRP))));
     }
 
-    private static PsiFilePattern.Capture<FileNode> resolveFile() {
-        return psiFile(FileNode.class);
+    private static PsiFilePattern.Capture<ResolveFileNode> resolveFile() {
+        return psiFile(ResolveFileNode.class);
     }
 }

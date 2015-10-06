@@ -20,7 +20,7 @@ public interface NamedElement
     @Nullable String getQualifiedName();
 
     @NotNull
-    FileNode getContainingFile();
+    ResolveFileNode getContainingFile();
 
     @Nullable
     Type findSiblingType();

@@ -29,7 +29,7 @@ public class RESOLVEModuleType extends ModuleType<RESOLVEModuleBuilder> {
     }
 
     @NotNull @Override public String getName() {
-        return "RESOLVE Module";
+        return "RESOLVE AbstractModuleNode";
     }
 
     @NotNull @Override public String getDescription() {
