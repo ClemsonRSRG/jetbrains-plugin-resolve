@@ -2,6 +2,10 @@ package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.util.CachedValueProvider;
+import com.intellij.psi.util.CachedValuesManager;
+import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import edu.clemson.resolve.plugin.psi.ResNamedElement;
@@ -35,6 +39,24 @@ public abstract class ResNamedElementImpl<T extends ResNamedStub<?>>
         PsiElement identifier = getIdentifier();
         return identifier != null ? identifier.getTextOffset() :
                 super.getTextOffset();
+    }
+
+    @Nullable
+    @Override
+    public GoType getGoType(@Nullable final ResolveState context) {
+        if (context != null) return getGoTypeInner(context);
+        return CachedValuesManager.getCachedValue(this, new CachedValueProvider<GoType>() {
+            @Nullable
+            @Override
+            public Result<GoType> compute() {
+                return Result.create(getGoTypeInner(null), PsiModificationTracker.MODIFICATION_COUNT);
+            }
+        });
+    }
+
+    @Nullable
+    protected ResType getGoTypeInner(@Nullable ResolveState context) {
+        return findSiblingType();
     }
 
     @Nullable @Override public ResType findSiblingType() {

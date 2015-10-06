@@ -160,8 +160,10 @@ precisExtensionModule
 // uses, imports
 
 usesList
-    :   USES ID (COMMA ID)* SEMI
+    :   USES usesItem (COMMA usesItem)* SEMI
     ;
+
+usesItem : ID ;
 
 // temp soln.
 dependentTermOptions
