@@ -14,9 +14,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-public class ResolveFile extends PsiFileBase {
+public class FileNode extends PsiFileBase {
 
-    public ResolveFile(@NotNull FileViewProvider viewProvider) {
+    public FileNode(@NotNull FileViewProvider viewProvider) {
         super(viewProvider, RESOLVELanguage.INSTANCE);
     }
 

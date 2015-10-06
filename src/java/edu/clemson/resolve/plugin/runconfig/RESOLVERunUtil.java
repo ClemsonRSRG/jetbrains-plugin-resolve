@@ -15,15 +15,15 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileSystemItem;
 import com.intellij.psi.PsiManager;
 import edu.clemson.resolve.plugin.RESOLVEFileType;
-import edu.clemson.resolve.plugin.psi.ResolveFile;
+import edu.clemson.resolve.plugin.psi.FileNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class RESOLVERunUtil {
 
     public static boolean isMainRESOLVEFile(PsiFile psiFile) {
-        if (psiFile != null && psiFile instanceof ResolveFile) {
-            return ((ResolveFile)psiFile).holdsValidExecutableModule();
+        if (psiFile != null && psiFile instanceof FileNode) {
+            return ((FileNode)psiFile).holdsValidExecutableModule();
         }
         return false;
     }

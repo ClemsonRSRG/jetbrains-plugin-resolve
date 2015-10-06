@@ -1,6 +1,5 @@
 package edu.clemson.resolve.plugin.editor;
 
-import com.intellij.codeInsight.folding.CodeFoldingSettings;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.folding.FoldingBuilderEx;
 import com.intellij.lang.folding.FoldingDescriptor;
@@ -15,7 +14,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.plugin.RESOLVETokenTypes;
 import edu.clemson.resolve.plugin.parser.ResolveLexer;
-import edu.clemson.resolve.plugin.psi.ResolveFile;
+import edu.clemson.resolve.plugin.psi.FileNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,8 +31,8 @@ public class RESOLVEFoldingBuilder
 
     @NotNull @Override public FoldingDescriptor[] buildFoldRegions(
             @NotNull PsiElement root, @NotNull Document document, boolean quick) {
-        if (!(root instanceof ResolveFile)) return FoldingDescriptor.EMPTY;
-        ResolveFile file = (ResolveFile)root;
+        if (!(root instanceof FileNode)) return FoldingDescriptor.EMPTY;
+        FileNode file = (FileNode)root;
         if (!file.isContentsLoaded()) return FoldingDescriptor.EMPTY;
         final List<FoldingDescriptor> result = ContainerUtil.newArrayList();
 /*

@@ -8,7 +8,7 @@ import com.intellij.openapi.util.Ref;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import edu.clemson.resolve.plugin.psi.ResolveFile;
+import edu.clemson.resolve.plugin.psi.FileNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,17 +41,17 @@ public abstract class RESOLVERunConfigurationProducerBase
 
     @Override public boolean isConfigurationFromContext(T configuration,
                                 ConfigurationContext configurationContext) {
-        ResolveFile file = getFileFromContext(configurationContext);
+        FileNode file = getFileFromContext(configurationContext);
         return file != null && FileUtil.pathsEqual(configuration.getFilePath(),
                 file.getVirtualFile().getPath());
     }
 
-    @Nullable private static ResolveFile getFileFromContext(
+    @Nullable private static FileNode getFileFromContext(
             @Nullable ConfigurationContext context) {
         PsiElement contextElement = RESOLVERunUtil.getContextElement(context);
         PsiFile psiFile = contextElement != null ?
                 contextElement.getContainingFile() : null;
-        return psiFile != null && psiFile instanceof ResolveFile ?
-                ((ResolveFile)psiFile) : null;
+        return psiFile != null && psiFile instanceof FileNode ?
+                ((FileNode)psiFile) : null;
     }
 }

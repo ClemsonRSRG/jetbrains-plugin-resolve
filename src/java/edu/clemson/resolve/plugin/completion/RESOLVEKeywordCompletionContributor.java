@@ -7,11 +7,10 @@ import com.intellij.patterns.PsiElementPattern;
 import com.intellij.patterns.PsiFilePattern;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import edu.clemson.resolve.plugin.RESOLVETokenTypes;
 import edu.clemson.resolve.plugin.parser.Resolve;
 import edu.clemson.resolve.plugin.parser.ResolveLexer;
-import edu.clemson.resolve.plugin.psi.ResolveFile;
+import edu.clemson.resolve.plugin.psi.FileNode;
 import edu.clemson.resolve.plugin.psi.impl.*;
 import org.antlr.intellij.adaptor.lexer.RuleElementType;
 import org.antlr.intellij.adaptor.lexer.TokenElementType;
@@ -182,7 +181,7 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
                         psiElement(PARAM_DECL_GRP))));
     }
 
-    private static PsiFilePattern.Capture<ResolveFile> resolveFile() {
-        return psiFile(ResolveFile.class);
+    private static PsiFilePattern.Capture<FileNode> resolveFile() {
+        return psiFile(FileNode.class);
     }
 }
