@@ -28,10 +28,10 @@ public class RESOLVEFileIconPatcher implements FileIconPatcher {
             VirtualFile file, int flags, Project project, Icon baseIcon) {
         final PsiFile f = PsiManager.getInstance(project).findFile(file);
 
-        if (PsiTreeUtil.findChildOfAnyType(f, PrecisModuleNode.class) != null) {
+        if (PsiTreeUtil.findChildOfAnyType(f, ResPrecisModule.class) != null) {
             return RESOLVEIcons.PRECIS;
         }
-        if (PsiTreeUtil.findChildOfAnyType(f, PrecisExtensionModule.class) != null) {
+     /*   if (PsiTreeUtil.findChildOfAnyType(f, PrecisExtensionModule.class) != null) {
             return RESOLVEIcons.PRECIS_EXTENSION;
         }
         else if (PsiTreeUtil.findChildOfAnyType(f,
@@ -53,7 +53,7 @@ public class RESOLVEFileIconPatcher implements FileIconPatcher {
         else if (PsiTreeUtil.findChildOfAnyType(f,
                 EnhancementImplModule.class) != null) {
             return RESOLVEIcons.IMPL;
-        }
+        }*/
         return baseIcon;
     }
 }

@@ -10,7 +10,7 @@ import com.intellij.psi.PsiErrorElement;
 import edu.clemson.resolve.plugin.RESOLVETokenTypes;
 import edu.clemson.resolve.plugin.parser.Resolve;
 import edu.clemson.resolve.plugin.parser.ResolveLexer;
-import edu.clemson.resolve.plugin.psi.ResolveFileNode;
+import edu.clemson.resolve.plugin.psi.ResFile;
 import edu.clemson.resolve.plugin.psi.impl.*;
 import org.antlr.intellij.adaptor.lexer.RuleElementType;
 import org.antlr.intellij.adaptor.lexer.TokenElementType;
@@ -58,7 +58,7 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "constraints"));*/
 
-        extend(CompletionType.BASIC, opParameterModePattern(),
+      /*  extend(CompletionType.BASIC, opParameterModePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "evaluates", "updates", "alters", "replaces", "preserves", "restores", "clears"));
         extend(CompletionType.BASIC, requiresOpProcPattern(),
@@ -81,7 +81,7 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
                         psiElement(ConceptModule.class),
                         psiElement(EnhancementModule.class)),
                 new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Type Family", "Operation"));
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "ResType Family", "Operation"));
 
         extend(CompletionType.BASIC, moduleBodyPattern(
                         psiElement(FacilityModule.class),
@@ -89,7 +89,7 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
                         psiElement(EnhancementImplModule.class)),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                        "Operation Procedure", "Facility Decl", "Type Record Rep", "Type Rep"));
+                        "Operation Procedure", "Facility Decl", "ResType Record Rep", "ResType Rep"));
 
         //need this extension since
         extend(CompletionType.BASIC, moduleBodyPattern(
@@ -97,7 +97,7 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
                         psiElement(EnhancementImplModule.class)),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "Procedure"));
-
+*/
         extend(CompletionType.BASIC, usesPattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "uses"));
@@ -131,11 +131,11 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
 
     private static PsiElementPattern.Capture<PsiElement> usesPattern() {
         return psiElement(ID).withParent(psiElement(PsiErrorElement.class)
-                .withParent(psiElement().withParent(AbstractModuleNode.class)
+                .withParent(psiElement().withParent(ResAbstractModule.class)
                         .isFirstAcceptedChild(psiElement())));
     }
 
-    private static PsiElementPattern.Capture<PsiElement> constraintPattern() {
+   /* private static PsiElementPattern.Capture<PsiElement> constraintPattern() {
         return psiElement(RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.ID))
                 .withParent(psiElement(PsiErrorElement.class).withParent(ModuleBlockNode.class)
                         .afterSibling(psiElement(TYPE_MODEL_DECL)
@@ -179,9 +179,9 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor {
                         psiElement(SPEC_PARAM_DECL).isFirstAcceptedChild(psiElement()),
                         psiElement(SPEC_PARAM_DECL),
                         psiElement(PARAM_DECL_GRP))));
-    }
+    }*/
 
-    private static PsiFilePattern.Capture<ResolveFileNode> resolveFile() {
-        return psiFile(ResolveFileNode.class);
+    private static PsiFilePattern.Capture<ResFile> resolveFile() {
+        return psiFile(ResFile.class);
     }
 }

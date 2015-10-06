@@ -1,26 +1,20 @@
 package edu.clemson.resolve.plugin.psi.impl;
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
-import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
-import com.intellij.usageView.UsageViewUtil;
 import com.intellij.util.IncorrectOperationException;
 import edu.clemson.resolve.plugin.RESOLVETokenTypes;
 import edu.clemson.resolve.plugin.parser.ResolveLexer;
-import edu.clemson.resolve.plugin.psi.Module;
-import org.antlr.intellij.adaptor.parser.PsiElementFactory;
+import edu.clemson.resolve.plugin.psi.ResModule;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
-
-public abstract class AbstractModuleNode
+public abstract class ResAbstractModule
         extends
-            ResolveCompositeElementImpl implements Module {
+        ResCompositeElementImpl implements ResModule {
 
-    public AbstractModuleNode(@NotNull ASTNode node) {
+    public ResAbstractModule(@NotNull ASTNode node) {
         super(node);
     }
 
@@ -41,7 +35,7 @@ public abstract class AbstractModuleNode
             @NonNls @NotNull String newName)
             throws IncorrectOperationException {
         PsiElement identifier = getIdentifier();
-        identifier.replace(ResolveElementFactory
+        identifier.replace(ResElementFactory
                 .createIdentifierFromText(getProject(), newName));
         return this;
     }

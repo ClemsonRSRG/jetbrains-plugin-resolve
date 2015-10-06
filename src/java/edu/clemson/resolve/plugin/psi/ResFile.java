@@ -7,15 +7,12 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import edu.clemson.resolve.plugin.RESOLVEFileType;
 import edu.clemson.resolve.plugin.RESOLVELanguage;
-import edu.clemson.resolve.plugin.RESOLVETokenTypes;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
+public class ResFile extends PsiFileBase {
 
-public class ResolveFileNode extends PsiFileBase {
-
-    public ResolveFileNode(@NotNull FileViewProvider viewProvider) {
+    public ResFile(@NotNull FileViewProvider viewProvider) {
         super(viewProvider, RESOLVELanguage.INSTANCE);
     }
 
@@ -31,8 +28,8 @@ public class ResolveFileNode extends PsiFileBase {
         return super.getChildren();
     }
 
-    @Nullable public Module getEnclosedModule() {
-        return PsiTreeUtil.findChildOfType(this, Module.class);
+    @Nullable public ResModule getEnclosedModule() {
+        return PsiTreeUtil.findChildOfType(this, ResModule.class);
     }
 
     public boolean holdsValidExecutableModule() {

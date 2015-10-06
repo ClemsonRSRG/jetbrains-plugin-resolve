@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Type "python bild.py" to build all of the parsers needed by the plugin.
+# ResType "python bild.py" to build all of the parsers needed by the plugin.
 
 # bootstrap by downloading bilder.py if not found
 import urllib
@@ -29,7 +29,7 @@ def latest_antlr4_sources():
 
 def parsers():
     require(latest_antlr4)
-    require(grammars)
+    #require(grammars)
     antlr4("src/grammars", "gen", version="4.5",
            package="edu.clemson.resolve.plugin.parser")
 
@@ -45,7 +45,7 @@ def grammars():
         "src/grammars/edu/clemson/resolve/plugin/ResolveLexer.g4")
 
 def all():
-    require(grammars)
+    #require(grammars)
     require(parsers)
     require(latest_antlr4_sources)
 

@@ -14,7 +14,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.plugin.RESOLVETokenTypes;
 import edu.clemson.resolve.plugin.parser.ResolveLexer;
-import edu.clemson.resolve.plugin.psi.ResolveFileNode;
+import edu.clemson.resolve.plugin.psi.ResFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,8 +31,8 @@ public class RESOLVEFoldingBuilder
 
     @NotNull @Override public FoldingDescriptor[] buildFoldRegions(
             @NotNull PsiElement root, @NotNull Document document, boolean quick) {
-        if (!(root instanceof ResolveFileNode)) return FoldingDescriptor.EMPTY;
-        ResolveFileNode file = (ResolveFileNode)root;
+        if (!(root instanceof ResFile)) return FoldingDescriptor.EMPTY;
+        ResFile file = (ResFile)root;
         if (!file.isContentsLoaded()) return FoldingDescriptor.EMPTY;
         final List<FoldingDescriptor> result = ContainerUtil.newArrayList();
 /*
@@ -61,16 +61,16 @@ public class RESOLVEFoldingBuilder
                     }
 
                     //Folding for TypeModelDecl
-                    //Basically, if there is the keyword Type with the keyword Family after it, it's a TypeModelDecl, and you can fold it.
+                    //Basically, if there is the keyword ResType with the keyword Family after it, it's a TypeModelDecl, and you can fold it.
                     if (type == RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.TYPE) && element.getNextSibling().getNextSibling().getNode().getElementType() == RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.FAMILY)) {
-                        //Type Family NAME...
+                        //ResType Family NAME...
                         addTypeBlock(element, element.getNextSibling().getNextSibling().getNextSibling().getNextSibling().getNextSibling(), element.getParent().getLastChild(), result);
                     }
 
                     //Folding for TypeModelRepr
-                    //Basically, if there is the keyword Type without the keyword Family after it, it's a TypeModelRepr, and you can fold it.
+                    //Basically, if there is the keyword ResType without the keyword Family after it, it's a TypeModelRepr, and you can fold it.
                     if (type == RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.TYPE) && element.getNextSibling().getNextSibling().getNode().getElementType() != RESOLVETokenTypes.TOKEN_ELEMENT_TYPES.get(ResolveLexer.FAMILY)) {
-                        //Type NAME...
+                        //ResType NAME...
                         addTypeBlock(element, element.getNextSibling().getNextSibling().getNextSibling(), element.getParent().getLastChild(), result);
                     }
 

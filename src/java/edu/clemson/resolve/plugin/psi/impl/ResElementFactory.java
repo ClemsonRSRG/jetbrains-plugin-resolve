@@ -4,24 +4,24 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFileFactory;
 import edu.clemson.resolve.plugin.RESOLVELanguage;
-import edu.clemson.resolve.plugin.psi.ResolveFileNode;
+import edu.clemson.resolve.plugin.psi.ResFile;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("ConstantConditions")
-public class ResolveElementFactory {
+public class ResElementFactory {
 
-    private ResolveElementFactory() {
+    private ResElementFactory() {
     }
 
-    @NotNull private static ResolveFileNode createFileFromText(
+    @NotNull private static ResFile createFileFromText(
             @NotNull Project project, @NotNull String text) {
-        return (ResolveFileNode) PsiFileFactory.getInstance(project)
+        return (ResFile) PsiFileFactory.getInstance(project)
                 .createFileFromText("a.resolve", RESOLVELanguage.INSTANCE, text);
     }
 
     @NotNull public static PsiElement createIdentifierFromText(
             @NotNull Project project, String text) {
-        ResolveFileNode file = createFileFromText(project,
+        ResFile file = createFileFromText(project,
                 "Precis "+text+"; end "+text+";");
         return file.getEnclosedModule().getIdentifier();
     }

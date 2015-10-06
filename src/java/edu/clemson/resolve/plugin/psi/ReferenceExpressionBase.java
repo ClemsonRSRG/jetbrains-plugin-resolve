@@ -4,7 +4,7 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface ReferenceExpressionBase extends ResolveCompositeElement {
+public interface ReferenceExpressionBase extends ResCompositeElement {
 
     @NotNull PsiElement getIdentifier();
 

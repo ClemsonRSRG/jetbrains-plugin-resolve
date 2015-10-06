@@ -5,7 +5,7 @@ import com.intellij.psi.PsiReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface TypeReferenceExpression
+public interface ResTypeReferenceExpression
         extends
         ReferenceExpressionBase {
 
@@ -14,5 +14,5 @@ public interface TypeReferenceExpression
     @NotNull PsiReference getReference();
 
     @Nullable
-    TypeReferenceExpression getQualifier();
+    ResTypeReferenceExpression getQualifier();
 }

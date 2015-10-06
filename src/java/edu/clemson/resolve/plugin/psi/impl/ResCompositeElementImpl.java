@@ -2,14 +2,14 @@ package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
-import edu.clemson.resolve.plugin.psi.ResolveCompositeElement;
+import edu.clemson.resolve.plugin.psi.ResCompositeElement;
 import org.jetbrains.annotations.NotNull;
 
-public class ResolveCompositeElementImpl
+public class ResCompositeElementImpl
         extends
-            ASTWrapperPsiElement implements ResolveCompositeElement {
+            ASTWrapperPsiElement implements ResCompositeElement {
 
-    public ResolveCompositeElementImpl(@NotNull ASTNode node) {
+    public ResCompositeElementImpl(@NotNull ASTNode node) {
         super(node);
     }
 

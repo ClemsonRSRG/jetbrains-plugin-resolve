@@ -6,11 +6,22 @@ import com.intellij.psi.PsiNameIdentifierOwner;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface Module
+public interface ResNamedElement
         extends
-        ResolveCompositeElement, PsiNameIdentifierOwner, NavigationItem {
+        ResTypeOwner,
+        ResCompositeElement,
+            PsiNameIdentifierOwner,
+            NavigationItem {
 
     boolean isPublic();
 
     @Nullable PsiElement getIdentifier();
+
+    //@Nullable String getQualifiedName();
+
+    @NotNull
+    ResFile getContainingFile();
+
+    @Nullable
+    ResType findSiblingType();
 }
