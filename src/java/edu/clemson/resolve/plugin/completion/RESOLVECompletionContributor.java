@@ -11,7 +11,7 @@ import edu.clemson.resolve.plugin.psi.ResUsesItem;
 public class RESOLVECompletionContributor extends CompletionContributor {
 
     public RESOLVECompletionContributor() {
-        extend(CompletionType.BASIC, usesItem(), new GoImportPathsCompletionProvider());
+        extend(CompletionType.BASIC, usesItem(), new RESOLVEUsesCompletionProvider());
         //extend(CompletionType.BASIC, referenceExpression(), new GoReferenceCompletionProvider());
         //extend(CompletionType.BASIC, goReference(), new GoReferenceCompletionProvider());
     }

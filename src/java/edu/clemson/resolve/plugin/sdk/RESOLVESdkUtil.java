@@ -7,14 +7,19 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.CachedValueProvider;
+import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.text.VersionComparatorUtil;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,6 +27,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+
+import static com.intellij.util.containers.ContainerUtil.newLinkedHashSet;
 
 public class RESOLVESdkUtil {
 
@@ -105,11 +112,54 @@ public class RESOLVESdkUtil {
                 RESOLVESdkService.getInstance(project);
         return ContainerUtil.filter(ModuleManager.getInstance(project)
                 .getModules(), new Condition<Module>() {
-            @Override public boolean value(Module module) {
+            @Override
+            public boolean value(Module module) {
                 return sdkService.isRESOLVEModule(module);
             }
         });
     }
 
+    @Nullable @Contract("null -> null") public static String getImportPath(
+            @Nullable final PsiDirectory psiDirectory) {
+        if (psiDirectory == null) {
+            return null;
+        }
+        return CachedValuesManager.getCachedValue(psiDirectory, new CachedValueProvider<String>() {
+            @Nullable
+            @Override
+            public Result<String> compute() {
+                Project project = psiDirectory.getProject();
+                Module module = ModuleUtilCore.findModuleForPsiElement(psiDirectory);
+                String path = getPathRelativeToSdkAndLibraries(psiDirectory.getVirtualFile(), project, module);
+                return Result.create(path, getSdkAndLibrariesCacheDependencies(psiDirectory));
+            }
+        });
+    }
+
+    @Nullable public static String getPathRelativeToSdkAndLibraries(
+            @NotNull VirtualFile file, @Nullable Project project,
+            @Nullable Module module) {
+        if (project != null) {
+            Collection<VirtualFile> roots = newLinkedHashSet();
+            ContainerUtil.addIfNotNull(roots, getSdkSrcDir(project, module));
+            roots.addAll(getGoPathSources(project, module));
+
+            String result = null;
+            for (VirtualFile root : roots) {
+                String relativePath = VfsUtilCore.getRelativePath(file, root, '/');
+                if (StringUtil.isNotEmpty(relativePath) && (result == null || result.length() > relativePath.length())) {
+                    result = relativePath;
+                }
+            }
+            if (result != null) return result;
+        }
+
+        String filePath = file.getPath();
+        int src = filePath.lastIndexOf("/src/");
+        if (src > -1) {
+            return filePath.substring(src + 5);
+        }
+        return null;
+    }
 
 }
