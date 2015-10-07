@@ -26,8 +26,10 @@ public class RESOLVEASTFactory extends ASTFactory {
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_facilityModule), ResFacilityModule.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_usesItem), ResUsesItemImpl.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_operationProcedureDecl), ResOperationProcedureDeclarationImpl.Factory.INSTANCE);
-        /*ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_conceptImplModule), ConceptImplModule.Factory.INSTANCE);
-        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_facilityModule), FacilityModule.Factory.INSTANCE);
+        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_type), ResTypeReferenceExpressionImpl.Factory.INSTANCE);
+        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_typeQualifier), ResTypeReferenceExpressionImpl.Factory.INSTANCE);
+
+        /*ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_facilityModule), FacilityModule.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_enhancementModule), EnhancementModule.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_enhancementImplModule), EnhancementImplModule.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_operationProcedureDecl), OperationProcedureDeclImpl.Factory.INSTANCE);

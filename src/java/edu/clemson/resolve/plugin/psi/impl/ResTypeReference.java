@@ -3,6 +3,7 @@ package edu.clemson.resolve.plugin.psi.impl;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
+import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.plugin.psi.ResFile;
 import edu.clemson.resolve.plugin.psi.ResTypeReferenceExpression;
@@ -27,10 +28,21 @@ public class ResTypeReference
                 public ResolveResult[] resolve(
                         @NotNull PsiPolyVariantReferenceBase psiPolyVariantReferenceBase,
                         boolean incompleteCode) {
-                    return ((ResTypeReferenceExpression)
+                    return ((ResTypeReference)
                             psiPolyVariantReferenceBase).resolveInner();
                 }
             };
+
+    @NotNull @Override public Object[] getVariants() {
+        return ArrayUtil.EMPTY_OBJECT_ARRAY;
+    }
+
+    @NotNull @Override public ResolveResult[] multiResolve(boolean b) {
+        return myElement.isValid()
+                ? ResolveCache.getInstance(myElement.getProject())
+                    .resolveWithCaching(this, MY_RESOLVER, false, false)
+                : ResolveResult.EMPTY_ARRAY;
+    }
 
     @NotNull private ResolveResult[] resolveInner() {
         Collection<ResolveResult> result = new OrderedSet<ResolveResult>();
@@ -45,10 +57,10 @@ public class ResTypeReference
         ResTypeReferenceExpression qualifier = myElement.getQualifier();
         if (qualifier != null) {
             return processQualifierExpression(
-                    ((GoFile)file), qualifier, processor, state);
+                    ((ResFile)file), qualifier, processor, state);
         }
         return processUnqualifiedResolve(
-                ((GoFile) file), processor, state, true);
+                ((ResFile) file), processor, state, true);
     }
 
     private static boolean processQualifierExpression(@NotNull ResFile file,
@@ -61,6 +73,15 @@ public class ResTypeReference
         if (target instanceof PsiDirectory) {
             GoReference.processDirectory((PsiDirectory)target, file, null, processor, state, false);
         }*/
+        return false;
+    }
+
+    private boolean processUnqualifiedResolve(@NotNull ResFile file,
+                                              @NotNull ResScopeProcessor processor,
+                                              @NotNull ResolveState state,
+                                              boolean localResolve) {
+        int i;
+        i = 0;
         return false;
     }
 }
