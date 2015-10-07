@@ -3,6 +3,7 @@ package edu.clemson.resolve.plugin.completion;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
@@ -16,6 +17,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import edu.clemson.resolve.plugin.RESOLVEFileType;
+import edu.clemson.resolve.plugin.RESOLVEIcons;
 import edu.clemson.resolve.plugin.psi.ResUsesItem;
 import edu.clemson.resolve.plugin.util.RESOLVEUtil;
 import org.jetbrains.annotations.NotNull;
@@ -64,6 +66,9 @@ public class RESOLVEUsesCompletionProvider
                     .getFiles(RESOLVEFileType.INSTANCE, scope)) {
                 int i;
                 i =0;
+                result.addElement(LookupElementBuilder.create(file.getNameWithoutExtension()).
+                        withIcon(RESOLVEIcons.FILE).
+                        withTypeText(file.getName()));
                 //result.addElement();
                 /*VirtualFile parent = file.getParent();
                 if (parent == null) continue;
