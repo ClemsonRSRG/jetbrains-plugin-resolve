@@ -252,8 +252,10 @@ elsePart
 // type and record related rules
 
 type
-    :   (qualifier=ID COLONCOLON)? name=ID
+    :   (qualifier=typeQualifier COLONCOLON)? name=ID
     ;
+
+typeQualifier : ID ;
 
 genericType
     :   ID

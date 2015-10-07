@@ -6,6 +6,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
+import com.intellij.psi.util.PsiTreeUtil;
+import edu.clemson.resolve.plugin.psi.ResTypeReferenceExpression;
 import edu.clemson.resolve.plugin.psi.ResUsesItem;
 import edu.clemson.resolve.plugin.psi.impl.uses.ResUsesReferenceSet;
 import org.jetbrains.annotations.NotNull;
@@ -19,10 +21,21 @@ public class ResPsiImplUtil {
         return new ResUsesReferenceSet(o).getAllReferences();
     }
 
-    @NotNull
-    public static TextRange getUsesTextRange(@NotNull ResUsesItem usesItem) {
+    @NotNull public static TextRange getUsesTextRange(
+            @NotNull ResUsesItem usesItem) {
         String text = usesItem.getText();
-        return !text.isEmpty() ? TextRange.create(0, text.length() - 1) : TextRange.EMPTY_RANGE;
+        return !text.isEmpty() ? TextRange.create(0, text.length() - 1) :
+                TextRange.EMPTY_RANGE;
+    }
+
+    @NotNull public static PsiReference getReference(
+            @NotNull ResTypeReferenceExpression o) {
+        return new ResTypeReference(o);
+    }
+
+    @Nullable public static ResTypeReferenceExpression getQualifier(
+            @NotNull ResTypeReferenceExpression o) {
+        return PsiTreeUtil.getChildOfType(o, ResTypeReferenceExpression.class);
     }
 
     @Nullable public static PsiDirectory resolve(
