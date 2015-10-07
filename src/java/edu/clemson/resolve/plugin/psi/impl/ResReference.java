@@ -39,8 +39,7 @@ public class ResReference
     }
 
     //this is the big starting point (I think...)
-    @NotNull
-    private ResolveResult[] resolveInner() {
+    @NotNull private ResolveResult[] resolveInner() {
         Collection<ResolveResult> result = new OrderedSet<ResolveResult>();
         processResolveVariants(createResolveProcessor(result, myElement));
         return result.toArray(new ResolveResult[result.size()]);
@@ -79,25 +78,20 @@ public class ResReference
                 processUnqualifiedResolve(((ResFile) file), processor, state, true);
     }
 
-    @NotNull
-    public ResolveState createContext() {
+    @NotNull public ResolveState createContext() {
         return ResolveState.initial().put(CONTEXT,
                 SmartPointerManager.getInstance(myElement.getProject()).createSmartPsiElementPointer(myElement));
     }
 
 
-    @Override
-    @NotNull
-    public ResolveResult[] multiResolve(
+    @Override @NotNull public ResolveResult[] multiResolve(
             boolean incompleteCode) {
         if (!myElement.isValid()) return ResolveResult.EMPTY_ARRAY;
         return ResolveCache.getInstance(myElement.getProject())
                 .resolveWithCaching(this, MY_RESOLVER, false, false);
     }
 
-    @NotNull
-    @Override
-    public Object[] getVariants() {
+    @NotNull @Override public Object[] getVariants() {
         return ArrayUtil.EMPTY_OBJECT_ARRAY;
     }
 
@@ -105,7 +99,6 @@ public class ResReference
                                               @NotNull ResScopeProcessor processor,
                                               @NotNull ResolveState state,
                                               boolean localResolve) {
-
         return true;
     }
 }
