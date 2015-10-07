@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 public interface ResModule
         extends
-        ResCompositeElement, PsiNameIdentifierOwner, NavigationItem {
+            ResCompositeElement, PsiNameIdentifierOwner, NavigationItem {
 
     boolean isPublic();
 

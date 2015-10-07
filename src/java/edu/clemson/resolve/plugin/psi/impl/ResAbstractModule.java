@@ -2,6 +2,7 @@ package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 import com.intellij.util.IncorrectOperationException;
 import edu.clemson.resolve.plugin.RESOLVETokenTypes;
 import edu.clemson.resolve.plugin.parser.ResolveLexer;
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class ResAbstractModule
         extends
-        ResCompositeElementImpl implements ResModule {
+            ResCompositeElementImpl implements ResModule {
 
     public ResAbstractModule(@NotNull ASTNode node) {
         super(node);
@@ -25,6 +26,10 @@ public abstract class ResAbstractModule
 
     @Nullable @Override public PsiElement getNameIdentifier() {
         return getIdentifier();
+    }
+
+    @Override public PsiReference getReference() {
+        return null;
     }
 
     @Override public boolean isPublic() {

@@ -27,7 +27,6 @@ public class ResUsesReferenceSet extends FileReferenceSet {
     /*@NotNull @Override public FileReference createFileReference(TextRange range,
                                                                 int index,
                                                                 String text) {
-        throw new UnsupportedOperationException("IMPLEMENT THIS DAN -- I'm in ResUsesReferenceSet");
        // return new GoImportReference(this, range, index, text);
     }*/
 }

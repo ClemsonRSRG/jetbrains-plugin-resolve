@@ -16,14 +16,4 @@ public class RESOLVECompletionUtil {
 
     public static final int KEYWORD_PRIORITY = 20;
 
-    @NotNull public static LookupElement createUsesLookupElement(
-            @NotNull String importPath,
-            @Nullable String contextImportPath,
-            boolean forType) {
-        return PrioritizedLookupElement.withPriority(
-                LookupElementBuilder.create(importPath)
-                        .withIcon(RESOLVEIcons.FILE), //todo: figure out correct icon..
-                        2);
-    }
-
 }

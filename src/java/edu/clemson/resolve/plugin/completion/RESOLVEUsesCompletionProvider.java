@@ -28,8 +28,8 @@ public class RESOLVEUsesCompletionProvider
             CompletionProvider<CompletionParameters> {
 
     /** We fiddle around with TextRange so much in here to strip out the
-     *  "Intellijidearulezzz" suffix that the completion provider apprently
-     *  always tacks on.
+     *  "Intellijidearulezzz" suffix that the completion provider apparently
+     *  always feels the need to tack on.
      */
     @Override protected void addCompletions(
             @NotNull CompletionParameters parameters,
@@ -58,40 +58,15 @@ public class RESOLVEUsesCompletionProvider
                                       @Nullable PsiElement context,
                                       boolean withLibraries) {
         if (module != null) {
-
             GlobalSearchScope scope = withLibraries ?
                     RESOLVEUtil.moduleScope(module) :
                     RESOLVEUtil.moduleScopeWithoutLibraries(module);
             for (VirtualFile file : FileTypeIndex
                     .getFiles(RESOLVEFileType.INSTANCE, scope)) {
-                int i;
-                i =0;
                 result.addElement(LookupElementBuilder.create(file.getNameWithoutExtension()).
                         withIcon(RESOLVEIcons.FILE).
                         withTypeText(file.getName()));
-                //result.addElement();
-                /*VirtualFile parent = file.getParent();
-                if (parent == null) continue;
-                String importPath = GoSdkUtil.getPathRelativeToSdkAndLibraries(parent, module.getProject(), module);
-                if (!StringUtil.isEmpty(importPath) && !importPath.equals(contextImportPath)) {
-                    result.addElement(GoCompletionUtil.createPackageLookupElement(importPath, contextImportPath, false));
-                }*/
             }
-           /* Project project = module.getProject();
-            String contextImportPath = GoCompletionUtil.getContextImportPath(context);
-            GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(project);
-            GlobalSearchScope scope = withLibraries ? GoUtil.moduleScope(module) : GoUtil.moduleScopeWithoutLibraries(module);
-            PsiFile contextFile = context != null ? context.getContainingFile() : null;
-            boolean testFileWithTestPackage = GoTestFinder.isTestFileWithTestPackage(contextFile);
-            for (VirtualFile file : FileTypeIndex.getFiles(GoFileType.INSTANCE, scope)) {
-                VirtualFile parent = file.getParent();
-                if (parent == null) continue;
-                String importPath = GoSdkUtil.getPathRelativeToSdkAndLibraries(parent, project, module);
-                if (!StringUtil.isEmpty(importPath) && !excludedSettings.isExcluded(importPath) &&
-                        (testFileWithTestPackage || !importPath.equals(contextImportPath))) {
-                    result.addElement(GoCompletionUtil.createPackageLookupElement(importPath, contextImportPath, false));
-                }
-            }*/
         }
     }
 }

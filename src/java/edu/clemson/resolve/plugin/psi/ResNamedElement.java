@@ -8,10 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 public interface ResNamedElement
         extends
-        ResTypeOwner,
-        ResCompositeElement,
-            PsiNameIdentifierOwner,
-            NavigationItem {
+            ResTypeOwner, ResCompositeElement, PsiNameIdentifierOwner, NavigationItem {
 
     boolean isPublic();
 
