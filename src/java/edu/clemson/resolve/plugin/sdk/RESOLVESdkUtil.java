@@ -119,47 +119,4 @@ public class RESOLVESdkUtil {
         });
     }
 
-    @Nullable @Contract("null -> null") public static String getImportPath(
-            @Nullable final PsiDirectory psiDirectory) {
-        if (psiDirectory == null) {
-            return null;
-        }
-        return CachedValuesManager.getCachedValue(psiDirectory, new CachedValueProvider<String>() {
-            @Nullable
-            @Override
-            public Result<String> compute() {
-                Project project = psiDirectory.getProject();
-                Module module = ModuleUtilCore.findModuleForPsiElement(psiDirectory);
-                String path = getPathRelativeToSdkAndLibraries(psiDirectory.getVirtualFile(), project, module);
-                return Result.create(path, getSdkAndLibrariesCacheDependencies(psiDirectory));
-            }
-        });
-    }
-
-    @Nullable public static String getPathRelativeToSdkAndLibraries(
-            @NotNull VirtualFile file, @Nullable Project project,
-            @Nullable Module module) {
-        if (project != null) {
-            Collection<VirtualFile> roots = newLinkedHashSet();
-            ContainerUtil.addIfNotNull(roots, getSdkSrcDir(project, module));
-            roots.addAll(getGoPathSources(project, module));
-
-            String result = null;
-            for (VirtualFile root : roots) {
-                String relativePath = VfsUtilCore.getRelativePath(file, root, '/');
-                if (StringUtil.isNotEmpty(relativePath) && (result == null || result.length() > relativePath.length())) {
-                    result = relativePath;
-                }
-            }
-            if (result != null) return result;
-        }
-
-        String filePath = file.getPath();
-        int src = filePath.lastIndexOf("/src/");
-        if (src > -1) {
-            return filePath.substring(src + 5);
-        }
-        return null;
-    }
-
 }

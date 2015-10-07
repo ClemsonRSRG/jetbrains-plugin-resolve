@@ -11,20 +11,5 @@ public class RESOLVECompletionUtil {
 
     public static final int KEYWORD_PRIORITY = 20;
 
-    @Nullable public static String getContextImportPath(
-            @Nullable PsiElement context) {
-        if (context == null) return null;
-        String currentPath = null;
-        if (context instanceof PsiDirectory) {
-            currentPath = RESOLVESdkUtil.getImportPath((PsiDirectory) context);
-        }
-        else {
-            PsiFile file = context.getContainingFile();
-            if (file instanceof ResFile) {
-                currentPath = ((ResFile)file).getImportPath();
-            }
-        }
-        return currentPath;
-    }
 
 }

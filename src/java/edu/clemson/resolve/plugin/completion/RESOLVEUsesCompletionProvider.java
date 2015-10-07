@@ -15,7 +15,9 @@ import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
+import edu.clemson.resolve.plugin.RESOLVEFileType;
 import edu.clemson.resolve.plugin.psi.ResUsesItem;
+import edu.clemson.resolve.plugin.util.RESOLVEUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,7 +56,23 @@ public class RESOLVEUsesCompletionProvider
                                       @Nullable PsiElement context,
                                       boolean withLibraries) {
         if (module != null) {
-            Project project = module.getProject();
+
+            GlobalSearchScope scope = withLibraries ?
+                    RESOLVEUtil.moduleScope(module) :
+                    RESOLVEUtil.moduleScopeWithoutLibraries(module);
+            for (VirtualFile file : FileTypeIndex
+                    .getFiles(RESOLVEFileType.INSTANCE, scope)) {
+                int i;
+                i =0;
+                //result.addElement();
+                /*VirtualFile parent = file.getParent();
+                if (parent == null) continue;
+                String importPath = GoSdkUtil.getPathRelativeToSdkAndLibraries(parent, module.getProject(), module);
+                if (!StringUtil.isEmpty(importPath) && !importPath.equals(contextImportPath)) {
+                    result.addElement(GoCompletionUtil.createPackageLookupElement(importPath, contextImportPath, false));
+                }*/
+            }
+           /* Project project = module.getProject();
             String contextImportPath = GoCompletionUtil.getContextImportPath(context);
             GoExcludedPathsSettings excludedSettings = GoExcludedPathsSettings.getInstance(project);
             GlobalSearchScope scope = withLibraries ? GoUtil.moduleScope(module) : GoUtil.moduleScopeWithoutLibraries(module);
@@ -68,7 +86,7 @@ public class RESOLVEUsesCompletionProvider
                         (testFileWithTestPackage || !importPath.equals(contextImportPath))) {
                     result.addElement(GoCompletionUtil.createPackageLookupElement(importPath, contextImportPath, false));
                 }
-            }
+            }*/
         }
     }
 }
