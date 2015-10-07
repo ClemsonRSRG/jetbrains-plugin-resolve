@@ -12,6 +12,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -63,6 +64,8 @@ public class RESOLVEUsesCompletionProvider
                     RESOLVEUtil.moduleScopeWithoutLibraries(module);
             for (VirtualFile file : FileTypeIndex
                     .getFiles(RESOLVEFileType.INSTANCE, scope)) {
+                //TODO: Explore this line below more for finding icons..
+                //PsiManager.getInstance(module.getProject()).findFile(file);
                 result.addElement(LookupElementBuilder.create(file.getNameWithoutExtension()).
                         withIcon(RESOLVEIcons.FILE).
                         withTypeText(file.getName()));

@@ -6,12 +6,13 @@ import edu.clemson.resolve.plugin.ConstTokenTypes;
 import edu.clemson.resolve.plugin.psi.ResOperationProcedureDeclaration;
 import edu.clemson.resolve.plugin.psi.ResType;
 import edu.clemson.resolve.plugin.stubs.ResOperationProcedureDeclarationStub;
+import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ResOperationProcedureDeclarationImpl<T extends ResOperationProcedureDeclarationStub<?>>
-        extends
-            ResNamedElementImpl<T> implements ResOperationProcedureDeclaration {
+public class ResOperationProcedureDeclarationImpl
+        extends ResNamedElementImpl<ResOperationProcedureDeclarationStub<?>>
+        implements ResOperationProcedureDeclaration {
 
     public ResOperationProcedureDeclarationImpl(@NotNull ASTNode node) {
         super(node);
@@ -23,5 +24,13 @@ public class ResOperationProcedureDeclarationImpl<T extends ResOperationProcedur
 
     @Override @Nullable public ResType getType() {
         return findChildByClass(ResType.class);
+    }
+
+    public static class Factory implements PsiElementFactory {
+        public static Factory INSTANCE = new Factory();
+
+        @Override public PsiElement createElement(ASTNode node) {
+            return new ResOperationProcedureDeclarationImpl(node);
+        }
     }
 }
