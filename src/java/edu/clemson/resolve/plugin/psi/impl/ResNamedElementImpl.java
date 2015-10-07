@@ -41,21 +41,13 @@ public abstract class ResNamedElementImpl<T extends ResNamedStub<?>>
                 super.getTextOffset();
     }
 
-    @Nullable
-    @Override
-    public GoType getGoType(@Nullable final ResolveState context) {
-        if (context != null) return getGoTypeInner(context);
-        return CachedValuesManager.getCachedValue(this, new CachedValueProvider<GoType>() {
-            @Nullable
-            @Override
-            public Result<GoType> compute() {
-                return Result.create(getGoTypeInner(null), PsiModificationTracker.MODIFICATION_COUNT);
-            }
-        });
+    @Nullable @Override public ResType getResType(
+            @Nullable final ResolveState context) {
+        if (context != null) return getResTypeInner(context);
+        return null;
     }
 
-    @Nullable
-    protected ResType getGoTypeInner(@Nullable ResolveState context) {
+    @Nullable protected ResType getResTypeInner(@Nullable ResolveState context) {
         return findSiblingType();
     }
 

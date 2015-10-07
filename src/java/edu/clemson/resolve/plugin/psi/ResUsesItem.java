@@ -1,5 +1,6 @@
 package edu.clemson.resolve.plugin.psi;
 
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
@@ -11,11 +12,13 @@ import org.jetbrains.annotations.Nullable;
 
 public interface ResUsesItem
         extends
-            ResCompositeElement, StubBasedPsiElement<ResUsesItemStub> {
+            ResNamedElement, StubBasedPsiElement<ResUsesItemStub> {
 
     @Nullable PsiElement getIdentifier();
 
     @NotNull PsiReference[] getReferences();
 
     @Nullable PsiDirectory resolve();
+
+    @NotNull TextRange getUsesTextRange();
 }

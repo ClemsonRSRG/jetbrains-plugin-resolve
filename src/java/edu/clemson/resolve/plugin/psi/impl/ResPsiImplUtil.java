@@ -1,5 +1,6 @@
 package edu.clemson.resolve.plugin.psi.impl;
 
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
@@ -16,6 +17,12 @@ public class ResPsiImplUtil {
             @NotNull ResUsesItem o) {
         if (o.getTextLength() == 0) return PsiReference.EMPTY_ARRAY;
         return new ResUsesReferenceSet(o).getAllReferences();
+    }
+
+    @NotNull
+    public static TextRange getUsesTextRange(@NotNull ResUsesItem usesItem) {
+        String text = usesItem.getText();
+        return !text.isEmpty() ? TextRange.create(0, text.length() - 1) : TextRange.EMPTY_RANGE;
     }
 
     @Nullable public static PsiDirectory resolve(
