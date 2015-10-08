@@ -104,8 +104,8 @@ public class ResTypeReference
         ResScopeProcessorBase delegate = createDelegate(processor);
         ResolutionUtil.treeWalkUp(myElement, delegate);
         Collection<? extends ResNamedElement> result = delegate.getVariants();
-        if (!processNamedElements(processor, state, result, localResolve))
-            return false;
+        if (!processNamedElements(processor, state, result, localResolve)) return false;
+        if (!processFileEntities(file, processor, state, localResolve)) return false;
 
         return true;
     }

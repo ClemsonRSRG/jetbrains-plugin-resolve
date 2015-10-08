@@ -43,13 +43,14 @@ public class ResFile extends PsiFileBase {
     }
 
     @NotNull public List<ResAbstractTypeDecl> getTypes() {
-        return CachedValuesManager.getCachedValue(this,
+        List<ResAbstractTypeDecl> types = CachedValuesManager.getCachedValue(this,
                 new CachedValueProvider<List<ResAbstractTypeDecl>>() {
                     @Override
                     public Result<List<ResAbstractTypeDecl>> compute() {
                         return Result.create(calcTypes(), ResFile.this);
                     }
                 });
+        return types;
     }
 
     @NotNull private List<ResAbstractTypeDecl> calcTypes() {
