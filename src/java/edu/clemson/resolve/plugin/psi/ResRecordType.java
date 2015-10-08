@@ -1,9 +1,10 @@
 package edu.clemson.resolve.plugin.psi;
 
-/**
- * Created by daniel on 10/7/15.
- */
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+
 public interface ResRecordType extends ResType {
 
-    
+    //@NotNull List<ResFieldVariableDeclGroup> getFieldVariableGroupList();
 }
