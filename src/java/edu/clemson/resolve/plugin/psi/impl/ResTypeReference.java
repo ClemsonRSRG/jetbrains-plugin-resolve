@@ -3,6 +3,7 @@ package edu.clemson.resolve.plugin.psi.impl;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.plugin.psi.ResFile;
@@ -36,20 +37,31 @@ public class ResTypeReference
                 }
             };
 
-    @NotNull @Override public Object[] getVariants() {
+    @NotNull
+    @Override
+    public Object[] getVariants() {
         return ArrayUtil.EMPTY_OBJECT_ARRAY;
     }
 
-    @NotNull @Override public ResolveResult[] multiResolve(boolean b) {
+    @NotNull
+    @Override
+    public ResolveResult[] multiResolve(boolean b) {
         return myElement.isValid()
                 ? ResolveCache.getInstance(myElement.getProject())
-                    .resolveWithCaching(this, MY_RESOLVER, false, false)
+                .resolveWithCaching(this, MY_RESOLVER, false, false)
                 : ResolveResult.EMPTY_ARRAY;
     }
 
-    @NotNull private ResolveResult[] resolveInner() {
+    @NotNull
+    private ResolveResult[] resolveInner() {
         Collection<ResolveResult> result = new OrderedSet<ResolveResult>();
         processResolveVariants(ResReference.createResolveProcessor(result, myElement));
+        /*if (result.isEmpty() && myElement.getParent() instanceof ResReceiverType) {
+            PsiElement resolve = new ResReference(myElement).resolve();
+            if (resolve != null) {
+                return PsiElementResolveResult.createResults(resolve);
+            }
+        }*/
         return result.toArray(new ResolveResult[result.size()]);
     }
 
@@ -60,13 +72,14 @@ public class ResTypeReference
         ResTypeReferenceExpression qualifier = myElement.getQualifier();
         if (qualifier != null) {
             return processQualifierExpression(
-                    ((ResFile)file), qualifier, processor, state);
+                    ((ResFile) file), qualifier, processor, state);
         }
         return processUnqualifiedResolve(
                 ((ResFile) file), processor, state, true);
     }
 
-    @NotNull private ResTypeProcessor createDelegate(
+    @NotNull
+    private ResTypeProcessor createDelegate(
             @NotNull ResScopeProcessor processor) {
         return new ResTypeProcessor(myElement, processor.isCompletion());
     }
@@ -91,7 +104,32 @@ public class ResTypeReference
         ResScopeProcessorBase delegate = createDelegate(processor);
         ResolutionUtil.treeWalkUp(myElement, delegate);
         Collection<? extends ResNamedElement> result = delegate.getVariants();
+        if (!processNamedElements(processor, state, result, localResolve))
+            return false;
 
-        return false;
+        return true;
+    }
+
+    private boolean processFileEntities(@NotNull ResFile file,
+                                        @NotNull ResScopeProcessor processor,
+                                        @NotNull ResolveState state,
+                                        boolean localProcessing) {
+        if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean processNamedElements(@NotNull PsiScopeProcessor processor,
+                                         @NotNull ResolveState state,
+                                         @NotNull Collection<? extends ResNamedElement> elements,
+                                         boolean localResolve) {
+        for (ResNamedElement definition : elements) {
+            //if (definition instanceof GoTypeSpec && !allowed((GoTypeSpec) definition))
+            //    continue;
+            if ((definition.isPublic() || localResolve) && !processor.execute(definition, state))
+                return false;
+        }
+        return true;
     }
 }
