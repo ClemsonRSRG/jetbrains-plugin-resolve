@@ -6,8 +6,11 @@ import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.plugin.psi.ResFile;
+import edu.clemson.resolve.plugin.psi.ResNamedElement;
 import edu.clemson.resolve.plugin.psi.ResTypeReferenceExpression;
 import edu.clemson.resolve.plugin.psi.impl.scopeprocessing.ResScopeProcessor;
+import edu.clemson.resolve.plugin.psi.impl.scopeprocessing.ResScopeProcessorBase;
+import edu.clemson.resolve.plugin.psi.impl.scopeprocessing.ResTypeProcessor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -63,6 +66,11 @@ public class ResTypeReference
                 ((ResFile) file), processor, state, true);
     }
 
+    @NotNull private ResTypeProcessor createDelegate(
+            @NotNull ResScopeProcessor processor) {
+        return new ResTypeProcessor(myElement, processor.isCompletion());
+    }
+
     private static boolean processQualifierExpression(@NotNull ResFile file,
                                                       @NotNull ResTypeReferenceExpression qualifier,
                                                       @NotNull ResScopeProcessor processor,
@@ -80,8 +88,10 @@ public class ResTypeReference
                                               @NotNull ResScopeProcessor processor,
                                               @NotNull ResolveState state,
                                               boolean localResolve) {
-        int i;
-        i = 0;
+        ResScopeProcessorBase delegate = createDelegate(processor);
+        ResolutionUtil.treeWalkUp(myElement, delegate);
+        Collection<? extends ResNamedElement> result = delegate.getVariants();
+
         return false;
     }
 }
