@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ResRecordType extends ResType {
 
-    //@NotNull List<ResFieldVariableDeclGroup> getFieldVariableGroupList();
+    @NotNull List<ResVarDeclGroup> getVariableDeclGroups();
 }

@@ -266,8 +266,10 @@ record
     ;
 
 recordVariableDeclGroup
-    :   ID (COMMA ID)* COLON type SEMI
+    :   variableDef (COMMA variableDef)* COLON type SEMI
     ;
+
+variableDef :   ID ;
 
 typeModelDecl
     :   TYPE FAMILY name=ID IS MODELED BY mathTypeExp SEMI
