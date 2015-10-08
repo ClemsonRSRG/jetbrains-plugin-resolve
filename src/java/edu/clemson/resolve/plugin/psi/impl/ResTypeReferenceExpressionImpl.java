@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class ResTypeReferenceExpressionImpl
         extends
-            ResCompositeElementImpl implements ResTypeReferenceExpression {
+            AbstractResTypeImpl implements ResTypeReferenceExpression {
 
     public ResTypeReferenceExpressionImpl(@NotNull ASTNode node) {
         super(node);
