@@ -9,9 +9,9 @@ public interface ResTypeReferenceExpression
         extends
         ResReferenceExpressionBase {
 
-    @NotNull PsiElement getIdentifier();
+    @Nullable PsiElement getIdentifier();
 
-    @NotNull PsiReference getReference();
+    @Nullable PsiReference getReference();
 
     @Nullable
     ResTypeReferenceExpression getQualifier();

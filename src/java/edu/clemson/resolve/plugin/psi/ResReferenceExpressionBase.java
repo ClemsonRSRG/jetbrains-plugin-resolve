@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 public interface ResReferenceExpressionBase extends ResCompositeElement {
 
-    @NotNull PsiElement getIdentifier();
+    @Nullable PsiElement getIdentifier();
 
     @Nullable ResReferenceExpressionBase getQualifier();
 }

@@ -4,6 +4,7 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTFactory;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.impl.source.tree.CompositeElement;
 import com.intellij.psi.impl.source.tree.FileElement;
 import com.intellij.psi.impl.source.tree.LeafElement;
@@ -15,6 +16,7 @@ import edu.clemson.resolve.plugin.psi.ResBlock;
 import edu.clemson.resolve.plugin.psi.ResRecordType;
 import edu.clemson.resolve.plugin.psi.ResTypeReprDecl;
 import edu.clemson.resolve.plugin.psi.impl.*;
+import org.antlr.intellij.adaptor.lexer.RuleElementType;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 

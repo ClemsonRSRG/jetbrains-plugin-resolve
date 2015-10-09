@@ -17,11 +17,12 @@ public class ResTypeReferenceExpressionImpl
         super(node);
     }
 
-    @Override @NotNull public PsiElement getIdentifier() {
-        return findNotNullChildByType(ConstTokenTypes.ID);
+    @Override @Nullable public PsiElement getIdentifier() {
+        return findChildByType(ConstTokenTypes.ID);
     }
 
-    @NotNull public PsiReference getReference() {
+    @Nullable public PsiReference getReference() {
+        if (getIdentifier() == null) return null;
         return ResPsiImplUtil.getReference(this);
     }
 
