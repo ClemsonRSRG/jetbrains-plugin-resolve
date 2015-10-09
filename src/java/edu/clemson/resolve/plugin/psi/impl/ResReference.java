@@ -63,6 +63,7 @@ public class ResReference
 
                 String name = ObjectUtils.chooseNotNull(state.get(ACTUAL_NAME),
                         element instanceof PsiNamedElement ? ((PsiNamedElement) element).getName() : null);
+                String oIdentifierText = o.getIdentifier().getText();
                 if (name != null && o.getIdentifier().textMatches(name)) {
                     result.add(new PsiElementResolveResult(element));
                     return false;
@@ -104,30 +105,11 @@ public class ResReference
                                        @NotNull ResScopeProcessor processor,
                                        @NotNull ResolveState state,
                                        @NotNull ResCompositeElement element) {
-        List<PsiFile> usesItemsAsPsiFiles = new ArrayList<PsiFile>();
-
         for (ResUsesItem u : file.getUsesItems()) {
-           /* if (file.getProject().getProjectFile() == null) continue;
-            VirtualFile targetFile =
-                    file.getProject().getProjectFile().findChild(u.getText());
-            if (targetFile == null) continue;
-            usesItemsAsPsiFiles.add(PsiManager.getInstance(file.getProject())
-                    .findFile(targetFile));*/
-
-            PsiFile x = u.resolve();
-            int i;
-            i=0;
+            PsiFile resolvedFile = u.resolve();
+            if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
+            if (!processFileEntities((ResFile)resolvedFile, processor, state, false)) return false;
         }
-
-        /*for (PsiFile f : usesItemsAsPsiFiles) {
-            if (!(f instanceof ResFile)) continue;
-            if (!processFileEntities((ResFile)f, processor, state, true)) return false;
-        }*/
-       /* for (PsiFile f : dir.getFiles()) {
-            if (!(f instanceof GoFile) || Comparing.equal(getPath(f), filePath)) continue;
-            if (packageName != null && !packageName.equals(((GoFile)f).getPackageName())) continue;
-            if (allowed(f, isTesting) && !processFileEntities((GoFile)f, processor, state, localProcessing)) return false;
-        }*/
         return true;
     }
 

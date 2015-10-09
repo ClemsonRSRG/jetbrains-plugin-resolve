@@ -14,6 +14,7 @@ import com.intellij.util.ProcessingContext;
 import edu.clemson.resolve.plugin.psi.ResNamedElement;
 import edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase;
 import edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeDecl;
+import edu.clemson.resolve.plugin.psi.impl.ResReference;
 import edu.clemson.resolve.plugin.psi.impl.ResTypeReference;
 import edu.clemson.resolve.plugin.psi.impl.scopeprocessing.ResScopeProcessor;
 import org.jetbrains.annotations.NotNull;
@@ -41,6 +42,10 @@ public class RESOLVEReferenceCompletionProvider
             @Nullable PsiReference reference,
             @NotNull CompletionResultSet result) {
         if (reference == null) return;
+        else if (reference instanceof ResReference) {
+            ((ResReference)reference).processResolveVariants(new MyRESOLVEScopeProcessor(result, false));
+            PsiElement element = reference.getElement();
+        }
         if (reference instanceof ResTypeReference) {
             PsiElement element = reference.getElement();
            // final PsiElement spec = PsiTreeUtil.getParentOfType(element, GoFieldDeclaration.class, GoTypeSpec.class);

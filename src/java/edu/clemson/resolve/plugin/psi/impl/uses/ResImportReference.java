@@ -35,37 +35,15 @@ public class ResImportReference extends FileReference {
         PsiDirectory currentDir = file.getContainingDirectory();
         if (currentDir == null) return ResolveResult.EMPTY_ARRAY;
         String currentDirName = currentDir.getName();
-        if (currentDirName == null) return ResolveResult.EMPTY_ARRAY;
-        while (!currentDirName.equals(projectName)) {
-
+        while (currentDir != null && !currentDirName.equals(projectName)) {
+            currentDir = currentDir.getParentDirectory();
         }
-        PsiFile x = currentDir.findFile(getText() + ".resolve");
-        //file.getContainingDirectory().findFile()
 
-        file.getProject().getName();
-  /*  if (isFirst()) {
-      if (".".equals(getCanonicalText())) {
-        PsiDirectory directory = getDirectory();
-        return directory != null ? new PsiElementResolveResult[]{new PsiElementResolveResult(directory)} : ResolveResult.EMPTY_ARRAY;
-      }
-      else if ("..".equals(getCanonicalText())) {
-        PsiDirectory directory = getDirectory();
-        PsiDirectory grandParent = directory != null ? directory.getParentDirectory() : null;
-        return grandParent != null ? new PsiElementResolveResult[]{new PsiElementResolveResult(grandParent)} : ResolveResult.EMPTY_ARRAY;
-      }
-    }*/
-
-        if (isLast()) {
-            List<ResolveResult> filtered = ContainerUtil.filter(super.innerResolve(caseSensitive, file), new Condition<ResolveResult>() {
-                @Override
-                public boolean value(@NotNull ResolveResult resolveResult) {
-                    PsiElement element = resolveResult.getElement();
-                    return element != null && element instanceof PsiDirectory;
-                }
-            });
-            return filtered.toArray(new ResolveResult[filtered.size()]);
-        }
-        return super.innerResolve(caseSensitive, file);
+        if (currentDir == null) return ResolveResult.EMPTY_ARRAY;
+        PsiFile referencedFile = currentDir.findFile(getText()+".resolve");
+        return referencedFile != null ? new PsiElementResolveResult[]{
+                new PsiElementResolveResult(referencedFile)} :
+                ResolveResult.EMPTY_ARRAY;
     }
 
     @Nullable private PsiDirectory getDirectory() {

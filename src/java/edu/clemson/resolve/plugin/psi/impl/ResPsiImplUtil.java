@@ -41,6 +41,10 @@ public class ResPsiImplUtil {
         return PsiTreeUtil.getChildOfType(o, ResTypeReferenceExpression.class);
     }
 
+    /** ok, in the go plugin don't be fooled by the seeming lack of connection between
+     *  GoImportReferenceHelper and GoFileContextProvider -- these are responsible
+     *  for setting getDefaultContext to "src/go/" etc...
+     */
     @Nullable public static PsiFile resolve(@NotNull ResUsesItem usesItem) {
         PsiReference[] references = usesItem.getReferences();
         for (PsiReference reference : references) {

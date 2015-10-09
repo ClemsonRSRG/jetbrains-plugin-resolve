@@ -110,7 +110,7 @@ public class ResTypeReference
         if (!processFileEntities(file, processor, state, localResolve)) return false;
 
         //this will search any 'uses' files
-        if (ResReference.processUsesRequests(file, processor, state, myElement)) return false;
+        //if (ResReference.processUsesRequests(file, processor, state, myElement)) return false;
 
         return true;
     }
