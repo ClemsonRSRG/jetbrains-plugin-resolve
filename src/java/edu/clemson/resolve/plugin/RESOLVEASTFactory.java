@@ -11,6 +11,7 @@ import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import edu.clemson.resolve.plugin.parser.Resolve;
+import edu.clemson.resolve.plugin.psi.ResBlock;
 import edu.clemson.resolve.plugin.psi.ResRecordType;
 import edu.clemson.resolve.plugin.psi.ResTypeReprDecl;
 import edu.clemson.resolve.plugin.psi.impl.*;
@@ -35,6 +36,7 @@ public class RESOLVEASTFactory extends ASTFactory {
 
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_typeQualifier), ResTypeReferenceExpressionImpl.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_typeRepresentationDecl), ResTypeReprDeclImpl.Factory.INSTANCE);
+        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_facilityBlock), ResBlockImpl.Factory.INSTANCE);
 
         /*ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_facilityModule), FacilityModule.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_enhancementModule), EnhancementModule.Factory.INSTANCE);

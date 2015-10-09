@@ -6,6 +6,7 @@ import com.intellij.psi.PsiReference;
 import com.intellij.util.IncorrectOperationException;
 import edu.clemson.resolve.plugin.RESOLVETokenTypes;
 import edu.clemson.resolve.plugin.parser.ResolveLexer;
+import edu.clemson.resolve.plugin.psi.ResBlock;
 import edu.clemson.resolve.plugin.psi.ResModule;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +27,10 @@ public abstract class ResAbstractModule
 
     @Nullable @Override public PsiElement getNameIdentifier() {
         return getIdentifier();
+    }
+
+    @Nullable public ResBlock getBlock() {
+        return findChildByClass(ResBlock.class);
     }
 
     @Override public PsiReference getReference() {

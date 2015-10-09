@@ -127,8 +127,9 @@ public class ResTypeReference
         for (ResNamedElement definition : elements) {
             //if (definition instanceof GoTypeSpec && !allowed((GoTypeSpec) definition))
             //    continue;
-            if ((definition.isPublic() || localResolve) && !processor.execute(definition, state))
+            if ((definition.isPublic() || localResolve) && !processor.execute(definition, state)) {
                 return false;
+            }
         }
         return true;
     }

@@ -18,6 +18,7 @@ import edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeDecl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ResFile extends PsiFileBase {
@@ -43,6 +44,8 @@ public class ResFile extends PsiFileBase {
     }
 
     @NotNull public List<ResAbstractTypeDecl> getTypes() {
+        ResModule x = getEnclosedModule();
+        if (x == null) return new ArrayList<ResAbstractTypeDecl>();
         List<ResAbstractTypeDecl> types = CachedValuesManager.getCachedValue(this,
                 new CachedValueProvider<List<ResAbstractTypeDecl>>() {
                     @Override
@@ -55,7 +58,10 @@ public class ResFile extends PsiFileBase {
 
     @NotNull private List<ResAbstractTypeDecl> calcTypes() {
         final List<ResAbstractTypeDecl> result = ContainerUtil.newArrayList();
-        processChildrenDummyAware(this, new Processor<PsiElement>() {
+        ResModule module = getEnclosedModule();
+        if (module == null) return new ArrayList<ResAbstractTypeDecl>();
+        if (module.getBlock() == null) return new ArrayList<ResAbstractTypeDecl>();
+        processChildrenDummyAware(module.getBlock(), new Processor<PsiElement>() {
             @Override
             public boolean process(PsiElement e) {
                 if (e instanceof ResAbstractTypeDecl) {
@@ -67,17 +73,8 @@ public class ResFile extends PsiFileBase {
         return result;
     }
 
-    private static boolean processChildrenDummyAware(@NotNull ResFile file,
+    private static boolean processChildrenDummyAware(@NotNull ResBlock module,
                                                      @NotNull final Processor<PsiElement> processor) {
-        StubTree stubTree = file.getStubTree();
-        if (stubTree != null) {
-            List<StubElement<?>> plainList = stubTree.getPlainList();
-            for (StubElement<?> stubElement : plainList) {
-                PsiElement psi = stubElement.getPsi();
-                if (!processor.process(psi)) return false;
-            }
-            return true;
-        }
         return new Processor<PsiElement>() {
             @Override
             public boolean process(@NotNull PsiElement psiElement) {
@@ -91,7 +88,7 @@ public class ResFile extends PsiFileBase {
                 }
                 return true;
             }
-        }.process(file);
+        }.process(module);
     }
 
 
