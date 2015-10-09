@@ -1,10 +1,7 @@
 package edu.clemson.resolve.plugin.psi;
 
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
-import com.intellij.psi.StubBasedPsiElement;
+import com.intellij.psi.*;
 import edu.clemson.resolve.plugin.psi.impl.ResCompositeElementImpl;
 import edu.clemson.resolve.plugin.stubs.ResUsesItemStub;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +15,7 @@ public interface ResUsesItem
 
     @NotNull PsiReference[] getReferences();
 
-    @Nullable PsiDirectory resolve();
+    @Nullable PsiFile resolve();
 
     @NotNull TextRange getUsesTextRange();
 }

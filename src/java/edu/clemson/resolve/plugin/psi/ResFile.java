@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class ResFile extends PsiFileBase {
@@ -41,6 +42,12 @@ public class ResFile extends PsiFileBase {
 
     @Nullable public ResModule getEnclosedModule() {
         return PsiTreeUtil.findChildOfType(this, ResModule.class);
+    }
+
+    //Todo: In future create calcImports() and add results from facilities too maybe?
+    @NotNull public Collection<ResUsesItem> getUsesItems() {
+        if (getEnclosedModule() == null) return new ArrayList<ResUsesItem>();
+        return PsiTreeUtil.findChildrenOfType(getEnclosedModule(), ResUsesItem.class);
     }
 
     @NotNull public List<ResAbstractTypeDecl> getTypes() {

@@ -104,8 +104,13 @@ public class ResTypeReference
         ResScopeProcessorBase delegate = createDelegate(processor);
         ResolutionUtil.treeWalkUp(myElement, delegate);
         Collection<? extends ResNamedElement> result = delegate.getVariants();
+
+        //these two will search locally...
         if (!processNamedElements(processor, state, result, localResolve)) return false;
         if (!processFileEntities(file, processor, state, localResolve)) return false;
+
+        //this will search any 'uses' files
+        if (ResReference.processUsesRequests(file, processor, state, myElement)) return false;
 
         return true;
     }

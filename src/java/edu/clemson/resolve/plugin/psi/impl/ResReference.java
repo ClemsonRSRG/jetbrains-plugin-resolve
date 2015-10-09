@@ -1,18 +1,23 @@
 package edu.clemson.resolve.plugin.psi.impl;
 
+import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.OrderedSet;
-import edu.clemson.resolve.plugin.psi.ResFile;
-import edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase;
+import edu.clemson.resolve.plugin.psi.*;
 import edu.clemson.resolve.plugin.psi.impl.scopeprocessing.ResScopeProcessor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class ResReference
         extends
@@ -95,10 +100,79 @@ public class ResReference
         return ArrayUtil.EMPTY_OBJECT_ARRAY;
     }
 
+    static boolean processUsesRequests(@NotNull ResFile file,
+                                       @NotNull ResScopeProcessor processor,
+                                       @NotNull ResolveState state,
+                                       @NotNull ResCompositeElement element) {
+        List<PsiFile> usesItemsAsPsiFiles = new ArrayList<PsiFile>();
+
+        for (ResUsesItem u : file.getUsesItems()) {
+           /* if (file.getProject().getProjectFile() == null) continue;
+            VirtualFile targetFile =
+                    file.getProject().getProjectFile().findChild(u.getText());
+            if (targetFile == null) continue;
+            usesItemsAsPsiFiles.add(PsiManager.getInstance(file.getProject())
+                    .findFile(targetFile));*/
+
+            PsiFile x = u.resolve();
+            int i;
+            i=0;
+        }
+
+        /*for (PsiFile f : usesItemsAsPsiFiles) {
+            if (!(f instanceof ResFile)) continue;
+            if (!processFileEntities((ResFile)f, processor, state, true)) return false;
+        }*/
+       /* for (PsiFile f : dir.getFiles()) {
+            if (!(f instanceof GoFile) || Comparing.equal(getPath(f), filePath)) continue;
+            if (packageName != null && !packageName.equals(((GoFile)f).getPackageName())) continue;
+            if (allowed(f, isTesting) && !processFileEntities((GoFile)f, processor, state, localProcessing)) return false;
+        }*/
+        return true;
+    }
+
     private boolean processUnqualifiedResolve(@NotNull ResFile file,
                                               @NotNull ResScopeProcessor processor,
                                               @NotNull ResolveState state,
                                               boolean localResolve) {
         return true;
+    }
+
+    private static boolean processFileEntities(@NotNull ResFile file,
+                                               @NotNull ResScopeProcessor processor,
+                                               @NotNull ResolveState state,
+                                               boolean localProcessing) {
+        //if (!processNamedElements(processor, state, file.getConstants(), localProcessing)) return false;
+        //if (!processNamedElements(processor, state, file.getVars(), localProcessing)) return false;
+        //if (!processNamedElements(processor, state, file.getFunctions(), localProcessing)) return false;
+        if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
+        return true;
+    }
+
+    static boolean processNamedElements(@NotNull PsiScopeProcessor processor,
+                                        @NotNull ResolveState state,
+                                        @NotNull Collection<? extends ResNamedElement> elements,
+                                        boolean localResolve) {
+        return processNamedElements(processor, state, elements, localResolve, false);
+    }
+
+    static boolean processNamedElements(@NotNull PsiScopeProcessor processor,
+                                        @NotNull ResolveState state,
+                                        @NotNull Collection<? extends ResNamedElement> elements,
+                                        boolean localResolve,
+                                        boolean checkContainingFile) {
+        PsiFile contextFile = checkContainingFile ? getContextFile(state) : null;
+        for (ResNamedElement definition : elements) {
+            //if (!definition.isValid() || checkContainingFile && !allowed(definition.getContainingFile(), contextFile)) continue;
+            if ((localResolve || definition.isPublic()) && !processor.execute(definition, state)) return false;
+        }
+        return true;
+    }
+
+    @Nullable private static PsiFile getContextFile(
+            @NotNull ResolveState state) {
+        SmartPsiElementPointer<ResReferenceExpressionBase> context =
+                state.get(CONTEXT);
+        return context != null ? context.getContainingFile() : null;
     }
 }

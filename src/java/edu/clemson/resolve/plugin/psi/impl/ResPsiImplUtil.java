@@ -3,8 +3,11 @@ package edu.clemson.resolve.plugin.psi.impl;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
 import com.intellij.psi.util.PsiTreeUtil;
 import edu.clemson.resolve.plugin.psi.ResTypeReferenceExpression;
@@ -38,17 +41,14 @@ public class ResPsiImplUtil {
         return PsiTreeUtil.getChildOfType(o, ResTypeReferenceExpression.class);
     }
 
-    @Nullable public static PsiDirectory resolve(
-            @NotNull ResUsesItem usesItem) {
+    @Nullable public static PsiFile resolve(@NotNull ResUsesItem usesItem) {
         PsiReference[] references = usesItem.getReferences();
         for (PsiReference reference : references) {
             if (reference instanceof FileReferenceOwner) {
-                PsiFileReference lastFileReference =
-                        ((FileReferenceOwner)reference).getLastFileReference();
-                PsiElement result = lastFileReference != null ?
-                        lastFileReference.resolve() : null;
-                return result instanceof PsiDirectory ? (PsiDirectory)result :
-                        null;
+                PsiFileReference lastFileReference = ((FileReferenceOwner)reference).getLastFileReference();
+                PsiElement result = lastFileReference != null ? lastFileReference.resolve() : null;
+                PsiFile x = result instanceof PsiFile ? (PsiFile)result : null;
+                return x;
             }
         }
         return null;

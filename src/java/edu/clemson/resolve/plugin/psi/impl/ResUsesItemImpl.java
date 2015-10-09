@@ -4,6 +4,7 @@ import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.stubs.IStubElementType;
 import edu.clemson.resolve.plugin.RESOLVETokenTypes;
@@ -31,7 +32,7 @@ public class ResUsesItemImpl
         return ResPsiImplUtil.getReferences(this);
     }
 
-    @Nullable public PsiDirectory resolve() {
+    @Nullable public PsiFile resolve() {
         return ResPsiImplUtil.resolve(this);
     }
 
