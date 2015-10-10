@@ -1,10 +1,7 @@
 package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiReference;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
@@ -12,6 +9,7 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileRefe
 import com.intellij.psi.util.PsiTreeUtil;
 import edu.clemson.resolve.plugin.psi.ResTypeReferenceExpression;
 import edu.clemson.resolve.plugin.psi.ResUsesItem;
+import edu.clemson.resolve.plugin.psi.impl.uses.ResImportReference;
 import edu.clemson.resolve.plugin.psi.impl.uses.ResUsesReferenceSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,7 +44,7 @@ public class ResPsiImplUtil {
      *  for setting getDefaultContext to "src/go/" etc...
      */
     @Nullable public static PsiFile resolve(@NotNull ResUsesItem usesItem) {
-        PsiReference[] references = usesItem.getReferences();
+       PsiReference[] references = usesItem.getReferences();
         for (PsiReference reference : references) {
             if (reference instanceof FileReferenceOwner) {
                 PsiFileReference lastFileReference = ((FileReferenceOwner)reference).getLastFileReference();

@@ -28,10 +28,32 @@ public class ResImportReference extends FileReference {
         super(fileReferenceSet, range, index, text);
     }
 
-    @NotNull @Override protected ResolveResult[] innerResolve(
-            boolean caseSensitive, @NotNull PsiFile file) {
+    @NotNull
+    @Override
+    protected ResolveResult[] innerResolve(boolean caseSensitive, @NotNull PsiFile file) {
+
+
+       /* for (PsiFile f : file.getContainingDirectory().getFiles()) {
+            if (f.getName().equals(getText())) {
+                return new PsiElementResolveResult[]{
+                        new PsiElementResolveResult(f)};
+            }
+        }*/
+        return ResolveResult.EMPTY_ARRAY;
+
+        /*if (isLast()) {
+            List<ResolveResult> filtered = ContainerUtil.filter(super.innerResolve(caseSensitive, file), new Condition<ResolveResult>() {
+                @Override
+                public boolean value(@NotNull ResolveResult resolveResult) {
+                    PsiElement element = resolveResult.getElement();
+                    return element != null && element instanceof PsiDirectory;
+                }
+            });
+            return filtered.toArray(new ResolveResult[filtered.size()]);
+        }
+        return super.innerResolve(caseSensitive, file);*/
         //first, go all the way up to the psiDirectory housing the whole project
-        String projectName = file.getProject().getName();
+       /* String projectName = file.getProject().getName();
         PsiDirectory currentDir = file.getContainingDirectory();
         if (currentDir == null) return ResolveResult.EMPTY_ARRAY;
         String currentDirName = currentDir.getName();
@@ -43,7 +65,7 @@ public class ResImportReference extends FileReference {
         PsiFile referencedFile = currentDir.findFile(getText()+".resolve");
         return referencedFile != null ? new PsiElementResolveResult[]{
                 new PsiElementResolveResult(referencedFile)} :
-                ResolveResult.EMPTY_ARRAY;
+                ResolveResult.EMPTY_ARRAY;*/
     }
 
     @Nullable private PsiDirectory getDirectory() {
