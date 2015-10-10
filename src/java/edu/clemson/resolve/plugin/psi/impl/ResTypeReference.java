@@ -6,6 +6,7 @@ import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.OrderedSet;
+import edu.clemson.resolve.plugin.completion.RESOLVEReferenceCompletionProvider;
 import edu.clemson.resolve.plugin.psi.ResFile;
 import edu.clemson.resolve.plugin.psi.ResNamedElement;
 import edu.clemson.resolve.plugin.psi.ResTypeReferenceExpression;
@@ -108,7 +109,7 @@ public class ResTypeReference
         //these two will search locally...
         if (!processNamedElements(processor, state, result, localResolve)) return false;
         if (!processFileEntities(file, processor, state, localResolve)) return false;
-
+        //RESOLVEReferenceCompletionProvider.MyRESOLVEScopeProcessor
         //this will search any 'uses' files
         if (ResReference.processUsesRequests(file, processor, state, myElement)) return false;
 

@@ -50,14 +50,16 @@ public class RESOLVEReferenceCompletionProvider
             PsiElement element = reference.getElement();
            // final PsiElement spec = PsiTreeUtil.getParentOfType(element, GoFieldDeclaration.class, GoTypeSpec.class);
             //final boolean insideParameter = PsiTreeUtil.getParentOfType(element, GoParameterDeclaration.class) != null;
-            ((ResTypeReference) reference).processResolveVariants(new MyRESOLVEScopeProcessor(result, true) {
+
+            ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
                 @Override
                 protected boolean accept(@NotNull PsiElement e) {
-                    return true;//e != spec &&
-                           // !(insideParameter &&
-                           //         (e instanceof GoNamedSignatureOwner || e instanceof GoVarDefinition || e instanceof GoConstDefinition));
+                    return false;//e != spec &&
+                    // !(insideParameter &&
+                    //         (e instanceof GoNamedSignatureOwner || e instanceof GoVarDefinition || e instanceof GoConstDefinition));
                 }
-            });
+            };
+            ((ResTypeReference) reference).processResolveVariants(aProcessor);
         }
     }
 
@@ -90,7 +92,8 @@ public class RESOLVEReferenceCompletionProvider
         return new CamelHumpMatcher(prefix, false);
     }
 
-    private static class MyRESOLVEScopeProcessor extends ResScopeProcessor {
+    public static class MyRESOLVEScopeProcessor extends ResScopeProcessor {
+        private final String myDanKey = "";
         private final CompletionResultSet myResult;
         private final boolean myForTypes;
 
