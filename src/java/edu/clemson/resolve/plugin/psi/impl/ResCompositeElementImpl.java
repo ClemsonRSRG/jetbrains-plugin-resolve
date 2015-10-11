@@ -2,8 +2,14 @@ package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.util.PsiTreeUtil;
 import edu.clemson.resolve.plugin.psi.ResCompositeElement;
+import edu.clemson.resolve.plugin.psi.ResOperationProcedureDeclaration;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ResCompositeElementImpl
         extends
@@ -15,6 +21,40 @@ public class ResCompositeElementImpl
 
     @Override public String toString() {
         return getNode().getElementType().toString();
+    }
+
+    @Override public boolean processDeclarations(
+            @NotNull PsiScopeProcessor processor,
+            @NotNull ResolveState state,
+            @Nullable PsiElement lastParent,
+            @NotNull PsiElement place) {
+        return processDeclarationsDefault(this, processor, state, lastParent, place);
+    }
+
+    public static boolean processDeclarationsDefault(
+            @NotNull ResCompositeElement o,
+            @NotNull PsiScopeProcessor processor,
+            @NotNull ResolveState state,
+            @Nullable PsiElement lastParent,
+            @NotNull PsiElement place) {
+        if (!o.shouldGoDeeper()) return processor.execute(o, state);
+        if (!processor.execute(o, state)) return false;
+       /* if ((
+                o instanceof GoSwitchStatement ||
+                        o instanceof GoIfStatement ||
+                        o instanceof GoForStatement ||
+                        o instanceof GoBlock
+        )
+                && processor instanceof GoScopeProcessorBase) {
+            if (!PsiTreeUtil.isAncestor(o, ((GoScopeProcessorBase) processor).myOrigin, false)) return true;
+        }
+
+        return o instanceof GoBlock ?
+                ResolveUtil.processChildrenFromTop(o, processor, state, lastParent, place) :
+                ResolveUtil.processChildren(o, processor, state, lastParent, place);*/
+        return o instanceof ResOperationProcedureDeclaration ?
+                ResolutionUtil.processChildrenFromTop(o, processor, state, lastParent, place) :
+                ResolutionUtil.processChildren(o, processor, state, lastParent, place);
     }
 
     @Override public boolean shouldGoDeeper() {

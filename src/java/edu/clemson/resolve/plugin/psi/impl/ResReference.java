@@ -12,6 +12,8 @@ import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.plugin.psi.*;
 import edu.clemson.resolve.plugin.psi.impl.scopeprocessing.ResScopeProcessor;
+import edu.clemson.resolve.plugin.psi.impl.scopeprocessing.ResScopeProcessorBase;
+import edu.clemson.resolve.plugin.psi.impl.scopeprocessing.ResVarProcessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,7 +45,6 @@ public class ResReference
                 o.getIdentifier().getTextLength()));
     }
 
-    //this is the big starting point (I think...)
     @NotNull private ResolveResult[] resolveInner() {
         Collection<ResolveResult> result = new OrderedSet<ResolveResult>();
         processResolveVariants(createResolveProcessor(result, myElement));
@@ -119,6 +120,9 @@ public class ResReference
                                               @NotNull ResScopeProcessor processor,
                                               @NotNull ResolveState state,
                                               boolean localResolve) {
+        ResScopeProcessorBase delegate = createDelegate(processor);
+        ResolutionUtil.treeWalkUp(myElement, delegate);
+        if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
         return true;
     }
 
@@ -158,5 +162,21 @@ public class ResReference
         SmartPsiElementPointer<ResReferenceExpressionBase> context =
                 state.get(CONTEXT);
         return context != null ? context.getContainingFile() : null;
+    }
+
+    @NotNull private ResVarProcessor createDelegate(
+            @NotNull ResScopeProcessor processor) {
+        return new ResVarProcessor(getIdentifier(), myElement,
+                processor.isCompletion(), true) {
+            @Override
+            protected boolean condition(@NotNull PsiElement e) {
+                //if (e instanceof GoFieldDefinition) return true;
+                return super.condition(e); //&& !(e instanceof GoTypeSpec);
+            }
+        };
+    }
+
+    @NotNull private PsiElement getIdentifier() {
+        return myElement.getIdentifier();
     }
 }

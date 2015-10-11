@@ -252,10 +252,10 @@ elsePart
 // type and record related rules
 
 type
-    :   (qualifier=typeQualifier COLONCOLON)? name=ID
+    :   (qual=qualifier COLONCOLON)? name=ID
     ;
 
-typeQualifier : ID ;
+qualifier : ID ;
 
 genericType
     :   ID
@@ -476,13 +476,13 @@ mathPrimaryExp
     ;
 
 mathLiteralExp
-    :   (qualifier=ID COLONCOLON)? (TRUE|FALSE)     #mathBooleanLiteralExp
-    |   (qualifier=ID COLONCOLON)? num=INT          #mathIntegerLiteralExp
+    :   (qual=qualifier COLONCOLON)? (TRUE|FALSE)     #mathBooleanLiteralExp
+    |   (qual=qualifier COLONCOLON)? num=INT          #mathIntegerLiteralExp
     ;
 
 mathFunctionApplicationExp
-    :   (AT)? (qualifier=ID COLONCOLON)? name=ID (LPAREN mathExp (COMMA mathExp)* RPAREN)+ #mathFunctionExp
-    |   (AT)? (qualifier=ID COLONCOLON)? name=ID #mathVariableExp
+    :   (AT)? (qual=qualifier COLONCOLON)? name=ID (LPAREN mathExp (COMMA mathExp)* RPAREN)+ #mathFunctionExp
+    |   (AT)? (qual=qualifier COLONCOLON)? name=ID #mathVariableExp
     ;
 
 mathFunctionRestrictionExp
@@ -562,16 +562,20 @@ progVarExp
     ;
 
 progParamExp
-    :   (qualifier=ID COLONCOLON)? name=ID
+    :   (qual=qualifier COLONCOLON)? name=ID
         LPAREN (progExp (COMMA progExp)*)? RPAREN
     ;
 
 progNamedExp
-    :   (qualifier=ID COLONCOLON)? name=ID
+    :   (qual=qualifier COLONCOLON)? name=ID
     ;
 
 progMemberExp
-    :   (progParamExp|progNamedExp) (DOT ID)+
+    :   fieldRefExp (DOT fieldRefExp)+
+    ;
+
+fieldRefExp
+    :   ID
     ;
 
 progLiteralExp

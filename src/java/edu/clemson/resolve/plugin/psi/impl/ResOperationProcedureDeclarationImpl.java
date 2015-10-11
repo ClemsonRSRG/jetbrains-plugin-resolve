@@ -2,6 +2,8 @@ package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import edu.clemson.resolve.plugin.ConstTokenTypes;
 import edu.clemson.resolve.plugin.psi.ResOperationProcedureDeclaration;
 import edu.clemson.resolve.plugin.psi.ResType;

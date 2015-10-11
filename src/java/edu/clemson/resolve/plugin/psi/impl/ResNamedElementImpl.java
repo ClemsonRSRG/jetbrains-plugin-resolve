@@ -8,6 +8,7 @@ import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
+import edu.clemson.resolve.plugin.psi.ResCompositeElement;
 import edu.clemson.resolve.plugin.psi.ResNamedElement;
 import edu.clemson.resolve.plugin.psi.ResType;
 import edu.clemson.resolve.plugin.stubs.ResNamedStub;
@@ -16,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class ResNamedElementImpl<T extends ResNamedStub<?>>
         extends
-            ResStubbedElementImpl<T> implements ResNamedElement {
+            ResStubbedElementImpl<T> implements ResCompositeElement, ResNamedElement {
 
     public ResNamedElementImpl(@NotNull ASTNode node) {
         super(node);

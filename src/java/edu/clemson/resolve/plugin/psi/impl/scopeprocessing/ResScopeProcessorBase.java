@@ -35,7 +35,6 @@ public abstract class ResScopeProcessorBase extends ResScopeProcessor {
 
     @Override public boolean execute(@NotNull PsiElement psiElement,
                                      @NotNull ResolveState resolveState) {
-        if (psiElement instanceof ResOperationProcedureDeclaration) return false;
         if (!(psiElement instanceof ResNamedElement)) return true;
         String name = ((ResNamedElement)psiElement).getName();
         if (StringUtil.isEmpty(name) || !myIsCompletion && !myRequestedNameElement.textMatches(name)) return true;
