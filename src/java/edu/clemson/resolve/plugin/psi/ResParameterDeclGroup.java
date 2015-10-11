@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public interface ResParameterDeclarationGroup extends ResCompositeElement {
+public interface ResParameterDeclGroup extends ResCompositeElement {
 
     @NotNull List<ResParameterDefinition> getParamDefinitionList();
 

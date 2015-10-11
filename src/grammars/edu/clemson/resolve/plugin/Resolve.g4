@@ -209,7 +209,7 @@ parameterMode
     ;
 
 variableDeclGroup
-    :   VAR ID (COMMA ID)* COLON type SEMI
+    :   VAR variableDef (COMMA variableDef)* COLON type SEMI
     ;
 
 // statements

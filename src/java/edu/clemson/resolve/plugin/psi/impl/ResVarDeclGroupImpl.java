@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 /**
+ *
  * Created by daniel on 10/8/15.
  */
 public class ResVarDeclGroupImpl

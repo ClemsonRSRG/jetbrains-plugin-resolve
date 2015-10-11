@@ -15,6 +15,7 @@ import edu.clemson.resolve.plugin.parser.Resolve;
 import edu.clemson.resolve.plugin.psi.ResBlock;
 import edu.clemson.resolve.plugin.psi.ResRecordType;
 import edu.clemson.resolve.plugin.psi.ResTypeReprDecl;
+import edu.clemson.resolve.plugin.psi.ResVarDeclGroup;
 import edu.clemson.resolve.plugin.psi.impl.*;
 import org.antlr.intellij.adaptor.lexer.RuleElementType;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
@@ -34,7 +35,9 @@ public class RESOLVEASTFactory extends ASTFactory {
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_type), ResTypeReferenceExpressionImpl.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_record), ResRecordTypeImpl.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_recordVariableDeclGroup), ResVarDeclGroupImpl.Factory.INSTANCE);
+        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_variableDeclGroup), ResVarDeclGroupImpl.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_variableDef), ResVarDefinitionImpl.Factory.INSTANCE);
+
 
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_typeQualifier), ResTypeReferenceExpressionImpl.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_typeRepresentationDecl), ResTypeReprDeclImpl.Factory.INSTANCE);

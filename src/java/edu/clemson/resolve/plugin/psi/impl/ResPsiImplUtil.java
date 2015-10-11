@@ -6,9 +6,11 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
+import com.intellij.psi.util.CachedValueProvider;
+import com.intellij.psi.util.CachedValuesManager;
+import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
-import edu.clemson.resolve.plugin.psi.ResTypeReferenceExpression;
-import edu.clemson.resolve.plugin.psi.ResUsesItem;
+import edu.clemson.resolve.plugin.psi.*;
 import edu.clemson.resolve.plugin.psi.impl.uses.ResImportReference;
 import edu.clemson.resolve.plugin.psi.impl.uses.ResUsesReferenceSet;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +28,16 @@ public class ResPsiImplUtil {
         String text = usesItem.getText();
         return !text.isEmpty() ? TextRange.create(0, text.length() - 1) :
                 TextRange.EMPTY_RANGE;
+    }
+
+    @Nullable public static ResType getGoType(@NotNull final ResExpression o,
+                                              @Nullable ResolveState context) {
+        return null; //TODO TODO TODO
+    }
+
+    @NotNull public static ResReference getReference(
+            @NotNull ResReferenceExpression o) {
+        return new ResReference(o);
     }
 
     @NotNull public static PsiReference getReference(
