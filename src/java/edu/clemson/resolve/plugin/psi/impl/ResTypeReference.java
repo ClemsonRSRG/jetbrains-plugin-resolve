@@ -109,8 +109,7 @@ public class ResTypeReference
         //these two will search locally...
         if (!processNamedElements(processor, state, result, localResolve)) return false;
         if (!processFileEntities(file, processor, state, localResolve)) return false;
-        //RESOLVEReferenceCompletionProvider.MyRESOLVEScopeProcessor
-        //this will search any 'uses' files
+
         if (ResReference.processUsesRequests(file, processor, state, myElement)) return false;
 
         return true;

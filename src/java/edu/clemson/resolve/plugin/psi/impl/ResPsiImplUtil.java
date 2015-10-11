@@ -18,7 +18,6 @@ public class ResPsiImplUtil {
 
     @NotNull public static PsiReference[] getReferences(
             @NotNull ResUsesItem o) {
-        if (o.getTextLength() == 0) return PsiReference.EMPTY_ARRAY;
         return new ResUsesReferenceSet(o).getAllReferences();
     }
 

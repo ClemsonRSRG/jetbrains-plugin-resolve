@@ -40,4 +40,12 @@ public class RESOLVECompletionUtil {
                 builder.withTailText(" " + importPath, true);
         return PrioritizedLookupElement.withPriority(builder, priority);
     }
+
+    @NotNull public static LookupElementBuilder createDirectoryLookupElement(
+            @NotNull PsiDirectory dir) {
+        int files = dir.getFiles().length;
+        return LookupElementBuilder.createWithSmartPointer(
+                dir.getName(), dir).withIcon(RESOLVEIcons.MODULE);
+    }
+
 }

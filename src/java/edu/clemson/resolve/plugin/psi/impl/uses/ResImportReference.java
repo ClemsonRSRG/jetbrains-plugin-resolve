@@ -11,14 +11,18 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.util.ArrayUtil;
+import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.plugin.RESOLVEFileType;
 import edu.clemson.resolve.plugin.RESOLVEIcons;
+import edu.clemson.resolve.plugin.completion.RESOLVECompletionUtil;
 import edu.clemson.resolve.plugin.sdk.RESOLVESdkUtil;
 import edu.clemson.resolve.plugin.util.RESOLVEUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 
 public class ResImportReference extends FileReference {
@@ -28,20 +32,37 @@ public class ResImportReference extends FileReference {
         super(fileReferenceSet, range, index, text);
     }
 
-    @NotNull
-    @Override
-    protected ResolveResult[] innerResolve(boolean caseSensitive, @NotNull PsiFile file) {
+    @Override protected Object createLookupItem(PsiElement candidate) {
+        if (candidate instanceof PsiDirectory) {
+            return RESOLVECompletionUtil
+                    .createDirectoryLookupElement((PsiDirectory) candidate);
+        }
+        return super.createLookupItem(candidate);
+    }
 
+    public PsiFileSystemItem resolve() {
+        PsiDirectory sourceFile = getDirectory();
+        Collection<PsiFileSystemItem> contexts =
+                this.getFileReferenceSet().getDefaultContexts();
 
-       /* for (PsiFile f : file.getContainingDirectory().getFiles()) {
-            if (f.getName().equals(getText())) {
-                return new PsiElementResolveResult[]{
-                        new PsiElementResolveResult(f)};
+        for (PsiFileSystemItem f : contexts) {
+            String text = getText();
+            VirtualFile x = f.getVirtualFile().findChild(getText()+".resolve");
+            if (x == null) continue;
+            PsiFile file = f.getManager().findFile(x);
+            if (file != null) {
+                PsiElementResolveResult result =
+                        new PsiElementResolveResult(FileReference.getOriginalFile(file));
+                return (PsiFileSystemItem) result.getElement();
             }
-        }*/
-        return ResolveResult.EMPTY_ARRAY;
+        }
+        return null;
+    }
 
-        /*if (isLast()) {
+    /*@NotNull @Override protected ResolveResult[] innerResolve(
+            boolean caseSensitive, @NotNull PsiFile file) {
+
+        if (isLast()) {
             List<ResolveResult> filtered = ContainerUtil.filter(super.innerResolve(caseSensitive, file), new Condition<ResolveResult>() {
                 @Override
                 public boolean value(@NotNull ResolveResult resolveResult) {
@@ -51,22 +72,8 @@ public class ResImportReference extends FileReference {
             });
             return filtered.toArray(new ResolveResult[filtered.size()]);
         }
-        return super.innerResolve(caseSensitive, file);*/
-        //first, go all the way up to the psiDirectory housing the whole project
-       /* String projectName = file.getProject().getName();
-        PsiDirectory currentDir = file.getContainingDirectory();
-        if (currentDir == null) return ResolveResult.EMPTY_ARRAY;
-        String currentDirName = currentDir.getName();
-        while (currentDir != null && !currentDirName.equals(projectName)) {
-            currentDir = currentDir.getParentDirectory();
-        }
-
-        if (currentDir == null) return ResolveResult.EMPTY_ARRAY;
-        PsiFile referencedFile = currentDir.findFile(getText()+".resolve");
-        return referencedFile != null ? new PsiElementResolveResult[]{
-                new PsiElementResolveResult(referencedFile)} :
-                ResolveResult.EMPTY_ARRAY;*/
-    }
+        return super.innerResolve(caseSensitive, file);
+    }*/
 
     @Nullable private PsiDirectory getDirectory() {
         PsiElement originalElement = CompletionUtil.getOriginalElement(getElement());

@@ -12,20 +12,10 @@ import edu.clemson.resolve.plugin.psi.ResUsesItem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Created by daniel on 10/6/15.
- */
 public class ResUsesReferenceSet extends FileReferenceSet {
-    public ResUsesReferenceSet(String str, @NotNull PsiElement element, int startInElement, PsiReferenceProvider provider, boolean caseSensitive, boolean endingSlashNotAllowed, @Nullable FileType[] suitableFileTypes) {
-        super(str, element, startInElement, provider, caseSensitive, endingSlashNotAllowed, suitableFileTypes);
-    }
 
     public ResUsesReferenceSet(@NotNull ResUsesItem usesItem) {
         super(usesItem.getText(), usesItem, usesItem.getTextOffset(), null, true);
-    }
-
-    @Nullable @Override public PsiFileSystemItem resolve() {
-        return super.resolve();
     }
 
     @NotNull @Override public FileReference createFileReference(TextRange range,
