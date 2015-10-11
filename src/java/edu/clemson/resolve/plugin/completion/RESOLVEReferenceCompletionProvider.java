@@ -78,10 +78,11 @@ public class RESOLVEReferenceCompletionProvider
                 return RESOLVECompletionUtil.createTypeLookupElement((ResAbstractTypeDecl)o);
                        // : GoCompletionUtil.createTypeConversionLookupElement((GoTypeSpec)o);
             }
+            else {
+                return RESOLVECompletionUtil.createVariableLikeLookupElement((ResNamedElement) o);
+            }
         }
-       else {
-            return RESOLVECompletionUtil.createVariableLikeLookupElement((ResNamedElement)o);
-       }
+
         return null;
     }
 
