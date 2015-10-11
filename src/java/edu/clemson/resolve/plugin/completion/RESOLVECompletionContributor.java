@@ -17,8 +17,6 @@ public class RESOLVECompletionContributor extends CompletionContributor {
                 new RESOLVEUsesCompletionProvider());
         extend(CompletionType.BASIC, referenceExpression(),
                 new RESOLVEReferenceCompletionProvider());
-        extend(CompletionType.BASIC, stmtRefExpression(),
-                new RESOLVEReferenceCompletionProvider());
     }
 
     private static PsiElementPattern.Capture<PsiElement> usesItem() {
@@ -31,17 +29,5 @@ public class RESOLVECompletionContributor extends CompletionContributor {
         return PlatformPatterns
                 .psiElement()
                 .withParent(ResReferenceExpressionBase.class);
-    }
-
-    /**
-     * since I'm awful at writing these patterns, I've split out this pattern
-     * to a separate rule extension. Basically this one gets accepted for
-     * under construction stmts (e.g.: those without the operator written yet)
-     * so we get variable completion for the lhs.
-     * @return
-     */
-    private static PsiElementPattern.Capture<PsiElement> stmtRefExpression() {
-        return PlatformPatterns.psiElement()
-                .withParent(PlatformPatterns.psiElement(ConstEleTypes.STMT));
     }
 }

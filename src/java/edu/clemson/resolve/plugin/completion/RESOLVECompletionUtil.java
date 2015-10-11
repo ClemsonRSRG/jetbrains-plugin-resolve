@@ -42,7 +42,7 @@ public class RESOLVECompletionUtil {
             ResNamedElement v = (ResNamedElement)o;
             ResType type = v.getResType(null);
             String text = ResPsiImplUtil.getText(type);
-            Icon icon = v instanceof ResVarDefinition ? RESOLVEIcons.MODULE : //RESOLVEIcons.VARIABLE
+            Icon icon = v instanceof ResVarDefinition ? RESOLVEIcons.VARIABLE :
                     /*v instanceof GoParamDefinition ? GoIcons.PARAMETER :
                             v instanceof GoFieldDefinition ? GoIcons.FIELD :
                                     v instanceof GoReceiver ? GoIcons.RECEIVER :
@@ -61,9 +61,9 @@ public class RESOLVECompletionUtil {
     @Nullable private static String calcTailTextForFields(
             @NotNull ResNamedElement v) {
         String name = null;
-       /* if (v instanceof GoFieldDefinition) {
-            GoFieldDefinitionStub stub = ((GoFieldDefinition)v).getStub();
-            GoTypeSpec spec = stub != null ? stub.getParentStubOfType(GoTypeSpec.class) : PsiTreeUtil.getParentOfType(v, GoTypeSpec.class);
+       /* if (v instanceof ResFieldDefinition) {
+            ResFieldDefinitionStub stub = ((ResFieldDefinition)v).getStub();
+            ResAbstractNamedType spec = stub != null ? stub.getParentStubOfType(ResAbstractNamedType.class) : PsiTreeUtil.getParentOfType(v, ResAbstractNamedType.class);
             name = spec != null ? spec.getName() : null;
         }*/
         return StringUtil.isNotEmpty(name) ? " " + UIUtil.rightArrow() + " " + name : null;
@@ -83,7 +83,7 @@ public class RESOLVECompletionUtil {
             double priority) {
         LookupElementBuilder builder =
                 LookupElementBuilder.createWithSmartPointer(lookupString, t)
-                    .withInsertHandler(handler).withIcon(RESOLVEIcons.MODULE);
+                    .withInsertHandler(handler).withIcon(RESOLVEIcons.REPR_TYPE);
         if (importPath != null) builder =
                 builder.withTailText(" " + importPath, true);
         return PrioritizedLookupElement.withPriority(builder, priority);

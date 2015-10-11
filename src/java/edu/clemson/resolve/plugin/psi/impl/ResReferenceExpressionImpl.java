@@ -18,11 +18,11 @@ public class ResReferenceExpressionImpl
         super(node);
     }
 
-    @Override @NotNull public PsiElement getIdentifier() {
-        return findNotNullChildByType(ConstEleTypes.ID);
+    @Override @Nullable public PsiElement getIdentifier() {
+        return findChildByType(ConstEleTypes.ID);
     }
 
-    @NotNull public ResReference getReference() {
+    @Nullable public ResReference getReference() {
         return ResPsiImplUtil.getReference(this);
     }
 
@@ -32,7 +32,7 @@ public class ResReferenceExpressionImpl
 
     @Nullable public ResType getResType(ResolveState context) {
         System.out.println("DON'T FORGET TO IMPLEMENT getResType for ResReferenceExpressionImpl");
-        return ResPsiImplUtil.getGoType(this, context);
+        return ResPsiImplUtil.getResType(this, context);
     }
 
     public static class Factory implements PsiElementFactory {

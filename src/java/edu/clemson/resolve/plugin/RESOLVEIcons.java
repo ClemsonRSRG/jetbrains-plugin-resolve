@@ -19,6 +19,10 @@ public interface RESOLVEIcons {
     public static final Icon IMPL = IconLoader.getIcon("/edu/clemson/resolve/icons/implementation.png");
     public static final Icon PRECIS = IconLoader.getIcon("/edu/clemson/resolve/icons/precis.png");
     public static final Icon PRECIS_EXTENSION = IconLoader.getIcon("/edu/clemson/resolve/icons/precis_extension.png");
+    public static final Icon REPR_TYPE =        IconLoader.getIcon("/edu/clemson/resolve/icons/type_repr.png");
+    public static final Icon VARIABLE = AllIcons.Nodes.Variable;
+    public static final Icon FIELD = AllIcons.Nodes.Field;
+
     public static final Icon APPLICATION_RUN = Helper.createIconWithShift(MODULE, AllIcons.Nodes.RunnableMark);
 
     class Helper {

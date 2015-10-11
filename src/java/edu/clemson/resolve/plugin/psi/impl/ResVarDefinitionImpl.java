@@ -3,7 +3,9 @@ package edu.clemson.resolve.plugin.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.ResolveState;
 import edu.clemson.resolve.plugin.ConstEleTypes;
+import edu.clemson.resolve.plugin.psi.ResType;
 import edu.clemson.resolve.plugin.psi.ResVarDefinition;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
@@ -22,6 +24,10 @@ public class ResVarDefinitionImpl
 
     @Nullable public PsiReference getReference() {
         return null;
+    }
+
+    @Nullable public ResType getResTypeInner(ResolveState context) {
+        return ResPsiImplUtil.getResTypeInner(this, context);
     }
 
     public static class Factory implements PsiElementFactory {

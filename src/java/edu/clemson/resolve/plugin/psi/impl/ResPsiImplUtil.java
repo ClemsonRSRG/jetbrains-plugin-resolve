@@ -2,16 +2,10 @@ package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
 import edu.clemson.resolve.plugin.psi.*;
-import edu.clemson.resolve.plugin.psi.impl.uses.ResImportReference;
 import edu.clemson.resolve.plugin.psi.impl.uses.ResUsesReferenceSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -40,6 +34,13 @@ public class ResPsiImplUtil {
         return new ResUsesReferenceSet(o).getAllReferences();
     }
 
+    @Nullable public static PsiReference getReference(
+            @NotNull ResUsesItem o) {
+        PsiReference[] refs = getReferences(o);
+        if (refs.length == 0) return null;
+        else return refs[0];
+    }
+
     @NotNull public static TextRange getUsesTextRange(
             @NotNull ResUsesItem usesItem) {
         String text = usesItem.getText();
@@ -47,17 +48,17 @@ public class ResPsiImplUtil {
                 TextRange.EMPTY_RANGE;
     }
 
-    @Nullable public static ResType getGoType(@NotNull final ResExpression o,
-                                              @Nullable ResolveState context) {
+    @Nullable public static ResType getResType(@NotNull final ResExpression o,
+                                               @Nullable ResolveState context) {
         return null; //TODO TODO TODO
     }
 
-    @NotNull public static ResReference getReference(
-            @NotNull ResReferenceExpression o) {
+    @Nullable public static ResReference getReference(ResReferenceExpression o) {
+        if (o == null || o.getIdentifier() == null) return null;
         return new ResReference(o);
     }
 
-    @NotNull public static PsiReference getReference(
+    @Nullable public static PsiReference getReference(
             @NotNull ResTypeReferenceExpression o) {
         return new ResTypeReference(o);
     }
@@ -68,8 +69,8 @@ public class ResPsiImplUtil {
     }
 
     /** ok, in the go plugin don't be fooled by the seeming lack of connection between
-     *  GoImportReferenceHelper and GoFileContextProvider -- these are responsible
-     *  for setting getDefaultContext to "src/go/" etc...
+     *  ImportReferenceHelper and the FileContextProvider -- these are responsible
+     *  for setting getDefaultContext to "resolve/src/" etc...
      */
     @Nullable public static PsiFile resolve(@NotNull ResUsesItem usesItem) {
        PsiReference[] references = usesItem.getReferences();
@@ -77,9 +78,18 @@ public class ResPsiImplUtil {
             if (reference instanceof FileReferenceOwner) {
                 PsiFileReference lastFileReference = ((FileReferenceOwner)reference).getLastFileReference();
                 PsiElement result = lastFileReference != null ? lastFileReference.resolve() : null;
-                PsiFile x = result instanceof PsiFile ? (PsiFile)result : null;
-                return x;
+                return result instanceof PsiFile ? (PsiFile)result : null;
             }
+        }
+        return null;
+    }
+
+    @Nullable public static ResType getResTypeInner(
+            @NotNull ResVarDefinition o, @Nullable ResolveState context) {
+        PsiElement parent = o.getParent();
+
+        if (parent instanceof ResVarDeclGroup) {
+            return ((ResVarDeclGroup)parent).getType();
         }
         return null;
     }

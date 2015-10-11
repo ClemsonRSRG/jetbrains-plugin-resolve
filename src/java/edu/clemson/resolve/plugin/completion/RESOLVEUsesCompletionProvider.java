@@ -19,10 +19,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import edu.clemson.resolve.plugin.RESOLVEFileType;
 import edu.clemson.resolve.plugin.RESOLVEIcons;
+import edu.clemson.resolve.plugin.psi.ResFile;
+import edu.clemson.resolve.plugin.psi.ResModule;
 import edu.clemson.resolve.plugin.psi.ResUsesItem;
 import edu.clemson.resolve.plugin.util.RESOLVEUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
 
 public class RESOLVEUsesCompletionProvider
         extends
@@ -64,12 +68,20 @@ public class RESOLVEUsesCompletionProvider
                     RESOLVEUtil.moduleScopeWithoutLibraries(module);
             for (VirtualFile file : FileTypeIndex
                     .getFiles(RESOLVEFileType.INSTANCE, scope)) {
-                //TODO: Explore this line below more for finding icons..
-                //PsiManager.getInstance(module.getProject()).findFile(file);
-                result.addElement(LookupElementBuilder.create(file.getNameWithoutExtension()).
-                        withIcon(RESOLVEIcons.FILE).
-                        withTypeText(file.getName()));
+
+                Icon fileIcon = RESOLVEIcons.FILE;
+                PsiFile psiFile = PsiManager.getInstance(module.getProject()).findFile(file);
+                if (psiFile != null && psiFile instanceof ResFile) {
+                    ResModule enclosedModule =
+                            ((ResFile) psiFile).getEnclosedModule();
+                    if (enclosedModule != null) fileIcon = enclosedModule.getIcon(0);
+                }
+                result.addElement(LookupElementBuilder
+                        .create(file.getNameWithoutExtension())
+                        .withIcon(fileIcon).withTypeText(file.getName()));
             }
         }
     }
+
+
 }

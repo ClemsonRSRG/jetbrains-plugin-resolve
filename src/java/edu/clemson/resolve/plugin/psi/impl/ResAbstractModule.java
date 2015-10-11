@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
+
 public abstract class ResAbstractModule
         extends
             ResCompositeElementImpl implements ResModule {
@@ -36,6 +38,8 @@ public abstract class ResAbstractModule
     @Override public PsiReference getReference() {
         return null;
     }
+
+    @NotNull @Override public abstract Icon getIcon(int i);
 
     @Override public boolean isPublic() {
         return true;
