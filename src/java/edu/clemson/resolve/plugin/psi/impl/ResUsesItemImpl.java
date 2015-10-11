@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class ResUsesItemImpl
         extends
-            ResNamedElementImpl implements ResUsesItem {
+            ResCompositeElementImpl implements ResUsesItem {
 
     public ResUsesItemImpl(ASTNode node) {
         super(node);
@@ -29,6 +29,10 @@ public class ResUsesItemImpl
 
     @NotNull public PsiReference[] getReferences() {
         return ResPsiImplUtil.getReferences(this);
+    }
+
+    @NotNull @Override public PsiReference getReference() {
+        return ResPsiImplUtil.getReference(this);
     }
 
     @Nullable public PsiFile resolve() {
