@@ -10,14 +10,13 @@ import com.intellij.psi.stubs.IStubElementType;
 import edu.clemson.resolve.plugin.RESOLVETokenTypes;
 import edu.clemson.resolve.plugin.parser.ResolveLexer;
 import edu.clemson.resolve.plugin.psi.ResUsesItem;
-import edu.clemson.resolve.plugin.stubs.ResUsesItemStub;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ResUsesItemImpl
         extends
-            ResNamedElementImpl<ResUsesItemStub> implements ResUsesItem {
+            ResNamedElementImpl implements ResUsesItem {
 
     public ResUsesItemImpl(ASTNode node) {
         super(node);

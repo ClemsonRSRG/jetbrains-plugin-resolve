@@ -2,18 +2,15 @@ package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.ResolveState;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import edu.clemson.resolve.plugin.ConstTokenTypes;
+import edu.clemson.resolve.plugin.ConstEleTypes;
 import edu.clemson.resolve.plugin.psi.ResOperationProcedureDeclaration;
 import edu.clemson.resolve.plugin.psi.ResType;
-import edu.clemson.resolve.plugin.stubs.ResOperationProcedureDeclarationStub;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ResOperationProcedureDeclarationImpl
-        extends ResNamedElementImpl<ResOperationProcedureDeclarationStub<?>>
+        extends ResNamedElementImpl
         implements ResOperationProcedureDeclaration {
 
     public ResOperationProcedureDeclarationImpl(@NotNull ASTNode node) {
@@ -21,7 +18,7 @@ public class ResOperationProcedureDeclarationImpl
     }
 
     @Override @NotNull public PsiElement getIdentifier() {
-        return findNotNullChildByType(ConstTokenTypes.ID);
+        return findNotNullChildByType(ConstEleTypes.ID);
     }
 
     @Override @Nullable public ResType getType() {

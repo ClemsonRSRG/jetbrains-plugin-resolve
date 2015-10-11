@@ -3,22 +3,21 @@ package edu.clemson.resolve.plugin.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
-import edu.clemson.resolve.plugin.ConstTokenTypes;
+import edu.clemson.resolve.plugin.ConstEleTypes;
 import edu.clemson.resolve.plugin.psi.ResVarDefinition;
-import edu.clemson.resolve.plugin.stubs.ResVarDefinitionStub;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ResVarDefinitionImpl
         extends
-            ResNamedElementImpl<ResVarDefinitionStub> implements ResVarDefinition {
+            ResNamedElementImpl implements ResVarDefinition {
     public ResVarDefinitionImpl(@NotNull ASTNode node) {
         super(node);
     }
 
     @NotNull @Override public PsiElement getIdentifier() {
-        return findNotNullChildByType(ConstTokenTypes.ID);
+        return findNotNullChildByType(ConstEleTypes.ID);
     }
 
     @Nullable public PsiReference getReference() {

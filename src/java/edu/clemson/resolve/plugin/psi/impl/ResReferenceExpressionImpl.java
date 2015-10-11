@@ -3,7 +3,7 @@ package edu.clemson.resolve.plugin.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
-import edu.clemson.resolve.plugin.ConstTokenTypes;
+import edu.clemson.resolve.plugin.ConstEleTypes;
 import edu.clemson.resolve.plugin.psi.ResReferenceExpression;
 import edu.clemson.resolve.plugin.psi.ResType;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
@@ -12,14 +12,14 @@ import org.jetbrains.annotations.Nullable;
 
 public class ResReferenceExpressionImpl
         extends
-            ResCompositeElementImpl implements ResReferenceExpression {
+            AbstractResExpressionImpl implements ResReferenceExpression {
 
     public ResReferenceExpressionImpl(@NotNull ASTNode node) {
         super(node);
     }
 
     @Override @NotNull public PsiElement getIdentifier() {
-        return findNotNullChildByType(ConstTokenTypes.ID);
+        return findNotNullChildByType(ConstEleTypes.ID);
     }
 
     @NotNull public ResReference getReference() {

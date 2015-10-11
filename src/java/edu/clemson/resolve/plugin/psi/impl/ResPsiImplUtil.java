@@ -18,6 +18,23 @@ import org.jetbrains.annotations.Nullable;
 
 public class ResPsiImplUtil {
 
+    @NotNull public static String getText(@Nullable ResType o) {
+        if (o == null) return "";
+        boolean s = o instanceof ResRecordType;
+        if (s) {
+            PsiElement parent = o.getParent();
+            if (parent instanceof ResAbstractTypeDecl) {
+                String n = ((ResAbstractTypeDecl)parent).getName();
+                String p = ((ResAbstractTypeDecl)parent).getContainingFile().getName();
+                if (n != null && p != null) return p + "::" + n;
+            }
+            return s ? "record {...}" : "";
+        }
+        String text = o.getText();
+        if (text == null) return "";
+        return text.replaceAll("\\s+", " ");
+    }
+
     @NotNull public static PsiReference[] getReferences(
             @NotNull ResUsesItem o) {
         return new ResUsesReferenceSet(o).getAllReferences();

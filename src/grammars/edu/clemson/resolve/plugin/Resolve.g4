@@ -216,8 +216,8 @@ variableDeclGroup
 
 stmt
     :   assignStmt
-    |   swapStmt
-    |   callStmt
+//    |   swapStmt
+//    |   callStmt
     |   whileStmt
     |   ifStmt
     ;

@@ -79,6 +79,9 @@ public class RESOLVEReferenceCompletionProvider
                        // : GoCompletionUtil.createTypeConversionLookupElement((GoTypeSpec)o);
             }
         }
+       else {
+            return RESOLVECompletionUtil.createVariableLikeLookupElement((ResNamedElement)o);
+       }
         return null;
     }
 

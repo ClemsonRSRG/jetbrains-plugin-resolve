@@ -3,6 +3,7 @@ package edu.clemson.resolve.plugin.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
+import com.intellij.psi.impl.PsiElementBase;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiModificationTracker;
@@ -11,13 +12,12 @@ import com.intellij.util.IncorrectOperationException;
 import edu.clemson.resolve.plugin.psi.ResCompositeElement;
 import edu.clemson.resolve.plugin.psi.ResNamedElement;
 import edu.clemson.resolve.plugin.psi.ResType;
-import edu.clemson.resolve.plugin.stubs.ResNamedStub;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class ResNamedElementImpl<T extends ResNamedStub<?>>
+public abstract class ResNamedElementImpl
         extends
-            ResStubbedElementImpl<T> implements ResCompositeElement, ResNamedElement {
+            ResCompositeElementImpl implements ResCompositeElement, ResNamedElement {
 
     public ResNamedElementImpl(@NotNull ASTNode node) {
         super(node);

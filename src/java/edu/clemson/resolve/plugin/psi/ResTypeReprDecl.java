@@ -6,9 +6,7 @@ import com.intellij.psi.StubBasedPsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface ResTypeReprDecl
-        extends
-            ResNamedElement, StubBasedPsiElement {
+public interface ResTypeReprDecl extends ResNamedElement {
 
     @NotNull ResType getType();
 

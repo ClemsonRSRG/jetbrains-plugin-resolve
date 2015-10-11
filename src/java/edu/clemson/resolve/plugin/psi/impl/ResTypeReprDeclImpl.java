@@ -2,7 +2,7 @@ package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
-import edu.clemson.resolve.plugin.ConstTokenTypes;
+import edu.clemson.resolve.plugin.ConstEleTypes;
 import edu.clemson.resolve.plugin.psi.ResType;
 import edu.clemson.resolve.plugin.psi.ResTypeReprDecl;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
@@ -20,7 +20,7 @@ public class ResTypeReprDeclImpl extends ResAbstractTypeDecl
     }
 
     @NotNull @Override public PsiElement getIdentifier() {
-        return findNotNullChildByType(ConstTokenTypes.ID);
+        return findNotNullChildByType(ConstEleTypes.ID);
     }
 
     public static class Factory implements PsiElementFactory {
