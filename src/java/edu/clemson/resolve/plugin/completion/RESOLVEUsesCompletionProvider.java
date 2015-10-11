@@ -13,6 +13,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -32,11 +33,33 @@ public class RESOLVEUsesCompletionProvider
         extends
             CompletionProvider<CompletionParameters> {
 
+    @Override protected void addCompletions(
+            @NotNull CompletionParameters completionParameters,
+            ProcessingContext processingContext,
+            @NotNull CompletionResultSet completionResultSet) {
+        ResUsesItem usesItem = PsiTreeUtil.getParentOfType(
+                completionParameters.getPosition(), ResUsesItem.class);
+        if (usesItem != null) {
+            fillVariantsByReference(usesItem.getReference(),
+                    completionResultSet.withPrefixMatcher(
+                            RESOLVEReferenceCompletionProvider.
+                                    createPrefixMatcher(completionResultSet
+                                            .getPrefixMatcher())));
+        }
+    }
+
+    private static void fillVariantsByReference(
+            @Nullable PsiReference reference,
+            @NotNull CompletionResultSet result) {
+        if (reference == null) return;
+
+    }
+
     /** We fiddle around with TextRange so much in here to strip out the
      *  "Intellijidearulezzz" suffix that the completion provider apparently
      *  always feels the need to tack on.
      */
-    @Override protected void addCompletions(
+   /* @Override protected void addCompletions(
             @NotNull CompletionParameters parameters,
             ProcessingContext context,
             @NotNull CompletionResultSet result) {
@@ -81,7 +104,6 @@ public class RESOLVEUsesCompletionProvider
                         .withIcon(fileIcon).withTypeText(file.getName()));
             }
         }
-    }
-
+    }*/
 
 }
