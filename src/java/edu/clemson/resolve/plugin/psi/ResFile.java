@@ -65,7 +65,6 @@ public class ResFile extends PsiFileBase {
     @NotNull public List<ResAbstractTypeDecl> getTypes() {
         ResModule x = getEnclosedModule();
         if (x == null) return new ArrayList<ResAbstractTypeDecl>();
-        List<ResAbstractTypeDecl> z = calcTypes();
         return CachedValuesManager.getCachedValue(this,
                 new CachedValueProvider<List<ResAbstractTypeDecl>>() {
                     @Override
