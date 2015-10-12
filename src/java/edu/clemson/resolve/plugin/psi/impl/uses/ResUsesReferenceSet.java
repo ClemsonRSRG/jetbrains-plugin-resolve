@@ -1,16 +1,10 @@
 package edu.clemson.resolve.plugin.psi.impl.uses;
 
-import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFileSystemItem;
-import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
 import edu.clemson.resolve.plugin.psi.ResUsesItem;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class ResUsesReferenceSet extends FileReferenceSet {
 
@@ -21,6 +15,6 @@ public class ResUsesReferenceSet extends FileReferenceSet {
     @NotNull @Override public FileReference createFileReference(TextRange range,
                                                                 int index,
                                                                 String text) {
-        return new ResImportReference(this, range, index, text);
+        return new ResUsesReference(this, range, index, text);
     }
 }

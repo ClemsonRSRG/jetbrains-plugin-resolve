@@ -50,17 +50,44 @@ public class ResFile extends PsiFileBase {
         return PsiTreeUtil.findChildrenOfType(getEnclosedModule(), ResUsesItem.class);
     }
 
+    @NotNull public List<ResFacilityDecl> getFacilities() {
+        ResModule x = getEnclosedModule();
+        if (x == null) return new ArrayList<ResFacilityDecl>();
+        return CachedValuesManager.getCachedValue(this,
+                new CachedValueProvider<List<ResFacilityDecl>>() {
+                    @Override
+                    public Result<List<ResFacilityDecl>> compute() {
+                        return Result.create(calcFacilities(), ResFile.this);
+                    }
+                });
+    }
+
     @NotNull public List<ResAbstractTypeDecl> getTypes() {
         ResModule x = getEnclosedModule();
         if (x == null) return new ArrayList<ResAbstractTypeDecl>();
-        List<ResAbstractTypeDecl> types = CachedValuesManager.getCachedValue(this,
+        List<ResAbstractTypeDecl> z = calcTypes();
+        return CachedValuesManager.getCachedValue(this,
                 new CachedValueProvider<List<ResAbstractTypeDecl>>() {
                     @Override
                     public Result<List<ResAbstractTypeDecl>> compute() {
                         return Result.create(calcTypes(), ResFile.this);
                     }
                 });
-        return types;
+    }
+
+    @NotNull private List<ResFacilityDecl> calcFacilities() {
+        final List<ResFacilityDecl> result = ContainerUtil.newArrayList();
+        ResModule module = getEnclosedModule();
+        if (module == null) return new ArrayList<ResFacilityDecl>();
+        if (module.getBlock() == null) return new ArrayList<ResFacilityDecl>();
+        processChildrenDummyAware(module.getBlock(), new Processor<PsiElement>() {
+            @Override
+            public boolean process(PsiElement e) {
+                if (e instanceof ResFacilityDecl) result.add((ResFacilityDecl)e);
+                return true;
+            }
+        });
+        return result;
     }
 
     @NotNull private List<ResAbstractTypeDecl> calcTypes() {
@@ -71,9 +98,7 @@ public class ResFile extends PsiFileBase {
         processChildrenDummyAware(module.getBlock(), new Processor<PsiElement>() {
             @Override
             public boolean process(PsiElement e) {
-                if (e instanceof ResAbstractTypeDecl) {
-                        result.add((ResAbstractTypeDecl)e);
-                }
+                if (e instanceof ResAbstractTypeDecl) result.add((ResAbstractTypeDecl)e);
                 return true;
             }
         });

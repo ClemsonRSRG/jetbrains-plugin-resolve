@@ -1,5 +1,6 @@
 package edu.clemson.resolve.plugin.psi.impl.uses;
 
+import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionUtil;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.Condition;
@@ -17,6 +18,11 @@ import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.plugin.RESOLVEFileType;
 import edu.clemson.resolve.plugin.RESOLVEIcons;
 import edu.clemson.resolve.plugin.completion.RESOLVECompletionUtil;
+import edu.clemson.resolve.plugin.psi.ResCompositeElement;
+import edu.clemson.resolve.plugin.psi.ResFile;
+import edu.clemson.resolve.plugin.psi.ResTypeReferenceExpression;
+import edu.clemson.resolve.plugin.psi.ResUsesItem;
+import edu.clemson.resolve.plugin.psi.impl.scopeprocessing.ResScopeProcessor;
 import edu.clemson.resolve.plugin.sdk.RESOLVESdkUtil;
 import edu.clemson.resolve.plugin.util.RESOLVEUtil;
 import org.jetbrains.annotations.NotNull;
@@ -25,10 +31,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.List;
 
-public class ResImportReference extends FileReference {
+public class ResUsesReference extends FileReference {
 
-    public ResImportReference(@NotNull FileReferenceSet fileReferenceSet,
-                              TextRange range, int index, String text) {
+    public ResUsesReference(@NotNull FileReferenceSet fileReferenceSet,
+                            TextRange range, int index, String text) {
         super(fileReferenceSet, range, index, text);
     }
 
@@ -50,6 +56,7 @@ public class ResImportReference extends FileReference {
             VirtualFile x = f.getVirtualFile().findChild(getText()+".resolve");
             if (x == null) continue;
             PsiFile file = f.getManager().findFile(x);
+
             if (file != null) {
                 PsiElementResolveResult result =
                         new PsiElementResolveResult(FileReference.getOriginalFile(file));
@@ -59,21 +66,10 @@ public class ResImportReference extends FileReference {
         return null;
     }
 
-    /*@NotNull @Override protected ResolveResult[] innerResolve(
-            boolean caseSensitive, @NotNull PsiFile file) {
+    public boolean processResolveVariants(@NotNull CompletionResultSet set) {
 
-        if (isLast()) {
-            List<ResolveResult> filtered = ContainerUtil.filter(super.innerResolve(caseSensitive, file), new Condition<ResolveResult>() {
-                @Override
-                public boolean value(@NotNull ResolveResult resolveResult) {
-                    PsiElement element = resolveResult.getElement();
-                    return element != null && element instanceof PsiDirectory;
-                }
-            });
-            return filtered.toArray(new ResolveResult[filtered.size()]);
-        }
-        return super.innerResolve(caseSensitive, file);
-    }*/
+        return false;
+    }
 
     @Nullable private PsiDirectory getDirectory() {
         PsiElement originalElement = CompletionUtil.getOriginalElement(getElement());

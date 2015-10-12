@@ -8,7 +8,4 @@ import org.jetbrains.annotations.Nullable;
 
 public interface ResTypeReprDecl extends ResNamedElement {
 
-    @NotNull ResType getType();
-
-    @NotNull PsiElement getIdentifier();
 }

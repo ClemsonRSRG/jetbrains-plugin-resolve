@@ -2,17 +2,15 @@ package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
-import edu.clemson.resolve.plugin.ConstEleTypes;
-import edu.clemson.resolve.plugin.psi.ResType;
-import edu.clemson.resolve.plugin.psi.ResTypeReprDecl;
+import edu.clemson.resolve.plugin.psi.ResTypeModelDecl;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 
-public class ResTypeReprDeclImpl
+public class ResTypeModelDeclImpl
         extends
-            ResAbstractTypeDecl implements ResTypeReprDecl {
+            ResAbstractTypeDecl implements ResTypeModelDecl {
 
-    public ResTypeReprDeclImpl(@NotNull ASTNode node) {
+    public ResTypeModelDeclImpl(@NotNull ASTNode node) {
         super(node);
     }
 
@@ -20,7 +18,7 @@ public class ResTypeReprDeclImpl
         public static Factory INSTANCE = new Factory();
 
         @Override public PsiElement createElement(ASTNode node) {
-            return new ResTypeReprDeclImpl(node);
+            return new ResTypeModelDeclImpl(node);
         }
     }
 }

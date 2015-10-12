@@ -1,10 +1,8 @@
 package edu.clemson.resolve.plugin;
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTFactory;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.impl.source.tree.CompositeElement;
 import com.intellij.psi.impl.source.tree.FileElement;
 import com.intellij.psi.impl.source.tree.LeafElement;
@@ -12,12 +10,7 @@ import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import edu.clemson.resolve.plugin.parser.Resolve;
-import edu.clemson.resolve.plugin.psi.ResBlock;
-import edu.clemson.resolve.plugin.psi.ResRecordType;
-import edu.clemson.resolve.plugin.psi.ResTypeReprDecl;
-import edu.clemson.resolve.plugin.psi.ResVarDeclGroup;
 import edu.clemson.resolve.plugin.psi.impl.*;
-import org.antlr.intellij.adaptor.lexer.RuleElementType;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,6 +23,9 @@ public class RESOLVEASTFactory extends ASTFactory {
     static {
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_precisModule), ResPrecisModule.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_facilityModule), ResFacilityModule.Factory.INSTANCE);
+        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_conceptModule), ResConceptModule.Factory.INSTANCE);
+        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_conceptBlock), ResBlockImpl.Factory.INSTANCE);
+
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_usesItem), ResUsesItemImpl.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_operationProcedureDecl), ResOperationProcedureDeclarationImpl.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_type), ResTypeReferenceExpressionImpl.Factory.INSTANCE);
@@ -38,6 +34,12 @@ public class RESOLVEASTFactory extends ASTFactory {
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_variableDeclGroup), ResVarDeclGroupImpl.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_variableDef), ResVarDefinitionImpl.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_progVarExp), ResAbstractVarExpOptions.Factory.INSTANCE);
+        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_facilityDecl), ResFacilityDeclImpl.Factory.INSTANCE);
+        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_qualifier), ResTypeReferenceExpressionImpl.Factory.INSTANCE);
+        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_spec), ResUsesItemImpl.Factory.INSTANCE);
+        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_spec), ResUsesItemImpl.Factory.INSTANCE);
+
+        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_typeModelDecl), ResTypeModelDeclImpl.Factory.INSTANCE);
 
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_progNamedExp), ResReferenceExpressionImpl.Factory.INSTANCE);
 

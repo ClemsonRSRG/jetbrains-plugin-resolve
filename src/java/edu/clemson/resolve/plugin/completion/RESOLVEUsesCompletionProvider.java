@@ -6,14 +6,9 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiReference;
+import com.intellij.psi.*;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -23,6 +18,9 @@ import edu.clemson.resolve.plugin.RESOLVEIcons;
 import edu.clemson.resolve.plugin.psi.ResFile;
 import edu.clemson.resolve.plugin.psi.ResModule;
 import edu.clemson.resolve.plugin.psi.ResUsesItem;
+import edu.clemson.resolve.plugin.psi.impl.ResReference;
+import edu.clemson.resolve.plugin.psi.impl.ResTypeReference;
+import edu.clemson.resolve.plugin.psi.impl.uses.ResUsesReference;
 import edu.clemson.resolve.plugin.util.RESOLVEUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,33 +31,11 @@ public class RESOLVEUsesCompletionProvider
         extends
             CompletionProvider<CompletionParameters> {
 
-    @Override protected void addCompletions(
-            @NotNull CompletionParameters completionParameters,
-            ProcessingContext processingContext,
-            @NotNull CompletionResultSet completionResultSet) {
-        ResUsesItem usesItem = PsiTreeUtil.getParentOfType(
-                completionParameters.getPosition(), ResUsesItem.class);
-        if (usesItem != null) {
-            fillVariantsByReference(usesItem.getReference(),
-                    completionResultSet.withPrefixMatcher(
-                            RESOLVEReferenceCompletionProvider.
-                                    createPrefixMatcher(completionResultSet
-                                            .getPrefixMatcher())));
-        }
-    }
-
-    private static void fillVariantsByReference(
-            @Nullable PsiReference reference,
-            @NotNull CompletionResultSet result) {
-        if (reference == null) return;
-
-    }
-
     /** We fiddle around with TextRange so much in here to strip out the
      *  "Intellijidearulezzz" suffix that the completion provider apparently
      *  always feels the need to tack on.
      */
-   /* @Override protected void addCompletions(
+    @Override protected void addCompletions(
             @NotNull CompletionParameters parameters,
             ProcessingContext context,
             @NotNull CompletionResultSet result) {
@@ -104,6 +80,6 @@ public class RESOLVEUsesCompletionProvider
                         .withIcon(fileIcon).withTypeText(file.getName()));
             }
         }
-    }*/
+    }
 
 }

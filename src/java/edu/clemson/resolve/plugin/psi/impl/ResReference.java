@@ -111,6 +111,7 @@ public class ResReference
             //works the rest of the time...
             PsiFile resolvedFile = u.resolve();
             if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
+            if (!processor.execute(((ResFile) resolvedFile).getEnclosedModule(), state.put(ACTUAL_NAME, u.getText()))) return true;
             if (!processFileEntities((ResFile)resolvedFile, processor, state, false)) return false;
         }
         return true;
@@ -122,7 +123,10 @@ public class ResReference
                                               boolean localResolve) {
         ResScopeProcessorBase delegate = createDelegate(processor);
         ResolutionUtil.treeWalkUp(myElement, delegate);
+ //       if (processUsesRequests(file, processor, state, myElement)) return false;
+
         if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
+
         return true;
     }
 
@@ -133,6 +137,7 @@ public class ResReference
         //if (!processNamedElements(processor, state, file.getConstants(), localProcessing)) return false;
         //if (!processNamedElements(processor, state, file.getVars(), localProcessing)) return false;
         //if (!processNamedElements(processor, state, file.getFunctions(), localProcessing)) return false;
+        if (!processNamedElements(processor, state, file.getFacilities(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
         return true;
     }

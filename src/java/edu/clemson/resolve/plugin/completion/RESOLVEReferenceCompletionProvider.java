@@ -17,6 +17,7 @@ import edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeDecl;
 import edu.clemson.resolve.plugin.psi.impl.ResReference;
 import edu.clemson.resolve.plugin.psi.impl.ResTypeReference;
 import edu.clemson.resolve.plugin.psi.impl.scopeprocessing.ResScopeProcessor;
+import edu.clemson.resolve.plugin.psi.impl.uses.ResUsesReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

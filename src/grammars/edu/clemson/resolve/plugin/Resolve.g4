@@ -358,15 +358,18 @@ mathVariableDecl
 // facilitydecls, enhancements, etc
 
 facilityDecl
-    :   FACILITY name=ID IS spec=ID (LT type (COMMA type)* GT)?
+    :   FACILITY name=ID IS spec (LT type (COMMA type)* GT)?
         (specArgs=moduleArgumentList)? (externally=EXTERNALLY)? IMPLEMENTED
-        BY impl=ID (implArgs=moduleArgumentList)? (enhancementPairDecl)* SEMI
+        BY impl (implArgs=moduleArgumentList)? (enhancementPairDecl)* SEMI
     ;
 
+spec : ID ;
+impl : ID ;
+
 enhancementPairDecl
-    :   EXTENDED BY spec=ID (LT type (COMMA type)* GT)?
+    :   EXTENDED BY spec (LT type (COMMA type)* GT)?
         (specArgs=moduleArgumentList)?
-        (externally=EXTERNALLY)? IMPLEMENTED BY impl=ID
+        (externally=EXTERNALLY)? IMPLEMENTED BY impl
         (implArgs=moduleArgumentList)?
     ;
 

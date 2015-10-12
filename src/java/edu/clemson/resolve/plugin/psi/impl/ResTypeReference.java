@@ -7,6 +7,7 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.plugin.completion.RESOLVEReferenceCompletionProvider;
+import edu.clemson.resolve.plugin.psi.ResFacilityDecl;
 import edu.clemson.resolve.plugin.psi.ResFile;
 import edu.clemson.resolve.plugin.psi.ResNamedElement;
 import edu.clemson.resolve.plugin.psi.ResTypeReferenceExpression;
@@ -89,9 +90,19 @@ public class ResTypeReference
                                                       @NotNull ResTypeReferenceExpression qualifier,
                                                       @NotNull ResScopeProcessor processor,
                                                       @NotNull ResolveState state) {
-       /* PsiElement target = qualifier.getReference().resolve();
+        PsiReference targetRef = qualifier.getReference();
+        if (targetRef == null) return false;
+        PsiElement target = targetRef.resolve();
         if (target == null || target == qualifier) return false;
-        if (target instanceof GoImportSpec) target = ((GoImportSpec)target).getImportString().resolve();
+        if (target instanceof ResFacilityDecl) {
+            PsiFile specFile = ((ResFacilityDecl)target).getSpec().resolve();
+            if (specFile != null) {
+                ResReference.processFileEntities((ResFile) specFile, processor, state, false);
+            }
+            //target =
+        }
+        //        ((ResFacilityDecl)target).getSpec()     //need to get PsiFile corresponding to spec...
+        /*if (target instanceof GoImportSpec) target = ((GoImportSpec)target).getImportString().resolve();
         if (target instanceof PsiDirectory) {
             GoReference.processDirectory((PsiDirectory)target, file, null, processor, state, false);
         }*/
@@ -119,9 +130,8 @@ public class ResTypeReference
                                         @NotNull ResScopeProcessor processor,
                                         @NotNull ResolveState state,
                                         boolean localProcessing) {
-        if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) {
-            return false;
-        }
+        if (!processNamedElements(processor, state, file.getFacilities(), localProcessing)) return false;
+        if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
         return true;
     }
 
