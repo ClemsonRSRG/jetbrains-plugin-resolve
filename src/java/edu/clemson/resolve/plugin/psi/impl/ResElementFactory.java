@@ -11,6 +11,9 @@ import edu.clemson.resolve.plugin.psi.ResUsesItem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SuppressWarnings("ConstantConditions")
 public class ResElementFactory {
 
@@ -30,10 +33,20 @@ public class ResElementFactory {
         return file.getEnclosedModule().getIdentifier();
     }
 
-    @NotNull public static ResUsesItem createUsesItem(@NotNull Project project,
-                                                      @NotNull String usesName) {
+    @NotNull public static ResUsesListImpl createUsesList(
+            @NotNull Project project,
+            @Nullable ResUsesListImpl existingUsesList,
+            @NotNull String newUsesItemName) {
+        List<String> rawStringUsesList = new ArrayList<String>();
+        if (existingUsesList != null) {
+            for (ResUsesItem usesItem : existingUsesList.getUsesItems()) {
+                rawStringUsesList.add(usesItem.getText());
+            }
+        }
+        rawStringUsesList.add(newUsesItemName); //now take on the new one.
+        String joinedUsesList = StringUtil.join(rawStringUsesList, ", ");
         ResFile file = createFileFromText(project,
-                "Precis Temp; uses "+usesName+"; end Temp;");
-        return file.getUsesItems().get(0);
+                "Precis Temp; uses "+joinedUsesList+"; end Temp;");
+        return file.getUsesList();
     }
 }

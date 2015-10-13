@@ -1,14 +1,20 @@
 package edu.clemson.resolve.plugin.completion;
 
 import com.intellij.codeInsight.completion.*;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.patterns.StandardPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.PsiImplUtil;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.stubs.StubIndex;
 import com.intellij.util.ProcessingContext;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
@@ -17,12 +23,14 @@ import edu.clemson.resolve.plugin.psi.impl.AbstractResTypeImpl;
 import edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeDecl;
 import edu.clemson.resolve.plugin.psi.impl.ResPsiImplUtil;
 import edu.clemson.resolve.plugin.psi.impl.ResTypeReference;
+import edu.clemson.resolve.plugin.util.RESOLVEUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static edu.clemson.resolve.plugin.completion.RESOLVECompletionUtil.createPrefixMatcher;
@@ -69,7 +77,18 @@ public class RESOLVEAutoUsesCompletionContributor
                     //processors.add(new TypesProcessor(parent));
                 }
                 if (processors.isEmpty()) return;
+                NamedElementProcessor processor =
+                        new NamedElementProcessor(processors,
+                                ((ResFile)file).getUsesItemMapping(), result);
+                Project project = position.getProject();
+                GlobalSearchScope scope = RESOLVEUtil.moduleScope(file);
+                VirtualFile containingDirectory = file.getVirtualFile().getParent();
 
+                Set<String> sortedKeys = sortMatching(matcher, StubIndex.getInstance().getAllKeys(ALL_PUBLIC_NAMES, project), file);
+                for (String name : sortedKeys) {
+                    processor.setName(name);
+                    StubIndex.getInstance().processElements(ALL_PUBLIC_NAMES, name, project, scope, GoNamedElement.class, processor);
+                }
             }
 
             private CompletionResultSet adjustMatcher(

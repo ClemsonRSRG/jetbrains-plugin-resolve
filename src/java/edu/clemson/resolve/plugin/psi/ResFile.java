@@ -5,6 +5,7 @@ import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubTree;
 import com.intellij.psi.util.CachedValueProvider;
@@ -15,13 +16,13 @@ import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.plugin.RESOLVEFileType;
 import edu.clemson.resolve.plugin.RESOLVELanguage;
 import edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeDecl;
+import edu.clemson.resolve.plugin.psi.impl.ResElementFactory;
+import edu.clemson.resolve.plugin.psi.impl.ResPsiImplUtil;
 import edu.clemson.resolve.plugin.psi.impl.ResUsesListImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class ResFile extends PsiFileBase {
 
@@ -47,24 +48,34 @@ public class ResFile extends PsiFileBase {
 
     //Todo: In future create calcImports() and add results from facilities too maybe?
     @NotNull public List<ResUsesItem> getUsesItems() {
-        if (getEnclosedModule() == null) return new ArrayList<ResUsesItem>();
-        return new ArrayList<ResUsesItem>(PsiTreeUtil
-                .findChildrenOfType(getEnclosedModule(), ResUsesItem.class));
+        return getUsesList() != null ? getUsesList().getUsesItems() :
+                ContainerUtil.<ResUsesItem>newArrayList();
     }
 
-    public ResUsesItem addUses(String name) {
-        ResUsesListImpl importList = getUsesList();
-        if (importList != null) {
-            return importList.addUses(name);
-        }
-        return null;
-    }
-
-    @SuppressWarnings("unchecked")
     @Nullable public ResUsesListImpl getUsesList() {
         if (getEnclosedModule() == null) return null;
-        return PsiTreeUtil.<ResUsesListImpl>findChildOfAnyType(
-                getEnclosedModule(), ResUsesListImpl.class);
+        return PsiTreeUtil.findChildOfType(getEnclosedModule(),
+                ResUsesListImpl.class);
+    }
+
+    @NotNull public Map<String, ResUsesItem> getUsesItemMapping() {
+        Map<String, ResUsesItem> result =
+                new LinkedHashMap<String, ResUsesItem>();
+        for (ResUsesItem item : getUsesItems()) {
+            result.put(item.getText(), item);
+        }
+        return result;
+    }
+
+    public void addUses(String name) {
+        ResUsesListImpl newUsesList = ResElementFactory.createUsesList(
+                this.getProject(), getUsesList(), name);
+        if (this.getUsesList() == null) {
+            ResBlock block = findChildByClass(ResBlock.class);
+            addBefore(newUsesList, block);
+        } else {
+            this.getUsesList().replace(newUsesList);
+        }
     }
 
     @NotNull public List<ResFacilityDecl> getFacilities() {

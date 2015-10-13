@@ -100,29 +100,6 @@ public class ResPsiImplUtil {
         return null;
     }
 
-    @NotNull public static ResUsesItem addUsesItem(
-            @NotNull ResUsesListImpl usesList, @NotNull String name) {
-        Project project = usesList.getProject();
-        ResUsesItem newDeclaration =
-                ResElementFactory.createUsesItem(project, name);
-        List<ResUsesItem> existingUses = usesList.getUsesItems();
-        
-        ResUsesItem lastUses = ContainerUtil.getLastItem(existingUses);
-        GoImportDeclaration importDeclaration = (GoImportDeclaration)importList.addAfter(newImportDeclaration, lastUses);
-        PsiElement importListNextSibling = importList.getNextSibling();
-        if (!(importListNextSibling instanceof PsiWhiteSpace)) {
-            importList.addAfter(GoElementFactory.createNewLine(importList.getProject()), importDeclaration);
-            if (importListNextSibling != null) {
-                // double new line if there is something valuable after import list
-                importList.addAfter(GoElementFactory.createNewLine(importList.getProject()), importDeclaration);
-            }
-        }
-        importList.addBefore(GoElementFactory.createNewLine(importList.getProject()), importDeclaration);
-        GoImportSpec result = ContainerUtil.getFirstItem(importDeclaration.getImportSpecList());
-        assert result != null;
-        return result;
-    }
-
     public static boolean isPrevColonColon(@Nullable PsiElement parent) {
         PsiElement prev = parent == null ? null :
                 PsiTreeUtil.prevVisibleLeaf(parent);

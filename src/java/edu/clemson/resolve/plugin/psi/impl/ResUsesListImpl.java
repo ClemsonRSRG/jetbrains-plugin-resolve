@@ -16,8 +16,4 @@ public class ResUsesListImpl extends ResCompositeElementImpl {
     @NotNull public List<ResUsesItem> getUsesItems() {
         return PsiTreeUtil.getChildrenOfTypeAsList(this, ResUsesItem.class);
     }
-
-    @NotNull public ResUsesItem addUses(String usesName) {
-        return ResPsiImplUtil.addUsesItem(this, usesName);
-    }
 }
