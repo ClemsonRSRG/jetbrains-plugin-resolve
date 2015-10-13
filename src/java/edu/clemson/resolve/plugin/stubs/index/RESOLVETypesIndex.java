@@ -11,9 +11,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-/**
- * Created by daniel on 10/13/15.
- */
 public class RESOLVETypesIndex extends StringStubIndexExtension<ResAbstractTypeDecl> {
     public static final StubIndexKey<String, ResAbstractTypeDecl> KEY =
             StubIndexKey.createIndexKey("go.type.name");
