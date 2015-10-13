@@ -18,6 +18,6 @@ public class ResUsesListImpl extends ResCompositeElementImpl {
     }
 
     @NotNull public ResUsesItem addUses(String usesName) {
-        return ResPsiImplUtil.addImport(this, usesName);
+        return ResPsiImplUtil.addUses(this, usesName);
     }
 }

@@ -1,16 +1,20 @@
 package edu.clemson.resolve.plugin.psi.impl;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
 import com.intellij.psi.impl.source.tree.LeafElement;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.plugin.ConstEleTypes;
 import edu.clemson.resolve.plugin.psi.*;
 import edu.clemson.resolve.plugin.psi.impl.uses.ResUsesReferenceSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class ResPsiImplUtil {
 
@@ -94,6 +98,29 @@ public class ResPsiImplUtil {
             return ((ResVarDeclGroup)parent).getType();
         }
         return null;
+    }
+
+    @NotNull public static ResUsesItem addUses(
+            @NotNull ResUsesListImpl usesList, @Nullable String name) {
+        Project project = usesList.getProject();
+        GoImportDeclaration newDeclaration = GoElementFactory.createImportDeclaration(project, packagePath, alias, false);
+        List<GoImportDeclaration> existingImports = importList.getImportDeclarationList();
+        for (int i = existingImports.size() - 1; i >= 0; i--) {
+            GoImportDeclaration existingImport = existingImports.get(i);
+            List<GoImportSpec> importSpecList = existingImport.getImportSpecList();
+            if (existingImport.getRparen() == null && importSpecList.size() == 1) {
+                GoImportSpec firstItem = ContainerUtil.getFirstItem(importSpecList);
+                assert firstItem != null;
+                String path = firstItem.getPath();
+                String oldAlias = firstItem.getAlias();
+                if (GoConstants.C_PATH.equals(path)) continue;
+
+                GoImportDeclaration importWithParens = GoElementFactory.createImportDeclaration(project, path, oldAlias, true);
+                existingImport = (GoImportDeclaration)existingImport.replace(importWithParens);
+            }
+            return existingImport.addImportSpec(packagePath, alias);
+        }
+        return addImportDeclaration(importList, newDeclaration);
     }
 
     public static boolean isPrevColonColon(@Nullable PsiElement parent) {
