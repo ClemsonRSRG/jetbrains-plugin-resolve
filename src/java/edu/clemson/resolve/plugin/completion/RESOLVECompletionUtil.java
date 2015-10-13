@@ -81,13 +81,13 @@ public class RESOLVECompletionUtil {
             @NotNull ResAbstractTypeDecl t,
             @NotNull String lookupString,
             @Nullable InsertHandler<LookupElement> handler,
-            @Nullable String importPath,
+            @Nullable String responsibleUsesItem,
             double priority) {
         LookupElementBuilder builder =
                 LookupElementBuilder.createWithSmartPointer(lookupString, t)
                     .withInsertHandler(handler).withIcon(RESOLVEIcons.REPR_TYPE);
-        if (importPath != null) builder =
-                builder.withTailText(" " + importPath, true);
+        if (responsibleUsesItem != null) builder =
+                builder.withTailText(" " + responsibleUsesItem, true);
         return PrioritizedLookupElement.withPriority(builder, priority);
     }
 

@@ -15,6 +15,7 @@ import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.plugin.RESOLVEFileType;
 import edu.clemson.resolve.plugin.RESOLVELanguage;
 import edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeDecl;
+import edu.clemson.resolve.plugin.psi.impl.ResUsesListImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,6 +49,21 @@ public class ResFile extends PsiFileBase {
     @NotNull public Collection<ResUsesItem> getUsesItems() {
         if (getEnclosedModule() == null) return new ArrayList<ResUsesItem>();
         return PsiTreeUtil.findChildrenOfType(getEnclosedModule(), ResUsesItem.class);
+    }
+
+    public ResUsesItem addUses(String name) {
+        ResUsesListImpl importList = getUsesList();
+        if (importList != null) {
+            return importList.addUses(name);
+        }
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Nullable public ResUsesListImpl getUsesList() {
+        if (getEnclosedModule() == null) return null;
+        return PsiTreeUtil.<ResUsesListImpl>findChildOfAnyType(
+                getEnclosedModule(), ResUsesListImpl.class);
     }
 
     @NotNull public List<ResFacilityDecl> getFacilities() {
