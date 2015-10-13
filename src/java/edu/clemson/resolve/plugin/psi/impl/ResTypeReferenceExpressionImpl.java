@@ -2,6 +2,7 @@ package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.PsiReference;
 import edu.clemson.resolve.plugin.ConstEleTypes;
 import edu.clemson.resolve.plugin.psi.ResTypeReferenceExpression;
