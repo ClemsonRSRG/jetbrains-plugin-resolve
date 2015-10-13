@@ -72,7 +72,7 @@ public class RESOLVEAutoUsesCompletionContributor
                     //processors.add(new VariablesAndConstantsProcessor());
                 }
                 else if (parent instanceof ResTypeReferenceExpression) {
-                    //processors.add(new TypesProcessor(parent));
+                    processors.add(new TypesProcessor(parent));
                 }
                 if (processors.isEmpty()) return;
                 NamedElementProcessor processor =
