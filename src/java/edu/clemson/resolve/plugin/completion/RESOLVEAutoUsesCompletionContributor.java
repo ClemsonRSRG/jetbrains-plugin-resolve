@@ -23,14 +23,12 @@ import edu.clemson.resolve.plugin.psi.impl.AbstractResTypeImpl;
 import edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeDecl;
 import edu.clemson.resolve.plugin.psi.impl.ResPsiImplUtil;
 import edu.clemson.resolve.plugin.psi.impl.ResTypeReference;
+import edu.clemson.resolve.plugin.stubs.index.RESOLVEAllVisibleNamesIndex;
 import edu.clemson.resolve.plugin.util.RESOLVEUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static edu.clemson.resolve.plugin.completion.RESOLVECompletionUtil.createPrefixMatcher;
@@ -84,10 +82,15 @@ public class RESOLVEAutoUsesCompletionContributor
                 GlobalSearchScope scope = RESOLVEUtil.moduleScope(file);
                 VirtualFile containingDirectory = file.getVirtualFile().getParent();
 
-                Set<String> sortedKeys = sortMatching(matcher, StubIndex.getInstance().getAllKeys(ALL_PUBLIC_NAMES, project), file);
+                Set<String> sortedKeys = sortMatching(matcher, StubIndex
+                        .getInstance().getAllKeys(
+                                RESOLVEAllVisibleNamesIndex.ALL_PUBLIC_NAMES,
+                                project), (ResFile)file);
                 for (String name : sortedKeys) {
                     processor.setName(name);
-                    StubIndex.getInstance().processElements(ALL_PUBLIC_NAMES, name, project, scope, GoNamedElement.class, processor);
+                    StubIndex.getInstance().processElements(
+                            RESOLVEAllVisibleNamesIndex.ALL_PUBLIC_NAMES, name,
+                            project, scope, ResNamedElement.class, processor);
                 }
             }
 
@@ -102,6 +105,34 @@ public class RESOLVEAutoUsesCompletionContributor
                 return result.withPrefixMatcher(createPrefixMatcher(newPrefix));
             }
         });
+    }
+
+    private static Set<String> sortMatching(@NotNull PrefixMatcher matcher,
+                                            @NotNull Collection<String> names,
+                                            @NotNull ResFile file) {
+        ProgressManager.checkCanceled();
+        String prefix = matcher.getPrefix();
+        if (prefix.isEmpty()) return ContainerUtil.newLinkedHashSet(names);
+        List<String> sorted = ContainerUtil.newArrayList();
+        for (String name : names) {
+            if (matcher.prefixMatches(name)) {
+                sorted.add(name);
+            }
+        }
+        ProgressManager.checkCanceled();
+        Collections.sort(sorted, String.CASE_INSENSITIVE_ORDER);
+        ProgressManager.checkCanceled();
+
+        LinkedHashSet<String> result = new LinkedHashSet<String>();
+        for (String name : sorted) {
+            if (matcher.isStartMatch(name)) {
+                result.add(name);
+            }
+        }
+        ProgressManager.checkCanceled();
+
+        result.addAll(sorted);
+        return result;
     }
 
     private static PsiElementPattern.Capture<PsiElement> inRESOLVEFile() {

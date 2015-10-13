@@ -8,6 +8,8 @@ import javax.swing.*;
 
 public class RESOLVEFileType extends LanguageFileType {
 
+    public static final int VERSION = 1;
+
     public static final RESOLVEFileType INSTANCE = new RESOLVEFileType();
 
     private RESOLVEFileType() {
