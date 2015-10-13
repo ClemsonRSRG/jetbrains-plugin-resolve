@@ -50,9 +50,8 @@ public class RESOLVEASTFactory extends ASTFactory {
 
     }
 
-    /**
-     * Create a FileElement for root or a parse tree CompositeElement (not
-     * PSI) for the token. This impl is more or less the default.
+    /** Create a FileElement for root or a parse tree CompositeElement (not
+     *  PSI) for the token. This impl is more or less the default.
      */
     @Override public CompositeElement createComposite(IElementType type) {
         if (type instanceof IFileElementType) {

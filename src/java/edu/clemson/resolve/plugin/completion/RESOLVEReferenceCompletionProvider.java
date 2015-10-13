@@ -21,6 +21,8 @@ import edu.clemson.resolve.plugin.psi.impl.uses.ResUsesReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static edu.clemson.resolve.plugin.completion.RESOLVECompletionUtil.createPrefixMatcher;
+
 public class RESOLVEReferenceCompletionProvider
         extends
             CompletionProvider<CompletionParameters> {
@@ -85,16 +87,6 @@ public class RESOLVEReferenceCompletionProvider
         }
 
         return null;
-    }
-
-    @NotNull public static CamelHumpMatcher createPrefixMatcher(
-            @NotNull PrefixMatcher original) {
-        return createPrefixMatcher(original.getPrefix());
-    }
-
-    @NotNull public static CamelHumpMatcher createPrefixMatcher(
-            @NotNull String prefix) {
-        return new CamelHumpMatcher(prefix, false);
     }
 
     public static class MyRESOLVEScopeProcessor extends ResScopeProcessor {

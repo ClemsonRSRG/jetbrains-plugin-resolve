@@ -2,7 +2,9 @@ package edu.clemson.resolve.plugin.completion;
 
 import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.InsertionContext;
+import com.intellij.codeInsight.completion.PrefixMatcher;
 import com.intellij.codeInsight.completion.PrioritizedLookupElement;
+import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
@@ -109,7 +111,7 @@ public class RESOLVECompletionUtil {
                 int offset = context.getStartOffset();
                 PsiElement at = file.findElementAt(offset);
                 GoCompositeElement ref = PsiTreeUtil.getParentOfType(at, GoValue.class, GoReferenceExpression.class);
-                if (ref instanceof GoReferenceExpression && (((GoReferenceExpression) ref).getQualifier() != null || GoPsiImplUtil.prevDot(ref))) {
+                if (ref instanceof GoReferenceExpression && (((GoReferenceExpression) ref).getQualifier() != null || GoPsiImplUtil.isPrevColonColon(ref))) {
                     return;
                 }
                 GoValue value = PsiTreeUtil.getParentOfType(at, GoValue.class);
@@ -118,6 +120,16 @@ public class RESOLVECompletionUtil {
                 super.handleInsert(context, item);
             }
         } :*/ null, VAR_PRIORITY);
+    }
+
+    @NotNull public static CamelHumpMatcher createPrefixMatcher(
+            @NotNull PrefixMatcher original) {
+        return createPrefixMatcher(original.getPrefix());
+    }
+
+    @NotNull public static CamelHumpMatcher createPrefixMatcher(
+            @NotNull String prefix) {
+        return new CamelHumpMatcher(prefix, false);
     }
 
     @NotNull public static LookupElement createVariableLikeLookupElement(

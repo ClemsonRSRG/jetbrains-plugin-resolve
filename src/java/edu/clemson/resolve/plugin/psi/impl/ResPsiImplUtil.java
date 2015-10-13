@@ -4,7 +4,9 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
+import com.intellij.psi.impl.source.tree.LeafElement;
 import com.intellij.psi.util.PsiTreeUtil;
+import edu.clemson.resolve.plugin.ConstEleTypes;
 import edu.clemson.resolve.plugin.psi.*;
 import edu.clemson.resolve.plugin.psi.impl.uses.ResUsesReferenceSet;
 import org.jetbrains.annotations.NotNull;
@@ -69,7 +71,7 @@ public class ResPsiImplUtil {
     }
 
     /** ok, in the go plugin don't be fooled by the seeming lack of connection between
-     *  ImportReferenceHelper and the FileContextProvider -- these are responsible
+     *  UsesReferenceHelper and the FileContextProvider -- these are responsible
      *  for setting getDefaultContext to "resolve/src/" etc...
      */
     @Nullable public static PsiFile resolve(@NotNull ResUsesItem usesItem) {
@@ -92,5 +94,12 @@ public class ResPsiImplUtil {
             return ((ResVarDeclGroup)parent).getType();
         }
         return null;
+    }
+
+    public static boolean isPrevColonColon(@Nullable PsiElement parent) {
+        PsiElement prev = parent == null ? null :
+                PsiTreeUtil.prevVisibleLeaf(parent);
+        return prev instanceof LeafElement &&
+                ((LeafElement)prev).getElementType() == ConstEleTypes.COLONCOLON;
     }
 }
