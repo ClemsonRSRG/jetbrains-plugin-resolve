@@ -37,7 +37,9 @@ public class RESOLVEASTFactory extends ASTFactory {
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_facilityDecl), ResFacilityDeclImpl.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_qualifier), ResTypeReferenceExpressionImpl.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_spec), ResUsesItemImpl.Factory.INSTANCE);
-        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_spec), ResUsesItemImpl.Factory.INSTANCE);
+        //ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_impl), ResUsesItemImpl.Factory.INSTANCE);
+
+        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_usesList), ResUsesListImpl.Factory.INSTANCE);
 
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_typeModelDecl), ResTypeModelDeclImpl.Factory.INSTANCE);
 

@@ -6,6 +6,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
+import edu.clemson.resolve.plugin.psi.ResFile;
+import edu.clemson.resolve.plugin.psi.ResModule;
 import edu.clemson.resolve.plugin.psi.impl.*;
 
 import javax.swing.*;
@@ -27,33 +29,10 @@ public class RESOLVEFileIconPatcher implements FileIconPatcher {
     @SuppressWarnings("unchecked") private static Icon replaceIcon(
             VirtualFile file, int flags, Project project, Icon baseIcon) {
         final PsiFile f = PsiManager.getInstance(project).findFile(file);
+        if (!(f instanceof ResFile)) return baseIcon;
 
-        if (PsiTreeUtil.findChildOfAnyType(f, ResPrecisModule.class) != null) {
-            return RESOLVEIcons.PRECIS;
-        }
-     /*   if (PsiTreeUtil.findChildOfAnyType(f, PrecisExtensionModule.class) != null) {
-            return RESOLVEIcons.PRECIS_EXTENSION;
-        }
-        else if (PsiTreeUtil.findChildOfAnyType(f,
-                ConceptModule.class) != null) {
-            return RESOLVEIcons.CONCEPT;
-        }
-        else if (PsiTreeUtil.findChildOfAnyType(f,
-                ConceptImplModule.class) != null) {
-            return RESOLVEIcons.IMPL;
-        }
-        else if (PsiTreeUtil.findChildOfAnyType(f,
-                FacilityModule.class) != null) {
-            return RESOLVEIcons.FACILITY;
-        }
-        else if (PsiTreeUtil.findChildOfAnyType(f,
-                EnhancementModule.class) != null) {
-            return RESOLVEIcons.SPEC_EXTENSION;
-        }
-        else if (PsiTreeUtil.findChildOfAnyType(f,
-                EnhancementImplModule.class) != null) {
-            return RESOLVEIcons.IMPL;
-        }*/
-        return baseIcon;
+        ResModule enclosedModule = ((ResFile)f).getEnclosedModule();
+        if (enclosedModule == null) return RESOLVEIcons.FILE;
+        return enclosedModule.getIcon(0);
     }
 }

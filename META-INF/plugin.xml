@@ -28,6 +28,9 @@
     -->
 
     <extensions defaultExtensionNs="com.intellij">
+
+        <stubIndex implementation="edu.clemson.resolve.plugin.stubs.index.RESOLVEAllVisibleNamesIndex"/>
+
         <internalFileTemplate name="Concept Module"/>
         <internalFileTemplate name="Concept Implementation Module"/>
         <internalFileTemplate name="Enhancement Module"/>
@@ -50,7 +53,7 @@
 
         <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVECompletionContributor"/>
         <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVEKeywordCompletionContributor"/>
-        <!--<completion.contributor language="RESOLVE" order="last" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVEAutoUsesCompletionContributor"/>-->
+        <completion.contributor language="RESOLVE" order="last" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVEAutoUsesCompletionContributor"/>
 
         <!-- <spellchecker.support language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.inspections.RESOLVESpellcheckingStrategy"/> -->
         <!--<lang.foldingBuilder language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.editor.RESOLVEFoldingBuilder"/>-->
