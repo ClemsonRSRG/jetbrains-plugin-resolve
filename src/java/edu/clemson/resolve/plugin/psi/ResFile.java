@@ -46,9 +46,10 @@ public class ResFile extends PsiFileBase {
     }
 
     //Todo: In future create calcImports() and add results from facilities too maybe?
-    @NotNull public Collection<ResUsesItem> getUsesItems() {
+    @NotNull public List<ResUsesItem> getUsesItems() {
         if (getEnclosedModule() == null) return new ArrayList<ResUsesItem>();
-        return PsiTreeUtil.findChildrenOfType(getEnclosedModule(), ResUsesItem.class);
+        return new ArrayList<ResUsesItem>(PsiTreeUtil
+                .findChildrenOfType(getEnclosedModule(), ResUsesItem.class));
     }
 
     public ResUsesItem addUses(String name) {

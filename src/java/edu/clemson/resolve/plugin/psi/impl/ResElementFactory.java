@@ -1,11 +1,15 @@
 package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFileFactory;
+import com.intellij.psi.util.PsiTreeUtil;
 import edu.clemson.resolve.plugin.RESOLVELanguage;
 import edu.clemson.resolve.plugin.psi.ResFile;
+import edu.clemson.resolve.plugin.psi.ResUsesItem;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("ConstantConditions")
 public class ResElementFactory {
@@ -24,5 +28,12 @@ public class ResElementFactory {
         ResFile file = createFileFromText(project,
                 "Precis "+text+"; end "+text+";");
         return file.getEnclosedModule().getIdentifier();
+    }
+
+    @NotNull public static ResUsesItem createUsesItem(@NotNull Project project,
+                                                      @NotNull String usesName) {
+        ResFile file = createFileFromText(project,
+                "Precis Temp; uses "+usesName+"; end Temp;");
+        return file.getUsesItems().get(0);
     }
 }

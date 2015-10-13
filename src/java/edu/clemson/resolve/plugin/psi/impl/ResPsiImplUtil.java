@@ -100,27 +100,27 @@ public class ResPsiImplUtil {
         return null;
     }
 
-    @NotNull public static ResUsesItem addUses(
-            @NotNull ResUsesListImpl usesList, @Nullable String name) {
+    @NotNull public static ResUsesItem addUsesItem(
+            @NotNull ResUsesListImpl usesList, @NotNull String name) {
         Project project = usesList.getProject();
-        GoImportDeclaration newDeclaration = GoElementFactory.createImportDeclaration(project, packagePath, alias, false);
-        List<GoImportDeclaration> existingImports = importList.getImportDeclarationList();
-        for (int i = existingImports.size() - 1; i >= 0; i--) {
-            GoImportDeclaration existingImport = existingImports.get(i);
-            List<GoImportSpec> importSpecList = existingImport.getImportSpecList();
-            if (existingImport.getRparen() == null && importSpecList.size() == 1) {
-                GoImportSpec firstItem = ContainerUtil.getFirstItem(importSpecList);
-                assert firstItem != null;
-                String path = firstItem.getPath();
-                String oldAlias = firstItem.getAlias();
-                if (GoConstants.C_PATH.equals(path)) continue;
-
-                GoImportDeclaration importWithParens = GoElementFactory.createImportDeclaration(project, path, oldAlias, true);
-                existingImport = (GoImportDeclaration)existingImport.replace(importWithParens);
+        ResUsesItem newDeclaration =
+                ResElementFactory.createUsesItem(project, name);
+        List<ResUsesItem> existingUses = usesList.getUsesItems();
+        
+        ResUsesItem lastUses = ContainerUtil.getLastItem(existingUses);
+        GoImportDeclaration importDeclaration = (GoImportDeclaration)importList.addAfter(newImportDeclaration, lastUses);
+        PsiElement importListNextSibling = importList.getNextSibling();
+        if (!(importListNextSibling instanceof PsiWhiteSpace)) {
+            importList.addAfter(GoElementFactory.createNewLine(importList.getProject()), importDeclaration);
+            if (importListNextSibling != null) {
+                // double new line if there is something valuable after import list
+                importList.addAfter(GoElementFactory.createNewLine(importList.getProject()), importDeclaration);
             }
-            return existingImport.addImportSpec(packagePath, alias);
         }
-        return addImportDeclaration(importList, newDeclaration);
+        importList.addBefore(GoElementFactory.createNewLine(importList.getProject()), importDeclaration);
+        GoImportSpec result = ContainerUtil.getFirstItem(importDeclaration.getImportSpecList());
+        assert result != null;
+        return result;
     }
 
     public static boolean isPrevColonColon(@Nullable PsiElement parent) {
