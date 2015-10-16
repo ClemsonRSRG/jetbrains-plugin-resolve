@@ -1,0 +1,55 @@
+{
+    parserClass='edu.clemson.resolve.plugin.parser.ResParser'
+
+    implements='edu.clemson.resolve.plugin.psi.ResCompositeElement'
+    extends='edu.clemson.resolve.plugin.psi.impl.ResCompositeElementImpl'
+  
+    elementTypeHolderClass='edu.clemson.resolve.plugin.ResTypes'
+    elementTypeClass='edu.clemson.resolve.plugin.psi.ResCompositeElementType'
+    tokenTypeClass='edu.clemson.resolve.plugin.psi.ResTokenType'
+  
+    psiClassPrefix='Res'
+    psiImplClassSuffix='Impl'
+    psiPackage='edu.clemson.resolve.plugin.psi'
+    psiImplPackage='edu.clemson.resolve.plugin.psi.impl'
+    psiImplUtilClass="edu.clemson.resolve.plugin.psi.impl.ResPsiImplUtil"
+    //parserUtilClass="com.goide.parser.GoParserUtil"
+
+    tokens=[
+        LPAREN                  = "("
+        RPAREN                  = ")"
+        COLON                   = ":"
+        SEMICOLON               = ";"
+        COMMA                   = ","
+
+        FACILITY                = "Facility"
+        END                     = "end"
+    ]
+
+    /*extends("(Or|Add|Conversion|Mul|Selector)Expr")=BinaryExpr
+    extends(".*(Expr|Literal|Lit|OperandName)")=Expression
+
+    implements("(Type|Import)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="com.goide.psi.GoNamedElement"
+    implements("FunctionLit")="com.goide.psi.GoSignatureOwner"
+    implements("MethodSpec")="com.goide.psi.GoNamedSignatureOwner"
+    implements("(Function|Method)Declaration")="com.goide.psi.GoFunctionOrMethodDeclaration"
+    implements("(Const|Type|Var)Declaration")="com.goide.psi.GoTopLevelDeclaration"
+    implements(".*ReferenceExpression|FieldName")="com.goide.psi.GoReferenceExpressionBase"
+    extends("(Function|Method)Declaration")="com.goide.psi.impl.GoFunctionOrMethodDeclarationImpl<?>"
+    extends("(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl<?>"
+    extends("Parameters|Signature|ParameterDeclaration|Result|Type|(Const|Var|Import)Spec")="com.goide.psi.impl.GoStubbedElementImpl<?>"
+    elementTypeFactory("(Function|Method|Parameter)Declaration|(Type|Import|Method|Const|Var)Spec|RangeClause|RecvStatement|ShortVarDeclaration|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver|Parameters|Signature|Result|.*Type|TypeList.*")='com.goide.stubs.GoStubElementTypeFactory.factory'
+    pin(".*Statement")=1
+    extends(".*Statement")=Statement
+    extends(".*Type|TypeList")=Type*/
+  
+  pin('.*List(?:_\d.*)?')=1
+
+  generateTokenAccessors=true
+}
+
+Module ::= FacilityModule
+
+FacilityModule ::= FACILITY identifier SEMICOLON END identifier SEMICOLON
+
+

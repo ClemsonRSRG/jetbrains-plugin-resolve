@@ -15,10 +15,7 @@ import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.plugin.RESOLVEFileType;
 import edu.clemson.resolve.plugin.RESOLVELanguage;
-import edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeDecl;
 import edu.clemson.resolve.plugin.psi.impl.ResElementFactory;
-import edu.clemson.resolve.plugin.psi.impl.ResPsiImplUtil;
-import edu.clemson.resolve.plugin.psi.impl.ResUsesListImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,7 +39,7 @@ public class ResFile extends PsiFileBase {
         return super.getChildren();
     }
 
-    @Nullable public ResModule getEnclosedModule() {
-        return PsiTreeUtil.findChildOfType(this, ResModule.class);
-    }
+    //@Nullable public ResModule getEnclosedModule() {
+    //    return PsiTreeUtil.findChildOfType(this, ResModule.class);
+    //}
 }

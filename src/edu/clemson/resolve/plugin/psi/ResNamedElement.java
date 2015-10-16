@@ -16,6 +16,5 @@ public interface ResNamedElement
 
     //@Nullable String getQualifiedName();
 
-    @Nullable
-    ResType findSiblingType();
+    //@Nullable ResType findSiblingType();
 }

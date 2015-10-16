@@ -6,7 +6,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import edu.clemson.resolve.plugin.psi.ResCompositeElement;
-import edu.clemson.resolve.plugin.psi.ResOperationProcedureDeclaration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,9 +50,9 @@ public class ResCompositeElementImpl
         return o instanceof GoBlock ?
                 ResolveUtil.processChildrenFromTop(o, processor, state, lastParent, place) :
                 ResolveUtil.processChildren(o, processor, state, lastParent, place);*/
-        return o instanceof ResOperationProcedureDeclaration ?
+        return false;/*o instanceof ResOperationProcedureDeclaration ?
                 ResolveUtil.processChildrenFromTop(o, processor, state, lastParent, place) :
-                ResolveUtil.processChildren(o, processor, state, lastParent, place);
+                ResolveUtil.processChildren(o, processor, state, lastParent, place);*/
     }
 
     @Override public boolean shouldGoDeeper() {

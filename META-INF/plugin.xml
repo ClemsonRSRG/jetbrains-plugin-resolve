@@ -33,12 +33,8 @@
         <stubIndex implementation="edu.clemson.resolve.plugin.stubs.index.RESOLVETypesIndex"/>-->
 
         <!-- sdk -->
-        <moduleType id="RESOLVE_LANGUAGE_MODULE" implementationClass="edu.clemson.resolve.plugin.RESOLVEModuleType"/>
-        <sdkType implementation="edu.clemson.resolve.plugin.sdk.RESOLVESdkType"/>
         <projectService serviceInterface="edu.clemson.resolve.plugin.sdk.RESOLVESdkService" serviceImplementation="edu.clemson.resolve.plugin.sdk.RESOLVESmallIDEsSdkService" overrides="false"/>
-        <library.presentationProvider implementation="edu.clemson.resolve.plugin.sdk.RESOLVESdkLibraryProvider"/>
 
-        <fileIconPatcher implementation="edu.clemson.resolve.plugin.RESOLVEFileIconPatcher"/>
         <fileTypeFactory implementation="edu.clemson.resolve.plugin.RESOLVEFileTypeFactory"/>
 
         <lang.parserDefinition language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.RESOLVEParserDefinition"/>
@@ -49,12 +45,6 @@
         <!--<lang.foldingBuilder language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.editor.RESOLVEFoldingBuilder"/>-->
         <!-- <externalAnnotator language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.annotations.RESOLVEExternalAnnotator"/> -->
         <!-- <psi.referenceContributor implementation="edu.clemson.resolve.plugin.RESOLVEReferenceContributor"/> -->
-
-        <stepsBeforeRunProvider implementation="edu.clemson.resolve.plugin.runconfig.before.RESOLVEToolBeforeRunTaskProvider"/>
-        <!-- run application -->
-        <configurationType implementation="edu.clemson.resolve.plugin.runconfig.application.RESOLVEApplicationRunConfigurationType"/>
-        <programRunner id="RESOLVERunner" implementation="edu.clemson.resolve.plugin.runconfig.RESOLVERunner"/>
-        <runConfigurationProducer implementation="edu.clemson.resolve.plugin.runconfig.application.RESOLVEApplicationRunConfigurationProducer"/>
 
 </extensions>
 

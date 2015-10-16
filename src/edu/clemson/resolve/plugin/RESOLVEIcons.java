@@ -1,7 +1,11 @@
 package edu.clemson.resolve.plugin;
 
-/**
- * Created by daniel on 10/16/15.
- */
+import com.intellij.openapi.util.IconLoader;
+
+import javax.swing.*;
+
 public interface RESOLVEIcons {
+
+    public static final Icon FILE = IconLoader.getIcon("/edu/clemson/resolve/icons/file.png");
+
 }

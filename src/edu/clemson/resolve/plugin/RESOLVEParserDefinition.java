@@ -12,10 +12,8 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import edu.clemson.resolve.plugin.lexer.ResolveLexer;
+import edu.clemson.resolve.plugin.parser.ResParser;
 import edu.clemson.resolve.plugin.psi.ResFile;
-import edu.clemson.resolve.plugin.adaptors.RESOLVELanguageParser;
-import edu.clemson.resolve.plugin.adaptors.RESOLVELexerAdaptor;
-import edu.clemson.resolve.plugin.parser.ResolveLexer;
 import edu.clemson.resolve.plugin.psi.ResTokenType;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,10 +37,35 @@ public class RESOLVEParserDefinition implements ParserDefinition {
     }
 
     @NotNull @Override public PsiParser createParser(Project project) {
-        return new ResolveParser();
+        return new ResParser();
     }
 
     @NotNull @Override public IFileElementType getFileNodeType() {
         return RESOLVEFileElementType.INSTANCE;
+    }
+
+    @NotNull @Override public TokenSet getWhitespaceTokens() {
+        return WHITESPACES;
+    }
+
+    @NotNull @Override public TokenSet getCommentTokens() {
+        return COMMENTS;
+    }
+
+    @NotNull @Override public TokenSet getStringLiteralElements() {
+        return TokenSet.EMPTY;
+    }
+
+    @NotNull @Override public PsiElement createElement(ASTNode node) {
+        return ResTypes.Factory.createElement(node);
+    }
+
+    @Override public PsiFile createFile(FileViewProvider fileViewProvider) {
+        return new ResFile(fileViewProvider);
+    }
+
+    @Override public SpaceRequirements spaceExistanceTypeBetweenTokens(
+            ASTNode astNode, ASTNode astNode1) {
+        return SpaceRequirements.MAY;
     }
 }
