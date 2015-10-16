@@ -82,6 +82,7 @@ ESCAPES = [abfnrtv]
 ")"                                       { return RPAREN; }
 
 ":"                                       { return COLON; }
+"::"                                      { return COLONCOLON; }
 ";"                                       { return SEMICOLON; }
 ","                                       { return COMMA; }
 "Facility"                                { return FACILITY;  }
@@ -96,6 +97,9 @@ ESCAPES = [abfnrtv]
 "Family"                                  { return FAMILY; }
 "modeled"                                 { return MODELED; }
 "exemplar"                                { return EXEMPLAR; }
+"Operation"                               { return OPERATION; }
+"Recursive"                               { return RECURSIVE; }
+"Procedure"                               { return PROCEDURE; }
 {IDENT}                                   { return IDENTIFIER; }
 {NUM_INT}                                 { return INT; }
 
