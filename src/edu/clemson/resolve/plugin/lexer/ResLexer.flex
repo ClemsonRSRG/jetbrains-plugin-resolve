@@ -88,6 +88,10 @@ ESCAPES = [abfnrtv]
 "Concept"                                 { return CONCEPT;  }
 "end"                                     { return END;  }
 "uses"                                    { return USES; }
+"is"                                      { return IS; }
+"externally"                              { return EXTERNALLY; }
+"implemented"                             { return IMPLEMENTED; }
+"by"                                      { return BY; }
 {IDENT}                                   { return IDENTIFIER; }
 {NUM_INT}                                 { return INT; }
 
