@@ -37,4 +37,12 @@ public class RESOLVEParserDefinition implements ParserDefinition {
     @NotNull @Override public Lexer createLexer(Project project) {
         return new ResolveLexer();
     }
+
+    @NotNull @Override public PsiParser createParser(Project project) {
+        return new ResolveParser();
+    }
+
+    @NotNull @Override public IFileElementType getFileNodeType() {
+        return RESOLVEFileElementType.INSTANCE;
+    }
 }
