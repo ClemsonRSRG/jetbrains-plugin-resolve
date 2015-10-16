@@ -25,14 +25,14 @@ public class ResElementFactory {
                 .createFileFromText("a.resolve", RESOLVELanguage.INSTANCE, text);
     }
 
-    /*@NotNull public static PsiElement createIdentifierFromText(
+    @NotNull public static PsiElement createIdentifierFromText(
             @NotNull Project project, String text) {
         ResFile file = createFileFromText(project,
-                "Precis "+text+"; end "+text+";");
+                "Facility "+text+";end "+text+";");
         return file.getEnclosedModule().getIdentifier();
     }
 
-    @NotNull public static ResUsesListImpl createUsesList(
+    /*@NotNull public static ResUsesListImpl createUsesList(
             @NotNull Project project,
             @Nullable ResUsesListImpl existingUsesList,
             @NotNull String newUsesItemName) {

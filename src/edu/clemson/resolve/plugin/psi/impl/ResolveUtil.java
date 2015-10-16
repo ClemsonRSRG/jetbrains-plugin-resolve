@@ -14,7 +14,8 @@ public final class ResolveUtil {
         PsiElement lastParent = null;
         PsiElement run = place;
         while (run != null) {
-            if (place != run && !run.processDeclarations(processor, ResolveState.initial(), lastParent, place)) return false;
+            if (place != run && !run.processDeclarations(processor,
+                    ResolveState.initial(), lastParent, place)) return false;
             lastParent = run;
             run = run.getParent();
         }
@@ -30,7 +31,8 @@ public final class ResolveUtil {
         while (run != null) {
             if (run instanceof ResCompositeElement) {
                 if (run.isEquivalentTo(lastParent)) return true;
-                if (!run.processDeclarations(processor, substitutor, null, place)) return false;
+                if (!run.processDeclarations(processor,
+                        substitutor, null, place)) return false;
             }
             run = run.getNextSibling();
         }
@@ -42,9 +44,12 @@ public final class ResolveUtil {
                                           @NotNull ResolveState substitutor,
                                           @Nullable PsiElement lastParent,
                                           @NotNull PsiElement place) {
-        PsiElement run = lastParent == null ? element.getLastChild() : lastParent.getPrevSibling();
+        PsiElement run = lastParent == null ? element.getLastChild() :
+                lastParent.getPrevSibling();
         while (run != null) {
-            if (run instanceof ResCompositeElement && !run.processDeclarations(processor, substitutor, null, place)) return false;
+            if (run instanceof ResCompositeElement &&
+                    !run.processDeclarations(
+                            processor, substitutor, null, place)) return false;
             run = run.getPrevSibling();
         }
         return true;

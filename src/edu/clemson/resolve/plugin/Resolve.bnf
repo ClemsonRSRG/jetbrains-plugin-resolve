@@ -33,6 +33,10 @@
         raw_string              = "raw_string"
     ]
 
+
+    extends("(Uses)Spec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
+    implements("(Uses)Spec")="edu.clemson.resolve.plugin.psi.ResNamedElement"
+
     /*extends("(Or|Add|Conversion|Mul|Selector)Expr")=BinaryExpr
     extends(".*(Expr|Literal|Lit|OperandName)")=Expression
 
@@ -50,19 +54,16 @@
     extends(".*Statement")=Statement
     extends(".*Type|TypeList")=Type*/
   
-  pin('.*List(?:_\d.*)?')=1
-
-  generateTokenAccessors=true
+    pin('.*List(?:_\d.*)?')=1
+    generateTokenAccessors=true
 }
 
 Module ::= FacilityModule <<eof>>
 
 FacilityModule ::= FACILITY identifier SEMICOLON
     UsesList?
-END identifier SEMICOLON {pin=2}
+END identifier SEMICOLON {pin(".*")=1}
 
-UsesList ::= USES ResUsesItem (COMMA ResUsesItem)* SEMICOLON
+UsesList ::= USES UsesSpec (COMMA UsesSpec)* SEMICOLON {pin(".*")=1}
 
-ResUsesItem ::= identifier
-
-
+UsesSpec ::= identifier {methods=[getName getReferences resolve]}
