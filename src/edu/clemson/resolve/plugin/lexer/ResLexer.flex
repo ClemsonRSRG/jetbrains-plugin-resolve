@@ -85,6 +85,7 @@ ESCAPES = [abfnrtv]
 ";"                                       { return SEMICOLON; }
 ","                                       { return COMMA; }
 "Facility"                                { return FACILITY;  }
+"Concept"                                 { return CONCEPT;  }
 "end"                                     { return END;  }
 "uses"                                    { return USES; }
 {IDENT}                                   { return IDENTIFIER; }

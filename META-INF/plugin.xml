@@ -35,6 +35,7 @@
         <!-- sdk -->
         <projectService serviceInterface="edu.clemson.resolve.plugin.sdk.RESOLVESdkService" serviceImplementation="edu.clemson.resolve.plugin.sdk.RESOLVESmallIDEsSdkService" overrides="false"/>
 
+        <fileIconPatcher implementation="edu.clemson.resolve.plugin.RESOLVEFileIconPatcher"/>
         <fileTypeFactory implementation="edu.clemson.resolve.plugin.RESOLVEFileTypeFactory"/>
 
         <lang.parserDefinition language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.RESOLVEParserDefinition"/>

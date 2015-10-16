@@ -1,6 +1,7 @@
 package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
@@ -21,6 +22,10 @@ public abstract class ResNamedElementImpl
 
     @Nullable @Override public PsiElement getNameIdentifier() {
         return getIdentifier();
+    }
+
+    public boolean isPublic() {
+        return true;
     }
 
     @Nullable @Override public String getName() {
