@@ -1,4 +1,4 @@
-package edu.clemson.resolve.plugin;
+package edu.clemson.resolve.plugin.lexer;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
@@ -10,13 +10,13 @@ import static edu.clemson.resolve.plugin.RESOLVEParserDefinition.*;
 %%
 
 %{
-  public _ResolveLexer() {
+  public _ResLexer() {
     this((java.io.Reader)null);
   }
 %}
 
 %unicode
-%class _ResolveLexer
+%class _ResLexer
 %implements FlexLexer, ResTypes
 %unicode
 %public
@@ -74,9 +74,6 @@ ESCAPES = [abfnrtv]
 {LINE_COMMENT}                             { return LINE_COMMENT; }
 "/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")? { return MULTILINE_COMMENT; }
 
-"'" [^\\] "'"                                           { return CHAR; }
-"'" \n "'"                                              { return CHAR; }
-"'\\" [abfnrtv\\\'] "'"                                 { return CHAR; }
 "'\\'"                                                  { return BAD_CHARACTER; }
 
 "`" [^`]* "`"?                            { return RAW_STRING; }
@@ -89,9 +86,9 @@ ESCAPES = [abfnrtv]
 ","                                       { return COMMA; }
 "Facility"                                { return FACILITY;  }
 "end"                                     { return END;  }
-
-{IDENT}                                  {  return IDENTIFIER; }
-{NUM_INT}                                {  return INT; }
+"uses"                                    { return USES; }
+{IDENT}                                   { return IDENTIFIER; }
+{NUM_INT}                                 { return INT; }
 
 .                                        {  return BAD_CHARACTER; }
 }

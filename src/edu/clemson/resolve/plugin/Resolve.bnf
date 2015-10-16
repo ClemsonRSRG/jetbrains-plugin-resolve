@@ -21,9 +21,16 @@
         COLON                   = ":"
         SEMICOLON               = ";"
         COMMA                   = ","
+        INT                     = "int"
+
+        //this 'space' is to make live preview less of a pain
+        space                   = "regexp:\s+"
 
         FACILITY                = "Facility"
         END                     = "end"
+        USES                    = "uses"
+        STRING                  = "string"
+        raw_string              = "raw_string"
     ]
 
     /*extends("(Or|Add|Conversion|Mul|Selector)Expr")=BinaryExpr
@@ -48,8 +55,14 @@
   generateTokenAccessors=true
 }
 
-Module ::= FacilityModule
+Module ::= FacilityModule <<eof>>
 
-FacilityModule ::= FACILITY identifier SEMICOLON END identifier SEMICOLON
+FacilityModule ::= FACILITY identifier SEMICOLON
+    UsesList?
+END identifier SEMICOLON {pin=2}
+
+UsesList ::= USES ResUsesItem (COMMA ResUsesItem)* SEMICOLON
+
+ResUsesItem ::= identifier
 
 
