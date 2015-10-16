@@ -8,57 +8,33 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
+import edu.clemson.resolve.plugin.lexer.ResolveLexer;
 import edu.clemson.resolve.plugin.psi.ResFile;
 import edu.clemson.resolve.plugin.adaptors.RESOLVELanguageParser;
 import edu.clemson.resolve.plugin.adaptors.RESOLVELexerAdaptor;
 import edu.clemson.resolve.plugin.parser.ResolveLexer;
+import edu.clemson.resolve.plugin.psi.ResTokenType;
 import org.jetbrains.annotations.NotNull;
 
 public class RESOLVEParserDefinition implements ParserDefinition {
-    public static final IFileElementType FILE =
-            new IFileElementType(RESOLVELanguage.INSTANCE);
+
+    public static final IElementType LINE_COMMENT =
+            new ResTokenType("RESOLVE_LINE_COMMENT");
+    public static final IElementType MULTILINE_COMMENT =
+            new ResTokenType("RESOLVE_MULTILINE_COMMENT");
+
+    public static final IElementType WS =
+            new ResTokenType("RESOLVE_WHITESPACE");
+    public static final IElementType NLS =
+            new ResTokenType("RESOLVE_WS_NEW_LINES");
+    public static final TokenSet WHITESPACES = TokenSet.create(WS, NLS);
+    public static final TokenSet COMMENTS =
+            TokenSet.create(LINE_COMMENT, MULTILINE_COMMENT);
 
     @NotNull @Override public Lexer createLexer(Project project) {
-        ResolveLexer lexer = new ResolveLexer(null);
-        return new RESOLVELexerAdaptor(RESOLVELanguage.INSTANCE, lexer);
-    }
-
-    @NotNull public TokenSet getWhitespaceTokens() {
-        return RESOLVETokenTypes.WHITESPACES;
-    }
-
-    @NotNull public TokenSet getCommentTokens() {
-        return RESOLVETokenTypes.COMMENTS;
-    }
-
-    @NotNull public TokenSet getStringLiteralElements() {
-        return TokenSet.EMPTY;
-    }
-
-    @NotNull public PsiParser createParser(final Project project) {
-        return new RESOLVELanguageParser();
-    }
-
-    @Override public IFileElementType getFileNodeType() {
-        return FILE;
-    }
-
-    public PsiFile createFile(FileViewProvider viewProvider) {
-        return new ResFile(viewProvider);
-    }
-
-    public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) {
-        return SpaceRequirements.MAY;
-    }
-
-    /**
-     * Convert from internal parse node (AST they call it) to final PSI node.
-     * This converts only internal rule nodes apparently, not leaf nodes. Leafs
-     * are just tokens I guess.
-     */
-    @NotNull public PsiElement createElement(ASTNode node) {
-        return RESOLVEASTFactory.createInternalParseTreeNode(node);
+        return new ResolveLexer();
     }
 }

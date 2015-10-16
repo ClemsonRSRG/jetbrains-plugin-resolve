@@ -5,7 +5,6 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.util.PsiTreeUtil;
 import edu.clemson.resolve.plugin.psi.ResCompositeElement;
 import edu.clemson.resolve.plugin.psi.ResOperationProcedureDeclaration;
 import org.jetbrains.annotations.NotNull;
@@ -53,8 +52,8 @@ public class ResCompositeElementImpl
                 ResolveUtil.processChildrenFromTop(o, processor, state, lastParent, place) :
                 ResolveUtil.processChildren(o, processor, state, lastParent, place);*/
         return o instanceof ResOperationProcedureDeclaration ?
-                ResolutionUtil.processChildrenFromTop(o, processor, state, lastParent, place) :
-                ResolutionUtil.processChildren(o, processor, state, lastParent, place);
+                ResolveUtil.processChildrenFromTop(o, processor, state, lastParent, place) :
+                ResolveUtil.processChildren(o, processor, state, lastParent, place);
     }
 
     @Override public boolean shouldGoDeeper() {

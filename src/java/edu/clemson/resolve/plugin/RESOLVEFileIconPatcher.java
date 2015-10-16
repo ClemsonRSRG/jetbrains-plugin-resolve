@@ -7,7 +7,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import edu.clemson.resolve.plugin.psi.ResFile;
-import edu.clemson.resolve.plugin.psi.ResModule;
 import edu.clemson.resolve.plugin.psi.impl.*;
 
 import javax.swing.*;
@@ -31,8 +30,9 @@ public class RESOLVEFileIconPatcher implements FileIconPatcher {
         final PsiFile f = PsiManager.getInstance(project).findFile(file);
         if (!(f instanceof ResFile)) return baseIcon;
 
-        ResModule enclosedModule = ((ResFile)f).getEnclosedModule();
+        /*ResModule enclosedModule = ((ResFile)f).getEnclosedModule();
         if (enclosedModule == null) return RESOLVEIcons.FILE;
-        return enclosedModule.getIcon(0);
+        return enclosedModule.getIcon(0);((*/
+        return null;
     }
 }

@@ -7,7 +7,6 @@ import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.util.PsiTreeUtil;
 import edu.clemson.resolve.plugin.RESOLVELanguage;
 import edu.clemson.resolve.plugin.psi.ResFile;
-import edu.clemson.resolve.plugin.psi.ResUsesItem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +25,7 @@ public class ResElementFactory {
                 .createFileFromText("a.resolve", RESOLVELanguage.INSTANCE, text);
     }
 
-    @NotNull public static PsiElement createIdentifierFromText(
+    /*@NotNull public static PsiElement createIdentifierFromText(
             @NotNull Project project, String text) {
         ResFile file = createFileFromText(project,
                 "Precis "+text+"; end "+text+";");
@@ -48,5 +47,5 @@ public class ResElementFactory {
         ResFile file = createFileFromText(project,
                 "Precis Temp; uses "+joinedUsesList+"; end Temp;");
         return file.getUsesList();
-    }
+    }*/
 }
