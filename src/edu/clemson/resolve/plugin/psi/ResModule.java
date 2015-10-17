@@ -5,5 +5,5 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 
 public interface ResModule extends ResNamedElement {
-    @NotNull Icon getIcon(int i);
+
 }

@@ -37,22 +37,7 @@ public class ResCompositeElementImpl
             @NotNull PsiElement place) {
         if (!o.shouldGoDeeper()) return processor.execute(o, state);
         if (!processor.execute(o, state)) return false;
-       /* if ((
-                o instanceof GoSwitchStatement ||
-                        o instanceof GoIfStatement ||
-                        o instanceof GoForStatement ||
-                        o instanceof GoBlock
-        )
-                && processor instanceof GoScopeProcessorBase) {
-            if (!PsiTreeUtil.isAncestor(o, ((GoScopeProcessorBase) processor).myOrigin, false)) return true;
-        }
-
-        return o instanceof GoBlock ?
-                ResolveUtil.processChildrenFromTop(o, processor, state, lastParent, place) :
-                ResolveUtil.processChildren(o, processor, state, lastParent, place);*/
-        return false;/*o instanceof ResOperationProcedureDeclaration ?
-                ResolveUtil.processChildrenFromTop(o, processor, state, lastParent, place) :
-                ResolveUtil.processChildren(o, processor, state, lastParent, place);*/
+        return false;
     }
 
     @Override public boolean shouldGoDeeper() {

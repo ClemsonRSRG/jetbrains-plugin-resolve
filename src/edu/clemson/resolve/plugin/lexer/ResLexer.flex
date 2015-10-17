@@ -18,37 +18,12 @@ import static edu.clemson.resolve.plugin.RESOLVEParserDefinition.*;
 %unicode
 %class _ResLexer
 %implements FlexLexer, ResTypes
-%unicode
-%public
-
 %function advance
 %type IElementType
 
 %eof{
   return;
 %eof}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////// User code //////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-%{
-
-  private Stack<IElementType> gStringStack = new Stack<IElementType>();
-  private Stack<IElementType> blockStack = new Stack<IElementType>();
-
-  private int afterComment = YYINITIAL;
-  private int afterNls = YYINITIAL;
-  private int afterBrace = YYINITIAL;
-
-  private void clearStacks(){
-    gStringStack.clear();
-    blockStack.clear();
-  }
-
-  private Stack<IElementType> braceCount = new Stack<IElementType>();
-%}
-
 
 NL = [\r\n] | \r\n      // NewLine
 WS = [ \t\f]            // Whitespaces
@@ -68,43 +43,37 @@ ESCAPES = [abfnrtv]
 %%
 <YYINITIAL> {
 
-"::"                                       { return COLONCOLON; }
+{WS}                                    { return WS; }
+{NL}+                                   { return NLS; }
 
-{WS}                                     { return WS; }
-{NL}+                                    { return NLS; }
-
-{LINE_COMMENT}                             { return LINE_COMMENT; }
+{LINE_COMMENT}                          { return LINE_COMMENT; }
 "/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")? { return MULTILINE_COMMENT; }
 
-"."                                       { return DOT; }
 
-"'\\'"                                    { return BAD_CHARACTER; }
-
-"`" [^`]* "`"?                            { return RAW_STRING; }
+"`" [^`]* "`"?                          { return RAW_STRING; }
 {STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}? { return STRING; }
-"("                                       { return LPAREN; }
-")"                                       { return RPAREN; }
-
-":"                                       { return COLON; }
-";"                                       { return SEMICOLON; }
-","                                       { return COMMA; }
-"Facility"                                { return FACILITY;  }
-"Concept"                                 { return CONCEPT;  }
-"end"                                     { return END;  }
-"uses"                                    { return USES; }
-"is"                                      { return IS; }
-"externally"                              { return EXTERNALLY; }
-"implemented"                             { return IMPLEMENTED; }
-"by"                                      { return BY; }
-"Type"                                    { return TYPE; }
-"Family"                                  { return FAMILY; }
-"modeled"                                 { return MODELED; }
-"exemplar"                                { return EXEMPLAR; }
-"Operation"                               { return OPERATION; }
-"Recursive"                               { return RECURSIVE; }
-"Procedure"                               { return PROCEDURE; }
-{IDENT}                                   { return IDENTIFIER; }
-{NUM_INT}                                 { return INT; }
-
-.                                        {  return BAD_CHARACTER; }
+"("                                     { return LPAREN; }
+")"                                     { return RPAREN; }
+"."                                     { return DOT; }
+":"                                     { return COLON; }
+";"                                     { return SEMICOLON; }
+","                                     { return COMMA; }
+"Facility"                              { return FACILITY;  }
+"Concept"                               { return CONCEPT;  }
+"end"                                   { return END;  }
+"uses"                                  { return USES; }
+"is"                                    { return IS; }
+"externally"                            { return EXTERNALLY; }
+"implemented"                           { return IMPLEMENTED; }
+"by"                                    { return BY; }
+"Type"                                  { return TYPE; }
+"Family"                                { return FAMILY; }
+"modeled"                               { return MODELED; }
+"exemplar"                              { return EXEMPLAR; }
+"Operation"                             { return OPERATION; }
+"Recursive"                             { return RECURSIVE; }
+"Procedure"                             { return PROCEDURE; }
+{IDENT}                                 { return IDENTIFIER; }
+{NUM_INT}                               { return INT; }
+.                                       { return BAD_CHARACTER; }
 }

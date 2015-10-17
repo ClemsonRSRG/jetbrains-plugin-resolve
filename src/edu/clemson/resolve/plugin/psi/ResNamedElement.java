@@ -16,7 +16,5 @@ public interface ResNamedElement
     @Nullable PsiElement getIdentifier();
 
     @NotNull PsiFile getContainingFile();
-    //@Nullable String getQualifiedName();
 
-    //@Nullable ResType findSiblingType();
 }
