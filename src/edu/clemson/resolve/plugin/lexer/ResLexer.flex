@@ -68,13 +68,17 @@ ESCAPES = [abfnrtv]
 %%
 <YYINITIAL> {
 
+"::"                                       { return COLONCOLON; }
+
 {WS}                                     { return WS; }
 {NL}+                                    { return NLS; }
 
 {LINE_COMMENT}                             { return LINE_COMMENT; }
 "/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")? { return MULTILINE_COMMENT; }
 
-"'\\'"                                                  { return BAD_CHARACTER; }
+"."                                       { return DOT; }
+
+"'\\'"                                    { return BAD_CHARACTER; }
 
 "`" [^`]* "`"?                            { return RAW_STRING; }
 {STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}? { return STRING; }
@@ -82,7 +86,6 @@ ESCAPES = [abfnrtv]
 ")"                                       { return RPAREN; }
 
 ":"                                       { return COLON; }
-"::"                                      { return COLONCOLON; }
 ";"                                       { return SEMICOLON; }
 ","                                       { return COMMA; }
 "Facility"                                { return FACILITY;  }
@@ -102,8 +105,6 @@ ESCAPES = [abfnrtv]
 "Procedure"                               { return PROCEDURE; }
 {IDENT}                                   { return IDENTIFIER; }
 {NUM_INT}                                 { return INT; }
-
-
 
 .                                        {  return BAD_CHARACTER; }
 }

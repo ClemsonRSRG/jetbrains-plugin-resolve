@@ -19,7 +19,6 @@
         LPAREN                  = "("
         RPAREN                  = ")"
         COLON                   = ":"
-        COLONCOLON              = "::"
         SEMICOLON               = ";"
         COMMA                   = ","
         INT                     = "int"
@@ -43,16 +42,20 @@
         PROCEDURE               = "Procedure"
         BY                      = "by"
         STRING                  = "string"
+        DOT                     =  '.'
+        COLONCOLON               =  '::'
         raw_string              = "raw_string"
     ]
 
     extends("(Facility|Concept)Module")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleImpl"
-    extends("(Facility|OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
+    extends("(Facility)Decl")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
     extends("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeDeclImpl"
+    extends("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.impl.ResOperationLikeNodeImpl"
 
     extends("(Uses)Spec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
 
-    implements("(Facility|OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.ResTopLevelModuleDecl"
+    implements("(Facility)Decl")="edu.clemson.resolve.plugin.psi.ResTopLevelModuleDecl"
+    implements("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.ResOperationLikeNode"
 
     implements("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.ResTypeDecl"
 
@@ -102,15 +105,12 @@ FacilityDecl ::= FACILITY identifier IS UsesSpec
 TypeModelDecl ::= TYPE FAMILY identifier IS MODELED BY identifier semicolon
 EXEMPLAR identifier semicolon {pin(".*")=1}
 
-OperationProcedureDecl ::= OPERATION identifier LPAREN RPAREN COLON TypeRefNode
-(RECURSIVE)? PROCEDURE
-END identifier semicolon
+OperationProcedureDecl ::= OPERATION identifier LPAREN RPAREN COLON TypeRefNode  (RECURSIVE)? PROCEDURE END semicolon {pin=2}
 
 TypeRefNode ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
 TypeReferenceExpression ::= identifier { methods=[getReference getQualifier] }
-left QualifiedTypeReferenceExpression ::= COLONCOLON identifier {elementType=TypeReferenceExpression}
+left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
 
-left QualifiedReferenceExpression ::= COLONCOLON identifier {elementType=ReferenceExpression}
-ReferenceExpression ::= identifier { methods=[getReference getQualifier] extends=Expression}
+//ReferenceExpression ::= identifier { methods=[getReference getQualifier] extends=Expression}
 
 Expression ::= LPAREN RPAREN //dummy

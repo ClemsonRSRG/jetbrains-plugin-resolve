@@ -3,7 +3,6 @@ package edu.clemson.resolve.plugin.psi.impl;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.util.PsiTreeUtil;
-import edu.clemson.resolve.plugin.psi.ResReferenceExpression;
 import edu.clemson.resolve.plugin.psi.ResTypeReferenceExpression;
 import edu.clemson.resolve.plugin.psi.ResUsesSpec;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +31,7 @@ public class ResPsiImplUtil {
         return new ResTypeReference(o);
     }
 
-    @Nullable public static ResReferenceExpression getQualifier(
+    /*@Nullable public static ResReferenceExpression getQualifier(
             @NotNull ResReferenceExpression o) {
         return PsiTreeUtil.getChildOfType(o, ResReferenceExpression.class);
     }
@@ -40,5 +39,5 @@ public class ResPsiImplUtil {
     @NotNull public static ResReference getReference(
             @NotNull ResReferenceExpression o) {
         return new ResReference(o);
-    }
+    }*/
 }

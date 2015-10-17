@@ -10,4 +10,6 @@ public interface RESOLVEIcons {
     public static final Icon FACILITY = IconLoader.getIcon("/edu/clemson/resolve/icons/facility.png");
     public static final Icon CONCEPT = IconLoader.getIcon("/edu/clemson/resolve/icons/concept.png");
 
+    public static final Icon TYPE_REPR = IconLoader.getIcon("/edu/clemson/resolve/icons/type_repr.png");
+
 }

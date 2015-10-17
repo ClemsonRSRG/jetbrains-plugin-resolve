@@ -43,6 +43,12 @@ public abstract class ResNamedElementImpl
         return this;
     }
 
+    @Override public int getTextOffset() {
+        PsiElement identifier = getIdentifier();
+        return identifier != null ? identifier.getTextOffset()
+                : super.getTextOffset();
+    }
+
     @Override public boolean processDeclarations(
             @NotNull PsiScopeProcessor processor,
             @NotNull ResolveState state,
