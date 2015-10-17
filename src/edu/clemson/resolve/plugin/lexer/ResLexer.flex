@@ -92,8 +92,14 @@ ESCAPES = [abfnrtv]
 "externally"                              { return EXTERNALLY; }
 "implemented"                             { return IMPLEMENTED; }
 "by"                                      { return BY; }
+"Type"                                    { return TYPE; }
+"Family"                                  { return FAMILY; }
+"modeled"                                 { return MODELED; }
+"exemplar"                                { return EXEMPLAR; }
 {IDENT}                                   { return IDENTIFIER; }
 {NUM_INT}                                 { return INT; }
+
+
 
 .                                        {  return BAD_CHARACTER; }
 }

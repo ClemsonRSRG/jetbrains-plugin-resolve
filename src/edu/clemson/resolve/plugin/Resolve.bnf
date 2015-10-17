@@ -33,17 +33,25 @@
         IS                      = "is"
         EXTERNALLY              = "externally"
         IMPLEMENTED             = "implemented"
+        TYPE                    = "Type"
+        FAMILY                  = "Family"
+        MODELED                 = "modeled"
+        EXEMPLAR                = "exemplar"
         BY                      = "by"
         STRING                  = "string"
         raw_string              = "raw_string"
     ]
 
     extends("(Facility|Concept)Module")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleImpl"
-    extends("FacilityDef")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
+    extends("(Facility)Decl")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
+    extends("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeDeclImpl"
 
     extends("(Uses)Spec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
 
-    implements("FacilityDef")="edu.clemson.resolve.plugin.psi.ResNamedElement"
+    implements("(Facility)Decl")="edu.clemson.resolve.plugin.psi.ResTopLevelModuleDecl"
+
+    implements("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.ResTypeDecl"
+
     implements("(Uses)Spec")="edu.clemson.resolve.plugin.psi.ResNamedElement"
     implements("(Facility|Concept)Module")="edu.clemson.resolve.plugin.psi.ResModule"
 
@@ -72,20 +80,19 @@ Module ::= FacilityModule | ConceptModule <<eof>>
 
 FacilityModule ::= FACILITY identifier SEMICOLON
     (UsesList)?
-    FacilityBlock
+    (FacilityDecl)* //add alts here
 END identifier SEMICOLON {pin(".*")=1}
 
 ConceptModule ::= CONCEPT identifier SEMICOLON
-
+    (TypeModelDecl)*
 END identifier SEMICOLON {pin(".*")=1}
 
 UsesList ::= USES UsesSpec (COMMA UsesSpec)* SEMICOLON {pin=1}
 
-UsesSpec ::= identifier {methods=[getName getReferences resolve getUsesTextRange]}
+UsesSpec ::= identifier {methods=[getUsesTextRange]}
 
-FacilityBlock ::= FacilityItem*
-
-FacilityItem ::= FacilityDef
-
-FacilityDef ::= FACILITY identifier IS UsesSpec
+FacilityDecl ::= FACILITY identifier IS UsesSpec
 (EXTERNALLY)? IMPLEMENTED BY UsesSpec SEMICOLON {pin=1}
+
+TypeModelDecl ::= TYPE FAMILY identifier IS MODELED BY identifier semicolon
+EXEMPLAR identifier semicolon {pin(".*")=1}

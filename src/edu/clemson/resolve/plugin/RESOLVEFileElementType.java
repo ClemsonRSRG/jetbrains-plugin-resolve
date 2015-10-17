@@ -5,7 +5,8 @@ import edu.clemson.resolve.plugin.stubs.ResFileStub;
 
 public class RESOLVEFileElementType extends IStubFileElementType<ResFileStub> {
 
-    public static final IStubFileElementType INSTANCE = new RESOLVEFileElementType();
+    public static final IStubFileElementType INSTANCE =
+            new RESOLVEFileElementType();
     public static final int VERSION = 13;
 
     private RESOLVEFileElementType() {
