@@ -9,6 +9,7 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
+import edu.clemson.resolve.plugin.psi.ResFacilityDecl;
 import edu.clemson.resolve.plugin.psi.ResNamedElement;
 import edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase;
 import edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl;
@@ -85,8 +86,12 @@ public class RESOLVEReferenceCompletionProvider
             boolean forTypes) {
         if (o instanceof ResNamedElement) {
             if (o instanceof ResTypeLikeNodeDecl) {
-                return RESOLVECompletionUtil.createTypeLookupElement((ResTypeLikeNodeDecl)o);
-                // : GoCompletionUtil.createTypeConversionLookupElement((GoTypeSpec)o);
+                return RESOLVECompletionUtil
+                        .createTypeLookupElement((ResTypeLikeNodeDecl)o);
+            }
+            else if (o instanceof ResFacilityDecl) {
+                return RESOLVECompletionUtil
+                        .createFacilityLookupElement(((ResFacilityDecl) o));
             }
             else {
                 //return RESOLVECompletionUtil.createVariableLikeLookupElement((ResNamedElement) o);
@@ -97,7 +102,6 @@ public class RESOLVEReferenceCompletionProvider
     }
 
     public static class MyRESOLVEScopeProcessor extends ResScopeProcessor {
-        private final String myDanKey = "";
         private final CompletionResultSet myResult;
         private final boolean myForTypes;
 

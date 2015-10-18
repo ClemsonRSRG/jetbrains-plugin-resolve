@@ -5,15 +5,27 @@ import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.PsiElement;
+import com.intellij.util.ObjectUtils;
 import edu.clemson.resolve.plugin.RESOLVEIcons;
+import edu.clemson.resolve.plugin.psi.ResFacilityDecl;
 import edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl;
+import groovy.lang.Lazy;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class RESOLVECompletionUtil {
+public final class RESOLVECompletionUtil {
 
+    public static final int FACILITY_PRIORITY = 2;
     public static final int NOT_IMPORTED_TYPE_PRIORITY = 5;
     public static final int TYPE_PRIORITY = NOT_IMPORTED_TYPE_PRIORITY + 10;
+
+    private static class Lazy {
+        private static final SingleCharInsertHandler PACKAGE_INSERT_HANDLER =
+                new SingleCharInsertHandler('.');
+    }
+
+    private RESOLVECompletionUtil() {}
 
     @NotNull public static CamelHumpMatcher createPrefixMatcher(
             @NotNull PrefixMatcher original) {
@@ -28,18 +40,32 @@ public class RESOLVECompletionUtil {
     @NotNull public static LookupElement createTypeLookupElement(
             @NotNull ResTypeLikeNodeDecl t) {
         return createTypeLookupElement(t, StringUtil.notNullize(
-                t.getName()), null, null, TYPE_PRIORITY);
+                t.getName()), null, TYPE_PRIORITY);
     }
 
     @NotNull public static LookupElement createTypeLookupElement(
             @NotNull ResTypeLikeNodeDecl t, @NotNull String lookupString,
-            @Nullable InsertHandler<LookupElement> handler,
-            @Nullable String importPath, double priority) {
+            @Nullable InsertHandler<LookupElement> handler, double priority) {
         LookupElementBuilder builder =
                 LookupElementBuilder.createWithSmartPointer(lookupString, t)
                 .withInsertHandler(handler).withIcon(RESOLVEIcons.TYPE_REPR);
-        if (importPath != null) builder =
-                builder.withTailText(" " + importPath, true);
         return PrioritizedLookupElement.withPriority(builder, priority);
     }
+
+    @Nullable public static LookupElement createFacilityLookupElement(
+            @NotNull ResFacilityDecl facility) {
+        return createFacilityLookupElement(facility,
+                facility.getIdentifier().getText());
+    }
+
+    @Nullable public static LookupElement createFacilityLookupElement(
+            @NotNull ResFacilityDecl facility, @NotNull String name) {
+        return PrioritizedLookupElement.withPriority(
+                LookupElementBuilder.create(name)
+                        .withIcon(RESOLVEIcons.FACILITY)
+                        .withInsertHandler(Lazy.PACKAGE_INSERT_HANDLER),
+                FACILITY_PRIORITY);
+    }
+
+
 }
