@@ -3,14 +3,14 @@ package edu.clemson.resolve.plugin.psi.impl;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.OrderedSet;
-import edu.clemson.resolve.plugin.psi.ResFacilityDecl;
-import edu.clemson.resolve.plugin.psi.ResFile;
-import edu.clemson.resolve.plugin.psi.ResTypeReferenceExpression;
+import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.List;
 
 public class ResTypeReference
         extends
@@ -74,16 +74,22 @@ public class ResTypeReference
                                                       @NotNull ResScopeProcessor processor,
                                                       @NotNull ResolveState state) {
         PsiReference targetRef = qualifier.getReference();
-        if (targetRef == null) return false;
         PsiElement target = targetRef.resolve();
         if (target == null || target == qualifier) return false;
-        /*if (target instanceof ResFacilityDecl) {
-            PsiFile specFile = ((ResFacilityDecl)target).getSpec().resolve();
+        if (target instanceof ResFacilityDecl) {
+            List<ResUsesSpec> facilitySpecs =
+                    ((ResFacilityDecl)target).getUsesSpecList();
+            if (facilitySpecs.size() < 1) return false;
+
+            //resolve through the specification of the facility
+            PsiFile specFile = facilitySpecs.get(0).resolve();
+
             if (specFile != null) {
-                ResReference.processFileEntities((ResFile) specFile, processor, state, false);
+                ResReference.processFileEntities(
+                        (ResFile) specFile, processor, state, false);
             }
             //target =
-        }*/
+        }
         //        ((ResFacilityDecl)target).getSpec()     //need to get PsiFile corresponding to spec...
         /*if (target instanceof GoImportSpec) target = ((GoImportSpec)target).getImportString().resolve();
         if (target instanceof PsiDirectory) {
@@ -96,8 +102,8 @@ public class ResTypeReference
                                               @NotNull ResScopeProcessor processor,
                                               @NotNull ResolveState state,
                                               boolean localResolve) {
-        /*ResScopeProcessorBase delegate = createDelegate(processor);
-        ResolutionUtil.treeWalkUp(myElement, delegate);
+        ResScopeProcessorBase delegate = createDelegate(processor);
+        ResolveUtil.treeWalkUp(myElement, delegate);
         Collection<? extends ResNamedElement> result = delegate.getVariants();
 
         //these two will search locally...
@@ -105,7 +111,34 @@ public class ResTypeReference
         if (!processFileEntities(file, processor, state, localResolve)) return false;
 
         if (ResReference.processUsesRequests(file, processor, state, myElement)) return false;
-        */
+
         return true;
+    }
+
+    private boolean processFileEntities(@NotNull ResFile file,
+                                        @NotNull ResScopeProcessor processor,
+                                        @NotNull ResolveState state,
+                                        boolean localProcessing) {
+        if (!processNamedElements(processor, state, file.getTypes(),
+                localProcessing)) return false;
+        return true;
+    }
+
+    private boolean processNamedElements(@NotNull PsiScopeProcessor processor,
+                                         @NotNull ResolveState state,
+                                         @NotNull Collection<? extends ResNamedElement> elements,
+                                         boolean localResolve) {
+        for (ResNamedElement definition : elements) {
+            //if (definition instanceof ResTypeLikeNodeDecl && !allowed((GoTypeSpec)definition)) continue;
+            if ((definition.isPublic() || localResolve) &&
+                    !processor.execute(definition, state)) return false;
+        }
+        return true;
+    }
+
+
+    @NotNull private ResTypeProcessor createDelegate(
+            @NotNull ResScopeProcessor processor) {
+        return new ResTypeProcessor(myElement, processor.isCompletion());
     }
 }

@@ -30,10 +30,6 @@ public class RESOLVEUsesCompletionProvider
         extends
             CompletionProvider<CompletionParameters> {
 
-    /** We fiddle around with TextRange so much in here to strip out the
-     *  "Intellijidearulezzz" suffix that the completion provider apparently
-     *  always feels the need to tack on.
-     */
     @Override protected void addCompletions(
             @NotNull CompletionParameters completionParameters,
             ProcessingContext processingContext,

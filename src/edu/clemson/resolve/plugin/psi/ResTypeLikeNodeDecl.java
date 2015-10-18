@@ -5,7 +5,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /** Encompasses type model declarations and type representation declarations.
+ *  Implementations of common methods between the two constructs can be found
+ *  in {@link edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeDeclImpl}.
  */
-public interface ResTypeDecl extends ResTopLevelModuleDecl, ResNamedElement {
+public interface ResTypeLikeNodeDecl extends ResTopLevelModuleDecl, ResNamedElement {
     @NotNull PsiElement getIdentifier();
 }

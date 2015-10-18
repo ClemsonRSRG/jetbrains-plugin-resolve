@@ -11,7 +11,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import edu.clemson.resolve.plugin.psi.ResNamedElement;
 import edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase;
-import edu.clemson.resolve.plugin.psi.ResTypeDecl;
+import edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl;
 import edu.clemson.resolve.plugin.psi.impl.ResReference;
 import edu.clemson.resolve.plugin.psi.impl.ResScopeProcessor;
 import edu.clemson.resolve.plugin.psi.impl.ResTypeReference;
@@ -70,7 +70,10 @@ public class RESOLVEReferenceCompletionProvider
         }
     }
 
-    private static void addElement(@NotNull PsiElement o, @NotNull ResolveState state, boolean forTypes, @NotNull CompletionResultSet set) {
+    private static void addElement(@NotNull PsiElement o,
+                                   @NotNull ResolveState state,
+                                   boolean forTypes,
+                                   @NotNull CompletionResultSet set) {
         LookupElement lookup = createLookupElement(o, state, forTypes);
         if (lookup != null) {
             set.addElement(lookup);
@@ -81,8 +84,8 @@ public class RESOLVEReferenceCompletionProvider
             @NotNull PsiElement o, @NotNull ResolveState state,
             boolean forTypes) {
         if (o instanceof ResNamedElement) {
-            if (o instanceof ResTypeDecl) {
-                return RESOLVECompletionUtil.createTypeLookupElement((ResTypeDecl)o);
+            if (o instanceof ResTypeLikeNodeDecl) {
+                return RESOLVECompletionUtil.createTypeLookupElement((ResTypeLikeNodeDecl)o);
                 // : GoCompletionUtil.createTypeConversionLookupElement((GoTypeSpec)o);
             }
             else {

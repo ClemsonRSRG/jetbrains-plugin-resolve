@@ -37,7 +37,10 @@ public class ResCompositeElementImpl
             @NotNull PsiElement place) {
         if (!o.shouldGoDeeper()) return processor.execute(o, state);
         if (!processor.execute(o, state)) return false;
-        return false;
+
+        return o instanceof ResOperationLikeNodeImpl ?
+                ResolveUtil.processChildrenFromTop(o, processor, state, lastParent, place) :
+                ResolveUtil.processChildren(o, processor, state, lastParent, place);
     }
 
     @Override public boolean shouldGoDeeper() {

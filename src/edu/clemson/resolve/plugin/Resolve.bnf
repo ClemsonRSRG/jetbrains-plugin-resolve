@@ -19,13 +19,14 @@
         LPAREN                  = "("
         RPAREN                  = ")"
         COLON                   = ":"
+        DOT                     = '.'
         SEMICOLON               = ";"
         COMMA                   = ","
-        INT                     = "int"
 
         //this 'space' is to make live preview less of a pain
         space                   = "regexp:\s+"
 
+        INT                     = "int"
         FACILITY                = "Facility"
         CONCEPT                 = "Concept"
         END                     = "end"
@@ -42,9 +43,6 @@
         PROCEDURE               = "Procedure"
         BY                      = "by"
         STRING                  = "string"
-        DOTDOT                  = '..'
-        DOT                     =  '.'
-        COLONCOLON              =  '::'
         raw_string              = "raw_string"
     ]
 
@@ -58,7 +56,7 @@
     implements("(Facility)Decl")="edu.clemson.resolve.plugin.psi.ResTopLevelModuleDecl"
     implements("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.ResOperationLikeNode"
 
-    implements("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.ResTypeDecl"
+    implements("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
 
     implements("(Uses)Spec")="edu.clemson.resolve.plugin.psi.ResNamedElement"
     implements("(Facility|Concept)Module")="edu.clemson.resolve.plugin.psi.ResModule"
@@ -97,15 +95,16 @@ END identifier SEMICOLON {pin(".*")=1}
 
 UsesList ::= USES UsesSpec (COMMA UsesSpec)* SEMICOLON {pin=1}
 
-UsesSpec ::= identifier {methods=[getUsesTextRange]}
+UsesSpec ::= identifier {methods=[getUsesTextRange getReferences resolve]}
 
 FacilityDecl ::= FACILITY identifier IS UsesSpec
 (EXTERNALLY)? IMPLEMENTED BY UsesSpec SEMICOLON {pin=2}
 
 TypeModelDecl ::= TYPE FAMILY identifier IS MODELED BY identifier semicolon
-EXEMPLAR identifier semicolon {pin(".*")=1}
+EXEMPLAR identifier semicolon {pin(".*")=3}
 
-OperationProcedureDecl ::= OPERATION identifier LPAREN RPAREN COLON TypeRefNode  (RECURSIVE)? PROCEDURE END semicolon {pin=2}
+OperationProcedureDecl ::= OPERATION identifier LPAREN RPAREN COLON TypeRefNode
+(RECURSIVE)? PROCEDURE END identifier semicolon {pin=2}
 
 TypeRefNode ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
 TypeReferenceExpression ::= identifier { methods=[getReference getQualifier] }

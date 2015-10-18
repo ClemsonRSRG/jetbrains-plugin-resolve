@@ -1,14 +1,12 @@
 package edu.clemson.resolve.plugin.completion;
 
-import com.intellij.codeInsight.completion.InsertHandler;
-import com.intellij.codeInsight.completion.PrefixMatcher;
-import com.intellij.codeInsight.completion.PrioritizedLookupElement;
+import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.text.StringUtil;
 import edu.clemson.resolve.plugin.RESOLVEIcons;
-import edu.clemson.resolve.plugin.psi.ResTypeDecl;
+import edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,13 +26,13 @@ public class RESOLVECompletionUtil {
     }
 
     @NotNull public static LookupElement createTypeLookupElement(
-            @NotNull ResTypeDecl t) {
+            @NotNull ResTypeLikeNodeDecl t) {
         return createTypeLookupElement(t, StringUtil.notNullize(
                 t.getName()), null, null, TYPE_PRIORITY);
     }
 
     @NotNull public static LookupElement createTypeLookupElement(
-            @NotNull ResTypeDecl t, @NotNull String lookupString,
+            @NotNull ResTypeLikeNodeDecl t, @NotNull String lookupString,
             @Nullable InsertHandler<LookupElement> handler,
             @Nullable String importPath, double priority) {
         LookupElementBuilder builder =
@@ -44,5 +42,4 @@ public class RESOLVECompletionUtil {
                 builder.withTailText(" " + importPath, true);
         return PrioritizedLookupElement.withPriority(builder, priority);
     }
-
 }

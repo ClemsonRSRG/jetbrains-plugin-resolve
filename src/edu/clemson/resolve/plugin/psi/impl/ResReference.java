@@ -4,13 +4,13 @@ import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.OrderedSet;
-import edu.clemson.resolve.plugin.psi.ResCompositeElement;
-import edu.clemson.resolve.plugin.psi.ResFile;
-import edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase;
+import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -99,14 +99,15 @@ public class ResReference
                                        @NotNull ResScopeProcessor processor,
                                        @NotNull ResolveState state,
                                        @NotNull ResCompositeElement element) {
-        /*for (ResUsesItem u : file.getUsesItems()) {
-            //this file resolve is failing for whatever reason when we're trying to add completions... is this a concurrency thing maybe?
-            //works the rest of the time...
+        for (ResUsesSpec u : file.getUsesItems()) {
             PsiFile resolvedFile = u.resolve();
             if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
-            if (!processor.execute(((ResFile) resolvedFile).getEnclosedModule(), state.put(ACTUAL_NAME, u.getText()))) return true;
-            if (!processFileEntities((ResFile)resolvedFile, processor, state, false)) return false;
-        }*/
+            if (((ResFile) resolvedFile).getEnclosedModule() == null) continue;
+            if (!processor.execute(((ResFile) resolvedFile).getEnclosedModule(),
+                    state.put(ACTUAL_NAME, u.getText()))) return true;
+            if (!processFileEntities((ResFile)resolvedFile,
+                    processor, state, false)) return false;
+        }
         return true;
     }
 
@@ -121,5 +122,47 @@ public class ResReference
         if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
 */
         return true;
+    }
+
+    protected static boolean processFileEntities(@NotNull ResFile file,
+                                                 @NotNull ResScopeProcessor processor,
+                                                 @NotNull ResolveState state,
+                                                 boolean localProcessing) {
+        //if (!processNamedElements(processor, state, file.getConstants(), localProcessing)) return false;
+        //if (!processNamedElements(processor, state, file.getVars(), localProcessing)) return false;
+        //if (!processNamedElements(processor, state, file.getFunctions(), localProcessing)) return false;
+        if (!processNamedElements(processor, state,
+                file.getFacilities(), localProcessing)) return false;
+        if (!processNamedElements(processor, state,
+                file.getTypes(), localProcessing)) return false;
+        return true;
+    }
+
+    static boolean processNamedElements(@NotNull PsiScopeProcessor processor,
+                                        @NotNull ResolveState state,
+                                        @NotNull Collection<? extends ResNamedElement> elements,
+                                        boolean localResolve) {
+        return processNamedElements(processor, state, elements, localResolve, false);
+    }
+
+    static boolean processNamedElements(@NotNull PsiScopeProcessor processor,
+                                        @NotNull ResolveState state,
+                                        @NotNull Collection<? extends ResNamedElement> elements,
+                                        boolean localResolve,
+                                        boolean checkContainingFile) {
+        PsiFile contextFile = checkContainingFile ? getContextFile(state) : null;
+        for (ResNamedElement definition : elements) {
+            //if (!definition.isValid() || checkContainingFile && !allowed(definition.getContainingFile(), contextFile)) continue;
+            if ((localResolve || definition.isPublic()) &&
+                    !processor.execute(definition, state)) return false;
+        }
+        return true;
+    }
+
+    @Nullable private static PsiFile getContextFile(
+            @NotNull ResolveState state) {
+        SmartPsiElementPointer<ResReferenceExpressionBase> context =
+                state.get(CONTEXT);
+        return context != null ? context.getContainingFile() : null;
     }
 }

@@ -46,12 +46,11 @@ ESCAPES = [abfnrtv]
 {WS}                                    { return WS; }
 {NL}+                                   { return NLS; }
 
-{LINE_COMMENT}                          { return LINE_COMMENT; }
 "/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")? { return MULTILINE_COMMENT; }
-
-
-"`" [^`]* "`"?                          { return RAW_STRING; }
 {STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}? { return STRING; }
+"`" [^`]* "`"?                          { return RAW_STRING; }
+
+{LINE_COMMENT}                          { return LINE_COMMENT; }
 "("                                     { return LPAREN; }
 ")"                                     { return RPAREN; }
 "."                                     { return DOT; }
