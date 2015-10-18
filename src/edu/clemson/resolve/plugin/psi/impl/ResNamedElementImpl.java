@@ -7,14 +7,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.impl.ElementBase;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.util.CachedValueProvider;
+import com.intellij.psi.util.CachedValuesManager;
+import com.intellij.psi.util.PsiModificationTracker;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.ui.RowIcon;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.PlatformIcons;
 import edu.clemson.resolve.plugin.RESOLVEIcons;
-import edu.clemson.resolve.plugin.psi.ResCompositeElement;
-import edu.clemson.resolve.plugin.psi.ResConceptModule;
-import edu.clemson.resolve.plugin.psi.ResFacilityModule;
-import edu.clemson.resolve.plugin.psi.ResNamedElement;
+import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -65,6 +66,28 @@ public abstract class ResNamedElementImpl
             @NotNull PsiElement place) {
         return ResCompositeElementImpl.processDeclarationsDefault(
                 this, processor, state, lastParent, place);
+    }
+
+    @Nullable @Override public ResTypeRefNode getResTypeRefNode(
+            @Nullable ResolveState context) {
+        if (context != null) return getResTypeRefNodeInner(context);
+        return CachedValuesManager.getCachedValue(this, new CachedValueProvider<ResTypeRefNode>() {
+            @Nullable
+            @Override
+            public Result<ResTypeRefNode> compute() {
+                return Result.create(getResTypeRefNodeInner(null),
+                        PsiModificationTracker.MODIFICATION_COUNT);
+            }
+        });
+    }
+
+    @Nullable protected ResTypeRefNode getResTypeRefNodeInner(
+            @Nullable ResolveState context) {
+        return findSiblingType();
+    }
+
+    @Nullable @Override public ResTypeRefNode findSiblingType() {
+        return PsiTreeUtil.getNextSiblingOfType(this, ResTypeRefNode.class);
     }
 
     @Nullable @Override public Icon getIcon(int flags) {

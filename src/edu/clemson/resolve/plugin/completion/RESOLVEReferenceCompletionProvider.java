@@ -94,7 +94,8 @@ public class RESOLVEReferenceCompletionProvider
                         .createFacilityLookupElement(((ResFacilityDecl) o));
             }
             else {
-                //return RESOLVECompletionUtil.createVariableLikeLookupElement((ResNamedElement) o);
+                //return RESOLVECompletionUtil
+                // .createVariableLikeLookupElement((ResNamedElement) o);
             }
         }
 
