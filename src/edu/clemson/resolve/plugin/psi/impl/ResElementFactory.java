@@ -38,7 +38,7 @@ public class ResElementFactory {
             @NotNull String newUsesItemName) {
         List<String> rawStringUsesList = new ArrayList<String>();
         if (existingUsesList != null) {
-            for (ResUsesItem usesItem : existingUsesList.getUsesItems()) {
+            for (ResUsesItem usesItem : existingUsesList.getUsesSpecs()) {
                 rawStringUsesList.add(usesItem.getText());
             }
         }

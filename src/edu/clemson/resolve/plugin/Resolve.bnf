@@ -47,18 +47,13 @@
     ]
 
     extends("(Facility|Concept)Module")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleImpl"
-    extends("(Facility)Decl")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
     extends("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeDeclImpl"
     extends("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.impl.ResOperationLikeNodeImpl"
+    extends("(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
 
-    extends("(Uses)Spec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
-
-    implements("(Facility)Decl")="edu.clemson.resolve.plugin.psi.ResTopLevelModuleDecl"
     implements("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.ResOperationLikeNode"
-
     implements("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
-
-    implements("(Uses)Spec")="edu.clemson.resolve.plugin.psi.ResNamedElement"
+    implements("(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.ResNamedElement"
     implements("(Facility|Concept)Module")="edu.clemson.resolve.plugin.psi.ResModule"
     implements(".*ReferenceExpression")="edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase"
 

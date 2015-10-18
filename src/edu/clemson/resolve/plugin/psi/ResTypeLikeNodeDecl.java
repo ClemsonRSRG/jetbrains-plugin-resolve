@@ -8,6 +8,6 @@ import org.jetbrains.annotations.Nullable;
  *  Implementations of common methods between the two constructs can be found
  *  in {@link edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeDeclImpl}.
  */
-public interface ResTypeLikeNodeDecl extends ResTopLevelModuleDecl, ResNamedElement {
+public interface ResTypeLikeNodeDecl extends ResNamedElement {
     @NotNull PsiElement getIdentifier();
 }

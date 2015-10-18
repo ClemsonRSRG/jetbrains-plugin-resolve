@@ -12,6 +12,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.PlatformIcons;
 import edu.clemson.resolve.plugin.RESOLVEIcons;
 import edu.clemson.resolve.plugin.psi.ResCompositeElement;
+import edu.clemson.resolve.plugin.psi.ResConceptModule;
 import edu.clemson.resolve.plugin.psi.ResFacilityModule;
 import edu.clemson.resolve.plugin.psi.ResNamedElement;
 import org.jetbrains.annotations.NonNls;
@@ -69,7 +70,7 @@ public abstract class ResNamedElementImpl
     @Nullable @Override public Icon getIcon(int flags) {
         Icon icon = null;
         if (this instanceof ResFacilityModule) icon = RESOLVEIcons.FACILITY;
-
+        else if (this instanceof ResConceptModule) icon = RESOLVEIcons.CONCEPT;
         if (icon != null) {
             if ((flags & Iconable.ICON_FLAG_VISIBILITY) != 0) {
                 RowIcon rowIcon =

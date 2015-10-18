@@ -99,11 +99,12 @@ public class ResReference
                                        @NotNull ResScopeProcessor processor,
                                        @NotNull ResolveState state,
                                        @NotNull ResCompositeElement element) {
-        for (ResUsesSpec u : file.getUsesItems()) {
+        for (ResUsesSpec u : file.getUsesSpecs()) {
             PsiFile resolvedFile = u.resolve();
             if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
-            if (((ResFile) resolvedFile).getEnclosedModule() == null) continue;
-            if (!processor.execute(((ResFile) resolvedFile).getEnclosedModule(),
+            ResModule resolvedModule = ((ResFile) resolvedFile).getEnclosedModule();
+            if (resolvedModule == null) continue;
+            if (!processor.execute(resolvedModule,
                     state.put(ACTUAL_NAME, u.getText()))) return true;
             if (!processFileEntities((ResFile)resolvedFile,
                     processor, state, false)) return false;
