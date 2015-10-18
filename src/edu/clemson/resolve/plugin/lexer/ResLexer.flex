@@ -57,21 +57,26 @@ ESCAPES = [abfnrtv]
 ":"                                     { return COLON; }
 ";"                                     { return SEMICOLON; }
 ","                                     { return COMMA; }
-"Facility"                              { return FACILITY;  }
+"="                                     { return EQUALS; }
+
+"by"                                    { return BY; }
 "Concept"                               { return CONCEPT;  }
 "end"                                   { return END;  }
-"uses"                                  { return USES; }
-"is"                                    { return IS; }
-"externally"                            { return EXTERNALLY; }
-"implemented"                           { return IMPLEMENTED; }
-"by"                                    { return BY; }
-"Type"                                  { return TYPE; }
-"Family"                                { return FAMILY; }
-"modeled"                               { return MODELED; }
 "exemplar"                              { return EXEMPLAR; }
+"externally"                            { return EXTERNALLY; }
+"Facility"                              { return FACILITY;  }
+"Family"                                { return FAMILY; }
+"is"                                    { return IS; }
+"implemented"                           { return IMPLEMENTED; }
+"modeled"                               { return MODELED; }
 "Operation"                             { return OPERATION; }
-"Recursive"                             { return RECURSIVE; }
 "Procedure"                             { return PROCEDURE; }
+"Recursive"                             { return RECURSIVE; }
+"Record"                                { return RECORD; }
+"Type"                                  { return TYPE; }
+"uses"                                  { return USES; }
+"Var"                                   { return VAR; }
+
 {IDENT}                                 { return IDENTIFIER; }
 {NUM_INT}                               { return INT; }
 .                                       { return BAD_CHARACTER; }

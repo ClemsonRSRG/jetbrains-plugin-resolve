@@ -22,6 +22,7 @@
         DOT                     = '.'
         SEMICOLON               = ";"
         COMMA                   = ","
+        EQUALS                  = "="
 
         //this 'space' is to make live preview less of a pain
         space                   = "regexp:\s+"
@@ -40,7 +41,9 @@
         EXEMPLAR                = "exemplar"
         OPERATION               = "Operation"
         RECURSIVE               = "Recursive"
+        RECORD                  = "Record"
         PROCEDURE               = "Procedure"
+        VAR                     = "Var"
         BY                      = "by"
         STRING                  = "string"
         raw_string              = "raw_string"
@@ -53,7 +56,7 @@
 
     implements("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.ResOperationLikeNode"
     implements("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
-    implements("(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.ResNamedElement"
+    implements("(Var)Def|(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.ResNamedElement"
     implements("(Facility|Concept)Module")="edu.clemson.resolve.plugin.psi.ResModule"
     implements(".*ReferenceExpression")="edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase"
 
@@ -81,7 +84,7 @@ Module ::= FacilityModule | ConceptModule <<eof>>
 
 FacilityModule ::= FACILITY identifier SEMICOLON
     (UsesList)?
-    (FacilityDecl | OperationProcedureDecl)* //add alts here
+    (FacilityDecl | OperationProcedureDecl | TypeReprDecl)*
 END identifier SEMICOLON {pin(".*")=1}
 
 ConceptModule ::= CONCEPT identifier SEMICOLON
@@ -98,8 +101,20 @@ FacilityDecl ::= FACILITY identifier IS UsesSpec
 TypeModelDecl ::= TYPE FAMILY identifier IS MODELED BY identifier semicolon
 EXEMPLAR identifier semicolon {pin(".*")=3}
 
+TypeReprDecl ::= TYPE '=' TypeRefNode | TypeRecordNode semicolon
+
+TypeRecordNode ::= RECORD RecordVarDeclGroup* END
+
+RecordVarDeclGroup ::= VarDef (COMMA VarDef)* COLON TypeRefNode
+
+VarDeclGroup ::= VAR VarDef (COMMA VarDef)* COLON TypeRefNode
+
+VarDef ::= identifier {methods=[getResTypeInner getReference]}
+
 OperationProcedureDecl ::= OPERATION identifier LPAREN RPAREN COLON
-TypeRefNode semicolon (RECURSIVE)? PROCEDURE END identifier semicolon {pin=2}
+TypeRefNode semicolon (RECURSIVE)? PROCEDURE
+    (VarDeclGroup)*
+END identifier semicolon {pin=2}
 
 TypeRefNode ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
 TypeReferenceExpression ::= identifier { methods=[getReference getQualifier] }
