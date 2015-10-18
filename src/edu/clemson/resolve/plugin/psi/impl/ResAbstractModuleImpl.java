@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ResAbstractModuleImpl
@@ -47,7 +48,7 @@ public abstract class ResAbstractModuleImpl
                 new CachedValueProvider<List<ResTypeLikeNodeDecl>>() {
                     @Override
                     public Result<List<ResTypeLikeNodeDecl>> compute() {
-                        return Result.create(calcTypes(), this);
+                        return Result.create(calcTypes(), ResAbstractModuleImpl.this);
                     }
                 });
     }
@@ -57,7 +58,7 @@ public abstract class ResAbstractModuleImpl
                 new CachedValueProvider<List<ResFacilityDecl>>() {
                     @Override
                     public Result<List<ResFacilityDecl>> compute() {
-                        return Result.create(calcFacilities(), this);
+                        return Result.create(calcFacilities(), ResAbstractModuleImpl.this);
                     }
                 });
     }

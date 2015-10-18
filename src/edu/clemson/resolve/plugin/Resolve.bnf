@@ -47,7 +47,7 @@
     ]
 
     extends("(Facility|Concept)Module")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleImpl"
-    extends("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeDeclImpl"
+    extends("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeDeclImpl"
     extends("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.impl.ResOperationLikeNodeImpl"
     extends("(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
 
@@ -98,8 +98,8 @@ FacilityDecl ::= FACILITY identifier IS UsesSpec
 TypeModelDecl ::= TYPE FAMILY identifier IS MODELED BY identifier semicolon
 EXEMPLAR identifier semicolon {pin(".*")=3}
 
-OperationProcedureDecl ::= OPERATION identifier LPAREN RPAREN COLON TypeRefNode
-(RECURSIVE)? PROCEDURE END identifier semicolon {pin=2}
+OperationProcedureDecl ::= OPERATION identifier LPAREN RPAREN COLON
+TypeRefNode semicolon (RECURSIVE)? PROCEDURE END identifier semicolon {pin=2}
 
 TypeRefNode ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
 TypeReferenceExpression ::= identifier { methods=[getReference getQualifier] }

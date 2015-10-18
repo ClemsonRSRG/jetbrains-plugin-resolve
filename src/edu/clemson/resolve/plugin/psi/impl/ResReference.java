@@ -151,7 +151,7 @@ public class ResReference
                                         @NotNull Collection<? extends ResNamedElement> elements,
                                         boolean localResolve,
                                         boolean checkContainingFile) {
-        PsiFile contextFile = checkContainingFile ? getContextFile(state) : null;
+
         for (ResNamedElement definition : elements) {
             //if (!definition.isValid() || checkContainingFile && !allowed(definition.getContainingFile(), contextFile)) continue;
             if ((localResolve || definition.isPublic()) &&

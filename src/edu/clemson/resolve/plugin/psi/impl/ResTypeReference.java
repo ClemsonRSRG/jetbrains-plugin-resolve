@@ -75,7 +75,7 @@ public class ResTypeReference
                                                       @NotNull ResolveState state) {
         PsiReference targetRef = qualifier.getReference();
         PsiElement target = targetRef.resolve();
-        if (target == null || target == qualifier) return false;
+        if (target == null) return false;
         if (target instanceof ResFacilityDecl) {
             List<ResUsesSpec> facilitySpecs =
                     ((ResFacilityDecl)target).getUsesSpecList();
