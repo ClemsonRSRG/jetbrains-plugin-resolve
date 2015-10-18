@@ -20,7 +20,7 @@ public class ResVarReference extends ResCachedReference<ResVarDef> {
                 return super.condition(e);
             }
         };
-        processResolveVariants(p);
+        //processResolveVariants(p);
         return p.getResult();
     }
 }

@@ -50,12 +50,13 @@
     ]
 
     extends("(Facility|Concept)Module")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleImpl"
-    extends("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeDeclImpl"
+    extends("(TypeRepr|TypeModel)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeDeclImpl"
     extends("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.impl.ResOperationLikeNodeImpl"
     extends("(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
+    extends("(Var)Def|(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
 
     implements("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.ResOperationLikeNode"
-    implements("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
+    implements("(TypeRepr|TypeModel)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
     implements("(Var)Def|(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.ResNamedElement"
     implements("(Facility|Concept)Module")="edu.clemson.resolve.plugin.psi.ResModule"
     implements(".*ReferenceExpression")="edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase"
@@ -105,9 +106,9 @@ TypeReprDecl ::= TYPE '=' TypeRefNode | TypeRecordNode semicolon
 
 TypeRecordNode ::= RECORD RecordVarDeclGroup* END
 
-RecordVarDeclGroup ::= VarDef (COMMA VarDef)* COLON TypeRefNode
+RecordVarDeclGroup ::= VarDef (COMMA VarDef)* COLON TypeRefNode semicolon
 
-VarDeclGroup ::= VAR VarDef (COMMA VarDef)* COLON TypeRefNode
+VarDeclGroup ::= VAR VarDef (COMMA VarDef)* COLON TypeRefNode semicolon
 
 VarDef ::= identifier {methods=[getResTypeInner getReference]}
 
