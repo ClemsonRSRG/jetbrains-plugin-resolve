@@ -31,6 +31,7 @@
         FACILITY                = "Facility"
         CONCEPT                 = "Concept"
         END                     = "end"
+        EVALUATES               = "evaluates"
         USES                    = "uses"
         IS                      = "is"
         EXTERNALLY              = "externally"
@@ -53,11 +54,12 @@
     extends("(TypeRepr|TypeModel)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeDeclImpl"
     extends("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.impl.ResOperationLikeNodeImpl"
     extends("(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
-    extends("(Var)Def|(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
+    extends("(Var|Param)Def|(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
 
+    implements("(Facility|Concept)Block")="edu.clemson.resolve.plugin.psi.ResModuleBlock"
     implements("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.ResOperationLikeNode"
     implements("(TypeRepr|TypeModel)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
-    implements("(Var)Def|(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.ResNamedElement"
+    implements("(Var|Param)Def|(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.ResNamedElement"
     implements("(Facility|Concept)Module")="edu.clemson.resolve.plugin.psi.ResModule"
     implements(".*ReferenceExpression")="edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase"
 
@@ -85,12 +87,17 @@ Module ::= FacilityModule | ConceptModule <<eof>>
 
 FacilityModule ::= FACILITY identifier SEMICOLON
     (UsesList)?
-    (FacilityDecl | OperationProcedureDecl | TypeReprDecl)*
+    FacilityBlock
 END identifier SEMICOLON {pin(".*")=1}
 
+FacilityBlock ::= (FacilityDecl | OperationProcedureDecl | TypeReprDecl)*
+
 ConceptModule ::= CONCEPT identifier SEMICOLON
-    (TypeModelDecl)*
+    (UsesList)?
+    ConceptBlock
 END identifier SEMICOLON {pin(".*")=1}
+
+ConceptBlock ::= (TypeModelDecl)*
 
 UsesList ::= USES UsesSpec (COMMA UsesSpec)* SEMICOLON {pin=1}
 
@@ -99,23 +106,25 @@ UsesSpec ::= identifier {methods=[getUsesTextRange getReferences resolve]}
 FacilityDecl ::= FACILITY identifier IS UsesSpec
 (EXTERNALLY)? IMPLEMENTED BY UsesSpec SEMICOLON {pin=2}
 
-TypeModelDecl ::= TYPE FAMILY identifier IS MODELED BY identifier semicolon
-EXEMPLAR identifier semicolon {pin(".*")=3}
+TypeModelDecl ::= TYPE FAMILY identifier IS MODELED BY identifier SEMICOLON
+EXEMPLAR identifier SEMICOLON {pin(".*")=3}
 
-TypeReprDecl ::= TYPE '=' TypeRefNode | TypeRecordNode semicolon
+TypeReprDecl ::= TYPE '=' TypeRefNode | TypeRecordNode SEMICOLON
 
 TypeRecordNode ::= RECORD RecordVarDeclGroup* END
 
-RecordVarDeclGroup ::= VarDef (COMMA VarDef)* COLON TypeRefNode semicolon
+RecordVarDeclGroup ::= VarDef (COMMA VarDef)* COLON TypeRefNode SEMICOLON
 
-VarDeclGroup ::= VAR VarDef (COMMA VarDef)* COLON TypeRefNode semicolon
+VarDeclGroup ::= VAR VarDef (COMMA VarDef)* COLON TypeRefNode SEMICOLON
 
 VarDef ::= identifier {methods=[getResTypeInner getReference]}
 
-OperationProcedureDecl ::= OPERATION identifier LPAREN RPAREN COLON
-TypeRefNode semicolon (RECURSIVE)? PROCEDURE
+OperationProcedureDecl ::= OPERATION identifier ParameterDeclList COLON
+TypeRefNode SEMICOLON (RECURSIVE)? PROCEDURE
     (VarDeclGroup)*
-END identifier semicolon {pin=2}
+END identifier SEMICOLON {pin=2}
+
+ParameterDeclList ::= LPAREN RPAREN
 
 TypeRefNode ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
 TypeReferenceExpression ::= identifier { methods=[getReference getQualifier] }

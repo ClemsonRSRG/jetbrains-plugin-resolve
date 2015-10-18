@@ -16,9 +16,9 @@ import org.jetbrains.annotations.Nullable;
 
 public final class RESOLVECompletionUtil {
 
-    public static final int FACILITY_PRIORITY = 2;
-    public static final int NOT_IMPORTED_TYPE_PRIORITY = 5;
-    public static final int TYPE_PRIORITY = NOT_IMPORTED_TYPE_PRIORITY + 10;
+    public static final int KEYWORD_PRIORITY = 20;
+    public static final int FACILITY_PRIORITY = 5;
+    public static final int TYPE_PRIORITY = 10;
 
     private static class Lazy {
         private static final SingleCharInsertHandler PACKAGE_INSERT_HANDLER =

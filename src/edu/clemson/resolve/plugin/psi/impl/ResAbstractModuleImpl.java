@@ -30,6 +30,10 @@ public abstract class ResAbstractModuleImpl
         return true;
     }
 
+    @NotNull public ResModuleBlock getModuleBlock() {
+        return findNotNullChildByClass(ResModuleBlock.class);
+    }
+
     @NotNull public List<ResUsesSpec> getUsesSpecs() {
         return getUsesList() != null ? getUsesList().getUsesSpecList() :
                 ContainerUtil.<ResUsesSpec>newArrayList();
