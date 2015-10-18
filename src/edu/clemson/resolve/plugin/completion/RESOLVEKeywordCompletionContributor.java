@@ -28,18 +28,8 @@ public class RESOLVEKeywordCompletionContributor
     }
 
     private static PsiElementPattern.Capture<PsiElement> usesPattern() {
-        return onStatementBeginning(ResTypes.IDENTIFIER)
-                .withParent(psiElement(PsiErrorElement.class)
-                        .withParent(psiElement(ResModule.class)));
-    }
-
-    private static PsiElementPattern.Capture<PsiElement> onStatementBeginning(
-            @NotNull IElementType... tokenTypes) {
-        return psiElement().withElementType(TokenSet.create(tokenTypes))
-                .afterLeafSkipping(psiElement().whitespaceCommentEmptyOrError()
-                                .withoutText(string().containsChars("\n")),
-                        or(psiElement(ResTypes.SEMICOLON), psiElement(ResTypes.COLON),
-                                psiElement().withText(string().containsChars("\n"))));
+        return psiElement(ResTypes.IDENTIFIER)
+                .withParent(psiElement(PsiErrorElement.class));
     }
 
 }
