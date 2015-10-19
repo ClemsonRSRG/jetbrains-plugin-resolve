@@ -68,14 +68,14 @@
 Module ::= FacilityModule <<eof>>
 
 FacilityModule ::= FACILITY identifier SEMICOLON
-FacilityBlock
-END identifier semicolon
+FacilityBlock?
+END identifier SEMICOLON {pin(".*")=1}
 
 FacilityBlock ::= FacilityItem*
 
 private FacilityItem ::= FacilityDecl | OperationProcedureDecl {recoverWhile="FacilityItemRecover"}
 
-private FacilityItemRecover ::= !( 'Facility' | 'Operation')
+private FacilityItemRecover ::= !( 'end' |'Facility' | 'Operation')
 
 FacilityDecl ::= 'Facility' identifier ';' {pin=2}
 
