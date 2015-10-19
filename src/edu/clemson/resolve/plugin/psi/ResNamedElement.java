@@ -17,6 +17,6 @@ public interface ResNamedElement
 
     @NotNull PsiFile getContainingFile();
 
-    @Nullable ResTypeRefNode findSiblingType();
+    //@Nullable ResTypeRefNode findSiblingType();
 
 }

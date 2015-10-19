@@ -51,83 +51,33 @@
     ]
 
     extends("(Facility|Concept)Module")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleImpl"
-    extends("(TypeRepr|TypeModel)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeDeclImpl"
     extends("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.impl.ResOperationLikeNodeImpl"
     extends("(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
-    extends("(Var|Param)Def|(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
+    //extends("(Var|Param)Def|(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
 
     implements("(Facility|Concept)Block")="edu.clemson.resolve.plugin.psi.ResModuleBlock"
     implements("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.ResOperationLikeNode"
-    implements("(TypeRepr|TypeModel)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
     implements("(Var|Param)Def|(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.ResNamedElement"
     implements("(Facility|Concept)Module")="edu.clemson.resolve.plugin.psi.ResModule"
-    implements(".*ReferenceExpression")="edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase"
-
-    /*extends("(Or|Add|Conversion|Mul|Selector)Expr")=BinaryExpr
-    extends(".*(Expr|Literal|Lit|OperandName)")=Expression
-
-    implements("(Type|Import)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="com.goide.psi.GoNamedElement"
-    implements("FunctionLit")="com.goide.psi.GoSignatureOwner"
-    implements("MethodSpec")="com.goide.psi.GoNamedSignatureOwner"
-    implements("(Function|Method)Declaration")="com.goide.psi.GoFunctionOrMethodDeclaration"
-    implements("(Const|Type|Var)Declaration")="com.goide.psi.GoTopLevelDeclaration"
-    implements(".*ReferenceExpression|FieldName")="com.goide.psi.GoReferenceExpressionBase"
-    extends("(Function|Method)Declaration")="com.goide.psi.impl.GoFunctionOrMethodDeclarationImpl<?>"
-    extends("(Type|Import|Method)Spec|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver")="com.goide.psi.impl.GoNamedElementImpl<?>"
-    extends("Parameters|Signature|ParameterDeclaration|Result|Type|(Const|Var|Import)Spec")="com.goide.psi.impl.GoStubbedElementImpl<?>"
-    elementTypeFactory("(Function|Method|Parameter)Declaration|(Type|Import|Method|Const|Var)Spec|RangeClause|RecvStatement|ShortVarDeclaration|(Var|Const|Param|(Anonymous)?Field|Label)Definition|Receiver|Parameters|Signature|Result|.*Type|TypeList.*")='com.goide.stubs.GoStubElementTypeFactory.factory'
-    pin(".*Statement")=1
-    extends(".*Statement")=Statement
-    extends(".*Type|TypeList")=Type*/
-  
     generateTokenAccessors=true
 }
 
-Module ::= FacilityModule | ConceptModule <<eof>>
+Module ::= FacilityModule <<eof>>
 
-FacilityModule ::= FACILITY identifier SEMICOLON
-    (UsesList)?
-    FacilityBlock
-END identifier SEMICOLON {pin(".*")=1}
+FacilityModule ::= FacilityBlock
 
-FacilityBlock ::= (FacilityDecl | OperationProcedureDecl | TypeReprDecl)*
 
-ConceptModule ::= CONCEPT identifier SEMICOLON
-    (UsesList)?
-    ConceptBlock
-END identifier SEMICOLON {pin(".*")=1}
+FacilityBlock ::= FacilityItem*
 
-ConceptBlock ::= (TypeModelDecl)*
+private FacilityItem ::= FacilityDecl | OperationProcedureDecl {recoverWhile="FacilityItemRecover"}
 
-UsesList ::= USES UsesSpec (COMMA UsesSpec)* SEMICOLON {pin=1}
+private FacilityItemRecover ::= !(';' | 'Facility' | 'Operation')
+
+FacilityDecl ::= 'Facility' identifier ';' {pin=2}
+
+OperationProcedureDecl ::= 'Operation' identifier ';' {pin=2}
+
+/*UsesList ::= USES UsesSpec (COMMA UsesSpec)* SEMICOLON {pin=1}
 
 UsesSpec ::= identifier {methods=[getUsesTextRange getReferences resolve]}
-
-FacilityDecl ::= FACILITY identifier IS UsesSpec
-(EXTERNALLY)? IMPLEMENTED BY UsesSpec SEMICOLON {pin=2}
-
-TypeModelDecl ::= TYPE FAMILY identifier IS MODELED BY identifier SEMICOLON
-EXEMPLAR identifier SEMICOLON {pin(".*")=3}
-
-TypeReprDecl ::= TYPE '=' TypeRefNode | TypeRecordNode SEMICOLON
-
-TypeRecordNode ::= RECORD RecordVarDeclGroup* END
-
-RecordVarDeclGroup ::= VarDef (COMMA VarDef)* COLON TypeRefNode SEMICOLON
-
-VarDeclGroup ::= VAR VarDef (COMMA VarDef)* COLON TypeRefNode SEMICOLON
-
-VarDef ::= identifier {methods=[getResTypeInner getReference]}
-
-OperationProcedureDecl ::= OPERATION identifier ParameterDeclList COLON
-TypeRefNode SEMICOLON (RECURSIVE)? PROCEDURE
-    (VarDeclGroup)*
-END identifier SEMICOLON {pin=2}
-
-ParameterDeclList ::= LPAREN RPAREN
-
-TypeRefNode ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
-TypeReferenceExpression ::= identifier { methods=[getReference getQualifier] }
-left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
-
-Expression ::= LPAREN RPAREN //dummy
+*/

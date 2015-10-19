@@ -34,17 +34,8 @@ public abstract class ResAbstractModuleImpl
         return findNotNullChildByClass(ResModuleBlock.class);
     }
 
-    @NotNull public List<ResUsesSpec> getUsesSpecs() {
-        return getUsesList() != null ? getUsesList().getUsesSpecList() :
-                ContainerUtil.<ResUsesSpec>newArrayList();
-    }
-
-    @Nullable public ResUsesList getUsesList() {
-        return PsiTreeUtil.findChildOfType(this, ResUsesList.class);
-    }
-
     @Nullable @Override public PsiElement getIdentifier() {
-        return findNotNullChildByType(ResTypes.IDENTIFIER);
+        return findChildByType(ResTypes.IDENTIFIER);
     }
 
     @NotNull public List<ResTypeLikeNodeDecl> getTypes() {

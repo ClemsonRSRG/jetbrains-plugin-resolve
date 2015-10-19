@@ -68,32 +68,11 @@ public abstract class ResNamedElementImpl
                 this, processor, state, lastParent, place);
     }
 
-    @Nullable @Override public ResTypeRefNode getResTypeRefNode(
-            @Nullable ResolveState context) {
-        if (context != null) return getResTypeRefNodeInner(context);
-        return CachedValuesManager.getCachedValue(this, new CachedValueProvider<ResTypeRefNode>() {
-            @Nullable
-            @Override
-            public Result<ResTypeRefNode> compute() {
-                return Result.create(getResTypeRefNodeInner(null),
-                        PsiModificationTracker.MODIFICATION_COUNT);
-            }
-        });
-    }
-
-    @Nullable protected ResTypeRefNode getResTypeRefNodeInner(
-            @Nullable ResolveState context) {
-        return findSiblingType();
-    }
-
-    @Nullable @Override public ResTypeRefNode findSiblingType() {
-        return PsiTreeUtil.getNextSiblingOfType(this, ResTypeRefNode.class);
-    }
 
     @Nullable @Override public Icon getIcon(int flags) {
         Icon icon = null;
         if (this instanceof ResFacilityModule) icon = RESOLVEIcons.FACILITY;
-        else if (this instanceof ResConceptModule) icon = RESOLVEIcons.CONCEPT;
+        //else if (this instanceof ResConceptModule) icon = RESOLVEIcons.CONCEPT;
         if (icon != null) {
             if ((flags & Iconable.ICON_FLAG_VISIBILITY) != 0) {
                 RowIcon rowIcon =
