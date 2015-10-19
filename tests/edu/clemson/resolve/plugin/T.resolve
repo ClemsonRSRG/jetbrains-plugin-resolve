@@ -1,0 +1,5 @@
+Facility T;
+        i
+    Operation T() : B;
+    Procedure end T;
+end T;

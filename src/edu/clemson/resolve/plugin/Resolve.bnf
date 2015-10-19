@@ -24,9 +24,6 @@
         COMMA                   = ","
         EQUALS                  = "="
 
-        //this 'space' is to make live preview less of a pain
-        space                   = "regexp:\s+"
-
         INT                     = "int"
         FACILITY                = "Facility"
         CONCEPT                 = "Concept"
@@ -49,8 +46,11 @@
         STRING                  = "string"
         LBRACE="{"
         RBRACE="}"
-        identifier='regexp:\p{Alpha}\w*'
         raw_string              = "raw_string"
+
+        //this 'space' is to make live preview less of a pain
+        space                   = "regexp:\s+"
+        identifier='regexp:\p{Alpha}\w*'
     ]
 
     extends("(Facility|Concept)Module")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleImpl"
@@ -67,22 +67,21 @@
 
 Module ::= FacilityModule <<eof>>
 
-FacilityModule ::= FACILITY identifier SEMICOLON
-(UsesList)?
+FacilityModule ::= FACILITY identifier  SEMICOLON
+UsesList?
 FacilityBlock
 END identifier SEMICOLON {pin(".*")=1}
 
 UsesList ::= USES UsesSpec (COMMA UsesSpec)* SEMICOLON {pin=1}
 
-UsesSpec ::= identifier {recoverWhile="UsesSpecRecover"}
-private UsesSpecRecover ::= !(';')
+UsesSpec ::= identifier
 
 FacilityBlock ::= FacilityItem*
 
 private FacilityItem ::= FacilityDecl | OperationProcedureDecl {recoverWhile="FacilityItemRecover"}
 
-private FacilityItemRecover ::= !( 'end' |'Facility' | 'Operation')
+private FacilityItemRecover ::= !('end'|'Operation'|'Facility')
 
-FacilityDecl ::= 'Facility' identifier ';' {pin=2}
+FacilityDecl ::= 'Facility' identifier ';' {pin(".*")=1}
 
-OperationProcedureDecl ::= 'Operation' identifier ';' {pin=2}
+OperationProcedureDecl ::= 'Operation' identifier ';' {pin(".*")=1}
