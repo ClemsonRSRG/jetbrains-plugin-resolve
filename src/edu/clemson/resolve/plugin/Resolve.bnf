@@ -72,8 +72,8 @@ UsesList?
 FacilityBlock
 'end' identifier ';' {pin(".*")=1}
 
-UsesList ::= 'uses' UsesSpec (',' UsesSpec)* ';' {pin=1 recoverWhile=UsesListRecover}
-private UsesListRecover ::= !('uses'|FacilityItem|'end' identifier)
+UsesList ::= 'uses' UsesSpec (',' UsesSpec)* ';' {recoverWhile=UsesListRecover}
+private UsesListRecover ::= !(FacilityItem|'end'|';')
 
 UsesSpec ::= identifier
 
@@ -85,4 +85,8 @@ private FacilityItemRecover ::= !( 'end' |'Facility' | 'Operation')
 
 FacilityDecl ::= 'Facility' identifier ';' {pin=2}
 
-OperationProcedureDecl ::= 'Operation' identifier ';' {pin=2}
+OperationProcedureDecl ::= 'Operation' identifier LPAREN RPAREN (':' TypeRefNode)';' {pin=2}
+
+TypeRefNode ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
+TypeReferenceExpression ::= identifier //{ methods=[getReference getQualifier] }
+left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
