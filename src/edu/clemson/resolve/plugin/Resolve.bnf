@@ -47,6 +47,9 @@
         VAR                     = "Var"
         BY                      = "by"
         STRING                  = "string"
+        LBRACE="{"
+        RBRACE="}"
+        identifier='regexp:\p{Alpha}\w*'
         raw_string              = "raw_string"
     ]
 
@@ -64,14 +67,15 @@
 
 Module ::= FacilityModule <<eof>>
 
-FacilityModule ::= FacilityBlock
-
+FacilityModule ::= FACILITY identifier SEMICOLON
+FacilityBlock
+END identifier semicolon
 
 FacilityBlock ::= FacilityItem*
 
 private FacilityItem ::= FacilityDecl | OperationProcedureDecl {recoverWhile="FacilityItemRecover"}
 
-private FacilityItemRecover ::= !(';' | 'Facility' | 'Operation')
+private FacilityItemRecover ::= !( 'Facility' | 'Operation')
 
 FacilityDecl ::= 'Facility' identifier ';' {pin=2}
 
