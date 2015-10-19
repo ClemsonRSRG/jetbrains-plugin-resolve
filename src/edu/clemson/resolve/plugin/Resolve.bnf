@@ -68,8 +68,14 @@
 Module ::= FacilityModule <<eof>>
 
 FacilityModule ::= FACILITY identifier SEMICOLON
-FacilityBlock?
+(UsesList)?
+FacilityBlock
 END identifier SEMICOLON {pin(".*")=1}
+
+UsesList ::= USES UsesSpec (COMMA UsesSpec)* SEMICOLON {pin=1}
+
+UsesSpec ::= identifier {recoverWhile="UsesSpecRecover"}
+private UsesSpecRecover ::= !(';')
 
 FacilityBlock ::= FacilityItem*
 
@@ -80,8 +86,3 @@ private FacilityItemRecover ::= !( 'end' |'Facility' | 'Operation')
 FacilityDecl ::= 'Facility' identifier ';' {pin=2}
 
 OperationProcedureDecl ::= 'Operation' identifier ';' {pin=2}
-
-/*UsesList ::= USES UsesSpec (COMMA UsesSpec)* SEMICOLON {pin=1}
-
-UsesSpec ::= identifier {methods=[getUsesTextRange getReferences resolve]}
-*/
