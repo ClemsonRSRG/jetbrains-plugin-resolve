@@ -1,5 +1,6 @@
 Facility T;
-        i
-    Operation T() : B;
-    Procedure end T;
+    uses X, Y, Z;
+    
+    Oper
+        
 end T;

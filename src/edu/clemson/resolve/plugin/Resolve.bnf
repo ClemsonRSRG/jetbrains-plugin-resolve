@@ -85,7 +85,9 @@ private FacilityItemRecover ::= !( 'end' |'Facility' | 'Operation')
 
 FacilityDecl ::= 'Facility' identifier ';' {pin=2}
 
-OperationProcedureDecl ::= 'Operation' identifier LPAREN RPAREN (':' TypeRefNode)';' {pin=2}
+OperationProcedureDecl ::= 'Operation' identifier '(' ')' (':' TypeRefNode)? ';'
+'Procedure'
+'end' identifier ';' {pin=2}
 
 TypeRefNode ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
 TypeReferenceExpression ::= identifier //{ methods=[getReference getQualifier] }
