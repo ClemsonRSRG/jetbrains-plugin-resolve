@@ -74,34 +74,35 @@ FacilityBlock
 'end' identifier ';' {pin(".*")=1}
 
 UsesList ::= 'uses' UsesSpec (',' UsesSpec)* ';' {recoverWhile=UsesListRecover}
-private UsesListRecover ::= !(FacilityItem|';')
+private UsesListRecover ::= !(FacilityItem|';'|'end')
 
 UsesSpec ::= identifier
 
 FacilityBlock ::= FacilityItem*
 
-private FacilityItem ::= FacilityDecl | OperationProcedureDecl {recoverWhile="FacilityItemRecover"}
+private FacilityItem ::= OperationProcedureDecl //| FacilityDecl
 
-private FacilityItemRecover ::= !( 'end' |'Facility' | 'Operation')
-
-FacilityDecl ::= 'Facility' identifier ';' {pin=2}
-
-OperationProcedureDecl ::= 'Operation' identifier '(' ')' (':' TypeRefNode)? ';'
+OperationProcedureDecl ::= 'Operation' identifier Signature? ';'
 'Procedure'
-    VarDeclGroupList
-'end' identifier ';' {pin=2}
+'end' identifier ';' {pin=1 recoverWhile=OperationRec}
 
+//continue trying to recover until you see and 'Operation' token or a 'Facility'
+//token...
+private OperationRec ::= !('end'|'Procedure'|'Operation')
+
+Signature ::= Parameters Result? {pin=1}
+
+Result ::= ':' TypeRefNode {pin=1}
+
+Parameters ::= '(' /*ParameterList*/ ')' { pin=1 }
+/*private ParameterList ::= ParameterDeclaration (',' (ParameterDeclaration | &')'))* {pin(".*")=1}
+ParameterDeclaration ::= ParamDefinitionListNoPin? '...'? Type | Type { // todo: use left rule
+  stubClass="com.goide.stubs.GoParameterDeclarationStub"
+  methods = [isVariadic]
+}
+private ParamDefinitionListNoPin ::= ParamDefinition &(!('.' | ')')) (',' ParamDefinition)*
+*/
 
 TypeRefNode ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
 TypeReferenceExpression ::= identifier //{ methods=[getReference getQualifier] }
 left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
-
-VarDeclGroup ::= 'Var' VarDefinitionList ':' TypeRefNode ';' {pin=1 recoverWhile="VarDeclRecover"}
-
-private VarDefinitionList ::= VarDef (',' VarDef)*
-
-VarDef ::= identifier //{methods=[getResTypeInner getReference]}
-
-private VarDeclGroupList ::= VarDeclGroup*
-
-private VarDeclRecover ::= !(';'|'end'|'Var')
