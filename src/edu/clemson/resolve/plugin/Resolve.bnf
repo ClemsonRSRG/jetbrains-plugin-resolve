@@ -63,6 +63,7 @@
     implements("(Var|Param)Def|(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.ResNamedElement"
     implements("(Facility|Concept)Module")="edu.clemson.resolve.plugin.psi.ResModule"
     generateTokenAccessors=true
+    pin('.*List(?:_\d.*)?')=1
 }
 
 Module ::= FacilityModule <<eof>>
@@ -73,7 +74,7 @@ FacilityBlock
 'end' identifier ';' {pin(".*")=1}
 
 UsesList ::= 'uses' UsesSpec (',' UsesSpec)* ';' {recoverWhile=UsesListRecover}
-private UsesListRecover ::= !(FacilityItem|'end'|';')
+private UsesListRecover ::= !(FacilityItem|';')
 
 UsesSpec ::= identifier
 
@@ -87,8 +88,20 @@ FacilityDecl ::= 'Facility' identifier ';' {pin=2}
 
 OperationProcedureDecl ::= 'Operation' identifier '(' ')' (':' TypeRefNode)? ';'
 'Procedure'
+    VarDeclGroupList
 'end' identifier ';' {pin=2}
+
 
 TypeRefNode ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
 TypeReferenceExpression ::= identifier //{ methods=[getReference getQualifier] }
 left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
+
+VarDeclGroup ::= 'Var' VarDefinitionList ':' TypeRefNode ';' {pin=1 recoverWhile="VarDeclRecover"}
+
+private VarDefinitionList ::= VarDef (',' VarDef)*
+
+VarDef ::= identifier //{methods=[getResTypeInner getReference]}
+
+private VarDeclGroupList ::= VarDeclGroup*
+
+private VarDeclRecover ::= !(';'|'end'|'Var')
