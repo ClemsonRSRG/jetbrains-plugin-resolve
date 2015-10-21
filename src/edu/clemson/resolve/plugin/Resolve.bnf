@@ -3,17 +3,17 @@
 
     implements='edu.clemson.resolve.plugin.psi.ResCompositeElement'
     extends='edu.clemson.resolve.plugin.psi.impl.ResCompositeElementImpl'
-  
+
     elementTypeHolderClass='edu.clemson.resolve.plugin.ResTypes'
     elementTypeClass='edu.clemson.resolve.plugin.psi.ResCompositeElementType'
     tokenTypeClass='edu.clemson.resolve.plugin.psi.ResTokenType'
-  
+
     psiClassPrefix='Res'
     psiImplClassSuffix='Impl'
     psiPackage='edu.clemson.resolve.plugin.psi'
     psiImplPackage='edu.clemson.resolve.plugin.psi.impl'
     psiImplUtilClass="edu.clemson.resolve.plugin.psi.impl.ResPsiImplUtil"
-    //parserUtilClass="com.goide.parser.GoParserUtil"
+    //parserUtilClass="edu.clemson.resolve.plugin.RESOLVEParserUtil"
 
     tokens=[
         LBRACE                  = '{'
@@ -25,9 +25,27 @@
         COLON                   = ':'
         SEMICOLON               = ';'
         COMMA                   = ','
-        COLONEQUALS             = ':='
 
         EQUALS                  = '='
+        NEQUALS                 = '/='
+        NOT                     = 'not'
+
+        PLUS_PLUS               = '++'
+        PLUS                    = '+'
+        MINUS_MINUS             = '--'
+        MINUS                   = '-'
+        AND                     = 'and'
+        OR                      = 'or'
+
+        LESS_OR_EQUAL           =  '<='
+        LESS                    =  '<'
+        GREATER_OR_EQUAL        =  '>='
+        GREATER                 =  '>'
+
+        MUL                     = '*'
+        QUOTIENT                = '/'
+
+        COLON_EQUALS             = ':='
         TRIPLE_DOT              = '...'
         DOT                     = '.'
 

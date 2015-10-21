@@ -76,8 +76,31 @@ ESCAPES = [abfnrtv]
 ";"                                     { return SEMICOLON; }
 ","                                     { return COMMA; }
 
-":="                                    { return COLONEQUALS; }
 "="                                     { return EQUALS; }
+
+"/="                                    { return NEQUALS; }
+"not"                                   { return NOT; }
+
+"++"                                    { return PLUS_PLUS; }
+"+"                                     { return PLUS; }
+
+"--"                                    { return MINUS_MINUS; }
+"-"                                     { return MINUS; }
+
+"or"                                    { return OR; }
+"and"                                   { return AND; }
+
+"<="                                    { return LESS_OR_EQUAL; }
+"<"                                     { return LESS; }
+
+"*"                                     { return MUL; }
+"/"                                     { return QUOTIENT; }
+
+">="                                    { return GREATER_OR_EQUAL; }
+">"                                     { return GREATER; }
+":="                                    { return COLON_EQUALS; }
+
+//END
 
 "by"                                    { return BY; }
 "Concept"                               { return CONCEPT;  }

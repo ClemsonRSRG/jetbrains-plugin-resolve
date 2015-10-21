@@ -17,6 +17,8 @@ import edu.clemson.resolve.plugin.psi.ResFile;
 import edu.clemson.resolve.plugin.psi.ResTokenType;
 import org.jetbrains.annotations.NotNull;
 
+import static edu.clemson.resolve.plugin.ResTypes.*;
+
 public class RESOLVEParserDefinition implements ParserDefinition {
 
     public static final IElementType LINE_COMMENT =
@@ -31,6 +33,8 @@ public class RESOLVEParserDefinition implements ParserDefinition {
     public static final TokenSet WHITESPACES = TokenSet.create(WS, NLS);
     public static final TokenSet COMMENTS =
             TokenSet.create(LINE_COMMENT, MULTILINE_COMMENT);
+    public static final TokenSet STRING_LITERALS =
+            TokenSet.create(STRING, RAW_STRING, CHAR);
 
     @NotNull @Override public Lexer createLexer(Project project) {
         return new ResolveLexer();
@@ -53,7 +57,7 @@ public class RESOLVEParserDefinition implements ParserDefinition {
     }
 
     @NotNull @Override public TokenSet getStringLiteralElements() {
-        return TokenSet.EMPTY;
+        return STRING_LITERALS;
     }
 
     @NotNull @Override public PsiElement createElement(ASTNode node) {
