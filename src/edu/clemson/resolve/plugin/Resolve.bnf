@@ -82,7 +82,7 @@ FacilityBlock ::= FacilityItem*
 
 private FacilityItem ::= OperationProcedureDecl {pin=1 recoverWhile=FacilityItemRecover}
 
-private FacilityItemRecover ::= !(';'|'Operation')
+private FacilityItemRecover ::= !('end'|'Operation')
 
 OperationProcedureDecl ::= 'Operation' identifier Signature? ';'
 'Procedure'

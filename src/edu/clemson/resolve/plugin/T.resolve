@@ -1,6 +1,7 @@
 Facility T;
     uses x, ym, z;
             
-    Operation S():S; Procedue end S
+         
+    Operation (); Procdue;end S;
             
 end T;
