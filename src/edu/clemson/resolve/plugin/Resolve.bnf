@@ -85,7 +85,7 @@ private FacilityItem ::= OperationProcedureDecl {pin=1 recoverWhile=FacilityItem
 private FacilityItemRecover ::= !('end'|'Operation')
 
 OperationProcedureDecl ::= 'Operation' identifier Signature? ';'
-
+ProcedureBody
 'end' identifier ';' {pin=1}
 
 Signature ::= Parameters Result? {pin=1}
@@ -100,6 +100,16 @@ ParameterDeclaration ::= ParamDefinitionListNoPin? '...'? Type | Type { // todo:
 }
 private ParamDefinitionListNoPin ::= ParamDefinition &(!('.' | ')')) (',' ParamDefinition)*
 */
+
+ProcedureBody ::= 'Procedure'
+VarDeclGroup* {pin=1 recoverWhile=ProcedureRec}
+
+ProcedureRec ::= !('end')
+VarDeclGroup ::= 'Var' VarSpec ';' {pin=1}
+VarSpec ::= VarDefList ':' TypeRefNode //{methods=[processDeclarations]}
+private VarDefList ::= VarDef (',' VarDef)*
+
+VarDef ::= identifier //{methods=[getResTypeInner getReference]}
 
 TypeRefNode ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
 TypeReferenceExpression ::= identifier //{ methods=[getReference getQualifier] }
