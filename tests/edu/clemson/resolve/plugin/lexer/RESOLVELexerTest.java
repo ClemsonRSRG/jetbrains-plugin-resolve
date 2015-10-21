@@ -11,6 +11,7 @@ import java.io.IOException;
 public class RESOLVELexerTest extends LexerTestCase {
 
     public void testHello() { doTest(); }
+    public void testEscaped_Quotes() { doTest(); }
 
     private void doTest() {
         try {

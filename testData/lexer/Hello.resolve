@@ -3,6 +3,6 @@ Facility Hello;
 
     Operation Main();
         Procedure
-            Write_Line("Hello world");
+            Std_Char_Str_Fac.Write_Line("Hello world");
         end Main;
 end Hello;
