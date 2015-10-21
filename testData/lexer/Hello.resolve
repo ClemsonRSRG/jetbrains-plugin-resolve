@@ -3,6 +3,6 @@ Facility Hello;
 
     Operation Main();
         Procedure
-            Write_Line();
+            Write_Line("Hello world");
         end Main;
 end Hello;
