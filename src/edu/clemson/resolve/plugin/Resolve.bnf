@@ -16,21 +16,22 @@
     //parserUtilClass="com.goide.parser.GoParserUtil"
 
     tokens=[
-        LBRACE               =  '{'
-        RBRACE               =  '}'
-        LBRACK               =  '['
-        RBRACK               =  ']'
-        LPAREN               =  '('
-        RPAREN               =  ')'
-        COLON                =  ':'
-        SEMICOLON            =  ';'
-        COMMA                =  ','
+        LBRACE                  = '{'
+        RBRACE                  = '}'
+        LBRACK                  = '['
+        RBRACK                  = ']'
+        LPAREN                  = '('
+        RPAREN                  = ')'
+        COLON                   = ':'
+        SEMICOLON               = ';'
+        COMMA                   = ','
+        COLONEQUALS             = ':='
 
-        EQUALS                  = "="
-        TRIPLE_DOT           =  '...'
-        DOT                  =  '.'
+        EQUALS                  = '='
+        TRIPLE_DOT              = '...'
+        DOT                     = '.'
 
-        INT                     = "int"
+        INT                     = 'int'
         FACILITY                = 'Facility'
         CONCEPT                 = 'Concept'
         END                     = 'end'

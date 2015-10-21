@@ -76,6 +76,7 @@ ESCAPES = [abfnrtv]
 ";"                                     { return SEMICOLON; }
 ","                                     { return COMMA; }
 
+":="                                    { return COLONEQUALS; }
 "="                                     { return EQUALS; }
 
 "by"                                    { return BY; }
