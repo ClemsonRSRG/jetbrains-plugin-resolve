@@ -80,15 +80,16 @@ UsesSpec ::= identifier
 
 FacilityBlock ::= FacilityItem*
 
-private FacilityItem ::= OperationProcedureDecl //| FacilityDecl
+private FacilityItem ::= OperationProcedureDecl {pin=1 recoverWhile=FacilityItemRecover}
+
+private FacilityItemRecover ::= !(';'|'Operation')
 
 OperationProcedureDecl ::= 'Operation' identifier Signature? ';'
 'Procedure'
-'end' identifier ';' {pin=1 recoverWhile=OperationRec}
+'end' identifier ';' {pin=1}
 
 //continue trying to recover until you see and 'Operation' token or a 'Facility'
 //token...
-private OperationRec ::= !('end'|'Procedure'|'Operation')
 
 Signature ::= Parameters Result? {pin=1}
 

@@ -1,6 +1,6 @@
 Facility T;
-    uses x, y, z;
-
-
-    Operation C() : T; Procedure
-    end C;
+    uses x, ym, z;
+            
+    Operation S():S; Procedue end S
+            
+end T;
