@@ -12,7 +12,7 @@
  *
  * 2. Redistributions in binary form must reproduce the above copyright
  * notice, this list of conditions and the following disclaimer in the
- * documentation and/or other materials provided with the distribution.
+ * documentation and/or other nterials provided with the distribution.
  *
  * 3. The name of the author may not be used to endorse or promote products
  * derived from this software without specific prior written permission.
@@ -59,8 +59,14 @@ conceptBlock
         | operationDecl
         | mathDefinitionDecl
         | mathDefinesDefinitionDecl
+        | mathStateVariableDeclGroup
+        | specModuleInit
         | constraintClause
         )*
+    ;
+
+mathStateVariableDeclGroup
+    :   VAR mathVariableDeclGroup SEMI
     ;
 
 // enhancement module
@@ -234,7 +240,9 @@ callStmt
     ;
 
 whileStmt
-    :   WHILE progExp DO
+    :   WHILE progExp
+        (MAINTAINING mathExp SEMI)?
+        (DECREASING mathExp SEMI)? DO
         (stmt)*
         END SEMI
     ;
@@ -281,12 +289,17 @@ typeRepresentationDecl
 
 // type initialization rules
 
+specModuleInit
+    :   FACILITY_INIT
+        (affectsClause)? (requiresClause)? (ensuresClause)?
+    ;
+
 typeModelInit
-    :   INITIALIZATION (ensuresClause)?
+    :   INIT (ensuresClause)?
     ;
 
 typeImplInit
-    :   INITIALIZATION (ensuresClause)?
+    :   INIT (ensuresClause)?
         (variableDeclGroup)* (stmt)*
         END SEMI
     ;
@@ -399,6 +412,14 @@ procedureDecl
     ;
 
 // mathematical clauses
+
+affectsClause
+    :   AFFECTS parameterMode affectsItem (COMMA affectsItem)*
+    ;
+
+affectsItem
+    :   parameterMode (qualifier=ID COLONCOLON)? name=ID
+    ;
 
 requiresClause
     :   REQUIRES mathAssertionExp (entailsClause)? SEMI

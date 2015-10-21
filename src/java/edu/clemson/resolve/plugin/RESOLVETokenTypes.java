@@ -86,7 +86,6 @@ public class RESOLVETokenTypes {
                     ResolveLexer.FORALL,
                     ResolveLexer.IF,
                     ResolveLexer.IMPLICIT,
-                    ResolveLexer.INITIALIZATION,
                     ResolveLexer.IS,
                     ResolveLexer.IMPLEMENTATION,
                     ResolveLexer.IMPLEMENTED,
@@ -106,5 +105,7 @@ public class RESOLVETokenTypes {
                     ResolveLexer.TYPE,
                     ResolveLexer.USES,
                     ResolveLexer.VAR,
-                    ResolveLexer.WHILE);
+                    ResolveLexer.WHILE,
+                    ResolveLexer.MAINTAINING,
+                    ResolveLexer.DECREASING);
 }
