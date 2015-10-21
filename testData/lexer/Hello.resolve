@@ -1,0 +1,8 @@
+Facility Hello;
+    uses Std_Char_Strings;
+
+    Operation Main();
+        Procedure
+            Write_Line();
+        end Main;
+end Hello;

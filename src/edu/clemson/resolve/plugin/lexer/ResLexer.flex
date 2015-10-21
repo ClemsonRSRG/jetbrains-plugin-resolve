@@ -34,6 +34,8 @@ LETTER = [:letter:] | "_"
 DIGIT =  [:digit:]
 
 INT_DIGIT = [0-9]
+//TODO: Octal & hex..
+
 NUM_INT = "0" | ([1-9] {INT_DIGIT}*)
 
 IDENT = {LETTER} ({LETTER} | {DIGIT} )*
@@ -45,21 +47,37 @@ ESCAPES = [abfnrtv]
 
 {WS}                                    { return WS; }
 {NL}+                                   { return NLS; }
-
-"/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")? { return MULTILINE_COMMENT; }
-{STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}? { return STRING; }
-"`" [^`]* "`"?                          { return RAW_STRING; }
-
 {LINE_COMMENT}                          { return LINE_COMMENT; }
+"/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")? { return MULTILINE_COMMENT; }
+
+"..."                                   { return TRIPLE_DOT; }
+"."                                     { return DOT; }
+
+"'" [^\\] "'"                           { return CHAR; }
+"'" \n "'"                              { return CHAR; }
+"'\\" [abfnrtv\\\'] "'"                 { return CHAR; }
+"'\\'"                                  { return BAD_CHARACTER; }
+
+
+"`" [^`]* "`"?                          { return RAW_STRING; }
+{STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}?
+                                        { return STRING; }
+
+"{"                                     { return LBRACE; }
+"}"                                     { return RBRACE; }
+
+"["                                     { return LBRACK; }
+"]"                                     { return RBRACK; }
+
 "("                                     { return LPAREN; }
 ")"                                     { return RPAREN; }
-"."                                     { return DOT; }
+
 ":"                                     { return COLON; }
 ";"                                     { return SEMICOLON; }
 ","                                     { return COMMA; }
+
 "="                                     { return EQUALS; }
-"{"                                     { return LBRACE; }
-"}"                                     { return RBRACE; }
+
 "by"                                    { return BY; }
 "Concept"                               { return CONCEPT;  }
 "end"                                   { return END;  }

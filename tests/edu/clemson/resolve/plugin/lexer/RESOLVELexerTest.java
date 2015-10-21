@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class RESOLVELexerTest extends LexerTestCase {
 
-    public void testHelloWorld() { doTest(); }
+    public void testHello() { doTest(); }
 
     private void doTest() {
         try {

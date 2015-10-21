@@ -48,7 +48,7 @@ public abstract class ResAbstractModuleImpl
                 });
     }
 
-    @NotNull public List<ResFacilityDecl> getFacilities() {
+    /*@NotNull public List<ResFacilityDecl> getFacilities() {
         return CachedValuesManager.getCachedValue(this,
                 new CachedValueProvider<List<ResFacilityDecl>>() {
                     @Override
@@ -56,7 +56,7 @@ public abstract class ResAbstractModuleImpl
                         return Result.create(calcFacilities(), ResAbstractModuleImpl.this);
                     }
                 });
-    }
+    }*/
 
     @NotNull private List<ResTypeLikeNodeDecl> calcTypes() {
         final List<ResTypeLikeNodeDecl> result = ContainerUtil.newArrayList();
@@ -72,7 +72,7 @@ public abstract class ResAbstractModuleImpl
         return result;
     }
 
-    @NotNull private List<ResFacilityDecl> calcFacilities() {
+   /* @NotNull private List<ResFacilityDecl> calcFacilities() {
         final List<ResFacilityDecl> result = ContainerUtil.newArrayList();
         processChildrenDummyAware(this, new Processor<PsiElement>() {
             @Override
@@ -84,7 +84,7 @@ public abstract class ResAbstractModuleImpl
             }
         });
         return result;
-    }
+    }*/
 
     private static boolean processChildrenDummyAware(@NotNull ResModule module,
                                                      @NotNull final Processor<PsiElement> processor) {

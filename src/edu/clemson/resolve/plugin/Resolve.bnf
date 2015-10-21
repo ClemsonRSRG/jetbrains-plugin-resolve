@@ -16,39 +16,45 @@
     //parserUtilClass="com.goide.parser.GoParserUtil"
 
     tokens=[
-        LPAREN                  = "("
-        RPAREN                  = ")"
-        COLON                   = ":"
-        DOT                     = '.'
-        SEMICOLON               = ";"
-        COMMA                   = ","
-        EQUALS                  = "="
+        LBRACE               =  '{'
+        RBRACE               =  '}'
+        LBRACK               =  '['
+        RBRACK               =  ']'
+        LPAREN               =  '('
+        RPAREN               =  ')'
+        COLON                =  ':'
+        SEMICOLON            =  ';'
+        COMMA                =  ','
 
-        //this 'space' is to make live preview less of a pain
+        EQUALS                  = "="
+        TRIPLE_DOT           =  '...'
+        DOT                  =  '.'
 
         INT                     = "int"
-        FACILITY                = "Facility"
-        CONCEPT                 = "Concept"
-        END                     = "end"
-        EVALUATES               = "evaluates"
-        USES                    = "uses"
-        IS                      = "is"
-        EXTERNALLY              = "externally"
-        IMPLEMENTED             = "implemented"
-        TYPE                    = "Type"
-        FAMILY                  = "Family"
-        MODELED                 = "modeled"
-        EXEMPLAR                = "exemplar"
-        OPERATION               = "Operation"
-        RECURSIVE               = "Recursive"
-        RECORD                  = "Record"
-        PROCEDURE               = "Procedure"
-        VAR                     = "Var"
-        BY                      = "by"
-        STRING                  = "string"
-        LBRACE="{"
-        RBRACE="}"
+        FACILITY                = 'Facility'
+        CONCEPT                 = 'Concept'
+        END                     = 'end'
+        EVALUATES               = 'evaluates'
+        USES                    = 'uses'
+        IS                      = 'is'
+        EXTERNALLY              = 'externally'
+        IMPLEMENTED             = 'implemented'
+        TYPE                    = 'Type'
+        FAMILY                  = 'Family'
+        MODELED                 = 'modeled'
+        EXEMPLAR                = 'exemplar'
+        OPERATION               = 'Operation'
+        RECURSIVE               = 'Recursive'
+        RECORD                  = 'Record'
+        PROCEDURE               = 'Procedure'
+        VAR                     = 'Var'
+        BY                      = 'by'
+        STRING                  = 'string'
+        CHAR                    = 'char'
         raw_string              = "raw_string"
+
+        //these two are for grammarkit's live preview feature
+        //otherwise disregard
         space                   = "regexp:\s+"
         identifier              = 'regexp:\p{Alpha}\w*'
     ]
@@ -56,8 +62,7 @@
     extends("(Facility|Concept)Module")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleImpl"
     extends("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.impl.ResOperationLikeNodeImpl"
     extends("(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
-    //extends("(Var|Param)Def|(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
-
+    extends("VarDef")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
     implements("(Facility|Concept)Block")="edu.clemson.resolve.plugin.psi.ResModuleBlock"
     implements("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.ResOperationLikeNode"
     implements("(Var|Param)Def|(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.ResNamedElement"
