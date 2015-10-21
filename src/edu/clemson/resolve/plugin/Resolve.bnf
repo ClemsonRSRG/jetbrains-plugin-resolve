@@ -85,11 +85,8 @@ private FacilityItem ::= OperationProcedureDecl {pin=1 recoverWhile=FacilityItem
 private FacilityItemRecover ::= !('end'|'Operation')
 
 OperationProcedureDecl ::= 'Operation' identifier Signature? ';'
-'Procedure'
-'end' identifier ';' {pin=1}
 
-//continue trying to recover until you see and 'Operation' token or a 'Facility'
-//token...
+'end' identifier ';' {pin=1}
 
 Signature ::= Parameters Result? {pin=1}
 
