@@ -13,6 +13,8 @@ public class RESOLVELexerTest extends LexerTestCase {
     public void testHello() { doTest(); }
     public void testEscaped_Quotes() { doTest(); }
     public void testConstants() { doTest(); }
+    public void testWhile() { doTest(); }
+    public void testFunction_Arguments() { doTest(); }
 
     private void doTest() {
         try {

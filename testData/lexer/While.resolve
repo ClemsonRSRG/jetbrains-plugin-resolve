@@ -3,11 +3,9 @@ Facility While;
     Operation Main(); Procedure
 
         Var Sum, i : Std_Ints.Integer;
-        Sum := 0;
-        i := 0;
+        Sum := 0; i := 0;
         While i < 10 do
-            Sum := Sum + 1;
-            i++;
+            Sum := Sum + 1; i++;
         end;
 
     end Main;
