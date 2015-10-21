@@ -104,6 +104,7 @@ ESCAPES = [abfnrtv]
 
 "by"                                    { return BY; }
 "Concept"                               { return CONCEPT;  }
+"do"                                    { return DO; }
 "end"                                   { return END;  }
 "exemplar"                              { return EXEMPLAR; }
 "externally"                            { return EXTERNALLY; }
@@ -119,6 +120,7 @@ ESCAPES = [abfnrtv]
 "Type"                                  { return TYPE; }
 "uses"                                  { return USES; }
 "Var"                                   { return VAR; }
+"While"                                 { return WHILE; }
 
 {IDENT}                                 { return IDENTIFIER; }
 {NUM_INT}                               { return INT; }

@@ -68,6 +68,8 @@
         PROCEDURE               = 'Procedure'
         VAR                     = 'Var'
         BY                      = 'by'
+        WHILE                   = 'While'
+        DO                      = 'do'
         STRING                  = 'string'
         CHAR                    = 'char'
         raw_string              = "raw_string"
