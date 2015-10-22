@@ -116,7 +116,7 @@
     extends("(Facility|Concept)Module")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleImpl"
     extends("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.impl.ResOperationLikeNodeImpl"
     extends("(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
-    extends("VarDef")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
+    extends("(Param|Var)Def")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
     implements("(Facility|Concept)Block")="edu.clemson.resolve.plugin.psi.ResModuleBlock"
     implements("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.ResOperationLikeNode"
     implements("(Var|Param)Def|(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.ResNamedElement"
@@ -151,14 +151,11 @@ Signature ::= Parameters Result? {pin=1}
 
 Result ::= ':' TypeRefNode {pin=1}
 
-Parameters ::= '(' /*ParameterList*/ ')' { pin=1 }
-/*private ParameterList ::= ParameterDeclaration (',' (ParameterDeclaration | &')'))* {pin(".*")=1}
-ParameterDeclaration ::= ParamDefinitionListNoPin? '...'? Type | Type { // todo: use left rule
-  stubClass="com.goide.stubs.GoParameterDeclarationStub"
-  methods = [isVariadic]
-}
-private ParamDefinitionListNoPin ::= ParamDefinition &(!('.' | ')')) (',' ParamDefinition)*
-*/
+Parameters ::= '(' ParamList? ')' { pin=1 }
+private ParamList ::= ParamDecl (';' ParamDecl)* {pin(".*")=1}
+ParamDecl ::= ParameterMode ParamDefinitionListNoPin? ':' TypeRefNode {pin=1} //{methods = [isVariadic]}
+private ParamDefinitionListNoPin ::= ParamDef &(!(';'|')')) (',' ParamDef)* // todo
+ParamDef ::= identifier //{methods = [isVariadic]}
 
 ProcedureBody ::= ('Recursive')?'Procedure'
 VarDeclGroup* {pin=1 recoverWhile=ProcedureRec}
@@ -174,3 +171,26 @@ TypeRefNode ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
 TypeReferenceExpression ::= identifier //{ methods=[getReference getQualifier] }
 left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
 
+/*Statement ::=
+          SimpleStatement
+        | WhileStmt //{methods=[processDeclarations]}
+
+WhileStmt ::= 'While'
+
+SimpleStatement ::= AssignmentStatement
+
+ExpressionWithRecover ::=
+
+left AssignmentStatement ::= ':=' ExpressionWithRecover {pin=1}
+*/
+//assignStmt
+//swapStmt
+
+ParameterMode ::=
+      'alters'
+    | 'updates'
+    | 'clears'
+    | 'restores'
+    | 'preserves'
+    | 'replaces'
+    | 'evaluates' {pin=1}
