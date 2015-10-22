@@ -119,24 +119,30 @@ ESCAPES = [abfnrtv]
 
 "by"                                    { return BY; }
 "Concept"                               { return CONCEPT;  }
+"constraints"                           { return CONSTRAINT; }
 "do"                                    { return DO; }
 "end"                                   { return END;  }
+"ensures"                               { return ENSURES; }
 "exemplar"                              { return EXEMPLAR; }
 "externally"                            { return EXTERNALLY; }
 "Facility"                              { return FACILITY;  }
 "Family"                                { return FAMILY; }
 "is"                                    { return IS; }
 "implemented"                           { return IMPLEMENTED; }
+"initialization"                        { return INITIALIZATION; }
 "lambda"                                { return LAMBDA; }
 "modeled"                               { return MODELED; }
 "Operation"                             { return OPERATION; }
 "Procedure"                             { return PROCEDURE; }
 "Recursive"                             { return RECURSIVE; }
 "Record"                                { return RECORD; }
+"requires"                              { return REQUIRES; }
 "Type"                                  { return TYPE; }
+"type"                                  { return PARAM_TYPE; }
 "uses"                                  { return USES; }
 "Var"                                   { return VAR; }
 "While"                                 { return WHILE; }
+"which_entails"                         { return WHICH_ENTAILS; }
 
 // Parameter modes
 

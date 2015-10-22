@@ -17,7 +17,6 @@
 
     tokens=[
         // Punctuation
-
         AT                      = '@'
         TRIPLE_DOT              = '...'
         DOT_DOT                 = '..'
@@ -35,7 +34,6 @@
         COMMA                   = ','
 
         // Operators
-
         EQUALS                  = '='
         NEQUALS                 = '/='
 
@@ -69,34 +67,38 @@
         DBL_BAR                 = '||'
 
         // Keywords
-
         INT                     = 'int'
         FACILITY                = 'Facility'
         CONCEPT                 = 'Concept'
+        CONSTRAINT              = 'constraints'
         END                     = 'end'
         USES                    = 'uses'
         IS                      = 'is'
         EXTERNALLY              = 'externally'
         IMPLEMENTED             = 'implemented'
+        INITIALIZATION          = 'initialization'
         LAMBDA                  = 'lambda'
         TYPE                    = 'Type'
+        PARAM_TYPE              = 'type'
         FAMILY                  = 'Family'
         MODELED                 = 'modeled'
         EXEMPLAR                = 'exemplar'
         OPERATION               = 'Operation'
         RECURSIVE               = 'Recursive'
         RECORD                  = 'Record'
+        REQUIRES                = 'requires'
+        ENSURES                 = 'ensures'
         PROCEDURE               = 'Procedure'
         VAR                     = 'Var'
         BY                      = 'by'
         WHILE                   = 'While'
         DO                      = 'do'
         STRING                  = 'string'
+        WHICH_ENTAILS           = 'which_entails'
         CHAR                    = 'char'
         raw_string              = 'raw_string'
 
         // Parameter modes
-
         ALTERS                  = 'alters'
         UPDATES                 = 'updates'
         CLEARS                  = 'clears'

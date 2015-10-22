@@ -16,9 +16,8 @@ public class RESOLVELexerTest extends LexerTestCase {
     public void testWhile() { doTest(); }
     public void testFunction_Arguments() { doTest(); }
     public void testRecords() { doTest(); }
-    //TODO: test some (math) specs, str notation, set notation, etc
-    //probably should be around 3 different ones.. testing each curr domain
-    //we have
+    public void testSpecifications() { doTest(); }
+    //TODO: test spec with spiral stuff and strs
 
     private void doTest() {
         try {
