@@ -1,0 +1,43 @@
+RESOLVE file
+  PsiComment(RESOLVE_LINE_COMMENT)('//issues with param lists, and the "Procedure" keyword')
+  FACILITY_MODULE
+    PsiElement(Facility)('Facility')
+    PsiElement(identifier)('Op_Error_Recover')
+    PsiElement(;)(';')
+    FACILITY_BLOCK
+      OPERATION_PROCEDURE_DECL
+        PsiElement(Operation)('Operation')
+        PsiElement(identifier)('Op')
+        SIGNATURE
+          OPERATION_LIKE_PARAMETERS
+            PsiElement(()('(')
+            PARAM_DECL
+              PARAMETER_MODE
+                PsiElement(evaluates)('evaluates')
+              PARAM_DEF
+                PsiElement(identifier)('x')
+              PsiElement(,)(',')
+              PARAM_DEF
+                PsiElement(identifier)('y')
+              PsiElement(,)(',')
+              PARAM_DEF
+                PsiElement(identifier)('z')
+              PsiElement(:)(':')
+              TYPE_REF_NODE
+                TYPE_REFERENCE_EXPRESSION
+                  PsiElement(identifier)('Integer')
+            PsiElement(;)(';')
+            PsiErrorElement:<parameter mode> expected, got ')'
+              <empty list>
+            PsiElement())(')')
+        PsiElement(;)(';')
+        PROCEDURE_BODY
+          PsiErrorElement:Procedure or Recursive expected, got 'Proc'
+            <empty list>
+          PsiElement(identifier)('Proc')
+        PsiElement(end)('end')
+        PsiElement(identifier)('Op')
+        PsiElement(;)(';')
+    PsiElement(end)('end')
+    PsiElement(identifier)('Op_Error_Recover')
+    PsiElement(;)(';')

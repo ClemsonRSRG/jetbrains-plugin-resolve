@@ -1,3 +1,12 @@
-Facility Op_Param_Error_Recover;
+Facility F;
+    Ffffff
 
-end Op_Param_Error_Recover;
+    Operatio
+
+    Operation F( : Int) : B;
+        Pr
+        end ;
+
+     Operation F(); Procedure
+        end F;
+end F;
