@@ -1,0 +1,8 @@
+RESOLVE file
+  CONCEPT_MODULE
+    PsiElement(Concept)('Concept')
+    PsiElement(identifier)('Empty_Module')
+    PsiElement(;)(';')
+    PsiElement(end)('end')
+    PsiElement(identifier)('Empty_Module')
+    PsiElement(;)(';')
