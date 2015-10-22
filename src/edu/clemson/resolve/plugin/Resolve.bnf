@@ -154,7 +154,7 @@ Result ::= ':' TypeRefNode {pin=1}
 Parameters ::= '(' ParamList? ')' { pin=1 }
 private ParamList ::= ParamDecl (';' ParamDecl)* {pin(".*")=1}
 ParamDecl ::= ParameterMode ParamDefinitionListNoPin? ':' TypeRefNode {pin=1} //{methods = [isVariadic]}
-private ParamDefinitionListNoPin ::= ParamDef &(!(';'|')')) (',' ParamDef)* // todo
+private ParamDefinitionListNoPin ::= ParamDef &(!(';'|')')) (',' ParamDef)* {pin=1}
 ParamDef ::= identifier //{methods = [isVariadic]}
 
 ProcedureBody ::= ('Recursive')?'Procedure'
@@ -193,4 +193,4 @@ ParameterMode ::=
     | 'restores'
     | 'preserves'
     | 'replaces'
-    | 'evaluates' {pin=1}
+    | 'evaluates' {pin=1} //TODO: not sure about the pin here...
