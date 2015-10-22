@@ -1,0 +1,50 @@
+RESOLVE file
+  FACILITY_MODULE
+    PsiElement(Facility)('Facility')
+    PsiElement(identifier)('F')
+    PsiElement(;)(';')
+    PsiErrorElement:uses expected, got 'Ffffff'
+      PsiElement(identifier)('Ffffff')
+    PsiElement(identifier)('Operatio')
+    FACILITY_BLOCK
+      OPERATION_PROCEDURE_DECL
+        PsiElement(Operation)('Operation')
+        PsiElement(identifier)('F')
+        SIGNATURE
+          OPERATION_LIKE_PARAMETERS
+            PsiElement(()('(')
+            PsiErrorElement:')' or <parameter mode> expected, got ':'
+              <empty list>
+          RESULT
+            PsiElement(:)(':')
+            TYPE_REF_NODE
+              TYPE_REFERENCE_EXPRESSION
+                PsiElement(identifier)('Int')
+        PsiErrorElement:'.' or ';' expected, got ')'
+          <empty list>
+        PROCEDURE_BODY
+          PsiElement())(')')
+          PsiElement(:)(':')
+          PsiElement(identifier)('B')
+          PsiElement(;)(';')
+          PsiElement(identifier)('Pr')
+        PsiElement(end)('end')
+        PsiErrorElement:identifier expected, got ';'
+          <empty list>
+        PsiElement(;)(';')
+      OPERATION_PROCEDURE_DECL
+        PsiElement(Operation)('Operation')
+        PsiElement(identifier)('F')
+        SIGNATURE
+          OPERATION_LIKE_PARAMETERS
+            PsiElement(()('(')
+            PsiElement())(')')
+        PsiElement(;)(';')
+        PROCEDURE_BODY
+          PsiElement(Procedure)('Procedure')
+        PsiElement(end)('end')
+        PsiElement(identifier)('F')
+        PsiElement(;)(';')
+    PsiElement(end)('end')
+    PsiElement(identifier)('F')
+    PsiElement(;)(';')
