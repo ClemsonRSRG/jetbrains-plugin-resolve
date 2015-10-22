@@ -35,5 +35,6 @@ public class RESOLVEParserTest extends ParsingTestCase {
     }
 
     public void testEmpty_File() { doTest(true); }
+    public void testEmpty_File_Comments() { doTest(true); }
     public void testEmpty_Module() { doTest(true); }
 }

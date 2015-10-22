@@ -1,8 +1,11 @@
 RESOLVE file
+  PsiComment(RESOLVE_MULTILINE_COMMENT)('/** License information goes here\n */')
+  PsiComment(RESOLVE_LINE_COMMENT)('//Dan was here')
   CONCEPT_MODULE
     PsiElement(Concept)('Concept')
     PsiElement(identifier)('Empty_Module')
     PsiElement(;)(';')
+    PsiComment(RESOLVE_LINE_COMMENT)('//this is an empty module...')
     PsiElement(end)('end')
     PsiElement(identifier)('Empty_Module')
     PsiElement(;)(';')
