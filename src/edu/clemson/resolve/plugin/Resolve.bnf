@@ -125,11 +125,15 @@
     pin('.*List(?:_\d.*)?')=1
 }
 
-Module ::= FacilityModule <<eof>>
+Module ::= FacilityModule | ConceptModule <<eof>>
 
 FacilityModule ::= 'Facility' identifier ';'
 UsesList?
 FacilityBlock
+'end' identifier ';' {pin(".*")=1}
+
+ConceptModule ::= 'Concept' identifier SpecModuleParameters? ';'
+    UsesList?
 'end' identifier ';' {pin(".*")=1}
 
 UsesList ::= 'uses' UsesSpec (',' UsesSpec)* ';' {recoverWhile=UsesListRecover}
@@ -147,12 +151,22 @@ OperationProcedureDecl ::= 'Operation' identifier Signature? ';'
 ProcedureBody
 'end' identifier ';' {pin=1}
 
-Signature ::= Parameters Result? {pin=1}
+Signature ::= OperationLikeParameters Result? {pin=1}
 
 Result ::= ':' TypeRefNode {pin=1}
 
-Parameters ::= '(' ParamList? ')' { pin=1 }
-private ParamList ::= ParamDecl (';' ParamDecl)* {pin(".*")=1}
+SpecModuleParameters ::= '(' SpecModuleParamList ')' {pin=1}
+
+private SpecModuleParamList ::= SpecParamDecl  (';' SpecParamDecl)* {pin(".*")=1 recoverWhile=SpecListRec}
+
+private SpecListRec ::= !(')'|SpecParamDecl)
+
+SpecParamDecl ::= TypeParamDecl | ParamDecl
+
+TypeParamDecl ::= 'type' identifier {pin=1}
+
+OperationLikeParameters ::= '(' OpParamList? ')' { pin=1 }
+private OpParamList ::= ParamDecl (';' ParamDecl)* {pin(".*")=1}
 ParamDecl ::= ParameterMode ParamDefinitionListNoPin? ':' TypeRefNode {pin=1} //{methods = [isVariadic]}
 private ParamDefinitionListNoPin ::= ParamDef &(!(';'|')')) (',' ParamDef)* {pin=1}
 ParamDef ::= identifier //{methods = [isVariadic]}
