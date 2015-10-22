@@ -107,8 +107,8 @@
         REPLACES                = 'replaces'
         EVALUATES               = 'evaluates'
 
-        //these two are for grammarkit's live preview feature
-        //otherwise disregard
+        //these two are for grammarkit's live preview feature work right,
+        //disregard them otherwise
         space                   = "regexp:\s+"
         identifier              = 'regexp:\p{Alpha}\w*'
     ]
@@ -133,19 +133,28 @@ FacilityBlock
 'end' identifier ';' {pin(".*")=1}
 
 ConceptModule ::= 'Concept' identifier SpecModuleParameters? ';'
-    UsesList?
+UsesList?
+ConceptBlock
 'end' identifier ';' {pin(".*")=1}
 
 UsesList ::= 'uses' UsesSpec (',' UsesSpec)* ';' {recoverWhile=UsesListRecover}
-private UsesListRecover ::= !(FacilityItem|';'|'end')
+private UsesListRecover ::= !(FacilityItem|ConceptItem|';'|'end')
 
 UsesSpec ::= identifier
+
+ConceptBlock ::= ConceptItem*
 
 FacilityBlock ::= FacilityItem*
 
 private FacilityItem ::= OperationProcedureDecl {pin=1 recoverWhile=FacilityItemRecover}
+private ConceptItem ::= TypeModelDecl {pin=1 recoverWhile=ConceptItemRecover}
 
 private FacilityItemRecover ::= !('end'|'Operation')
+
+private ConceptItemRecover ::= !('end'|'Operation'|'Type')
+
+TypeModelDecl ::= 'Type' 'Family' identifier 'is' 'modeled' 'by' identifier ';'
+    'exemplar' identifier ';' {pin(".*")=1}
 
 OperationProcedureDecl ::= 'Operation' identifier Signature? ';'
 ProcedureBody
