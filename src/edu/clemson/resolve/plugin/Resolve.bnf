@@ -13,11 +13,19 @@
     psiPackage='edu.clemson.resolve.plugin.psi'
     psiImplPackage='edu.clemson.resolve.plugin.psi.impl'
     psiImplUtilClass="edu.clemson.resolve.plugin.psi.impl.ResPsiImplUtil"
-    //parserUtilClass="edu.clemson.resolve.plugin.RESOLVEParserUtil"
+    //parserUtilClass="edu.clemson.resolve.plugin.RESOLVEParserUtil" //not needed yet..
 
     tokens=[
+        // Punctuation
+
+        AT                      = '@'
+        TRIPLE_DOT              = '...'
+        DOT_DOT                 = '..'
+        DOT                     = '.'
+        DBL_LBRACE              = '{{'
         LBRACE                  = '{'
         RBRACE                  = '}'
+        DBL_RBRACE              = '}}'
         LBRACK                  = '['
         RBRACK                  = ']'
         LPAREN                  = '('
@@ -26,38 +34,51 @@
         SEMICOLON               = ';'
         COMMA                   = ','
 
+        // Operators
+
         EQUALS                  = '='
         NEQUALS                 = '/='
-        NOT                     = 'not'
 
+        AND                     = 'and'
+        OR                      = 'or'
+        NOT                     = 'not'
+        CAT                     = 'o'
+
+        LESS_OR_EQUAL           = '<='
+        LESS                    = '<'
+        GREATER_OR_EQUAL        = '>='
+        GREATER                 = '>'
+
+        MOD                     = '%'
+        MUL                     = '*'
+        QUOTIENT                = '/'
         PLUS_PLUS               = '++'
         PLUS                    = '+'
         MINUS_MINUS             = '--'
         MINUS                   = '-'
-        AND                     = 'and'
-        OR                      = 'or'
 
-        LESS_OR_EQUAL           =  '<='
-        LESS                    =  '<'
-        GREATER_OR_EQUAL        =  '>='
-        GREATER                 =  '>'
+        COLON_EQUALS            = ':='
+        COLON_EQUALS_COLON      = ':=:'
+        RARROW                  = '->'
+        TILDE                   = '~'
+        UNION                   = 'union'
+        INTERSECT               = 'intersect'
+        IS_IN                   = 'is_in'
+        IS_NOT_IN               = 'is_not_in'
+        BAR                     = '|'
+        DBL_BAR                 = '||'
 
-        MUL                     = '*'
-        QUOTIENT                = '/'
-
-        COLON_EQUALS             = ':='
-        TRIPLE_DOT              = '...'
-        DOT                     = '.'
+        // Keywords
 
         INT                     = 'int'
         FACILITY                = 'Facility'
         CONCEPT                 = 'Concept'
         END                     = 'end'
-        EVALUATES               = 'evaluates'
         USES                    = 'uses'
         IS                      = 'is'
         EXTERNALLY              = 'externally'
         IMPLEMENTED             = 'implemented'
+        LAMBDA                  = 'lambda'
         TYPE                    = 'Type'
         FAMILY                  = 'Family'
         MODELED                 = 'modeled'
@@ -72,7 +93,17 @@
         DO                      = 'do'
         STRING                  = 'string'
         CHAR                    = 'char'
-        raw_string              = "raw_string"
+        raw_string              = 'raw_string'
+
+        // Parameter modes
+
+        ALTERS                  = 'alters'
+        UPDATES                 = 'updates'
+        CLEARS                  = 'clears'
+        RESTORES                = 'restores'
+        PRESERVES               = 'preserves'
+        REPLACES                = 'replaces'
+        EVALUATES               = 'evaluates'
 
         //these two are for grammarkit's live preview feature
         //otherwise disregard
@@ -140,3 +171,4 @@ VarDef ::= identifier //{methods=[getResTypeInner getReference]}
 TypeRefNode ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
 TypeReferenceExpression ::= identifier //{ methods=[getReference getQualifier] }
 left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
+

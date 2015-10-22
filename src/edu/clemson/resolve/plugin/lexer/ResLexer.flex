@@ -112,6 +112,8 @@ ESCAPES = [abfnrtv]
 "intersect"                             { return INTERSECT; }
 "is_in"                                 { return IS_IN; }
 "is_not_in"                             { return IS_NOT_IN; }
+"|"                                     { return BAR; }
+"||"                                    { return DBL_BAR; }
 
 // Keywords
 
