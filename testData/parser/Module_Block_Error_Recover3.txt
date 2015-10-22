@@ -9,7 +9,7 @@ RESOLVE file
     PsiElement(is)('is')
     PsiElement(identifier)('Integer_Template')
     PsiElement(externally)('externally')
-    PsiElement(modeled)('modeled')
+    PsiElement(implemented)('implemented')
     PsiElement(by)('by')
     PsiElement(identifier)('X')
     FACILITY_BLOCK
@@ -25,7 +25,7 @@ RESOLVE file
     PsiElement(end)('end')
     PsiElement(identifier)('Foo')
     PsiElement(;)(';')
-    PsiElement(identifier)('mmmm')
+    PsiElement(identifier)('m')
     PsiElement(Operation)('Operation')
   PsiElement(DUMMY_BLOCK)
     PsiElement(identifier)('Foo')
