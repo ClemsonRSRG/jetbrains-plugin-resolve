@@ -127,7 +127,7 @@ ParameterDeclaration ::= ParamDefinitionListNoPin? '...'? Type | Type { // todo:
 private ParamDefinitionListNoPin ::= ParamDefinition &(!('.' | ')')) (',' ParamDefinition)*
 */
 
-ProcedureBody ::= 'Procedure'
+ProcedureBody ::= ('Recursive')?'Procedure'
 VarDeclGroup* {pin=1 recoverWhile=ProcedureRec}
 
 ProcedureRec ::= !('end')

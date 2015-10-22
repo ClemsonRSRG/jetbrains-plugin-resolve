@@ -50,6 +50,9 @@ ESCAPES = [abfnrtv]
 {LINE_COMMENT}                          { return LINE_COMMENT; }
 "/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")? { return MULTILINE_COMMENT; }
 
+// Punctuation
+
+"@"                                     { return AT; }
 "..."                                   { return TRIPLE_DOT; }
 "."                                     { return DOT; }
 
@@ -63,8 +66,10 @@ ESCAPES = [abfnrtv]
 {STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}?
                                         { return STRING; }
 
+"{{"                                    { return DBL_LBRACE; }
 "{"                                     { return LBRACE; }
 "}"                                     { return RBRACE; }
+"}}"                                    { return DBL_RBRACE; }
 
 "["                                     { return LBRACK; }
 "]"                                     { return RBRACK; }
@@ -76,31 +81,39 @@ ESCAPES = [abfnrtv]
 ";"                                     { return SEMICOLON; }
 ","                                     { return COMMA; }
 
+// Operators
+
 "="                                     { return EQUALS; }
-
 "/="                                    { return NEQUALS; }
-"not"                                   { return NOT; }
 
-"++"                                    { return PLUS_PLUS; }
-"+"                                     { return PLUS; }
-
-"--"                                    { return MINUS_MINUS; }
-"-"                                     { return MINUS; }
-
-"or"                                    { return OR; }
 "and"                                   { return AND; }
+"or"                                    { return OR; }
+"not"                                   { return NOT; }
+"o"                                     { return CAT; }
 
 "<="                                    { return LESS_OR_EQUAL; }
 "<"                                     { return LESS; }
-
-"*"                                     { return MUL; }
-"/"                                     { return QUOTIENT; }
-
 ">="                                    { return GREATER_OR_EQUAL; }
 ">"                                     { return GREATER; }
-":="                                    { return COLON_EQUALS; }
 
-//END
+"%"                                     { return MOD; }
+"*"                                     { return MUL; }
+"/"                                     { return QUOTIENT; }
+"++"                                    { return PLUS_PLUS; }
+"+"                                     { return PLUS; }
+"--"                                    { return MINUS_MINUS; }
+"-"                                     { return MINUS; }
+
+":="                                    { return COLON_EQUALS; }
+":=:"                                   { return COLON_EQUALS_COLON; }
+"->"                                    { return RARROW; }
+"~"			                            { return TILDE; }
+"union"                                 { return UNION; }
+"intersect"                             { return INTERSECT; }
+"is_in"                                 { return IS_IN; }
+"is_not_in"                             { return IS_NOT_IN; }
+
+// Keywords
 
 "by"                                    { return BY; }
 "Concept"                               { return CONCEPT;  }
@@ -112,6 +125,7 @@ ESCAPES = [abfnrtv]
 "Family"                                { return FAMILY; }
 "is"                                    { return IS; }
 "implemented"                           { return IMPLEMENTED; }
+"lambda"                                { return LAMBDA; }
 "modeled"                               { return MODELED; }
 "Operation"                             { return OPERATION; }
 "Procedure"                             { return PROCEDURE; }
@@ -121,6 +135,16 @@ ESCAPES = [abfnrtv]
 "uses"                                  { return USES; }
 "Var"                                   { return VAR; }
 "While"                                 { return WHILE; }
+
+// Parameter modes
+
+"alters"                                { return ALTERS; }
+"updates"                               { return UPDATES; }
+"clears"                                { return CLEARS; }
+"restores"                              { return RESTORES; }
+"preserves"                             { return PRESERVES; }
+"replaces"                              { return REPLACES; }
+"evaluates"                             { return EVALUATES; }
 
 {IDENT}                                 { return IDENTIFIER; }
 {NUM_INT}                               { return INT; }
