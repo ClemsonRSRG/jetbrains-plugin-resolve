@@ -39,6 +39,7 @@ public class RESOLVEParserTest extends ParsingTestCase {
     public void testEmpty_Module() { doTest(true); }
     public void testModule_Block_Error_Recover() { doTest(false); }
     public void testModule_Block_Error_Recover2() { doTest(false); }
+    public void testModule_Block_Error_Recover3() { doTest(false); }
     public void testOp_Error_Recover() { doTest(false); }
 
 }

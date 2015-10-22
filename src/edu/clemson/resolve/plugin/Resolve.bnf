@@ -160,7 +160,7 @@ private FacilityItemRecover ::= !('end'|'Operation'|'Facility')
 private ConceptItemRecover ::= !('end'|'Operation'|'Type')
 
 FacilityDecl ::= 'Facility' identifier 'is' UsesSpec
-('externally')? 'modeled' 'by' UsesSpec ';' //TODO: enhancements!
+('externally')? 'implemented' 'by' UsesSpec ';' {pin=2} //TODO: enhancements!
 
 TypeModelDecl ::= 'Type' 'Family' identifier 'is' 'modeled' 'by' identifier ';'
     'exemplar' identifier ';' {pin(".*")=1}
