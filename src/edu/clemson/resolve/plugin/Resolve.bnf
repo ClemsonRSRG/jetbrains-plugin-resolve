@@ -151,11 +151,12 @@ FacilityBlock ::= FacilityItem*
 
 private FacilityItem ::=
         OperationProcedureDecl
-    |   FacilityDecl {pin=1 recoverWhile=FacilityItemRecover}
+    |   FacilityDecl
+    |   TypeReprDecl {pin=1 recoverWhile=FacilityItemRecover}
 
 private ConceptItem ::= TypeModelDecl {pin=1 recoverWhile=ConceptItemRecover}
 
-private FacilityItemRecover ::= !('end'|'Operation'|'Facility')
+private FacilityItemRecover ::= !('end'|'Operation'|'Facility'|'Type')
 
 private ConceptItemRecover ::= !('end'|'Operation'|'Type')
 
@@ -164,6 +165,9 @@ FacilityDecl ::= 'Facility' identifier 'is' UsesSpec
 
 TypeModelDecl ::= 'Type' 'Family' identifier 'is' 'modeled' 'by' identifier ';'
     'exemplar' identifier ';' {pin(".*")=1}
+
+TypeReprDecl ::= 'Type' identifier '='
+(TypeRefNode | RecordTypeNode) ';' {pin=2}
 
 OperationProcedureDecl ::= 'Operation' identifier Signature? ';'
 ProcedureBody
@@ -193,6 +197,9 @@ ProcedureBody ::= ('Recursive')?'Procedure'
 VarDeclGroup* {pin=1 recoverWhile=ProcedureRec}
 
 ProcedureRec ::= !('end')
+
+RecordVarDeclGroup ::= VarSpec ';' {pin=1}
+
 VarDeclGroup ::= 'Var' VarSpec ';' {pin=1}
 VarSpec ::= VarDefList ':' TypeRefNode //{methods=[processDeclarations]}
 private VarDefList ::= VarDef (',' VarDef)*
@@ -202,6 +209,8 @@ VarDef ::= identifier //{methods=[getResTypeInner getReference]}
 TypeRefNode ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
 TypeReferenceExpression ::= identifier //{ methods=[getReference getQualifier] }
 left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
+
+RecordTypeNode ::= 'Record' RecordVarDeclGroup* 'end'
 
 /*Statement ::=
           SimpleStatement
