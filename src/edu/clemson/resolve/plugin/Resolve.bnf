@@ -117,6 +117,9 @@
     extends("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.impl.ResOperationLikeNodeImpl"
     extends("(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
     extends("(Param|Var)Def")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
+    extends("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeDeclImpl"
+
+    implements("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
     implements("(Facility|Concept)Block")="edu.clemson.resolve.plugin.psi.ResModuleBlock"
     implements("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.ResOperationLikeNode"
     implements("(Var|Param)Def|(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.ResNamedElement"
@@ -146,12 +149,18 @@ ConceptBlock ::= ConceptItem*
 
 FacilityBlock ::= FacilityItem*
 
-private FacilityItem ::= OperationProcedureDecl {pin=1 recoverWhile=FacilityItemRecover}
+private FacilityItem ::=
+        OperationProcedureDecl
+    |   FacilityDecl {pin=1 recoverWhile=FacilityItemRecover}
+
 private ConceptItem ::= TypeModelDecl {pin=1 recoverWhile=ConceptItemRecover}
 
-private FacilityItemRecover ::= !('end'|'Operation')
+private FacilityItemRecover ::= !('end'|'Operation'|'Facility')
 
 private ConceptItemRecover ::= !('end'|'Operation'|'Type')
+
+FacilityDecl ::= 'Facility' identifier 'is' UsesSpec
+('externally')? 'modeled' 'by' UsesSpec ';' //TODO: enhancements!
 
 TypeModelDecl ::= 'Type' 'Family' identifier 'is' 'modeled' 'by' identifier ';'
     'exemplar' identifier ';' {pin(".*")=1}
