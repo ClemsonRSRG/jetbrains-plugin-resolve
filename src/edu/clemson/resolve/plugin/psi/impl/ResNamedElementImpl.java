@@ -72,7 +72,7 @@ public abstract class ResNamedElementImpl
     @Nullable @Override public Icon getIcon(int flags) {
         Icon icon = null;
         if (this instanceof ResFacilityModule) icon = RESOLVEIcons.FACILITY;
-        //else if (this instanceof ResConceptModule) icon = RESOLVEIcons.CONCEPT;
+        else if (this instanceof ResConceptModule) icon = RESOLVEIcons.CONCEPT;
         if (icon != null) {
             if ((flags & Iconable.ICON_FLAG_VISIBILITY) != 0) {
                 RowIcon rowIcon =

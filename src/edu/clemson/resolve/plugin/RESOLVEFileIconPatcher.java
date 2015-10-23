@@ -30,6 +30,7 @@ public class RESOLVEFileIconPatcher implements FileIconPatcher {
 
         ResModule enclosedModule = ((ResFile)f).getEnclosedModule();
         if (enclosedModule == null) return RESOLVEIcons.FILE;
-        return enclosedModule.getIcon(0);
+        return enclosedModule.getIcon(0) != null ?
+                enclosedModule.getIcon(0) : baseIcon;
     }
 }

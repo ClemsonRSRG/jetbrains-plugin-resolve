@@ -40,6 +40,11 @@ public class RESOLVEKeywordCompletionContributor
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
                 "OperationProcedure"));
+
+        extend(CompletionType.BASIC, conceptModulePattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY,
+                        "TypeFamily"));
     }
 
     private static Capture<PsiElement> modulePattern() {
@@ -58,6 +63,11 @@ public class RESOLVEKeywordCompletionContributor
     private static Capture<PsiElement> facilityModulePattern() {
         return topLevelModulePattern(ResFacilityModule.class,
                 ResFacilityBlock.class);
+    }
+
+    private static Capture<PsiElement> conceptModulePattern() {
+        return topLevelModulePattern(ResConceptModule.class,
+                ResConceptBlock.class);
     }
 
     @SuppressWarnings("unchecked")

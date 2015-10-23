@@ -164,7 +164,7 @@ FacilityDecl ::= 'Facility' identifier 'is' UsesSpec
 ('externally')? 'implemented' 'by' UsesSpec ';' {pin=2} //TODO: enhancements!
 
 TypeModelDecl ::= 'Type' 'Family' identifier 'is' 'modeled' 'by' identifier ';'
-    'exemplar' identifier ';' {pin(".*")=1}
+    'exemplar' identifier ';' {pin(".*")=2}
 
 TypeReprDecl ::= 'Type' identifier '='
 (TypeRefNode | RecordTypeNode) ';' {pin=2}
@@ -187,9 +187,10 @@ SpecParamDecl ::= TypeParamDecl | ParamDecl
 
 TypeParamDecl ::= 'type' identifier {pin=1}
 
-OperationLikeParameters ::= '(' OpParamList? ')' { pin=1 }
-private OpParamList ::= ParamDecl (';' ParamDecl)* {pin(".*")=1}
-ParamDecl ::= ParameterMode ParamDefinitionListNoPin? ':' TypeRefNode {pin=1} //{methods = [isVariadic]}
+OperationLikeParameters ::= '(' OpParamList? ')' { pin=1}
+private ParamListRec ::= !(')')
+OpParamList ::= ParamDecl (';' ParamDecl)* {pin=3 recoverWhile=ParamListRec} 
+ParamDecl ::= ParameterMode ParamDefinitionListNoPin ':' TypeRefNode {pin=1}
 private ParamDefinitionListNoPin ::= ParamDef &(!(';'|')')) (',' ParamDef)* {pin=1}
 ParamDef ::= identifier //{methods = [isVariadic]}
 
