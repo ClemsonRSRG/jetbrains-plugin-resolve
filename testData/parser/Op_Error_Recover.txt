@@ -1,4 +1,4 @@
-RESOLVE file
+RESOLVE_FILE
   PsiComment(RESOLVE_LINE_COMMENT)('//issues with param lists, and the "Procedure" keyword')
   FACILITY_MODULE
     PsiElement(Facility)('Facility')

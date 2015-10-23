@@ -1,2 +1,2 @@
-RESOLVE file
+RESOLVE_FILE
   <empty list>

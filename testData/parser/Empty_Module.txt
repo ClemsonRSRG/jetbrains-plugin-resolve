@@ -1,4 +1,4 @@
-RESOLVE file
+RESOLVE_FILE
   PsiComment(RESOLVE_MULTILINE_COMMENT)('/** License information goes here\n */')
   PsiComment(RESOLVE_LINE_COMMENT)('//Dan was here')
   FACILITY_MODULE

@@ -1,4 +1,4 @@
-RESOLVE file
+RESOLVE_FILE
   FACILITY_MODULE
     PsiElement(Facility)('Facility')
     PsiElement(identifier)('Module_Block_Error_Recover3')
