@@ -13,20 +13,19 @@ RESOLVE_FILE
         SIGNATURE
           OPERATION_LIKE_PARAMETERS
             PsiElement(()('(')
-            PsiErrorElement:')' or <parameter mode> expected, got ':'
-              <empty list>
+            PsiErrorElement:<parameter mode> expected, got ':'
+              PsiElement(:)(':')
+            PsiElement(identifier)('Int')
+            PsiElement())(')')
           RESULT
             PsiElement(:)(':')
             TYPE_REF_NODE
               TYPE_REFERENCE_EXPRESSION
-                PsiElement(identifier)('Int')
-        PsiErrorElement:'.' or ';' expected, got ')'
-          <empty list>
+                PsiElement(identifier)('B')
+        PsiElement(;)(';')
         PROCEDURE_BODY
-          PsiElement())(')')
-          PsiElement(:)(':')
-          PsiElement(identifier)('B')
-          PsiElement(;)(';')
+          PsiErrorElement:Procedure or Recursive expected, got 'Pr'
+            <empty list>
           PsiElement(identifier)('Pr')
         PsiElement(end)('end')
         PsiErrorElement:identifier expected, got ';'

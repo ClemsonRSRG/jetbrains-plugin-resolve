@@ -189,7 +189,7 @@ TypeParamDecl ::= 'type' identifier {pin=1}
 
 OperationLikeParameters ::= '(' OpParamList? ')' { pin=1}
 private ParamListRec ::= !(')')
-OpParamList ::= ParamDecl (';' ParamDecl)* {pin=3 recoverWhile=ParamListRec} 
+OpParamList ::= ParamDecl (';' ParamDecl)* {pin=1 recoverWhile=ParamListRec}
 ParamDecl ::= ParameterMode ParamDefinitionListNoPin ':' TypeRefNode {pin=1}
 private ParamDefinitionListNoPin ::= ParamDef &(!(';'|')')) (',' ParamDef)* {pin=1}
 ParamDef ::= identifier //{methods = [isVariadic]}
@@ -235,4 +235,4 @@ ParameterMode ::=
     | 'restores'
     | 'preserves'
     | 'replaces'
-    | 'evaluates' {pin=1} //TODO: not sure about the pin here...
+    | 'evaluates'//TODO: not sure about the pin here...

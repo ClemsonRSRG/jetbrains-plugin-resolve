@@ -11,24 +11,25 @@ RESOLVE_FILE
         SIGNATURE
           OPERATION_LIKE_PARAMETERS
             PsiElement(()('(')
-            PARAM_DECL
-              PARAMETER_MODE
-                PsiElement(evaluates)('evaluates')
-              PARAM_DEF
-                PsiElement(identifier)('x')
-              PsiElement(,)(',')
-              PARAM_DEF
-                PsiElement(identifier)('y')
-              PsiElement(,)(',')
-              PARAM_DEF
-                PsiElement(identifier)('z')
-              PsiElement(:)(':')
-              TYPE_REF_NODE
-                TYPE_REFERENCE_EXPRESSION
-                  PsiElement(identifier)('Integer')
-            PsiElement(;)(';')
-            PsiErrorElement:<parameter mode> expected, got ')'
-              <empty list>
+            OP_PARAM_LIST
+              PARAM_DECL
+                PARAMETER_MODE
+                  PsiElement(evaluates)('evaluates')
+                PARAM_DEF
+                  PsiElement(identifier)('x')
+                PsiElement(,)(',')
+                PARAM_DEF
+                  PsiElement(identifier)('y')
+                PsiElement(,)(',')
+                PARAM_DEF
+                  PsiElement(identifier)('z')
+                PsiElement(:)(':')
+                TYPE_REF_NODE
+                  TYPE_REFERENCE_EXPRESSION
+                    PsiElement(identifier)('Integer')
+              PsiElement(;)(';')
+              PsiErrorElement:<parameter mode> expected, got ')'
+                <empty list>
             PsiElement())(')')
         PsiElement(;)(';')
         PROCEDURE_BODY

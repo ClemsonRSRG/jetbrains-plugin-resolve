@@ -45,19 +45,30 @@ public class RESOLVEKeywordCompletionContributor
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
                         "TypeFamily"));
+
+        extend(CompletionType.BASIC, parameterModePattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY,
+                        "evaluates", "updates", "alters", "clears",
+                        "preserves", "restores", "replaces"));
+    }
+
+    private static Capture<PsiElement> parameterModePattern() {
+        return psiElement(ResTypes.IDENTIFIER)
+                .withParent(ResParameterMode.class);
     }
 
     private static Capture<PsiElement> modulePattern() {
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(PsiErrorElement.class)
-                    .withParent(ResFile.class));
+                        .withParent(ResFile.class));
     }
 
     private static Capture<PsiElement> usesPattern() {
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(PsiErrorElement.class)
-                    .withParent(ResModule.class)
-                    .isFirstAcceptedChild(psiElement()));
+                        .withParent(ResModule.class)
+                        .isFirstAcceptedChild(psiElement()));
     }
 
     private static Capture<PsiElement> facilityModulePattern() {
