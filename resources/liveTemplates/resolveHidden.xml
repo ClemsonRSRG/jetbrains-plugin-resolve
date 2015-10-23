@@ -46,8 +46,15 @@
     </template>
 
     <template description='Type representation declaration' id='resolve_lang_TypeRepresentation' name='resolve_lang_Type_Representation' toReformat='true' toShortenFQNames='true'
-              value='Type $NAME$ = $END$'>
+              value='Type $NAME$ = $END$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Record type' id='resolve_lang_Record' name='resolve_lang_Record' toReformat='true' toShortenFQNames='true'
+              value='Record&#10;        $END$&#10;    end'>
         <context>
             <option name='RESOLVE' value='true'/>
         </context>

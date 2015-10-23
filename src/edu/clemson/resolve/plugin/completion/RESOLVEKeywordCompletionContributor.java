@@ -51,11 +51,11 @@ public class RESOLVEKeywordCompletionContributor
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
                         "evaluates", "updates", "alters", "clears",
                         "preserves", "restores", "replaces"));
-    }
 
-    private static Capture<PsiElement> parameterModePattern() {
-        return psiElement(ResTypes.IDENTIFIER)
-                .withParent(ResParameterMode.class);
+        extend(CompletionType.BASIC, recordTypePattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY,
+                        "Record"));
     }
 
     private static Capture<PsiElement> modulePattern() {
@@ -71,13 +71,21 @@ public class RESOLVEKeywordCompletionContributor
                         .isFirstAcceptedChild(psiElement()));
     }
 
+    private static Capture<PsiElement> recordTypePattern() {
+        return psiElement(ResTypes.IDENTIFIER)
+                .withParent(psiElement(ResTypes.TYPE_REFERENCE_EXPRESSION)
+                        .withParent(psiElement()
+                                .withParent(ResTypeReprDecl.class)));
+    }
+
+    private static Capture<PsiElement> parameterModePattern() {
+        return psiElement(ResTypes.IDENTIFIER)
+                .withParent(ResParameterMode.class);
+    }
+
     private static Capture<PsiElement> facilityModulePattern() {
         return topLevelModulePattern(ResFacilityModule.class,
                 ResFacilityBlock.class);
-    }
-
-    private static Capture<PsiElement> recordTypePattern() {
-        return  null;
     }
 
     private static Capture<PsiElement> conceptModulePattern() {
