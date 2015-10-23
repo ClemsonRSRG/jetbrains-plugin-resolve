@@ -10,6 +10,7 @@ import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.patterns.PsiElementPattern.Capture;
+import com.intellij.patterns.StandardPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
 import edu.clemson.resolve.plugin.ResTypes;
@@ -99,6 +100,7 @@ public class RESOLVEKeywordCompletionContributor
             Class<? extends ResModuleBlock> blockType) {
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(PsiErrorElement.class)
-                    .withParent(or(psiElement(blockType), psiElement(moduleType))));
+                    .withParent(StandardPatterns.or(psiElement(blockType),
+                            psiElement(moduleType))));
     }
 }
