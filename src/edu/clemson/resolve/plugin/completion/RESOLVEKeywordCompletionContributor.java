@@ -29,17 +29,17 @@ public class RESOLVEKeywordCompletionContributor
         extend(CompletionType.BASIC, modulePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                "Concept", "Facility"));
+                        "Concept", "Facility"));
 
         extend(CompletionType.BASIC, usesPattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE, "uses"));
+                        AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE, "uses"));
 
         extend(CompletionType.BASIC, facilityModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                "OperationProcedure", "TypeRepresentation"));
+                        "OperationProcedure", "TypeRepresentation"));
 
         extend(CompletionType.BASIC, conceptModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
@@ -99,7 +99,6 @@ public class RESOLVEKeywordCompletionContributor
             Class<? extends ResModuleBlock> blockType) {
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(PsiErrorElement.class)
-                    .withParent(PlatformPatterns.or(psiElement(blockType),
-                            psiElement(moduleType))));
+                    .withParent(or(psiElement(blockType), psiElement(moduleType))));
     }
 }
