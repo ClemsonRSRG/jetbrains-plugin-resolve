@@ -39,7 +39,7 @@ public class RESOLVEKeywordCompletionContributor
         extend(CompletionType.BASIC, facilityModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                "OperationProcedure"));
+                "OperationProcedure", "TypeRepresentation"));
 
         extend(CompletionType.BASIC, conceptModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
@@ -74,6 +74,10 @@ public class RESOLVEKeywordCompletionContributor
     private static Capture<PsiElement> facilityModulePattern() {
         return topLevelModulePattern(ResFacilityModule.class,
                 ResFacilityBlock.class);
+    }
+
+    private static Capture<PsiElement> recordTypePattern() {
+        return  null;
     }
 
     private static Capture<PsiElement> conceptModulePattern() {

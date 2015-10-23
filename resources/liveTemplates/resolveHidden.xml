@@ -35,4 +35,22 @@
             <option name='RESOLVE' value='true'/>
         </context>
     </template>
+
+    <template description='Operation procedure declaration' id='resolve_lang_TypeRepresentation' name='resolve_lang_Type_Representation' toReformat='true' toShortenFQNames='true'
+              value='Operation $NAME$ ($PARAMS$);&#10;    Procedure&#10;    $END$        &#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;parameters&quot;' expression='' name='PARAMS'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Type representation declaration' id='resolve_lang_TypeRepresentation' name='resolve_lang_Type_Representation' toReformat='true' toShortenFQNames='true'
+              value='Type $NAME$ = $END$'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+
 </templateSet>
