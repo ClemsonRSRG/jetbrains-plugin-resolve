@@ -171,7 +171,7 @@ TypeReprDecl ::= 'Type' identifier '='
 
 OperationProcedureDecl ::= 'Operation' identifier Signature? ';'
 ProcedureBody
-'end' identifier ';' {pin=1}
+'end' identifier ';' {pin(".*")=1}
 
 Signature ::= OperationLikeParameters Result? {pin=1}
 

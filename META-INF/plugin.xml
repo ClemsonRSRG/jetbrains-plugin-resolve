@@ -40,13 +40,13 @@
 
         <lang.parserDefinition language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.RESOLVEParserDefinition"/>
 
-        <!--<completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVECompletionContributor"/>
-        <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVEKeywordCompletionContributor"/>-->
+        <!-- project -->
+        <defaultLiveTemplatesProvider implementation="edu.clemson.resolve.plugin.template.RESOLVELiveTemplatesProvider"/>
+        <liveTemplateContext implementation="edu.clemson.resolve.plugin.template.RESOLVEEverywhereContextType"/>
+        <!--<liveTemplateContext implementation="edu.clemson.resolve.plugin.template.RESOLVELiveTemplateContextType$RESOLVEFileContextType"/> -->
 
-        <!-- <spellchecker.support language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.inspections.RESOLVESpellcheckingStrategy"/> -->
-        <!--<lang.foldingBuilder language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.editor.RESOLVEFoldingBuilder"/>-->
-        <!-- <externalAnnotator language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.annotations.RESOLVEExternalAnnotator"/> -->
-        <!-- <psi.referenceContributor implementation="edu.clemson.resolve.plugin.RESOLVEReferenceContributor"/> -->
+        <!--<completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVECompletionContributor"/>-->
+        <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVEKeywordCompletionContributor"/>
 
 </extensions>
 

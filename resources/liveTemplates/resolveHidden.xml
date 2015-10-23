@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<templateSet group="ResolveHiddenTemplate">
+
+    <template description='Facility module declaration' id='resolve_lang_Facility' name='resolve_lang_Facility' toReformat='true' toShortenFQNames='true'
+              value='Facility $NAME$;&#10;    $END$ &#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Concept module declaration' id='resolve_lang_Concept' name='resolve_lang_Concept' toReformat='true' toShortenFQNames='true'
+              value='Concept $NAME$;&#10;    $END$ &#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Operation procedure declaration' id='resolve_lang_OperationProcedure' name='resolve_lang_Operation_Procedure' toReformat='true' toShortenFQNames='true'
+              value='Operation $NAME$ ($END$);&#10;    Procedure &#10;        &#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+</templateSet>

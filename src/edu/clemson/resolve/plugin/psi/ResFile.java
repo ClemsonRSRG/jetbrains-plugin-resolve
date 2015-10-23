@@ -23,10 +23,6 @@ public class ResFile extends PsiFileBase {
         return RESOLVEFileType.INSTANCE;
     }
 
-    @Override public String toString() {
-        return "RESOLVE file";
-    }
-
     @NotNull @Override public PsiElement[] getChildren() {
         return super.getChildren();
     }
