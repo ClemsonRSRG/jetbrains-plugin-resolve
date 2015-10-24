@@ -37,9 +37,9 @@ public class ResFile extends PsiFileBase {
                 new ArrayList<ResTypeLikeNodeDecl>();
     }
 
-    /*@NotNull public List<ResFacilityDecl> getFacilities() {
+    @NotNull public List<ResFacilityDecl> getFacilities() {
         ResModule enclosedModule = getEnclosedModule();
         return enclosedModule != null ? enclosedModule.getFacilities() :
                 new ArrayList<ResFacilityDecl>();
-    }*/
+    }
 }

@@ -28,6 +28,9 @@ public abstract class ResCachedReference<T extends PsiElement>
 
     @Nullable protected abstract PsiElement resolveInner();
 
+    public abstract boolean processResolveVariants(
+            @NotNull ResScopeProcessor processor);
+
     @Nullable @Override public PsiElement resolve() {
         return myElement.isValid()
                 ? ResolveCache.getInstance(myElement.getProject())

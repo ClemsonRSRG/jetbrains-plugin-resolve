@@ -119,6 +119,7 @@
     extends("(Param|Var)Def")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
     extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeDeclImpl"
 
+    implements(".*ReferenceExpression")="edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase"
     implements("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
     implements("(Facility|Concept)Block")="edu.clemson.resolve.plugin.psi.ResModuleBlock"
     implements("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.ResOperationLikeNode"
@@ -207,10 +208,10 @@ VarDeclGroup ::= 'Var' VarSpec ';' {pin=1}
 VarSpec ::= VarDefList ':' TypeRefNode //{methods=[processDeclarations]}
 private VarDefList ::= VarDef (',' VarDef)*
 
-VarDef ::= identifier //{methods=[getResTypeInner getReference]}
+VarDef ::= identifier {methods=[getResTypeInner getReference]}
 
 TypeRefNode ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
-TypeReferenceExpression ::= identifier //{ methods=[getReference getQualifier] }
+TypeReferenceExpression ::= identifier { methods=[getReference getQualifier] }
 left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
 
 RecordTypeNode ::= 'Record' RecordVarDeclGroup* 'end'

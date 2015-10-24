@@ -11,9 +11,9 @@ public interface ResModule extends ResNamedElement {
 
     @NotNull public ResModuleBlock getModuleBlock();
 
-    //@NotNull public List<ResUsesSpec> getUsesSpecs();
+    @NotNull public List<ResUsesSpec> getUsesSpecs();
 
-    //@NotNull public List<ResFacilityDecl> getFacilities();
+    @NotNull public List<ResFacilityDecl> getFacilities();
 
     @NotNull public List<ResTypeLikeNodeDecl> getTypes();
 }
