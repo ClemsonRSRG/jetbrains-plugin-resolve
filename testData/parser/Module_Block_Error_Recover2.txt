@@ -1,5 +1,5 @@
 RESOLVE_FILE
-  FACILITY_MODULE
+  FACILITY_MODULE_DECL
     PsiElement(Facility)('Facility')
     PsiElement(identifier)('Module_Block_Error_Recover2')
     PsiElement(;)(';')
@@ -14,6 +14,8 @@ RESOLVE_FILE
         PsiElement(;)(';')
         PROCEDURE_BODY
           PsiElement(Procedure)('Procedure')
+          VAR_DECL_GROUP_LIST
+            <empty list>
         PsiElement(end)('end')
         PsiElement(identifier)('I')
         PsiElement(;)(';')

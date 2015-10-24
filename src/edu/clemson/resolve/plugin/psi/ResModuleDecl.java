@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.util.List;
 
-public interface ResModule extends ResNamedElement {
+public interface ResModuleDecl extends ResNamedElement {
 
     @NotNull public ResModuleBlock getModuleBlock();
 

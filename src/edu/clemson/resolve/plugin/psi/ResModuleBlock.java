@@ -1,4 +1,7 @@
 package edu.clemson.resolve.plugin.psi;
 
-public interface ResModuleBlock extends ResCompositeElement {
+/**
+ * Created by daniel on 10/24/15.
+ */
+public interface ResModuleBlock extends ResBlock {
 }

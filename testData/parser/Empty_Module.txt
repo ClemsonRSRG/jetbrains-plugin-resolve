@@ -1,7 +1,7 @@
 RESOLVE_FILE
   PsiComment(RESOLVE_MULTILINE_COMMENT)('/** License information goes here\n */')
   PsiComment(RESOLVE_LINE_COMMENT)('//Dan was here')
-  FACILITY_MODULE
+  FACILITY_MODULE_DECL
     PsiElement(Facility)('Facility')
     PsiElement(identifier)('Empty_Module')
     PsiElement(;)(';')

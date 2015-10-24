@@ -99,7 +99,14 @@ public class ResReference
                                        @NotNull ResScopeProcessor processor,
                                        @NotNull ResolveState state,
                                        @NotNull ResCompositeElement element) {
-
+        for (ResUsesSpec u : file.getUsesSpecs()) {
+            //this file resolve is failing for whatever reason when we're trying to add completions... is this a concurrency thing maybe?
+            //works the rest of the time...
+            PsiFile resolvedFile = u.resolve();
+            if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
+            //if (!processor.execute(((ResFile) resolvedFile).getEnclosedModule(), state.put(ACTUAL_NAME, u.getText()))) return true;
+            if (!processFileEntities((ResFile)resolvedFile, processor, state, false)) return false;
+        }
         return true;
     }
 

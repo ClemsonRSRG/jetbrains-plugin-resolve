@@ -1,5 +1,12 @@
 package plugin
 
-import fmt;
+import "fmt"
 
-func
+type person struct {
+
+}
+
+func foo() {
+
+	var x person
+}

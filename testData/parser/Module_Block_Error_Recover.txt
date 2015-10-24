@@ -1,5 +1,5 @@
 RESOLVE_FILE
-  FACILITY_MODULE
+  FACILITY_MODULE_DECL
     PsiElement(Facility)('Facility')
     PsiElement(identifier)('F')
     PsiElement(;)(';')

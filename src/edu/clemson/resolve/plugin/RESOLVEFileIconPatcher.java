@@ -6,12 +6,12 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import edu.clemson.resolve.plugin.psi.ResFile;
-import edu.clemson.resolve.plugin.psi.ResModule;
+import edu.clemson.resolve.plugin.psi.ResModuleDecl;
 
 import javax.swing.*;
 
 /** Dynamically updates (patches) icons for {@link PsiFile} instances based on
- *  the {@link ResModule} declared within.
+ *  the {@link ResModuleDecl} declared within.
  */
 public class RESOLVEFileIconPatcher implements FileIconPatcher {
 
@@ -28,7 +28,7 @@ public class RESOLVEFileIconPatcher implements FileIconPatcher {
         final PsiFile f = PsiManager.getInstance(project).findFile(file);
         if (!(f instanceof ResFile)) return baseIcon;
 
-        ResModule enclosedModule = ((ResFile)f).getEnclosedModule();
+        ResModuleDecl enclosedModule = ((ResFile)f).getEnclosedModule();
         if (enclosedModule == null) return RESOLVEIcons.FILE;
         return enclosedModule.getIcon(0) != null ?
                 enclosedModule.getIcon(0) : baseIcon;

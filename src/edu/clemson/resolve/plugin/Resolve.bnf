@@ -113,7 +113,7 @@
         identifier              = 'regexp:\p{Alpha}\w*'
     ]
 
-    extends("(Facility|Concept)Module")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleImpl"
+    extends("(Facility|Concept)ModuleDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleDeclImpl"
     extends("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.impl.ResOperationLikeNodeImpl"
     extends("(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
     extends("(Param|Var)Def")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
@@ -124,19 +124,19 @@
     implements("(Facility|Concept)Block")="edu.clemson.resolve.plugin.psi.ResModuleBlock"
     implements("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.ResOperationLikeNode"
     implements("(Var|Param)Def|(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.ResNamedElement"
-    implements("(Facility|Concept)Module")="edu.clemson.resolve.plugin.psi.ResModule"
+    implements("(Facility|Concept)ModuleDecl")="edu.clemson.resolve.plugin.psi.ResModuleDecl"
     generateTokenAccessors=true
     pin('.*List(?:_\d.*)?')=1
 }
 
-Module ::= FacilityModule | ConceptModule <<eof>>
+ModuleDecl ::= FacilityModuleDecl | ConceptModuleDecl <<eof>>
 
-FacilityModule ::= 'Facility' identifier ';'
+FacilityModuleDecl ::= 'Facility' identifier ';'
 UsesList?
 FacilityBlock
 'end' identifier ';' {pin(".*")=1}
 
-ConceptModule ::= 'Concept' identifier SpecModuleParameters? ';'
+ConceptModuleDecl ::= 'Concept' identifier SpecModuleParameters? ';'
 UsesList?
 ConceptBlock
 'end' identifier ';' {pin(".*")=1}
@@ -144,11 +144,11 @@ ConceptBlock
 UsesList ::= 'uses' UsesSpec (',' UsesSpec)* ';' {recoverWhile=UsesListRecover}
 private UsesListRecover ::= !(FacilityItem|ConceptItem|';'|'end')
 
-UsesSpec ::= identifier
+UsesSpec ::= identifier {methods=[getReferences resolve getUsesTextRange]}
 
-ConceptBlock ::= ConceptItem*
+ConceptBlock ::= ConceptItem* {methods=[processDeclarations]}
 
-FacilityBlock ::= FacilityItem*
+FacilityBlock ::= FacilityItem* {methods=[processDeclarations]}
 
 private FacilityItem ::=
         OperationProcedureDecl

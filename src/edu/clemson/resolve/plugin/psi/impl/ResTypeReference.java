@@ -6,13 +6,11 @@ import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.OrderedSet;
-import edu.clemson.resolve.plugin.psi.ResFacilityDecl;
-import edu.clemson.resolve.plugin.psi.ResFile;
-import edu.clemson.resolve.plugin.psi.ResNamedElement;
-import edu.clemson.resolve.plugin.psi.ResTypeReferenceExpression;
+import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.List;
 
 public class ResTypeReference
         extends
@@ -45,9 +43,12 @@ public class ResTypeReference
         return myElement.getIdentifier();
     }
 
-    @NotNull @Override public ResolveResult[] multiResolve(
+    @Override @NotNull public ResolveResult[] multiResolve(
             boolean incompleteCode) {
-        return new ResolveResult[0];
+        return myElement.isValid()
+                ? ResolveCache.getInstance(myElement.getProject())
+                .resolveWithCaching(this, MY_RESOLVER, false, false)
+                : ResolveResult.EMPTY_ARRAY;
     }
 
     @NotNull @Override public Object[] getVariants() {
@@ -75,7 +76,10 @@ public class ResTypeReference
         PsiElement target = targetRef.resolve();
         if (target == null || target == qualifier) return false;
         if (target instanceof ResFacilityDecl) {
-            PsiFile specFile = ((ResFacilityDecl)target).getSpec().resolve();
+            List<ResUsesSpec> facilityRefs =
+                    ((ResFacilityDecl) target).getUsesSpecList();
+            if (facilityRefs.isEmpty()) return false;
+            PsiFile specFile = facilityRefs.get(0).resolve();
             if (specFile != null) {
                 ResReference.processFileEntities((ResFile) specFile, processor, state, false);
             }
@@ -92,25 +96,27 @@ public class ResTypeReference
         ResolveUtil.treeWalkUp(myElement, delegate);
         Collection<? extends ResNamedElement> result = delegate.getVariants();
 
-        //these two will search locally...
-        if (!processNamedElements(processor, state, result, localResolve)) return false;
-        if (!processFileEntities(file, processor, state, localResolve)) return false;
+        //this processes any named elements we've found searching up the tree in the previous line
+        if (!processLocalEntities(processor, state, result, localResolve)) return false;
+
+        //this proce
+        if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
 
         if (ResReference.processUsesRequests(file, processor, state, myElement)) return false;
 
         return true;
     }
 
-    private boolean processFileEntities(@NotNull ResFile file,
-                                        @NotNull ResScopeProcessor processor,
-                                        @NotNull ResolveState state,
-                                        boolean localProcessing) {
-        if (!processNamedElements(processor, state, file.getFacilities(), localProcessing)) return false;
-        if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
+    private boolean processModuleLevelEntities(@NotNull ResFile file,
+                                               @NotNull ResScopeProcessor processor,
+                                               @NotNull ResolveState state,
+                                               boolean localProcessing) {
+        if (!processLocalEntities(processor, state, file.getFacilities(), localProcessing)) return false;
+        if (!processLocalEntities(processor, state, file.getTypes(), localProcessing)) return false;
         return true;
     }
 
-    private boolean processNamedElements(@NotNull PsiScopeProcessor processor,
+    private boolean processLocalEntities(@NotNull PsiScopeProcessor processor,
                                          @NotNull ResolveState state,
                                          @NotNull Collection<? extends ResNamedElement> elements,
                                          boolean localResolve) {

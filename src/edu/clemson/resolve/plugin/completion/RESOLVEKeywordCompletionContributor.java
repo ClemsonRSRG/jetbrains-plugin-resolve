@@ -1,24 +1,14 @@
 package edu.clemson.resolve.plugin.completion;
 
 import com.intellij.codeInsight.completion.CompletionContributor;
-import com.intellij.codeInsight.completion.CompletionParameters;
-import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.codeInsight.lookup.AutoCompletionPolicy;
 import com.intellij.openapi.project.DumbAware;
-import com.intellij.patterns.ElementPattern;
-import com.intellij.patterns.PlatformPatterns;
-import com.intellij.patterns.PsiElementPattern;
 import com.intellij.patterns.PsiElementPattern.Capture;
-import com.intellij.patterns.StandardPatterns;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
 import edu.clemson.resolve.plugin.ResTypes;
 import edu.clemson.resolve.plugin.psi.*;
-import org.jetbrains.annotations.NotNull;
 
-import static com.intellij.openapi.util.Conditions.oneOf;
-import static com.intellij.patterns.PlatformPatterns.elementType;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 import static com.intellij.patterns.StandardPatterns.or;
 
@@ -86,13 +76,13 @@ public class RESOLVEKeywordCompletionContributor
     private static Capture<PsiElement> vanillaUsesPattern() {
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(PsiErrorElement.class)
-                        .withParent(ResModule.class));
+                        .withParent(ResModuleDecl.class));
     }
 
     private static Capture<PsiElement> otherUsesPattern() {
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(PsiErrorElement.class)
-                        .withParent(ResModule.class))
+                        .withParent(ResModuleDecl.class))
                 .afterSibling(psiElement(ResSpecModuleParameters.class));
     }
 
@@ -115,24 +105,24 @@ public class RESOLVEKeywordCompletionContributor
     }
 
     private static Capture<PsiElement> facilityModulePattern() {
-        return topLevelModulePattern(ResFacilityModule.class,
+        return topLevelModulePattern(ResFacilityModuleDecl.class,
                 ResFacilityBlock.class);
     }
 
     private static Capture<PsiElement> conceptModulePattern() {
-        return topLevelModulePattern(ResConceptModule.class,
+        return topLevelModulePattern(ResConceptModuleDecl.class,
                 ResConceptBlock.class);
     }
 
     private static Capture<PsiElement> onKeywordStart() {
-        return topLevelModulePattern(ResConceptModule.class,
+        return topLevelModulePattern(ResConceptModuleDecl.class,
                 ResConceptBlock.class);
     }
 
     @SuppressWarnings("unchecked")
     private static Capture<PsiElement> topLevelModulePattern(
-            Class<? extends ResModule> moduleType,
-            Class<? extends ResModuleBlock> blockType) {
+            Class<? extends ResModuleDecl> moduleType,
+            Class<? extends ResBlock> blockType) {
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(PsiErrorElement.class)
                     .withParent(or(psiElement(blockType),

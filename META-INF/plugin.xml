@@ -47,6 +47,7 @@
 
         <!--<completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVECompletionContributor"/>-->
         <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVEKeywordCompletionContributor"/>
+        <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVECompletionContributor"/>
 
 </extensions>
 

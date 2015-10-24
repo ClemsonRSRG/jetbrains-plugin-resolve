@@ -2,7 +2,6 @@ package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.Iconable;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.impl.ElementBase;
@@ -68,11 +67,31 @@ public abstract class ResNamedElementImpl
                 this, processor, state, lastParent, place);
     }
 
+    @Nullable @Override public ResTypeRefNode getResType(
+            @Nullable ResolveState context) {
+        if (context != null) return getGoTypeInner(context);
+        return CachedValuesManager.getCachedValue(this,
+                new CachedValueProvider<ResTypeRefNode>() {
+            @Nullable @Override public Result<ResTypeRefNode> compute() {
+                return Result.create(getGoTypeInner(null),
+                        PsiModificationTracker.MODIFICATION_COUNT);
+            }
+        });
+    }
+
+    @Nullable protected ResTypeRefNode getGoTypeInner(
+            @Nullable ResolveState context) {
+        return findSiblingType();
+    }
+
+    @Nullable @Override public ResTypeRefNode findSiblingType() {
+        return PsiTreeUtil.getNextSiblingOfType(this, ResTypeRefNode.class);
+    }
 
     @Nullable @Override public Icon getIcon(int flags) {
         Icon icon = null;
-        if (this instanceof ResFacilityModule) icon = RESOLVEIcons.FACILITY;
-        else if (this instanceof ResConceptModule) icon = RESOLVEIcons.CONCEPT;
+        if (this instanceof ResFacilityModuleDecl) icon = RESOLVEIcons.FACILITY;
+        else if (this instanceof ResConceptModuleDecl) icon = RESOLVEIcons.CONCEPT;
         if (icon != null) {
             if ((flags & Iconable.ICON_FLAG_VISIBILITY) != 0) {
                 RowIcon rowIcon =

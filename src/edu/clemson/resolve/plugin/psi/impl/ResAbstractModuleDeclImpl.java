@@ -8,21 +8,18 @@ import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
-import edu.clemson.resolve.plugin.RESOLVEIcons;
 import edu.clemson.resolve.plugin.ResTypes;
 import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
-import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ResAbstractModuleImpl
+public abstract class ResAbstractModuleDeclImpl
         extends
-            ResNamedElementImpl implements ResModule {
+            ResNamedElementImpl implements ResModuleDecl {
 
-    public ResAbstractModuleImpl(@NotNull ASTNode node) {
+    public ResAbstractModuleDeclImpl(@NotNull ASTNode node) {
         super(node);
     }
 
@@ -38,29 +35,40 @@ public abstract class ResAbstractModuleImpl
         return findChildByType(ResTypes.IDENTIFIER);
     }
 
+    @NotNull @Override public List<ResUsesSpec> getUsesSpecs() {
+        return getUsesList() != null ? getUsesList().getUsesSpecList() :
+                ContainerUtil.<ResUsesSpec>newArrayList();
+    }
+
+    @Nullable public ResUsesList getUsesList() {
+        return PsiTreeUtil.findChildOfType(this, ResUsesList.class);
+    }
+
     @NotNull public List<ResTypeLikeNodeDecl> getTypes() {
-        return CachedValuesManager.getCachedValue(this,
+        final ResBlock body = this.getModuleBlock();
+        return CachedValuesManager.getCachedValue(body,
                 new CachedValueProvider<List<ResTypeLikeNodeDecl>>() {
                     @Override
                     public Result<List<ResTypeLikeNodeDecl>> compute() {
-                        return Result.create(calcTypes(), ResAbstractModuleImpl.this);
+                        return Result.create(calcTypes(), body);
                     }
                 });
     }
 
     @NotNull public List<ResFacilityDecl> getFacilities() {
-        return CachedValuesManager.getCachedValue(this,
+        final ResBlock body = this.getModuleBlock();
+        return CachedValuesManager.getCachedValue(body,
                 new CachedValueProvider<List<ResFacilityDecl>>() {
                     @Override
                     public Result<List<ResFacilityDecl>> compute() {
-                        return Result.create(calcFacilities(), ResAbstractModuleImpl.this);
+                        return Result.create(calcFacilities(), body);
                     }
                 });
     }
 
     @NotNull private List<ResTypeLikeNodeDecl> calcTypes() {
         final List<ResTypeLikeNodeDecl> result = ContainerUtil.newArrayList();
-        processChildrenDummyAware(this, new Processor<PsiElement>() {
+        processChildrenDummyAware(this.getModuleBlock(), new Processor<PsiElement>() {
             @Override
             public boolean process(PsiElement e) {
                 if (e instanceof ResTypeLikeNodeDecl) {
@@ -74,7 +82,7 @@ public abstract class ResAbstractModuleImpl
 
     @NotNull private List<ResFacilityDecl> calcFacilities() {
         final List<ResFacilityDecl> result = ContainerUtil.newArrayList();
-        processChildrenDummyAware(this, new Processor<PsiElement>() {
+        processChildrenDummyAware(this.getModuleBlock(), new Processor<PsiElement>() {
             @Override
             public boolean process(PsiElement e) {
                 if (e instanceof ResFacilityDecl) {
@@ -86,7 +94,7 @@ public abstract class ResAbstractModuleImpl
         return result;
     }
 
-    private static boolean processChildrenDummyAware(@NotNull ResModule module,
+    private static boolean processChildrenDummyAware(@NotNull ResBlock module,
                                                      @NotNull final Processor<PsiElement> processor) {
         return new Processor<PsiElement>() {
             @Override
