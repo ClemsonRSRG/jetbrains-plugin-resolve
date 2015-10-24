@@ -45,6 +45,16 @@
         </context>
     </template>
 
+    <template description='Facility declaration' id='resolve_lang_FacilityDeclaration' name='resolve_lang_Facility_Declaration' toReformat='true' toShortenFQNames='true'
+              value='Facility $NAME$ is $CONCEPT$&#10;    implemented by $IMPL$;&#10;$END$'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;concept&quot;' expression='' name='CONCEPT'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;impl&quot;' expression='' name='IMPL'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+
     <template description='Type representation declaration' id='resolve_lang_TypeRepresentation' name='resolve_lang_Type_Representation' toReformat='true' toShortenFQNames='true'
               value='Type $NAME$ = $END$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>

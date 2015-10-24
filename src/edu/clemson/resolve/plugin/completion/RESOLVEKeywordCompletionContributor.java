@@ -44,7 +44,8 @@ public class RESOLVEKeywordCompletionContributor
         extend(CompletionType.BASIC, facilityModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                        "OperationProcedure", "TypeRepresentation"));
+                        "OperationProcedure", "TypeRepresentation",
+                        "FacilityDeclaration"));
 
         extend(CompletionType.BASIC, conceptModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
@@ -63,10 +64,16 @@ public class RESOLVEKeywordCompletionContributor
         extend(CompletionType.BASIC, typeParamPattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "type"));
+
+        extend(CompletionType.BASIC, variablePattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Var"));
+
     }
 
     private static Capture<PsiElement> typeParamPattern() {
         return psiElement(ResTypes.IDENTIFIER)
+                .withParent(ResParameterMode.class)
                 .inside(ResSpecModuleParameters.class);
     }
 
@@ -87,6 +94,12 @@ public class RESOLVEKeywordCompletionContributor
                 .withParent(psiElement(PsiErrorElement.class)
                         .withParent(ResModule.class))
                 .afterSibling(psiElement(ResSpecModuleParameters.class));
+    }
+
+    private static Capture<PsiElement> variablePattern() {
+        return psiElement(ResTypes.IDENTIFIER)
+                .withParent(psiElement(PsiErrorElement.class)
+                        .inside(psiElement(ResVarDeclGroupList.class)));
     }
 
     private static Capture<PsiElement> recordTypePattern() {

@@ -195,9 +195,11 @@ private ParamDefinitionListNoPin ::= ParamDef &(!(';'|')')) (',' ParamDef)* {pin
 ParamDef ::= identifier //{methods = [isVariadic]}
 
 ProcedureBody ::= ('Recursive')?'Procedure'
-VarDeclGroup* {pin=1 recoverWhile=ProcedureRec}
+VarDeclGroupList
 
 ProcedureRec ::= !('end')
+
+VarDeclGroupList ::= VarDeclGroup* {pin=1 recoverWhile=ProcedureRec}
 
 RecordVarDeclGroup ::= VarSpec ';' {pin=1}
 
