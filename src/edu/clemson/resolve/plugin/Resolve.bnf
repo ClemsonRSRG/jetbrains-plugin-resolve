@@ -177,15 +177,15 @@ Signature ::= OperationLikeParameters Result? {pin=1}
 
 Result ::= ':' TypeRefNode {pin=1}
 
-SpecModuleParameters ::= '(' SpecModuleParamList ')' {pin=1}
+SpecModuleParameters ::= '(' SpecModuleParamList ')' {pin=1 }
 
-private SpecModuleParamList ::= SpecParamDecl  (';' SpecParamDecl)* {pin(".*")=1 recoverWhile=SpecListRec}
+private SpecModuleParamList ::= SpecParamDecl  (';' SpecParamDecl)* {pin=2 recoverWhile=SpecListRec}
 
-private SpecListRec ::= !(')'|SpecParamDecl)
+private SpecListRec ::= !(')')
 
 SpecParamDecl ::= TypeParamDecl | ParamDecl
 
-TypeParamDecl ::= 'type' identifier {pin=1}
+TypeParamDecl ::= 'type' identifier {pin=2}
 
 OperationLikeParameters ::= '(' OpParamList? ')' { pin=1}
 private ParamListRec ::= !(')')
@@ -235,4 +235,5 @@ ParameterMode ::=
     | 'restores'
     | 'preserves'
     | 'replaces'
-    | 'evaluates'//TODO: not sure about the pin here...
+    | 'evaluates'
+    | identifier //TODO: not sure about the pin here...

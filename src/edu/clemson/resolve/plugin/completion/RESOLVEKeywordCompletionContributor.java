@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import static com.intellij.openapi.util.Conditions.oneOf;
 import static com.intellij.patterns.PlatformPatterns.elementType;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static com.intellij.patterns.StandardPatterns.or;
 
 public class RESOLVEKeywordCompletionContributor
         extends
@@ -32,10 +33,13 @@ public class RESOLVEKeywordCompletionContributor
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
                         "Concept", "Facility"));
 
-        extend(CompletionType.BASIC, usesPattern(),
+        //TODO: Find a good way to combine these into a single pattern..
+        extend(CompletionType.BASIC, vanillaUsesPattern(),
                 new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                        AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE, "uses"));
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "uses"));
+        extend(CompletionType.BASIC, otherUsesPattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "uses"));
 
         extend(CompletionType.BASIC, facilityModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
@@ -44,8 +48,7 @@ public class RESOLVEKeywordCompletionContributor
 
         extend(CompletionType.BASIC, conceptModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                        "TypeFamily"));
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "TypeFamily"));
 
         extend(CompletionType.BASIC, parameterModePattern(),
                 new RESOLVEKeywordCompletionProvider(
@@ -55,8 +58,16 @@ public class RESOLVEKeywordCompletionContributor
 
         extend(CompletionType.BASIC, recordTypePattern(),
                 new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                        "Record"));
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Record"));
+
+        extend(CompletionType.BASIC, typeParamPattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "type"));
+    }
+
+    private static Capture<PsiElement> typeParamPattern() {
+        return psiElement(ResTypes.IDENTIFIER)
+                .inside(ResSpecModuleParameters.class);
     }
 
     private static Capture<PsiElement> modulePattern() {
@@ -65,11 +76,17 @@ public class RESOLVEKeywordCompletionContributor
                         .withParent(ResFile.class));
     }
 
-    private static Capture<PsiElement> usesPattern() {
+    private static Capture<PsiElement> vanillaUsesPattern() {
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(PsiErrorElement.class)
-                        .withParent(ResModule.class)
-                        .isFirstAcceptedChild(psiElement()));
+                        .withParent(ResModule.class));
+    }
+
+    private static Capture<PsiElement> otherUsesPattern() {
+        return psiElement(ResTypes.IDENTIFIER)
+                .withParent(psiElement(PsiErrorElement.class)
+                        .withParent(ResModule.class))
+                .afterSibling(psiElement(ResSpecModuleParameters.class));
     }
 
     private static Capture<PsiElement> recordTypePattern() {
@@ -94,13 +111,18 @@ public class RESOLVEKeywordCompletionContributor
                 ResConceptBlock.class);
     }
 
+    private static Capture<PsiElement> onKeywordStart() {
+        return topLevelModulePattern(ResConceptModule.class,
+                ResConceptBlock.class);
+    }
+
     @SuppressWarnings("unchecked")
     private static Capture<PsiElement> topLevelModulePattern(
             Class<? extends ResModule> moduleType,
             Class<? extends ResModuleBlock> blockType) {
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(PsiErrorElement.class)
-                    .withParent(StandardPatterns.or(psiElement(blockType),
+                    .withParent(or(psiElement(blockType),
                             psiElement(moduleType))));
     }
 }
