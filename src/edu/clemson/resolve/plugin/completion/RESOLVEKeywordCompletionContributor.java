@@ -76,7 +76,9 @@ public class RESOLVEKeywordCompletionContributor
     private static Capture<PsiElement> vanillaUsesPattern() {
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(PsiErrorElement.class)
-                        .withParent(ResModuleDecl.class));
+                        .withParent(psiElement()
+                                .withParent(ResModuleDecl.class)))
+                                .isFirstAcceptedChild(psiElement());
     }
 
     private static Capture<PsiElement> otherUsesPattern() {
@@ -122,7 +124,7 @@ public class RESOLVEKeywordCompletionContributor
     @SuppressWarnings("unchecked")
     private static Capture<PsiElement> topLevelModulePattern(
             Class<? extends ResModuleDecl> moduleType,
-            Class<? extends ResBlock> blockType) {
+            Class<? extends ResModuleBlock> blockType) {
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(PsiErrorElement.class)
                     .withParent(or(psiElement(blockType),

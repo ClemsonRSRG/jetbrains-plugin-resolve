@@ -141,8 +141,7 @@ UsesList?
 ConceptBlock
 'end' identifier ';' {pin(".*")=1}
 
-UsesList ::= 'uses' UsesSpec (',' UsesSpec)* ';' {recoverWhile=UsesListRecover}
-private UsesListRecover ::= !(FacilityItem|ConceptItem|';'|'end')
+UsesList ::= 'uses' UsesSpec &(!(';')) (',' UsesSpec)* ';' {recoverWhile= ConceptItemRecover}
 
 UsesSpec ::= identifier {methods=[getReferences resolve getUsesTextRange]}
 
@@ -159,13 +158,13 @@ private ConceptItem ::= TypeModelDecl {pin=1 recoverWhile=ConceptItemRecover}
 
 private FacilityItemRecover ::= !('end'|'Operation'|'Facility'|'Type')
 
-private ConceptItemRecover ::= !('end'|'Operation'|'Type')
+private ConceptItemRecover ::= !('end'|'Type')
 
 FacilityDecl ::= 'Facility' identifier 'is' UsesSpec
 ('externally')? 'implemented' 'by' UsesSpec ';' {pin=2} //TODO: enhancements!
 
 TypeModelDecl ::= 'Type' 'Family' identifier 'is' 'modeled' 'by' identifier ';'
-    'exemplar' identifier ';' {pin(".*")=2}
+    'exemplar' identifier ';' {pin=2}
 
 TypeReprDecl ::= 'Type' identifier '='
 (TypeRefNode | RecordTypeNode) ';' {pin=2}

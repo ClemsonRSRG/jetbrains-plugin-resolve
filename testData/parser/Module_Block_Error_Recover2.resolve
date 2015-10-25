@@ -1,7 +1,0 @@
-Facility Module_Block_Error_Recover2;
-    Operation I(); Procedure end I;
-    aaa
-    Operation J(); Procedure end J;
-    bb
-    Operation J(); Procedure end K;
-end Module_Block_Error_Recover2;

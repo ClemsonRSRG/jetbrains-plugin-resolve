@@ -21,6 +21,11 @@ public class RESOLVECompletionUtil {
 
     private RESOLVECompletionUtil() {}
 
+    private static class Lazy {
+        private static final SingleCharInsertHandler FACILITY_INSERT_HANDLER =
+                new SingleCharInsertHandler('.');
+    }
+
     @NotNull public static CamelHumpMatcher createPrefixMatcher(
             @NotNull PrefixMatcher original) {
         return createPrefixMatcher(original.getPrefix());
@@ -56,6 +61,7 @@ public class RESOLVECompletionUtil {
             @NotNull ResFacilityDecl facility, @NotNull String name) {
         return PrioritizedLookupElement.withPriority(
                 LookupElementBuilder.create(name)
+                        .withInsertHandler(Lazy.FACILITY_INSERT_HANDLER)
                         .withIcon(RESOLVEIcons.FACILITY), FACILITY_PRIORITY);
     }
 }
