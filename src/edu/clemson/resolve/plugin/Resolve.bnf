@@ -140,18 +140,16 @@ FacilityBlock
 
 ConceptModuleDecl ::= 'Concept' identifier SpecModuleParameters? ';'
 UsesList?
-ConceptItems
+ConceptBlock
 'end' identifier ';' {pin(".*")=1}
 
 UsesList ::= 'uses' UsesSpec (',' UsesSpec)* ';'
 
 UsesSpec ::= identifier {methods=[getReferences resolve getUsesTextRange]}
 
-ConceptBlock ::= ConceptItem* {methods=[processDeclarations]}
+FacilityBlock ::= FacilityItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
 
-FacilityBlock ::= FacilityItem* {methods=[processDeclarations]}
-
-ConceptItems ::= ConceptItem* {recoverWhile=ItemsRecover}
+ConceptBlock ::= ConceptItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
 
 private ItemsRecover ::= !('end')
 
@@ -159,13 +157,12 @@ private FacilityItem ::=
         OperationProcedureDecl
     |   FacilityDecl
     |   TypeReprDecl {pin=1 recoverWhile=FacilityItemRecover}
-private FacilityItemRecover ::= !('end'|'Operation'|'Facility'|'Type')
 
+private FacilityItemRecover ::= !('Operation'|'Facility'|'Type'|'end')
 
 private ConceptItem ::=
         TypeModelDecl
-    |   OperationDecl{ pin=1 recoverWhile=ConceptItemRecover}
-
+    |   OperationDecl {pin=1 recoverWhile=ConceptItemRecover}
 
 private ConceptItemRecover ::= !('Type'|'Operation'|'end')
 

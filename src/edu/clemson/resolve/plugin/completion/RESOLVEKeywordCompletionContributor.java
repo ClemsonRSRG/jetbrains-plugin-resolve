@@ -74,12 +74,9 @@ public class RESOLVEKeywordCompletionContributor
     }
 
     private static Capture<PsiElement> vanillaUsesPattern() {
-        return psiElement(ResTypes.IDENTIFIER)
-                .withParent(or(
-                        psiElement(PsiErrorElement.class).withParent(ResModuleDecl.class),
-                        psiElement(ResFile.class),
-                        psiElement(PsiErrorElement.class).withParent(
-                                psiElement().withParent(ResModuleDecl.class))));
+        return onKeywordStart().withParent(psiElement()
+                .withParent(ResModuleDecl.class))
+                .isFirstAcceptedChild(psiElement());
     }
 
     private static Capture<PsiElement> otherUsesPattern() {
@@ -90,9 +87,7 @@ public class RESOLVEKeywordCompletionContributor
     }
 
     private static Capture<PsiElement> variablePattern() {
-        return psiElement(ResTypes.IDENTIFIER)
-                .withParent(psiElement(PsiErrorElement.class)
-                        .inside(psiElement(ResVarDeclGroupList.class)));
+        return onKeywordStart().inside(psiElement(ResVarDeclGroupList.class));
     }
 
     private static Capture<PsiElement> recordTypePattern() {
@@ -126,9 +121,7 @@ public class RESOLVEKeywordCompletionContributor
     private static Capture<PsiElement> topLevelModulePattern(
             Class<? extends ResModuleDecl> moduleType,
             Class<? extends ResModuleBlock> blockType) {
-        return psiElement(ResTypes.IDENTIFIER)
-                .withParent(psiElement(PsiErrorElement.class)
-                    .withParent(or(psiElement(blockType),
-                            psiElement(moduleType))));
+        return onKeywordStart().withParent(or(psiElement(blockType),
+                            psiElement(moduleType)));
     }
 }
