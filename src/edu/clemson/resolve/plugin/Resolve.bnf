@@ -154,28 +154,32 @@ private FacilityItem ::=
     |   FacilityDecl
     |   TypeReprDecl {pin=1 recoverWhile=FacilityItemRecover}
 
-private ConceptItem ::= TypeModelDecl {pin=1 recoverWhile=ConceptItemRecover}
+private ConceptItem ::=
+        TypeModelDecl
+    |   OperationDecl{ pin=1 recoverWhile=ConceptItemRecover}
 
-private FacilityItemRecover ::= !('end'|'Operation'|'Facility'|'Type')
+private FacilityItemRecover ::= !('end')
 
-private ConceptItemRecover ::= !('end'|'Type')
+private ConceptItemRecover ::= !('end')
 
 FacilityDecl ::= 'Facility' identifier 'is' UsesSpec
 ('externally')? 'implemented' 'by' UsesSpec ';' {pin=2} //TODO: enhancements!
 
 TypeModelDecl ::= 'Type' 'Family' identifier 'is' 'modeled' 'by' identifier ';'
-    'exemplar' identifier ';' {pin=2}
+    'exemplar' identifier ';' {pin=1}
 
 TypeReprDecl ::= 'Type' identifier '='
 (TypeRefNode | RecordTypeNode) ';' {pin=2}
 
-OperationProcedureDecl ::= 'Operation' identifier Signature? ';'
+OperationProcedureDecl ::= 'Operation' identifier Signature ';'
 ProcedureBody
 'end' identifier ';' {pin(".*")=1}
 
 Signature ::= OperationLikeParameters Result? {pin=1}
 
 Result ::= ':' TypeRefNode {pin=1}
+
+OperationDecl ::= 'Operation' identifier Signature ';'
 
 SpecModuleParameters ::= '(' SpecModuleParamList ')' {pin=1 }
 

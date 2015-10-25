@@ -2,11 +2,9 @@ package plugin
 
 import "fmt"
 
-type person struct {
+type geometry interface {
+	area() float64
+	perim() float64
 
-}
 
-func foo() {
-
-	var x person
 }

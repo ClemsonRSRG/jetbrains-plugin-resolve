@@ -29,7 +29,7 @@
     <template description='Type family declaration' id='resolve_lang_TypeFamily' name='resolve_lang_Type_Family' toReformat='true' toShortenFQNames='true'
               value='Type Family $NAME$ is modeled by $MATHTYPE$;&#10;    exemplar $EXEMPLAR$;&#10;$END$'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
-        <variable alwaysStopAt='true' defaultValue='&quot;mathtype&quot;' expression='' name='$MATHTYPE$'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;mathtype&quot;' expression='' name='MATHTYPE'/>
         <variable alwaysStopAt='true' defaultValue='&quot;e&quot;' expression='' name='EXEMPLAR'/>
         <context>
             <option name='RESOLVE' value='true'/>

@@ -46,22 +46,21 @@ public abstract class ResAbstractModuleDeclImpl
 
     @NotNull public List<ResTypeLikeNodeDecl> getTypes() {
         final ResBlock body = this.getModuleBlock();
-        return CachedValuesManager.getCachedValue(body,
+        return CachedValuesManager.getCachedValue(this,
                 new CachedValueProvider<List<ResTypeLikeNodeDecl>>() {
                     @Override
                     public Result<List<ResTypeLikeNodeDecl>> compute() {
-                        return Result.create(calcTypes(), body);
+                        return Result.create(calcTypes(), ResAbstractModuleDeclImpl.this);
                     }
                 });
     }
 
     @NotNull public List<ResFacilityDecl> getFacilities() {
-        final ResBlock body = this.getModuleBlock();
-        return CachedValuesManager.getCachedValue(body,
+        return CachedValuesManager.getCachedValue(this,
                 new CachedValueProvider<List<ResFacilityDecl>>() {
                     @Override
                     public Result<List<ResFacilityDecl>> compute() {
-                        return Result.create(calcFacilities(), body);
+                        return Result.create(calcFacilities(), ResAbstractModuleDeclImpl.this);
                     }
                 });
     }
