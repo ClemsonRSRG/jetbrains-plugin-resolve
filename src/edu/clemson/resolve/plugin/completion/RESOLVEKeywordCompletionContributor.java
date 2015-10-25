@@ -58,7 +58,6 @@ public class RESOLVEKeywordCompletionContributor
         extend(CompletionType.BASIC, variablePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "Var"));
-
     }
 
     private static Capture<PsiElement> typeParamPattern() {
@@ -68,21 +67,17 @@ public class RESOLVEKeywordCompletionContributor
     }
 
     private static Capture<PsiElement> modulePattern() {
-        return psiElement(ResTypes.IDENTIFIER)
-                .withParent(psiElement(PsiErrorElement.class)
-                        .withParent(ResFile.class));
+        return onKeywordStart().withParent(ResFile.class);
     }
 
     private static Capture<PsiElement> vanillaUsesPattern() {
-        return onKeywordStart().withParent(psiElement()
+        return onKeywordStart().withParent(psiElement(ResModuleBlock.class)
                 .withParent(ResModuleDecl.class))
                 .isFirstAcceptedChild(psiElement());
     }
 
     private static Capture<PsiElement> otherUsesPattern() {
-        return psiElement(ResTypes.IDENTIFIER)
-                .withParent(psiElement(PsiErrorElement.class)
-                        .withParent(ResModuleDecl.class))
+        return onKeywordStart().withParent(ResModuleDecl.class)
                 .afterSibling(psiElement(ResSpecModuleParameters.class));
     }
 
