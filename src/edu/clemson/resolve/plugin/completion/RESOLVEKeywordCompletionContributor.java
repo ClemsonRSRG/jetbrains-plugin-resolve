@@ -75,10 +75,11 @@ public class RESOLVEKeywordCompletionContributor
 
     private static Capture<PsiElement> vanillaUsesPattern() {
         return psiElement(ResTypes.IDENTIFIER)
-                .withParent(psiElement(PsiErrorElement.class)
-                        .withParent(psiElement()
-                                .withParent(ResModuleDecl.class)))
-                                .isFirstAcceptedChild(psiElement());
+                .withParent(or(
+                        psiElement(PsiErrorElement.class).withParent(ResModuleDecl.class),
+                        psiElement(ResFile.class),
+                        psiElement(PsiErrorElement.class).withParent(
+                                psiElement().withParent(ResModuleDecl.class))));
     }
 
     private static Capture<PsiElement> otherUsesPattern() {

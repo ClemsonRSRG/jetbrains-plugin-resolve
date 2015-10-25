@@ -141,7 +141,7 @@ UsesList?
 ConceptBlock
 'end' identifier ';' {pin(".*")=1}
 
-UsesList ::= 'uses' UsesSpec &(!(';')) (',' UsesSpec)* ';' {recoverWhile= ConceptItemRecover}
+UsesList ::= 'uses' UsesSpec (',' UsesSpec)* ';'
 
 UsesSpec ::= identifier {methods=[getReferences resolve getUsesTextRange]}
 
