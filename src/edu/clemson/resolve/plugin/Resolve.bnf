@@ -129,8 +129,6 @@
     pin('.*List(?:_\d.*)?')=1
 }
 
-
-
 ModuleDecl ::= FacilityModuleDecl | ConceptModuleDecl <<eof>>
 
 FacilityModuleDecl ::= 'Facility' identifier ';'

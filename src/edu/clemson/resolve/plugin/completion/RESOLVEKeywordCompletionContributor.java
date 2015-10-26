@@ -10,7 +10,6 @@ import edu.clemson.resolve.plugin.ResTypes;
 import edu.clemson.resolve.plugin.psi.*;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
-import static com.intellij.patterns.StandardPatterns.or;
 
 public class RESOLVEKeywordCompletionContributor
         extends
@@ -67,22 +66,22 @@ public class RESOLVEKeywordCompletionContributor
     }
 
     private static Capture<PsiElement> modulePattern() {
-        return onKeywordStart().withParent(ResFile.class);
+        return onKeywordStartWithParent(ResFile.class);
     }
 
     private static Capture<PsiElement> vanillaUsesPattern() {
-        return onKeywordStart().withParent(psiElement(ResModuleBlock.class)
-                .withParent(ResModuleDecl.class))
-                .isFirstAcceptedChild(psiElement());
+        return onKeywordStartWithParent(psiElement(ResModuleBlock.class)
+                .withParent(ResModuleDecl.class)
+                .isFirstAcceptedChild(psiElement()));
     }
 
     private static Capture<PsiElement> otherUsesPattern() {
-        return onKeywordStart().withParent(ResModuleDecl.class)
-                .afterSibling(psiElement(ResSpecModuleParameters.class));
+        return onKeywordStartWithParent(ResBlock.class);
     }
 
     private static Capture<PsiElement> variablePattern() {
-        return onKeywordStart().inside(psiElement(ResVarDeclGroupList.class));
+        return onKeywordStartWithParent(psiElement()
+                .inside(psiElement(ResVarDeclGroupList.class)));
     }
 
     private static Capture<PsiElement> recordTypePattern() {
@@ -107,16 +106,22 @@ public class RESOLVEKeywordCompletionContributor
                 ResConceptBlock.class);
     }
 
-    private static Capture<PsiElement> onKeywordStart() {
-        return topLevelModulePattern(ResConceptModuleDecl.class,
-                ResConceptBlock.class);
+    private static Capture<PsiElement> onKeywordStartWithParent(
+            Class<? extends PsiElement> parentClass) {
+        return onKeywordStartWithParent(psiElement(parentClass));
     }
 
-    @SuppressWarnings("unchecked")
+    private static Capture<PsiElement> onKeywordStartWithParent(
+            Capture<? extends PsiElement> parentPattern) {
+        return psiElement(ResTypes.IDENTIFIER)
+                .withParent(psiElement(PsiErrorElement.class)
+                        .withParent(parentPattern));
+    }
+
     private static Capture<PsiElement> topLevelModulePattern(
             Class<? extends ResModuleDecl> moduleType,
             Class<? extends ResModuleBlock> blockType) {
-        return onKeywordStart().withParent(or(psiElement(blockType),
-                            psiElement(moduleType)));
+      return onKeywordStartWithParent(psiElement(blockType)
+              .withParent(moduleType));
     }
 }
