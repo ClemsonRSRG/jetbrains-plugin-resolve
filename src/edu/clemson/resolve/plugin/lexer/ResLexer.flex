@@ -78,6 +78,7 @@ ESCAPES = [abfnrtv]
 ")"                                     { return RPAREN; }
 
 ":"                                     { return COLON; }
+"::"                                    { return COLONCOLON; }
 ";"                                     { return SEMICOLON; }
 ","                                     { return COMMA; }
 
@@ -137,7 +138,7 @@ ESCAPES = [abfnrtv]
 "Recursive"                             { return RECURSIVE; }
 "Record"                                { return RECORD; }
 "requires"                              { return REQUIRES; }
-"Type"                                  { return TYPE; }
+"Type"                                  { return FAMILY_TYPE; }
 "type"                                  { return PARAM_TYPE; }
 "uses"                                  { return USES; }
 "Var"                                   { return VAR; }

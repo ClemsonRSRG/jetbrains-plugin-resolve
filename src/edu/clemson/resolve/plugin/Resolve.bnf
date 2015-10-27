@@ -30,6 +30,7 @@
         LPAREN                  = '('
         RPAREN                  = ')'
         COLON                   = ':'
+        COLONCOLON              = '::'
         SEMICOLON               = ';'
         COMMA                   = ','
 
@@ -78,7 +79,7 @@
         IMPLEMENTED             = 'implemented'
         INITIALIZATION          = 'initialization'
         LAMBDA                  = 'lambda'
-        TYPE                    = 'Type'
+        FAMILY_TYPE             = 'Type'
         PARAM_TYPE              = 'type'
         FAMILY                  = 'Family'
         MODELED                 = 'modeled'
@@ -171,7 +172,7 @@ TypeModelDecl ::= 'Type' 'Family' identifier 'is' 'modeled' 'by' identifier ';'
     'exemplar' identifier ';' {pin=3}
 
 TypeReprDecl ::= 'Type' identifier '='
-(TypeRefNode | RecordTypeNode) ';' {pin=2}
+(Type | RecordTypeNode) ';' {pin=2}
 
 OperationProcedureDecl ::= 'Operation' identifier Signature ';'
 ProcedureBody
@@ -179,7 +180,7 @@ ProcedureBody
 
 Signature ::= OperationLikeParameters Result? {pin=1}
 
-Result ::= ':' TypeRefNode {pin=1}
+Result ::= ':' Type {pin=1}
 
 OperationDecl ::= 'Operation' identifier Signature ';' {pin=1}
 
@@ -196,7 +197,7 @@ TypeParamDecl ::= 'type' identifier {pin=2}
 OperationLikeParameters ::= '(' OpParamList? ')' { pin=1}
 private ParamListRec ::= !(')')
 OpParamList ::= ParamDecl (';' ParamDecl)* {pin=1 recoverWhile=ParamListRec}
-ParamDecl ::= ParameterMode ParamDefinitionListNoPin ':' TypeRefNode {pin=1}
+ParamDecl ::= ParameterMode ParamDefinitionListNoPin ':' Type {pin=1}
 private ParamDefinitionListNoPin ::= ParamDef &(!(';'|')')) (',' ParamDef)* {pin=1}
 ParamDef ::= identifier //{methods = [isVariadic]}
 
@@ -210,12 +211,12 @@ VarDeclGroupList ::= VarDeclGroup* {pin=1 recoverWhile=ProcedureRec}
 RecordVarDeclGroup ::= VarSpec ';' {pin=1}
 
 VarDeclGroup ::= 'Var' VarSpec ';' {pin=1}
-VarSpec ::= VarDefList ':' TypeRefNode //{methods=[processDeclarations]}
+VarSpec ::= VarDefList ':' Type //{methods=[processDeclarations]}
 private VarDefList ::= VarDef (',' VarDef)*
 
 VarDef ::= identifier {methods=[getResTypeInner getReference]}
 
-TypeRefNode ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
+Type ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
 TypeReferenceExpression ::= identifier { methods=[getReference getQualifier] }
 left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
 
@@ -228,11 +229,11 @@ private OperationStatement ::= Statement {recoverWhile=StatementRecover}
 Statement ::= SimpleStatement
 private StatementRecover ::= !(':=')
 SimpleStatement ::=
-    (ProgExpression (AssignmentStatement /*|SwapStatement*/)) {pin(".*")=LeftHandExprList}
+    (Expression (AssignmentStatement /*|SwapStatement*/)) {pin(".*")=LeftHandExprList}
 
-left AssignmentStatement ::= ':=' ProgExpression {pin=1}
+left AssignmentStatement ::= ':=' Expression {pin=1}
 
-ProgExpression ::= ' '
+Expression ::= ' '
 /*Statement ::=
           SimpleStatement
         | WhileStmt //{methods=[processDeclarations]}

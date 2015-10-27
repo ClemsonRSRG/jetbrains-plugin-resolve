@@ -61,7 +61,7 @@ public class ResPsiImplUtil {
         return new ResUsesReferenceSet(o).getAllReferences();
     }
 
-    @Nullable public static ResTypeRefNode getResTypeInner(
+    @Nullable public static ResType getResTypeInner(
             @NotNull ResExpression o, @Nullable ResolveState context) {
         /*if (o instanceof ResReferenceExpression) {
             PsiReference reference = o.getReference();
@@ -71,12 +71,12 @@ public class ResPsiImplUtil {
         return null;
     }
 
-    @Nullable public static ResTypeRefNode getResTypeInner(
+    @Nullable public static ResType getResTypeInner(
             @NotNull ResVarDef o, @Nullable ResolveState context) {
         PsiElement parent = o.getParent();
 
         if (parent instanceof ResVarSpec) {
-            return ((ResVarSpec)parent).getTypeRefNode();
+            return ((ResVarSpec)parent).getType();
         }
         return null;
     }
