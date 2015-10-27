@@ -221,6 +221,18 @@ left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeRefere
 
 RecordTypeNode ::= 'Record' RecordVarDeclGroup* 'end'
 
+OperationStatementBlock ::= OperationStatement*
+
+private OperationStatement ::= Statement {recoverWhile=StatementRecover}
+
+Statement ::= SimpleStatement
+private StatementRecover ::= !(':=')
+SimpleStatement ::=
+    (ProgExpression (AssignmentStatement /*|SwapStatement*/)) {pin(".*")=LeftHandExprList}
+
+left AssignmentStatement ::= ':=' ProgExpression {pin=1}
+
+ProgExpression ::= ' '
 /*Statement ::=
           SimpleStatement
         | WhileStmt //{methods=[processDeclarations]}
