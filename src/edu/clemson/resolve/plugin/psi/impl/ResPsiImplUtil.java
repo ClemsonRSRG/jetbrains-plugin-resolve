@@ -1,10 +1,15 @@
 package edu.clemson.resolve.plugin.psi.impl;
 
+import com.intellij.openapi.util.Computable;
+import com.intellij.openapi.util.RecursionManager;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.util.CachedValueProvider;
+import com.intellij.psi.util.CachedValuesManager;
+import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
 import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
@@ -37,6 +42,16 @@ public class ResPsiImplUtil {
         return new ResVarReference(o);
     }
 
+    @NotNull public static ResReference getReference(
+            @NotNull ResReferenceExpression o) {
+        return new ResReference(o);
+    }
+
+    @Nullable public static ResReferenceExpression getQualifier(
+            @NotNull ResReferenceExpression o) {
+        return PsiTreeUtil.getChildOfType(o, ResReferenceExpression.class);
+    }
+
     /** ok, in the go plugin don't be fooled by the seeming lack of connection between
      *  UsesReferenceHelper and the FileContextProvider -- these are responsible
      *  for setting getDefaultContext to "resolve/src/" etc...
@@ -59,6 +74,24 @@ public class ResPsiImplUtil {
             @NotNull ResUsesSpec o) {
         if (o.getTextLength() == 0) return PsiReference.EMPTY_ARRAY;
         return new ResUsesReferenceSet(o).getAllReferences();
+    }
+
+    @Nullable public static ResType getResType(@NotNull final ResExpression o,
+                                     @Nullable final ResolveState context) {
+        return RecursionManager.doPreventingRecursion(o, true,
+                new Computable<ResType>() {
+            @Override public ResType compute() {
+                if (context != null) return getResTypeInner(o, context);
+                return CachedValuesManager.getCachedValue(o,
+                        new CachedValueProvider<ResType>() {
+
+                    @Nullable @Override public Result<ResType> compute() {
+                        return Result.create(getResTypeInner(o, null),
+                                PsiModificationTracker.MODIFICATION_COUNT);
+                    }
+                });
+            }
+        });
     }
 
     @Nullable public static ResType getResTypeInner(

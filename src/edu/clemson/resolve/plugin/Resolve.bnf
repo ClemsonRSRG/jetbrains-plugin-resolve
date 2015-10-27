@@ -172,7 +172,7 @@ TypeModelDecl ::= 'Type' 'Family' identifier 'is' 'modeled' 'by' identifier ';'
     'exemplar' identifier ';' {pin=3}
 
 TypeReprDecl ::= 'Type' identifier '='
-(Type | RecordTypeNode) ';' {pin=2}
+(Type | RecordType) ';' {pin=2}
 
 OperationProcedureDecl ::= 'Operation' identifier Signature ';'
 ProcedureBody
@@ -203,16 +203,16 @@ ParamDef ::= identifier //{methods = [isVariadic]}
 
 ProcedureBody ::= ('Recursive')?'Procedure'
 VarDeclGroupList
+OperationStatements
+//VarDeclGroupRec ::= !('end'|';'|':='|identifier)
 
-ProcedureRec ::= !('end')
-
-VarDeclGroupList ::= VarDeclGroup* {pin=1 recoverWhile=ProcedureRec}
+VarDeclGroupList ::= VarDeclGroup* {pin=1 recoverWhile=VarDeclGroupRec}
 
 RecordVarDeclGroup ::= VarSpec ';' {pin=1}
 
 VarDeclGroup ::= 'Var' VarSpec ';' {pin=1}
-VarSpec ::= VarDefList ':' Type //{methods=[processDeclarations]}
-private VarDefList ::= VarDef (',' VarDef)*
+VarSpec ::= VarDefList ':' Type {pin=1}//{methods=[processDeclarations]}
+private VarDefList ::= VarDef &(!(';'))(',' VarDef)*
 
 VarDef ::= identifier {methods=[getResTypeInner getReference]}
 
@@ -220,20 +220,30 @@ Type ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
 TypeReferenceExpression ::= identifier { methods=[getReference getQualifier] }
 left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
 
-RecordTypeNode ::= 'Record' RecordVarDeclGroup* 'end'
+RecordType ::= 'Record' RecordVarDeclGroup* 'end'
 
-OperationStatementBlock ::= OperationStatement*
+OperationStatements ::= OperationStatement*
 
 private OperationStatement ::= Statement {recoverWhile=StatementRecover}
 
 Statement ::= SimpleStatement
-private StatementRecover ::= !(':=')
+private StatementRecover ::= !('end'|';')
 SimpleStatement ::=
-    (Expression (AssignmentStatement /*|SwapStatement*/)) {pin(".*")=LeftHandExprList}
+    (Expression (AssignmentStatement|SwapStatement)) ';' {pin(".*")=Expression}
 
 left AssignmentStatement ::= ':=' Expression {pin=1}
+left SwapStatement ::= ':=:' Expression
 
-Expression ::= ' '
+Expression ::=
+    //|...
+    MaxGroup {methods=[getResType] implements="edu.clemson.resolve.plugin.psi.ResTypeOwner"}
+
+private MaxGroup ::= OperandName
+
+OperandName ::= ReferenceExpression QualifiedReferenceExpression? {elementType=ReferenceExpression}
+
+left QualifiedReferenceExpression ::= '.' identifier {elementType=ReferenceExpression}
+ReferenceExpression ::= identifier { methods=[getReference getQualifier] extends=Expression}
 /*Statement ::=
           SimpleStatement
         | WhileStmt //{methods=[processDeclarations]}
