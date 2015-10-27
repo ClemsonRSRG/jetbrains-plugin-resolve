@@ -24,6 +24,8 @@ public class RESOLVECompletionContributor extends CompletionContributor {
     public RESOLVECompletionContributor() {
         extend(CompletionType.BASIC, referenceExpression(),
                 new RESOLVEReferenceCompletionProvider());
+        extend(CompletionType.BASIC, resReference(),
+                new RESOLVEReferenceCompletionProvider());
     }
 
     private static PsiElementPattern.Capture<PsiElement> referenceExpression() {

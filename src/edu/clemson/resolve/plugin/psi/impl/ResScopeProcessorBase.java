@@ -15,9 +15,9 @@ public abstract class ResScopeProcessorBase extends ResScopeProcessor {
     @NotNull protected final OrderedSet<ResNamedElement> myResult =
             new OrderedSet<ResNamedElement>();
 
-    @NotNull protected final PsiElement myOrigin;
-    @NotNull private final PsiElement myRequestedNameElement;
-    protected final boolean myIsCompletion;
+    @NotNull protected final PsiElement origin;
+    @NotNull private final PsiElement requestedNameElement;
+    protected final boolean isCompletion;
 
     public ResScopeProcessorBase(@NotNull PsiElement origin, boolean completion) {
         this(origin, origin, completion);
@@ -26,20 +26,20 @@ public abstract class ResScopeProcessorBase extends ResScopeProcessor {
     public ResScopeProcessorBase(@NotNull PsiElement requestedNameElement,
                                  @NotNull PsiElement origin,
                                  boolean completion) {
-        myRequestedNameElement = requestedNameElement;
-        myOrigin = origin;
-        myIsCompletion = completion;
+        this.requestedNameElement = requestedNameElement;
+        this.origin = origin;
+        this.isCompletion = completion;
     }
 
     @Override public boolean execute(@NotNull PsiElement psiElement,
                                      @NotNull ResolveState resolveState) {
         if (!(psiElement instanceof ResNamedElement)) return true;
         String name = ((ResNamedElement)psiElement).getName();
-        if (StringUtil.isEmpty(name) || !myIsCompletion &&
-                !myRequestedNameElement.textMatches(name)) return true;
+        if (StringUtil.isEmpty(name) || !isCompletion &&
+                !requestedNameElement.textMatches(name)) return true;
         if (condition(psiElement)) return true;
-        if (psiElement.equals(myOrigin)) return true;
-        return add((ResNamedElement)psiElement) || myIsCompletion;
+        if (psiElement.equals(origin)) return true;
+        return add((ResNamedElement)psiElement) || isCompletion;
     }
 
     protected boolean add(@NotNull ResNamedElement psiElement) {

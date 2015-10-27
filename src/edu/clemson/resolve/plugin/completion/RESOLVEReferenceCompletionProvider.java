@@ -5,11 +5,8 @@ import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.*;
-import com.intellij.psi.impl.source.resolve.reference.impl.PsiMultiReference;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.ArrayUtil;
 import com.intellij.util.ProcessingContext;
-import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.plugin.psi.ResFacilityDecl;
 import edu.clemson.resolve.plugin.psi.ResNamedElement;
 import edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase;
@@ -53,13 +50,9 @@ public class RESOLVEReferenceCompletionProvider
         else if (reference instanceof ResReference) {
             ((ResReference)reference).processResolveVariants(
                     new MyRESOLVEScopeProcessor(result, false));
-            PsiElement element = reference.getElement();
         }
         if (reference instanceof ResTypeReference) {
             PsiElement element = reference.getElement();
-            // final PsiElement spec = PsiTreeUtil.getParentOfType(element, GoFieldDeclaration.class, GoTypeSpec.class);
-            //final boolean insideParameter = PsiTreeUtil.getParentOfType(element, GoParameterDeclaration.class) != null;
-
             ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
                 @Override
                 protected boolean accept(@NotNull PsiElement e) {
@@ -96,7 +89,8 @@ public class RESOLVEReferenceCompletionProvider
                         .createFacilityLookupElement(((ResFacilityDecl) o));
             }
             else {
-                //return RESOLVECompletionUtil.createVariableLikeLookupElement((ResNamedElement) o);
+                return RESOLVECompletionUtil
+                        .createVariableLikeLookupElement((ResNamedElement) o);
             }
         }
 
@@ -104,20 +98,19 @@ public class RESOLVEReferenceCompletionProvider
     }
 
     public static class MyRESOLVEScopeProcessor extends ResScopeProcessor {
-        private final String myDanKey = "";
-        private final CompletionResultSet myResult;
-        private final boolean myForTypes;
+        private final CompletionResultSet result;
+        private final boolean forTypes;
 
         public MyRESOLVEScopeProcessor(@NotNull CompletionResultSet result,
                                        boolean forTypes) {
-            myResult = result;
-            myForTypes = forTypes;
+            this.result = result;
+            this.forTypes = forTypes;
         }
 
         @Override public boolean execute(@NotNull PsiElement o,
                                          @NotNull ResolveState state) {
             if (accept(o)) {
-                addElement(o, state, myForTypes, myResult);
+                addElement(o, state, forTypes, result);
             }
             return true;
         }

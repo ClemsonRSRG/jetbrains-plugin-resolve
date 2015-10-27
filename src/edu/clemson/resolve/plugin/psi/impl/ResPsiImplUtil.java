@@ -52,6 +52,13 @@ public class ResPsiImplUtil {
         return PsiTreeUtil.getChildOfType(o, ResReferenceExpression.class);
     }
 
+    @NotNull public static String getText(@Nullable ResType o) {
+        if (o == null) return "";
+        String text = o.getText();
+        if (text == null) return "";
+        return text.replaceAll("\\s+", " ");
+    }
+
     /** ok, in the go plugin don't be fooled by the seeming lack of connection between
      *  UsesReferenceHelper and the FileContextProvider -- these are responsible
      *  for setting getDefaultContext to "resolve/src/" etc...

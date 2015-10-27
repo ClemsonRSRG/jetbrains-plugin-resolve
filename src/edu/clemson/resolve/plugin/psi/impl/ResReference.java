@@ -33,6 +33,10 @@ public class ResReference
                 }
             };
 
+    @NotNull private PsiElement getIdentifier() {
+        return myElement.getIdentifier();
+    }
+
     public ResReference(@NotNull ResReferenceExpressionBase o) {
         super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(),
                 o.getIdentifier().getTextLength()));
@@ -114,12 +118,13 @@ public class ResReference
                                               @NotNull ResScopeProcessor processor,
                                               @NotNull ResolveState state,
                                               boolean localResolve) {
-        /*ResScopeProcessorBase delegate = createDelegate(processor);
-        ResolutionUtil.treeWalkUp(myElement, delegate);
+        ResScopeProcessorBase delegate = createDelegate(processor);
+
+        //NOTE: Good place for breakpoints Then put one in ResCompsite element on the return to processDeclarations()..
+        ResolveUtil.treeWalkUp(myElement, delegate);
         //       if (processUsesRequests(file, processor, state, myElement)) return false;
 
         if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
-*/
         return true;
     }
 
@@ -154,6 +159,17 @@ public class ResReference
                     !processor.execute(definition, state)) return false;
         }
         return true;
+    }
+
+    @NotNull private ResVarProcessor createDelegate(
+            @NotNull ResScopeProcessor processor) {
+        return new ResVarProcessor(getIdentifier(), myElement,
+                processor.isCompletion(), true) {
+            @Override protected boolean condition(@NotNull PsiElement e) {
+                //if (e instanceof ResRecordFieldDef) return true;
+                return super.condition(e); //&& !(e instanceof GoTypeSpec);
+            }
+        };
     }
 
     @Nullable private static PsiFile getContextFile(

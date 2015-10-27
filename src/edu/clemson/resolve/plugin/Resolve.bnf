@@ -201,12 +201,12 @@ ParamDecl ::= ParameterMode ParamDefinitionListNoPin ':' Type {pin=1}
 private ParamDefinitionListNoPin ::= ParamDef &(!(';'|')')) (',' ParamDef)* {pin=1}
 ParamDef ::= identifier //{methods = [isVariadic]}
 
+//TODO: make this "Block" and have it implement ResBlock
 ProcedureBody ::= ('Recursive')?'Procedure'
 VarDeclGroupList
-OperationStatements
-//VarDeclGroupRec ::= !('end'|';'|':='|identifier)
+Statements
 
-VarDeclGroupList ::= VarDeclGroup* {pin=1 recoverWhile=VarDeclGroupRec}
+VarDeclGroupList ::= VarDeclGroup* {pin=1}
 
 RecordVarDeclGroup ::= VarSpec ';' {pin=1}
 
@@ -222,17 +222,15 @@ left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeRefere
 
 RecordType ::= 'Record' RecordVarDeclGroup* 'end'
 
-OperationStatements ::= OperationStatement*
-
-private OperationStatement ::= Statement {recoverWhile=StatementRecover}
+private Statements ::= Statement* {recoverWhile=StatementRecover}
 
 Statement ::= SimpleStatement
-private StatementRecover ::= !('end'|';')
+private StatementRecover ::= !('end'|':='|':=:')
 SimpleStatement ::=
-    (Expression (AssignmentStatement|SwapStatement)) ';' {pin(".*")=Expression}
+    (Expression (AssignmentStatement|SwapStatement)) ';' {pin=1}
 
 left AssignmentStatement ::= ':=' Expression {pin=1}
-left SwapStatement ::= ':=:' Expression
+left SwapStatement ::= ':=:' Expression {pin=1}
 
 Expression ::=
     //|...
@@ -244,20 +242,6 @@ OperandName ::= ReferenceExpression QualifiedReferenceExpression? {elementType=R
 
 left QualifiedReferenceExpression ::= '.' identifier {elementType=ReferenceExpression}
 ReferenceExpression ::= identifier { methods=[getReference getQualifier] extends=Expression}
-/*Statement ::=
-          SimpleStatement
-        | WhileStmt //{methods=[processDeclarations]}
-
-WhileStmt ::= 'While'
-
-SimpleStatement ::= AssignmentStatement
-
-ExpressionWithRecover ::=
-
-left AssignmentStatement ::= ':=' ExpressionWithRecover {pin=1}
-*/
-//assignStmt
-//swapStmt
 
 ParameterMode ::=
       'alters'
