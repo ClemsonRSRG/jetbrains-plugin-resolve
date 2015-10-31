@@ -226,8 +226,8 @@ private Statements ::= Statement* {recoverWhile=StatementRecover}
 
 Statement ::= SimpleStatement
 private StatementRecover ::= !('end'|':='|':=:')
-SimpleStatement ::=
-    (Expression (AssignmentStatement|SwapStatement)) ';' {pin=1}
+SimpleStatement ::= Expression ':=' Expression ';' {pin(".*")=1}
+    //(Expression (AssignmentStatement|SwapStatement)) ';' {pin(".*")=1}
 
 left AssignmentStatement ::= ':=' Expression {pin=1}
 left SwapStatement ::= ':=:' Expression {pin=1}
