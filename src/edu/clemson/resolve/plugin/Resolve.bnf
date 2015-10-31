@@ -13,7 +13,6 @@
     psiPackage='edu.clemson.resolve.plugin.psi'
     psiImplPackage='edu.clemson.resolve.plugin.psi.impl'
     psiImplUtilClass="edu.clemson.resolve.plugin.psi.impl.ResPsiImplUtil"
-    //parserUtilClass="edu.clemson.resolve.plugin.RESOLVEParserUtil" //not needed yet..
 
     tokens=[
         // Punctuation
@@ -178,7 +177,7 @@ TypeReprDecl ::= 'Type' identifier '='
 OperationProcedureDecl ::= 'Operation' identifier Signature ';'
 ('Recursive')? 'Procedure'
 Block
-'end' identifier ';' {pin=1}
+'end' identifier ';' {pin=1 implements="edu.clemson.resolve.plugin.psi.ResSignatureOwner"}
 
 Signature ::= OperationLikeParameters Result? {pin=1}
 
@@ -249,7 +248,6 @@ CallExpr ::= NameExpr ArgumentList
 ArgumentList ::= '(' ExpressionArgList? ')' {pin=1}
 private ExpressionArgList ::= ExpressionWithRecover (',' ExpressionWithRecover)* {pin(".*")=1}
 private ExpressionWithRecover ::= Expression {recoverWhile=ExpressionListRecover}
-private ExpressionWithRecover2 ::= <<withOn "PAR" ExpressionWithRecover>> | (!() Expression) {recoverWhile=ExpressionListRecover}
 private ExpressionListRecover ::= !('%' | '+' | '-' | '(' | ')' | ',' | '*' | '++' | '<' | '<=' | '>' | '>=' | 'end' | 'Operation' | 'Type' | 'Facility')
 
 ParameterMode ::=
@@ -260,4 +258,6 @@ ParameterMode ::=
     | 'preserves'
     | 'replaces'
     | 'evaluates'
-    | identifier //TODO: not sure about the pin here...
+    | identifier //TODO: would like to get rid of identifier, but results in
+                 //an uglier (partial) psi; which makes keyword completion
+                 //patterns much harder

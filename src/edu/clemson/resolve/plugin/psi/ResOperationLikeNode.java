@@ -4,7 +4,13 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface ResOperationLikeNode extends ResNamedElement {
+public interface ResOperationLikeNode
+        extends
+            ResNamedElement, ResNamedSignatureOwner {
 
-    @NotNull PsiElement getIdentifier();
+    @Nullable public ResBlock getBlock();
+
+    @NotNull public PsiElement getIdentifier();
+
+    @Nullable public ResSignature getSignature();
 }

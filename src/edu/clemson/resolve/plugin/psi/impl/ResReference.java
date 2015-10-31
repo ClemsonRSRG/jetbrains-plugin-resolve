@@ -5,6 +5,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.OrderedSet;
@@ -125,7 +126,20 @@ public class ResReference
         //       if (processUsesRequests(file, processor, state, myElement)) return false;
 
         if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
+        processFunctionParameters(myElement, delegate);
         return true;
+    }
+
+    //This is for processing formal parameters for enclosing fxn. Todo : think about one for modules as well..
+    public static void processFunctionParameters(@NotNull ResCompositeElement e,
+                                                 @NotNull ResScopeProcessor processor) {
+        ResSignatureOwner signatureOwner =
+                PsiTreeUtil.getParentOfType(e, ResSignatureOwner.class);
+        int i;
+        i=0;
+        /*while (signatureOwner != null && processSignatureOwner(signatureOwner, processor)) {
+            signatureOwner = PsiTreeUtil.getParentOfType(signatureOwner, GoSignatureOwner.class);
+        }*/
     }
 
     protected static boolean processFileEntities(@NotNull ResFile file,
