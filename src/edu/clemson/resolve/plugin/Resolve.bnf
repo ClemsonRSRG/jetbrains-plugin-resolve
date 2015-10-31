@@ -119,6 +119,7 @@
     extends("(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
     extends("(Param|Var)Def")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
     extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeDeclImpl"
+    extends("(Concept|Facility)Block")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleBlockImpl"
 
     implements(".*ReferenceExpression")="edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase"
     implements("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
@@ -175,7 +176,8 @@ TypeReprDecl ::= 'Type' identifier '='
 (Type | RecordType) ';' {pin=2}
 
 OperationProcedureDecl ::= 'Operation' identifier Signature ';'
-ProcedureBody
+('Recursive')? 'Procedure'
+Block
 'end' identifier ';' {pin=1}
 
 Signature ::= OperationLikeParameters Result? {pin=1}
@@ -202,7 +204,7 @@ private ParamDefinitionListNoPin ::= ParamDef &(!(';'|')')) (',' ParamDef)* {pin
 ParamDef ::= identifier //{methods = [isVariadic]}
 
 //TODO: make this "Block" and have it implement ResBlock
-ProcedureBody ::= ('Recursive')?'Procedure'
+Block ::=
 VarDeclGroupList
 Statements
 
@@ -226,11 +228,7 @@ private Statements ::= Statement* {recoverWhile=StatementRecover}
 
 Statement ::= SimpleStatement
 private StatementRecover ::= !('end'|':='|':=:')
-SimpleStatement ::= Expression ':=' Expression ';' {pin(".*")=1}
-    //(Expression (AssignmentStatement|SwapStatement)) ';' {pin(".*")=1}
-
-left AssignmentStatement ::= ':=' Expression {pin=1}
-left SwapStatement ::= ':=:' Expression {pin=1}
+SimpleStatement ::= Expression (':='|':=:') Expression ';' {pin(".*")=1}
 
 Expression ::=
     //|...

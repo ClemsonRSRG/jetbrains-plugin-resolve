@@ -3,11 +3,13 @@ package edu.clemson.resolve.plugin.completion;
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.openapi.project.DumbAware;
+import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PsiElementPattern.Capture;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
 import edu.clemson.resolve.plugin.ResTypes;
 import edu.clemson.resolve.plugin.psi.*;
+import org.eclipse.jdt.internal.compiler.ast.ReferenceExpression;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
@@ -79,9 +81,10 @@ public class RESOLVEKeywordCompletionContributor
         return onKeywordStartWithParent(ResBlock.class);
     }
 
+    //TODO: Fix, allows interleaving.
     private static Capture<PsiElement> variablePattern() {
-        return onKeywordStartWithParent(psiElement()
-                .inside(psiElement(ResVarDeclGroupList.class)));
+        return psiElement(ResTypes.IDENTIFIER)
+                .withParent(psiElement(ResTypes.REFERENCE_EXPRESSION));
     }
 
     private static Capture<PsiElement> recordTypePattern() {
