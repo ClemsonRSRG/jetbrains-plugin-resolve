@@ -203,7 +203,6 @@ ParamDecl ::= ParameterMode ParamDefinitionListNoPin ':' Type {pin=1}
 private ParamDefinitionListNoPin ::= ParamDef &(!(';'|')')) (',' ParamDef)* {pin=1}
 ParamDef ::= identifier //{methods = [isVariadic]}
 
-//TODO: make this "Block" and have it implement ResBlock
 Block ::=
 VarDeclGroupList
 Statements
@@ -228,18 +227,30 @@ private Statements ::= Statement* {recoverWhile=StatementRecover}
 
 Statement ::= SimpleStatement
 private StatementRecover ::= !('end'|':='|':=:')
-SimpleStatement ::= Expression (':='|':=:') Expression ';' {pin(".*")=1}
+SimpleStatement ::=
+      CallExpr ';'
+    | Expression (':='|':=:') Expression ';' {pin(".*")=1}
 
 Expression ::=
     //|...
     MaxGroup {methods=[getResType] implements="edu.clemson.resolve.plugin.psi.ResTypeOwner"}
 
-private MaxGroup ::= OperandName
+private MaxGroup ::=
+      NameExpr
+    | CallExpr
 
-OperandName ::= ReferenceExpression QualifiedReferenceExpression? {elementType=ReferenceExpression}
+NameExpr ::= ReferenceExpression QualifiedReferenceExpression? {elementType=ReferenceExpression}
 
 left QualifiedReferenceExpression ::= '.' identifier {elementType=ReferenceExpression}
 ReferenceExpression ::= identifier { methods=[getReference getQualifier] extends=Expression}
+
+CallExpr ::= NameExpr ArgumentList
+
+ArgumentList ::= '(' ExpressionArgList? ')' {pin=1}
+private ExpressionArgList ::= ExpressionWithRecover (',' ExpressionWithRecover)* {pin(".*")=1}
+private ExpressionWithRecover ::= Expression {recoverWhile=ExpressionListRecover}
+private ExpressionWithRecover2 ::= <<withOn "PAR" ExpressionWithRecover>> | (!() Expression) {recoverWhile=ExpressionListRecover}
+private ExpressionListRecover ::= !('%' | '+' | '-' | '(' | ')' | ',' | '*' | '++' | '<' | '<=' | '>' | '>=' | 'end' | 'Operation' | 'Type' | 'Facility')
 
 ParameterMode ::=
       'alters'
