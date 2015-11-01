@@ -249,7 +249,7 @@ CallExpr ::= NameExpr ArgumentList
 ArgumentList ::= '(' ExpressionArgList? ')' {pin=1}
 private ExpressionArgList ::= ExpressionWithRecover (',' ExpressionWithRecover)* {pin(".*")=1}
 private ExpressionWithRecover ::= Expression {recoverWhile=ExpressionListRecover}
-private ExpressionListRecover ::= !('%' | '+' | '-' | '(' | ')' | ',' | '*' | '++' | '<' | '<=' | '>' | '>=' | 'end' | 'Operation' | 'Type' | 'Facility')
+private ExpressionListRecover ::= !('%' | '+' | '-' | '(' | ')' | ',' | '*' | '++' | '<' | '<=' | '>' | '>=' | 'end' | 'Operation' | 'Type' | 'Facility' | identifier)
 
 ParameterMode ::=
       'alters'
