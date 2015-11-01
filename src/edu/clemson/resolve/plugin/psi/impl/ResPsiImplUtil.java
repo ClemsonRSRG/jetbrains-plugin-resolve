@@ -30,6 +30,12 @@ public class ResPsiImplUtil {
                 TextRange.EMPTY_RANGE;
     }
 
+    @Nullable public static ResUsesSpec getSpecification(
+            @NotNull ResFacilityDecl facility) {
+        List<ResUsesSpec> uses = facility.getUsesSpecList();
+        return uses.size() > 0 ? uses.get(0) : null;
+    }
+
     @Nullable public static ResTypeReferenceExpression getQualifier(
             @NotNull ResTypeReferenceExpression o) {
         return PsiTreeUtil.getChildOfType(o, ResTypeReferenceExpression.class);

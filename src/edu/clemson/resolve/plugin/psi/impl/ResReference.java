@@ -65,20 +65,13 @@ public class ResReference
                                                @NotNull ResolveState state) {
         PsiReference reference = qualifier.getReference();
         PsiElement target = reference != null ? reference.resolve() : null;
-       /* if (target == null || target == qualifier) return false;
-        if (target instanceof GoImportSpec) {
-            if (GoConstants.C_PATH.equals(((GoImportSpec)target).getPath())) return processor.execute(myElement, state);
-            target = ((GoImportSpec)target).getImportString().resolve();
+        if (target == null || target == qualifier) return false;
+        if (target instanceof ResFacilityDecl) {
+            ResUsesSpec spec = ((ResFacilityDecl)target).getSpecification();
+            if (spec == null) return false;
+            target = spec.resolve();
+            if (target != null) processFileEntities((ResFile) target, processor, state, false);
         }
-        if (target instanceof PsiDirectory && !processDirectory((PsiDirectory)target, file, null, processor, state, false)) return false;
-        if (target instanceof GoTypeOwner) {
-            GoType type = typeOrParameterType((GoTypeOwner)target, createContext());
-            if (type != null) {
-                if (!processGoType(type, processor, state)) return false;
-                GoTypeReferenceExpression ref = type.getTypeReferenceExpression();
-                if (ref != null && ref.getReference().resolve() == ref) return processor.execute(myElement, state); // a bit hacky resolve for: var a C.foo; a.b
-            }
-        }*/
         return true;
     }
 

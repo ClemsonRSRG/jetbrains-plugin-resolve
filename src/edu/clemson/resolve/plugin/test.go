@@ -14,5 +14,5 @@ func bar2(x person) person {
 
 func foo() {
 
-	bar2()
+
 }
