@@ -119,6 +119,7 @@
     extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeDeclImpl"
     extends("(Concept|Facility)Block")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleBlockImpl"
     extends(".*Statement")=Statement
+    extends(".*(Expr)")=Expression
 
     implements(".*ReferenceExpression")="edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase"
     implements("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
@@ -233,7 +234,10 @@ SimpleStatement ::=
 
 Expression ::=
     //|...
-    MaxGroup {methods=[getResType] implements="edu.clemson.resolve.plugin.psi.ResTypeOwner"}
+      OrExpr
+    | MaxGroup {methods=[getResType] implements="edu.clemson.resolve.plugin.psi.ResTypeOwner"}
+
+OrExpr ::= Expression 'or' Expression
 
 private MaxGroup ::=
       NameExpr
