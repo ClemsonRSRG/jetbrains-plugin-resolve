@@ -4,10 +4,15 @@ import "fmt"
 func bar1() {
 
 }
-func bar2() {
+type person struct {
 
 }
+func bar2(x person) person {
+	var x person;
+	return x;
+}
+
 func foo() {
-	bar1(), soo()
+
 	bar2()
 }

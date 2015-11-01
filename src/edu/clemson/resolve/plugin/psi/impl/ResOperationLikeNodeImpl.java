@@ -16,6 +16,7 @@ public abstract class ResOperationLikeNodeImpl
     }
 
     @NotNull @Override public PsiElement getIdentifier() {
+
         return findNotNullChildByType(ResTypes.IDENTIFIER);
     }
 }

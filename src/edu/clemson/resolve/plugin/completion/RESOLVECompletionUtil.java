@@ -44,9 +44,9 @@ public class RESOLVECompletionUtil {
             if (!(element instanceof ResSignatureOwner)) return;
             ResSignatureOwner f = (ResSignatureOwner)element;
             ResSignature signature = f.getSignature();
-            int paramsCount = signature != null &&
-                    signature.getOpParamList() != null ?
-                    signature.getOpParamList().getParamDeclList().size() : 0;
+            int paramsCount = signature != null ?
+                    signature.getOperationLikeParameters()
+                            .getParamDeclList().size() : 0;
             InsertHandler<LookupElement> handler =
                     paramsCount == 0 ? ParenthesesInsertHandler.NO_PARAMETERS :
                             ParenthesesInsertHandler.WITH_PARAMETERS;
@@ -89,8 +89,7 @@ public class RESOLVECompletionUtil {
             String paramText = "";
             if (signature != null) {
                 ResResult result = signature.getResult();
-                paramText = signature.getOpParamList() != null ?
-                        signature.getOpParamList().getText() : "";
+                paramText = signature.getOperationLikeParameters().getText();
                 if (result != null) typeText = result.getText();
             }
 
