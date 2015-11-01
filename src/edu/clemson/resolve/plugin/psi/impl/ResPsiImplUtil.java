@@ -6,11 +6,13 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
+import com.intellij.psi.impl.source.tree.LeafElement;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
+import edu.clemson.resolve.plugin.ResTypes;
 import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -87,18 +89,18 @@ public class ResPsiImplUtil {
                                      @Nullable final ResolveState context) {
         return RecursionManager.doPreventingRecursion(o, true,
                 new Computable<ResType>() {
-            @Override public ResType compute() {
-                if (context != null) return getResTypeInner(o, context);
-                return CachedValuesManager.getCachedValue(o,
-                        new CachedValueProvider<ResType>() {
+                    @Override public ResType compute() {
+                        if (context != null) return getResTypeInner(o, context);
+                        return CachedValuesManager.getCachedValue(o,
+                                new CachedValueProvider<ResType>() {
 
-                    @Nullable @Override public Result<ResType> compute() {
-                        return Result.create(getResTypeInner(o, null),
-                                PsiModificationTracker.MODIFICATION_COUNT);
+                                    @Nullable @Override public Result<ResType> compute() {
+                                        return Result.create(getResTypeInner(o, null),
+                                                PsiModificationTracker.MODIFICATION_COUNT);
+                                    }
+                                });
                     }
                 });
-            }
-        });
     }
 
     @Nullable public static ResType getResTypeInner(
@@ -137,5 +139,12 @@ public class ResPsiImplUtil {
         }
         return ResCompositeElementImpl.processDeclarationsDefault(
                 o, processor, state, lastParent, place);
+    }
+
+    public static boolean prevDot(@Nullable PsiElement parent) {
+        PsiElement prev = parent == null ? null :
+                PsiTreeUtil.prevVisibleLeaf(parent);
+        return prev instanceof LeafElement &&
+                ((LeafElement)prev).getElementType() == ResTypes.DOT;
     }
 }

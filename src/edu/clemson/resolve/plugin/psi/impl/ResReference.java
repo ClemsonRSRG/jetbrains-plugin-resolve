@@ -54,10 +54,32 @@ public class ResReference
         if (!(file instanceof ResFile)) return false;
         ResolveState state = createContext();
         ResReferenceExpressionBase qualifier = myElement.getQualifier();
-        return //qualifier != null
-                // ? processQualifierExpression(((GoFile)file), qualifier, processor, state)
-                //:
+        return qualifier != null ?
+                processQualifierExpression(((ResFile)file), qualifier, processor, state) :
                 processUnqualifiedResolve(((ResFile) file), processor, state, true);
+    }
+
+    private boolean processQualifierExpression(@NotNull ResFile file,
+                                               @NotNull ResReferenceExpressionBase qualifier,
+                                               @NotNull ResScopeProcessor processor,
+                                               @NotNull ResolveState state) {
+        PsiReference reference = qualifier.getReference();
+        PsiElement target = reference != null ? reference.resolve() : null;
+       /* if (target == null || target == qualifier) return false;
+        if (target instanceof GoImportSpec) {
+            if (GoConstants.C_PATH.equals(((GoImportSpec)target).getPath())) return processor.execute(myElement, state);
+            target = ((GoImportSpec)target).getImportString().resolve();
+        }
+        if (target instanceof PsiDirectory && !processDirectory((PsiDirectory)target, file, null, processor, state, false)) return false;
+        if (target instanceof GoTypeOwner) {
+            GoType type = typeOrParameterType((GoTypeOwner)target, createContext());
+            if (type != null) {
+                if (!processGoType(type, processor, state)) return false;
+                GoTypeReferenceExpression ref = type.getTypeReferenceExpression();
+                if (ref != null && ref.getReference().resolve() == ref) return processor.execute(myElement, state); // a bit hacky resolve for: var a C.foo; a.b
+            }
+        }*/
+        return true;
     }
 
     @NotNull public ResolveState createContext() {
@@ -120,9 +142,12 @@ public class ResReference
                                               @NotNull ResolveState state,
                                               boolean localResolve) {
 
+        if (ResPsiImplUtil.prevDot(myElement.getParent())) return false;
+
         if (!processBlock(processor, state, true)) return false;
         if (!processParameters(processor, state, true)) return false;
         if (!processFileEntities(file, processor, state, true)) return false;
+        if (!processUsesRequests(file, processor, state, myElement)) return false;
 
         return true;
     }
@@ -166,7 +191,6 @@ public class ResReference
         if (!processNamedElements(processor, state, file.getOperations(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getFacilities(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
-
         return true;
     }
 

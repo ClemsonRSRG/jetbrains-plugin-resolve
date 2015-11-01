@@ -101,7 +101,6 @@ public class ResTypeReference
 
         //this proce
         if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
-
         if (ResReference.processUsesRequests(file, processor, state, myElement)) return false;
 
         return true;

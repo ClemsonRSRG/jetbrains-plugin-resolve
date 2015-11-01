@@ -90,13 +90,13 @@ public class RESOLVECompletionUtil {
             if (signature != null) {
                 ResResult result = signature.getResult();
                 paramText = signature.getOperationLikeParameters().getText();
-                if (result != null) typeText = result.getText();
+                if (result != null) typeText = result.getType().getText();
             }
 
             p.setIcon(RESOLVEIcons.OPERATION);
             p.setTypeText(typeText);
             p.setTypeGrayed(true);
-            //p.setTailText(calcTailText(f), true);
+            p.setTailText(calcTailText(f), true);
             p.setItemText(element.getLookupString() + paramText);
         }
     };
@@ -164,5 +164,10 @@ public class RESOLVECompletionUtil {
                 .createWithSmartPointer(lookupString, v)
                 .withRenderer(VARIABLE_RENDERER)
                 .withInsertHandler(insertHandler), priority);
+    }
+
+    @Nullable private static String calcTailText(ResSignatureOwner m) {
+        String text = "";
+        return StringUtil.isNotEmpty(text) ? " " + UIUtil.rightArrow() + " " + text : null;
     }
 }

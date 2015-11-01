@@ -115,10 +115,10 @@
 
     extends("(Facility|Concept)ModuleDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleDeclImpl"
     extends("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.impl.ResOperationLikeNodeImpl"
-    extends("(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
-    extends("(Param|Var)Def")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
+    extends("(Facility)Decl|(Uses)Spec|(Param|Var)Def")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
     extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeDeclImpl"
     extends("(Concept|Facility)Block")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleBlockImpl"
+    extends(".*Statement")=Statement
 
     implements(".*ReferenceExpression")="edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase"
     implements("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
@@ -126,6 +126,7 @@
     implements("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.ResOperationLikeNode"
     implements("(Var|Param)Def|(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.ResNamedElement"
     implements("(Facility|Concept)ModuleDecl")="edu.clemson.resolve.plugin.psi.ResModuleDecl"
+
     generateTokenAccessors=true
     pin('.*List(?:_\d.*)?')=1
 }
@@ -181,7 +182,7 @@ Block
 
 Signature ::= OperationLikeParameters Result? {pin=1}
 
-Result ::= ':' Type {pin=1}
+Result ::= ':' Type {pin=2}
 
 OperationDecl ::= 'Operation' identifier Signature ';' {pin=1}
 

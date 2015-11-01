@@ -81,7 +81,7 @@ public class RESOLVEKeywordCompletionContributor
         return onKeywordStartWithParent(ResBlock.class);
     }
 
-    //TODO: Fix, allows interleaving.
+    //TODO: Fix, allows erroneous interleaving w/ stats
     private static Capture<PsiElement> variablePattern() {
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(ResTypes.REFERENCE_EXPRESSION));
