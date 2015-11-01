@@ -5,6 +5,7 @@ import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.completion.PrefixMatcher;
 import com.intellij.codeInsight.completion.PrioritizedLookupElement;
 import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
+import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
@@ -13,6 +14,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.ui.UIUtil;
 import edu.clemson.resolve.plugin.RESOLVEIcons;
 import edu.clemson.resolve.plugin.psi.*;
 import edu.clemson.resolve.plugin.psi.impl.ResPsiImplUtil;
@@ -26,6 +28,7 @@ public class RESOLVECompletionUtil {
     public static final int KEYWORD_PRIORITY = 20;
     public static final int TYPE_PRIORITY = 10;
     public static final int FACILITY_PRIORITY = 5;
+    public static final int FUNCTION_PRIORITY = 15;
     public static final int VAR_PRIORITY = 1;
 
     private RESOLVECompletionUtil() {}
@@ -34,6 +37,22 @@ public class RESOLVECompletionUtil {
         private static final SingleCharInsertHandler FACILITY_INSERT_HANDLER =
                 new SingleCharInsertHandler('.');
     }
+    public static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER = new InsertHandler<LookupElement>() {
+        @Override
+        public void handleInsert(InsertionContext context, LookupElement item) {
+            PsiElement element = item.getPsiElement();
+            if (!(element instanceof ResSignatureOwner)) return;
+            ResSignatureOwner f = (ResSignatureOwner)element;
+            ResSignature signature = f.getSignature();
+            int paramsCount = signature != null &&
+                    signature.getOpParamList() != null ?
+                    signature.getOpParamList().getParamDeclList().size() : 0;
+            InsertHandler<LookupElement> handler =
+                    paramsCount == 0 ? ParenthesesInsertHandler.NO_PARAMETERS :
+                            ParenthesesInsertHandler.WITH_PARAMETERS;
+            handler.handleInsert(context, item);
+        }
+    };
 
     public static final LookupElementRenderer<LookupElement> VARIABLE_RENDERER =
             new LookupElementRenderer<LookupElement>() {
@@ -58,6 +77,30 @@ public class RESOLVECompletionUtil {
             p.setItemText(element.getLookupString());
         }
     };
+    public static final LookupElementRenderer<LookupElement> FUNCTION_RENDERER =
+            new LookupElementRenderer<LookupElement>() {
+        @Override public void renderElement(LookupElement element,
+                                            LookupElementPresentation p) {
+            PsiElement o = element.getPsiElement();
+            if (!(o instanceof ResNamedSignatureOwner)) return;
+            ResNamedSignatureOwner f = (ResNamedSignatureOwner)o;
+            String typeText = "";
+            ResSignature signature = f.getSignature();
+            String paramText = "";
+            if (signature != null) {
+                ResResult result = signature.getResult();
+                paramText = signature.getOpParamList() != null ?
+                        signature.getOpParamList().getText() : "";
+                if (result != null) typeText = result.getText();
+            }
+
+            p.setIcon(RESOLVEIcons.OPERATION);
+            p.setTypeText(typeText);
+            p.setTypeGrayed(true);
+            //p.setTailText(calcTailText(f), true);
+            p.setItemText(element.getLookupString() + paramText);
+        }
+    };
 
     @NotNull public static CamelHumpMatcher createPrefixMatcher(
             @NotNull PrefixMatcher original) {
@@ -67,6 +110,15 @@ public class RESOLVECompletionUtil {
     @NotNull public static CamelHumpMatcher createPrefixMatcher(
             @NotNull String prefix) {
         return new CamelHumpMatcher(prefix, false);
+    }
+
+    @NotNull public static LookupElement createFunctionOrMethodLookupElement(
+            @NotNull ResNamedSignatureOwner f, @NotNull String lookupString,
+            @Nullable InsertHandler<LookupElement> h, double priority) {
+        return PrioritizedLookupElement.withPriority(LookupElementBuilder
+                .createWithSmartPointer(lookupString, f)
+                .withRenderer(FUNCTION_RENDERER)
+                .withInsertHandler(h != null ? h : FUNCTION_INSERT_HANDLER), priority);
     }
 
     @NotNull public static LookupElement createTypeLookupElement(

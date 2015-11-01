@@ -195,7 +195,7 @@ SpecParamDecl ::= TypeParamDecl | ParamDecl
 
 TypeParamDecl ::= 'type' identifier {pin=2}
 
-OperationLikeParameters ::= '(' OpParamList? ')' { pin=1}
+private OperationLikeParameters ::= '(' OpParamList? ')' { pin=1}
 private ParamListRec ::= !(')')
 OpParamList ::= ParamDecl (';' ParamDecl)* {pin=1 recoverWhile=ParamListRec}
 ParamDecl ::= ParameterMode ParamDefinitionListNoPin ':' Type {pin=1}

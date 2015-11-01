@@ -7,10 +7,7 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
-import edu.clemson.resolve.plugin.psi.ResFacilityDecl;
-import edu.clemson.resolve.plugin.psi.ResNamedElement;
-import edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase;
-import edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl;
+import edu.clemson.resolve.plugin.psi.*;
 import edu.clemson.resolve.plugin.psi.impl.ResReference;
 import edu.clemson.resolve.plugin.psi.impl.ResScopeProcessor;
 import edu.clemson.resolve.plugin.psi.impl.ResTypeReference;
@@ -88,12 +85,21 @@ public class RESOLVEReferenceCompletionProvider
                 return RESOLVECompletionUtil
                         .createFacilityLookupElement(((ResFacilityDecl) o));
             }
+            else if (o instanceof ResNamedSignatureOwner &&
+                    ((ResNamedSignatureOwner)o).getName() != null) {
+                String name = ((ResNamedSignatureOwner)o).getName();
+                if (name != null) {
+                    return RESOLVECompletionUtil
+                            .createFunctionOrMethodLookupElement(
+                                    (ResNamedSignatureOwner) o, name, null,
+                                    RESOLVECompletionUtil.FUNCTION_PRIORITY);
+                }
+            }
             else {
                 return RESOLVECompletionUtil
                         .createVariableLikeLookupElement((ResNamedElement) o);
             }
         }
-
         return null;
     }
 

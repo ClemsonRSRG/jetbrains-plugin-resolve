@@ -65,6 +65,30 @@ public abstract class ResAbstractModuleDeclImpl
                 });
     }
 
+    @NotNull public List<ResOperationLikeNode> getOperations() {
+        return CachedValuesManager.getCachedValue(this,
+                new CachedValueProvider<List<ResOperationLikeNode>>() {
+                    @Override
+                    public Result<List<ResOperationLikeNode>> compute() {
+                        return Result.create(calcOperations(), ResAbstractModuleDeclImpl.this);
+                    }
+                });
+    }
+
+    @NotNull private List<ResOperationLikeNode> calcOperations() {
+        final List<ResOperationLikeNode> result = ContainerUtil.newArrayList();
+        processChildrenDummyAware(this.getModuleBlock(), new Processor<PsiElement>() {
+            @Override
+            public boolean process(PsiElement e) {
+                if (e instanceof ResOperationLikeNode) {
+                    result.add((ResOperationLikeNode)e);
+                }
+                return true;
+            }
+        });
+        return result;
+    }
+
     @NotNull private List<ResTypeLikeNodeDecl> calcTypes() {
         final List<ResTypeLikeNodeDecl> result = ContainerUtil.newArrayList();
         processChildrenDummyAware(this.getModuleBlock(), new Processor<PsiElement>() {

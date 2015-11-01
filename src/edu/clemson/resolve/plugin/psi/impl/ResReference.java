@@ -119,15 +119,30 @@ public class ResReference
                                               @NotNull ResScopeProcessor processor,
                                               @NotNull ResolveState state,
                                               boolean localResolve) {
-        ResScopeProcessorBase delegate = createDelegate(processor);
 
-        //NOTE: Good place for breakpoints Then put one in ResCompsite element on the return to processDeclarations()..
-        ResolveUtil.treeWalkUp(myElement, delegate);
-        //       if (processUsesRequests(file, processor, state, myElement)) return false;
+        if (!processBlock(processor, state, true)) return false;
+        if (!processParameters(processor, state, true)) return false;
+        if (!processFileEntities(file, processor, state, true)) return false;
 
-        if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
-        processFunctionParameters(myElement, delegate);
         return true;
+    }
+
+    private boolean processBlock(@NotNull ResScopeProcessor processor,
+                                 @NotNull ResolveState state,
+                                 boolean localResolve) {
+        ResScopeProcessorBase delegate = createDelegate(processor);
+        ResolveUtil.treeWalkUp(myElement, delegate);
+        return processNamedElements(processor, state, delegate.getVariants(),
+                localResolve);
+    }
+
+    private boolean processParameters(@NotNull ResScopeProcessor processor,
+                                      @NotNull ResolveState state,
+                                      boolean localResolve) {
+        ResScopeProcessorBase delegate = createDelegate(processor);
+        processFunctionParameters(myElement, delegate);
+        return processNamedElements(processor, state, delegate.getVariants(),
+                localResolve);
     }
 
     //This is for processing formal parameters for enclosing fxn. Todo : think about one for modules as well..
@@ -148,9 +163,10 @@ public class ResReference
                                                  boolean localProcessing) {
         //if (!processNamedElements(processor, state, file.getConstants(), localProcessing)) return false;
         //if (!processNamedElements(processor, state, file.getVars(), localProcessing)) return false;
-        //if (!processNamedElements(processor, state, file.getFunctions(), localProcessing)) return false;
+        if (!processNamedElements(processor, state, file.getOperations(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getFacilities(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
+
         return true;
     }
 
