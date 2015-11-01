@@ -135,7 +135,7 @@ public class ResReference
                                               @NotNull ResolveState state,
                                               boolean localResolve) {
 
-        if (ResPsiImplUtil.prevDot(myElement.getParent())) return false;
+        //if (ResPsiImplUtil.prevDot(myElement.getParent())) return false;
 
         if (!processBlock(processor, state, true)) return false;
         if (!processParameters(processor, state, true)) return false;
@@ -181,7 +181,8 @@ public class ResReference
                                                  boolean localProcessing) {
         //if (!processNamedElements(processor, state, file.getConstants(), localProcessing)) return false;
         //if (!processNamedElements(processor, state, file.getVars(), localProcessing)) return false;
-        if (!processNamedElements(processor, state, file.getOperations(), localProcessing)) return false;
+        if (!processNamedElements(processor, state, file.getOperationImpls(), localProcessing)) return false;
+        if (!processNamedElements(processor, state, file.getOperationDecls(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getFacilities(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
         return true;
