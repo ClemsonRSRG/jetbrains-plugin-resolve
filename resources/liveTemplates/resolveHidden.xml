@@ -26,20 +26,21 @@
         </context>
     </template>
 
-    <template description='Type family declaration' id='resolve_lang_TypeFamily' name='resolve_lang_Type_Family' toReformat='true' toShortenFQNames='true'
-              value='Type Family $NAME$ is modeled by $MATHTYPE$;&#10;    exemplar $EXEMPLAR$;&#10;$END$'>
+    <template description='Operation declaration' id='resolve_lang_OperationDeclaration' name='resolve_lang_Operation_Declaration' toReformat='true' toShortenFQNames='true'
+              value='Operation $NAME$ ($PARAMS$)$TYPE$;&#10;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
-        <variable alwaysStopAt='true' defaultValue='&quot;mathtype&quot;' expression='' name='MATHTYPE'/>
-        <variable alwaysStopAt='true' defaultValue='&quot;e&quot;' expression='' name='EXEMPLAR'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;&quot;' expression='' name='PARAMS'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;&quot;' expression='' name='TYPE'/>
         <context>
             <option name='RESOLVE' value='true'/>
         </context>
     </template>
 
-    <template description='Operation procedure declaration' id='resolve_lang_TypeRepresentation' name='resolve_lang_Type_Representation' toReformat='true' toShortenFQNames='true'
-              value='Operation $NAME$ ($PARAMS$);&#10;    Procedure&#10;    $END$        &#10;end $NAME$;'>
+    <template description='Type family declaration' id='resolve_lang_TypeFamily' name='resolve_lang_Type_Family' toReformat='true' toShortenFQNames='true'
+              value='Type Family $NAME$ is modeled by $MATHTYPE$;&#10;    exemplar $EXEMPLAR$;&#10;$END$'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
-        <variable alwaysStopAt='true' defaultValue='&quot;parameters&quot;' expression='' name='PARAMS'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;mathtype&quot;' expression='' name='MATHTYPE'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;e&quot;' expression='' name='EXEMPLAR'/>
         <context>
             <option name='RESOLVE' value='true'/>
         </context>

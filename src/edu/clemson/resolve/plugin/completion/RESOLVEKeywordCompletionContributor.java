@@ -40,7 +40,8 @@ public class RESOLVEKeywordCompletionContributor
 
         extend(CompletionType.BASIC, conceptModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "TypeFamily"));
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "TypeFamily",
+                        "OperationDeclaration"));
 
         extend(CompletionType.BASIC, parameterModePattern(),
                 new RESOLVEKeywordCompletionProvider(

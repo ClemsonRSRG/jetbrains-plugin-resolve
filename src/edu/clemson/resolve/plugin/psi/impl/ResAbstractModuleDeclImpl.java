@@ -65,23 +65,23 @@ public abstract class ResAbstractModuleDeclImpl
                 });
     }
 
-    @NotNull public List<ResOperationLikeNode> getOperations() {
+    @NotNull public List<ResOperationDecl> getOperations() {
         return CachedValuesManager.getCachedValue(this,
-                new CachedValueProvider<List<ResOperationLikeNode>>() {
+                new CachedValueProvider<List<ResOperationDecl>>() {
                     @Override
-                    public Result<List<ResOperationLikeNode>> compute() {
+                    public Result<List<ResOperationDecl>> compute() {
                         return Result.create(calcOperations(), ResAbstractModuleDeclImpl.this);
                     }
                 });
     }
 
-    @NotNull private List<ResOperationLikeNode> calcOperations() {
-        final List<ResOperationLikeNode> result = ContainerUtil.newArrayList();
+    @NotNull private List<ResOperationDecl> calcOperations() {
+        final List<ResOperationDecl> result = ContainerUtil.newArrayList();
         processChildrenDummyAware(this.getModuleBlock(), new Processor<PsiElement>() {
             @Override
             public boolean process(PsiElement e) {
-                if (e instanceof ResOperationLikeNode) {
-                    result.add((ResOperationLikeNode)e);
+                if (e instanceof ResOperationDecl) {
+                    result.add((ResOperationDecl)e);
                 }
                 return true;
             }

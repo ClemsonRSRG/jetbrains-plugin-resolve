@@ -115,12 +115,13 @@
 
     extends("(Facility|Concept)ModuleDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleDeclImpl"
     extends("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.impl.ResOperationLikeNodeImpl"
-    extends("(Facility)Decl|(Uses)Spec|(Param|Var)Def")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
+    extends("(Facility|Operation)Decl|(Uses)Spec|(Param|Var)Def")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
     extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeDeclImpl"
     extends("(Concept|Facility)Block")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleBlockImpl"
     extends(".*Statement")=Statement
     extends(".*(Expr)")=Expression
 
+    implements("OperationDecl")="edu.clemson.resolve.plugin.psi.ResNamedSignatureOwner"
     implements(".*ReferenceExpression")="edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase"
     implements("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
     implements("(Facility|Concept)Block")="edu.clemson.resolve.plugin.psi.ResModuleBlock"
@@ -175,6 +176,8 @@ TypeModelDecl ::= 'Type' 'Family' identifier 'is' 'modeled' 'by' identifier ';'
 
 TypeReprDecl ::= 'Type' identifier '='
 (Type | RecordType) ';' {pin=2}
+
+OperationDecl ::= 'Operation' identifier Signature ';'
 
 OperationProcedureDecl ::= 'Operation' identifier Signature ';'
 ('Recursive')? 'Procedure'

@@ -1,15 +1,15 @@
 package plugin
 
 import "fmt"
-func bar1() {
 
+type small_stack interface {
+	push();
+	pop()
 }
-type person struct {
 
-}
-func bar2(x person) person {
-	var x person;
-	return x;
+func bar2() {
+	var x small_stack;
+	x.
 }
 
 func foo() {

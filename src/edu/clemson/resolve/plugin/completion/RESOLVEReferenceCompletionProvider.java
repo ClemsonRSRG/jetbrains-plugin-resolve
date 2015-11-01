@@ -79,7 +79,6 @@ public class RESOLVEReferenceCompletionProvider
             if (o instanceof ResTypeLikeNodeDecl) {
                 return RESOLVECompletionUtil
                         .createTypeLookupElement((ResTypeLikeNodeDecl) o);
-                // : GoCompletionUtil.createTypeConversionLookupElement((GoTypeSpec)o);
             }
             else if (o instanceof ResFacilityDecl) {
                 return RESOLVECompletionUtil
