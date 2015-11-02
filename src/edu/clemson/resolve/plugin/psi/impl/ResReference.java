@@ -1,5 +1,6 @@
 package edu.clemson.resolve.plugin.psi.impl;
 
+import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
@@ -8,12 +9,14 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ObjectUtils;
+import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.List;
 
 public class ResReference
         extends
@@ -72,7 +75,67 @@ public class ResReference
             target = spec.resolve();
             if (target != null) processFileEntities((ResFile) target, processor, state, false);
         }
+        if (target instanceof ResTypeOwner) {
+            ResType type = ((ResTypeOwner)target).getResType(createContext());
+            if (type != null && !processResType(type, processor, state)) return false;
+        }
         return true;
+    }
+
+    private boolean processResType(@NotNull ResType type,
+                                   @NotNull ResScopeProcessor processor,
+                                   @NotNull ResolveState state) {
+        if (!processExistingType(type, processor, state)) return false;
+        return processTypeRef(type, processor, state);
+    }
+
+    private boolean processTypeRef(@Nullable ResType type,
+                                   @NotNull ResScopeProcessor processor,
+                                   @NotNull ResolveState state) {
+        return processInTypeRef(getTypeReference(type), type, processor, state);
+    }
+
+    private boolean processInTypeRef(@Nullable ResTypeReferenceExpression refExpr,
+                                     @Nullable ResType recursiveStopper,
+                                     @NotNull ResScopeProcessor processor,
+                                     @NotNull ResolveState state) {
+        PsiReference reference = refExpr != null ? refExpr.getReference() : null;
+        PsiElement resolve = reference != null ? reference.resolve() : null;
+        if (resolve instanceof ResTypeOwner) {
+            ResType type = ((ResTypeOwner)resolve).getResType(state);
+            if (notMatchRecursiveStopper(recursiveStopper, type)) {
+                if (!processResType(type, processor, state)) return false;
+                if (type instanceof GoSpecType && !processGoType(((GoSpecType)type).getType(), processor, state)) return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean processExistingType(@NotNull ResType type,
+                                        @NotNull ResScopeProcessor processor,
+                                        @NotNull ResolveState state) {
+        PsiFile file = type.getContainingFile();
+        if (!(file instanceof ResFile)) return true;
+        PsiFile myFile = ObjectUtils.notNull(getContextFile(state), myElement.getContainingFile());
+        if (!(myFile instanceof ResFile)) return true;
+        boolean localResolve = true;
+        if (type instanceof ResTypeReprDecl) type = ((ResTypeReprDecl)type).getType();
+        if (type instanceof ResRecordType) {
+            ResScopeProcessorBase delegate = createDelegate(processor);
+            type.processDeclarations(delegate, ResolveState.initial(), null, myElement);
+            //List<ResTypeReferenceExpression> structRefs = ContainerUtil.newArrayList();
+            for (ResRecordVarDeclGroup d : ((ResRecordType)type).getRecordVarDeclGroupList()) {
+                if (!processNamedElements(processor, state, d.getVarSpec().getVarDefList(), localResolve)) return false;
+            }
+            if (!processCollectedRefs(type, structRefs, processor, state)) return false;
+        }
+        return true;
+    }
+
+    @Nullable public static ResTypeReferenceExpression getTypeReference(
+            @Nullable ResType o) {
+        if (o == null) return null;
+        return o.getTypeReferenceExpression();
     }
 
     @NotNull public ResolveState createContext() {
@@ -136,7 +199,6 @@ public class ResReference
                                               boolean localResolve) {
 
         //if (ResPsiImplUtil.prevDot(myElement.getParent())) return false;
-
         if (!processBlock(processor, state, true)) return false;
         if (!processParameters(processor, state, true)) return false;
         if (!processFileEntities(file, processor, state, true)) return false;

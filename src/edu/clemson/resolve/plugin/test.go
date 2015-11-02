@@ -7,9 +7,15 @@ type small_stack interface {
 	pop()
 }
 
+type person struct {
+	age small_stack
+}
+func Peon() {
+
+}
 func bar2() {
-	var x small_stack;
-	x.
+	var x person;
+	x.age.
 }
 
 func foo() {

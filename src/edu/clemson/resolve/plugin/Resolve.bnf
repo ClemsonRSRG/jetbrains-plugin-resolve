@@ -174,10 +174,7 @@ FacilityDecl ::= 'Facility' identifier 'is' UsesSpec
 TypeModelDecl ::= 'Type' 'Family' identifier 'is' 'modeled' 'by' identifier ';'
     'exemplar' identifier ';' {pin=3}
 
-TypeReprDecl ::= 'Type' identifier '='
-(Type | RecordType) ';' {pin=2}
-
-OperationDecl ::= 'Operation' identifier Signature ';'
+TypeReprDecl ::= 'Type' identifier '=' (RecordType|Type) ';' {pin=2}
 
 OperationProcedureDecl ::= 'Operation' identifier Signature ';'
 ('Recursive')? 'Procedure'
