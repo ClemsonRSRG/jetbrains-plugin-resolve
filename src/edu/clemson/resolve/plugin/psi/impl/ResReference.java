@@ -103,10 +103,7 @@ public class ResReference
         PsiElement resolve = reference != null ? reference.resolve() : null;
         if (resolve instanceof ResTypeOwner) {
             ResType type = ((ResTypeOwner)resolve).getResType(state);
-            if (notMatchRecursiveStopper(recursiveStopper, type)) {
-                if (!processResType(type, processor, state)) return false;
-                if (type instanceof GoSpecType && !processGoType(((GoSpecType)type).getType(), processor, state)) return false;
-            }
+            if (type != null && !processResType(type, processor, state)) return false;
         }
         return true;
     }
@@ -123,11 +120,21 @@ public class ResReference
         if (type instanceof ResRecordType) {
             ResScopeProcessorBase delegate = createDelegate(processor);
             type.processDeclarations(delegate, ResolveState.initial(), null, myElement);
-            //List<ResTypeReferenceExpression> structRefs = ContainerUtil.newArrayList();
+            List<ResTypeReferenceExpression> structRefs = ContainerUtil.newArrayList();
             for (ResRecordVarDeclGroup d : ((ResRecordType)type).getRecordVarDeclGroupList()) {
-                if (!processNamedElements(processor, state, d.getVarSpec().getVarDefList(), localResolve)) return false;
+                if (!processNamedElements(processor, state, d.getFieldVarSpec().getFieldDefList(), localResolve)) return false;
             }
             if (!processCollectedRefs(type, structRefs, processor, state)) return false;
+        }
+        return true;
+    }
+
+    private boolean processCollectedRefs(@NotNull ResType type,
+                                         @NotNull List<ResTypeReferenceExpression> refs,
+                                         @NotNull ResScopeProcessor processor,
+                                         @NotNull ResolveState state) {
+        for (ResTypeReferenceExpression ref : refs) {
+            if (!processInTypeRef(ref, type, processor, state)) return false;
         }
         return true;
     }
@@ -198,7 +205,7 @@ public class ResReference
                                               @NotNull ResolveState state,
                                               boolean localResolve) {
 
-        //if (ResPsiImplUtil.prevDot(myElement.getParent())) return false;
+        if (ResPsiImplUtil.prevDot(myElement)) return false;
         if (!processBlock(processor, state, true)) return false;
         if (!processParameters(processor, state, true)) return false;
         if (!processFileEntities(file, processor, state, true)) return false;
@@ -276,8 +283,8 @@ public class ResReference
         return new ResVarProcessor(getIdentifier(), myElement,
                 processor.isCompletion(), true) {
             @Override protected boolean condition(@NotNull PsiElement e) {
-                //if (e instanceof ResRecordFieldDef) return true;
-                return super.condition(e); //&& !(e instanceof GoTypeSpec);
+                if (e instanceof ResFieldDef) return true;
+                return super.condition(e); //&& !(e instanceof ResTypeSpec);
             }
         };
     }

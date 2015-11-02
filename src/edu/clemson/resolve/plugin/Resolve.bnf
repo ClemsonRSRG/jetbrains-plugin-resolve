@@ -115,9 +115,11 @@
 
     extends("(Facility|Concept)ModuleDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleDeclImpl"
     extends("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.impl.ResOperationLikeNodeImpl"
-    extends("(Facility|Operation)Decl|(Uses)Spec|(Param|Var)Def")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
+    extends("(Facility|Operation)Decl|(Uses)Spec|(Param|Var|Field)Def")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
     extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeDeclImpl"
     extends("(Concept|Facility)Block")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleBlockImpl"
+
+    extends("(Or|Selector)Expr")=BinaryExpr
     extends(".*Statement")=Statement
     extends(".*(Expr)")=Expression
 
@@ -126,7 +128,7 @@
     implements("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
     implements("(Facility|Concept)Block")="edu.clemson.resolve.plugin.psi.ResModuleBlock"
     implements("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.ResOperationWithBodyNode"
-    implements("(Var|Param)Def|(Facility)Decl|(Uses)Spec")="edu.clemson.resolve.plugin.psi.ResNamedElement"
+    implements("(Var|Param)Def|(Facility)Decl|(Uses)Spec|(Field)Def")="edu.clemson.resolve.plugin.psi.ResNamedElement"
     implements("(Facility|Concept)ModuleDecl")="edu.clemson.resolve.plugin.psi.ResModuleDecl"
 
     generateTokenAccessors=true
@@ -208,14 +210,17 @@ Block ::=
 VarDeclGroupList
 Statements
 
-VarDeclGroupList ::= VarDeclGroup* {pin=1}
 
-RecordVarDeclGroup ::= VarSpec ';' {pin=1}
+RecordVarDeclGroup ::= FieldVarSpec ';' {pin=1}
+FieldVarSpec ::= FieldVarDefList ':' Type {pin=1}
+private FieldVarDefList ::= FieldDef &(!(';'))(',' FieldDef)*
+FieldDef ::= identifier
+
+VarDeclGroupList ::= VarDeclGroup* {pin=1}
 
 VarDeclGroup ::= 'Var' VarSpec ';' {pin=1}
 VarSpec ::= VarDefList ':' Type {pin=1}//{methods=[processDeclarations]}
 private VarDefList ::= VarDef &(!(';'))(',' VarDef)*
-
 VarDef ::= identifier {methods=[getResTypeInner getReference]}
 
 Type ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
@@ -238,6 +243,10 @@ Expression ::=
     //|...
       OrExpr
     | MaxGroup {methods=[getResType] implements="edu.clemson.resolve.plugin.psi.ResTypeOwner"}
+
+fake BinaryExpr ::= Expression+ {
+  methods=[left="Expression[0]" right="Expression[1]"]
+}
 
 OrExpr ::= Expression 'or' Expression
 
@@ -268,6 +277,6 @@ ParameterMode ::=
     | 'preserves'
     | 'replaces'
     | 'evaluates'
-    | identifier //TODO: would like to get rid of identifier, but results in
-                 //an uglier (partial) psi; which makes keyword completion
+    | identifier //TODO: would like to get rid of identifier here, but results
+                 //in an uglier (partial) psi; which makes keyword completion
                  //patterns much harder
