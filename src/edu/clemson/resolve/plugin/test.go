@@ -9,16 +9,17 @@ type small_stack interface {
 
 type person struct {
 	age small_stack
+	soo person
 }
 func Peon() {
 
 }
 func bar2() {
 	var x person;
-	x.age.
+	x.age
 }
 
 func foo() {
-
+	x.a.b.z
 
 }

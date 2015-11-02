@@ -244,6 +244,7 @@ OrExpr ::= Expression 'or' Expression
 private MaxGroup ::=
       NameExpr
     | CallExpr
+    | SelectorExpr
 
 NameExpr ::= ReferenceExpression QualifiedReferenceExpression? {elementType=ReferenceExpression}
 
@@ -256,6 +257,8 @@ ArgumentList ::= '(' ExpressionArgList? ')' {pin=1}
 private ExpressionArgList ::= ExpressionWithRecover (',' ExpressionWithRecover)* {pin(".*")=1}
 private ExpressionWithRecover ::= Expression {recoverWhile=ExpressionListRecover}
 private ExpressionListRecover ::= !('%' | '+' | '-' | '(' | ')' | ',' | '*' | '++' | '<' | '<=' | '>' | '>=' | 'end' | 'Operation' | 'Type' | 'Facility')
+
+SelectorExpr ::= Expression '.' Expression
 
 ParameterMode ::=
       'alters'
