@@ -204,13 +204,31 @@ public class ResReference
                                               @NotNull ResScopeProcessor processor,
                                               @NotNull ResolveState state,
                                               boolean localResolve) {
+        PsiElement parent = myElement.getParent();
+        if (parent instanceof ResSelectorExpr) {
+            boolean result = processSelector((ResSelectorExpr)parent, processor, state, myElement);
+            if (processor.isCompletion()) return result;
+            if (!result || ResPsiImplUtil.prevDot(myElement)) return false;
+        }
+        if (ResPsiImplUtil.prevDot(parent)) return false;
 
-        if (ResPsiImplUtil.prevDot(myElement)) return false;
         if (!processBlock(processor, state, true)) return false;
         if (!processParameters(processor, state, true)) return false;
         if (!processFileEntities(file, processor, state, true)) return false;
         if (!processUsesRequests(file, processor, state, myElement)) return false;
 
+        return true;
+    }
+
+    private boolean processSelector(@NotNull ResSelectorExpr parent,
+                                    @NotNull ResScopeProcessor processor,
+                                    @NotNull ResolveState state,
+                                    @Nullable PsiElement another) {
+        List<ResExpression> list = parent.getExpressionList();
+        if (list.size() > 1 && list.get(1).isEquivalentTo(another)) {
+            ResType type = list.get(0).getResType(createContext());
+            if (type != null && !processResType(type, processor, state)) return false;
+        }
         return true;
     }
 
