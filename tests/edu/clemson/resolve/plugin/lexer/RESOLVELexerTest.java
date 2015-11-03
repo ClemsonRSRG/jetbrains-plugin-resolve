@@ -14,14 +14,12 @@ public class RESOLVELexerTest extends LexerTestCase {
     public void testEscaped_Quotes() { doTest(); }
     public void testConstants() { doTest(); }
     public void testDefinitions() { doTest(); }
-    public void testWhile() { doTest(); }
     public void testFunction_Arguments() { doTest(); }
+    public void testParameter_Modes() { doTest(); }
     public void testRecords() { doTest(); }
     public void testSet_Spec() { doTest(); }
     public void testSpiral_Spec() { doTest(); }
-    public void testSample_Spec_Impl() { doTest(); }
-
-
+    public void testSample_Set_Impl() { doTest(); }
     private void doTest() {
         try {
             String text = FileUtil.loadFile(new File("./testData/lexer/"

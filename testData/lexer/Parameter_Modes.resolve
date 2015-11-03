@@ -1,0 +1,10 @@
+Facility Parameter_Modes;
+    Operation T (alters e:E;
+                 preserves f:F;
+                 restores g:G;
+                 alters h:H;
+                 clears j:I;
+                 evaluates i:J;
+                 updates S:K);
+        Procedure end T;
+end Parameter_Modes;

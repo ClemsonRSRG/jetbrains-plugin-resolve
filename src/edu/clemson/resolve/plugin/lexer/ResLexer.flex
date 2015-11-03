@@ -128,6 +128,7 @@ ESCAPES = [abfnrtv]
 "correspondence"                        { return CORRESPONDENCE; }
 "decreasing"                            { return DECREASING; }
 "Definition"                            { return DEFINITION; }
+"Extension"                             { return EXTENSION; }
 "do"                                    { return DO; }
 "end"                                   { return END;  }
 "ensures"                               { return ENSURES; }
@@ -141,6 +142,7 @@ ESCAPES = [abfnrtv]
 "for"                                   { return FOR; }
 "hypo"                                  { return HYPO; }
 "if"                                    { return IF; }
+"If"                                    { return PROG_IF; }
 "is"                                    { return IS; }
 "implemented"                           { return IMPLEMENTED; }
 "Implementation"                        { return IMPLEMENTATION; }
@@ -156,6 +158,7 @@ ESCAPES = [abfnrtv]
 "Recursive"                             { return RECURSIVE; }
 "Record"                                { return RECORD; }
 "requires"                              { return REQUIRES; }
+"then"                                  { return THEN; }
 "true"                                  { return TRUE; }
 "Type"                                  { return FAMILY_TYPE; }
 "type"                                  { return PARAM_TYPE; }
