@@ -1,4 +1,0 @@
-Don't edit the language's grammar here! Whichever Resolve.g4 exists in the
-resolve-lite master branch is the one that will be automatically pulled in,
-overwriting whatever local copy exists in this directory. These
-grammar files are here strictly out of necessity.

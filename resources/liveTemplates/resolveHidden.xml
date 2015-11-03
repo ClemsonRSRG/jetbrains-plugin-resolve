@@ -1,14 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
-<templateSet group="RESOLVEHiddenTemplate">
-
-    <template description='Precis module declaration' id='resolve_lang_Precis' name='resolve_lang_Precis' toReformat='true' toShortenFQNames='true'
-              value='Precis $NAME$;&#10;    $END$ &#10;end $NAME$;'>
-        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
-        <context>
-            <option name='RESOLVE' value='true'/>
-        </context>
-    </template>
+<templateSet group="ResolveHiddenTemplate">
 
     <template description='Facility module declaration' id='resolve_lang_Facility' name='resolve_lang_Facility' toReformat='true' toShortenFQNames='true'
               value='Facility $NAME$;&#10;    $END$ &#10;end $NAME$;'>
@@ -26,43 +18,7 @@
         </context>
     </template>
 
-    <template description='Enhancement module declaration' id='resolve_lang_Enhancement' name='resolve_lang_Enhancement' toReformat='true' toShortenFQNames='true'
-              value='Enhancement $NAME$ for $CONCEPT$;&#10;    $END$ &#10;end $NAME$;'>
-        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
-        <variable alwaysStopAt='true' defaultValue='&quot;concept&quot;' expression='' name='CONCEPT'/>
-        <context>
-            <option name='RESOLVE' value='true'/>
-        </context>
-    </template>
-
-    <template description='Implementation module declaration' id='resolve_lang_Implementation' name='resolve_lang_Implementation' toReformat='true' toShortenFQNames='true'
-              value='Implementation $NAME$ for $SPEC$;&#10;    $END$ &#10;end $NAME$;'>
-        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
-        <variable alwaysStopAt='true' defaultValue='&quot;specification&quot;' expression='' name='SPEC'/>
-        <context>
-            <option name='RESOLVE' value='true'/>
-        </context>
-    </template>
-
-    <template description='Type family declaration' id='resolve_lang_Type_Family' name='resolve_lang_Type_Family' toReformat='true' toShortenFQNames='true'
-              value='Type Family $NAME$ is modeled by $TYPE$;&#10;    exemplar $EXEMPLAR$;&#10;$END$'>
-        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
-        <variable alwaysStopAt='true' defaultValue='&quot;type&quot;' expression='' name='TYPE'/>
-        <variable alwaysStopAt='true' defaultValue='&quot;e&quot;' expression='' name='EXEMPLAR'/>
-        <context>
-            <option name='RESOLVE' value='true'/>
-        </context>
-    </template>
-
-    <template description='Operation declaration' id='resolve_lang_Operation' name='resolve_lang_Operation' toReformat='true' toShortenFQNames='true'
-              value='Operation $NAME$ ($END$);'>
-        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
-        <context>
-            <option name='RESOLVE' value='true'/>
-        </context>
-    </template>
-
-    <template description='Operation procedure declaration' id='resolve_lang_Operation_Procedure' name='resolve_lang_Operation_Procedure' toReformat='true' toShortenFQNames='true'
+    <template description='Operation procedure declaration' id='resolve_lang_OperationProcedure' name='resolve_lang_Operation_Procedure' toReformat='true' toShortenFQNames='true'
               value='Operation $NAME$ ($END$);&#10;    Procedure &#10;        &#10;end $NAME$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
         <context>
@@ -70,16 +26,28 @@
         </context>
     </template>
 
-    <template description='Procedure declaration' id='resolve_lang_Procedure' name='resolve_lang_Procedure' toReformat='true' toShortenFQNames='true'
-              value='Procedure $NAME$ ($END$);&#10; &#10;end $NAME$;'>
+    <template description='Operation declaration' id='resolve_lang_OperationDeclaration' name='resolve_lang_Operation_Declaration' toReformat='true' toShortenFQNames='true'
+              value='Operation $NAME$ ($PARAMS$)$TYPE$;&#10;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;&quot;' expression='' name='PARAMS'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;&quot;' expression='' name='TYPE'/>
         <context>
             <option name='RESOLVE' value='true'/>
         </context>
     </template>
 
-    <template description='Facility declaration' id='resolve_lang_Facility_Decl' name='resolve_lang_Facility_Decl' toReformat='true' toShortenFQNames='true'
-              value='Facility $NAME$ is $CONCEPT$&#10;    implemented by $IMPL$;'>
+    <template description='Type family declaration' id='resolve_lang_TypeFamily' name='resolve_lang_Type_Family' toReformat='true' toShortenFQNames='true'
+              value='Type Family $NAME$ is modeled by $MATHTYPE$;&#10;    exemplar $EXEMPLAR$;&#10;$END$'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;mathtype&quot;' expression='' name='MATHTYPE'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;e&quot;' expression='' name='EXEMPLAR'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Facility declaration' id='resolve_lang_FacilityDeclaration' name='resolve_lang_Facility_Declaration' toReformat='true' toShortenFQNames='true'
+              value='Facility $NAME$ is $CONCEPT$&#10;    implemented by $IMPL$;&#10;$END$'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
         <variable alwaysStopAt='true' defaultValue='&quot;concept&quot;' expression='' name='CONCEPT'/>
         <variable alwaysStopAt='true' defaultValue='&quot;impl&quot;' expression='' name='IMPL'/>
@@ -88,20 +56,28 @@
         </context>
     </template>
 
-    <template description='Type record rep declaration' id='resolve_lang_Type_Record_Rep' name='resolve_lang_Type_Record_Rep' toReformat='true' toShortenFQNames='true'
-              value='Type $NAME$ = Record &#10;        $END$ &#10;    end;'>
+    <template description='Type representation declaration' id='resolve_lang_TypeRepresentation' name='resolve_lang_Type_Representation' toReformat='true' toShortenFQNames='true'
+              value='Type $NAME$ = $END$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
         <context>
             <option name='RESOLVE' value='true'/>
         </context>
     </template>
 
-    <template description='Type rep declaration' id='resolve_lang_Type_Rep' name='resolve_lang_Type_Rep' toReformat='true' toShortenFQNames='true'
-              value='Type $NAME$ = $REP$;'>
-        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
-        <variable alwaysStopAt='true' defaultValue='&quot;representation&quot;' expression='' name='REP'/>
+    <template description='Record type' id='resolve_lang_Record' name='resolve_lang_Record' toReformat='true' toShortenFQNames='true'
+              value='Record&#10;        $END$&#10;    end'>
         <context>
             <option name='RESOLVE' value='true'/>
         </context>
     </template>
+
+    <template description='Variable' id='resolve_lang_Var' name='resolve_lang_Var' toReformat='true' toShortenFQNames='true'
+              value='Var $NAME$ : $TYPE$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;type&quot;' expression='' name='TYPE'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+
 </templateSet>

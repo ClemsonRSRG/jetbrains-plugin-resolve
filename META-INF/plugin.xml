@@ -28,40 +28,27 @@
     -->
 
     <extensions defaultExtensionNs="com.intellij">
-        <internalFileTemplate name="Concept Module"/>
-        <internalFileTemplate name="Concept Implementation Module"/>
-        <internalFileTemplate name="Enhancement Module"/>
-        <internalFileTemplate name="Enhancement Implementation Module"/>
-        <internalFileTemplate name="Precis Module"/>
-        <internalFileTemplate name="Facility Module"/>
+
+        <!--<stubIndex implementation="edu.clemson.resolve.plugin.stubs.index.RESOLVEAllVisibleNamesIndex"/>
+        <stubIndex implementation="edu.clemson.resolve.plugin.stubs.index.RESOLVETypesIndex"/>-->
 
         <!-- sdk -->
-        <moduleType id="RESOLVE_LANGUAGE_MODULE" implementationClass="edu.clemson.resolve.plugin.RESOLVEModuleType"/>
-        <sdkType implementation="edu.clemson.resolve.plugin.sdk.RESOLVESdkType"/>
         <projectService serviceInterface="edu.clemson.resolve.plugin.sdk.RESOLVESdkService" serviceImplementation="edu.clemson.resolve.plugin.sdk.RESOLVESmallIDEsSdkService" overrides="false"/>
-        <library.presentationProvider implementation="edu.clemson.resolve.plugin.sdk.RESOLVESdkLibraryProvider"/>
-        <lang.ast.factory language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.RESOLVEASTFactory"/>
 
         <fileIconPatcher implementation="edu.clemson.resolve.plugin.RESOLVEFileIconPatcher"/>
         <fileTypeFactory implementation="edu.clemson.resolve.plugin.RESOLVEFileTypeFactory"/>
 
         <lang.parserDefinition language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.RESOLVEParserDefinition"/>
-        <lang.syntaxHighlighterFactory key="RESOLVE" implementationClass="edu.clemson.resolve.plugin.highlighting.RESOLVESyntaxHighlighterFactory"/>
-        <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVEKeywordCompletionContributor"/>
-        <!-- <spellchecker.support language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.inspections.RESOLVESpellcheckingStrategy"/> -->
-        <lang.foldingBuilder language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.editor.RESOLVEFoldingBuilder"/>
-        <colorSettingsPage implementation="edu.clemson.resolve.plugin.highlighting.RESOLVEColorSettingsPage"/>
-        <!-- <externalAnnotator language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.annotations.RESOLVEExternalAnnotator"/> -->
-        <!-- <psi.referenceContributor implementation="edu.clemson.resolve.plugin.RESOLVEReferenceContributor"/> -->
 
-        <stepsBeforeRunProvider implementation="edu.clemson.resolve.plugin.runconfig.before.RESOLVEToolBeforeRunTaskProvider"/>
-        <!-- run application -->
-        <configurationType implementation="edu.clemson.resolve.plugin.runconfig.application.RESOLVEApplicationRunConfigurationType"/>
-        <programRunner id="RESOLVERunner" implementation="edu.clemson.resolve.plugin.runconfig.RESOLVERunner"/>
-        <runConfigurationProducer implementation="edu.clemson.resolve.plugin.runconfig.application.RESOLVEApplicationRunConfigurationProducer"/>
-
+        <!-- project -->
         <defaultLiveTemplatesProvider implementation="edu.clemson.resolve.plugin.template.RESOLVELiveTemplatesProvider"/>
-        <liveTemplateContext implementation="edu.clemson.resolve.plugin.template.RESOLVEGenericContext"/>
+        <liveTemplateContext implementation="edu.clemson.resolve.plugin.template.RESOLVEEverywhereContextType"/>
+        <!--<liveTemplateContext implementation="edu.clemson.resolve.plugin.template.RESOLVELiveTemplateContextType$RESOLVEFileContextType"/> -->
+
+        <!--<completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVECompletionContributor"/>-->
+        <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVEKeywordCompletionContributor"/>
+        <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVECompletionContributor"/>
+
 </extensions>
 
 <application-components>
