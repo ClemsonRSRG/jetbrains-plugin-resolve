@@ -19,6 +19,7 @@ public class RESOLVELexerTest extends LexerTestCase {
     public void testRecords() { doTest(); }
     public void testSet_Specs() { doTest(); }
     public void testStack_Specs() { doTest(); }
+    public void testSpiral_Specs() { doTest(); }
 
     //TODO: test spec with spiral stuff and strs
 

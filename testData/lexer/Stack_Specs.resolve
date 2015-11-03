@@ -16,4 +16,4 @@ Concept Stack_Specs(type Entry;
         requires 1 <= |S|;
         ensures @S = <e> o S;
 
-end Stack_Template;
+end Stack_Specs;
