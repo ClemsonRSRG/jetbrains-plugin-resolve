@@ -12,6 +12,7 @@ import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.plugin.ResTypes;
 import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
@@ -85,14 +86,13 @@ public class ResPsiImplUtil {
         return null;
     }
 
-    @NotNull public static PsiReference[] getReferences(
-            @NotNull ResUsesSpec o) {
+    @NotNull public static PsiReference[] getReferences(@NotNull ResUsesSpec o) {
         if (o.getTextLength() == 0) return PsiReference.EMPTY_ARRAY;
         return new ResUsesReferenceSet(o).getAllReferences();
     }
 
     @Nullable public static ResType getResType(@NotNull final ResExpression o,
-                                     @Nullable final ResolveState context) {
+                                               @Nullable final ResolveState context) {
         return RecursionManager.doPreventingRecursion(o, true,
                 new Computable<ResType>() {
                     @Override public ResType compute() {
@@ -109,18 +109,22 @@ public class ResPsiImplUtil {
                 });
     }
 
-    @Nullable public static ResType getResTypeInner(
-            @NotNull ResExpression o, @Nullable ResolveState context) {
-        /*if (o instanceof ResReferenceExpression) {
+    @Nullable public static ResType getResTypeInner(@NotNull ResExpression o,
+                                                    @Nullable ResolveState context) {
+        if (o instanceof ResReferenceExpression) {
             PsiReference reference = o.getReference();
-            PsiElement resolve = reference != null ? reference.resolve();
-            return resolve
-        }*/
+            PsiElement resolve = reference != null ? reference.resolve() : null;
+            if (resolve instanceof ResTypeOwner) return ((ResTypeOwner) resolve).getResType(context);
+        }
+        else if (o instanceof ResSelectorExpr) {
+            ResExpression item = ContainerUtil.getLastItem(((ResSelectorExpr) o).getExpressionList());
+            return item != null ? item.getResType(context) : null;
+        }
         return null;
     }
 
-    @Nullable public static ResType getResTypeInner(
-            @NotNull ResVarDef o, @Nullable ResolveState context) {
+    @Nullable public static ResType getResTypeInner(@NotNull ResVarDef o,
+                                                    @Nullable ResolveState context) {
         PsiElement parent = o.getParent();
 
         if (parent instanceof ResVarSpec) {
@@ -129,11 +133,17 @@ public class ResPsiImplUtil {
         return null;
     }
 
-    public static boolean processDeclarations(
-            @NotNull ResCompositeElement o,
-            @NotNull PsiScopeProcessor processor,
-            @NotNull ResolveState state, PsiElement lastParent,
-            @NotNull PsiElement place) {
+    @Nullable public static ResType getResTypeInner(@NotNull ResTypeReprDecl o,
+                                                    @SuppressWarnings("UnusedParameters")
+                                                    @Nullable ResolveState context) {
+        return o.getType();
+    }
+
+    public static boolean processDeclarations(@NotNull ResCompositeElement o,
+                                              @NotNull PsiScopeProcessor processor,
+                                              @NotNull ResolveState state,
+                                              PsiElement lastParent,
+                                              @NotNull PsiElement place) {
         //boolean isAncestor = PsiTreeUtil.isAncestor(o, place, false);
         //if (o instanceof ResVarSpec) return isAncestor || ResCompositeElementImpl.processDeclarationsDefault(o, processor, state, lastParent, place);
         //if (isAncestor) return ResCompositeElementImpl.processDeclarationsDefault(o, processor, state, lastParent, place);

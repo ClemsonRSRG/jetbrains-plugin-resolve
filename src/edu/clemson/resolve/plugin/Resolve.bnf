@@ -176,7 +176,7 @@ FacilityDecl ::= 'Facility' identifier 'is' UsesSpec
 TypeModelDecl ::= 'Type' 'Family' identifier 'is' 'modeled' 'by' identifier ';'
     'exemplar' identifier ';' {pin=3}
 
-TypeReprDecl ::= 'Type' identifier '=' (RecordType|Type) ';' {pin=2}
+TypeReprDecl ::= 'Type' identifier '=' (RecordType|Type) ';' {pin=2 methods=[getResTypeInner]}
 
 OperationProcedureDecl ::= 'Operation' identifier Signature ';'
 ('Recursive')? 'Procedure'
@@ -210,7 +210,6 @@ Block ::=
 VarDeclGroupList
 Statements
 
-
 RecordVarDeclGroup ::= FieldVarSpec ';' {pin=1}
 FieldVarSpec ::= FieldVarDefList ':' Type {pin=1}
 private FieldVarDefList ::= FieldDef &(!(';'))(',' FieldDef)*
@@ -223,11 +222,14 @@ VarSpec ::= VarDefList ':' Type {pin=1}//{methods=[processDeclarations]}
 private VarDefList ::= VarDef &(!(';'))(',' VarDef)*
 VarDef ::= identifier {methods=[getResTypeInner getReference]}
 
-Type ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
+//TOOD: Really this should just be namedType (w/o records). Right now this
+//allows anonymous record types .. which is ok .. I GUESS.
+Type ::= RecordType | NamedType
+private NamedType ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
 TypeReferenceExpression ::= identifier { methods=[getReference getQualifier] }
 left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
 
-RecordType ::= 'Record' RecordVarDeclGroup* 'end'
+RecordType ::= 'Record' RecordVarDeclGroup* 'end' {extends=Type}
 
 private Statements ::= Statement* {recoverWhile=StatementRecover}
 
@@ -240,7 +242,6 @@ left AssignStatement ::= ':=' Expression {pin=1}
 left SwapStatement ::= ':=:' Expression {pin=1}
 
 Expression ::=
-    //|...
       OrExpr
     | MaxGroup {methods=[getResType] implements="edu.clemson.resolve.plugin.psi.ResTypeOwner"}
 
