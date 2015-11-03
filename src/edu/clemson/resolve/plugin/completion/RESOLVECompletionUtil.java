@@ -66,12 +66,12 @@ public class RESOLVECompletionUtil {
             String text = ResPsiImplUtil.getText(type);
             Icon icon = v instanceof ResVarDef ? RESOLVEIcons.VARIABLE :
                         //v instanceof ResParamDef ? RESOLVEIcons.PARAMETER :
-                        //v instanceof ResRecordFieldDef ? RESOLVEIcons.FIELD :
+                        v instanceof ResFieldDef ? RESOLVEIcons.FIELD :
                         //v instanceof ResConstantDef ? RESOLVEIcons.CONSTANT :
                          null;
 
             p.setIcon(icon);
-            //p.setTailText(calcTailTextForFields(v), true);
+            p.setTailText(calcTailTextForFields(v), true);
             p.setTypeText(text);
             p.setTypeGrayed(true);
             p.setItemText(element.getLookupString());
@@ -166,8 +166,22 @@ public class RESOLVECompletionUtil {
                 .withInsertHandler(insertHandler), priority);
     }
 
+    @Nullable private static String calcTailTextForFields(
+            @NotNull ResNamedElement v) {
+        String name = null;
+        if (v instanceof ResFieldDef) {
+            ResTypeReprDecl spec =
+                    PsiTreeUtil.getParentOfType(v, ResTypeReprDecl.class);
+            name = spec != null ? spec.getName() : null;
+        }
+        return StringUtil.isNotEmpty(name) ? " " +
+                UIUtil.rightArrow() + " " + name : null;
+    }
+
+
     @Nullable private static String calcTailText(ResSignatureOwner m) {
         String text = "";
-        return StringUtil.isNotEmpty(text) ? " " + UIUtil.rightArrow() + " " + text : null;
+        return StringUtil.isNotEmpty(text) ? " " + UIUtil.rightArrow() +
+                " " + text : null;
     }
 }

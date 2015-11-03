@@ -1,0 +1,19 @@
+Concept Stack_Specs(type Entry;
+                    evaluates Max_Depth : Std_Ints.Integer);
+    uses String_Theory, Integer_Theory;
+    requires 1 <= Max_Depth;
+
+    Type Family Stack is modeled by Str(Entry);
+        exemplar S;
+        constraints |S| <= Max_Depth;
+        initialization ensures S = Empty_String;
+
+    Operation Push (alters e : Entry; updates S : Stack);
+        requires 1 + |S| <= Max_Depth;
+        ensures S = <@e> o @S;
+
+    Operation Pop (replaces e : Entry; updates S : Stack);
+        requires 1 <= |S|;
+        ensures @S = <e> o S;
+
+end Stack_Template;
