@@ -1,4 +1,4 @@
-Concept Spiral_Specs(type Label; evaluates k, Max_Length : Std_Ints.Int);
+Concept Spiral_Spec(type Label; evaluates k, Max_Length : Std_Ints.Int);
 
     Type Family Spiral_Pos is modeled by Cart_Prod
             Lab : Sp_Loc(k) -> T;
@@ -22,4 +22,4 @@ Concept Spiral_Specs(type Label; evaluates k, Max_Length : Std_Ints.Int);
                                 Std_Boolean_Fac :: Boolean;
         ensures At_Edge = (not(RS(k)(0, P.Curr_Loc) is_in
             Inward_Loc(P.Trmnl_Loc)));
-end Spiral_Specs;
+end Spiral_Spec;

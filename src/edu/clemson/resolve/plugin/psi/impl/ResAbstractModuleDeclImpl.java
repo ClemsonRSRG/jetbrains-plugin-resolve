@@ -102,20 +102,6 @@ public abstract class ResAbstractModuleDeclImpl
         return result;
     }
 
-    @NotNull private List<ResOperationDecl> calcOperations() {
-        final List<ResOperationDecl> result = ContainerUtil.newArrayList();
-        processChildrenDummyAware(this.getModuleBlock(), new Processor<PsiElement>() {
-            @Override
-            public boolean process(PsiElement e) {
-                if (e instanceof ResOperationDecl) {
-                    result.add((ResOperationDecl)e);
-                }
-                return true;
-            }
-        });
-        return result;
-    }
-
     private static boolean processChildrenDummyAware(@NotNull ResBlock module,
                                                      @NotNull final Processor<PsiElement> processor) {
         return new Processor<PsiElement>() {

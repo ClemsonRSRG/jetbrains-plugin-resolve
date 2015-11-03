@@ -121,8 +121,12 @@ ESCAPES = [abfnrtv]
 "base"                                  { return BASE;}
 "by"                                    { return BY; }
 "Cart_Prod"                             { return CART_PROD; }
+"changing"                              { return CHANGING; }
 "Concept"                               { return CONCEPT;  }
-"constraints"                           { return CONSTRAINT; }
+"constraints"                           { return CONSTRAINTS; }
+"conventions"                           { return CONVENTIONS; }
+"correspondence"                        { return CORRESPONDENCE; }
+"decreasing"                            { return DECREASING; }
 "Definition"                            { return DEFINITION; }
 "do"                                    { return DO; }
 "end"                                   { return END;  }
@@ -134,13 +138,16 @@ ESCAPES = [abfnrtv]
 "false"                                 { return FALSE; }
 "Family"                                { return FAMILY; }
 "Forall"                                { return FORALL; }
+"for"                                   { return FOR; }
 "hypo"                                  { return HYPO; }
 "if"                                    { return IF; }
 "is"                                    { return IS; }
 "implemented"                           { return IMPLEMENTED; }
+"Implementation"                        { return IMPLEMENTATION; }
 "initialization"                        { return INITIALIZATION; }
 "Inductive"                             { return INDUCTIVE; }
 "lambda"                                { return LAMBDA; }
+"maintaining"                           { return MAINTAINING; }
 "modeled"                               { return MODELED; }
 "Operation"                             { return OPERATION; }
 "otherwise"                             { return OTHERWISE; }
