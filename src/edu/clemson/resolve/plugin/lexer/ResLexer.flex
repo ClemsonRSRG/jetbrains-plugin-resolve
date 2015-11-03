@@ -118,26 +118,35 @@ ESCAPES = [abfnrtv]
 
 // Keywords
 
+"base"                                  { return BASE;}
 "by"                                    { return BY; }
 "Concept"                               { return CONCEPT;  }
 "constraints"                           { return CONSTRAINT; }
+"Definition"                            { return DEFINITION; }
 "do"                                    { return DO; }
 "end"                                   { return END;  }
 "ensures"                               { return ENSURES; }
 "exemplar"                              { return EXEMPLAR; }
+"Exists"                                { return EXISTS; }
 "externally"                            { return EXTERNALLY; }
 "Facility"                              { return FACILITY;  }
+"false"                                 { return FALSE; }
 "Family"                                { return FAMILY; }
+"Forall"                                { return FORALL; }
+"hypo"                                  { return HYPO; }
 "is"                                    { return IS; }
 "implemented"                           { return IMPLEMENTED; }
 "initialization"                        { return INITIALIZATION; }
+"Inductive"                             { return INDUCTIVE; }
 "lambda"                                { return LAMBDA; }
 "modeled"                               { return MODELED; }
 "Operation"                             { return OPERATION; }
 "Procedure"                             { return PROCEDURE; }
+"Precis"                                { return PRECIS; }
 "Recursive"                             { return RECURSIVE; }
 "Record"                                { return RECORD; }
 "requires"                              { return REQUIRES; }
+"true"                                  { return TRUE; }
 "Type"                                  { return FAMILY_TYPE; }
 "type"                                  { return PARAM_TYPE; }
 "uses"                                  { return USES; }
