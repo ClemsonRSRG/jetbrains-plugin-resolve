@@ -83,6 +83,7 @@
         CORRESPONDENCE          = 'correspondence'
         EXTENSION               = 'extension'
         END                     = 'end'
+        ELSE                    = 'else'
         USES                    = 'uses'
         IS                      = 'is'
         IF                      = 'if'
@@ -256,13 +257,20 @@ RecordType ::= 'Record' RecordVarDeclGroup* 'end' {extends=Type}
 
 private Statements ::= Statement* {recoverWhile=StatementRecover}
 
-Statement ::= SimpleStatement
-private StatementRecover ::= !('end'|':='|':=:')
+Statement ::=
+      SimpleStatement
+   // | IfStatement
+
+private StatementRecover ::= !('end'|':='|':=:'|'If')
 SimpleStatement ::=
       Expression (AssignStatement|SwapStatement)? ';' {pin(".*")=1}
 
 left AssignStatement ::= ':=' Expression {pin=1}
 left SwapStatement ::= ':=:' Expression {pin=1}
+
+IfStatement ::= 'If' Expression 'then' Statement* (ElseStatement)? 'end' ';' {pin=1}
+
+ElseStatement ::= 'else' Statement* {pin=1}
 
 Expression ::=
       OrExpr

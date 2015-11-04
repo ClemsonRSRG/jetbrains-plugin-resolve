@@ -83,7 +83,6 @@ public class ResTypeReference
             if (specFile != null) {
                 ResReference.processFileEntities((ResFile) specFile, processor, state, false);
             }
-            //target =
         }
         return false;
     }
@@ -120,8 +119,7 @@ public class ResTypeReference
                                          @NotNull Collection<? extends ResNamedElement> elements,
                                          boolean localResolve) {
         for (ResNamedElement definition : elements) {
-            //if (definition instanceof GoTypeSpec && !allowed((GoTypeSpec) definition))
-            //    continue;
+            //if (definition instanceof ResTypeLikeNodeDecl) continue;
             if ((definition.isPublic() || localResolve) && !processor.execute(definition, state)) {
                 return false;
             }

@@ -128,6 +128,7 @@ ESCAPES = [abfnrtv]
 "correspondence"                        { return CORRESPONDENCE; }
 "decreasing"                            { return DECREASING; }
 "Definition"                            { return DEFINITION; }
+"else"                                  { return ELSE; }
 "Extension"                             { return EXTENSION; }
 "do"                                    { return DO; }
 "end"                                   { return END;  }

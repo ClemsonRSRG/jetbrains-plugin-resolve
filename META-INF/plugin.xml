@@ -49,7 +49,10 @@
         <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVEKeywordCompletionContributor"/>
         <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVECompletionContributor"/>
 
-</extensions>
+        <lang.syntaxHighlighterFactory key="RESOLVE" implementationClass="edu.clemson.resolve.plugin.highlighting.RESOLVESyntaxHighlighterFactory"/>
+        <colorSettingsPage implementation="edu.clemson.resolve.plugin.highlighting.RESOLVEColorsAndFontsPage"/>
+
+    </extensions>
 
 <application-components>
     <!-- Add your application components here -->

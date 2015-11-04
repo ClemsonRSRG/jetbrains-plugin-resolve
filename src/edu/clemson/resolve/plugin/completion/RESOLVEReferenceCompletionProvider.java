@@ -53,7 +53,7 @@ public class RESOLVEReferenceCompletionProvider
             ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
                 @Override
                 protected boolean accept(@NotNull PsiElement e) {
-                    return true;//e != spec &&
+                    return e instanceof ResTypeLikeNodeDecl || e instanceof ResFacilityDecl;//e != spec &&
                     // !(insideParameter &&
                     //         (e instanceof GoNamedSignatureOwner || e instanceof GoVarDefinition || e instanceof GoConstDefinition));
                 }
