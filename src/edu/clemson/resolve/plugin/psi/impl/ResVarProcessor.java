@@ -2,6 +2,7 @@ package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
+import edu.clemson.resolve.plugin.psi.ResBlock;
 import edu.clemson.resolve.plugin.psi.ResCompositeElement;
 import edu.clemson.resolve.plugin.psi.ResConceptBlock;
 import edu.clemson.resolve.plugin.psi.ResVarDef;
@@ -36,7 +37,7 @@ public class ResVarProcessor extends ResScopeProcessorBase {
         if (elseStatement != null) return elseStatement.getBlock();
        */
         //TODO: NOT RIGHT YET.. SHOULD JUST BE A GENERAL FXN BLOCK...
-        return PsiTreeUtil.getParentOfType(o, ResConceptBlock.class);
+        return PsiTreeUtil.getParentOfType(o, ResBlock.class);
     }
 
     @Override protected boolean condition(@NotNull PsiElement element) {
