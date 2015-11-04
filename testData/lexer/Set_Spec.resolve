@@ -1,4 +1,4 @@
-Concept Math_Set_Specs(type Entry; evaluates Max_Capacity : Std_Int.Integer);
+Concept Set_Spec(type Entry; evaluates Max_Capacity : Std_Int.Integer);
     requires Max_Capacity > 0
         which_entails Max_Capacity : N;
 
@@ -17,4 +17,4 @@ Concept Math_Set_Specs(type Entry; evaluates Max_Capacity : Std_Int.Integer);
             requires e is_in S;
             ensures S = @S ~ {e};
 
-end Math_Set_Specs;
+end Set_Spec;

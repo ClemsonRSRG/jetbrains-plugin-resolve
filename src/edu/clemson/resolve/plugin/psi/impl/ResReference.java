@@ -210,6 +210,9 @@ public class ResReference
             if (processor.isCompletion()) return result;
             if (!result || ResPsiImplUtil.prevDot(myElement)) return false;
         }
+        PsiElement grandPa = parent.getParent();
+        if (grandPa instanceof ResSelectorExpr && !processSelector((ResSelectorExpr)grandPa, processor, state, parent)) return false;
+
         if (ResPsiImplUtil.prevDot(parent)) return false;
 
         if (!processBlock(processor, state, true)) return false;

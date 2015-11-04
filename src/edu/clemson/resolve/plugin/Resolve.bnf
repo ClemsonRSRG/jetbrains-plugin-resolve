@@ -42,6 +42,9 @@
         NOT                     = 'not'
         CAT                     = 'o'
 
+        TRUE                    = 'true'
+        FALSE                   = 'false'
+
         LESS_OR_EQUAL           = '<='
         LESS                    = '<'
         GREATER_OR_EQUAL        = '>='
@@ -69,18 +72,38 @@
         // Keywords
         INT                     = 'int'
         FACILITY                = 'Facility'
+        PRECIS                  = 'Precis'
+        BASE                    = 'base'
+        HYPO                    = 'hypo'
         CONCEPT                 = 'Concept'
-        CONSTRAINT              = 'constraints'
+        CART_PROD               = 'Cart_Prod'
+        Definition              = 'Definition'
+        CONSTRAINTS             = 'constraints'
+        CONVENTIONS             = 'conventions'
+        CORRESPONDENCE          = 'correspondence'
+        EXTENSION               = 'extension'
         END                     = 'end'
+        ELSE                    = 'else'
         USES                    = 'uses'
         IS                      = 'is'
+        IF                      = 'if'
+        PROG_IF                 = 'If'
+        CHANGING                = 'changing'
+        MAINTAINING             = 'maintaining'
+        DECREASING              = 'decreasing'
+        OTHERWISE               = 'otherwise'
+        FORALL                  = 'Forall'
+        EXISTS                  = 'Exists'
         EXTERNALLY              = 'externally'
         IMPLEMENTED             = 'implemented'
         INITIALIZATION          = 'initialization'
+        IMPLEMENTATION          = 'Implementation'
+        INDUCTIVE               = 'Inductive'
         LAMBDA                  = 'lambda'
         FAMILY_TYPE             = 'Type'
         PARAM_TYPE              = 'type'
         FAMILY                  = 'Family'
+        FOR                     = 'for'
         MODELED                 = 'modeled'
         EXEMPLAR                = 'exemplar'
         OPERATION               = 'Operation'
@@ -91,6 +114,7 @@
         PROCEDURE               = 'Procedure'
         VAR                     = 'Var'
         BY                      = 'by'
+        THEN                    = 'then'
         WHILE                   = 'While'
         DO                      = 'do'
         STRING                  = 'string'
@@ -117,16 +141,15 @@
     extends("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.impl.ResOperationLikeNodeImpl"
     extends("(Facility|Operation)Decl|(Uses)Spec|(Param|Var|Field)Def")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
     extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeDeclImpl"
-    extends("(Concept|Facility)Block")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleBlockImpl"
-
     extends("(Or|Selector)Expr")=BinaryExpr
     extends(".*Statement")=Statement
     extends(".*(Expr)")=Expression
 
+    implements("OpBlock"="edu.clemson.resolve.plugin.psi.ResBlock")
+    implements("(Concept|Facility)Block")="edu.clemson.resolve.plugin.psi.ResModuleBlock"
     implements("OperationDecl")="edu.clemson.resolve.plugin.psi.ResNamedSignatureOwner"
     implements(".*ReferenceExpression")="edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase"
     implements("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
-    implements("(Facility|Concept)Block")="edu.clemson.resolve.plugin.psi.ResModuleBlock"
     implements("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.ResOperationWithBodyNode"
     implements("(Var|Param)Def|(Facility)Decl|(Uses)Spec|(Field)Def")="edu.clemson.resolve.plugin.psi.ResNamedElement"
     implements("(Facility|Concept)ModuleDecl")="edu.clemson.resolve.plugin.psi.ResModuleDecl"
@@ -176,11 +199,11 @@ FacilityDecl ::= 'Facility' identifier 'is' UsesSpec
 TypeModelDecl ::= 'Type' 'Family' identifier 'is' 'modeled' 'by' identifier ';'
     'exemplar' identifier ';' {pin=3}
 
-TypeReprDecl ::= 'Type' identifier '=' (RecordType|Type) ';' {pin=2}
+TypeReprDecl ::= 'Type' identifier '=' (RecordType|Type) ';' {pin=2 methods=[getResTypeInner]}
 
 OperationProcedureDecl ::= 'Operation' identifier Signature ';'
 ('Recursive')? 'Procedure'
-Block
+OpBlock
 'end' identifier ';' {pin=1 implements="edu.clemson.resolve.plugin.psi.ResSignatureOwner"}
 
 Signature ::= OperationLikeParameters Result? {pin=1}
@@ -206,41 +229,47 @@ ParamDecl ::= ParameterMode ParamDefinitionListNoPin ':' Type {pin=1}
 private ParamDefinitionListNoPin ::= ParamDef &(!(';'|')')) (',' ParamDef)* {pin=1}
 ParamDef ::= identifier //{methods = [isVariadic]}
 
-Block ::=
-VarDeclGroupList
-Statements
-
+OpBlock ::=
+VarDeclGroup*
+Statements?
 
 RecordVarDeclGroup ::= FieldVarSpec ';' {pin=1}
 FieldVarSpec ::= FieldVarDefList ':' Type {pin=1}
 private FieldVarDefList ::= FieldDef &(!(';'))(',' FieldDef)*
 FieldDef ::= identifier
 
-VarDeclGroupList ::= VarDeclGroup* {pin=1}
-
 VarDeclGroup ::= 'Var' VarSpec ';' {pin=1}
 VarSpec ::= VarDefList ':' Type {pin=1}//{methods=[processDeclarations]}
 private VarDefList ::= VarDef &(!(';'))(',' VarDef)*
 VarDef ::= identifier {methods=[getResTypeInner getReference]}
 
-Type ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
+//TOOD: Really this should just be namedType (w/o records). Right now this
+//allows anonymous record types .. which is ok .. I GUESS.
+Type ::= RecordType | NamedType
+private NamedType ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
 TypeReferenceExpression ::= identifier { methods=[getReference getQualifier] }
 left QualifiedTypeReferenceExpression ::= '.' identifier {elementType=TypeReferenceExpression}
 
-RecordType ::= 'Record' RecordVarDeclGroup* 'end'
+RecordType ::= 'Record' RecordVarDeclGroup* 'end' {extends=Type}
 
 private Statements ::= Statement* {recoverWhile=StatementRecover}
 
-Statement ::= SimpleStatement
-private StatementRecover ::= !('end'|':='|':=:')
+Statement ::=
+      SimpleStatement
+   // | IfStatement
+
+private StatementRecover ::= !('end'|':='|':=:'|'If')
 SimpleStatement ::=
       Expression (AssignStatement|SwapStatement)? ';' {pin(".*")=1}
 
 left AssignStatement ::= ':=' Expression {pin=1}
 left SwapStatement ::= ':=:' Expression {pin=1}
 
+IfStatement ::= 'If' Expression 'then' Statement* (ElseStatement)? 'end' ';' {pin=1}
+
+ElseStatement ::= 'else' Statement* {pin=1}
+
 Expression ::=
-    //|...
       OrExpr
     | MaxGroup {methods=[getResType] implements="edu.clemson.resolve.plugin.psi.ResTypeOwner"}
 

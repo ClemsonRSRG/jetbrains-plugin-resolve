@@ -92,6 +92,10 @@ public abstract class ResNamedElementImpl
         Icon icon = null;
         if (this instanceof ResFacilityModuleDecl) icon = RESOLVEIcons.FACILITY;
         else if (this instanceof ResConceptModuleDecl) icon = RESOLVEIcons.CONCEPT;
+        else if (this instanceof ResTypeLikeNodeDecl) icon = RESOLVEIcons.TYPE;
+        else if (this instanceof ResVarDef) icon = RESOLVEIcons.VARIABLE;
+        else if (this instanceof ResFieldDef) icon = RESOLVEIcons.FIELD;
+        //TODO: complete the icon list here as you go along
         if (icon != null) {
             if ((flags & Iconable.ICON_FLAG_VISIBILITY) != 0) {
                 RowIcon rowIcon =

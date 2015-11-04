@@ -118,26 +118,49 @@ ESCAPES = [abfnrtv]
 
 // Keywords
 
+"base"                                  { return BASE;}
 "by"                                    { return BY; }
+"Cart_Prod"                             { return CART_PROD; }
+"changing"                              { return CHANGING; }
 "Concept"                               { return CONCEPT;  }
-"constraints"                           { return CONSTRAINT; }
+"constraints"                           { return CONSTRAINTS; }
+"conventions"                           { return CONVENTIONS; }
+"correspondence"                        { return CORRESPONDENCE; }
+"decreasing"                            { return DECREASING; }
+"Definition"                            { return DEFINITION; }
+"else"                                  { return ELSE; }
+"Extension"                             { return EXTENSION; }
 "do"                                    { return DO; }
 "end"                                   { return END;  }
 "ensures"                               { return ENSURES; }
 "exemplar"                              { return EXEMPLAR; }
+"Exists"                                { return EXISTS; }
 "externally"                            { return EXTERNALLY; }
 "Facility"                              { return FACILITY;  }
+"false"                                 { return FALSE; }
 "Family"                                { return FAMILY; }
+"Forall"                                { return FORALL; }
+"for"                                   { return FOR; }
+"hypo"                                  { return HYPO; }
+"if"                                    { return IF; }
+"If"                                    { return PROG_IF; }
 "is"                                    { return IS; }
 "implemented"                           { return IMPLEMENTED; }
+"Implementation"                        { return IMPLEMENTATION; }
 "initialization"                        { return INITIALIZATION; }
+"Inductive"                             { return INDUCTIVE; }
 "lambda"                                { return LAMBDA; }
+"maintaining"                           { return MAINTAINING; }
 "modeled"                               { return MODELED; }
 "Operation"                             { return OPERATION; }
+"otherwise"                             { return OTHERWISE; }
 "Procedure"                             { return PROCEDURE; }
+"Precis"                                { return PRECIS; }
 "Recursive"                             { return RECURSIVE; }
 "Record"                                { return RECORD; }
 "requires"                              { return REQUIRES; }
+"then"                                  { return THEN; }
+"true"                                  { return TRUE; }
 "Type"                                  { return FAMILY_TYPE; }
 "type"                                  { return PARAM_TYPE; }
 "uses"                                  { return USES; }

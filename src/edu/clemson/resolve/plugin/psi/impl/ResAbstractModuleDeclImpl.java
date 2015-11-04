@@ -50,7 +50,8 @@ public abstract class ResAbstractModuleDeclImpl
                 new CachedValueProvider<List<ResTypeLikeNodeDecl>>() {
                     @Override
                     public Result<List<ResTypeLikeNodeDecl>> compute() {
-                        return Result.create(calcTypes(), ResAbstractModuleDeclImpl.this);
+                        return Result.create(calc(ResTypeLikeNodeDecl.class),
+                                ResAbstractModuleDeclImpl.this);
                     }
                 });
     }
@@ -60,7 +61,8 @@ public abstract class ResAbstractModuleDeclImpl
                 new CachedValueProvider<List<ResFacilityDecl>>() {
                     @Override
                     public Result<List<ResFacilityDecl>> compute() {
-                        return Result.create(calcFacilities(), ResAbstractModuleDeclImpl.this);
+                        return Result.create(calc(ResFacilityDecl.class),
+                                ResAbstractModuleDeclImpl.this);
                     }
                 });
     }
@@ -70,7 +72,8 @@ public abstract class ResAbstractModuleDeclImpl
                 new CachedValueProvider<List<ResOperationDecl>>() {
                     @Override
                     public Result<List<ResOperationDecl>> compute() {
-                        return Result.create(calcOperations(), ResAbstractModuleDeclImpl.this);
+                        return Result.create(calc(ResOperationDecl.class),
+                                ResAbstractModuleDeclImpl.this);
                     }
                 });
     }
@@ -80,62 +83,19 @@ public abstract class ResAbstractModuleDeclImpl
                 new CachedValueProvider<List<ResOperationWithBodyNode>>() {
                     @Override
                     public Result<List<ResOperationWithBodyNode>> compute() {
-                        return Result.create(calcOperationImpls(),
+                        return Result.create(calc(ResOperationWithBodyNode.class),
                                 ResAbstractModuleDeclImpl.this);
                     }
                 });
     }
 
-    @NotNull private List<ResOperationDecl> calcOperations() {
-        final List<ResOperationDecl> result = ContainerUtil.newArrayList();
-        processChildrenDummyAware(this.getModuleBlock(), new Processor<PsiElement>() {
-            @Override
-            public boolean process(PsiElement e) {
-                if (e instanceof ResOperationDecl) {
-                    result.add((ResOperationDecl)e);
-                }
-                return true;
-            }
-        });
-        return result;
-    }
-
-    @NotNull private List<ResOperationWithBodyNode> calcOperationImpls() {
-        final List<ResOperationWithBodyNode> result = ContainerUtil.newArrayList();
-        processChildrenDummyAware(this.getModuleBlock(), new Processor<PsiElement>() {
-            @Override
-            public boolean process(PsiElement e) {
-                if (e instanceof ResOperationWithBodyNode) {
-                    result.add((ResOperationWithBodyNode)e);
-                }
-                return true;
-            }
-        });
-        return result;
-    }
-
-    @NotNull private List<ResTypeLikeNodeDecl> calcTypes() {
-        final List<ResTypeLikeNodeDecl> result = ContainerUtil.newArrayList();
-        processChildrenDummyAware(this.getModuleBlock(), new Processor<PsiElement>() {
-            @Override
-            public boolean process(PsiElement e) {
-                if (e instanceof ResTypeLikeNodeDecl) {
-                    result.add((ResTypeLikeNodeDecl)e);
-                }
-                return true;
-            }
-        });
-        return result;
-    }
-
-    @NotNull private List<ResFacilityDecl> calcFacilities() {
-        final List<ResFacilityDecl> result = ContainerUtil.newArrayList();
-        processChildrenDummyAware(this.getModuleBlock(), new Processor<PsiElement>() {
-            @Override
-            public boolean process(PsiElement e) {
-                if (e instanceof ResFacilityDecl) {
-                    result.add((ResFacilityDecl)e);
-                }
+    @NotNull private <T extends ResCompositeElement> List<T> calc(
+            final Class<? extends T> type) {
+        final List<T> result = ContainerUtil.newArrayList();
+        processChildrenDummyAware(this.getModuleBlock(),
+                new Processor<PsiElement>() {
+            @Override public boolean process(PsiElement e) {
+                if (type.isInstance(e)) result.add(type.cast(e));
                 return true;
             }
         });

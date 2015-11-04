@@ -74,7 +74,7 @@
     <template description='Variable' id='resolve_lang_Var' name='resolve_lang_Var' toReformat='true' toShortenFQNames='true'
               value='Var $NAME$ : $TYPE$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
-        <variable alwaysStopAt='true' defaultValue='&quot;type&quot;' expression='' name='TYPE'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;ty&quot;' expression='' name='TYPE'/>
         <context>
             <option name='RESOLVE' value='true'/>
         </context>

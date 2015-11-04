@@ -35,6 +35,25 @@ public class RESOLVEParserDefinition implements ParserDefinition {
             TokenSet.create(LINE_COMMENT, MULTILINE_COMMENT);
     public static final TokenSet STRING_LITERALS =
             TokenSet.create(STRING, RAW_STRING, CHAR);
+    public static final TokenSet NUMBERS = TokenSet.create(INT);
+
+    public static final TokenSet KEYWORDS = TokenSet.create(
+            BASE, BY, CART_PROD, CHANGING, CONCEPT, CONSTRAINTS, CONVENTIONS,
+            CORRESPONDENCE, DECREASING, DEFINITION, DO, END, ENSURES, EXEMPLAR,
+            EXISTS, EXTENSION, EXTERNALLY, FACILITY, FAMILY, FAMILY_TYPE, FOR,
+            FORALL, HYPO, IF, IMPLEMENTATION, IMPLEMENTED, INDUCTIVE,
+            INITIALIZATION, IS, LAMBDA, MAINTAINING, MODELED, OPERATION,
+            OTHERWISE, PARAM_TYPE, PRECIS, PROCEDURE, PROG_IF, RECORD,
+            RECURSIVE, REQUIRES, THEN, USES, VAR, WHICH_ENTAILS, WHILE);
+
+    public static final TokenSet OPERATORS = TokenSet.create(AT,
+            EQUALS, NEQUALS, AND, OR, NOT, CAT, LESS_OR_EQUAL, LESS,
+            GREATER_OR_EQUAL, GREATER, MOD, MUL, QUOTIENT, PLUS_PLUS, PLUS,
+            MINUS_MINUS, MINUS, COLON_EQUALS, COLON_EQUALS_COLON, RARROW,
+            TILDE, UNION, INTERSECT, IS_IN, IS_NOT_IN, BAR, DBL_BAR);
+
+    public static final TokenSet PARAMETER_MODES = TokenSet.create(ALTERS,
+            UPDATES, CLEARS, RESTORES, PRESERVES, REPLACES, EVALUATES);
 
     @NotNull @Override public Lexer createLexer(Project project) {
         return new ResolveLexer();
@@ -69,7 +88,7 @@ public class RESOLVEParserDefinition implements ParserDefinition {
     }
 
     @Override public SpaceRequirements spaceExistanceTypeBetweenTokens(
-            ASTNode astNode, ASTNode astNode1) {
+            ASTNode left, ASTNode right) {
         return SpaceRequirements.MAY;
     }
 }
