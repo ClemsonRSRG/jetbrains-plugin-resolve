@@ -8,7 +8,7 @@ public interface ResOperationWithBodyNode
         extends
             ResNamedElement, ResNamedSignatureOwner {
 
-    @Nullable public ResBlock getBlock();
+    @Nullable public ResOpBlock getOpBlock();
 
     @NotNull public PsiElement getIdentifier();
 

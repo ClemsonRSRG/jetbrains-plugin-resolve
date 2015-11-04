@@ -141,16 +141,15 @@
     extends("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.impl.ResOperationLikeNodeImpl"
     extends("(Facility|Operation)Decl|(Uses)Spec|(Param|Var|Field)Def")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
     extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeDeclImpl"
-    extends("(Concept|Facility)Block")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleBlockImpl"
-
     extends("(Or|Selector)Expr")=BinaryExpr
     extends(".*Statement")=Statement
     extends(".*(Expr)")=Expression
 
+    implements("OpBlock"="edu.clemson.resolve.plugin.psi.ResBlock")
+    implements("(Concept|Facility)Block")="edu.clemson.resolve.plugin.psi.ResModuleBlock"
     implements("OperationDecl")="edu.clemson.resolve.plugin.psi.ResNamedSignatureOwner"
     implements(".*ReferenceExpression")="edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase"
     implements("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
-    implements("(Facility|Concept)Block")="edu.clemson.resolve.plugin.psi.ResModuleBlock"
     implements("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.ResOperationWithBodyNode"
     implements("(Var|Param)Def|(Facility)Decl|(Uses)Spec|(Field)Def")="edu.clemson.resolve.plugin.psi.ResNamedElement"
     implements("(Facility|Concept)ModuleDecl")="edu.clemson.resolve.plugin.psi.ResModuleDecl"
@@ -204,7 +203,7 @@ TypeReprDecl ::= 'Type' identifier '=' (RecordType|Type) ';' {pin=2 methods=[get
 
 OperationProcedureDecl ::= 'Operation' identifier Signature ';'
 ('Recursive')? 'Procedure'
-Block
+OpBlock
 'end' identifier ';' {pin=1 implements="edu.clemson.resolve.plugin.psi.ResSignatureOwner"}
 
 Signature ::= OperationLikeParameters Result? {pin=1}
@@ -230,16 +229,14 @@ ParamDecl ::= ParameterMode ParamDefinitionListNoPin ':' Type {pin=1}
 private ParamDefinitionListNoPin ::= ParamDef &(!(';'|')')) (',' ParamDef)* {pin=1}
 ParamDef ::= identifier //{methods = [isVariadic]}
 
-Block ::=
-VarDeclGroupList
-Statements
+OpBlock ::=
+VarDeclGroup*
+Statements?
 
 RecordVarDeclGroup ::= FieldVarSpec ';' {pin=1}
 FieldVarSpec ::= FieldVarDefList ':' Type {pin=1}
 private FieldVarDefList ::= FieldDef &(!(';'))(',' FieldDef)*
 FieldDef ::= identifier
-
-VarDeclGroupList ::= VarDeclGroup* {pin=1}
 
 VarDeclGroup ::= 'Var' VarSpec ';' {pin=1}
 VarSpec ::= VarDefList ':' Type {pin=1}//{methods=[processDeclarations]}
