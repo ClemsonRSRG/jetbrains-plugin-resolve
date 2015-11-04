@@ -36,16 +36,24 @@ public class RESOLVEParserDefinition implements ParserDefinition {
     public static final TokenSet STRING_LITERALS =
             TokenSet.create(STRING, RAW_STRING, CHAR);
     public static final TokenSet NUMBERS = TokenSet.create(INT);
-    public static final TokenSet KEYWORDS = TokenSet.create(
-            BASE,
-            PACKAGE, IMPORT, BREAK, CASE, CHAN, CONST, CONTINUE, DEFAULT, DEFER, ELSE, FALLTHROUGH, FOR, FUNC, GO, GOTO, IF, IMPORT,
-            INTERFACE, MAP, PACKAGE, RANGE, RETURN, SELECT, STRUCT, SWITCH, TYPE_, VAR);
 
-    public static final TokenSet OPERATORS = TokenSet.create(
-            EQ, ASSIGN, NOT_EQ, NOT, PLUS_PLUS, PLUS_ASSIGN, PLUS, MINUS_MINUS, MINUS_ASSIGN, MINUS, COND_OR, BIT_OR_ASSIGN, BIT_OR,
-            BIT_CLEAR_ASSIGN, BIT_CLEAR, COND_AND, BIT_AND_ASSIGN, BIT_AND, SHIFT_LEFT_ASSIGN, SHIFT_LEFT, SEND_CHANNEL, LESS_OR_EQUAL,
-            LESS, BIT_XOR_ASSIGN, BIT_XOR, MUL_ASSIGN, MUL, QUOTIENT_ASSIGN, QUOTIENT, REMAINDER_ASSIGN, REMAINDER, SHIFT_RIGHT_ASSIGN,
-            SHIFT_RIGHT, GREATER_OR_EQUAL, GREATER, VAR_ASSIGN);
+    public static final TokenSet KEYWORDS = TokenSet.create(
+            BASE, BY, CART_PROD, CHANGING, CONCEPT, CONSTRAINTS, CONVENTIONS,
+            CORRESPONDENCE, DECREASING, DEFINITION, DO, END, ENSURES, EXEMPLAR,
+            EXISTS, EXTENSION, EXTERNALLY, FACILITY, FAMILY, FAMILY_TYPE, FOR,
+            FORALL, HYPO, IF, IMPLEMENTATION, IMPLEMENTED, INDUCTIVE,
+            INITIALIZATION, IS, LAMBDA, MAINTAINING, MODELED, OPERATION,
+            OTHERWISE, PARAM_TYPE, PRECIS, PROCEDURE, PROG_IF, RECORD,
+            RECURSIVE, REQUIRES, THEN, USES, VAR, WHICH_ENTAILS, WHILE);
+
+    public static final TokenSet OPERATORS = TokenSet.create(AT,
+            EQUALS, NEQUALS, AND, OR, NOT, CAT, LESS_OR_EQUAL, LESS,
+            GREATER_OR_EQUAL, GREATER, MOD, MUL, QUOTIENT, PLUS_PLUS, PLUS,
+            MINUS_MINUS, MINUS, COLON_EQUALS, COLON_EQUALS_COLON, RARROW,
+            TILDE, UNION, INTERSECT, IS_IN, IS_NOT_IN, BAR, DBL_BAR);
+
+    public static final TokenSet PARAMETER_MODES = TokenSet.create(ALTERS,
+            UPDATES, CLEARS, RESTORES, PRESERVES, REPLACES, EVALUATES);
 
     @NotNull @Override public Lexer createLexer(Project project) {
         return new ResolveLexer();
@@ -80,7 +88,7 @@ public class RESOLVEParserDefinition implements ParserDefinition {
     }
 
     @Override public SpaceRequirements spaceExistanceTypeBetweenTokens(
-            ASTNode astNode, ASTNode astNode1) {
+            ASTNode left, ASTNode right) {
         return SpaceRequirements.MAY;
     }
 }
