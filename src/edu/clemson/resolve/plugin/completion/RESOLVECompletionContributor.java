@@ -19,6 +19,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
+import static com.intellij.patterns.PlatformPatterns.*;
+
 public class RESOLVECompletionContributor extends CompletionContributor {
 
     public RESOLVECompletionContributor() {
@@ -26,16 +28,21 @@ public class RESOLVECompletionContributor extends CompletionContributor {
                 new RESOLVEReferenceCompletionProvider());
         extend(CompletionType.BASIC, resReference(),
                 new RESOLVEReferenceCompletionProvider());
+        extend(CompletionType.BASIC, usesReference(),
+                new RESOLVEUsesCompletionProvider());
     }
 
     private static PsiElementPattern.Capture<PsiElement> referenceExpression() {
-        return PlatformPatterns.psiElement()
-                .withParent(ResReferenceExpressionBase.class);
+        return psiElement().withParent(ResReferenceExpressionBase.class);
     }
 
     private static PsiElementPattern.Capture<PsiElement> resReference() {
-        return PlatformPatterns.psiElement()
-                .withParent(PlatformPatterns.psiElement()
-                        .withReference(ResCachedReference.class));
+        return psiElement().withParent(psiElement()
+                .withReference(ResCachedReference.class));
+    }
+
+    private static PsiElementPattern.Capture<PsiElement> usesReference() {
+        return PlatformPatterns.psiElement(ResTypes.IDENTIFIER)
+                .withParent(psiElement(ResTypes.USES_SPEC));
     }
 }

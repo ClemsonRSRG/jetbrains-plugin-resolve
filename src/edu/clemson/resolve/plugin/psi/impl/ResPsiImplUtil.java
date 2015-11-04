@@ -80,7 +80,7 @@ public class ResPsiImplUtil {
                         ((FileReferenceOwner)reference).getLastFileReference();
                 PsiElement result = lastFileReference != null ?
                         lastFileReference.resolve() : null;
-                return result instanceof PsiFile ? (PsiFile)result : null;
+                return result instanceof ResFile ? ((ResFile)result) : null;
             }
         }
         return null;

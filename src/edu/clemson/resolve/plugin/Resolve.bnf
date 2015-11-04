@@ -172,7 +172,7 @@ ConceptBlock
 
 UsesList ::= 'uses' UsesSpec (',' UsesSpec)* ';'
 
-UsesSpec ::= identifier {methods=[getReferences resolve getUsesTextRange]}
+UsesSpec ::= identifier {pin=1 methods=[getReferences resolve getUsesTextRange]}
 
 FacilityBlock ::= FacilityItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
 

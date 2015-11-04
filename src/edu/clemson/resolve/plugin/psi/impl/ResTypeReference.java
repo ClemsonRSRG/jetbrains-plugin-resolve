@@ -119,7 +119,8 @@ public class ResTypeReference
                                          @NotNull Collection<? extends ResNamedElement> elements,
                                          boolean localResolve) {
         for (ResNamedElement definition : elements) {
-            //if (definition instanceof ResTypeLikeNodeDecl) continue;
+            if (definition instanceof ResTypeLikeNodeDecl)
+            //    continue;
             if ((definition.isPublic() || localResolve) && !processor.execute(definition, state)) {
                 return false;
             }

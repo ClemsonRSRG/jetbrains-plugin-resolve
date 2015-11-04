@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public class ResUsesReference  extends FileReference {
+public class ResUsesReference extends FileReference {
 
     public ResUsesReference(@NotNull FileReferenceSet fileReferenceSet,
                             TextRange range, int index, String text) {
