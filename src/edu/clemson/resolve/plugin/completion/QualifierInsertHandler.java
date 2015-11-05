@@ -11,15 +11,8 @@ import org.jetbrains.annotations.NotNull;
 public class QualifierInsertHandler extends BasicInsertHandler<LookupElement> {
     private final String insertStr;
 
-    /** Set to {@code true} if we should insert one character of leading
-     *  whitespace before (and immediately after) {@code insertStr};
-     *  {@code false} otherwise.
-     */
-    private final boolean shouldPad;
-
     public QualifierInsertHandler(String aStr, boolean pad) {
-        this.insertStr = aStr;
-        this.shouldPad = pad;
+        this.insertStr = pad ? " " + aStr + " " : aStr;
     }
 
     @Override public void handleInsert(@NotNull InsertionContext context,
@@ -30,15 +23,13 @@ public class QualifierInsertHandler extends BasicInsertHandler<LookupElement> {
         context.commitDocument();
         boolean staysAtChar = document.getTextLength() > tailOffset &&
                String.valueOf(document.getCharsSequence().charAt(tailOffset))
-                       .startsWith(insertStr);
+                       .equals(insertStr);
 
         context.setAddCompletionChar(false);
         if (!staysAtChar) {
-
-            document.insertString(tailOffset+1, insertStr);
+            document.insertString(tailOffset, insertStr);
         }
-        editor.getCaretModel().moveToOffset(shouldPad ? tailOffset + 3 :
-                tailOffset + 2);
+        editor.getCaretModel().moveToOffset(tailOffset + insertStr.length());
 
         AutoPopupController.getInstance(context.getProject())
                 .scheduleAutoPopup(editor);

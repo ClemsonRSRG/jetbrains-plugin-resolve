@@ -34,7 +34,7 @@ public class RESOLVECompletionUtil {
 
     private static class Lazy {
         private static final QualifierInsertHandler FACILITY_INSERT_HANDLER =
-                new QualifierInsertHandler("::", true);
+                new QualifierInsertHandler("::", true); //TODO: it'd be nice if there were a way for the user to set padding options..
     }
     public static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER =
             new InsertHandler<LookupElement>() {

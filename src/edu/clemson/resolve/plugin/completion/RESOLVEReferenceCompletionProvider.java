@@ -55,7 +55,7 @@ public class RESOLVEReferenceCompletionProvider
                 protected boolean accept(@NotNull PsiElement e) {
                     return e instanceof ResTypeLikeNodeDecl || e instanceof ResFacilityDecl;//e != spec &&
                     // !(insideParameter &&
-                    //         (e instanceof GoNamedSignatureOwner || e instanceof GoVarDefinition || e instanceof GoConstDefinition));
+                    //         (e instanceof ResNamedSignatureOwner || e instanceof ResVarDef));
                 }
             };
             ((ResTypeReference) reference).processResolveVariants(aProcessor);
