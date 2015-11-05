@@ -45,4 +45,11 @@ public class RESOLVECompletionContributor extends CompletionContributor {
         return PlatformPatterns.psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(ResTypes.USES_SPEC));
     }
+
+    /**
+     * Allow autoPopup to appear after custom symbol
+     */
+    public boolean invokeAutoPopup(@NotNull PsiElement position, char typeChar) {
+        return typeChar != ';';
+    }
 }

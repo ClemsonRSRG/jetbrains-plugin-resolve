@@ -8,11 +8,11 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import org.jetbrains.annotations.NotNull;
 
-public class SingleCharInsertHandler extends BasicInsertHandler<LookupElement> {
-    private final char insertChar;
+public class QualifierInsertHandler extends BasicInsertHandler<LookupElement> {
+    private final String insertStr;
 
-    public SingleCharInsertHandler(char aChar) {
-        this.insertChar = aChar;
+    public QualifierInsertHandler(String aStr, boolean pad) {
+        this.insertStr = pad ? " " + aStr + " " : aStr;
     }
 
     @Override public void handleInsert(@NotNull InsertionContext context,
@@ -22,13 +22,14 @@ public class SingleCharInsertHandler extends BasicInsertHandler<LookupElement> {
         Document document = editor.getDocument();
         context.commitDocument();
         boolean staysAtChar = document.getTextLength() > tailOffset &&
-                document.getCharsSequence().charAt(tailOffset) == insertChar;
+               String.valueOf(document.getCharsSequence().charAt(tailOffset))
+                       .equals(insertStr);
 
         context.setAddCompletionChar(false);
         if (!staysAtChar) {
-            document.insertString(tailOffset, String.valueOf(insertChar));
+            document.insertString(tailOffset, insertStr);
         }
-        editor.getCaretModel().moveToOffset(tailOffset + 1);
+        editor.getCaretModel().moveToOffset(tailOffset + insertStr.length());
 
         AutoPopupController.getInstance(context.getProject())
                 .scheduleAutoPopup(editor);

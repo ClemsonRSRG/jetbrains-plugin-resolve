@@ -12,7 +12,6 @@ import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.codeInsight.lookup.LookupElementRenderer;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ui.UIUtil;
 import edu.clemson.resolve.plugin.RESOLVEIcons;
@@ -34,10 +33,11 @@ public class RESOLVECompletionUtil {
     private RESOLVECompletionUtil() {}
 
     private static class Lazy {
-        private static final SingleCharInsertHandler FACILITY_INSERT_HANDLER =
-                new SingleCharInsertHandler('.');
+        private static final QualifierInsertHandler FACILITY_INSERT_HANDLER =
+                new QualifierInsertHandler("::", true); //TODO: it'd be nice if there were a way for the user to set padding options..
     }
-    public static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER = new InsertHandler<LookupElement>() {
+    public static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER =
+            new InsertHandler<LookupElement>() {
         @Override
         public void handleInsert(InsertionContext context, LookupElement item) {
             PsiElement element = item.getPsiElement();
