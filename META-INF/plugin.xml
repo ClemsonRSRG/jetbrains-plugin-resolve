@@ -34,7 +34,11 @@
         <internalFileTemplate name="Enhancement Implementation Module"/>
         <internalFileTemplate name="Precis Module"/>
         <internalFileTemplate name="Facility Module"/>
-</extensions>
+
+        <lang.parserDefinition language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.RESOLVEParserDefinition"/>
+        <fileIconPatcher implementation="edu.clemson.resolve.plugin.RESOLVEFileIconPatcher"/>
+        <fileTypeFactory implementation="edu.clemson.resolve.plugin.RESOLVEFileTypeFactory"/>
+    </extensions>
 
 <application-components>
     <!-- Add your application components here -->

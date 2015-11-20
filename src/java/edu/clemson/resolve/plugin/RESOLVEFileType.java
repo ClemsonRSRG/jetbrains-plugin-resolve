@@ -10,7 +10,7 @@ import javax.swing.*;
  * The {@link LanguageFileType} for RESOLVE files.
  *
  * @author <dtw.welch@gmail.com>
- * @since 0.1
+ * @since 0.0.1
  */
 public class RESOLVEFileType extends LanguageFileType {
 
