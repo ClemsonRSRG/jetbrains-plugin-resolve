@@ -7,54 +7,37 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.util.PsiTreeUtil;
+import edu.clemson.resolve.plugin.psi.ResFile;
+import edu.clemson.resolve.plugin.psi.ResModuleDecl;
 import edu.clemson.resolve.plugin.psi.impl.*;
 
 import javax.swing.*;
 
 /**
  * Dynamically updates (patches) icons for {@link PsiFile} instances based on
- * module declared within.
+ * the {@link ResModuleDecl} declared within.
  */
 public class RESOLVEFileIconPatcher implements FileIconPatcher {
 
     @Override public Icon patchIcon(Icon baseIcon, VirtualFile file,
-                                int flags, Project project) {
+                                    int flags, Project project) {
         if (project == null) {
             return baseIcon;
         }
         return replaceIcon(file, flags, project, baseIcon);
     }
 
-    @SuppressWarnings("unchecked") private static Icon replaceIcon(
-            VirtualFile file, int flags, Project project, Icon baseIcon) {
+    private static Icon replaceIcon(VirtualFile file, int flags,
+                                    Project project,
+                                    Icon baseIcon) {
         final PsiFile f = PsiManager.getInstance(project).findFile(file);
+        if (!(f instanceof ResFile)) {
+            return baseIcon;
+        }
 
-        if (PsiTreeUtil.findChildOfAnyType(f, PrecisModule.class) != null) {
-            return RESOLVEIcons.PRECIS;
-        }
-        if (PsiTreeUtil.findChildOfAnyType(f, PrecisExtensionModule.class) != null) {
-            return RESOLVEIcons.PRECIS_EXTENSION;
-        }
-        else if (PsiTreeUtil.findChildOfAnyType(f,
-                ConceptModule.class) != null) {
-            return RESOLVEIcons.CONCEPT;
-        }
-        else if (PsiTreeUtil.findChildOfAnyType(f,
-                ConceptImplModule.class) != null) {
-            return RESOLVEIcons.IMPL;
-        }
-        else if (PsiTreeUtil.findChildOfAnyType(f,
-                FacilityModule.class) != null) {
-            return RESOLVEIcons.FACILITY;
-        }
-        else if (PsiTreeUtil.findChildOfAnyType(f,
-                EnhancementModule.class) != null) {
-            return RESOLVEIcons.SPEC_EXTENSION;
-        }
-        else if (PsiTreeUtil.findChildOfAnyType(f,
-                EnhancementImplModule.class) != null) {
-            return RESOLVEIcons.IMPL;
-        }
-        return baseIcon;
+        ResModuleDecl enclosedModule = ((ResFile)f).getEnclosedModule();
+        if (enclosedModule == null) return RESOLVEIcons.FILE;
+        Icon moduleIcon = enclosedModule.getIcon(0);
+        return moduleIcon != null ? moduleIcon : baseIcon;
     }
 }

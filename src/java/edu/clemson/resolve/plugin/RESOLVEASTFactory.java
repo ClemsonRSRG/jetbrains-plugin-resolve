@@ -22,7 +22,7 @@ public class RESOLVEASTFactory extends ASTFactory {
 
     private static final Map<IElementType, PsiElementFactory> ruleElementTypeToPsiFactory = new HashMap<IElementType, PsiElementFactory>();
     static {
-        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_precisModule), PrecisModule.Factory.INSTANCE);
+        /*ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_precisModule), PrecisModule.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_precisExtensionModule), PrecisExtensionModule.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_conceptModule), ConceptModule.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_conceptImplModule), ConceptImplModule.Factory.INSTANCE);
@@ -34,6 +34,7 @@ public class RESOLVEASTFactory extends ASTFactory {
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_conceptBlock), ModuleBlockNode.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_enhancementBlock), ModuleBlockNode.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_type), TypeRefNode.Factory.INSTANCE);
+        */
     }
 
     /**

@@ -4,9 +4,11 @@ import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.PsiTreeUtil;
 import edu.clemson.resolve.plugin.RESOLVEFileType;
 import edu.clemson.resolve.plugin.RESOLVELanguage;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ResFile extends PsiFileBase {
 
@@ -16,5 +18,9 @@ public class ResFile extends PsiFileBase {
 
     @NotNull @Override public FileType getFileType() {
         return RESOLVEFileType.INSTANCE;
+    }
+
+    @Nullable public ResModuleDecl getEnclosedModule() {
+        return PsiTreeUtil.findChildOfType(this, ResModuleDecl.class);
     }
 }

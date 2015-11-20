@@ -30,6 +30,6 @@ public class RESOLVELanguageParser extends AntlrParser<Resolve> {
 
     @Override protected ParseTree parseImpl(Resolve parser,
                               IElementType root, PsiBuilder builder) {
-        return parser.module();
+        return parser.moduleDecl();
     }
 }

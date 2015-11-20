@@ -34,11 +34,11 @@ options {
 	tokenVocab=ResolveLexer;
 }
 
-module
-    :   precisModule
+moduleDecl
+    :   precisModuleDecl
     ;
 
-precisModule
+precisModuleDecl
     :   PRECIS name=ID SEMI
         (usesList)?
         precisBlock
