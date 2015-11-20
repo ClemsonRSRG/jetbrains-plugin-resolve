@@ -48,18 +48,9 @@ public class RESOLVEASTFactory extends ASTFactory {
         return new CompositeElement(type);
     }
 
-    @Override public LeafElement createLeaf(
-                        @NotNull IElementType type, CharSequence text) {
-        LeafElement t;
-       /*if ( type == ANTLRv4TokenTypes.TOKEN_ELEMENT_TYPES.get(ANTLRv4Lexer.RULE_REF) ) {
-            t = new ParserRuleRefNode(type, text);
-        }
-        else if ( type == ANTLRv4TokenTypes.TOKEN_ELEMENT_TYPES.get(ANTLRv4Lexer.TOKEN_REF) ) {
-            t = new LexerRuleRefNode(type, text);
-        }
-        else {*/
-            t = new LeafPsiElement(type, text);
-       // }
+    @Override public LeafElement createLeaf(@NotNull IElementType type,
+                                            CharSequence text) {
+        LeafElement t = new LeafPsiElement(type, text);
 //		System.out.println("createLeaf "+t+" from "+type+" "+text);
         return t;
     }
@@ -72,7 +63,7 @@ public class RESOLVEASTFactory extends ASTFactory {
             t = factory.createElement(node);
         }
         else {
-            t = new ASTWrapperPsiElement(node);
+            t = new ResCompositeElementImpl(node);
         }
         return t;
     }
