@@ -9,6 +9,10 @@ import org.antlr.intellij.adaptor.parser.SyntaxErrorListener;
 import org.antlr.v4.runtime.TokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+/**
+ * A specific kind of parser that knows how to parse our general purpose
+ * RESOLVE grammar type.
+ */
 public class RESOLVELanguageParser extends AntlrParser<Resolve> {
 
     public RESOLVELanguageParser() {

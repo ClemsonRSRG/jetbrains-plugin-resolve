@@ -41,7 +41,7 @@ public class RESOLVETokenTypes {
             ElementTypeFactory.createTokenSet(RESOLVELanguage.INSTANCE,
                     Arrays.asList(ResolveLexer.tokenNames), ResolveLexer.AND,
                     ResolveLexer.ASSIGN, ResolveLexer.BAR, ResolveLexer.CAT,
-                    ResolveLexer.CUTMINUS, ResolveLexer.DBL_BAR, ResolveLexer.DIVIDE,
+                    ResolveLexer.DBL_BAR, ResolveLexer.DIVIDE,
                     ResolveLexer.EQUALS, ResolveLexer.GT, ResolveLexer.GTE,
                     ResolveLexer.IMPLIES, ResolveLexer.INTERSECT, ResolveLexer.IS_IN,
                     ResolveLexer.IS_NOT_IN, ResolveLexer.LT, ResolveLexer.LTE,

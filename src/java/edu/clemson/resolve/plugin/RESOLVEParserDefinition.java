@@ -8,6 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import edu.clemson.resolve.plugin.psi.ResolveFile;
@@ -16,7 +17,14 @@ import edu.clemson.resolve.plugin.adaptors.RESOLVELexerAdaptor;
 import edu.clemson.resolve.plugin.parser.ResolveLexer;
 import org.jetbrains.annotations.NotNull;
 
+/** The general interface between RESOLVE and IntelliJ. */
 public class RESOLVEParserDefinition implements ParserDefinition {
+
+    public static final IElementType LINE_COMMENT =
+            new ResTokenType("RESOLVE_LINE_COMMENT");
+    public static final IElementType MULTILINE_COMMENT =
+            new ResTokenType("RESOLVE_MULTILINE_COMMENT");
+
     public static final IFileElementType FILE =
             new IFileElementType(RESOLVELanguage.INSTANCE);
 
