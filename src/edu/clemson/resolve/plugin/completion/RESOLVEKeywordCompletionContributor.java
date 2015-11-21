@@ -17,7 +17,7 @@ public class RESOLVEKeywordCompletionContributor
         extends
             CompletionContributor implements DumbAware {
 
-    public RESOLVEKeywordCompletionContributor() {
+  /*  public RESOLVEKeywordCompletionContributor() {
 
         extend(CompletionType.BASIC, modulePattern(),
                 new RESOLVEKeywordCompletionProvider(
@@ -127,5 +127,5 @@ public class RESOLVEKeywordCompletionContributor
             Class<? extends ResModuleBlock> blockType) {
       return onKeywordStartWithParent(psiElement(blockType)
               .withParent(moduleType));
-    }
+    }*/
 }

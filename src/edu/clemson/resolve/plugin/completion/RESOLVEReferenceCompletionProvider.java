@@ -49,7 +49,7 @@ public class RESOLVEReferenceCompletionProvider
                     new MyRESOLVEScopeProcessor(result, false));
         }
         if (reference instanceof ResTypeReference) {
-            PsiElement element = reference.getElement();
+            /*PsiElement element = reference.getElement();
             ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
                 @Override
                 protected boolean accept(@NotNull PsiElement e) {
@@ -58,7 +58,7 @@ public class RESOLVEReferenceCompletionProvider
                     //         (e instanceof ResNamedSignatureOwner || e instanceof ResVarDef));
                 }
             };
-            ((ResTypeReference) reference).processResolveVariants(aProcessor);
+            ((ResTypeReference) reference).processResolveVariants(aProcessor);*/
         }
     }
 
@@ -76,7 +76,7 @@ public class RESOLVEReferenceCompletionProvider
             @NotNull PsiElement o, @NotNull ResolveState state,
             boolean forTypes) {
         if (o instanceof ResNamedElement) {
-            if (o instanceof ResTypeLikeNodeDecl) {
+            /*if (o instanceof ResTypeLikeNodeDecl) {
                 return RESOLVECompletionUtil
                         .createTypeLookupElement((ResTypeLikeNodeDecl) o);
             }
@@ -97,7 +97,7 @@ public class RESOLVEReferenceCompletionProvider
             else {
                 return RESOLVECompletionUtil
                         .createVariableLikeLookupElement((ResNamedElement) o);
-            }
+            }*/
         }
         return null;
     }

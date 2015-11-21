@@ -8,20 +8,16 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public interface ResModuleDecl
-        extends
-            ResCompositeElement, PsiNameIdentifierOwner, NavigationItem {
+public interface ResModuleDecl extends ResNamedElement {
 
     @NotNull public ResModuleBlock getModuleBlock();
 
-    @Nullable public PsiElement getIdentifier();
-
     @NotNull public List<ResUsesSpec> getUsesSpecs();
 
-    @NotNull public List<ResFacilityDecl> getFacilities();
+    /*@NotNull public List<ResFacilityDecl> getFacilities();
 
     @NotNull public List<ResOperationDecl> getOperations();
-
+*/
     @NotNull public List<ResOperationWithBodyNode> getOperationsWithImpls();
 
     @NotNull public List<ResTypeLikeNodeDecl> getTypes();
