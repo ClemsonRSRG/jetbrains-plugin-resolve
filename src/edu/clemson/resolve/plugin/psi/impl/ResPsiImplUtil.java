@@ -27,7 +27,7 @@ public class ResPsiImplUtil {
     @NotNull public static TextRange getUsesTextRange(
             @NotNull ResUsesSpec importString) {
         String text = importString.getText();
-        return !text.isEmpty() ? TextRange.create(1, text.length() - 1) :
+        return !text.isEmpty() ? TextRange.create(0, text.length() - 1) :
                 TextRange.EMPTY_RANGE;
     }
 
