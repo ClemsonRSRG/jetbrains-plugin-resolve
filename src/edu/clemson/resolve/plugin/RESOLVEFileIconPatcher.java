@@ -13,6 +13,8 @@ import javax.swing.*;
 /**
  * Dynamically updates (patches) icons for {@link PsiFile} instances based on
  * the {@link ResModuleDecl} declared within.
+ *
+ * @since 0.0.1
  */
 public class RESOLVEFileIconPatcher implements FileIconPatcher {
 

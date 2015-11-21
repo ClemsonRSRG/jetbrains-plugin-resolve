@@ -158,7 +158,7 @@
     pin('.*List(?:_\d.*)?')=1
 }
 
-ModuleDecl ::= FacilityModuleDecl | ConceptModuleDecl <<eof>>
+ModuleDecl ::= FacilityModuleDecl | ConceptModuleDecl | PrecisModuleDecl <<eof>>
 
 FacilityModuleDecl ::= 'Facility' identifier ';'
 UsesList?
@@ -170,6 +170,11 @@ UsesList?
 ConceptBlock
 'end' identifier ';' {pin(".*")=1}
 
+PrecisModuleDecl ::= 'Precis' identifier ';'
+UsesList?
+PrecisBlock
+'end' identifier ';' {pin(".*")=1}
+
 UsesList ::= 'uses' UsesSpec (',' UsesSpec)* ';'
 
 UsesSpec ::= identifier {pin=1 methods=[getReferences resolve getUsesTextRange]}
@@ -177,6 +182,8 @@ UsesSpec ::= identifier {pin=1 methods=[getReferences resolve getUsesTextRange]}
 FacilityBlock ::= FacilityItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
 
 ConceptBlock ::= ConceptItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
+
+PrecisBlock ::= PrecisItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
 
 private ItemsRecover ::= !('end')
 
@@ -192,6 +199,13 @@ private ConceptItem ::=
     |   OperationDecl {pin=1 recoverWhile=ConceptItemRecover}
 
 private ConceptItemRecover ::= !('Type'|'Operation'|'end')
+
+private PrecisItem ::=
+        MathDefinitionDecl  {pin=1 recoverWhile=PrecisItemRecover}
+
+private PrecisItemRecover ::= !('Definition'|'end')
+
+MathDefinitionDecl ::= 'Definition' identifier ';'
 
 FacilityDecl ::= 'Facility' identifier 'is' UsesSpec
 ('externally')? 'implemented' 'by' UsesSpec ';' {pin=2 methods=[getSpecification]}
