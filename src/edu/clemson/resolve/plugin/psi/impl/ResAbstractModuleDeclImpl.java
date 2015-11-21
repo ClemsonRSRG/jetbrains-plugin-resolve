@@ -6,10 +6,12 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.plugin.ResTypes;
 import edu.clemson.resolve.plugin.psi.*;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,22 +19,32 @@ import java.util.List;
 
 public abstract class ResAbstractModuleDeclImpl
         extends
-            ResNamedElementImpl implements ResModuleDecl {
+            ResCompositeElementImpl implements ResModuleDecl {
 
     public ResAbstractModuleDeclImpl(@NotNull ASTNode node) {
         super(node);
-    }
-
-    @Override public boolean isPublic() {
-        return true;
     }
 
     @NotNull public ResModuleBlock getModuleBlock() {
         return findNotNullChildByClass(ResModuleBlock.class);
     }
 
+    @Nullable @Override public PsiElement getNameIdentifier() {
+        return getIdentifier();
+    }
+
     @Nullable @Override public PsiElement getIdentifier() {
         return findChildByType(ResTypes.IDENTIFIER);
+    }
+
+    @NotNull @Override public PsiElement setName(
+            @NonNls @NotNull String newName) throws IncorrectOperationException {
+        PsiElement identifier = getIdentifier();
+        if (identifier != null) {
+            identifier.replace(ResElementFactory
+                    .createIdentifierFromText(getProject(), newName));
+        }
+        return this;
     }
 
     @NotNull @Override public List<ResUsesSpec> getUsesSpecs() {

@@ -16,5 +16,4 @@ public class RESOLVEFileElementType extends IStubFileElementType<ResFileStub> {
     @Override public int getStubVersion() {
         return VERSION;
     }
-
 }
