@@ -1,6 +1,5 @@
 package edu.clemson.resolve.plugin.psi.impl;
 
-import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
@@ -75,8 +74,8 @@ public class ResReference
             target = spec.resolve();
             if (target != null) processFileEntities((ResFile) target, processor, state, false);
         }
-        if (target instanceof ResTypeOwner) {
-            ResType type = ((ResTypeOwner)target).getResType(createContext());
+        if (target instanceof ResProgTypeOwner) {
+            ResType type = ((ResProgTypeOwner)target).getResType(createContext());
             if (type != null && !processResType(type, processor, state)) return false;
         }
         return true;
@@ -101,8 +100,8 @@ public class ResReference
                                      @NotNull ResolveState state) {
         PsiReference reference = refExpr != null ? refExpr.getReference() : null;
         PsiElement resolve = reference != null ? reference.resolve() : null;
-        if (resolve instanceof ResTypeOwner) {
-            ResType type = ((ResTypeOwner)resolve).getResType(state);
+        if (resolve instanceof ResProgTypeOwner) {
+            ResType type = ((ResProgTypeOwner)resolve).getResType(state);
             if (type != null && !processResType(type, processor, state)) return false;
         }
         return true;

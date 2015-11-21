@@ -18,8 +18,6 @@ import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class ResPsiImplUtil {
@@ -114,7 +112,7 @@ public class ResPsiImplUtil {
         if (o instanceof ResReferenceExpression) {
             PsiReference reference = o.getReference();
             PsiElement resolve = reference != null ? reference.resolve() : null;
-            if (resolve instanceof ResTypeOwner) return ((ResTypeOwner) resolve).getResType(context);
+            if (resolve instanceof ResProgTypeOwner) return ((ResProgTypeOwner) resolve).getResType(context);
         }
         else if (o instanceof ResSelectorExpr) {
             ResExpression item = ContainerUtil.getLastItem(((ResSelectorExpr) o).getExpressionList());

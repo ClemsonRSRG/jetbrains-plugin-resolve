@@ -36,7 +36,7 @@ public class RESOLVECompletionUtil {
         private static final QualifierInsertHandler FACILITY_INSERT_HANDLER =
                 new QualifierInsertHandler("::", true); //TODO: it'd be nice if there were a way for the user to set padding options..
     }
-    /*public static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER =
+    public static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER =
             new InsertHandler<LookupElement>() {
         @Override
         public void handleInsert(InsertionContext context, LookupElement item) {
@@ -52,7 +52,7 @@ public class RESOLVECompletionUtil {
                             ParenthesesInsertHandler.WITH_PARAMETERS;
             handler.handleInsert(context, item);
         }
-    };*/
+    };
 
     /*public static final LookupElementRenderer<LookupElement> VARIABLE_RENDERER =
             new LookupElementRenderer<LookupElement>() {
@@ -111,14 +111,14 @@ public class RESOLVECompletionUtil {
         return new CamelHumpMatcher(prefix, false);
     }
 
-    /*@NotNull public static LookupElement createFunctionOrMethodLookupElement(
+    @NotNull public static LookupElement createFunctionOrMethodLookupElement(
             @NotNull ResNamedSignatureOwner f, @NotNull String lookupString,
             @Nullable InsertHandler<LookupElement> h, double priority) {
         return PrioritizedLookupElement.withPriority(LookupElementBuilder
                 .createWithSmartPointer(lookupString, f)
                 .withRenderer(FUNCTION_RENDERER)
                 .withInsertHandler(h != null ? h : FUNCTION_INSERT_HANDLER), priority);
-    }*/
+    }
 
     @NotNull public static LookupElement createTypeLookupElement(
             @NotNull ResTypeLikeNodeDecl t) {
@@ -149,14 +149,14 @@ public class RESOLVECompletionUtil {
                         .withIcon(RESOLVEIcons.FACILITY), FACILITY_PRIORITY);
     }*/
 
-    /*@Nullable public static LookupElement createVariableLikeLookupElement(
+    @Nullable public static LookupElement createVariableLikeLookupElement(
             @NotNull ResNamedElement v) {
         String name = v.getName();
         if (StringUtil.isEmpty(name)) return null;
         return createVariableLikeLookupElement(v, name, null, VAR_PRIORITY);
     }
 
-    @NotNull public static LookupElement createVariableLikeLookupElement(
+    /*@NotNull public static LookupElement createVariableLikeLookupElement(
             @NotNull ResNamedElement v, @NotNull String lookupString,
             @Nullable InsertHandler<LookupElement> insertHandler,
             double priority) {

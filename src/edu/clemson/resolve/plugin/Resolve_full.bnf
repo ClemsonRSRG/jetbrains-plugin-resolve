@@ -285,7 +285,7 @@ ElseStatement ::= 'else' Statement* {pin=1}
 
 Expression ::=
       OrExpr
-    | MaxGroup {methods=[getResType] implements="edu.clemson.resolve.plugin.psi.ResTypeOwner"}
+    | MaxGroup {methods=[getResType] implements="edu.clemson.resolve.plugin.psi.ResProgTypeOwner"}
 
 fake BinaryExpr ::= Expression+ {
   methods=[left="Expression[0]" right="Expression[1]"]
