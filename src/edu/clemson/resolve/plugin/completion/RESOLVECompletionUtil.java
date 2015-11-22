@@ -54,8 +54,8 @@ public class RESOLVECompletionUtil {
         @Override public void renderElement(LookupElement element,
                                             LookupElementPresentation p) {
             PsiElement o = element.getPsiElement();
-            if (!(o instanceof ResNamedElement)) return;
-            ResNamedElement v = (ResNamedElement)o;
+            if (!(o instanceof ResProgNamedElement)) return;
+            ResProgNamedElement v = (ResProgNamedElement)o;
             ResType type = v.getResType(null);
             String text = ResPsiImplUtil.getText(type);
             Icon icon = v instanceof ResVarDef ? RESOLVEIcons.VARIABLE :
@@ -144,14 +144,14 @@ public class RESOLVECompletionUtil {
     }*/
 
     @Nullable public static LookupElement createVariableLikeLookupElement(
-            @NotNull ResNamedElement v) {
+            @NotNull ResProgNamedElement v) {
         String name = v.getName();
         if (StringUtil.isEmpty(name)) return null;
         return createVariableLikeLookupElement(v, name, null, VAR_PRIORITY);
     }
 
     /*@NotNull public static LookupElement createVariableLikeLookupElement(
-            @NotNull ResNamedElement v, @NotNull String lookupString,
+            @NotNull ResProgNamedElement v, @NotNull String lookupString,
             @Nullable InsertHandler<LookupElement> insertHandler,
             double priority) {
         return PrioritizedLookupElement.withPriority(LookupElementBuilder
@@ -161,7 +161,7 @@ public class RESOLVECompletionUtil {
     }*/
 
     @Nullable private static String calcTailTextForFields(
-            @NotNull ResNamedElement v) {
+            @NotNull ResProgNamedElement v) {
         String name = null;
       /*  if (v instanceof ResFieldDef) {
             ResTypeReprDecl spec =

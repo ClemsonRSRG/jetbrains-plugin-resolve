@@ -7,13 +7,9 @@ import com.intellij.psi.PsiNameIdentifierOwner;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface ResNamedElement
+public interface ResProgNamedElement
         extends
-            ResCompositeElement, PsiNameIdentifierOwner, NavigationItem {
+            ResNamedElement, ResProgTypeOwner {
 
-    boolean isPublic();
-
-    @Nullable PsiElement getIdentifier();
-
-    @NotNull PsiFile getContainingFile();
+    @Nullable ResProgType findSiblingProgType();
 }

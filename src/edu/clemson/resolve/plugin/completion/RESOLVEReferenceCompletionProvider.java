@@ -75,7 +75,7 @@ public class RESOLVEReferenceCompletionProvider
     @Nullable private static LookupElement createLookupElement(
             @NotNull PsiElement o, @NotNull ResolveState state,
             boolean forTypes) {
-        if (o instanceof ResNamedElement) {
+        if (o instanceof ResProgNamedElement) {
             /*if (o instanceof ResTypeLikeNodeDecl) {
                 return RESOLVECompletionUtil
                         .createTypeLookupElement((ResTypeLikeNodeDecl) o);
@@ -96,7 +96,7 @@ public class RESOLVEReferenceCompletionProvider
             }
             else {
                 return RESOLVECompletionUtil
-                        .createVariableLikeLookupElement((ResNamedElement) o);
+                        .createVariableLikeLookupElement((ResProgNamedElement) o);
             }*/
         }
         return null;
