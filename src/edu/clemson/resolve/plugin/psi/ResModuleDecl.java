@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public interface ResModuleDecl extends ResProgNamedElement {
+public interface ResModuleDecl extends ResNamedElement {
 
     @NotNull public ResModuleBlock getModuleBlock();
 

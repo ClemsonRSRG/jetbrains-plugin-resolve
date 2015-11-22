@@ -48,7 +48,7 @@ public abstract class ResAbstractModuleDeclImpl
         return PsiTreeUtil.findChildOfType(this, ResUsesList.class);
     }
 
-    @NotNull public List<ResTypeLikeNodeDecl> getTypes() {
+    /*@NotNull public List<ResTypeLikeNodeDecl> getTypes() {
         final ResBlock body = this.getModuleBlock();
         return CachedValuesManager.getCachedValue(this,
                 new CachedValueProvider<List<ResTypeLikeNodeDecl>>() {
@@ -104,7 +104,7 @@ public abstract class ResAbstractModuleDeclImpl
             }
         });
         return result;
-    }
+    }*/
 
     private static boolean processChildrenDummyAware(@NotNull ResBlock module,
                                                      @NotNull final Processor<PsiElement> processor) {

@@ -4,23 +4,18 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
-import edu.clemson.resolve.plugin.psi.ResMathDefinitionDecl;
-import edu.clemson.resolve.plugin.psi.ResMathInfixDefinitionSignature;
-import edu.clemson.resolve.plugin.psi.ResMathSignature;
+import edu.clemson.resolve.plugin.psi.ResMathNamedElement;
 import edu.clemson.resolve.plugin.psi.ResMathType;
+import edu.clemson.resolve.plugin.psi.ResProgType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class ResAbstractMathDefinitionDeclImpl
+public abstract class ResMathNamedElementImpl
         extends
-            ResMathNamedElementImpl implements ResMathDefinitionDecl {
+            ResNamedElementImpl implements ResMathNamedElement {
 
-    public ResAbstractMathDefinitionDeclImpl(@NotNull ASTNode node) {
+    public ResMathNamedElementImpl(@NotNull ASTNode node) {
         super(node);
-    }
-
-    @Nullable @Override public ResMathSignature getMathSignature() {
-        return findChildByClass(ResMathSignature.class);
     }
 
     @Nullable protected ResMathType getResTypeInner(
@@ -31,4 +26,5 @@ public abstract class ResAbstractMathDefinitionDeclImpl
     @Nullable @Override public ResMathType findSiblingType() {
         return PsiTreeUtil.getNextSiblingOfType(this, ResMathType.class);
     }
+
 }

@@ -7,9 +7,7 @@ import com.intellij.psi.PsiNameIdentifierOwner;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public interface ResProgNamedElement
-        extends
-            ResNamedElement, ResProgTypeOwner {
+public interface ResProgNamedElement extends ResNamedElement, ResProgTypeOwner {
 
     @Nullable ResProgType findSiblingProgType();
 }
