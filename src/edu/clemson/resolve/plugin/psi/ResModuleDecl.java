@@ -17,8 +17,9 @@ public interface ResModuleDecl extends ResNamedElement {
     /*@NotNull public List<ResFacilityDecl> getFacilities();
 
     @NotNull public List<ResOperationDecl> getOperations();
-*/
+
     @NotNull public List<ResOperationWithBodyNode> getOperationsWithImpls();
 
     @NotNull public List<ResTypeLikeNodeDecl> getTypes();
+    */
 }

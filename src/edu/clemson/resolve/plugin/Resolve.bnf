@@ -147,7 +147,7 @@
 
     implements("OpBlock")="edu.clemson.resolve.plugin.psi.ResBlock"
     implements("(Concept|Facility)Block")="edu.clemson.resolve.plugin.psi.ResModuleBlock"
-    implements("OperationDecl")="edu.clemson.resolve.plugin.psi.ResNamedSignatureOwner"
+    implements("OperationDecl")="edu.clemson.resolve.plugin.psi.ResProgNamedSignatureOwnerwner"
     implements(".*ReferenceExpression")="edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase"
     implements("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
     implements("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.ResOperationWithBodyNode"
@@ -155,9 +155,9 @@
     implements("(Facility|Concept|Precis)ModuleDecl")="edu.clemson.resolve.plugin.psi.ResModuleDecl"
 */
 
-    extends("MathInfixExp")=MathBinaryExp
+    //extends("MathInfixExp")=MathBinaryExp
     //extends("Math.*(Exp)")=MathExp
-        extends(".*(Exp)")=MathExp
+    extends("Math.*(Exp)")=MathExp
 
     generateTokenAccessors=true
     pin('.*List(?:_\d.*)?')=1
@@ -187,15 +187,25 @@ private PrecisItemRecover ::= !('Definition'|'end')
 //  M A T H   C O N S T R U C T S   &   E X P R S
 // -------------------------------------------------
 
-MathDefinitionDecl ::= 'Definition' identifier MathDefinitionSignature ';' {pin=2}
+MathDefinitionDecl ::= 'Definition' MathDefinitionSignature ';' {pin=2}
 
-MathDefinitionSignature ::= MathDefinitionParams? MathResult {pin=1}
+MathDefinitionSignature ::=
+           MathPrefixDefinitionSignature
+        |  MathInfixDefinitionSignature
+
+MathPrefixDefinitionSignature ::=
+          identifier MathDefinitionParams? MathResult {pin=1}
+
+MathInfixDefinitionSignature ::=
+        '(' MathParamDecl ')' identifier '(' MathParamDecl ')' MathResult {pin=4}
 
 MathDefinitionParams ::= '(' MathDefinitionParamList ')' { pin=1}
 private ParamListRec ::= !(')')
-private MathDefinitionParamList ::= MathParamDecl (',' MathParamDecl)* {pin=1 recoverWhile=ParamListRec}
+private MathDefinitionParamList ::= MathParamDeclGroup (',' MathParamDeclGroup)* {pin=1 recoverWhile=ParamListRec}
 
-MathParamDecl ::= MathDefinitionParamDefListNoPin ':' MathTypeExp {pin=1}
+MathParamDecl ::= MathParamDef ':' MathTypeExp
+
+MathParamDeclGroup ::= MathDefinitionParamDefListNoPin ':' MathTypeExp {pin=1}
 private MathDefinitionParamDefListNoPin ::= MathParamDef &(!(')')) (',' MathParamDef)* {pin=1}
 MathParamDef ::= identifier
 
@@ -203,25 +213,18 @@ MathResult ::= ':' MathTypeExp
 
 MathTypeExp ::= MathExp
 
-MathExp ::=
-          MathInfixExp
-        | MathPrimary
+MathExp ::=  MathPrefixApplyExp|MathPrimary
 
 MathPrefixApplyExp ::=
     MathExp '(' MathExp (',' MathExp)* ')'
 
-MathInfixExp ::=
-    MathExp '+' MathExp
-
 private MathPrimary ::=
           MathSymbolExp
-        | MathPrefixApplyExp
         | MathLiteralExp
 
-private Factor ::= MathPrimary 
-fake MathBinaryExp ::= MathExp+ {
+/*fake MathBinaryExp ::= MathExp+ {
   methods=[left="MathExp[0]" right="MathExp[1]"]
-}
+}*/
 
 MathSymbolExp ::= MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}
 

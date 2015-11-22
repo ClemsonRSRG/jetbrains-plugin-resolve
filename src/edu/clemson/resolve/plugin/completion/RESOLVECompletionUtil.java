@@ -8,19 +8,13 @@ import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.codeInsight.lookup.LookupElementPresentation;
-import com.intellij.codeInsight.lookup.LookupElementRenderer;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ui.UIUtil;
 import edu.clemson.resolve.plugin.RESOLVEIcons;
 import edu.clemson.resolve.plugin.psi.*;
-import edu.clemson.resolve.plugin.psi.impl.ResPsiImplUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
 
 public class RESOLVECompletionUtil {
 
@@ -41,8 +35,8 @@ public class RESOLVECompletionUtil {
         @Override
         public void handleInsert(InsertionContext context, LookupElement item) {
             PsiElement element = item.getPsiElement();
-            if (!(element instanceof ResSignatureOwner)) return;
-            ResSignatureOwner f = (ResSignatureOwner)element;
+            if (!(element instanceof ResProgSignatureOwner)) return;
+            ResProgSignatureOwner f = (ResProgSignatureOwner)element;
             ResSignature signature = f.getSignature();
             int paramsCount = signature != null ?
                     signature.getOperationLikeParameters()
@@ -82,8 +76,8 @@ public class RESOLVECompletionUtil {
         @Override public void renderElement(LookupElement element,
                                             LookupElementPresentation p) {
             PsiElement o = element.getPsiElement();
-            if (!(o instanceof ResNamedSignatureOwner)) return;
-            ResNamedSignatureOwner f = (ResNamedSignatureOwner)o;
+            if (!(o instanceof ResProgNamedSignatureOwner)) return;
+            ResProgNamedSignatureOwner f = (ResProgNamedSignatureOwner)o;
             String typeText = "";
             ResSignature signature = f.getSignature();
             String paramText = "";
@@ -112,7 +106,7 @@ public class RESOLVECompletionUtil {
     }
 
     @NotNull public static LookupElement createFunctionOrMethodLookupElement(
-            @NotNull ResNamedSignatureOwner f, @NotNull String lookupString,
+            @NotNull ResProgNamedSignatureOwner f, @NotNull String lookupString,
             @Nullable InsertHandler<LookupElement> h, double priority) {
         return PrioritizedLookupElement.withPriority(LookupElementBuilder
                 .createWithSmartPointer(lookupString, f)
@@ -179,7 +173,7 @@ public class RESOLVECompletionUtil {
     }
 
 
-    @Nullable private static String calcTailText(ResSignatureOwner m) {
+    @Nullable private static String calcTailText(ResProgSignatureOwner m) {
         String text = "";
         return StringUtil.isNotEmpty(text) ? " " + UIUtil.rightArrow() +
                 " " + text : null;

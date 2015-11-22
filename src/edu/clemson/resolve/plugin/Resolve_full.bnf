@@ -147,7 +147,7 @@
 
     implements("OpBlock")="edu.clemson.resolve.plugin.psi.ResBlock"
     implements("(Concept|Facility)Block")="edu.clemson.resolve.plugin.psi.ResModuleBlock"
-    implements("OperationDecl")="edu.clemson.resolve.plugin.psi.ResNamedSignatureOwner"
+    implements("OperationDecl")="edu.clemson.resolve.plugin.psi.ResProgNamedSignatureOwner"
     implements(".*ReferenceExpression")="edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase"
     implements("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
     implements("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.ResOperationWithBodyNode"
@@ -218,7 +218,7 @@ TypeReprDecl ::= 'Type' identifier '=' (RecordType|Type) ';' {pin=2 methods=[get
 OperationProcedureDecl ::= 'Operation' identifier Signature ';'
 ('Recursive')? 'Procedure'
 OpBlock
-'end' identifier ';' {pin=2 implements="edu.clemson.resolve.plugin.psi.ResSignatureOwner"}
+'end' identifier ';' {pin=2 implements="edu.clemson.resolve.plugin.psi.ResProgSignatureOwner"}
 
 Signature ::= OperationLikeParameters Result? {pin=1}
 

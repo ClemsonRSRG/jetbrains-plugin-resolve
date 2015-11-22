@@ -55,7 +55,7 @@ public class RESOLVEReferenceCompletionProvider
                 protected boolean accept(@NotNull PsiElement e) {
                     return e instanceof ResTypeLikeNodeDecl || e instanceof ResFacilityDecl;//e != spec &&
                     // !(insideParameter &&
-                    //         (e instanceof ResNamedSignatureOwner || e instanceof ResVarDef));
+                    //         (e instanceof ResProgNamedSignatureOwner || e instanceof ResVarDef));
                 }
             };
             ((ResTypeReference) reference).processResolveVariants(aProcessor);*/
@@ -84,13 +84,13 @@ public class RESOLVEReferenceCompletionProvider
                 return RESOLVECompletionUtil
                         .createFacilityLookupElement(((ResFacilityDecl) o));
             }
-            else if (o instanceof ResNamedSignatureOwner &&
-                    ((ResNamedSignatureOwner)o).getName() != null) {
-                String name = ((ResNamedSignatureOwner)o).getName();
+            else if (o instanceof ResProgNamedSignatureOwner &&
+                    ((ResProgNamedSignatureOwner)o).getName() != null) {
+                String name = ((ResProgNamedSignatureOwner)o).getName();
                 if (name != null) {
                     return RESOLVECompletionUtil
                             .createFunctionOrMethodLookupElement(
-                                    (ResNamedSignatureOwner) o, name, null,
+                                    (ResProgNamedSignatureOwner) o, name, null,
                                     RESOLVECompletionUtil.FUNCTION_PRIORITY);
                 }
             }
