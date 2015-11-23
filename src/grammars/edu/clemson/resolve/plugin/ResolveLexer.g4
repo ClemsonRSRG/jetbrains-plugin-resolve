@@ -75,6 +75,7 @@ FAMILY			:	'Family'			;
 FOR				:	'for'				;
 FORALL			:	'Forall'			;
 IF				:	('if'|'If')			;
+IFF				:	'iff'				;
 IMPLICIT		:	'Implicit'			;
 INIT			:	'initialization'	;
 IS 				:	'is'				;
@@ -100,6 +101,7 @@ TYPE			:	'Type'				;
 USES			:	'uses'				;
 VAR				:	'Var'				;
 WHILE			:	'While'				;
+WITH			:	'with'				;
 
 // parameter modes
 

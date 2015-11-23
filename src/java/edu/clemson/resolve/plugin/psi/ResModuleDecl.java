@@ -5,9 +5,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNameIdentifierOwner;
 import org.jetbrains.annotations.Nullable;
 
-public interface ResModuleDecl
-        extends
-            ResCompositeElement, PsiNameIdentifierOwner, NavigationItem {
+public interface ResModuleDecl extends ResNamedElement {
 
-    @Nullable PsiElement getIdentifier();
 }

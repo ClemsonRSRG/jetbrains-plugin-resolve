@@ -23,10 +23,6 @@ public class ResModuleDeclImpl
         return findChildByType(ResJetbrainTypes.ID);
     }
 
-    @Nullable @Override public ResType findSiblingType() {
-        return PsiTreeUtil.getNextSiblingOfType(this, ResType.class);
-    }
-
     public static class Factory implements PsiElementFactory {
         public static Factory INSTANCE = new Factory();
 

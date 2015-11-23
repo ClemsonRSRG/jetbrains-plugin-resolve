@@ -36,6 +36,7 @@ options {
 
 moduleDecl
     :   precisModuleDecl
+    |   precisExtensionModuleDecl
     ;
 
 precisModuleDecl
@@ -45,8 +46,14 @@ precisModuleDecl
         END closename=ID SEMI EOF
     ;
 
+precisExtensionModuleDecl
+    :   EXTENSION name=ID FOR precis=ID SEMI
+        precisBlock
+        END closename=ID SEMI
+    ;
+
 precisBlock
-    :   ( mathDefinitionDecl
+    :   ( mathStandardDefinitionDecl
         | mathCategoricalDefinitionDecl
         | mathInductiveDefinitionDecl
         | mathTheoremDecl
@@ -56,7 +63,15 @@ precisBlock
 // uses, imports
 
 usesList
-    :   USES ID (COMMA ID)* SEMI
+    :   USES usesItem (COMMA usesItem)* SEMI
+    ;
+
+usesItem
+    :   ID (withExtensions)?
+    ;
+
+withExtensions
+    :   WITH LPAREN ID (COMMA ID)* RPAREN
     ;
 
 // math constructs
@@ -68,6 +83,13 @@ mathTheoremDecl
 mathDefinitionSig
     :   mathPrefixDefinitionSig
     |   mathInfixDefinitionSig
+    |   mathOutfixDefinitionSig
+    ;
+
+mathPrefixDefinitionSig
+    :   name=mathSymbolName (LPAREN
+                mathVariableDeclGroup (COMMA mathVariableDeclGroup)* RPAREN)?
+                COLON mathTypeExp
     ;
 
 mathInfixDefinitionSig
@@ -75,10 +97,9 @@ mathInfixDefinitionSig
         LPAREN mathVariableDecl RPAREN COLON mathTypeExp
     ;
 
-mathPrefixDefinitionSig
-    :   name=mathSymbolName (LPAREN
-                mathVariableDeclGroup (COMMA mathVariableDeclGroup)* RPAREN)?
-                COLON mathTypeExp
+mathOutfixDefinitionSig
+    :   leftSym=mathSymbolName LPAREN mathVariableDecl RPAREN
+        rightSym=mathSymbolName COLON mathTypeExp
     ;
 
 mathSymbolName
@@ -100,7 +121,7 @@ mathDefinesDefinitionDecl
     :   DEFINES ID (COMMA ID)* COLON mathTypeExp SEMI
     ;
 
-mathDefinitionDecl
+mathStandardDefinitionDecl
     :   (IMPLICIT)? DEFINITION mathDefinitionSig
         (IS mathAssertionExp)? SEMI
     ;
@@ -157,7 +178,7 @@ mathAssertionExp
     ;
 
 mathQuantifiedExp
-    :   q=(FORALL|EXISTS) mathVariableDeclGroup COMMA mathAssertionExp
+    :   q=(FORALL|EXISTS) mathVariableDeclGroup ',' mathAssertionExp
     ;
 
 mathExp
@@ -169,7 +190,7 @@ mathExp
     |   mathExp op=(IS_IN|IS_NOT_IN) mathExp                        #mathInfixApplyExp
     |   mathExp op=(LTE|GTE|GT|LT) mathExp                          #mathInfixApplyExp
     |   mathExp op=(EQUALS|NEQUALS) mathExp                         #mathInfixApplyExp
-    |   mathExp op=IMPLIES mathExp                                  #mathInfixApplyExp
+    |   mathExp op=(IMPLIES|IFF) mathExp                            #mathInfixApplyExp
     |   mathExp op=(AND|OR) mathExp                                 #mathInfixApplyExp
     |   mathExp op=COLON mathTypeExp                                #mathTypeAssertionExp
     |   LPAREN mathAssertionExp RPAREN                              #mathNestedExp
@@ -180,7 +201,7 @@ mathPrimaryExp
     :   mathLiteralExp
     |   mathCrossTypeExp
     |   mathSymbolExp
-    |   mathOutfixExp
+    |   mathOutfixApplyExp
     |   mathSetComprehensionExp
     |   mathSetExp
     |   mathLambdaExp
@@ -202,7 +223,7 @@ mathSymbolExp
     :   (incoming=AT)? (qualifier=ID COLONCOLON)? name=mathSymbolName
     ;
 
-mathOutfixExp
+mathOutfixApplyExp
     :   lop=LT mathExp rop=GT
     |   lop=BAR mathExp rop=BAR
     |   lop=DBL_BAR mathExp rop=DBL_BAR
@@ -233,9 +254,8 @@ mathTupleExp
     :   LPAREN mathExp (COMMA mathExp)+ RPAREN
     ;
 
-//Segments can end in an application but (not that I'm aware of atleast) they
-//can't contain one in the middle .. hopefully :) ...
+//Segments can end in an application but they can't contain one in the middle ..
+//hopefully :) ...
 mathSegmentsExp
-    :   mathSymbolExp (DOT mathSymbolExp)+
-        (LPAREN mathExp (COMMA mathExp)* RPAREN)?
+    :   mathSymbolExp (DOT mathSymbolExp)+ (LPAREN mathExp (COMMA mathExp)* RPAREN)?
     ;

@@ -13,6 +13,7 @@ import edu.clemson.resolve.plugin.RESOLVEIcons;
 import edu.clemson.resolve.plugin.psi.ResCompositeElement;
 import edu.clemson.resolve.plugin.psi.ResNamedElement;
 import edu.clemson.resolve.plugin.psi.ResType;
+import edu.clemson.resolve.plugin.psi.boilerplate.ResPrecisModuleDecl;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -56,22 +57,14 @@ public abstract class ResNamedElementImpl
                 : super.getTextOffset();
     }
 
-    @Nullable protected ResType getResTypeInner(
-            @Nullable ResolveState context) {
-        return findSiblingType();
-    }
-
-    @Nullable @Override public ResType findSiblingType() {
-        return PsiTreeUtil.getNextSiblingOfType(this, ResType.class);
-    }
-
     @Nullable @Override public Icon getIcon(int flags) {
         Icon icon = null;
+        if (this instanceof ResPrecisModuleDecl) icon = RESOLVEIcons.PRECIS;
         /*if (this instanceof ResFacilityModuleDecl) icon = RESOLVEIcons.FACILITY;
         else if (this instanceof ResConceptModuleDecl) icon = RESOLVEIcons.CONCEPT;
         else if (this instanceof ResTypeLikeNodeDecl) icon = RESOLVEIcons.TYPE;
         else if (this instanceof ResVarDef) icon = RESOLVEIcons.VARIABLE;
-        else if (this instanceof ResFieldDef) icon = RESOLVEIcons.FIELD;
+        else if (this instanceof ResFieldDef) icon = RESOLVEIcons.FIELD;*/
         //TODO: complete the icon list here as you go along
         if (icon != null) {
             if ((flags & Iconable.ICON_FLAG_VISIBILITY) != 0) {
@@ -82,7 +75,7 @@ public abstract class ResNamedElementImpl
                 return rowIcon;
             }
             return icon;
-        }*/
+        }
         return super.getIcon(flags);
     }
 
