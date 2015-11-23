@@ -94,7 +94,7 @@ mathPrefixDefinitionSig
     ;
 
 mathInfixDefinitionSig
-    :   LPAREN mathVariableDecl RPAREN name=mathSymbolName
+    :   LPAREN mathVariableDecl RPAREN name=ID
         LPAREN mathVariableDecl RPAREN COLON mathTypeExp
     ;
 

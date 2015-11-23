@@ -6,9 +6,9 @@ import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ResMathPrefixDefSigImpl extends ResAbstractMathDefSig {
+public class ResMathInfixDefSigImpl extends ResAbstractMathDefSig {
 
-    public ResMathPrefixDefSigImpl(@NotNull ASTNode node) {
+    public ResMathInfixDefSigImpl(@NotNull ASTNode node) {
         super(node);
     }
 
@@ -20,7 +20,7 @@ public class ResMathPrefixDefSigImpl extends ResAbstractMathDefSig {
         public static Factory INSTANCE = new Factory();
 
         @Override public PsiElement createElement(ASTNode node) {
-            return new ResMathPrefixDefSigImpl(node);
+            return new ResMathInfixDefSigImpl(node);
         }
     }
 }

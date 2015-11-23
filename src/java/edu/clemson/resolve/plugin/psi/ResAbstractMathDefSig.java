@@ -17,38 +17,16 @@ import java.util.List;
 //children.
 
 //TODO: We might actually not need this... Mess around with ResCompositeElement shouldGoDeeper()...
-public class ResMathDefSigImpl
+public abstract class ResAbstractMathDefSig
         extends
             ResNamedElementImpl implements ResMathDefSig {
 
-    public ResMathDefSigImpl(@NotNull ASTNode node) {
+    public ResAbstractMathDefSig(@NotNull ASTNode node) {
         super(node);
     }
 
-    @Nullable @Override public PsiElement getIdentifier() {
-        ResMathDefSig signature = PsiTreeUtil.findChildOfType(this,
-                ResMathDefSig.class);
-        if (signature != null) {
-            return signature.getIdentifier();
-        }
-        return null;
-    }
-
     @NotNull @Override public List<ResMathVarDeclGroup> getMathVarDeclGroups() {
-        List<ResMathVarDeclGroup> result = new ArrayList<ResMathVarDeclGroup>();
-        ResMathDefSig signature = PsiTreeUtil.findChildOfType(this,
-                ResMathDefSig.class);
-        if (signature != null) {
-            result.addAll(signature.getMathVarDeclGroups());
-        }
-        return result;
-    }
-
-    public static class Factory implements PsiElementFactory {
-        public static Factory INSTANCE = new Factory();
-
-        @Override public PsiElement createElement(ASTNode node) {
-            return new ResMathDefSigImpl(node);
-        }
+        return PsiTreeUtil.getChildrenOfTypeAsList(this,
+                ResMathVarDeclGroup.class);
     }
 }
