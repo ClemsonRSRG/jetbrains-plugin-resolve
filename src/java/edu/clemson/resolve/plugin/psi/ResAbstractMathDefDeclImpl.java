@@ -13,5 +13,4 @@ public abstract class ResAbstractMathDefDeclImpl
         super(node);
     }
 
-
 }

@@ -11,9 +11,7 @@ import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import edu.clemson.resolve.plugin.parser.Resolve;
-import edu.clemson.resolve.plugin.psi.ResMathDefSigImpl;
-import edu.clemson.resolve.plugin.psi.ResMathPrefixDefSigImpl;
-import edu.clemson.resolve.plugin.psi.ResStandardMathDefDeclImpl;
+import edu.clemson.resolve.plugin.psi.*;
 import edu.clemson.resolve.plugin.psi.boilerplate.impl.ResPrecisModuleDeclImpl;
 import edu.clemson.resolve.plugin.psi.impl.*;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
@@ -34,9 +32,9 @@ public class RESOLVEASTFactory extends ASTFactory {
 
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_mathDefinitionSig), ResMathDefSigImpl.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_mathPrefixDefinitionSig), ResMathPrefixDefSigImpl.Factory.INSTANCE);
+        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_mathVariableDeclGroup), ResMathVarDeclGroupImpl.Factory.INSTANCE);
 
-        /*ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_precisExtensionModule), PrecisExtensionModule.Factory.INSTANCE);
-        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_conceptModule), ConceptModule.Factory.INSTANCE);
+        /*ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_conceptModule), ConceptModule.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_conceptImplModule), ConceptImplModule.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_facilityModule), FacilityModule.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_enhancementModule), EnhancementModule.Factory.INSTANCE);
@@ -75,7 +73,7 @@ public class RESOLVEASTFactory extends ASTFactory {
             t = factory.createElement(node);
         }
         else {
-            t = new ASTWrapperPsiElement(node);
+            t = new ResCompositeElementImpl(node);
         }
         return t;
     }

@@ -12,6 +12,8 @@ import org.jetbrains.annotations.Nullable;
 //chain of rules, never a leaf; why are we not abstract then? well, every node
 //needs to be concrete right now since there's no mechanism of hiding irrelevant
 //children.
+
+//TODO: We might actually not need this... Mess around with ResCompositeElement shouldGoDeeper()...
 public class ResMathDefSigImpl
         extends
             ResNamedElementImpl implements ResMathDefSig {

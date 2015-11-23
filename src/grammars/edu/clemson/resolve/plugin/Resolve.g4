@@ -86,10 +86,11 @@ mathDefinitionSig
     |   mathOutfixDefinitionSig
     ;
 
+//TODO: ID for now...
 mathPrefixDefinitionSig
-    :   name=mathSymbolName (LPAREN
-                mathVariableDeclGroup (COMMA mathVariableDeclGroup)* RPAREN)?
-                COLON mathTypeExp
+    :   name=ID (LPAREN
+            mathVariableDeclGroup (COMMA mathVariableDeclGroup)* RPAREN)?
+            COLON mathTypeExp
     ;
 
 mathInfixDefinitionSig
@@ -133,12 +134,14 @@ mathInductiveDefinitionDecl
     ;
 
 mathVariableDeclGroup
-    :   ID (COMMA ID)* COLON mathTypeExp
+    :   mathVarDef (COMMA mathVarDef)* COLON mathTypeExp
     ;
 
 mathVariableDecl
-    :   ID COLON mathTypeExp
+    :   mathVarDef COLON mathTypeExp
     ;
+
+mathVarDef : ID ;
 
 // mathematical clauses
 
