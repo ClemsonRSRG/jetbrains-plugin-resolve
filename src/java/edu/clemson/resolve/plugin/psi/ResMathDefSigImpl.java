@@ -8,6 +8,9 @@ import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 //We exist as an intermediate node (we're always going to be the middle of a
 //chain of rules, never a leaf; why are we not abstract then? well, every node
 //needs to be concrete right now since there's no mechanism of hiding irrelevant
@@ -23,12 +26,22 @@ public class ResMathDefSigImpl
     }
 
     @Nullable @Override public PsiElement getIdentifier() {
-        ResMathDefSig child =
-                PsiTreeUtil.findChildOfType(this, ResMathDefSig.class);
-        if (child != null) {
-            return child.getIdentifier();
+        ResMathDefSig signature = PsiTreeUtil.findChildOfType(this,
+                ResMathDefSig.class);
+        if (signature != null) {
+            return signature.getIdentifier();
         }
         return null;
+    }
+
+    @NotNull @Override public List<ResMathVarDeclGroup> getMathVarDeclGroups() {
+        List<ResMathVarDeclGroup> result = new ArrayList<ResMathVarDeclGroup>();
+        ResMathDefSig signature = PsiTreeUtil.findChildOfType(this,
+                ResMathDefSig.class);
+        if (signature != null) {
+            result.addAll(signature.getMathVarDeclGroups());
+        }
+        return result;
     }
 
     public static class Factory implements PsiElementFactory {
