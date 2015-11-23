@@ -37,12 +37,13 @@ def clean():
     rmdir("gen")
 
 def grammars():
-    urllib.urlretrieve(
-        "https://raw.githubusercontent.com/Welchd1/resolve-lite/master/compiler/src/edu/clemson/resolve/parser/Resolve.g4",
-        "src/grammars/edu/clemson/resolve/plugin/Resolve.g4")
-    urllib.urlretrieve(
-        "https://raw.githubusercontent.com/Welchd1/resolve-lite/master/compiler/src/edu/clemson/resolve/parser/ResolveLexer.g4",
-        "src/grammars/edu/clemson/resolve/plugin/ResolveLexer.g4")
+    pass
+    #urllib.urlretrieve(
+    #    "https://raw.githubusercontent.com/Welchd1/resolve-lite/master/compiler/src/edu/clemson/resolve/parser/Resolve.g4",
+    #    "src/grammars/edu/clemson/resolve/plugin/Resolve.g4")
+    #urllib.urlretrieve(
+    #    "https://raw.githubusercontent.com/Welchd1/resolve-lite/master/compiler/src/edu/clemson/resolve/parser/ResolveLexer.g4",
+    #    "src/grammars/edu/clemson/resolve/plugin/ResolveLexer.g4")
 
 def all():
     require(grammars)
