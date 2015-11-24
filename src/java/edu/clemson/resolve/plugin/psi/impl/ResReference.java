@@ -96,7 +96,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResRefExpBase> {
         return true;
     }
 
-    @NotNull private ResVarProcessor createVarDelegate(
+    /*@NotNull private ResVarProcessor createVarDelegate(
             @NotNull ResScopeProcessor processor) {
         return new ResVarProcessor(getName(), myElement, processor.isCompletion(), true) {
             @Override
@@ -104,7 +104,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResRefExpBase> {
                 return super.condition(e);
             }
         };
-    }
+    }*/
 
     private String getName() {
         return myElement.getIdentifier().getText();
