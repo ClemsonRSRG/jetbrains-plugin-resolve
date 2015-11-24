@@ -1,8 +1,6 @@
-package edu.clemson.resolve.plugin.psi.impl;
+package edu.clemson.resolve.plugin;
 
 import com.intellij.openapi.fileTypes.LanguageFileType;
-import edu.clemson.resolve.plugin.RESOLVEIcons;
-import edu.clemson.resolve.plugin.RESOLVELanguage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
