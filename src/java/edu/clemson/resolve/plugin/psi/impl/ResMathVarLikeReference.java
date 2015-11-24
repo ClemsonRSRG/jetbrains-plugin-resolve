@@ -1,16 +1,14 @@
 package edu.clemson.resolve.plugin.psi.impl;
 
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.plugin.psi.ResFile;
 import edu.clemson.resolve.plugin.psi.ResMathSymbolRefExp;
+import edu.clemson.resolve.plugin.psi.ResNamedElement;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -74,26 +72,35 @@ public class ResMathVarLikeReference
                                               boolean localResolve) {
         ResScopeProcessorBase delegate = createDelegate(processor);
         ResolveUtil.treeWalkUp(myElement, delegate);
-        /*Collection<? extends GoNamedElement> result = delegate.getVariants();
-        if (!processNamedElements(processor, state, result, localResolve)) return false;
-        if (!processFileEntities(file, processor, state, localResolve)) return false;
-        PsiDirectory dir = file.getOriginalFile().getParent();
-        if (!GoReference.processDirectory(dir, file, file.getPackageName(), processor, state, true)) return false;
-        if (GoReference.processImports(file, processor, state, myElement)) return false;
-        if (processBuiltin(processor, state, myElement)) return false;
-        if (getIdentifier().textMatches(GoConstants.NIL) && PsiTreeUtil.getParentOfType(myElement, GoTypeCaseClause.class) != null) {
-            GoType type = PsiTreeUtil.getParentOfType(myElement, GoType.class);
-            if (FormatterUtil.getPrevious(type != null ? type.getNode() : null, GoTypes.CASE) == null) return true;
-            GoFile builtinFile = GoSdkUtil.findBuiltinFile(myElement);
-            if (builtinFile == null) return false;
-            GoVarDefinition nil = ContainerUtil.find(builtinFile.getVars(), new Condition<GoVarDefinition>() {
-                @Override
-                public boolean value(GoVarDefinition v) {
-                    return GoConstants.NIL.equals(v.getName());
-                }
-            });
-            if (nil != null && !processor.execute(nil, state)) return false;
-        }*/
+        Collection<? extends ResNamedElement> result = delegate.getVariants();
+
+        //this processes any named elements we've found searching up the tree in the previous line
+        if (!processLocalEntities(processor, state, result, localResolve)) return false;
+        if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
+        //if (ResReference.processUsesRequests(file, processor, state, myElement)) return false;
+
+        return true;
+    }
+
+    private boolean processModuleLevelEntities(@NotNull ResFile file,
+                                               @NotNull ResScopeProcessor processor,
+                                               @NotNull ResolveState state,
+                                               boolean localProcessing) {
+        if (!processLocalEntities(processor, state, file.getMathDefSigs(), localProcessing)) return false;
+        //if (!processLocalEntities(processor, state, file.getTypes(), localProcessing)) return false;
+        return true;
+    }
+
+
+    private boolean processLocalEntities(@NotNull PsiScopeProcessor processor,
+                                         @NotNull ResolveState state,
+                                         @NotNull Collection<? extends PsiElement> elements,
+                                         boolean localResolve) {
+        for (PsiElement e : elements) {
+            if (/*(definition.isPublic() ||*/( localResolve) && !processor.execute(e, state)) {
+                return false;
+            }
+        }
         return true;
     }
 

@@ -61,7 +61,8 @@ public class RESOLVEReferenceCompletionProvider
             ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
                 @Override
                 protected boolean accept(@NotNull PsiElement e) {
-                    return e instanceof ResMathDefSig;//e != spec &&
+                    //basically the equivalent of saying: "ResMathNamedSignatureOwner"
+                    return e instanceof ResMathDefDecl;//e != spec &&
                     // !(insideParameter &&
                     //         (e instanceof ResNamedSignatureOwner || e instanceof ResVarDef));
                 }
@@ -109,6 +110,11 @@ public class RESOLVEReferenceCompletionProvider
                 return RESOLVECompletionUtil
                         .createVariableLikeLookupElement((ResNamedElement) o);
             }*/
+        }
+        //the signature is named, but the declaration itself isn't...
+        else if (o instanceof ResMathDefDecl &&
+                !((ResMathDefDecl) o).getMathDefSignatures().isEmpty()) {
+
         }
         return null;
     }

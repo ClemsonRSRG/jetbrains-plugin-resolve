@@ -9,6 +9,9 @@ import edu.clemson.resolve.plugin.RESOLVELanguage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ResFile extends PsiFileBase {
 
     public ResFile(@NotNull FileViewProvider viewProvider) {
@@ -21,5 +24,13 @@ public class ResFile extends PsiFileBase {
 
     @Nullable public ResModuleDecl getEnclosedModule() {
         return PsiTreeUtil.findChildOfType(this, ResModuleDecl.class);
+    }
+
+    @NotNull public List<ResMathDefSig> getMathDefSigs() {
+        ResModuleDecl enclosedModule = getEnclosedModule();
+        List<ResMathDefSig> foundDecls =  enclosedModule != null ?
+                enclosedModule.getMathDefSigs() :
+                new ArrayList<ResMathDefSig>();
+        return foundDecls;
     }
 }

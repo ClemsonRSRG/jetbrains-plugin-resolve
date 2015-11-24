@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import edu.clemson.resolve.plugin.psi.ResJetbrainTypes;
 import edu.clemson.resolve.plugin.psi.ResMathSymbolRefExp;
+import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,6 +26,14 @@ public class ResMathSymbolRefExpImpl
     }
 
     @Nullable @Override public ResMathSymbolRefExp getQualifier() {
-        return null;
+        return ResPsiImplUtil.getQualifier(this);
+    }
+
+    public static class Factory implements PsiElementFactory {
+        public static Factory INSTANCE = new Factory();
+
+        @Override public PsiElement createElement(ASTNode node) {
+            return new ResMathSymbolRefExpImpl(node);
+        }
     }
 }

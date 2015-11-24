@@ -34,6 +34,7 @@
         <internalFileTemplate name="Enhancement Implementation Module"/>
         <internalFileTemplate name="Precis Module"/>
         <internalFileTemplate name="Facility Module"/>
+        <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVECompletionContributor"/>
 
         <lang.parserDefinition language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.RESOLVEParserDefinition"/>
         <fileIconPatcher implementation="edu.clemson.resolve.plugin.RESOLVEFileIconPatcher"/>
