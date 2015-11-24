@@ -36,28 +36,27 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResRefExpBase> {
     }
 
     @NotNull private ResolveResult[] resolveInner() {
-        String identifierText = getName();
+        if (!myElement.isValid()) return ResolveResult.EMPTY_ARRAY;
         Collection<ResolveResult> result = new OrderedSet<ResolveResult>();
-        processResolveVariants(createResolveProcessor(
-                identifierText, result, myElement));
+        processResolveVariants(createResolveProcessor(result, myElement));
         return result.toArray(new ResolveResult[result.size()]);
     }
 
     @NotNull static ResScopeProcessor createResolveProcessor(
-            @NotNull final String text,
             @NotNull final Collection<ResolveResult> result,
-            @NotNull final ResCompositeElement o) {
+            @NotNull final ResRefExpBase o) {
         return new ResScopeProcessor() {
-
-            @Override public boolean execute(@NotNull PsiElement element,
-                                             @NotNull ResolveState state) {
+            @Override
+            public boolean execute(@NotNull PsiElement element,
+                                   @NotNull ResolveState state) {
                 if (element.equals(o)) {
-                    return !result.add(new PsiElementResolveResult(element));
+                    return !result.add(
+                            new PsiElementResolveResult(element));
                 }
                 String name = ObjectUtils.chooseNotNull(state.get(ACTUAL_NAME),
                         element instanceof PsiNamedElement ?
-                                ((PsiNamedElement) element).getName() : null);
-                if (text.equals(name)) {
+                                ((PsiNamedElement)element).getName() : null);
+                if (name != null && o.getIdentifier().textMatches(name)) {
                     result.add(new PsiElementResolveResult(element));
                     return false;
                 }
