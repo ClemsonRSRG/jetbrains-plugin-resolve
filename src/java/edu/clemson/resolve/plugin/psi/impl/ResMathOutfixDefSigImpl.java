@@ -1,14 +1,15 @@
-package edu.clemson.resolve.plugin.psi;
+package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import edu.clemson.resolve.plugin.psi.ResJetbrainTypes;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ResMathPrefixDefSigImpl extends ResAbstractMathDefSig {
+public class ResMathOutfixDefSigImpl extends ResAbstractMathDefSig {
 
-    public ResMathPrefixDefSigImpl(@NotNull ASTNode node) {
+    public ResMathOutfixDefSigImpl(@NotNull ASTNode node) {
         super(node);
     }
 
@@ -20,7 +21,7 @@ public class ResMathPrefixDefSigImpl extends ResAbstractMathDefSig {
         public static Factory INSTANCE = new Factory();
 
         @Override public PsiElement createElement(ASTNode node) {
-            return new ResMathPrefixDefSigImpl(node);
+            return new ResMathOutfixDefSigImpl(node);
         }
     }
 }

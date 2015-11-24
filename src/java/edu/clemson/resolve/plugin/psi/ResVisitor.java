@@ -1,4 +1,4 @@
-package edu.clemson.resolve.plugin.psi.boilerplate;
+package edu.clemson.resolve.plugin.psi;
 
 import com.intellij.psi.PsiElementVisitor;
 import org.jetbrains.annotations.NotNull;

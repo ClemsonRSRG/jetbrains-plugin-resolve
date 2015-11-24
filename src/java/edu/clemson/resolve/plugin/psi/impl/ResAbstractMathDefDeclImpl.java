@@ -1,6 +1,7 @@
-package edu.clemson.resolve.plugin.psi;
+package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.lang.ASTNode;
+import edu.clemson.resolve.plugin.psi.ResMathDefDecl;
 import edu.clemson.resolve.plugin.psi.impl.ResCompositeElementImpl;
 import edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl;
 import org.jetbrains.annotations.NotNull;

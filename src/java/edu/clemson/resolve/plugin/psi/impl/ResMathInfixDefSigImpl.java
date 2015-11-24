@@ -1,7 +1,8 @@
-package edu.clemson.resolve.plugin.psi;
+package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
+import edu.clemson.resolve.plugin.psi.ResJetbrainTypes;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

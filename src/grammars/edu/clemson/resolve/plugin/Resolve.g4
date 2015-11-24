@@ -88,13 +88,13 @@ mathDefinitionSig
 
 //TODO: ID for now...
 mathPrefixDefinitionSig
-    :   name=ID (LPAREN
+    :   (ID|mathSymbolName) (LPAREN
             mathVariableDeclGroup (COMMA mathVariableDeclGroup)* RPAREN)?
             COLON mathTypeExp
     ;
 
 mathInfixDefinitionSig
-    :   LPAREN mathVariableDecl RPAREN name=ID
+    :   LPAREN mathVariableDecl RPAREN (ID|mathSymbolName)
         LPAREN mathVariableDecl RPAREN COLON mathTypeExp
     ;
 
@@ -104,8 +104,7 @@ mathOutfixDefinitionSig
     ;
 
 mathSymbolName
-    :   ID
-    |   (PLUS|MINUS|TRIPLEDOT|DIVIDE|LDIVIDE|BAR|DBL_BAR|LT|GT|CAT|MULT|GTE|LTE|INT|NOT)
+    :   (PLUS|MINUS|TRIPLEDOT|DIVIDE|LDIVIDE|BAR|DBL_BAR|LT|GT|CAT|MULT|GTE|LTE|INT|NOT)
     |   BAR TRIPLEDOT BAR
     |   LT TRIPLEDOT GT
     |   DBL_BAR TRIPLEDOT DBL_BAR
@@ -223,7 +222,7 @@ mathCrossTypeExp
     ;
 
 mathSymbolExp
-    :   (incoming=AT)? (qualifier=ID COLONCOLON)? name=mathSymbolName
+    :   (incoming=AT)? (qualifier=ID COLONCOLON)? (ID|mathSymbolName)
     ;
 
 mathOutfixApplyExp

@@ -1,9 +1,10 @@
-package edu.clemson.resolve.plugin.psi;
+package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
-import edu.clemson.resolve.plugin.psi.impl.ResCompositeElementImpl;
+import edu.clemson.resolve.plugin.psi.ResMathVarDecl;
+import edu.clemson.resolve.plugin.psi.ResMathVarDef;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 

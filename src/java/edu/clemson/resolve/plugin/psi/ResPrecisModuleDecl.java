@@ -1,4 +1,4 @@
-package edu.clemson.resolve.plugin.psi.boilerplate;
+package edu.clemson.resolve.plugin.psi;
 
 import edu.clemson.resolve.plugin.psi.ResModuleDecl;
 
