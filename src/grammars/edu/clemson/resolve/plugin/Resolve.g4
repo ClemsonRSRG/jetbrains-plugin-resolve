@@ -202,7 +202,8 @@ mathExp
 mathPrimaryExp
     :   mathLiteralExp
     |   mathCrossTypeExp
-    |   mathSymbolExp
+    |   mathSymbolRefExp
+
     |   mathOutfixApplyExp
     |   mathSetComprehensionExp
     |   mathSetExp
@@ -221,8 +222,12 @@ mathCrossTypeExp
     :   CART_PROD (mathVariableDeclGroup SEMI)+ END
     ;
 
-mathSymbolExp
-    :   (incoming=AT)? (qualifier=ID COLONCOLON)? (ID|mathSymbolName)
+mathSymbolRefExp
+    :   (incoming=AT)? (qualifier=mathQualifierRefExp)? (ID|mathSymbolName)
+    ;
+
+mathQualifierRefExp
+    :   qualifier=ID COLONCOLON
     ;
 
 mathOutfixApplyExp
@@ -259,5 +264,6 @@ mathTupleExp
 //Segments can end in an application but they can't contain one in the middle ..
 //hopefully :) ...
 mathSegmentsExp
-    :   mathSymbolExp (DOT mathSymbolExp)+ (LPAREN mathExp (COMMA mathExp)* RPAREN)?
+    :   mathSymbolRefExp (DOT mathSymbolRefExp)+
+        (LPAREN mathExp (COMMA mathExp)* RPAREN)?
     ;
