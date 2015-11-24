@@ -92,7 +92,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResRefExpBase> {
                                               @NotNull ResScopeProcessor processor,
                                               @NotNull ResolveState state,
                                               boolean localResolve) {
-        ResScopeProcessorBase delegate = createVarDelegate(processor);
+        //ResScopeProcessorBase delegate = createVarDelegate(processor);
 
         return true;
     }
