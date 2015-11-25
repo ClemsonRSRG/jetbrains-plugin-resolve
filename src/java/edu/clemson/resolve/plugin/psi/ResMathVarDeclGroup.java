@@ -1,12 +1,13 @@
 package edu.clemson.resolve.plugin.psi;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public interface ResMathVarDeclGroup extends ResCompositeElement {
 
-    @NotNull List<ResMathVarDef> getMathVarDefList();
+    @NotNull public List<ResMathVarDef> getMathVarDefList();
 
-    //TODO: @Nullable public ResRefExp getMathType();
+    @Nullable public ResCompositeElement getMathType();
 }

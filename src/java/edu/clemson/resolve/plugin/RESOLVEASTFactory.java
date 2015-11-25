@@ -30,8 +30,8 @@ public class RESOLVEASTFactory extends ASTFactory {
 
         //math defns & sigs
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_mathStandardDefinitionDecl), ResStandardMathDefDeclImpl.Factory.INSTANCE);
-        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_mathInfixDefinitionSig), ResMathInfixDefSigImpl.Factory.INSTANCE);
-        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_mathPrefixDefinitionSig), ResMathPrefixDefSigImpl.Factory.INSTANCE);
+        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_mathInfixDefinitionSig), ResMathDefSigImpl.Factory.INSTANCE);
+        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_mathPrefixDefinitionSig), ResMathDefSigImpl.Factory.INSTANCE);
 
         //math vars
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_mathVariableDeclGroup), ResMathVarDeclGroupImpl.Factory.INSTANCE);

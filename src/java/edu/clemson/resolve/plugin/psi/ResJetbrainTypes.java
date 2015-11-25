@@ -21,6 +21,7 @@ import static edu.clemson.resolve.plugin.RESOLVETokenTypes.TOKEN_ELEMENT_TYPES;
  */
 public interface ResJetbrainTypes {
 
+    static RuleElementType MATH_TYPE_EXP = RULE_ELEMENT_TYPES.get(Resolve.RULE_mathTypeExp);
     static RuleElementType MATH_SYMBOL_NAME = RULE_ELEMENT_TYPES.get(Resolve.RULE_mathSymbolName);
 
     static TokenElementType ID = TOKEN_ELEMENT_TYPES.get(ResolveLexer.ID);

@@ -1,9 +1,6 @@
 package edu.clemson.resolve.plugin.completion;
 
-import com.intellij.codeInsight.completion.InsertHandler;
-import com.intellij.codeInsight.completion.InsertionContext;
-import com.intellij.codeInsight.completion.PrefixMatcher;
-import com.intellij.codeInsight.completion.PrioritizedLookupElement;
+import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -14,8 +11,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.ui.UIUtil;
 import edu.clemson.resolve.plugin.RESOLVEIcons;
-import edu.clemson.resolve.plugin.psi.ResMathDefSig;
-import edu.clemson.resolve.plugin.psi.ResMathSymbolRefExp;
+import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,9 +27,10 @@ public class RESOLVECompletionUtil {
                     if (!(element instanceof ResMathDefSig)) return;
                     ResMathDefSig signature = (ResMathDefSig)element;
                     int paramsCount = signature.getMathVarDeclGroups().size();
+                    //we don't want empty parens for nullary function applications
                     InsertHandler<LookupElement> handler =
                             paramsCount == 0 ?
-                                    ParenthesesInsertHandler.NO_PARAMETERS :
+                                    new BasicInsertHandler<LookupElement>() :
                                     ParenthesesInsertHandler.WITH_PARAMETERS;
                     handler.handleInsert(context, item);
                 }
@@ -45,19 +42,32 @@ public class RESOLVECompletionUtil {
                                                     LookupElementPresentation p) {
                     PsiElement o = element.getPsiElement();
                     if (!(o instanceof ResMathDefSig)) return;
-                    String typeText = "";
+                    String rangeTypeText = "";
                     ResMathDefSig signature = (ResMathDefSig)o;
-                    String paramText = "";
+                    String typeText = "";
 
-                    ResMathSymbolRefExp mathType = signature.getMathType();
-                    paramText = signature.getMathVarDeclGroups().toString();
-                    if (mathType != null) typeText = mathType.getText();
-
-                    p.setIcon(RESOLVEIcons.OPERATION);
-                    p.setTypeText(typeText);
+                    ResCompositeElement mathType = signature.getMathType();
+                    boolean first = true;
+                    for (ResMathVarDeclGroup grp : signature.getMathVarDeclGroups()) {
+                        if (grp.getMathType() != null) {
+                            if (first) {
+                                first = false;
+                                typeText += grp.getMathType().getText();
+                            }
+                            else {
+                                typeText +=  " * " +
+                                        grp.getMathType().getText();
+                            }
+                        }
+                    }
+                    if (mathType != null) rangeTypeText = mathType.getText();
+                    if (!typeText.equals("")) typeText += " -> ";
+                    typeText += rangeTypeText;
+                    p.setIcon(RESOLVEIcons.DEFINITION);
+                    p.setTypeText(rangeTypeText);
                     p.setTypeGrayed(true);
-                    //p.setTailText(calcTailText(f), true);
-                    p.setItemText(element.getLookupString() + paramText);
+                   // p.setTailText(calcTailText(f), true);
+                    p.setItemText(element.getLookupString() + " : " + typeText);
                 }
             };
 

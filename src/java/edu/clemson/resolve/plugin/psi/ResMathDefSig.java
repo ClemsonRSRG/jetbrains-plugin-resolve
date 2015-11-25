@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ResMathDefSig extends ResNamedElement {
 
-    @Nullable public ResMathSymbolRefExp getMathType();
+    @Nullable public ResCompositeElement getMathType();
 
     @NotNull public List<ResMathVarDeclGroup> getMathVarDeclGroups();
 }

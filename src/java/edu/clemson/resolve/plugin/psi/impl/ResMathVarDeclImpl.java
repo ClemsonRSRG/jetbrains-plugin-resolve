@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ResMathVarDeclImpl
         extends
-            ResCompositeElementImpl implements ResMathVarDecl {
+            ResMathVarDeclGroupImpl implements ResMathVarDecl {
 
     public ResMathVarDeclImpl(@NotNull ASTNode node) {
         super(node);
