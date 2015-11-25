@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import edu.clemson.resolve.plugin.psi.ResJetbrainTypes;
 import edu.clemson.resolve.plugin.psi.ResMathDefSig;
+import edu.clemson.resolve.plugin.psi.ResMathSymbolRefExp;
 import edu.clemson.resolve.plugin.psi.ResMathVarDeclGroup;
 import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +19,10 @@ public abstract class ResAbstractMathDefSigImpl
 
     public ResAbstractMathDefSigImpl(@NotNull ASTNode node) {
         super(node);
+    }
+
+    @Nullable @Override public ResMathSymbolRefExp getMathType() {
+        return findChildByClass(ResMathSymbolRefExp.class);
     }
 
     @NotNull @Override public List<ResMathVarDeclGroup> getMathVarDeclGroups() {

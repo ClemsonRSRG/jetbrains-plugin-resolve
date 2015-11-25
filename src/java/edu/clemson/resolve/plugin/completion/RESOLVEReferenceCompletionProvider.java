@@ -90,7 +90,13 @@ public class RESOLVEReferenceCompletionProvider
             boolean forTypes) {
         if (o instanceof ResNamedElement) {
             if (o instanceof ResMathDefSig) {
-                return RESOLVECompletionUtil
+                String name = ((ResMathDefSig)o).getName();
+                if (name != null) {
+                    return RESOLVECompletionUtil
+                            .createDefinitionLookupElement(
+                                    (ResMathDefSig) o, name, null,
+                                    RESOLVECompletionUtil.DEFINITION_PRIORITY);
+                }
             }
         /*    if (o instanceof ResTypeLikeNodeDecl) {
                 return RESOLVECompletionUtil
