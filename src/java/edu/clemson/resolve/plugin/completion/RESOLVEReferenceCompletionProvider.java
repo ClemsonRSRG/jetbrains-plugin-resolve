@@ -10,6 +10,7 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import edu.clemson.resolve.plugin.psi.*;
+import edu.clemson.resolve.plugin.psi.impl.ResAbstractMathDefSigImpl;
 import edu.clemson.resolve.plugin.psi.impl.ResMathVarLikeReference;
 import edu.clemson.resolve.plugin.psi.impl.ResReference;
 import edu.clemson.resolve.plugin.psi.impl.ResScopeProcessor;
@@ -62,7 +63,7 @@ public class RESOLVEReferenceCompletionProvider
                 @Override
                 protected boolean accept(@NotNull PsiElement e) {
                     //basically the equivalent of saying: "ResMathNamedSignatureOwner"
-                    return e instanceof ResMathDefDecl;//e != spec &&
+                    return e instanceof ResAbstractMathDefSigImpl;//e != spec &&
                     // !(insideParameter &&
                     //         (e instanceof ResNamedSignatureOwner || e instanceof ResVarDef));
                 }
