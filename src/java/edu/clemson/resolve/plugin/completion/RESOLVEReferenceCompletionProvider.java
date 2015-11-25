@@ -89,6 +89,9 @@ public class RESOLVEReferenceCompletionProvider
             @NotNull PsiElement o, @NotNull ResolveState state,
             boolean forTypes) {
         if (o instanceof ResNamedElement) {
+            if (o instanceof ResMathDefSig) {
+                return RESOLVECompletionUtil
+            }
         /*    if (o instanceof ResTypeLikeNodeDecl) {
                 return RESOLVECompletionUtil
                         .createTypeLookupElement((ResTypeLikeNodeDecl) o);
@@ -111,11 +114,6 @@ public class RESOLVEReferenceCompletionProvider
                 return RESOLVECompletionUtil
                         .createVariableLikeLookupElement((ResNamedElement) o);
             }*/
-        }
-        //the signature is named, but the declaration itself isn't...
-        else if (o instanceof ResMathDefDecl &&
-                !((ResMathDefDecl) o).getMathDefSignatures().isEmpty()) {
-
         }
         return null;
     }
