@@ -12,7 +12,8 @@ public class RESOLVEGenericContext extends RESOLVELiveTemplateContext {
     }
 
     @Override protected boolean isInContext(@NotNull PsiFile file,
-                                  @NotNull PsiElement element, int offset) {
+                                            @NotNull PsiElement element,
+                                            int offset) {
         return false;
     }
 }

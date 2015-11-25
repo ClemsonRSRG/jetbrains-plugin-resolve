@@ -18,7 +18,8 @@ public abstract class RESOLVELiveTemplateContext extends TemplateContextType {
     }
 
     protected abstract boolean isInContext(@NotNull PsiFile file,
-                                   @NotNull PsiElement element, int offset);
+                                           @NotNull PsiElement element,
+                                           int offset);
 
     @Override public boolean isInContext(@NotNull PsiFile file, int offset) {
         // offset is where cursor or insertion point is I guess
