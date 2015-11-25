@@ -84,7 +84,7 @@ public abstract class ResAbstractModuleDeclImpl
         public static Factory INSTANCE = new Factory();
 
         @Override public PsiElement createElement(ASTNode node) {
-            return new ResPrecisModuleDeclImpl(node);
+            return new ResPrecisExtensionModuleDeclImpl(node);
         }
     }
 }

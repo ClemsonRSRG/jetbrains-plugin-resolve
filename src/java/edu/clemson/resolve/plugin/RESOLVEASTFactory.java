@@ -23,9 +23,8 @@ public class RESOLVEASTFactory extends ASTFactory {
     private static final Map<IElementType, PsiElementFactory> ruleElementTypeToPsiFactory = new HashMap<IElementType, PsiElementFactory>();
     static {
         //modules
-        //ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_moduleDecl), ResAbstractModuleDeclImpl.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_precisModuleDecl), ResPrecisModuleDeclImpl.Factory.INSTANCE);
-        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_precisExtensionModuleDecl), ResPrecisModuleDeclImpl.Factory.INSTANCE);
+        ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_precisExtensionModuleDecl), ResPrecisExtensionModuleDeclImpl.Factory.INSTANCE);
         ruleElementTypeToPsiFactory.put(RESOLVETokenTypes.RULE_ELEMENT_TYPES.get(Resolve.RULE_precisBlock), ResBlockImpl.Factory.INSTANCE);
 
         //math defns & sigs

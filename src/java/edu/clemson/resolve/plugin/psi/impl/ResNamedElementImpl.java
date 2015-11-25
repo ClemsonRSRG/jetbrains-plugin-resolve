@@ -10,7 +10,6 @@ import com.intellij.util.PlatformIcons;
 import edu.clemson.resolve.plugin.RESOLVEIcons;
 import edu.clemson.resolve.plugin.psi.ResCompositeElement;
 import edu.clemson.resolve.plugin.psi.ResNamedElement;
-import edu.clemson.resolve.plugin.psi.ResPrecisModuleDecl;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -56,7 +55,9 @@ public abstract class ResNamedElementImpl
 
     @Nullable @Override public Icon getIcon(int flags) {
         Icon icon = null;
-        if (this instanceof ResPrecisModuleDecl) icon = RESOLVEIcons.PRECIS;
+        if (this instanceof ResPrecisModuleDeclImpl) icon = RESOLVEIcons.PRECIS;
+        if (this instanceof ResPrecisExtensionModuleDeclImpl) icon = RESOLVEIcons.PRECIS_EXTENSION;
+
         //TODO: Precis exts
         /*if (this instanceof ResFacilityModuleDecl) icon = RESOLVEIcons.FACILITY;
         else if (this instanceof ResConceptModuleDecl) icon = RESOLVEIcons.CONCEPT;
