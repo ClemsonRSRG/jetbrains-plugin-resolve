@@ -20,8 +20,8 @@ public class RESOLVELanguageParser extends AntlrParser<Resolve> {
     }
 
     @Override protected Resolve createParserImpl(TokenStream tokenStream,
-                                             IElementType root,
-                                             PsiBuilder builder) {
+                                                 IElementType root,
+                                                 PsiBuilder builder) {
         Resolve parser = new Resolve(tokenStream);
         parser.removeErrorListeners();
         parser.addErrorListener(new SyntaxErrorListener());
@@ -29,7 +29,8 @@ public class RESOLVELanguageParser extends AntlrParser<Resolve> {
     }
 
     @Override protected ParseTree parseImpl(Resolve parser,
-                              IElementType root, PsiBuilder builder) {
+                                            IElementType root,
+                                            PsiBuilder builder) {
         return parser.moduleDecl();
     }
 }
