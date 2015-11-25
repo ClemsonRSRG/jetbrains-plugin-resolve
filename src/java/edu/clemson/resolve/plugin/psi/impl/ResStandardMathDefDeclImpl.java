@@ -16,7 +16,9 @@ public class ResStandardMathDefDeclImpl extends ResAbstractMathDefDeclImpl {
     }
 
     @NotNull @Override public List<ResMathDefSig> getMathDefSignatures() {
-        return PsiTreeUtil.getChildrenOfTypeAsList(this, ResMathDefSig.class);
+        List<ResMathDefSig> sigs =
+                PsiTreeUtil.getChildrenOfTypeAsList(this, ResMathDefSig.class);
+        return sigs;
     }
 
     public static class Factory implements PsiElementFactory {

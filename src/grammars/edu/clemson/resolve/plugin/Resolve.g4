@@ -80,12 +80,6 @@ mathTheoremDecl
     :   (COROLLARY|THEOREM) name=ID COLON mathAssertionExp SEMI
     ;
 
-mathDefinitionSig
-    :   mathPrefixDefinitionSig
-    |   mathInfixDefinitionSig
-    |   mathOutfixDefinitionSig
-    ;
-
 //TODO: ID for now...
 mathPrefixDefinitionSig
     :   (ID|mathSymbolName) (LPAREN
@@ -122,12 +116,17 @@ mathDefinesDefinitionDecl
     ;
 
 mathStandardDefinitionDecl
-    :   (IMPLICIT)? DEFINITION mathDefinitionSig
+    :   (IMPLICIT)? DEFINITION
+        ( mathPrefixDefinitionSig
+        | mathInfixDefinitionSig
+        | mathOutfixDefinitionSig)
         (IS mathAssertionExp)? SEMI
     ;
 
 mathInductiveDefinitionDecl
-    :   INDUCTIVE DEFINITION mathDefinitionSig IS
+    :   INDUCTIVE DEFINITION ( mathPrefixDefinitionSig
+                             | mathInfixDefinitionSig
+                             | mathOutfixDefinitionSig) IS
         BASE_CASE mathAssertionExp SEMI
         INDUCTIVE_CASE mathAssertionExp SEMI
     ;

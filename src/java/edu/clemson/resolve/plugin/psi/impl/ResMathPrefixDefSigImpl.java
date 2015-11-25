@@ -7,7 +7,7 @@ import org.antlr.intellij.adaptor.parser.PsiElementFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ResMathPrefixDefSigImpl extends ResAbstractMathDefSig {
+public class ResMathPrefixDefSigImpl extends ResAbstractMathDefSigImpl {
 
     public ResMathPrefixDefSigImpl(@NotNull ASTNode node) {
         super(node);

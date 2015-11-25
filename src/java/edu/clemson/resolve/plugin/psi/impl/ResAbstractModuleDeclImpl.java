@@ -32,8 +32,6 @@ public abstract class ResAbstractModuleDeclImpl
     }
 
     @NotNull @Override public List<ResMathDefDecl> getMathDefDecls() {
-
-
         return CachedValuesManager.getCachedValue(this,
                 new CachedValueProvider<List<ResMathDefDecl>>() {
                     @Override

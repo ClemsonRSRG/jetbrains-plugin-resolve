@@ -87,17 +87,17 @@ public class ResMathVarLikeReference
                                                @NotNull ResolveState state,
                                                boolean localProcessing) {
         if (!processLocalEntities(processor, state, file.getMathDefSigs(), localProcessing)) return false;
+        //type families as well perhaps (if we're in the proper context -- e.g.: not a precis or precis-extension)
         //if (!processLocalEntities(processor, state, file.getTypes(), localProcessing)) return false;
         return true;
     }
 
-
     private boolean processLocalEntities(@NotNull PsiScopeProcessor processor,
                                          @NotNull ResolveState state,
-                                         @NotNull Collection<? extends PsiElement> elements,
+                                         @NotNull Collection<? extends ResNamedElement> elements,
                                          boolean localResolve) {
-        for (PsiElement e : elements) {
-            if (/*(definition.isPublic() ||*/( localResolve) && !processor.execute(e, state)) {
+        for (ResNamedElement e : elements) {
+            if ((e.isPublic() || localResolve) && !processor.execute(e, state)) {
                 return false;
             }
         }
