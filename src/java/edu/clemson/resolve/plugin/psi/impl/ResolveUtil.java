@@ -15,7 +15,9 @@ public final class ResolveUtil {
         PsiElement run = place;
         while (run != null) {
             if (place != run && !run.processDeclarations(processor,
-                    ResolveState.initial(), lastParent, place)) return false;
+                    ResolveState.initial(), lastParent, place)) {
+                return false;
+            }
             lastParent = run;
             run = run.getParent();
         }
