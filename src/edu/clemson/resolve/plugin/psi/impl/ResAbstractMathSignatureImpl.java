@@ -3,14 +3,14 @@ package edu.clemson.resolve.plugin.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.util.PsiTreeUtil;
 import edu.clemson.resolve.plugin.psi.ResMathParamDecl;
-import edu.clemson.resolve.plugin.psi.ResMathSignature;
+import edu.clemson.resolve.plugin.psi.ResMathDefinitionSignature;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public abstract class ResAbstractMathSignatureImpl
         extends
-            ResCompositeElementImpl implements ResMathSignature {
+            ResCompositeElementImpl implements ResMathDefinitionSignature {
 
     public ResAbstractMathSignatureImpl(@NotNull ASTNode node) {
         super(node);

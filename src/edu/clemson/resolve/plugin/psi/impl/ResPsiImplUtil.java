@@ -112,7 +112,7 @@ public class ResPsiImplUtil {
         if (o instanceof ResReferenceExpression) {
             PsiReference reference = o.getReference();
             PsiElement resolve = reference != null ? reference.resolve() : null;
-            if (resolve instanceof ResProgTypeOwner) return ((ResProgTypeOwner) resolve).getResType(context);
+            if (resolve instanceof ResTypeOwner) return ((ResTypeOwner) resolve).getResType(context);
         }
         else if (o instanceof ResSelectorExpr) {
             ResExpression item = ContainerUtil.getLastItem(((ResSelectorExpr) o).getExpressionList());

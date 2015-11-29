@@ -31,7 +31,7 @@ public class ResFile extends PsiFileBase {
         return PsiTreeUtil.findChildOfType(this, ResModuleDecl.class);
     }
 
-    @NotNull public List<ResUsesSpec> getUsesSpecs() {
+    /*@NotNull public List<ResUsesSpec> getUsesSpecs() {
         ResModuleDecl enclosedModule = getEnclosedModule();
         return enclosedModule != null ? enclosedModule.getUsesSpecs() :
                 new ArrayList<ResUsesSpec>();
@@ -41,7 +41,7 @@ public class ResFile extends PsiFileBase {
         ResModuleDecl enclosedModule = getEnclosedModule();
         return enclosedModule != null ? enclosedModule.getTypes() :
                 new ArrayList<ResTypeLikeNodeDecl>();
-    }
+    }*/
 
     /*@NotNull public List<ResFacilityDecl> getFacilities() {
         ResModuleDecl enclosedModule = getEnclosedModule();

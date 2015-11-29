@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface ResModuleDecl extends ResNamedElement {
 
-    @NotNull public ResModuleBlock getModuleBlock();
+    @NotNull public ResBlock getBlock();
 
-    @NotNull public List<ResUsesSpec> getUsesSpecs();
+    //@NotNull public List<ResUsesSpec> getUsesSpecs();
 
     /*@NotNull public List<ResFacilityDecl> getFacilities();
 

@@ -158,7 +158,7 @@
     extends("Math.*(DefinitionDecl)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathDefinitionDeclImpl"
 
     extends("Math.*(Signature)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathSignatureImpl"
-    implements("Math.*Signature")="edu.clemson.resolve.plugin.psi.ResMathSignature"
+    implements("Math.*Signature")="edu.clemson.resolve.plugin.psi.ResMathDefinitionSignature"
     implements("Math.*DefinitionDecl")="edu.clemson.resolve.plugin.psi.ResMathDefinitionDecl"
 
     //extends("MathInfixExp")=MathBinaryExp
