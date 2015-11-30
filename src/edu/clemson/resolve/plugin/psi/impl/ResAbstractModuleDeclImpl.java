@@ -31,22 +31,22 @@ public abstract class ResAbstractModuleDeclImpl
         super(node);
     }
 
-    @NotNull public ResModuleBlock getModuleBlock() {
-        return findNotNullChildByClass(ResModuleBlock.class);
+    @NotNull public ResBlock getBlock() {
+        return findNotNullChildByClass(ResBlock.class);
     }
 
     @Nullable @Override public PsiElement getIdentifier() {
         return findChildByType(ResTypes.IDENTIFIER);
     }
 
-    @NotNull @Override public List<ResUsesSpec> getUsesSpecs() {
+   /* @NotNull @Override public List<ResUsesSpec> getUsesItems() {
         return getUsesList() != null ? getUsesList().getUsesSpecList() :
                 ContainerUtil.<ResUsesSpec>newArrayList();
     }
 
-    @Nullable public ResUsesList getUsesList() {
+    @Nullable public ResUsesList getUsesItemList() {
         return PsiTreeUtil.findChildOfType(this, ResUsesList.class);
-    }
+    }*/
 
     /*@NotNull public List<ResTypeLikeNodeDecl> getTypes() {
         final ResBlock body = this.getModuleBlock();

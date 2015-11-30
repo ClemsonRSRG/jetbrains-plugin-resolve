@@ -136,33 +136,14 @@
         space                   = "regexp:\s+"
         identifier              = 'regexp:\p{Alpha}\w*'
     ]
-/*
-    extends("(Facility|Concept|Precis)ModuleDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleDeclImpl"
-    extends("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.impl.ResOperationLikeNodeImpl"
-    extends("(Facility|Operation)Decl|(Uses)Spec|(Param|Var|Field)Def")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
-    extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeDeclImpl"
-    extends("(Or|Selector)Expr")=BinaryExpr
-    extends(".*Statement")=Statement
-    extends(".*(Expr)")=Expression
-
-    implements("OpBlock")="edu.clemson.resolve.plugin.psi.ResBlock"
-    implements("(Concept|Facility)Block")="edu.clemson.resolve.plugin.psi.ResModuleBlock"
-    implements("OperationDecl")="edu.clemson.resolve.plugin.psi.ResProgNamedSignatureOwnerwner"
-    implements(".*ReferenceExpression")="edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase"
-    implements("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
-    implements("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.ResOperationWithBodyNode"
-    implements("(Var|Param)Def|(Facility)Decl|(Uses)Spec|(Field)Def")="edu.clemson.resolve.plugin.psi.ResProgNamedElementment"
-    implements("(Facility|Concept|Precis)ModuleDecl")="edu.clemson.resolve.plugin.psi.ResModuleDecl"
-*/
 
     extends("Math.*(DefinitionDecl)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathDefinitionDeclImpl"
 
     extends("Math.*(Signature)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathSignatureImpl"
     implements("Math.*Signature")="edu.clemson.resolve.plugin.psi.ResMathDefinitionSignature"
     implements("Math.*DefinitionDecl")="edu.clemson.resolve.plugin.psi.ResMathDefinitionDecl"
+    implements(".*Block")="edu.clemson.resolve.plugin.psi.ResBlock"
 
-    //extends("MathInfixExp")=MathBinaryExp
-    //extends("Math.*(Exp)")=MathExp
     extends("Math.*(Exp)")=MathExp
 
     generateTokenAccessors=true
@@ -172,13 +153,13 @@
 ModuleDecl ::= PrecisModuleDecl <<eof>>
 
 PrecisModuleDecl ::= 'Precis' identifier ';'
-UsesList?
+UsesItemList?
 PrecisBlock
 'end' identifier ';' {pin(".*")=1}
 
-UsesList ::= 'uses' UsesSpec (',' UsesSpec)* ';'
+UsesItemList ::= 'uses' UsesItem (',' UsesItem)* ';'
 
-UsesSpec ::= identifier {pin=1 methods=[getReferences resolve getUsesTextRange]}
+UsesItem ::= identifier {pin=1 methods=[getReferences resolve getUsesTextRange]}
 
 PrecisBlock ::= PrecisItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
 
@@ -208,17 +189,17 @@ MathInfixDefinitionSignature ::=
 
 private MathDefinitionParams ::= '(' MathDefinitionParamList ')' { pin=1}
 private ParamListRec ::= !(')')
-private MathDefinitionParamList ::= MathParamDecl (',' MathParamDecl)* {pin=1 recoverWhile=ParamListRec}
+private MathDefinitionParamList ::= MathVarDeclGroup (',' MathVarDeclGroup)* {pin=1 recoverWhile=ParamListRec}
 
-MathSingletonParamDecl ::= MathParamDef ':' MathType {pin=2 extends=MathParamDecl}
+MathSingletonParamDecl ::= MathVarDef ':' MathTypeExp {pin=2 extends=MathVarDeclGroup}
 
-MathParamDecl ::= MathDefinitionParamDefListNoPin ':' MathType {pin=1}
-private MathDefinitionParamDefListNoPin ::= MathParamDef &(!(')')) (',' MathParamDef)* {pin=1}
-MathParamDef ::= identifier
+MathVarDeclGroup ::= MathVarDeclList ':' MathTypeExp {pin=1}
+private MathVarDeclList ::= MathVarDef &(!(')')) (',' MathVarDef)* {pin=1}
+MathVarDef ::= identifier
 
-MathResult ::= ':' MathType
+MathResult ::= ':' MathTypeExp
 
-MathType ::= MathExp
+MathTypeExp ::= MathExp
 
 MathExp ::=  MathPrefixApplyExp|MathPrimary
 

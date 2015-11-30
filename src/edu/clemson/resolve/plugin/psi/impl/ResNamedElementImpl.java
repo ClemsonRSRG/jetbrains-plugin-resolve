@@ -69,12 +69,12 @@ public abstract class ResNamedElementImpl
 
     @Nullable @Override public Icon getIcon(int flags) {
         Icon icon = null;
-        /*if (this instanceof ResFacilityModuleDecl) icon = RESOLVEIcons.FACILITY;
-        else if (this instanceof ResConceptModuleDecl) icon = RESOLVEIcons.CONCEPT;
+        if (this instanceof ResPrecisModuleDecl) icon = RESOLVEIcons.PRECIS;
+        /*else if (this instanceof ResConceptModuleDecl) icon = RESOLVEIcons.CONCEPT;
         else if (this instanceof ResPrecisModuleDecl) icon = RESOLVEIcons.PRECIS;
         else if (this instanceof ResTypeLikeNodeDecl) icon = RESOLVEIcons.TYPE;
         else if (this instanceof ResVarDef) icon = RESOLVEIcons.VARIABLE;
-        else if (this instanceof ResFieldDef) icon = RESOLVEIcons.FIELD;
+        else if (this instanceof ResFieldDef) icon = RESOLVEIcons.FIELD;*/
         //TODO: complete the icon list here as you go along
         if (icon != null) {
             if ((flags & Iconable.ICON_FLAG_VISIBILITY) != 0) {
@@ -85,7 +85,7 @@ public abstract class ResNamedElementImpl
                 return rowIcon;
             }
             return icon;
-        }*/
+        }
         return super.getIcon(flags);
     }
 }

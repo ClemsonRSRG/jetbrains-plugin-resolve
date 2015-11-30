@@ -10,6 +10,8 @@ import edu.clemson.resolve.plugin.psi.ResMathType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public abstract class ResAbstractMathDefinitionDeclImpl
         extends
             ResNamedElementImpl implements ResMathDefinitionDecl {
@@ -18,16 +20,8 @@ public abstract class ResAbstractMathDefinitionDeclImpl
         super(node);
     }
 
-    @Nullable @Override public ResMathDefinitionSignature getMathSignature() {
-        return findChildByClass(ResMathDefinitionSignature.class);
-    }
-
-    @Nullable protected ResMathType getResTypeInner(
-            @Nullable ResolveState context) {
-        return findSiblingType();
-    }
-
-    @Nullable @Override public ResMathType findSiblingType() {
-        return PsiTreeUtil.getNextSiblingOfType(this, ResMathType.class);
+    @Override @NotNull public List<ResMathDefinitionSignature> getSignatures() {
+        return PsiTreeUtil.getChildrenOfTypeAsList(
+                this, ResMathDefinitionSignature.class);
     }
 }

@@ -5,15 +5,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.OrderedSet;
-import edu.clemson.resolve.plugin.psi.ResProgNamedElement;
+import edu.clemson.resolve.plugin.psi.ResMathDefinitionDecl;
+import edu.clemson.resolve.plugin.psi.ResNamedElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public abstract class ResScopeProcessorBase extends ResScopeProcessor {
-    @NotNull protected final OrderedSet<ResProgNamedElement> myResult =
-            new OrderedSet<ResProgNamedElement>();
+    @NotNull protected final OrderedSet<ResNamedElement> myResult =
+            new OrderedSet<ResNamedElement>();
 
     @NotNull protected final PsiElement origin;
     @NotNull private final PsiElement requestedNameElement;
@@ -33,24 +34,26 @@ public abstract class ResScopeProcessorBase extends ResScopeProcessor {
 
     @Override public boolean execute(@NotNull PsiElement psiElement,
                                      @NotNull ResolveState resolveState) {
-        if (!(psiElement instanceof ResProgNamedElement)) return true;
-        String name = ((ResProgNamedElement)psiElement).getName();
+        if (psiElement instanceof ResMathDefinitionDecl) return false;
+
+        if (!(psiElement instanceof ResNamedElement)) return true;
+        String name = ((ResNamedElement)psiElement).getName();
         if (StringUtil.isEmpty(name) || !isCompletion &&
                 !requestedNameElement.textMatches(name)) return true;
         if (condition(psiElement)) return true;
         if (psiElement.equals(origin)) return true;
-        return add((ResProgNamedElement)psiElement) || isCompletion;
+        return add((ResNamedElement)psiElement) || isCompletion;
     }
 
-    protected boolean add(@NotNull ResProgNamedElement psiElement) {
+    protected boolean add(@NotNull ResNamedElement psiElement) {
         return !myResult.add(psiElement);
     }
 
-    @Nullable public ResProgNamedElement getResult() {
+    @Nullable public ResNamedElement getResult() {
         return ContainerUtil.getFirstItem(myResult);
     }
 
-    @NotNull public List<ResProgNamedElement> getVariants() {
+    @NotNull public List<ResNamedElement> getVariants() {
         return myResult;
     }
 

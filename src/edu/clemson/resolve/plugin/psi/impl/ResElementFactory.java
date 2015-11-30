@@ -28,7 +28,7 @@ public class ResElementFactory {
     @NotNull public static PsiElement createIdentifierFromText(
             @NotNull Project project, String text) {
         ResFile file = createFileFromText(project,
-                "Facility "+text+";end "+text+";");
+                "Precis " + text + ";end " + text + ";");
         return file.getEnclosedModule().getIdentifier();
     }
 
