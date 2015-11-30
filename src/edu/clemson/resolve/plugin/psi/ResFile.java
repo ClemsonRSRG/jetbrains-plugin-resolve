@@ -31,6 +31,14 @@ public class ResFile extends PsiFileBase {
         return PsiTreeUtil.findChildOfType(this, ResModuleDecl.class);
     }
 
+    @NotNull public List<ResMathDefinitionSignature> getMathDefinitionSignatures() {
+        ResModuleDecl enclosedModule = getEnclosedModule();
+        List<ResMathDefinitionSignature> foundDecls =  enclosedModule != null ?
+                enclosedModule.getMathDefinitionSignatures() :
+                new ArrayList<ResMathDefinitionSignature>();
+        return foundDecls;
+    }
+
     /*@NotNull public List<ResUsesSpec> getUsesSpecs() {
         ResModuleDecl enclosedModule = getEnclosedModule();
         return enclosedModule != null ? enclosedModule.getUsesSpecs() :

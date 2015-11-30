@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ResAbstractModuleDeclImpl
@@ -37,6 +38,28 @@ public abstract class ResAbstractModuleDeclImpl
 
     @Nullable @Override public PsiElement getIdentifier() {
         return findChildByType(ResTypes.IDENTIFIER);
+    }
+
+    @NotNull @Override public
+            List<ResMathDefinitionDecl> getMathDefinitionDecls() {
+        return CachedValuesManager.getCachedValue(this,
+                new CachedValueProvider<List<ResMathDefinitionDecl>>() {
+                    @Override
+                    public Result<List<ResMathDefinitionDecl>> compute() {
+                        return Result.create(calc(ResMathDefinitionDecl.class),
+                                ResAbstractModuleDeclImpl.this);
+                    }
+                });
+    }
+
+    @NotNull @Override public
+            List<ResMathDefinitionSignature> getMathDefinitionSignatures() {
+        List<ResMathDefinitionSignature> signatures =
+                new ArrayList<ResMathDefinitionSignature>();
+        for (ResMathDefinitionDecl def : getMathDefinitionDecls()) {
+            signatures.addAll(def.getSignatures());
+        }
+        return signatures;
     }
 
    /* @NotNull @Override public List<ResUsesSpec> getUsesItems() {
@@ -91,20 +114,20 @@ public abstract class ResAbstractModuleDeclImpl
                                 ResAbstractModuleDeclImpl.this);
                     }
                 });
-    }
+    }*/
 
     @NotNull private <T extends ResCompositeElement> List<T> calc(
             final Class<? extends T> type) {
         final List<T> result = ContainerUtil.newArrayList();
-        processChildrenDummyAware(this.getModuleBlock(),
-                new Processor<PsiElement>() {
-            @Override public boolean process(PsiElement e) {
+        processChildrenDummyAware(this.getBlock(), new Processor<PsiElement>() {
+            @Override
+            public boolean process(PsiElement e) {
                 if (type.isInstance(e)) result.add(type.cast(e));
                 return true;
             }
         });
         return result;
-    }*/
+    }
 
     private static boolean processChildrenDummyAware(@NotNull ResBlock module,
                                                      @NotNull final Processor<PsiElement> processor) {

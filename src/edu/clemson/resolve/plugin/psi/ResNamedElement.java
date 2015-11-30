@@ -11,9 +11,9 @@ public interface ResNamedElement
         extends
             ResCompositeElement, PsiNameIdentifierOwner, NavigationItem {
 
-    boolean isPublic();
+    public boolean isPublic();
 
-    @Nullable PsiElement getIdentifier();
+    @Nullable public PsiElement getIdentifier();
 
-    @NotNull PsiFile getContainingFile();
+    @NotNull public PsiFile getContainingFile();
 }

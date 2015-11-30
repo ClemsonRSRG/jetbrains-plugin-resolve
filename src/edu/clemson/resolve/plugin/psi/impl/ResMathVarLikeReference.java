@@ -75,8 +75,8 @@ public class ResMathVarLikeReference
         Collection<? extends ResNamedElement> result = delegate.getVariants();
 
         //this processes any named elements we've found searching up the tree in the previous line
-        //if (!processLocalEntities(processor, state, result, localResolve)) return false;
-        //if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
+        if (!processLocalEntities(processor, state, result, localResolve)) return false;
+        if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
         //if (ResReference.processUsesRequests(file, processor, state, myElement)) return false;
 
         return true;
@@ -86,7 +86,7 @@ public class ResMathVarLikeReference
                                                @NotNull ResScopeProcessor processor,
                                                @NotNull ResolveState state,
                                                boolean localProcessing) {
-        //if (!processLocalEntities(processor, state, file.getMathDefSigs(), localProcessing)) return false;
+        if (!processLocalEntities(processor, state, file.getMathDefinitionSignatures(), localProcessing)) return false;
         //type families as well perhaps (if we're in the proper context -- e.g.: not a precis or precis-extension)
         //if (!processLocalEntities(processor, state, file.getTypes(), localProcessing)) return false;
         return true;

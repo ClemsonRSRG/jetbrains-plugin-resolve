@@ -5,5 +5,5 @@ import org.jetbrains.annotations.Nullable;
 
 public interface ResTypeOwner extends ResCompositeElement {
 
-    @Nullable ResType getResType(@Nullable ResolveState context);
+    @Nullable public ResType getResType(@Nullable ResolveState context);
 }
