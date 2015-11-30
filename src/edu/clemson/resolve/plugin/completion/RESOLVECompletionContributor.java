@@ -12,8 +12,7 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import edu.clemson.resolve.plugin.ResTypes;
-import edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase;
-import edu.clemson.resolve.plugin.psi.ResUsesSpec;
+import edu.clemson.resolve.plugin.psi.ResReferenceExpBase;
 import edu.clemson.resolve.plugin.psi.impl.ResCachedReference;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,30 +25,23 @@ public class RESOLVECompletionContributor extends CompletionContributor {
     public RESOLVECompletionContributor() {
         extend(CompletionType.BASIC, referenceExpression(),
                 new RESOLVEReferenceCompletionProvider());
-        extend(CompletionType.BASIC, resReference(),
-                new RESOLVEReferenceCompletionProvider());
-        extend(CompletionType.BASIC, usesReference(),
-                new RESOLVEUsesCompletionProvider());
+        //extend(CompletionType.BASIC, resReference(),
+        //        new RESOLVEReferenceCompletionProvider());
     }
 
     private static PsiElementPattern.Capture<PsiElement> referenceExpression() {
-        return psiElement().withParent(ResReferenceExpressionBase.class);
+        return psiElement().withParent(ResReferenceExpBase.class);
     }
 
-    private static PsiElementPattern.Capture<PsiElement> resReference() {
-        return psiElement().withParent(psiElement()
-                .withReference(ResCachedReference.class));
-    }
-
-    private static PsiElementPattern.Capture<PsiElement> usesReference() {
-        return PlatformPatterns.psiElement(ResTypes.IDENTIFIER)
-                .withParent(psiElement(ResTypes.USES_SPEC));
-    }
+   // private static PsiElementPattern.Capture<PsiElement> resReference() {
+   //     return psiElement().withParent(psiElement()
+   //             .withReference(ResCachedReference.class));
+   // }
 
     /**
      * Allow autoPopup to appear after custom symbol
      */
-    public boolean invokeAutoPopup(@NotNull PsiElement position, char typeChar) {
-        return typeChar != ';' && typeChar != ' ' && typeChar != ')';
-    }
+   // public boolean invokeAutoPopup(@NotNull PsiElement position, char typeChar) {
+   //     return typeChar != ';' && typeChar != ' ' && typeChar != ')';
+   // }
 }

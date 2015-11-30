@@ -6,7 +6,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import edu.clemson.resolve.plugin.psi.ResMathDefinitionDecl;
 import edu.clemson.resolve.plugin.psi.ResMathInfixDefinitionSignature;
 import edu.clemson.resolve.plugin.psi.ResMathDefinitionSignature;
-import edu.clemson.resolve.plugin.psi.ResMathType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

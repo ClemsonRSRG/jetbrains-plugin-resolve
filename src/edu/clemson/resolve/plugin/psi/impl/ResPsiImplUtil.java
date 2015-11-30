@@ -29,6 +29,16 @@ public class ResPsiImplUtil {
                 TextRange.EMPTY_RANGE;
     }
 
+    @Nullable public static ResMathReferenceExp getQualifier(
+            @NotNull ResMathReferenceExp o) {
+        return PsiTreeUtil.getChildOfType(o, ResMathReferenceExp.class);
+    }
+
+    @NotNull public static ResMathVarLikeReference getReference(
+            @NotNull ResMathReferenceExp o) {
+        return new ResMathVarLikeReference(o);
+    }
+
     @NotNull public static String getText(@Nullable ResType o) {
         if (o == null) return "";
         String text = o.getText();

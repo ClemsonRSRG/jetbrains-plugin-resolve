@@ -138,8 +138,9 @@
     ]
 
     extends("Math.*(DefinitionDecl)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathDefinitionDeclImpl"
-
     extends("Math.*(Signature)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathSignatureImpl"
+
+    implements(".*ReferenceExp")="edu.clemson.resolve.plugin.psi.ResReferenceExpBase"
     implements("Math.*Signature")="edu.clemson.resolve.plugin.psi.ResMathDefinitionSignature"
     implements("Math.*DefinitionDecl")="edu.clemson.resolve.plugin.psi.ResMathDefinitionDecl"
     implements(".*Block")="edu.clemson.resolve.plugin.psi.ResBlock"
@@ -218,6 +219,6 @@ MathSymbolExp ::= MathReferenceExp MathQualifiedReferenceExp? {elementType=MathR
 
 left MathQualifiedReferenceExp ::= '::' identifier {elementType=MathReferenceExp}
 
-MathReferenceExp::= identifier {extends=MathExp}
+MathReferenceExp::= identifier {methods=[getReference getQualifier] extends=MathExp}
 
 MathLiteralExp ::= (int|'true'|'false')
