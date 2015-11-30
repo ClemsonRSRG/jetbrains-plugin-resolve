@@ -11,9 +11,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * See note in {@link ResMathDefinitionDecl} as to why this doesn't extend
+ * {@link edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl}
+ */
 public abstract class ResAbstractMathDefinitionDeclImpl
         extends
-            ResNamedElementImpl implements ResMathDefinitionDecl {
+            ResCompositeElementImpl implements ResMathDefinitionDecl {
 
     public ResAbstractMathDefinitionDeclImpl(@NotNull ASTNode node) {
         super(node);

@@ -10,7 +10,6 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import edu.clemson.resolve.plugin.psi.*;
-import edu.clemson.resolve.plugin.psi.impl.ResMathDefSigImpl;
 import edu.clemson.resolve.plugin.psi.impl.ResMathVarLikeReference;
 import edu.clemson.resolve.plugin.psi.impl.ResReference;
 import edu.clemson.resolve.plugin.psi.impl.ResScopeProcessor;
@@ -93,7 +92,7 @@ public class RESOLVEReferenceCompletionProvider
                 if (name != null) {
                     return RESOLVECompletionUtil
                             .createDefinitionLookupElement(
-                                    (ResMathDefSig) o, name, null,
+                                    (ResMathDefinitionSignature) o, name, null,
                                     RESOLVECompletionUtil.DEFINITION_PRIORITY);
                 }
             }

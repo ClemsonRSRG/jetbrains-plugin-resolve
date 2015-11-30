@@ -47,21 +47,21 @@ public class RESOLVECompletionUtil {
                     ResCompositeElement mathType = signature.getMathTypeExp();
                     boolean first = true;
                     for (ResMathVarDeclGroup grp : signature.getParameters()) {
-                        if (grp.getMathTypeExp() != null) {
+                        if (grp.getMathExp() != null) {
                             if (first) {
                                 first = false;
-                                typeText += grp.getMathType().getText();
+                                typeText += grp.getMathExp().getText();
                             }
                             else {
                                 typeText +=  " * " +
-                                        grp.getMathType().getText();
+                                        grp.getMathExp().getText();
                             }
                         }
                     }
                     if (mathType != null) rangeTypeText = mathType.getText();
                     if (!typeText.equals("")) typeText += " -> ";
                     typeText += rangeTypeText;
-                    p.setIcon(RESOLVEIcons.DEFINITION);
+                    p.setIcon(RESOLVEIcons.DEF);
                     p.setTypeText(rangeTypeText);
                     p.setTypeGrayed(true);
                     // p.setTailText(calcTailText(f), true);
@@ -80,8 +80,10 @@ public class RESOLVECompletionUtil {
     }
 
     @NotNull public static LookupElement createDefinitionLookupElement(
-            @NotNull ResMathDefSig signature, @NotNull String lookupString,
-            @Nullable InsertHandler<LookupElement> h, double priority) {
+            @NotNull ResMathDefinitionSignature signature,
+            @NotNull String lookupString,
+            @Nullable InsertHandler<LookupElement> h,
+            double priority) {
         return PrioritizedLookupElement.withPriority(LookupElementBuilder
                         .createWithSmartPointer(lookupString, signature)
                         .withRenderer(DEFINITION_RENDERER)

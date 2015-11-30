@@ -139,10 +139,14 @@
 
     extends("Math.*(DefinitionDecl)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathDefinitionDeclImpl"
     extends("Math.*(Signature)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathSignatureImpl"
+    extends(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleDeclImpl"
+    extends(".*Def")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
 
+    implements(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.ResModuleDecl"
     implements(".*ReferenceExp")="edu.clemson.resolve.plugin.psi.ResReferenceExpBase"
     implements("Math.*Signature")="edu.clemson.resolve.plugin.psi.ResMathDefinitionSignature"
     implements("Math.*DefinitionDecl")="edu.clemson.resolve.plugin.psi.ResMathDefinitionDecl"
+    implements(".*Def")="edu.clemson.resolve.plugin.psi.ResNamedElement"
     implements(".*Block")="edu.clemson.resolve.plugin.psi.ResBlock"
 
     extends("Math.*(Exp)")=MathExp
@@ -182,23 +186,21 @@ private MathDefinitionSignature ::=
         |  MathInfixDefinitionSignature
 
 MathPrefixDefinitionSignature ::=
-          identifier MathDefinitionParams? MathResult {pin=1}
+          identifier MathDefinitionParams? ':' MathTypeExp {pin=1}
 
 MathInfixDefinitionSignature ::=
-        '(' MathSingletonParamDecl ')' identifier
-        '(' MathSingletonParamDecl ')' MathResult {pin=1}
+        '(' MathSingletonVarDecl ')' identifier
+        '(' MathSingletonVarDecl ')' ':' MathTypeExp {pin=1}
 
 private MathDefinitionParams ::= '(' MathDefinitionParamList ')' { pin=1}
 private ParamListRec ::= !(')')
 private MathDefinitionParamList ::= MathVarDeclGroup (',' MathVarDeclGroup)* {pin=1 recoverWhile=ParamListRec}
 
-MathSingletonParamDecl ::= MathVarDef ':' MathTypeExp {pin=2 extends=MathVarDeclGroup}
+MathSingletonVarDecl ::= MathVarDef ':' MathTypeExp {pin=2 extends=MathVarDeclGroup}
 
 MathVarDeclGroup ::= MathVarDeclList ':' MathTypeExp {pin=1}
 private MathVarDeclList ::= MathVarDef &(!(')')) (',' MathVarDef)* {pin=1}
 MathVarDef ::= identifier
-
-MathResult ::= ':' MathTypeExp
 
 MathTypeExp ::= MathExp
 
