@@ -224,10 +224,9 @@ private MathPrimary ::=
 
 MathSymbolExp ::= MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}
 
-left MathQualifiedReferenceExp ::= '::' identifier {elementType=MathReferenceExp}
+left MathQualifiedReferenceExp ::= '::' MathNameIdentifier {elementType=MathReferenceExp}
 
-//TODO: instead of identifier, this needs to be MathNameIdentifier
-MathReferenceExp::= identifier {methods=[getReference getQualifier] extends=MathExp}
+MathReferenceExp::= MathNameIdentifier {methods=[getReference getQualifier getIdentifier] extends=MathExp}
 
 MathLiteralExp ::= (int|'true'|'false')
 

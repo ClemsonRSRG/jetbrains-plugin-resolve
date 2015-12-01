@@ -29,6 +29,10 @@ public class ResPsiImplUtil {
                 TextRange.EMPTY_RANGE;
     }
 
+    @NotNull public static PsiElement getIdentifier(ResMathReferenceExp o) {
+        return PsiTreeUtil.getChildOfType(o, ResMathNameIdentifier.class);
+    }
+
     @Nullable public static ResMathReferenceExp getQualifier(
             @NotNull ResMathReferenceExp o) {
         return PsiTreeUtil.getChildOfType(o, ResMathReferenceExp.class);
