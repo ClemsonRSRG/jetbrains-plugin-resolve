@@ -109,10 +109,10 @@ ESCAPES = [abfnrtv]
 ":=:"                                   { return COLON_EQUALS_COLON; }
 "->"                                    { return RARROW; }
 "~"			                            { return TILDE; }
-"union"                                 { return UNION; }
-"intersect"                             { return INTERSECT; }
-"is_in"                                 { return IS_IN; }
-"is_not_in"                             { return IS_NOT_IN; }
+//"union"                                 { return UNION; }
+//"intersect"                             { return INTERSECT; }
+//"is_in"                                 { return IS_IN; }
+//"is_not_in"                             { return IS_NOT_IN; }
 "|"                                     { return BAR; }
 "||"                                    { return DBL_BAR; }
 
@@ -125,6 +125,7 @@ ESCAPES = [abfnrtv]
 "Concept"                               { return CONCEPT;  }
 "constraints"                           { return CONSTRAINTS; }
 "conventions"                           { return CONVENTIONS; }
+"Corollary"                             { return COROLLARY; }
 "correspondence"                        { return CORRESPONDENCE; }
 "decreasing"                            { return DECREASING; }
 "Definition"                            { return DEFINITION; }
@@ -161,6 +162,7 @@ ESCAPES = [abfnrtv]
 "requires"                              { return REQUIRES; }
 "then"                                  { return THEN; }
 "true"                                  { return TRUE; }
+"Theorem"                               { return THEOREM; }
 "Type"                                  { return FAMILY_TYPE; }
 "type"                                  { return PARAM_TYPE; }
 "uses"                                  { return USES; }

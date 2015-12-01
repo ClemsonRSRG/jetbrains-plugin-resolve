@@ -38,9 +38,6 @@ public abstract class ResScopeProcessorBase extends ResScopeProcessor {
 
         if (!(psiElement instanceof ResNamedElement)) return true;
         String name = ((ResNamedElement)psiElement).getName();
-
-
-       boolean x= requestedNameElement.textMatches(name);
         if (StringUtil.isEmpty(name) || !isCompletion &&
                 !requestedNameElement.textMatches(name)) return true;
         if (condition(psiElement)) return true;

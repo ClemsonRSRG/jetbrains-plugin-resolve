@@ -62,10 +62,10 @@
         COLON_EQUALS_COLON      = ':=:'
         RARROW                  = '->'
         TILDE                   = '~'
-        UNION                   = 'union'
-        INTERSECT               = 'intersect'
-        IS_IN                   = 'is_in'
-        IS_NOT_IN               = 'is_not_in'
+        //UNION                   = 'union'
+        //INTERSECT               = 'intersect'
+        //IS_IN                   = 'is_in'
+        //IS_NOT_IN               = 'is_not_in'
         BAR                     = '|'
         DBL_BAR                 = '||'
 
@@ -99,6 +99,8 @@
         INITIALIZATION          = 'initialization'
         IMPLEMENTATION          = 'Implementation'
         INDUCTIVE               = 'Inductive'
+        THEOREM                 = 'Theorem'
+        COROLLARY               = 'Corollary'
         LAMBDA                  = 'lambda'
         FAMILY_TYPE             = 'Type'
         PARAM_TYPE              = 'type'
@@ -140,13 +142,13 @@
     extends("Math.*(DefinitionDecl)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathDefinitionDeclImpl"
     extends("Math.*(Signature)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathSignatureImpl"
     extends(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleDeclImpl"
-    extends(".*Def")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
+    extends(".*(Def|Decl)")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
 
     implements(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.ResModuleDecl"
     implements(".*ReferenceExp")="edu.clemson.resolve.plugin.psi.ResReferenceExpBase"
     implements("Math.*Signature")="edu.clemson.resolve.plugin.psi.ResMathDefinitionSignature"
     implements("Math.*DefinitionDecl")="edu.clemson.resolve.plugin.psi.ResMathDefinitionDecl"
-    implements(".*Def")="edu.clemson.resolve.plugin.psi.ResNamedElement"
+    implements(".*(Def|Decl)")="edu.clemson.resolve.plugin.psi.ResNamedElement"
     implements(".*Block")="edu.clemson.resolve.plugin.psi.ResBlock"
 
     extends("Math.*(Exp)")=MathExp
@@ -171,13 +173,17 @@ PrecisBlock ::= PrecisItem* {methods=[processDeclarations] recoverWhile=ItemsRec
 private ItemsRecover ::= !('end')
 
 private PrecisItem ::=
-        MathStandardDefinitionDecl  {pin=1 recoverWhile=PrecisItemRecover}
+          MathTheoremDecl
+        | MathStandardDefinitionDecl  {pin=1 recoverWhile=PrecisItemRecover}
 
-private PrecisItemRecover ::= !('Definition'|'end')
+private PrecisItemRecover ::= !('Definition'|'Theorem'|'Corollary'|'end')
 
 // -------------------------------------------------
 //  M A T H   C O N S T R U C T S   &   E X P R S
 // -------------------------------------------------
+
+MathTheoremDecl ::= ('Theorem'|'Corollary') identifier ':'
+MathAssertionExp ';' {pin = 2}
 
 MathStandardDefinitionDecl ::= 'Definition' MathDefinitionSignature
         ('is' MathAssertionExp)? ';' {pin=2}
