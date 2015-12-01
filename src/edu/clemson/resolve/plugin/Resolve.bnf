@@ -180,14 +180,14 @@ private PrecisItemRecover ::= !('Definition'|'end')
 // -------------------------------------------------
 
 MathStandardDefinitionDecl ::= 'Definition' MathDefinitionSignature
-        ('is' MathExp)? ';' {pin=2}
+        ('is' MathAssertionExp)? ';' {pin=2}
 
 private MathDefinitionSignature ::=
            MathPrefixDefinitionSignature
         |  MathInfixDefinitionSignature
 
 MathPrefixDefinitionSignature ::=
-          identifier MathDefinitionParams? ':' MathExp {pin=1}
+          MathNameExp MathDefinitionParams? ':' MathExp {pin=1}
 
 MathInfixDefinitionSignature ::=
         '(' MathSingletonVarDecl ')' identifier
@@ -205,7 +205,7 @@ MathVarDef ::= identifier
 
 MathAssertionExp ::= MathQuantifiedExp|MathExp
 
-MathQuantifiedExp ::= ('Forall'|'Exists') MathVarDeclGroup ',' MathAssertionExp
+MathQuantifiedExp ::= ('Forall'|'Exists') MathVarDeclGroup ',' MathAssertionExp {pin=1}
 
 MathExp ::=  MathPrefixApplyExp|MathPrimary
 
@@ -229,3 +229,5 @@ left MathQualifiedReferenceExp ::= '::' identifier {elementType=MathReferenceExp
 MathReferenceExp::= identifier {methods=[getReference getQualifier] extends=MathExp}
 
 MathLiteralExp ::= (int|'true'|'false')
+
+MathNameExp ::= identifier|('and'|'or'|'not'|'o'|'true'|'false'|int);

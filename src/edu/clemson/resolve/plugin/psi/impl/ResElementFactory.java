@@ -32,6 +32,17 @@ public class ResElementFactory {
         return file.getEnclosedModule().getIdentifier();
     }
 
+    @NotNull public static ResFile getHardCodedMathFile(
+            @NotNull Project project) {
+        final String hardcoded =
+                "Precis HardCoded; " +
+                    "Definition Cls : Cls;" +
+                    "Definition SSet : Cls;" +
+                    "Definition Powerset(S : Cls) : Cls;\n" +
+                "end HardCoded;";
+        return createFileFromText(project, hardcoded);
+    }
+
     /*@NotNull public static ResUsesListImpl createUsesList(
             @NotNull Project project,
             @Nullable ResUsesListImpl existingUsesList,
