@@ -203,6 +203,10 @@ MathVarDeclGroup ::= MathVarDeclList ':' MathExp {pin=1}
 private MathVarDeclList ::= MathVarDef &(!(')')) (',' MathVarDef)* {pin=1}
 MathVarDef ::= identifier
 
+MathAssertionExp ::= MathQuantifiedExp|MathExp
+
+MathQuantifiedExp ::= ('Forall'|'Exists') MathVarDeclGroup ',' MathAssertionExp
+
 MathExp ::=  MathPrefixApplyExp|MathPrimary
 
 MathPrefixApplyExp ::=
