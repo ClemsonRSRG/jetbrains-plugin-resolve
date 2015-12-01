@@ -17,7 +17,6 @@
     tokens=[
         // Punctuation
         AT                      = '@'
-        BACKTICK                = '`'
         TRIPLE_DOT              = '...'
         DOT_DOT                 = '..'
         DOT                     = '.'
@@ -218,29 +217,29 @@ MathAssertionExp ::= MathQuantifiedExp|MathExp
 MathQuantifiedExp ::= ('Forall'|'Exists') MathVarDeclGroup ',' MathAssertionExp {pin=1}
 
 MathExp ::=
-      MathEqualsInfixExp
+      MathEqualsInfixApplyExp
     | MathAddGroup
     | MathMultGroup
     | MathPrefixApplyExp
-    | MathCustomInfixExp
+    | MathCustomInfixApplyExp
     | MathPrimary
 
 //private rules for operators with the same precedence
-private MathAddGroup ::= MathPlusInfixExp | MathMinusInfixExp
-private MathMultGroup ::= MathMultInfixExp | MathDivInfixExp
+private MathAddGroup ::= MathPlusInfixApplyExp | MathMinusInfixApplyExp
+private MathMultGroup ::= MathMultInfixApplyExp | MathDivInfixApplyExp
 
-MathEqualsInfixExp ::= MathExp '=' MathExp {extends=MathInfixExp}
-MathPlusInfixExp ::= MathExp '+' MathExp {extends=MathInfixExp}
-MathMinusInfixExp ::= MathExp '-' MathExp {extends=MathInfixExp}
-MathMultInfixExp ::= MathExp '*' MathExp {extends=MathInfixExp}
-MathDivInfixExp ::= MathExp '/' MathExp {extends=MathInfixExp}
-MathCustomInfixExp ::= MathExp '\' MathSymbolExp MathExp {pin=3 extends=MathInfixExp}
+MathEqualsInfixApplyExp ::= MathExp '=' MathExp {extends=MathInfixApplyExp}
+MathPlusInfixApplyExp ::= MathExp '+' MathExp {extends=MathInfixApplyExp}
+MathMinusInfixApplyExp ::= MathExp '-' MathExp {extends=MathInfixApplyExp}
+MathMultInfixApplyExp ::= MathExp '*' MathExp {extends=MathInfixApplyExp}
+MathDivInfixApplyExp ::= MathExp '/' MathExp {extends=MathInfixApplyExp}
+MathCustomInfixApplyExp ::= MathExp identifier MathExp {pin=2 extends=MathInfixApplyExp}
 
 private MathPrimary ::=
           MathSymbolExp
         | MathLiteralExp
 
-fake MathInfixExp ::= MathExp+ {
+fake MathInfixApplyExp ::= MathExp+ {
   methods=[left="MathExp[0]" right="MathExp[1]"]
 }
 
