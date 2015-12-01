@@ -205,7 +205,9 @@ MathVarDef ::= identifier
 MathExp ::=  MathPrefixApplyExp|MathPrimary
 
 MathPrefixApplyExp ::=
-    MathExp '(' MathExp (',' MathExp)* ')'
+    MathExp '(' MathArgList')' {pin=2}
+
+private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
 
 private MathPrimary ::=
           MathSymbolExp
