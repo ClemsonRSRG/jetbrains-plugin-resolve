@@ -39,6 +39,8 @@ public class ResElementFactory {
                     "Definition Cls : Cls;" +
                     "Definition SSet : Cls;" +
                     "Definition Powerset(S : Cls) : Cls;\n" +
+                    "Definition and(a, b : B) : B;\n" +
+                    "Definition or(a, b : B) : B;\n" +
                 "end HardCoded;";
         return createFileFromText(project, hardcoded);
     }

@@ -50,7 +50,7 @@ public class RESOLVEParserDefinition implements ParserDefinition {
             EQUALS, NEQUALS, AND, OR, NOT, CAT, LESS_OR_EQUAL, LESS,
             GREATER_OR_EQUAL, GREATER, MOD, MUL, QUOTIENT, PLUS_PLUS, PLUS,
             MINUS_MINUS, MINUS, COLON_EQUALS, COLON_EQUALS_COLON, RARROW,
-            TILDE, UNION, INTERSECT, IS_IN, IS_NOT_IN, BAR, DBL_BAR);
+            TILDE, /*UNION, INTERSECT, IS_IN, IS_NOT_IN,*/ BAR, DBL_BAR);
 
     public static final TokenSet PARAMETER_MODES = TokenSet.create(ALTERS,
             UPDATES, CLEARS, RESTORES, PRESERVES, REPLACES, EVALUATES);

@@ -12,7 +12,7 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import edu.clemson.resolve.plugin.ResTypes;
-import edu.clemson.resolve.plugin.psi.ResMathNameIdentifier;
+import edu.clemson.resolve.plugin.psi.ResMathNameIdentifierSymbol;
 import edu.clemson.resolve.plugin.psi.ResReferenceExpBase;
 import edu.clemson.resolve.plugin.psi.impl.ResCachedReference;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +37,7 @@ public class RESOLVECompletionContributor extends CompletionContributor {
     }
 
     private static PsiElementPattern.Capture<PsiElement> mathReferenceExp() {
-        return psiElement().withParent(psiElement(ResMathNameIdentifier.class)
+        return psiElement().withParent(psiElement(ResMathNameIdentifierSymbol.class)
                 .withParent(ResReferenceExpBase.class));
     }
 

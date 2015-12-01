@@ -81,8 +81,16 @@ public class ResMathVarLikeReference
 
         if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
         //if (ResReference.processUsesRequests(file, processor, state, myElement)) return false;
+        if (!processBuiltin(processor, state, myElement)) return false;
 
         return true;
+    }
+
+    private boolean processBuiltin(@NotNull ResScopeProcessor processor,
+                                  @NotNull ResolveState state,
+                                  @NotNull ResCompositeElement element) {
+        ResFile f = ResElementFactory.getHardCodedMathFile(element.getProject());
+        return processModuleLevelEntities(f, processor, state, true);
     }
 
     private void processMathParameterLikeThings(@NotNull ResCompositeElement e,

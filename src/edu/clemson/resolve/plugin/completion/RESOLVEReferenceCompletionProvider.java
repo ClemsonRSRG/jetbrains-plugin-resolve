@@ -95,6 +95,7 @@ public class RESOLVEReferenceCompletionProvider
                 }
             }
             else {
+                //TODO: Apply type info to the lookup renderers for these 'var like' elements
                 return RESOLVECompletionUtil
                         .createVariableLikeLookupElement((ResNamedElement) o);
             }

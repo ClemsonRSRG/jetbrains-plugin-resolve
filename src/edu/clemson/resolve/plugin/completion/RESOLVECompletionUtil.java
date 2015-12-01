@@ -51,6 +51,7 @@ public class RESOLVECompletionUtil {
                 }
             };
 
+    //TODO: If it's infix we don't want to insert parens.
     public static final InsertHandler<LookupElement> DEFINITION_INSERT_HANDLER =
             new InsertHandler<LookupElement>() {
                 @Override public void handleInsert(InsertionContext context,

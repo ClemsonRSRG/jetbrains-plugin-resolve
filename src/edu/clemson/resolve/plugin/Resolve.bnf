@@ -142,14 +142,16 @@
     extends("Math.*(DefinitionDecl)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathDefinitionDeclImpl"
     extends("Math.*(Signature)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathSignatureImpl"
     extends(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleDeclImpl"
-    extends(".*(Def|Decl)")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
+    extends(".*(Def|MathTheoremDecl)")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
 
     implements(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.ResModuleDecl"
     implements(".*ReferenceExp")="edu.clemson.resolve.plugin.psi.ResReferenceExpBase"
     implements("Math.*Signature")="edu.clemson.resolve.plugin.psi.ResMathDefinitionSignature"
     implements("Math.*DefinitionDecl")="edu.clemson.resolve.plugin.psi.ResMathDefinitionDecl"
-    implements(".*(Def|Decl)")="edu.clemson.resolve.plugin.psi.ResNamedElement"
+    implements(".*(Def|MathTheoremDecl)")="edu.clemson.resolve.plugin.psi.ResNamedElement"
     implements(".*Block")="edu.clemson.resolve.plugin.psi.ResBlock"
+
+    //extends("Math.*InfixExp")=MathInfixExp // this attributes can be placed directly after rule
 
     extends("Math.*(Exp)")=MathExp
 
@@ -193,10 +195,10 @@ private MathDefinitionSignature ::=
         |  MathInfixDefinitionSignature
 
 MathPrefixDefinitionSignature ::=
-          MathNameIdentifier MathDefinitionParams? ':' MathExp {pin=1}
+          MathIdentifierSymbol MathDefinitionParams? ':' MathExp {pin=1}
 
 MathInfixDefinitionSignature ::=
-        '(' MathSingletonVarDecl ')' MathNameIdentifier
+        '(' MathSingletonVarDecl ')' MathIdentifierSymbol
         '(' MathSingletonVarDecl ')' ':' MathExp {pin=4}
 
 private MathDefinitionParams ::= '(' MathDefinitionParamList ')' { pin=1}
@@ -213,27 +215,47 @@ MathAssertionExp ::= MathQuantifiedExp|MathExp
 
 MathQuantifiedExp ::= ('Forall'|'Exists') MathVarDeclGroup ',' MathAssertionExp {pin=1}
 
-MathExp ::=  MathPrefixApplyExp|MathPrimary
+MathExp ::=
+      MathEqualsInfixExp
+    | MathAddGroup
+    | MathMultGroup
+    | MathCustomInfixExp
+    | MathPrefixApplyExp
+    | MathPrimary
+
+//private rules for operators with the same precedence
+private MathAddGroup ::= MathPlusInfixExp | MathMinusInfixExp
+private MathMultGroup ::= MathMultInfixExp | MathDivInfixExp
+
+MathEqualsInfixExp ::= MathExp '=' MathExp {extends=MathInfixExp}
+MathPlusInfixExp ::= MathExp '+' MathExp {extends=MathInfixExp}
+MathMinusInfixExp ::= MathExp '-' MathExp {extends=MathInfixExp}
+MathMultInfixExp ::= MathExp '*' MathExp {extends=MathInfixExp}
+MathDivInfixExp ::= MathExp '/' MathExp {extends=MathInfixExp}
+MathCustomInfixExp ::= MathExp MathOnlyIdentifierSymbol MathExp {extends=MathInfixExp}
+
+private MathPrimary ::=
+          MathSymbolExp
+        | MathLiteralExp
+
+fake MathInfixExp ::= MathExp+ {
+  methods=[left="MathExp[0]" right="MathExp[1]"]
+}
 
 MathPrefixApplyExp ::=
     MathExp '(' MathArgList')' {pin=2}
 
 private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
 
-private MathPrimary ::=
-          MathSymbolExp
-        | MathLiteralExp
-
-/*fake MathBinaryExp ::= MathExp+ {
-  methods=[left="MathExp[0]" right="MathExp[1]"]
-}*/
-
 MathSymbolExp ::= MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}
 
-left MathQualifiedReferenceExp ::= '::' MathNameIdentifier {elementType=MathReferenceExp}
+left MathQualifiedReferenceExp ::= '::' MathIdentifierSymbol {elementType=MathReferenceExp}
 
-MathReferenceExp::= MathNameIdentifier {methods=[getReference getQualifier getIdentifier] extends=MathExp}
+MathReferenceExp::= MathIdentifierSymbol {methods=[getReference getQualifier getIdentifier] extends=MathExp}
 
 MathLiteralExp ::= (int|'true'|'false')
 
-MathNameIdentifier ::= identifier|('and'|'or'|'not'|'o'|'true'|'false'|int);
+MathIdentifierSymbol ::= identifier|('and'|'or'|'not'|'o'|'true'|'false'|int); {implements="edu.clemson.resolve.plugin.psi.ResMathNameLikeSymbol"}
+
+//Basically used for custom infix expressions for user defined defs.
+MathOnlyIdentifierSymbol ::= identifier {implements="edu.clemson.resolve.plugin.psi.ResMathNameLikeSymbol"}
