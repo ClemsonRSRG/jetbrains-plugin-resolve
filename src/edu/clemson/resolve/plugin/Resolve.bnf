@@ -62,10 +62,6 @@
         COLON_EQUALS_COLON      = ':=:'
         RARROW                  = '->'
         TILDE                   = '~'
-        //UNION                   = 'union'
-        //INTERSECT               = 'intersect'
-        //IS_IN                   = 'is_in'
-        //IS_NOT_IN               = 'is_not_in'
         BAR                     = '|'
         DBL_BAR                 = '||'
 
@@ -150,9 +146,8 @@
     implements("Math.*DefinitionDecl")="edu.clemson.resolve.plugin.psi.ResMathDefinitionDecl"
     implements(".*(Def|MathTheoremDecl)")="edu.clemson.resolve.plugin.psi.ResNamedElement"
     implements(".*Block")="edu.clemson.resolve.plugin.psi.ResBlock"
-   // implements("Math.*IdentifierSymbol")="edu.clemson.resolve.plugin.psi.ResMathIdentifierLikeSymbol"
 
-    //extends("Math.*InfixExp")=MathInfixExp // this attributes can be placed directly after rule
+    extends("Math(Minus|Plus|Div|Mult|Custom)InfixApplyExp")=MathInfixApplyExp // this attributes can be placed directly after rule
 
     extends("Math.*(Exp)")=MathExp
 
@@ -228,15 +223,21 @@ MathExp ::=
 private MathAddGroup ::= MathPlusInfixApplyExp | MathMinusInfixApplyExp
 private MathMultGroup ::= MathMultInfixApplyExp | MathDivInfixApplyExp
 
-MathEqualsInfixApplyExp ::= MathExp '=' MathExp {extends=MathInfixApplyExp}
-MathPlusInfixApplyExp ::= MathExp '+' MathExp {extends=MathInfixApplyExp}
-MathMinusInfixApplyExp ::= MathExp '-' MathExp {extends=MathInfixApplyExp}
-MathMultInfixApplyExp ::= MathExp '*' MathExp {extends=MathInfixApplyExp}
-MathDivInfixApplyExp ::= MathExp '/' MathExp {extends=MathInfixApplyExp}
-MathCustomInfixApplyExp ::= MathExp identifier MathExp {pin=2 extends=MathInfixApplyExp}
+MathEqualsInfixApplyExp ::= MathExp '=' MathExp
+MathPlusInfixApplyExp ::= MathExp '+' MathExp
+MathMinusInfixApplyExp ::= MathExp '-' MathExp
+MathMultInfixApplyExp ::= MathExp '*' MathExp
+MathDivInfixApplyExp ::= MathExp '/' MathExp
+MathCustomInfixApplyExp ::= MathExp identifier MathExp
+
+MathTypeAssertionExp ::= MathExp ':' MathExp {pin=2}
+MathNestedExp ::= '(' MathExp ')'
 
 private MathPrimary ::=
           MathSymbolExp
+        | MathTypeAssertionExp
+        | MathSetComprehensionExp
+        | MathNestedExp
         | MathLiteralExp
 
 fake MathInfixApplyExp ::= MathExp+ {
@@ -254,9 +255,8 @@ left MathQualifiedReferenceExp ::= '::' MathIdentifierSymbol {elementType=MathRe
 
 MathReferenceExp ::= MathIdentifierSymbol {methods=[getReference getQualifier getIdentifier] extends=MathExp}
 
+MathSetComprehensionExp ::= '{' MathSingletonVarDecl '|' MathExp '}' {pin=1}
+
 MathLiteralExp ::= (int|'true'|'false')
 
 MathIdentifierSymbol ::= identifier|('and'|'or'|'not'|'o'|'true'|'false'|int)
-
-//Basically used for custom infix expressions for user defined defs.
-//MathOnlyIdentifierSymbol ::= identifier

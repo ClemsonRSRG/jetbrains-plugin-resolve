@@ -32,12 +32,13 @@ public class ResElementFactory {
         return file.getEnclosedModule().getIdentifier();
     }
 
+    //TODO: Need to find a way to restrict navigatability
     @NotNull public static ResFile getHardCodedMathFile(
             @NotNull Project project) {
         final String hardcoded =
-                "Precis HardCoded; " +
-                    "Definition Cls : Cls;" +
-                    "Definition SSet : Cls;" +
+                "Precis HardCoded;\n" +
+                    "Definition Cls : Cls;\n" +
+                    "Definition SSet : Cls;\n" +
                     "Definition Powerset(S : Cls) : Cls;\n" +
                     "Definition and(a, b : B) : B;\n" +
                     "Definition or(a, b : B) : B;\n" +

@@ -60,10 +60,13 @@ public class RESOLVECompletionUtil {
                     if (!(element instanceof ResMathDefinitionSignature)) return;
                     ResMathDefinitionSignature signature = (ResMathDefinitionSignature)element;
                     int paramsCount = signature.getParameters().size();
-                    //we don't want empty parens for nullary function applications
+                    //we don't want empty parens for nullary function applications or infix (or outfix)
+                    //TODO: Actually, we could define some nice insertion handlers for outfix defns.
                     InsertHandler<LookupElement> handler =
-                            paramsCount == 0 ?
-                                    new BasicInsertHandler<LookupElement>() :
+                            paramsCount == 0 //||
+                            //signature instanceof ResMathInfixDefinitionSignature ? //||
+                            //signature instanceof ResMathOutfixDefinitionSignature ?
+                                    ? new BasicInsertHandler<LookupElement>() :
                                     ParenthesesInsertHandler.WITH_PARAMETERS;
                     handler.handleInsert(context, item);
                 }

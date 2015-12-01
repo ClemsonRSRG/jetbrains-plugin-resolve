@@ -109,11 +109,6 @@ ESCAPES = [abfnrtv]
 ":=:"                                   { return COLON_EQUALS_COLON; }
 "->"                                    { return RARROW; }
 "~"			                            { return TILDE; }
-
-//"union"                                 { return UNION; }
-//"intersect"                             { return INTERSECT; }
-//"is_in"                                 { return IS_IN; }
-//"is_not_in"                             { return IS_NOT_IN; }
 "|"                                     { return BAR; }
 "||"                                    { return DBL_BAR; }
 

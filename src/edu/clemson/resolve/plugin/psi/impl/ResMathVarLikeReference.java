@@ -11,7 +11,9 @@ import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ResMathVarLikeReference
         extends
@@ -116,6 +118,7 @@ public class ResMathVarLikeReference
                                       @NotNull List<ResMathVarDeclGroup> parameters) {
         for (ResMathVarDeclGroup declaration : parameters) {
             if (!processNamedElements(processor, ResolveState.initial(), declaration.getMathVarDefList(), true)) return false;
+           //if (!processImplicitTypeParameters(processor, ResolveState.initial(), declaration.getMathExp(), true)) return false;
         }
         return true;
     }
@@ -142,6 +145,8 @@ public class ResMathVarLikeReference
         return true;
     }
 
+
+
     @NotNull private ResMathVarLikeProcessor createDelegate(
             @NotNull ResScopeProcessor processor) {
         return new ResMathVarLikeProcessor(myElement, processor.isCompletion());
@@ -150,11 +155,14 @@ public class ResMathVarLikeReference
     protected static class ResMathVarLikeProcessor
             extends
                 ResScopeProcessorBase {
+        public Map<String, String> implicitlyBoundTypeParameters =
+                new HashMap<String, String>();
         public ResMathVarLikeProcessor(@NotNull ResMathReferenceExp origin,
                                        boolean completion) {
             super(origin.getIdentifier(), origin, completion);
         }
         @Override protected boolean condition(@NotNull PsiElement element) {
+
             return false;
         }
     }
