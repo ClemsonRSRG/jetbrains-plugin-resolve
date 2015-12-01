@@ -13,9 +13,9 @@ public class RESOLVECompletionTest extends RESOLVECompletionTestBase {
    //             "xs", "meh", "T1");
    // }
 
-    public void testQuantifierBoundVarRef() {
-        doTestEquals("Precis Foo; Theorem T: " +
-                "Forall xs, ys : Z, Exists pz : B, <caret>; " +
-                "end Foo;", "xs", "ys", "pz");
-    }
+   // public void testQuantifierBoundVarRef() {
+   //     doTestEquals("Precis Foo; Theorem T: " +
+   //             "Forall xs, ys : Z, Exists pz : B, <caret>; " +
+   //             "end Foo;", "xs", "ys", "pz");
+   // }
 }
