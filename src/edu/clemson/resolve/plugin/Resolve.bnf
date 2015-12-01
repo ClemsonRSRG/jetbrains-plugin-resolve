@@ -179,7 +179,8 @@ private PrecisItemRecover ::= !('Definition'|'end')
 //  M A T H   C O N S T R U C T S   &   E X P R S
 // -------------------------------------------------
 
-MathStandardDefinitionDecl ::= 'Definition' MathDefinitionSignature ';' {pin=2}
+MathStandardDefinitionDecl ::= 'Definition' MathDefinitionSignature
+        ('is' MathExp)? ';' {pin=2}
 
 private MathDefinitionSignature ::=
            MathPrefixDefinitionSignature

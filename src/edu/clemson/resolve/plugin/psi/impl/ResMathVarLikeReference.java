@@ -4,14 +4,14 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.OrderedSet;
-import edu.clemson.resolve.plugin.psi.ResFile;
-import edu.clemson.resolve.plugin.psi.ResMathReferenceExp;
-import edu.clemson.resolve.plugin.psi.ResNamedElement;
+import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.List;
 
 public class ResMathVarLikeReference
         extends
@@ -63,7 +63,7 @@ public class ResMathVarLikeReference
             //return processQualifierExpression(((ResFile)file), qualifier,
             //        processor, state);
         }
-        return processUnqualifiedResolve(((ResFile)file), processor, state, true);
+        return processUnqualifiedResolve(((ResFile) file), processor, state, true);
     }
 
     private boolean processUnqualifiedResolve(@NotNull ResFile file,
@@ -75,10 +75,40 @@ public class ResMathVarLikeReference
         Collection<? extends ResNamedElement> result = delegate.getVariants();
 
         //this processes any named elements we've found searching up the tree in the previous line
-        if (!processLocalEntities(processor, state, result, localResolve)) return false;
+        if (!processNamedElements(processor, state, result, localResolve)) return false;
+        processMathParameterLikeThings(myElement, delegate);
+        if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
+
         if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
         //if (ResReference.processUsesRequests(file, processor, state, myElement)) return false;
 
+        return true;
+    }
+
+    private void processMathParameterLikeThings(@NotNull ResCompositeElement e,
+                                                @NotNull ResScopeProcessorBase processor) {
+        ResMathDefinitionDecl def =
+                PsiTreeUtil.getParentOfType(e, ResMathDefinitionDecl.class);
+        if (def != null) {
+            processTopLevelMathDef(def, processor);
+        }
+    }
+
+    private boolean processTopLevelMathDef(@NotNull ResMathDefinitionDecl o,
+                                           @NotNull ResScopeProcessorBase processor) {
+        List<ResMathDefinitionSignature> sigs = o.getSignatures();
+        if (sigs.size() == 1) {
+            ResMathDefinitionSignature sig = o.getSignatures().get(0);
+            if (!processParameters(processor, sig.getParameters())) return false;
+        } //size > 1 ? then we're categorical; size == 0, we're null
+        return true;
+    }
+
+    private boolean processParameters(@NotNull ResScopeProcessorBase processor,
+                                      @NotNull List<ResMathVarDeclGroup> parameters) {
+        for (ResMathVarDeclGroup declaration : parameters) {
+            if (!processNamedElements(processor, ResolveState.initial(), declaration.getMathVarDefList(), true)) return false;
+        }
         return true;
     }
 
@@ -86,13 +116,13 @@ public class ResMathVarLikeReference
                                                @NotNull ResScopeProcessor processor,
                                                @NotNull ResolveState state,
                                                boolean localProcessing) {
-        if (!processLocalEntities(processor, state, file.getMathDefinitionSignatures(), localProcessing)) return false;
+        if (!processNamedElements(processor, state, file.getMathDefinitionSignatures(), localProcessing)) return false;
         //type families as well perhaps (if we're in the proper context -- e.g.: not a precis or precis-extension)
-        //if (!processLocalEntities(processor, state, file.getTypes(), localProcessing)) return false;
+        //if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
         return true;
     }
 
-    private boolean processLocalEntities(@NotNull PsiScopeProcessor processor,
+    private boolean processNamedElements(@NotNull PsiScopeProcessor processor,
                                          @NotNull ResolveState state,
                                          @NotNull Collection<? extends ResNamedElement> elements,
                                          boolean localResolve) {
@@ -117,7 +147,7 @@ public class ResMathVarLikeReference
             super(origin.getIdentifier(), origin, completion);
         }
         @Override protected boolean condition(@NotNull PsiElement element) {
-            return true;
+            return false;
         }
     }
 }

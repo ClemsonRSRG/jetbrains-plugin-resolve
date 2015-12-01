@@ -20,7 +20,7 @@ import static edu.clemson.resolve.plugin.completion.RESOLVECompletionUtil.create
 
 public class RESOLVEReferenceCompletionProvider
         extends
-        CompletionProvider<CompletionParameters> {
+            CompletionProvider<CompletionParameters> {
 
     @Override protected void addCompletions(
             @NotNull CompletionParameters parameters,
@@ -60,10 +60,8 @@ public class RESOLVEReferenceCompletionProvider
             ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
                 @Override
                 protected boolean accept(@NotNull PsiElement e) {
-                    //basically the equivalent of saying: "ResMathNamedSignatureOwner"
-                    return e instanceof ResMathDefinitionSignature;//e != spec &&
-                    // !(insideParameter &&
-                    //         (e instanceof ResNamedSignatureOwner || e instanceof ResVarDef));
+                    return e instanceof ResMathDefinitionSignature ||
+                            e instanceof ResMathVarDef;
                 }
             };
             ((ResMathVarLikeReference) reference).processResolveVariants(aProcessor);
@@ -95,6 +93,10 @@ public class RESOLVEReferenceCompletionProvider
                                     (ResMathDefinitionSignature) o, name, null,
                                     RESOLVECompletionUtil.DEFINITION_PRIORITY);
                 }
+            }
+            else {
+                return RESOLVECompletionUtil
+                        .createVariableLikeLookupElement((ResNamedElement) o);
             }
         /*    if (o instanceof ResTypeLikeNodeDecl) {
                 return RESOLVECompletionUtil
