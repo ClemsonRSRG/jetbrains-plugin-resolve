@@ -191,7 +191,7 @@ MathPrefixDefinitionSignature ::=
 
 MathInfixDefinitionSignature ::=
         '(' MathSingletonVarDecl ')' MathNameIdentifier
-        '(' MathSingletonVarDecl ')' ':' MathExp {pin=1}
+        '(' MathSingletonVarDecl ')' ':' MathExp {pin=4}
 
 private MathDefinitionParams ::= '(' MathDefinitionParamList ')' { pin=1}
 private ParamListRec ::= !(')')
