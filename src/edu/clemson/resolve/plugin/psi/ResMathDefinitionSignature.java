@@ -11,10 +11,10 @@ public interface ResMathDefinitionSignature extends ResNamedElement {
 
     /**
      * Returns the 'math type' of this {@code ResMathDefinitionSignature}.
-     * Best to think of the {@link ResMathTypeExp} as simply a wrapper around an
-     * arbitarary {@link ResMathExp}.
+     * Best to think of the {@code MathTypeExp} simply a synonym for an
+     * {@link ResMathExp} that happens to be functioning as a type.
      *
-     * @return the declared math type of this signature
+     * @return the declared 'math type' of this signature
      */
-    @NotNull public ResMathTypeExp getMathTypeExp();
+    @Nullable public ResMathExp getMathTypeExp();
 }

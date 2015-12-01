@@ -186,23 +186,21 @@ private MathDefinitionSignature ::=
         |  MathInfixDefinitionSignature
 
 MathPrefixDefinitionSignature ::=
-          identifier MathDefinitionParams? ':' MathTypeExp {pin=1}
+          identifier MathDefinitionParams? ':' MathExp {pin=1}
 
 MathInfixDefinitionSignature ::=
         '(' MathSingletonVarDecl ')' identifier
-        '(' MathSingletonVarDecl ')' ':' MathTypeExp {pin=1}
+        '(' MathSingletonVarDecl ')' ':' MathExp {pin=1}
 
 private MathDefinitionParams ::= '(' MathDefinitionParamList ')' { pin=1}
 private ParamListRec ::= !(')')
 private MathDefinitionParamList ::= MathVarDeclGroup (',' MathVarDeclGroup)* {pin=1 recoverWhile=ParamListRec}
 
-MathSingletonVarDecl ::= MathVarDef ':' MathTypeExp {pin=2 extends=MathVarDeclGroup}
+MathSingletonVarDecl ::= MathVarDef ':' MathExp {pin=2 extends=MathVarDeclGroup}
 
-MathVarDeclGroup ::= MathVarDeclList ':' MathTypeExp {pin=1}
+MathVarDeclGroup ::= MathVarDeclList ':' MathExp {pin=1}
 private MathVarDeclList ::= MathVarDef &(!(')')) (',' MathVarDef)* {pin=1}
 MathVarDef ::= identifier
-
-MathTypeExp ::= MathExp
 
 MathExp ::=  MathPrefixApplyExp|MathPrimary
 
