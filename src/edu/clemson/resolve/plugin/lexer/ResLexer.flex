@@ -100,6 +100,7 @@ ESCAPES = [abfnrtv]
 "%"                                     { return MOD; }
 "*"                                     { return MUL; }
 "/"                                     { return QUOTIENT; }
+"\\"                                    { return BACKSLASH; }
 "++"                                    { return PLUS_PLUS; }
 "+"                                     { return PLUS; }
 "--"                                    { return MINUS_MINUS; }
@@ -109,6 +110,8 @@ ESCAPES = [abfnrtv]
 ":=:"                                   { return COLON_EQUALS_COLON; }
 "->"                                    { return RARROW; }
 "~"			                            { return TILDE; }
+
+"`"                                     { return BACKTICK; }
 //"union"                                 { return UNION; }
 //"intersect"                             { return INTERSECT; }
 //"is_in"                                 { return IS_IN; }

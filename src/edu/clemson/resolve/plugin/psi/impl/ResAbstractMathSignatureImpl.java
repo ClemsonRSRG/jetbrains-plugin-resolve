@@ -3,11 +3,7 @@ package edu.clemson.resolve.plugin.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
-import edu.clemson.resolve.plugin.ResTypes;
-import edu.clemson.resolve.plugin.psi.ResMathDefinitionSignature;
-import edu.clemson.resolve.plugin.psi.ResMathExp;
-import edu.clemson.resolve.plugin.psi.ResMathVarDeclGroup;
-import edu.clemson.resolve.plugin.psi.ResType;
+import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,6 +27,6 @@ public abstract class ResAbstractMathSignatureImpl
     }
 
     @Nullable @Override public PsiElement getIdentifier() {
-        return findChildByType(ResTypes.MATH_NAME_IDENTIFIER_SYMBOL);
+        return findChildByClass(ResMathIdentifierSymbol.class);
     }
 }

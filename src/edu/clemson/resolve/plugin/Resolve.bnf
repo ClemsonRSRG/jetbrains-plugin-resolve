@@ -17,6 +17,7 @@
     tokens=[
         // Punctuation
         AT                      = '@'
+        BACKTICK                = '`'
         TRIPLE_DOT              = '...'
         DOT_DOT                 = '..'
         DOT                     = '.'
@@ -150,6 +151,7 @@
     implements("Math.*DefinitionDecl")="edu.clemson.resolve.plugin.psi.ResMathDefinitionDecl"
     implements(".*(Def|MathTheoremDecl)")="edu.clemson.resolve.plugin.psi.ResNamedElement"
     implements(".*Block")="edu.clemson.resolve.plugin.psi.ResBlock"
+   // implements("Math.*IdentifierSymbol")="edu.clemson.resolve.plugin.psi.ResMathIdentifierLikeSymbol"
 
     //extends("Math.*InfixExp")=MathInfixExp // this attributes can be placed directly after rule
 
@@ -219,8 +221,8 @@ MathExp ::=
       MathEqualsInfixExp
     | MathAddGroup
     | MathMultGroup
-    | MathCustomInfixExp
     | MathPrefixApplyExp
+    | MathCustomInfixExp
     | MathPrimary
 
 //private rules for operators with the same precedence
@@ -232,7 +234,7 @@ MathPlusInfixExp ::= MathExp '+' MathExp {extends=MathInfixExp}
 MathMinusInfixExp ::= MathExp '-' MathExp {extends=MathInfixExp}
 MathMultInfixExp ::= MathExp '*' MathExp {extends=MathInfixExp}
 MathDivInfixExp ::= MathExp '/' MathExp {extends=MathInfixExp}
-MathCustomInfixExp ::= MathExp MathOnlyIdentifierSymbol MathExp {extends=MathInfixExp}
+MathCustomInfixExp ::= MathExp '\' MathSymbolExp MathExp {pin=3 extends=MathInfixExp}
 
 private MathPrimary ::=
           MathSymbolExp
@@ -251,11 +253,11 @@ MathSymbolExp ::= MathReferenceExp MathQualifiedReferenceExp? {elementType=MathR
 
 left MathQualifiedReferenceExp ::= '::' MathIdentifierSymbol {elementType=MathReferenceExp}
 
-MathReferenceExp::= MathIdentifierSymbol {methods=[getReference getQualifier getIdentifier] extends=MathExp}
+MathReferenceExp ::= MathIdentifierSymbol {methods=[getReference getQualifier getIdentifier] extends=MathExp}
 
 MathLiteralExp ::= (int|'true'|'false')
 
-MathIdentifierSymbol ::= identifier|('and'|'or'|'not'|'o'|'true'|'false'|int); {implements="edu.clemson.resolve.plugin.psi.ResMathNameLikeSymbol"}
+MathIdentifierSymbol ::= identifier|('and'|'or'|'not'|'o'|'true'|'false'|int)
 
 //Basically used for custom infix expressions for user defined defs.
-MathOnlyIdentifierSymbol ::= identifier {implements="edu.clemson.resolve.plugin.psi.ResMathNameLikeSymbol"}
+//MathOnlyIdentifierSymbol ::= identifier

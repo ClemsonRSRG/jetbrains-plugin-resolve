@@ -1,24 +1,16 @@
 package edu.clemson.resolve.plugin.psi.impl;
 
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.RecursionManager;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
 import com.intellij.psi.impl.source.tree.LeafElement;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.plugin.ResTypes;
 import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class ResPsiImplUtil {
 
@@ -30,7 +22,7 @@ public class ResPsiImplUtil {
     }
 
     @NotNull public static PsiElement getIdentifier(ResMathReferenceExp o) {
-        return PsiTreeUtil.getChildOfType(o, MathNameSym.class);
+        return PsiTreeUtil.getChildOfType(o, ResMathIdentifierSymbol.class);
     }
 
     @Nullable public static ResMathReferenceExp getQualifier(
