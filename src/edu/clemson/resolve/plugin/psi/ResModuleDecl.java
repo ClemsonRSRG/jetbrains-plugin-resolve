@@ -12,7 +12,7 @@ public interface ResModuleDecl extends ResNamedElement {
 
     @NotNull public List<ResMathDefinitionSignature> getMathDefinitionSignatures();
 
-    //@NotNull public List<ResUsesSpec> getUsesSpecs();
+    @NotNull public List<ResUsesItem> getUsesItems();
 
     /*@NotNull public List<ResFacilityDecl> getFacilities();
 

@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 public class ResModuleReferenceSet extends FileReferenceSet {
 
     public ResModuleReferenceSet(@NotNull ResModuleSpec moduleSpec) {
-        super("", moduleSpec, moduleSpec.getModuleSpecTextRange()
+        super(moduleSpec.getText(), moduleSpec, moduleSpec.getModuleSpecTextRange()
                 .getStartOffset(), null, true);
     }
 

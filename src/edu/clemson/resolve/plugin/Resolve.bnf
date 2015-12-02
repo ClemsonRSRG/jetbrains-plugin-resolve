@@ -120,6 +120,7 @@
         BY                      = 'by'
         THEN                    = 'then'
         WHILE                   = 'While'
+        WITH                    = 'with'
         DO                      = 'do'
         STRING                  = 'string'
         WHICH_ENTAILS           = 'which_entails'
@@ -177,8 +178,7 @@ UsesItemList ::= 'uses' UsesItem (',' UsesItem)* ';'
 
 ModuleSpec ::= identifier {pin=1 methods=[getReferences resolve getModuleSpecTextRange]}
 
-//TODO: Add with clause...
-UsesItem ::= ModuleSpec {pin=1}
+UsesItem ::= ModuleSpec
 
 PrecisBlock ::= PrecisItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
 

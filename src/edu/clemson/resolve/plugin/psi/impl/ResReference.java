@@ -4,12 +4,11 @@ import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.OrderedSet;
-import edu.clemson.resolve.plugin.psi.ResCompositeElement;
-import edu.clemson.resolve.plugin.psi.ResFile;
-import edu.clemson.resolve.plugin.psi.ResReferenceExpBase;
+import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -103,11 +102,61 @@ public class ResReference
             @NotNull ResScopeProcessor processor) {
         return new ResVarProcessor(getName(), myElement, processor.isCompletion(), true) {
             @Override
-            protected boolean condition(@NotNull PsiElement e) {
-                return super.condition(e);
+            protected boolean crossOff(@NotNull PsiElement e) {
+                return super.crossOff(e);
             }
         };
     }*/
+
+    static boolean processUsesRequests(@NotNull ResFile file,
+                                       @NotNull ResScopeProcessor processor,
+                                       @NotNull ResolveState state,
+                                       @NotNull ResCompositeElement element) {
+        for (ResUsesItem u : file.getUsesItems()) {
+            //this file resolve is failing for whatever reason when we're trying to add completions... is this a concurrency thing maybe?
+            //works the rest of the time...
+            PsiElement resolvedModule = u.getModuleSpec().resolve();
+            if (resolvedModule == null || !(resolvedModule instanceof ResFile)) continue;
+            //if (!processor.execute(((ResFile) resolvedFile).getEnclosedModule(), state.put(ACTUAL_NAME, u.getText()))) return true;
+            if (!processFileEntities((ResFile)resolvedModule, processor, state, false)) return false;
+        }
+        return true;
+    }
+
+    protected static boolean processFileEntities(@NotNull ResFile file,
+                                                 @NotNull ResScopeProcessor processor,
+                                                 @NotNull ResolveState state,
+                                                 boolean localProcessing) {
+        //if (!processNamedElements(processor, state, file.getConstants(), localProcessing)) return false;
+        //if (!processNamedElements(processor, state, file.getVars(), localProcessing)) return false;
+       /* if (!processNamedElements(processor, state, file.getOperationImpls(), localProcessing)) return false;
+        if (!processNamedElements(processor, state, file.getOperationDecls(), localProcessing)) return false;
+        if (!processNamedElements(processor, state, file.getFacilities(), localProcessing)) return false;
+        if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;*/
+        if (!processNamedElements(processor, state, file.getMathDefinitionSignatures(), localProcessing)) return false;
+        return true;
+    }
+
+    static boolean processNamedElements(@NotNull PsiScopeProcessor processor,
+                                        @NotNull ResolveState state,
+                                        @NotNull Collection<? extends ResNamedElement> elements,
+                                        boolean localResolve) {
+        return processNamedElements(processor, state, elements, localResolve, false);
+    }
+
+    static boolean processNamedElements(@NotNull PsiScopeProcessor processor,
+                                        @NotNull ResolveState state,
+                                        @NotNull Collection<? extends ResNamedElement> elements,
+                                        boolean localResolve,
+                                        boolean checkContainingFile) {
+
+        for (ResNamedElement definition : elements) {
+            //if (!definition.isValid() || checkContainingFile && !allowed(definition.getContainingFile(), contextFile)) continue;
+            if ((localResolve || definition.isPublic()) &&
+                    !processor.execute(definition, state)) return false;
+        }
+        return true;
+    }
 
     private String getName() {
         return myElement.getIdentifier().getText();

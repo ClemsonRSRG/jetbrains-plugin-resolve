@@ -82,7 +82,7 @@ public class ResMathVarLikeReference
         if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
 
         if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
-        //if (ResReference.processUsesRequests(file, processor, state, myElement)) return false;
+        if (ResReference.processUsesRequests(file, processor, state, myElement)) return false;
         if (!processBuiltin(processor, state, myElement)) return false;
 
         return true;
@@ -161,7 +161,7 @@ public class ResMathVarLikeReference
                                        boolean completion) {
             super(origin.getIdentifier(), origin, completion);
         }
-        @Override protected boolean condition(@NotNull PsiElement element) {
+        @Override protected boolean crossOff(@NotNull PsiElement element) {
 
             return false;
         }
