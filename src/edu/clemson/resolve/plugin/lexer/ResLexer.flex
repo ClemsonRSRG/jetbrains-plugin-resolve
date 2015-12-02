@@ -81,6 +81,8 @@ ESCAPES = [abfnrtv]
 "::"                                    { return COLONCOLON; }
 ";"                                     { return SEMICOLON; }
 ","                                     { return COMMA; }
+"(i.)"                                  { return IND_BASE; }
+"(ii.)"                                 { return IND_HYPO; }
 
 // Operators
 
@@ -117,6 +119,7 @@ ESCAPES = [abfnrtv]
 "base"                                  { return BASE;}
 "by"                                    { return BY; }
 "Cart_Prod"                             { return CART_PROD; }
+"Categorical"                           { return CATEGORICAL; }
 "changing"                              { return CHANGING; }
 "Concept"                               { return CONCEPT;  }
 "constraints"                           { return CONSTRAINTS; }
@@ -127,6 +130,7 @@ ESCAPES = [abfnrtv]
 "Definition"                            { return DEFINITION; }
 "else"                                  { return ELSE; }
 "Extension"                             { return EXTENSION; }
+"extended_by"                           { return EXTENDED_BY; }
 "do"                                    { return DO; }
 "end"                                   { return END;  }
 "ensures"                               { return ENSURES; }

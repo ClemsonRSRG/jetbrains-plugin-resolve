@@ -22,7 +22,7 @@ public class ResPsiImplUtil {
     }
 
     @NotNull public static PsiElement getIdentifier(ResMathReferenceExp o) {
-        return PsiTreeUtil.getChildOfType(o, ResMathIdentifierSymbol.class);
+        return PsiTreeUtil.getChildOfType(o, ResMathNameIdentifier.class);
     }
 
     @Nullable public static ResMathReferenceExp getQualifier(

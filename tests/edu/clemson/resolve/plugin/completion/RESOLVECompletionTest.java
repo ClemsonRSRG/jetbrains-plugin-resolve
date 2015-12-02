@@ -22,7 +22,8 @@ public class RESOLVECompletionTest extends RESOLVECompletionTestBase {
     public void testExclusivelyHardCodedMathRefs() {
         doTestEquals("Precis Foo; Corollary C1: <caret>; " +
                         "end Foo",
-                "Powerset", "Cls", "SSet", "and", "or");
+                "Powerset", "Cls", "SSet", "and", "or", "true", "false", "B",
+                "implies", "not");
     }
 
 }

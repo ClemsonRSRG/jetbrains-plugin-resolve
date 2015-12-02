@@ -32,6 +32,8 @@
         COLONCOLON              = '::'
         SEMICOLON               = ';'
         COMMA                   = ','
+        IND_BASE                = '(i.)'
+        IND_HYPO                = '(ii.)'
 
         // Operators
         EQUALS                  = '='
@@ -72,12 +74,14 @@
         BASE                    = 'base'
         HYPO                    = 'hypo'
         CONCEPT                 = 'Concept'
+        EXTENSION               = 'Extension'
+        EXTENDED_BY             = 'extended_by'
         CART_PROD               = 'Cart_Prod'
-        Definition              = 'Definition'
+        DEFINITION              = 'Definition'
         CONSTRAINTS             = 'constraints'
         CONVENTIONS             = 'conventions'
         CORRESPONDENCE          = 'correspondence'
-        EXTENSION               = 'extension'
+        EXTENSION               = 'Extension'
         END                     = 'end'
         ELSE                    = 'else'
         USES                    = 'uses'
@@ -104,6 +108,7 @@
         FAMILY                  = 'Family'
         FOR                     = 'for'
         MODELED                 = 'modeled'
+        CATEGORICAL             = 'Categorical'
         EXEMPLAR                = 'exemplar'
         OPERATION               = 'Operation'
         RECURSIVE               = 'Recursive'
@@ -156,12 +161,17 @@
     pin('.*List(?:_\d.*)?')=1
 }
 
-ModuleDecl ::= PrecisModuleDecl <<eof>>
+ModuleDecl ::= PrecisModuleDecl | PrecisExtensionModuleDecl <<eof>>
+
+PrecisExtensionModuleDecl ::= 'Precis' 'Extension' identifier 'for'
+identifier ('extended_by' identifier)? ';'
+PrecisBlock
+'end' identifier ';' {pin(".*")=2}
 
 PrecisModuleDecl ::= 'Precis' identifier ';'
 UsesItemList?
 PrecisBlock
-'end' identifier ';' {pin(".*")=1}
+'end' identifier ';' {pin(".*")=2}
 
 UsesItemList ::= 'uses' UsesItem (',' UsesItem)* ';'
 
@@ -173,9 +183,11 @@ private ItemsRecover ::= !('end')
 
 private PrecisItem ::=
           MathTheoremDecl
-        | MathStandardDefinitionDecl  {pin=1 recoverWhile=PrecisItemRecover}
+        | MathStandardDefinitionDecl
+        | MathCategoricalDefinitionDecl
+        | MathInductiveDefinitionDecl {pin=1 recoverWhile=PrecisItemRecover}
 
-private PrecisItemRecover ::= !('Definition'|'Implicit'|'Theorem'|'Corollary'|'end')
+private PrecisItemRecover ::= !('Definition'|'Implicit'|'Theorem'|'Corollary'|'Categorical'|'end')
 
 // -------------------------------------------------
 //  M A T H   C O N S T R U C T S   &   E X P R S
@@ -187,15 +199,28 @@ MathAssertionExp ';' {pin = 2}
 MathStandardDefinitionDecl ::= ('Implicit')? 'Definition'
     MathDefinitionSignature ('is' MathAssertionExp)? ';' {pin=2}
 
+MathCategoricalDefinitionDecl ::= 'Categorical' 'Definition' 'for'
+CategoricalSigList 'is' MathExp ';' {pin=1}
+
+private CategoricalSigList ::= MathPrefixDefinitionSignature
+(',' MathPrefixDefinitionSignature)* {recoverWhile=CategoricalSigListRec}
+
+private CategoricalSigListRec ::= !('is')
+
+MathInductiveDefinitionDecl ::= 'Inductive' 'Definition'
+MathDefinitionSignature 'is'
+'(i.)' MathExp ';'
+'(ii.)' MathExp ';' {pin=1}
+
 private MathDefinitionSignature ::=
            MathPrefixDefinitionSignature
         |  MathInfixDefinitionSignature
 
 MathPrefixDefinitionSignature ::=
-          MathIdentifierSymbol MathDefinitionParams? ':' MathExp {pin=1}
+          MathNameIdentifier MathDefinitionParams? ':' MathExp {pin=1}
 
 MathInfixDefinitionSignature ::=
-        '(' MathSingletonVarDecl ')' MathIdentifierSymbol
+        '(' MathSingletonVarDecl ')' MathNameIdentifier
         '(' MathSingletonVarDecl ')' ':' MathExp {pin=4}
 
 private MathDefinitionParams ::= '(' MathDefinitionParamList ')' { pin=1}
@@ -256,9 +281,9 @@ private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
 
 MathSymbolExp ::= MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}
 
-left MathQualifiedReferenceExp ::= '::' MathIdentifierSymbol {elementType=MathReferenceExp}
+left MathQualifiedReferenceExp ::= '::' MathNameIdentifier {elementType=MathReferenceExp}
 
-MathReferenceExp ::= MathIdentifierSymbol {methods=[getReference getQualifier getIdentifier] extends=MathExp}
+MathReferenceExp ::= MathNameIdentifier {methods=[getReference getQualifier getIdentifier] extends=MathExp}
 
 MathSetComprehensionExp ::= '{' MathSingletonVarDecl '|' MathExp '}'
 
@@ -269,4 +294,4 @@ MathSetElementsList ::= MathExp (',' MathExp)* {recoverWhile=MathSetEleRecover}
 private MathSetEleRecover ::= !('}')
 MathLiteralExp ::= (int|'true'|'false')
 
-MathIdentifierSymbol ::= identifier|('and'|'or'|'not'|'o'|'true'|'false'|int)
+MathNameIdentifier ::= identifier|('and'|'or'|'not'|'o'|'true'|'false'|int|'+'|'-')

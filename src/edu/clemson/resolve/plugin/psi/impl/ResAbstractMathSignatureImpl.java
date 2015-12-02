@@ -27,6 +27,6 @@ public abstract class ResAbstractMathSignatureImpl
     }
 
     @Nullable @Override public PsiElement getIdentifier() {
-        return findChildByClass(ResMathIdentifierSymbol.class);
+        return findChildByClass(ResMathNameIdentifier.class);
     }
 }
