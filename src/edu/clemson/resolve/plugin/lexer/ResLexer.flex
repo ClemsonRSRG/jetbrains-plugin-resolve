@@ -144,6 +144,7 @@ ESCAPES = [abfnrtv]
 "is"                                    { return IS; }
 "implemented"                           { return IMPLEMENTED; }
 "Implementation"                        { return IMPLEMENTATION; }
+"Implicit"                              { return IMPLICIT; }
 "initialization"                        { return INITIALIZATION; }
 "Inductive"                             { return INDUCTIVE; }
 "lambda"                                { return LAMBDA; }

@@ -95,6 +95,7 @@
         INITIALIZATION          = 'initialization'
         IMPLEMENTATION          = 'Implementation'
         INDUCTIVE               = 'Inductive'
+        IMPLICIT                = 'Implicit'
         THEOREM                 = 'Theorem'
         COROLLARY               = 'Corollary'
         LAMBDA                  = 'lambda'
@@ -174,7 +175,7 @@ private PrecisItem ::=
           MathTheoremDecl
         | MathStandardDefinitionDecl  {pin=1 recoverWhile=PrecisItemRecover}
 
-private PrecisItemRecover ::= !('Definition'|'Theorem'|'Corollary'|'end')
+private PrecisItemRecover ::= !('Definition'|'Implicit'|'Theorem'|'Corollary'|'end')
 
 // -------------------------------------------------
 //  M A T H   C O N S T R U C T S   &   E X P R S
@@ -183,8 +184,8 @@ private PrecisItemRecover ::= !('Definition'|'Theorem'|'Corollary'|'end')
 MathTheoremDecl ::= ('Theorem'|'Corollary') identifier ':'
 MathAssertionExp ';' {pin = 2}
 
-MathStandardDefinitionDecl ::= 'Definition' MathDefinitionSignature
-        ('is' MathAssertionExp)? ';' {pin=2}
+MathStandardDefinitionDecl ::= ('Implicit')? 'Definition'
+    MathDefinitionSignature ('is' MathAssertionExp)? ';' {pin=2}
 
 private MathDefinitionSignature ::=
            MathPrefixDefinitionSignature
@@ -234,13 +235,14 @@ MathRelationalInfixApplyExp ::= MathExp ('<' | '>' | '<=' | '>=' | '=' | '/=') M
 MathCustomInfixApplyExp ::= MathExp identifier MathExp
 
 MathTypeAssertionExp ::= MathExp ':' MathExp {pin=2}
-MathNestedExp ::= '(' MathExp ')'
+MathNestedExp ::= '(' MathAssertionExp ')'
 
 private MathPrimary ::=
           MathSymbolExp
         | MathTypeAssertionExp
         | MathSetComprehensionExp
         | MathNestedExp
+        | MathSetExp
         | MathLiteralExp
 
 fake MathInfixApplyExp ::= MathExp+ {
@@ -258,8 +260,13 @@ left MathQualifiedReferenceExp ::= '::' MathIdentifierSymbol {elementType=MathRe
 
 MathReferenceExp ::= MathIdentifierSymbol {methods=[getReference getQualifier getIdentifier] extends=MathExp}
 
-MathSetComprehensionExp ::= '{' MathSingletonVarDecl '|' MathExp '}' {pin=1}
+MathSetComprehensionExp ::= '{' MathSingletonVarDecl '|' MathExp '}'
 
+MathSetExp ::= '{' MathSetElementsList? '}' {pin=2}
+
+MathSetElementsList ::= MathExp (',' MathExp)* {recoverWhile=MathSetEleRecover}
+
+private MathSetEleRecover ::= !('}')
 MathLiteralExp ::= (int|'true'|'false')
 
 MathIdentifierSymbol ::= identifier|('and'|'or'|'not'|'o'|'true'|'false'|int)
