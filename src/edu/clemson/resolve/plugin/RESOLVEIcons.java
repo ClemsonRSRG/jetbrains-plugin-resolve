@@ -13,6 +13,7 @@ public interface RESOLVEIcons {
     public static final Icon CONCEPT = IconLoader.getIcon("/edu/clemson/resolve/icons/concept.png");
 
     public static final Icon PRECIS = IconLoader.getIcon("/edu/clemson/resolve/icons/precis.png");
+    public static final Icon PRECIS_EXT = IconLoader.getIcon("/edu/clemson/resolve/icons/precis_extension.png");
 
     public static final Icon DEF = IconLoader.getIcon("/edu/clemson/resolve/icons/def.png");
     public static final Icon VARIABLE = AllIcons.Nodes.Variable;

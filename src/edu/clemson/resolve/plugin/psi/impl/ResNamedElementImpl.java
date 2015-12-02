@@ -70,6 +70,7 @@ public abstract class ResNamedElementImpl
     @Nullable @Override public Icon getIcon(int flags) {
         Icon icon = null;
         if (this instanceof ResPrecisModuleDecl) icon = RESOLVEIcons.PRECIS;
+        else if (this instanceof ResPrecisExtensionModuleDecl) icon = RESOLVEIcons.PRECIS_EXT;
         /*else if (this instanceof ResConceptModuleDecl) icon = RESOLVEIcons.CONCEPT;
         else if (this instanceof ResPrecisModuleDecl) icon = RESOLVEIcons.PRECIS;
         else if (this instanceof ResTypeLikeNodeDecl) icon = RESOLVEIcons.TYPE;

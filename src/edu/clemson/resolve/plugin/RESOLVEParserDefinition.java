@@ -45,7 +45,7 @@ public class RESOLVEParserDefinition implements ParserDefinition {
             INITIALIZATION, IS, LAMBDA, MAINTAINING, MODELED, OPERATION,
             OTHERWISE, PARAM_TYPE, PRECIS, PROCEDURE, PROG_IF, RECORD,
             RECURSIVE, REQUIRES, THEN, USES, VAR, WHICH_ENTAILS, WHILE,
-            CATEGORICAL);
+            CATEGORICAL, IMPLICIT, THEOREM, COROLLARY);
 
     public static final TokenSet OPERATORS = TokenSet.create(AT,
             EQUALS, NEQUALS, AND, OR, NOT, CAT, LESS_OR_EQUAL, LESS,
