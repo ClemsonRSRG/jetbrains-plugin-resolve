@@ -213,6 +213,7 @@ MathQuantifiedExp ::= ('Forall'|'Exists') MathVarDeclGroup ',' MathAssertionExp 
 
 MathExp ::=
       MathRelationalInfixApplyExp
+    | MathRangeApplyExp
     | MathAddGroup
     | MathMultGroup
     | MathPrefixApplyExp
@@ -224,9 +225,10 @@ private MathAddGroup ::= MathPlusInfixApplyExp | MathMinusInfixApplyExp
 private MathMultGroup ::= MathMultInfixApplyExp | MathDivInfixApplyExp
 
 MathPlusInfixApplyExp ::= MathExp '+' MathExp
-MathMinusInfixApplyExp ::= MathExp '-' MathExp
+MathMinusInfixApplyExp ::= MathExp ('-'|'~') MathExp
 MathMultInfixApplyExp ::= MathExp '*' MathExp
 MathDivInfixApplyExp ::= MathExp '/' MathExp
+MathRangeApplyExp ::= MathExp '->' MathExp
 
 MathRelationalInfixApplyExp ::= MathExp ('<' | '>' | '<=' | '>=' | '=' | '/=') MathExp
 MathCustomInfixApplyExp ::= MathExp identifier MathExp

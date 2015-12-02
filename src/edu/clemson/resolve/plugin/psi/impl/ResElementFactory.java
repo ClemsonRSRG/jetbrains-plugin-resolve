@@ -44,7 +44,9 @@ public class ResElementFactory {
                     "Definition Powerset(S : Cls) : Cls;\n" +
                     "Definition and(a, b : B) : B;\n" +
                     "Definition or(a, b : B) : B;\n" +
-                "end HardCoded;";
+                    "Definition not(a : B) : B;\n" +
+                    "Definition implies(a, b : B) : B;\n" +
+                        "end HardCoded;";
         return createFileFromText(project, hardcoded);
     }
 }
