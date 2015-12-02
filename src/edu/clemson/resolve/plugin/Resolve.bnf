@@ -230,7 +230,6 @@ private MathDefinitionParamList ::= MathVarDeclGroup (',' MathVarDeclGroup)* {pi
 
 MathOutfixDefinitionSignature ::=
         ('|'|'||') MathSingletonVarDecl ('|'|'||')  ':' MathExp {pin=1}
-//TODO: Implement a PsiImplUtil getIdentifier() for this guy ^
 
 MathSingletonVarDecl ::= MathVarDef ':' MathExp {pin=2 extends=MathVarDeclGroup}
 
@@ -243,7 +242,8 @@ MathAssertionExp ::= MathQuantifiedExp|MathExp
 MathQuantifiedExp ::= ('Forall'|'Exists') MathVarDeclGroup ',' MathAssertionExp {pin=1}
 
 MathExp ::=
-      MathRelationalInfixApplyExp
+      MathBooleanInfixApplyExp
+    | MathRelationalInfixApplyExp
     | MathRangeApplyExp
     | MathAddGroup
     | MathMultGroup
@@ -258,6 +258,7 @@ private MathMultGroup ::= MathMultInfixApplyExp | MathDivInfixApplyExp
 
 MathPlusInfixApplyExp ::= MathExp '+' MathExp
 MathMinusInfixApplyExp ::= MathExp ('-'|'~') MathExp
+MathBooleanInfixApplyExp ::= MathExp ('and'|'or') MathExp
 MathMultInfixApplyExp ::= MathExp '*' MathExp
 MathDivInfixApplyExp ::= MathExp '/' MathExp
 MathCatInfixApplyExp ::= MathExp 'o' MathExp
