@@ -26,6 +26,11 @@ public abstract class ResAbstractMathSignatureImpl
         return findChildByClass(ResMathExp.class);
     }
 
+    /**
+     * This has to be {@code Nullable} at the moment; think about it: We have
+     * infix and outfix signatures, how in the would we create the |..| needed?
+     * In other words, its tough doing completion for non-identifiers.
+     */
     @Nullable @Override public PsiElement getIdentifier() {
         return findChildByClass(ResMathNameIdentifier.class);
     }

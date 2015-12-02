@@ -214,6 +214,7 @@ MathDefinitionSignature 'is'
 
 private MathDefinitionSignature ::=
            MathPrefixDefinitionSignature
+        |  MathOutfixDefinitionSignature
         |  MathInfixDefinitionSignature
 
 MathPrefixDefinitionSignature ::=
@@ -226,6 +227,10 @@ MathInfixDefinitionSignature ::=
 private MathDefinitionParams ::= '(' MathDefinitionParamList ')' { pin=1}
 private ParamListRec ::= !(')')
 private MathDefinitionParamList ::= MathVarDeclGroup (',' MathVarDeclGroup)* {pin=1 recoverWhile=ParamListRec}
+
+MathOutfixDefinitionSignature ::=
+        ('|'|'||') MathSingletonVarDecl ('|'|'||')  ':' MathExp {pin=1}
+//TODO: Implement a PsiImplUtil getIdentifier() for this guy ^
 
 MathSingletonVarDecl ::= MathVarDef ':' MathExp {pin=2 extends=MathVarDeclGroup}
 
@@ -270,11 +275,17 @@ private MathPrimary ::=
         | MathSetComprehensionExp
         | MathNestedExp
         | MathSetExp
+        | MathOutfixApplyExp
         | MathLiteralExp
 
 fake MathInfixApplyExp ::= MathExp+ {
   methods=[left="MathExp[0]" right="MathExp[1]"]
 }
+
+MathOutfixApplyExp ::=
+      '<' MathExp '>'
+    | '|' MathExp '|'
+    | '||' MathExp '||'
 
 MathPrefixApplyExp ::=
     MathExp '(' MathArgList')' {pin=2}
