@@ -9,14 +9,15 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
 import edu.clemson.resolve.plugin.ResTypes;
 import edu.clemson.resolve.plugin.psi.*;
+import edu.clemson.resolve.plugin.psi.impl.imports.ResModuleReferenceSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ResPsiImplUtil {
 
-    @NotNull public static TextRange getUsesTextRange(
-            @NotNull ResUsesItem importString) {
-        String text = importString.getText();
+    @NotNull public static TextRange getModuleIDTextRange(
+            @NotNull ResModuleIdentifier moduleId) {
+        String text = moduleId.getText();
         return !text.isEmpty() ? TextRange.create(0, text.length() - 1) :
                 TextRange.EMPTY_RANGE;
     }
@@ -33,6 +34,11 @@ public class ResPsiImplUtil {
     @NotNull public static ResMathVarLikeReference getReference(
             @NotNull ResMathReferenceExp o) {
         return new ResMathVarLikeReference(o);
+    }
+
+    @NotNull public static PsiReference[] getReferences(
+            @NotNull ResModuleIdentifier o) {
+        return new ResModuleReferenceSet(o).getAllReferences();
     }
 
     @NotNull public static String getText(@Nullable ResType o) {

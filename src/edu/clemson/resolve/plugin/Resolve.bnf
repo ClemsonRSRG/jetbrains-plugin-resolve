@@ -164,7 +164,7 @@
 ModuleDecl ::= PrecisModuleDecl | PrecisExtensionModuleDecl <<eof>>
 
 PrecisExtensionModuleDecl ::= 'Precis' 'Extension' identifier 'for'
-identifier ('extended_by' identifier)? ';'
+ModuleIdentifier ('extended_by' ModuleIdentifier)? ';'
 PrecisBlock
 'end' identifier ';' {pin(".*")=2}
 
@@ -175,7 +175,10 @@ PrecisBlock
 
 UsesItemList ::= 'uses' UsesItem (',' UsesItem)* ';'
 
-UsesItem ::= identifier {pin=1 methods=[getReferences resolve getUsesTextRange]}
+ModuleIdentifier ::= identifier {pin=1 methods=[getReferences getModuleIDTextRange]}
+
+//TODO: Add with clause...
+UsesItem ::= ModuleIdentifier {pin=1}
 
 PrecisBlock ::= PrecisItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
 
