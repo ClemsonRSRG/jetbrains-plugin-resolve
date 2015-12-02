@@ -135,7 +135,7 @@
         REPLACES                = 'replaces'
         EVALUATES               = 'evaluates'
 
-        //these two are for grammarkit's live preview feature work right,
+        //these two are so grammarkit's live preview feature will work right,
         //disregard them otherwise
         space                   = "regexp:\s+"
         identifier              = 'regexp:\p{Alpha}\w*'
@@ -187,7 +187,7 @@ private PrecisItem ::=
         | MathCategoricalDefinitionDecl
         | MathInductiveDefinitionDecl {pin=1 recoverWhile=PrecisItemRecover}
 
-private PrecisItemRecover ::= !('Definition'|'Implicit'|'Theorem'|'Corollary'|'Categorical'|'end')
+private PrecisItemRecover ::= !('Definition'|'Implicit'|'Theorem'|'Corollary'|'Categorical'|'Inductive'|'end')
 
 // -------------------------------------------------
 //  M A T H   C O N S T R U C T S   &   E X P R S
@@ -242,6 +242,7 @@ MathExp ::=
     | MathRangeApplyExp
     | MathAddGroup
     | MathMultGroup
+    | MathCatInfixApplyExp
     | MathPrefixApplyExp
     | MathCustomInfixApplyExp
     | MathPrimary
@@ -254,6 +255,7 @@ MathPlusInfixApplyExp ::= MathExp '+' MathExp
 MathMinusInfixApplyExp ::= MathExp ('-'|'~') MathExp
 MathMultInfixApplyExp ::= MathExp '*' MathExp
 MathDivInfixApplyExp ::= MathExp '/' MathExp
+MathCatInfixApplyExp ::= MathExp 'o' MathExp
 MathRangeApplyExp ::= MathExp '->' MathExp
 
 MathRelationalInfixApplyExp ::= MathExp ('<' | '>' | '<=' | '>=' | '=' | '/=') MathExp

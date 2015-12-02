@@ -36,7 +36,9 @@ public class ResElementFactory {
             @NotNull Project project) {
         final String hardcoded =
                 "Precis HardCoded;\n " +
-                    "Definition Cls : Cls;\n" +
+                    "Definition Cls : HCls;\n" +
+                    "Definition El : Cls;\n" +
+                    "Definition Entity : Cls;\n" +
                     "Definition SSet : Cls;\n" +
                     "Definition B : SSet;\n" +
                     "Definition true : B;\n" +
@@ -46,7 +48,7 @@ public class ResElementFactory {
                     "Definition or(a, b : B) : B;\n" +
                     "Definition not(a : B) : B;\n" +
                     "Definition implies(a, b : B) : B;\n" +
-                        "end HardCoded;";
+                "end HardCoded;";
         return createFileFromText(project, hardcoded);
     }
 }
