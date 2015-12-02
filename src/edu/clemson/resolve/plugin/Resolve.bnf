@@ -144,13 +144,13 @@
     extends("Math.*(DefinitionDecl)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathDefinitionDeclImpl"
     extends("Math.*(Signature)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathSignatureImpl"
     extends(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleDeclImpl"
-    extends(".*(Def|MathTheoremDecl)")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
+    extends(".*(Def|MathTheoremDecl)|ModuleSpec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
 
     implements(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.ResModuleDecl"
     implements(".*ReferenceExp")="edu.clemson.resolve.plugin.psi.ResReferenceExpBase"
     implements("Math.*Signature")="edu.clemson.resolve.plugin.psi.ResMathDefinitionSignature"
     implements("Math.*DefinitionDecl")="edu.clemson.resolve.plugin.psi.ResMathDefinitionDecl"
-    implements(".*(Def|MathTheoremDecl)")="edu.clemson.resolve.plugin.psi.ResNamedElement"
+    implements(".*(Def|MathTheoremDecl)|ModuleSpec")="edu.clemson.resolve.plugin.psi.ResNamedElement"
     implements(".*Block")="edu.clemson.resolve.plugin.psi.ResBlock"
 
     extends("Math(Minus|Plus|Div|Mult|Custom)InfixApplyExp")=MathInfixApplyExp // this attributes can be placed directly after rule
@@ -164,7 +164,7 @@
 ModuleDecl ::= PrecisModuleDecl | PrecisExtensionModuleDecl <<eof>>
 
 PrecisExtensionModuleDecl ::= 'Precis' 'Extension' identifier 'for'
-ModuleIdentifier ('extended_by' ModuleIdentifier)? ';'
+ModuleSpec ('extended_by' ModuleSpec)? ';'
 PrecisBlock
 'end' identifier ';' {pin(".*")=2}
 
@@ -175,10 +175,10 @@ PrecisBlock
 
 UsesItemList ::= 'uses' UsesItem (',' UsesItem)* ';'
 
-ModuleIdentifier ::= identifier {pin=1 methods=[getReferences getModuleIDTextRange]}
+ModuleSpec ::= identifier {pin=1 methods=[getReferences resolve getModuleSpecTextRange]}
 
 //TODO: Add with clause...
-UsesItem ::= ModuleIdentifier {pin=1}
+UsesItem ::= ModuleSpec {pin=1}
 
 PrecisBlock ::= PrecisItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
 

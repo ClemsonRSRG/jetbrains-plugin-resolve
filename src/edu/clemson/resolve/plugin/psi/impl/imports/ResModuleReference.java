@@ -14,12 +14,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public class ResModuleReference
-        extends
-            PsiPolyVariantReferenceBase<ResModuleIdentifier> {
+public class ResModuleReference extends FileReference {
 
-    public ResModuleReference(ResModuleIdentifier psiElement) {
-        super(psiElement);
+    public ResModuleReference(@NotNull FileReferenceSet fileReferenceSet,
+                              TextRange range, int index, String text) {
+        super(fileReferenceSet, range, index, text);
     }
 
     public PsiFileSystemItem resolve() {
@@ -42,10 +41,6 @@ public class ResModuleReference
         return null;
     }
 
-    @NotNull @Override public Object[] getVariants() {
-        return new Object[0];
-    }
-
     public boolean processResolveVariants(@NotNull CompletionResultSet set) {
         return false;
     }
@@ -57,9 +52,5 @@ public class ResModuleReference
                 originalElement.getContainingFile() :
                 getElement().getContainingFile();
         return file.getParent();
-    }
-
-    @NotNull @Override public ResolveResult[] multiResolve(boolean b) {
-        return new ResolveResult[0];
     }
 }

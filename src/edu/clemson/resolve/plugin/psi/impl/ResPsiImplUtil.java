@@ -15,9 +15,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class ResPsiImplUtil {
 
-    @NotNull public static TextRange getModuleIDTextRange(
-            @NotNull ResModuleIdentifier moduleId) {
-        String text = moduleId.getText();
+    @NotNull public static TextRange getModuleSpecTextRange(
+            @NotNull ResModuleSpec moduleSpec) {
+        String text = moduleSpec.getText();
         return !text.isEmpty() ? TextRange.create(0, text.length() - 1) :
                 TextRange.EMPTY_RANGE;
     }
@@ -37,7 +37,8 @@ public class ResPsiImplUtil {
     }
 
     @NotNull public static PsiReference[] getReferences(
-            @NotNull ResModuleIdentifier o) {
+            @NotNull ResModuleSpec o) {
+        if (o.getTextLength() == 0) return PsiReference.EMPTY_ARRAY;
         return new ResModuleReferenceSet(o).getAllReferences();
     }
 
@@ -53,8 +54,9 @@ public class ResPsiImplUtil {
      * UsesReferenceHelper and the FileContextProvider -- these are responsible
      * for setting getDefaultContext to "resolve/src/" etc...
      */
-    @Nullable public static PsiFile resolve(@NotNull ResUsesItem usesItem) {
-        PsiReference[] references = usesItem.getReferences();
+    @Nullable public static PsiFile resolve(
+            @NotNull ResModuleSpec moduleSpec) {
+        PsiReference[] references = moduleSpec.getReferences();
         for (PsiReference reference : references) {
             if (reference instanceof FileReferenceOwner) {
                 PsiFileReference lastFileReference =
