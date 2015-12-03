@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static edu.clemson.resolve.plugin.psi.impl.ResReference.processModuleLevelEntities;
+
 public class ResMathVarLikeReference
         extends
             PsiPolyVariantReferenceBase<ResMathReferenceExp> {
@@ -82,7 +84,7 @@ public class ResMathVarLikeReference
         if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
 
         if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
-        if (ResReference.processUsesRequests(file, processor, state, myElement)) return false;
+        if (!ResReference.processUsesRequests(file, processor, state, myElement)) return false;
         if (!processBuiltin(processor, state, myElement)) return false;
 
         return true;
@@ -123,16 +125,6 @@ public class ResMathVarLikeReference
         return true;
     }
 
-    private boolean processModuleLevelEntities(@NotNull ResFile file,
-                                               @NotNull ResScopeProcessor processor,
-                                               @NotNull ResolveState state,
-                                               boolean localProcessing) {
-        if (!processNamedElements(processor, state, file.getMathDefinitionSignatures(), localProcessing)) return false;
-        //type families as well perhaps (if we're in the proper context -- e.g.: not a precis or precis-extension)
-        //if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
-        return true;
-    }
-
     private boolean processNamedElements(@NotNull PsiScopeProcessor processor,
                                          @NotNull ResolveState state,
                                          @NotNull Collection<? extends ResNamedElement> elements,
@@ -144,8 +136,6 @@ public class ResMathVarLikeReference
         }
         return true;
     }
-
-
 
     @NotNull private ResMathVarLikeProcessor createDelegate(
             @NotNull ResScopeProcessor processor) {

@@ -118,15 +118,15 @@ public class ResReference
             PsiElement resolvedModule = u.getModuleSpec().resolve();
             if (resolvedModule == null || !(resolvedModule instanceof ResFile)) continue;
             //if (!processor.execute(((ResFile) resolvedFile).getEnclosedModule(), state.put(ACTUAL_NAME, u.getText()))) return true;
-            if (!processFileEntities((ResFile)resolvedModule, processor, state, false)) return false;
+            if (!processModuleLevelEntities((ResFile) resolvedModule, processor, state, false)) return false;
         }
         return true;
     }
 
-    protected static boolean processFileEntities(@NotNull ResFile file,
-                                                 @NotNull ResScopeProcessor processor,
-                                                 @NotNull ResolveState state,
-                                                 boolean localProcessing) {
+    protected static boolean processModuleLevelEntities(@NotNull ResFile file,
+                                                        @NotNull ResScopeProcessor processor,
+                                                        @NotNull ResolveState state,
+                                                        boolean localProcessing) {
         //if (!processNamedElements(processor, state, file.getConstants(), localProcessing)) return false;
         //if (!processNamedElements(processor, state, file.getVars(), localProcessing)) return false;
        /* if (!processNamedElements(processor, state, file.getOperationImpls(), localProcessing)) return false;
