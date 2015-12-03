@@ -8,7 +8,6 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
 import edu.clemson.resolve.plugin.psi.ResMathReferenceExp;
-import edu.clemson.resolve.plugin.psi.ResModuleIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
