@@ -20,8 +20,6 @@ public class RESOLVECompletionContributor extends CompletionContributor {
                 new RESOLVEReferenceCompletionProvider());
         //extend(CompletionType.BASIC, resReference(),
         //        new RESOLVEReferenceCompletionProvider());
-        extend(CompletionType.BASIC, moduleReference(),
-                new RESOLVEUsesCompletionProvider());
     }
 
     private static PsiElementPattern.Capture<PsiElement> referenceExp() {
@@ -32,12 +30,6 @@ public class RESOLVECompletionContributor extends CompletionContributor {
         return psiElement().withParent(psiElement(ResMathNameIdentifier.class)
                 .withParent(ResReferenceExpBase.class));
     }
-
-    private static PsiElementPattern.Capture<PsiElement> moduleReference() {
-        return PlatformPatterns.psiElement(ResTypes.IDENTIFIER)
-                .withParent(psiElement(ResTypes.MODULE_SPEC));
-    }
-
 
     // private static PsiElementPattern.Capture<PsiElement> resReference() {
    //     return psiElement().withParent(psiElement()

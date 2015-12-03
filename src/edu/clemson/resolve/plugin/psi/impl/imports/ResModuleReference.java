@@ -2,11 +2,13 @@ package edu.clemson.resolve.plugin.psi.impl.imports;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionUtil;
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
+import edu.clemson.resolve.plugin.psi.ResFile;
 import edu.clemson.resolve.plugin.psi.ResMathReferenceExp;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,6 +44,13 @@ public class ResModuleReference extends FileReference {
 
     public boolean processResolveVariants(@NotNull CompletionResultSet set) {
         return false;
+    }
+
+    @Override protected Object createLookupItem(PsiElement candidate) {
+        return LookupElementBuilder
+                .create(((ResFile)candidate).getVirtualFile().getNameWithoutExtension())
+                .withIcon(candidate.getIcon(0)).withTypeText(
+                        ((ResFile) candidate).getName());
     }
 
     @Nullable private PsiDirectory getDirectory() {
