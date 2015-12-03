@@ -35,28 +35,21 @@ public class ResElementFactory {
     @NotNull public static ResFile getHardCodedMathFile(
             @NotNull Project project) {
         final String hardcoded =
-                "Precis HardCoded; " +
-                    "Definition Cls : Cls;" +
-                    "Definition SSet : Cls;" +
+                "Precis HardCoded;\n " +
+                    "Definition Cls : HypCls;\n" +
+                    "Definition El : Cls;\n" +
+                    "Definition Entity : Cls;\n" +
+                    "Definition SSet : Cls;\n" +
+                    "Definition B : SSet;\n" +
+                    "Definition true : B;\n" +
+                    "Definition false : B;\n" +
                     "Definition Powerset(S : Cls) : Cls;\n" +
+                    "Definition and(a, b : B) : B;\n" +
+                    "Definition or(a, b : B) : B;\n" +
+                    "Definition not(a : B) : B;\n" +
+                    "Definition implies(a, b : B) : B;\n" +
+                    "Definition iff(a, b : B) : B;\n" +
                 "end HardCoded;";
         return createFileFromText(project, hardcoded);
     }
-
-    /*@NotNull public static ResUsesListImpl createUsesList(
-            @NotNull Project project,
-            @Nullable ResUsesListImpl existingUsesList,
-            @NotNull String newUsesItemName) {
-        List<String> rawStringUsesList = new ArrayList<String>();
-        if (existingUsesList != null) {
-            for (ResUsesItem usesItem : existingUsesList.getUsesSpecs()) {
-                rawStringUsesList.add(usesItem.getText());
-            }
-        }
-        rawStringUsesList.add(newUsesItemName); //now take on the new one.
-        String joinedUsesList = StringUtil.join(rawStringUsesList, ", ");
-        ResFile file = createFileFromText(project,
-                "Precis Temp; uses "+joinedUsesList+"; end Temp;");
-        return file.getUsesList();
-    }*/
 }

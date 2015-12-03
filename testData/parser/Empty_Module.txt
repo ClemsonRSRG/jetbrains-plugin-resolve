@@ -1,12 +1,12 @@
 RESOLVE_FILE
   PsiComment(RESOLVE_MULTILINE_COMMENT)('/** License information goes here\n */')
   PsiComment(RESOLVE_LINE_COMMENT)('//Dan was here')
-  FACILITY_MODULE_DECL
-    PsiElement(Facility)('Facility')
+  PRECIS_MODULE_DECL
+    PsiElement(Precis)('Precis')
     PsiElement(identifier)('Empty_Module')
     PsiElement(;)(';')
     PsiComment(RESOLVE_LINE_COMMENT)('//this is an empty module...')
-    FACILITY_BLOCK
+    PRECIS_BLOCK
       <empty list>
     PsiElement(end)('end')
     PsiElement(identifier)('Empty_Module')

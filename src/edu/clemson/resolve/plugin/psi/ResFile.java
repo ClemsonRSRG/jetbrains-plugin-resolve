@@ -39,13 +39,13 @@ public class ResFile extends PsiFileBase {
         return foundDecls;
     }
 
-    /*@NotNull public List<ResUsesSpec> getUsesSpecs() {
+    @NotNull public List<ResUsesItem> getUsesItems() {
         ResModuleDecl enclosedModule = getEnclosedModule();
-        return enclosedModule != null ? enclosedModule.getUsesSpecs() :
-                new ArrayList<ResUsesSpec>();
+        return enclosedModule != null ? enclosedModule.getUsesItems() :
+                new ArrayList<ResUsesItem>();
     }
 
-    @NotNull public List<ResTypeLikeNodeDecl> getTypes() {
+    /*@NotNull public List<ResTypeLikeNodeDecl> getTypes() {
         ResModuleDecl enclosedModule = getEnclosedModule();
         return enclosedModule != null ? enclosedModule.getTypes() :
                 new ArrayList<ResTypeLikeNodeDecl>();

@@ -40,7 +40,7 @@ public abstract class ResScopeProcessorBase extends ResScopeProcessor {
         String name = ((ResNamedElement)psiElement).getName();
         if (StringUtil.isEmpty(name) || !isCompletion &&
                 !requestedNameElement.textMatches(name)) return true;
-        if (condition(psiElement)) return true;
+        if (crossOff(psiElement)) return true;
         if (psiElement.equals(origin)) return true;
         return add((ResNamedElement)psiElement) || isCompletion;
     }
@@ -57,5 +57,5 @@ public abstract class ResScopeProcessorBase extends ResScopeProcessor {
         return myResult;
     }
 
-    protected abstract boolean condition(@NotNull PsiElement element);
+    protected abstract boolean crossOff(@NotNull PsiElement element);
 }

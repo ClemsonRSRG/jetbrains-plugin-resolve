@@ -32,6 +32,8 @@
         COLONCOLON              = '::'
         SEMICOLON               = ';'
         COMMA                   = ','
+        IND_BASE                = '(i.)'
+        IND_HYPO                = '(ii.)'
 
         // Operators
         EQUALS                  = '='
@@ -62,10 +64,6 @@
         COLON_EQUALS_COLON      = ':=:'
         RARROW                  = '->'
         TILDE                   = '~'
-        //UNION                   = 'union'
-        //INTERSECT               = 'intersect'
-        //IS_IN                   = 'is_in'
-        //IS_NOT_IN               = 'is_not_in'
         BAR                     = '|'
         DBL_BAR                 = '||'
 
@@ -76,12 +74,14 @@
         BASE                    = 'base'
         HYPO                    = 'hypo'
         CONCEPT                 = 'Concept'
+        EXTENSION               = 'Extension'
+        EXTENDED_BY             = 'extended_by'
         CART_PROD               = 'Cart_Prod'
-        Definition              = 'Definition'
+        DEFINITION              = 'Definition'
         CONSTRAINTS             = 'constraints'
         CONVENTIONS             = 'conventions'
         CORRESPONDENCE          = 'correspondence'
-        EXTENSION               = 'extension'
+        EXTENSION               = 'Extension'
         END                     = 'end'
         ELSE                    = 'else'
         USES                    = 'uses'
@@ -99,6 +99,7 @@
         INITIALIZATION          = 'initialization'
         IMPLEMENTATION          = 'Implementation'
         INDUCTIVE               = 'Inductive'
+        IMPLICIT                = 'Implicit'
         THEOREM                 = 'Theorem'
         COROLLARY               = 'Corollary'
         LAMBDA                  = 'lambda'
@@ -107,6 +108,7 @@
         FAMILY                  = 'Family'
         FOR                     = 'for'
         MODELED                 = 'modeled'
+        CATEGORICAL             = 'Categorical'
         EXEMPLAR                = 'exemplar'
         OPERATION               = 'Operation'
         RECURSIVE               = 'Recursive'
@@ -118,6 +120,7 @@
         BY                      = 'by'
         THEN                    = 'then'
         WHILE                   = 'While'
+        WITH                    = 'with'
         DO                      = 'do'
         STRING                  = 'string'
         WHICH_ENTAILS           = 'which_entails'
@@ -133,7 +136,7 @@
         REPLACES                = 'replaces'
         EVALUATES               = 'evaluates'
 
-        //these two are for grammarkit's live preview feature work right,
+        //these two are so grammarkit's live preview feature will work right,
         //disregard them otherwise
         space                   = "regexp:\s+"
         identifier              = 'regexp:\p{Alpha}\w*'
@@ -142,14 +145,16 @@
     extends("Math.*(DefinitionDecl)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathDefinitionDeclImpl"
     extends("Math.*(Signature)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathSignatureImpl"
     extends(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleDeclImpl"
-    extends(".*(Def|Decl)")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
+    extends(".*(Def|MathTheoremDecl)|ModuleSpec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
 
     implements(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.ResModuleDecl"
     implements(".*ReferenceExp")="edu.clemson.resolve.plugin.psi.ResReferenceExpBase"
     implements("Math.*Signature")="edu.clemson.resolve.plugin.psi.ResMathDefinitionSignature"
     implements("Math.*DefinitionDecl")="edu.clemson.resolve.plugin.psi.ResMathDefinitionDecl"
-    implements(".*(Def|Decl)")="edu.clemson.resolve.plugin.psi.ResNamedElement"
+    implements(".*(Def|MathTheoremDecl)|ModuleSpec")="edu.clemson.resolve.plugin.psi.ResNamedElement"
     implements(".*Block")="edu.clemson.resolve.plugin.psi.ResBlock"
+
+    extends("Math(Minus|Plus|Div|Mult|Custom)InfixApplyExp")=MathInfixApplyExp // this attributes can be placed directly after rule
 
     extends("Math.*(Exp)")=MathExp
 
@@ -157,16 +162,23 @@
     pin('.*List(?:_\d.*)?')=1
 }
 
-ModuleDecl ::= PrecisModuleDecl <<eof>>
+ModuleDecl ::= PrecisModuleDecl | PrecisExtensionModuleDecl <<eof>>
+
+PrecisExtensionModuleDecl ::= 'Precis' 'Extension' identifier 'for'
+ModuleSpec ('extended_by' ModuleSpec)? ';'
+PrecisBlock
+'end' identifier ';' {pin(".*")=2}
 
 PrecisModuleDecl ::= 'Precis' identifier ';'
 UsesItemList?
 PrecisBlock
-'end' identifier ';' {pin(".*")=1}
+'end' identifier ';' {pin(".*")=2}
 
 UsesItemList ::= 'uses' UsesItem (',' UsesItem)* ';'
 
-UsesItem ::= identifier {pin=1 methods=[getReferences resolve getUsesTextRange]}
+ModuleSpec ::= identifier {pin=1 methods=[getReferences resolve getModuleSpecTextRange]}
+
+UsesItem ::= ModuleSpec
 
 PrecisBlock ::= PrecisItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
 
@@ -174,9 +186,11 @@ private ItemsRecover ::= !('end')
 
 private PrecisItem ::=
           MathTheoremDecl
-        | MathStandardDefinitionDecl  {pin=1 recoverWhile=PrecisItemRecover}
+        | MathStandardDefinitionDecl
+        | MathCategoricalDefinitionDecl
+        | MathInductiveDefinitionDecl {pin=1 recoverWhile=PrecisItemRecover}
 
-private PrecisItemRecover ::= !('Definition'|'Theorem'|'Corollary'|'end')
+private PrecisItemRecover ::= !('Definition'|'Implicit'|'Theorem'|'Corollary'|'Categorical'|'Inductive'|'end')
 
 // -------------------------------------------------
 //  M A T H   C O N S T R U C T S   &   E X P R S
@@ -185,11 +199,25 @@ private PrecisItemRecover ::= !('Definition'|'Theorem'|'Corollary'|'end')
 MathTheoremDecl ::= ('Theorem'|'Corollary') identifier ':'
 MathAssertionExp ';' {pin = 2}
 
-MathStandardDefinitionDecl ::= 'Definition' MathDefinitionSignature
-        ('is' MathAssertionExp)? ';' {pin=2}
+MathStandardDefinitionDecl ::= ('Implicit')? 'Definition'
+    MathDefinitionSignature ('is' MathAssertionExp)? ';' {pin=2}
+
+MathCategoricalDefinitionDecl ::= 'Categorical' 'Definition' 'for'
+CategoricalSigList 'is' MathExp ';' {pin=1}
+
+private CategoricalSigList ::= MathPrefixDefinitionSignature
+(',' MathPrefixDefinitionSignature)* {recoverWhile=CategoricalSigListRec}
+
+private CategoricalSigListRec ::= !('is')
+
+MathInductiveDefinitionDecl ::= 'Inductive' 'Definition'
+MathDefinitionSignature 'is'
+'(i.)' MathExp ';'
+'(ii.)' MathExp ';' {pin=1}
 
 private MathDefinitionSignature ::=
            MathPrefixDefinitionSignature
+        |  MathOutfixDefinitionSignature
         |  MathInfixDefinitionSignature
 
 MathPrefixDefinitionSignature ::=
@@ -203,6 +231,9 @@ private MathDefinitionParams ::= '(' MathDefinitionParamList ')' { pin=1}
 private ParamListRec ::= !(')')
 private MathDefinitionParamList ::= MathVarDeclGroup (',' MathVarDeclGroup)* {pin=1 recoverWhile=ParamListRec}
 
+MathOutfixDefinitionSignature ::=
+        ('|'|'||') MathSingletonVarDecl ('|'|'||')  ':' MathExp {pin=1}
+
 MathSingletonVarDecl ::= MathVarDef ':' MathExp {pin=2 extends=MathVarDeclGroup}
 
 MathVarDeclGroup ::= MathVarDeclList ':' MathExp {pin=1}
@@ -213,27 +244,74 @@ MathAssertionExp ::= MathQuantifiedExp|MathExp
 
 MathQuantifiedExp ::= ('Forall'|'Exists') MathVarDeclGroup ',' MathAssertionExp {pin=1}
 
-MathExp ::=  MathPrefixApplyExp|MathPrimary
+MathExp ::=
+      MathBooleanInfixApplyExp
+    | MathRelationalInfixApplyExp
+    | MathRangeApplyExp
+    | MathAddGroup
+    | MathMultGroup
+    | MathCatInfixApplyExp
+    | MathPrefixApplyExp
+    | MathCustomInfixApplyExp
+    | MathPrimary
+
+//private rules for operators with the same precedence
+private MathAddGroup ::= MathPlusInfixApplyExp | MathMinusInfixApplyExp
+private MathMultGroup ::= MathMultInfixApplyExp | MathDivInfixApplyExp
+
+MathPlusInfixApplyExp ::= MathExp '+' MathExp
+MathMinusInfixApplyExp ::= MathExp ('-'|'~') MathExp
+MathBooleanInfixApplyExp ::= MathExp ('and'|'or') MathExp
+MathMultInfixApplyExp ::= MathExp '*' MathExp
+MathDivInfixApplyExp ::= MathExp '/' MathExp
+MathCatInfixApplyExp ::= MathExp 'o' MathExp
+MathRangeApplyExp ::= MathExp '->' MathExp
+
+MathRelationalInfixApplyExp ::= MathExp ('<' | '>' | '<=' | '>=' | '=' | '/=') MathExp
+MathCustomInfixApplyExp ::= MathExp identifier MathExp
+
+MathTypeAssertionExp ::= MathExp ':' MathExp {pin=2}
+MathNestedExp ::= '(' MathAssertionExp ')'
+
+private MathPrimary ::=
+          MathSymbolExp
+        | MathTypeAssertionExp
+        | MathSetComprehensionExp
+        | MathGeneralizedApplyExp
+        | MathNestedExp
+        | MathSetExp
+        | MathOutfixApplyExp
+        | MathLiteralExp
+
+MathGeneralizedApplyExp ::= MathExp '[' MathExp ',' '[' MathExp ']'']' {pin=2}
+
+fake MathInfixApplyExp ::= MathExp+ {
+  methods=[left="MathExp[0]" right="MathExp[1]"]
+}
+
+MathOutfixApplyExp ::=
+      '<' MathExp '>'
+    | '|' MathExp '|'
+    | '||' MathExp '||'
 
 MathPrefixApplyExp ::=
     MathExp '(' MathArgList')' {pin=2}
 
 private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
 
-private MathPrimary ::=
-          MathSymbolExp
-        | MathLiteralExp
-
-/*fake MathBinaryExp ::= MathExp+ {
-  methods=[left="MathExp[0]" right="MathExp[1]"]
-}*/
-
 MathSymbolExp ::= MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}
 
 left MathQualifiedReferenceExp ::= '::' MathNameIdentifier {elementType=MathReferenceExp}
 
-MathReferenceExp::= MathNameIdentifier {methods=[getReference getQualifier getIdentifier] extends=MathExp}
+MathReferenceExp ::= MathNameIdentifier {methods=[getReference getQualifier getIdentifier] extends=MathExp}
 
+MathSetComprehensionExp ::= '{' MathSingletonVarDecl '|' MathExp '}'
+
+MathSetExp ::= '{' MathSetElementsList? '}' {pin=2}
+
+MathSetElementsList ::= MathExp (',' MathExp)* {recoverWhile=MathSetEleRecover}
+
+private MathSetEleRecover ::= !('}')
 MathLiteralExp ::= (int|'true'|'false')
 
-MathNameIdentifier ::= identifier|('and'|'or'|'not'|'o'|'true'|'false'|int);
+MathNameIdentifier ::= identifier|('and'|'or'|'not'|'o'|'true'|'false'|int|'+'|'-')

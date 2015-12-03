@@ -39,6 +39,7 @@
         <fileTypeFactory implementation="edu.clemson.resolve.plugin.RESOLVEFileTypeFactory"/>
 
         <lang.parserDefinition language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.RESOLVEParserDefinition"/>
+        <lang.braceMatcher language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.editor.RESOLVEBraceMatcher"/>
 
         <!-- project -->
         <defaultLiveTemplatesProvider implementation="edu.clemson.resolve.plugin.template.RESOLVELiveTemplatesProvider"/>

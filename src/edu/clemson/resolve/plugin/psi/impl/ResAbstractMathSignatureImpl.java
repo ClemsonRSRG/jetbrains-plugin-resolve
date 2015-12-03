@@ -3,11 +3,7 @@ package edu.clemson.resolve.plugin.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
-import edu.clemson.resolve.plugin.ResTypes;
-import edu.clemson.resolve.plugin.psi.ResMathDefinitionSignature;
-import edu.clemson.resolve.plugin.psi.ResMathExp;
-import edu.clemson.resolve.plugin.psi.ResMathVarDeclGroup;
-import edu.clemson.resolve.plugin.psi.ResType;
+import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,7 +26,12 @@ public abstract class ResAbstractMathSignatureImpl
         return findChildByClass(ResMathExp.class);
     }
 
+    /**
+     * This has to be {@code Nullable} at the moment; think about it: We have
+     * infix and outfix signatures, how in the would we create the |..| needed?
+     * In other words, its tough doing completion for non-identifiers.
+     */
     @Nullable @Override public PsiElement getIdentifier() {
-        return findChildByType(ResTypes.MATH_NAME_IDENTIFIER);
+        return findChildByClass(ResMathNameIdentifier.class);
     }
 }

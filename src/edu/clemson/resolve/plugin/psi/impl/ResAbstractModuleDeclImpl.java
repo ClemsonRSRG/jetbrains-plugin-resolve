@@ -40,6 +40,10 @@ public abstract class ResAbstractModuleDeclImpl
         return findChildByType(ResTypes.IDENTIFIER);
     }
 
+    @NotNull public List<ResModuleSpec> getModuleSpecList() {
+        return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleSpec.class);
+    }
+
     @NotNull @Override public
             List<ResMathDefinitionDecl> getMathDefinitionDecls() {
         return CachedValuesManager.getCachedValue(this,
@@ -62,14 +66,14 @@ public abstract class ResAbstractModuleDeclImpl
         return signatures;
     }
 
-   /* @NotNull @Override public List<ResUsesSpec> getUsesItems() {
-        return getUsesList() != null ? getUsesList().getUsesSpecList() :
-                ContainerUtil.<ResUsesSpec>newArrayList();
+    @NotNull @Override public List<ResUsesItem> getUsesItems() {
+        return getUsesItemList() != null ? getUsesItemList().getUsesItemList() :
+                ContainerUtil.<ResUsesItem>newArrayList();
     }
 
-    @Nullable public ResUsesList getUsesItemList() {
-        return PsiTreeUtil.findChildOfType(this, ResUsesList.class);
-    }*/
+    @Nullable public ResUsesItemList getUsesItemList() {
+        return PsiTreeUtil.findChildOfType(this, ResUsesItemList.class);
+    }
 
     /*@NotNull public List<ResTypeLikeNodeDecl> getTypes() {
         final ResBlock body = this.getModuleBlock();

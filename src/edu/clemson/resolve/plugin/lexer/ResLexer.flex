@@ -81,6 +81,8 @@ ESCAPES = [abfnrtv]
 "::"                                    { return COLONCOLON; }
 ";"                                     { return SEMICOLON; }
 ","                                     { return COMMA; }
+"(i.)"                                  { return IND_BASE; }
+"(ii.)"                                 { return IND_HYPO; }
 
 // Operators
 
@@ -109,10 +111,6 @@ ESCAPES = [abfnrtv]
 ":=:"                                   { return COLON_EQUALS_COLON; }
 "->"                                    { return RARROW; }
 "~"			                            { return TILDE; }
-//"union"                                 { return UNION; }
-//"intersect"                             { return INTERSECT; }
-//"is_in"                                 { return IS_IN; }
-//"is_not_in"                             { return IS_NOT_IN; }
 "|"                                     { return BAR; }
 "||"                                    { return DBL_BAR; }
 
@@ -121,6 +119,7 @@ ESCAPES = [abfnrtv]
 "base"                                  { return BASE;}
 "by"                                    { return BY; }
 "Cart_Prod"                             { return CART_PROD; }
+"Categorical"                           { return CATEGORICAL; }
 "changing"                              { return CHANGING; }
 "Concept"                               { return CONCEPT;  }
 "constraints"                           { return CONSTRAINTS; }
@@ -131,6 +130,7 @@ ESCAPES = [abfnrtv]
 "Definition"                            { return DEFINITION; }
 "else"                                  { return ELSE; }
 "Extension"                             { return EXTENSION; }
+"extended_by"                           { return EXTENDED_BY; }
 "do"                                    { return DO; }
 "end"                                   { return END;  }
 "ensures"                               { return ENSURES; }
@@ -148,6 +148,7 @@ ESCAPES = [abfnrtv]
 "is"                                    { return IS; }
 "implemented"                           { return IMPLEMENTED; }
 "Implementation"                        { return IMPLEMENTATION; }
+"Implicit"                              { return IMPLICIT; }
 "initialization"                        { return INITIALIZATION; }
 "Inductive"                             { return INDUCTIVE; }
 "lambda"                                { return LAMBDA; }

@@ -1,30 +1,23 @@
 package edu.clemson.resolve.plugin.psi.impl;
 
-import com.intellij.openapi.util.Computable;
-import com.intellij.openapi.util.RecursionManager;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
 import com.intellij.psi.impl.source.tree.LeafElement;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
-import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.plugin.ResTypes;
 import edu.clemson.resolve.plugin.psi.*;
+import edu.clemson.resolve.plugin.psi.impl.imports.ResModuleReferenceSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
 public class ResPsiImplUtil {
 
-    @NotNull public static TextRange getUsesTextRange(
-            @NotNull ResUsesItem importString) {
-        String text = importString.getText();
+    @NotNull public static TextRange getModuleSpecTextRange(
+            @NotNull ResModuleSpec moduleSpec) {
+        String text = moduleSpec.getText();
         return !text.isEmpty() ? TextRange.create(0, text.length() - 1) :
                 TextRange.EMPTY_RANGE;
     }
@@ -43,6 +36,12 @@ public class ResPsiImplUtil {
         return new ResMathVarLikeReference(o);
     }
 
+    @NotNull public static PsiReference[] getReferences(
+            @NotNull ResModuleSpec o) {
+        if (o.getTextLength() == 0) return PsiReference.EMPTY_ARRAY;
+        return new ResModuleReferenceSet(o).getAllReferences();
+    }
+
     @NotNull public static String getText(@Nullable ResType o) {
         if (o == null) return "";
         String text = o.getText();
@@ -55,8 +54,9 @@ public class ResPsiImplUtil {
      * UsesReferenceHelper and the FileContextProvider -- these are responsible
      * for setting getDefaultContext to "resolve/src/" etc...
      */
-    @Nullable public static PsiFile resolve(@NotNull ResUsesItem usesItem) {
-        PsiReference[] references = usesItem.getReferences();
+    @Nullable public static PsiFile resolve(
+            @NotNull ResModuleSpec moduleSpec) {
+        PsiReference[] references = moduleSpec.getReferences();
         for (PsiReference reference : references) {
             if (reference instanceof FileReferenceOwner) {
                 PsiFileReference lastFileReference =

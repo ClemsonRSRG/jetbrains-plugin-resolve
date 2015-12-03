@@ -11,7 +11,11 @@ import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static edu.clemson.resolve.plugin.psi.impl.ResReference.processModuleLevelEntities;
 
 public class ResMathVarLikeReference
         extends
@@ -80,9 +84,18 @@ public class ResMathVarLikeReference
         if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
 
         if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
-        //if (ResReference.processUsesRequests(file, processor, state, myElement)) return false;
+        if (!ResReference.processUsesRequests(file, processor, state, myElement)) return false;
+        //processImplicitUsesRequests(
+        if (!processBuiltin(processor, state, myElement)) return false;
 
         return true;
+    }
+
+    private boolean processBuiltin(@NotNull ResScopeProcessor processor,
+                                  @NotNull ResolveState state,
+                                  @NotNull ResCompositeElement element) {
+        ResFile f = ResElementFactory.getHardCodedMathFile(element.getProject());
+        return processModuleLevelEntities(f, processor, state, true);
     }
 
     private void processMathParameterLikeThings(@NotNull ResCompositeElement e,
@@ -108,17 +121,8 @@ public class ResMathVarLikeReference
                                       @NotNull List<ResMathVarDeclGroup> parameters) {
         for (ResMathVarDeclGroup declaration : parameters) {
             if (!processNamedElements(processor, ResolveState.initial(), declaration.getMathVarDefList(), true)) return false;
+           //if (!processImplicitTypeParameters(processor, ResolveState.initial(), declaration.getMathExp(), true)) return false;
         }
-        return true;
-    }
-
-    private boolean processModuleLevelEntities(@NotNull ResFile file,
-                                               @NotNull ResScopeProcessor processor,
-                                               @NotNull ResolveState state,
-                                               boolean localProcessing) {
-        if (!processNamedElements(processor, state, file.getMathDefinitionSignatures(), localProcessing)) return false;
-        //type families as well perhaps (if we're in the proper context -- e.g.: not a precis or precis-extension)
-        //if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
         return true;
     }
 
@@ -142,11 +146,14 @@ public class ResMathVarLikeReference
     protected static class ResMathVarLikeProcessor
             extends
                 ResScopeProcessorBase {
+        public Map<String, String> implicitlyBoundTypeParameters =
+                new HashMap<String, String>();
         public ResMathVarLikeProcessor(@NotNull ResMathReferenceExp origin,
                                        boolean completion) {
             super(origin.getIdentifier(), origin, completion);
         }
-        @Override protected boolean condition(@NotNull PsiElement element) {
+        @Override protected boolean crossOff(@NotNull PsiElement element) {
+
             return false;
         }
     }
