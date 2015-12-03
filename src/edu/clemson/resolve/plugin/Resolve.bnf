@@ -277,10 +277,13 @@ private MathPrimary ::=
           MathSymbolExp
         | MathTypeAssertionExp
         | MathSetComprehensionExp
+        | MathGeneralizedApplyExp
         | MathNestedExp
         | MathSetExp
         | MathOutfixApplyExp
         | MathLiteralExp
+
+MathGeneralizedApplyExp ::= MathExp '[' MathExp ',' '[' MathExp ']'']' {pin=2}
 
 fake MathInfixApplyExp ::= MathExp+ {
   methods=[left="MathExp[0]" right="MathExp[1]"]

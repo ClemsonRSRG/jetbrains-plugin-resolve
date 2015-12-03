@@ -122,7 +122,7 @@ public class ResReference
         }
         ResModuleDecl module = file.getEnclosedModule();
         if (module != null) {
-            //Now process module implicit imports (minus those from facs)
+            //Now process module decl implicit imports
             for (ResModuleSpec moduleSpec : module.getModuleSpecList()) {
                 PsiElement resolvedModule = moduleSpec.resolve();
                 if (resolvedModule == null || !(resolvedModule instanceof ResFile)) continue;
