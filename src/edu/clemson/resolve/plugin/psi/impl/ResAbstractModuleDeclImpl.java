@@ -40,6 +40,10 @@ public abstract class ResAbstractModuleDeclImpl
         return findChildByType(ResTypes.IDENTIFIER);
     }
 
+    @NotNull public List<ResModuleSpec> getModuleSpecList() {
+        return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleSpec.class);
+    }
+
     @NotNull @Override public
             List<ResMathDefinitionDecl> getMathDefinitionDecls() {
         return CachedValuesManager.getCachedValue(this,

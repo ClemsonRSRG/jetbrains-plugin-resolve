@@ -14,7 +14,6 @@ public class RESOLVEBraceMatcher implements PairedBraceMatcher {
     private static final BracePair[] PAIRS = new BracePair[]{
             new BracePair(ResTypes.LPAREN, ResTypes.RPAREN, false),
             new BracePair(ResTypes.LBRACK, ResTypes.RBRACK, false),
-            new BracePair(ResTypes.BAR, ResTypes.BAR, false),
     };
 
     @Override public BracePair[] getPairs() {
@@ -30,7 +29,6 @@ public class RESOLVEBraceMatcher implements PairedBraceMatcher {
                 || type == ResTypes.RPAREN
                 || type == ResTypes.RBRACK
                 || type == ResTypes.RBRACE
-                || type == ResTypes.BAR2
                 || null == type;
     }
 

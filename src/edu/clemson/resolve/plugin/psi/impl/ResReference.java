@@ -12,6 +12,7 @@ import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.List;
 
 public class ResReference
         extends
@@ -117,8 +118,16 @@ public class ResReference
             //works the rest of the time...
             PsiElement resolvedModule = u.getModuleSpec().resolve();
             if (resolvedModule == null || !(resolvedModule instanceof ResFile)) continue;
-            //if (!processor.execute(((ResFile) resolvedFile).getEnclosedModule(), state.put(ACTUAL_NAME, u.getText()))) return true;
             if (!processModuleLevelEntities((ResFile) resolvedModule, processor, state, false)) return false;
+        }
+        ResModuleDecl module = file.getEnclosedModule();
+        if (module != null) {
+            //Now process module implicit imports (minus those from facs)
+            for (ResModuleSpec moduleSpec : module.getModuleSpecList()) {
+                PsiElement resolvedModule = moduleSpec.resolve();
+                if (resolvedModule == null || !(resolvedModule instanceof ResFile)) continue;
+                if (!processModuleLevelEntities((ResFile) resolvedModule, processor, state, false)) return false;
+            }
         }
         return true;
     }

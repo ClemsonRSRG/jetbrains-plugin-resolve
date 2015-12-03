@@ -8,6 +8,8 @@ public interface ResModuleDecl extends ResNamedElement {
 
     @NotNull public ResBlock getBlock();
 
+    @NotNull public List<ResModuleSpec> getModuleSpecList();
+
     @NotNull public List<ResMathDefinitionDecl> getMathDefinitionDecls();
 
     @NotNull public List<ResMathDefinitionSignature> getMathDefinitionSignatures();
