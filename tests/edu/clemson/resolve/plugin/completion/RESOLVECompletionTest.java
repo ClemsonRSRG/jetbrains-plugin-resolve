@@ -1,10 +1,23 @@
 package edu.clemson.resolve.plugin.completion;
 
+import java.io.IOException;
+import java.util.List;
+
 public class RESOLVECompletionTest extends RESOLVECompletionTestBase {
 
     public void testSimpleLocalMathRef() {
         doTestInclude("Precis Foo; Definition T1(xs, ys : Z) : B is <caret>",
                 "xs", "ys", "T1");
+    }
+
+    public void testUses() throws IOException {
+        myFixture.getTempDirFixture().createFile("A.resolve", "Precis A; Definition xss : V; end A;");
+        myFixture.getTempDirFixture().createFile("C.resolve", "");
+        myFixture.configureByText("C.resolve", "Precis C; uses A; Definition foo : <caret>");
+        myFixture.completeBasic();
+        List<String> lookupElementStrings = myFixture.getLookupElementStrings();
+        assertNotNull(lookupElementStrings);
+        //TODO: file
     }
 
     public void testSimpleMathSetRef() {

@@ -121,14 +121,14 @@ public class ResReference
             if (!processModuleLevelEntities((ResFile) resolvedModule, processor, state, false)) return false;
         }
         ResModuleDecl module = file.getEnclosedModule();
-        if (module != null) {
+        /*if (module != null) {
             //Now process module decl implicit imports
             for (ResModuleSpec moduleSpec : module.getModuleSpecList()) {
                 PsiElement resolvedModule = moduleSpec.resolve();
                 if (resolvedModule == null || !(resolvedModule instanceof ResFile)) continue;
                 if (!processModuleLevelEntities((ResFile) resolvedModule, processor, state, false)) return false;
             }
-        }
+        }*/
         return true;
     }
 
