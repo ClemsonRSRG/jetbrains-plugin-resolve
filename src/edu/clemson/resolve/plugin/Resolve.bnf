@@ -145,13 +145,13 @@
     extends("Math.*(DefinitionDecl)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathDefinitionDeclImpl"
     extends("Math.*(Signature)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathSignatureImpl"
     extends(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleDeclImpl"
-    extends(".*(Def|MathTheoremDecl)|ModuleSpec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
+    extends(".*((Var|Param|Field)Def|MathTheoremDecl|TypeParamDecl)|ModuleSpec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
 
     implements(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.ResModuleDecl"
     implements(".*ReferenceExp")="edu.clemson.resolve.plugin.psi.ResReferenceExpBase"
     implements("Math.*Signature")="edu.clemson.resolve.plugin.psi.ResMathDefinitionSignature"
     implements("Math.*DefinitionDecl")="edu.clemson.resolve.plugin.psi.ResMathDefinitionDecl"
-    implements(".*(Def|MathTheoremDecl)|ModuleSpec")="edu.clemson.resolve.plugin.psi.ResNamedElement"
+    implements(".*((Var|Param|Field)Def|MathTheoremDecl|TypeParamDecl|ModuleSpec)")="edu.clemson.resolve.plugin.psi.ResNamedElement"
     implements(".*Block")="edu.clemson.resolve.plugin.psi.ResBlock"
 
     extends("Math(Minus|Plus|Div|Mult|Custom)InfixApplyExp")=MathInfixApplyExp // this attributes can be placed directly after rule
@@ -174,10 +174,10 @@ UsesItemList?
 PrecisBlock
 'end' identifier ';' {pin(".*")=2}
 
-//ConceptModuleDecl ::= 'Concept' identifier SpecModuleParameters? ';'
-//UsesItemList?
+ConceptModuleDecl ::= 'Concept' identifier SpecModuleParameters? ';'
+UsesItemList?
 //ConceptBlock
-//'end' identifier ';' {pin(".*")=1}
+'end' identifier ';' {pin(".*")=1}
 
 UsesItemList ::= 'uses' UsesItem (',' UsesItem)* ';'
 
@@ -197,7 +197,51 @@ private PrecisItem ::=
 
 private PrecisItemRecover ::= !('Definition'|'Implicit'|'Theorem'|'Corollary'|'Categorical'|'Inductive'|'end')
 
+// -------------------------------------------------
+//  P R O G   P A R A M E T E R   A N D   V A R   S T U F F
+// -------------------------------------------------
 
+SpecModuleParameters ::= '(' SpecModuleParamList ')' {pin=1 }
+
+private SpecModuleParamList ::= SpecParamDecl  (';' SpecParamDecl)* {pin=2 recoverWhile=ParamListRec}
+
+private SpecParamDecl ::= TypeParamDecl | ParamDecl
+
+ParamDecl ::= ParameterMode ParamDefinitionListNoPin ':' Type {pin=1}
+private ParamDefinitionListNoPin ::= ParamDef &(!(';'|')')) (',' ParamDef)* {pin=1}
+ParamDef ::= identifier
+
+TypeParamDecl ::= 'type' identifier {pin=2}
+
+ParameterMode ::=
+      'alters'
+    | 'updates'
+    | 'clears'
+    | 'restores'
+    | 'preserves'
+    | 'replaces'
+    | 'evaluates'
+    | identifier //TODO: would like to get rid of identifier here, but results
+                 //in an uglier (partial) psi; which makes keyword completion
+                 //patterns much harder
+
+RecordVarDeclGroup ::= FieldVarSpec ';' {pin=1}
+FieldVarSpec ::= FieldVarDefList ':' Type {pin=1}
+private FieldVarDefList ::= FieldDef &(!(';'))(',' FieldDef)*
+FieldDef ::= identifier
+
+// -------------------------------------------------
+//  P R O G   T Y P E S
+// -------------------------------------------------
+
+//TOOD: Really this should just be namedType (w/o records). Right now this
+//allows anonymous record types .. which is ok .. I GUESS.
+Type ::= RecordType | NamedType
+private NamedType ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
+TypeReferenceExpression ::= identifier { methods=[getReference getQualifier] }
+left QualifiedTypeReferenceExpression ::= '::' identifier {elementType=TypeReferenceExpression}
+
+RecordType ::= 'Record' RecordVarDeclGroup* 'end' {extends=Type}
 
 // -------------------------------------------------
 //  M A T H   C O N S T R U C T S   &   E X P R S
