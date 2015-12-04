@@ -21,7 +21,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-//TODO: This shit ain't right atm.. eh.
 public class ResModuleReference extends FileReference {
 
     public ResModuleReference(@NotNull FileReferenceSet fileReferenceSet,
