@@ -53,7 +53,17 @@ public class ResModuleReference extends FileReference {
         PsiDirectory sourceFile = getDirectory();
         Collection<PsiFileSystemItem> contexts =
                 this.getFileReferenceSet().getDefaultContexts();
-        for (PsiFileSystemItem f : contexts) {
+        PsiFile[] foundFiles =
+                FilenameIndex.getFilesByName(sourceFile.getProject(),
+                        getText() + ".resolve",
+                        RESOLVEUtil.moduleScope(getDirectory()));
+        if (foundFiles.length != 0) {
+            PsiFile file = foundFiles[0];
+            PsiElementResolveResult result =
+                    new PsiElementResolveResult(FileReference.getOriginalFile(file));
+            return (PsiFileSystemItem) result.getElement();
+        }
+        /*for (PsiFileSystemItem f : contexts) {
 
             String text = getText();
             VirtualFile x = f.getVirtualFile().findChild(getText() + ".resolve");
@@ -65,7 +75,7 @@ public class ResModuleReference extends FileReference {
                         new PsiElementResolveResult(FileReference.getOriginalFile(file));
                 return (PsiFileSystemItem) result.getElement();
             }
-        }
+        }*/
         return null;
     }
 
