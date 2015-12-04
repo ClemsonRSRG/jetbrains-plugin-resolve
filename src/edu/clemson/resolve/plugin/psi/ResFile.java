@@ -33,10 +33,9 @@ public class ResFile extends PsiFileBase {
 
     @NotNull public List<ResMathDefinitionSignature> getMathDefinitionSignatures() {
         ResModuleDecl enclosedModule = getEnclosedModule();
-        List<ResMathDefinitionSignature> foundDecls =  enclosedModule != null ?
+        return enclosedModule != null ?
                 enclosedModule.getMathDefinitionSignatures() :
                 new ArrayList<ResMathDefinitionSignature>();
-        return foundDecls;
     }
 
     @NotNull public List<ResUsesItem> getUsesItems() {
@@ -45,11 +44,11 @@ public class ResFile extends PsiFileBase {
                 new ArrayList<ResUsesItem>();
     }
 
-    /*@NotNull public List<ResTypeLikeNodeDecl> getTypes() {
+    @NotNull public List<ResTypeNodeDecl> getTypes() {
         ResModuleDecl enclosedModule = getEnclosedModule();
         return enclosedModule != null ? enclosedModule.getTypes() :
-                new ArrayList<ResTypeLikeNodeDecl>();
-    }*/
+                new ArrayList<ResTypeNodeDecl>();
+    }
 
     /*@NotNull public List<ResFacilityDecl> getFacilities() {
         ResModuleDecl enclosedModule = getEnclosedModule();

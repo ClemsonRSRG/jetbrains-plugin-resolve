@@ -69,12 +69,6 @@ public class ResPsiImplUtil {
         return null;
     }
 
-    @NotNull public static PsiReference[] getReferences(@NotNull ResUsesItem o) {
-        return PsiReference.EMPTY_ARRAY;
-        //if (o.getTextLength() == 0) return PsiReference.EMPTY_ARRAY;
-        //return new ResUsesReferenceSet(o).getAllReferences();
-    }
-
     public static boolean processDeclarations(@NotNull ResCompositeElement o,
                                               @NotNull PsiScopeProcessor processor,
                                               @NotNull ResolveState state,
@@ -91,6 +85,16 @@ public class ResPsiImplUtil {
         }
         return ResCompositeElementImpl.processDeclarationsDefault(
                 o, processor, state, lastParent, place);
+    }
+
+    @Nullable public static ResTypeReferenceExp getQualifier(
+            @NotNull ResTypeReferenceExp o) {
+        return PsiTreeUtil.getChildOfType(o, ResTypeReferenceExp.class);
+    }
+
+    @NotNull public static PsiReference getReference(
+            @NotNull ResTypeReferenceExp o) {
+        return new ResTypeReference(o);
     }
 
     public static boolean prevDot(@Nullable PsiElement parent) {

@@ -142,16 +142,18 @@
         identifier              = 'regexp:\p{Alpha}\w*'
     ]
 
-    extends("Math.*(DefinitionDecl)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathDefinitionDeclImpl"
+    extends("Math.*(DefinitionDecl)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathDefinitionImpl"
     extends("Math.*(Signature)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathSignatureImpl"
-    extends(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleDeclImpl"
+    extends(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleImpl"
     extends(".*((Var|Param|Field)Def|MathTheoremDecl|TypeParamDecl)|ModuleSpec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
+    extends("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeNodeImpl"
 
     implements(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.ResModuleDecl"
     implements(".*ReferenceExp")="edu.clemson.resolve.plugin.psi.ResReferenceExpBase"
     implements("Math.*Signature")="edu.clemson.resolve.plugin.psi.ResMathDefinitionSignature"
     implements("Math.*DefinitionDecl")="edu.clemson.resolve.plugin.psi.ResMathDefinitionDecl"
     implements(".*((Var|Param|Field)Def|MathTheoremDecl|TypeParamDecl|ModuleSpec)")="edu.clemson.resolve.plugin.psi.ResNamedElement"
+    implements("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.ResTypeNodeDecl"
     implements(".*Block")="edu.clemson.resolve.plugin.psi.ResBlock"
 
     extends("Math(Minus|Plus|Div|Mult|Custom)InfixApplyExp")=MathInfixApplyExp // this attributes can be placed directly after rule
@@ -165,8 +167,7 @@
 ModuleDecl ::=
       PrecisModuleDecl
     | PrecisExtensionModuleDecl
-    | ConceptModuleDecl
-    <<eof>>
+    | ConceptModuleDecl <<eof>>
 
 PrecisExtensionModuleDecl ::= 'Precis' 'Extension' identifier 'for'
 ModuleSpec ('extended_by' ModuleSpec)? ';'
@@ -203,8 +204,8 @@ private PrecisItem ::=
 
 private PrecisItemRecover ::= !('Definition'|'Implicit'|'Theorem'|'Corollary'|'Categorical'|'Inductive'|'end')
 
-private ConceptItem ::= 'Family'|'Operation' {pin=1 recoverWhile=ConceptItemRecover}
-private ConceptItemRecover ::= !('Family'|'Operation'|'end')
+private ConceptItem ::= TypeModelDecl|'Operation' {pin=1 recoverWhile=ConceptItemRecover}
+private ConceptItemRecover ::= !('Type'|'Operation'|'end')
 
 // -------------------------------------------------
 //  P R O G   P A R A M E T E R   A N D   V A R   S T U F F
@@ -240,17 +241,20 @@ private FieldVarDefList ::= FieldDef &(!(';'))(',' FieldDef)*
 FieldDef ::= identifier
 
 // -------------------------------------------------
-//  P R O G   T Y P E S
+//  T Y P E S
 // -------------------------------------------------
 
 //TOOD: Really this should just be namedType (w/o records). Right now this
 //allows anonymous record types .. which is ok .. I GUESS.
 Type ::= RecordType | NamedType
-private NamedType ::= TypeReferenceExpression QualifiedTypeReferenceExpression?
-TypeReferenceExpression ::= identifier { methods=[getReference getQualifier] }
-left QualifiedTypeReferenceExpression ::= '::' identifier {elementType=TypeReferenceExpression}
+private NamedType ::= TypeReferenceExp QualifiedTypeReferenceExp?
+TypeReferenceExp ::= identifier { methods=[getReference getQualifier] }
+left QualifiedTypeReferenceExp ::= '::' identifier {elementType=TypeReferenceExp}
 
 RecordType ::= 'Record' RecordVarDeclGroup* 'end' {extends=Type}
+
+TypeModelDecl ::= 'Type' 'Family' identifier 'is' 'modeled' 'by' MathExp ';'
+    'exemplar' identifier ';' {pin=3}
 
 // -------------------------------------------------
 //  M A T H   C O N S T R U C T S   &   E X P R S

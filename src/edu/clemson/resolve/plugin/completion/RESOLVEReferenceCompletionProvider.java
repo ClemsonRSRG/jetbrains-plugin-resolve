@@ -99,9 +99,9 @@ public class RESOLVEReferenceCompletionProvider
                 return RESOLVECompletionUtil
                         .createVariableLikeLookupElement((ResNamedElement) o);
             }
-        /*    if (o instanceof ResTypeLikeNodeDecl) {
+        /*    if (o instanceof ResTypeNodeDecl) {
                 return RESOLVECompletionUtil
-                        .createTypeLookupElement((ResTypeLikeNodeDecl) o);
+                        .createTypeLookupElement((ResTypeNodeDecl) o);
             }
             else if (o instanceof ResFacilityDecl) {
                 return RESOLVECompletionUtil

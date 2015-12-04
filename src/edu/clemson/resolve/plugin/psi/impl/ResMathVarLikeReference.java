@@ -85,6 +85,7 @@ public class ResMathVarLikeReference
 
         if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
         if (!ResReference.processUsesRequests(file, processor, state, myElement)) return false;
+        //processImplicitUsesRequests(
         if (!processBuiltin(processor, state, myElement)) return false;
 
         return true;

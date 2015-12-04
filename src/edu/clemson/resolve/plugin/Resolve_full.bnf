@@ -137,7 +137,7 @@
         identifier              = 'regexp:\p{Alpha}\w*'
     ]
 
-    extends("(Facility|Concept|Precis)ModuleDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleDeclImpl"
+    extends("(Facility|Concept|Precis)ModuleDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleImpl"
     extends("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.impl.ResOperationLikeNodeImpl"
     extends("(Facility|Operation)Decl|(Uses)Spec|(Param|Var|Field)Def")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
     extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeDeclImpl"
@@ -149,7 +149,7 @@
     implements("(Concept|Facility)Block")="edu.clemson.resolve.plugin.psi.ResModuleBlock"
     implements("OperationDecl")="edu.clemson.resolve.plugin.psi.ResProgNamedSignatureOwner"
     implements(".*ReferenceExpression")="edu.clemson.resolve.plugin.psi.ResReferenceExpressionBase"
-    implements("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
+    implements("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.ResTypeNodeDecl"
     implements("(OperationProcedure)Decl")="edu.clemson.resolve.plugin.psi.ResOperationWithBodyNode"
     implements("(Var|Param)Def|(Facility)Decl|(Uses)Spec|(Field)Def")="edu.clemson.resolve.plugin.psi.ResProgNamedElement"
     implements("(Facility|Concept|Precis)ModuleDecl")="edu.clemson.resolve.plugin.psi.ResModuleDecl"
