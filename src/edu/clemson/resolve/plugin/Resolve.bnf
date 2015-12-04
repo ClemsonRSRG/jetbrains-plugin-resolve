@@ -162,7 +162,11 @@
     pin('.*List(?:_\d.*)?')=1
 }
 
-ModuleDecl ::= PrecisModuleDecl | PrecisExtensionModuleDecl <<eof>>
+ModuleDecl ::=
+      PrecisModuleDecl
+    | PrecisExtensionModuleDecl
+    | ConceptModuleDecl
+    <<eof>>
 
 PrecisExtensionModuleDecl ::= 'Precis' 'Extension' identifier 'for'
 ModuleSpec ('extended_by' ModuleSpec)? ';'
@@ -176,7 +180,7 @@ PrecisBlock
 
 ConceptModuleDecl ::= 'Concept' identifier SpecModuleParameters? ';'
 UsesItemList?
-//ConceptBlock
+ConceptBlock
 'end' identifier ';' {pin(".*")=1}
 
 UsesItemList ::= 'uses' UsesItem (',' UsesItem)* ';'
@@ -186,6 +190,8 @@ ModuleSpec ::= identifier {pin=1 methods=[getReferences resolve getModuleSpecTex
 UsesItem ::= ModuleSpec
 
 PrecisBlock ::= PrecisItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
+
+ConceptBlock ::= ConceptItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
 
 private ItemsRecover ::= !('end')
 
@@ -197,13 +203,16 @@ private PrecisItem ::=
 
 private PrecisItemRecover ::= !('Definition'|'Implicit'|'Theorem'|'Corollary'|'Categorical'|'Inductive'|'end')
 
+private ConceptItem ::= 'Family'|'Operation' {pin=1 recoverWhile=ConceptItemRecover}
+private ConceptItemRecover ::= !('Family'|'Operation'|'end')
+
 // -------------------------------------------------
 //  P R O G   P A R A M E T E R   A N D   V A R   S T U F F
 // -------------------------------------------------
 
 SpecModuleParameters ::= '(' SpecModuleParamList ')' {pin=1 }
 
-private SpecModuleParamList ::= SpecParamDecl  (';' SpecParamDecl)* {pin=2 recoverWhile=ParamListRec}
+private SpecModuleParamList ::= SpecParamDecl  (';' SpecParamDecl)* {recoverWhile=ParamListRec}
 
 private SpecParamDecl ::= TypeParamDecl | ParamDecl
 
