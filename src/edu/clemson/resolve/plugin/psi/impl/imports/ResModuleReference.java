@@ -8,8 +8,10 @@ import com.intellij.openapi.util.io.FileSystemUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceCompletion;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
 import com.intellij.psi.search.FilenameIndex;
+import com.intellij.util.ArrayUtil;
 import com.intellij.util.io.fs.FileSystem;
 import edu.clemson.resolve.plugin.psi.ResFile;
 import edu.clemson.resolve.plugin.psi.ResMathReferenceExp;
@@ -25,6 +27,10 @@ public class ResModuleReference extends FileReference {
     public ResModuleReference(@NotNull FileReferenceSet fileReferenceSet,
                               TextRange range, int index, String text) {
         super(fileReferenceSet, range, index, text);
+    }
+
+    @NotNull @Override public Object[] getVariants() {
+        return ArrayUtil.EMPTY_OBJECT_ARRAY;
     }
 
     @Override public PsiFileSystemItem resolve() {
@@ -61,7 +67,7 @@ public class ResModuleReference extends FileReference {
             }
         }
         return null;*/
-   }
+    }
 
    /* public boolean processResolveVariants(@NotNull CompletionResultSet set) {
         return true;
