@@ -20,6 +20,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+//TODO: Thinking ahead to type appearances in concept/enhancement realizations,
+//we might just need to have to specify that we DONT want to search the
+//spec we're enhancing (and that should be easy since we already have a specialized
+//processor for types, or b.) somehow ignore type models when we'r
 public class ResTypeReference
         extends
             PsiPolyVariantReferenceBase<ResTypeReferenceExp> {

@@ -145,7 +145,7 @@
     extends("Math.*(DefinitionDecl)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathDefinitionImpl"
     extends("Math.*(Signature)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathSignatureImpl"
     extends(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleImpl"
-    extends(".*((Var|Param|Field)Def|MathTheoremDecl|TypeParamDecl)|ModuleSpec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
+    extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation)Decl)|ModuleSpec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
     extends("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeNodeImpl"
 
     implements(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.ResModuleDecl"
@@ -154,7 +154,7 @@
     implements(".*ReferenceExp")="edu.clemson.resolve.plugin.psi.ResReferenceExpBase"
     implements("Math.*Signature")="edu.clemson.resolve.plugin.psi.ResMathDefinitionSignature"
     implements("Math.*DefinitionDecl")="edu.clemson.resolve.plugin.psi.ResMathDefinitionDecl"
-    implements(".*((Var|Param|Field)Def|MathTheoremDecl|TypeParamDecl|ModuleSpec)")="edu.clemson.resolve.plugin.psi.ResNamedElement"
+    implements(".*((Var|Param|Field)Def|(MathTheorem|TypeParam)Decl|ModuleSpec)")="edu.clemson.resolve.plugin.psi.ResNamedElement"
     implements("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
     implements(".*Block")="edu.clemson.resolve.plugin.psi.ResBlock"
 
@@ -268,8 +268,10 @@ RecordType ::= 'Record' RecordVarDeclGroup* 'end' {extends=Type}
 //  M A T H   C O N S T R U C T S   &   E X P R S
 // -------------------------------------------------
 
-TypeModelDecl ::= 'Type' 'Family' identifier 'is' 'modeled' 'by' MathExp ';'
+TypeModelDecl ::= 'Type' 'Family' identifier TypeModelPortion ';'
     'exemplar' identifier ';' {pin=3}
+
+private TypeModelPortion ::= 'is' 'modeled' 'by' MathExp {pin=4}
 
 RequiresClause ::= 'requires' MathAssertionExp ';' {pin=1}
 

@@ -8,7 +8,7 @@ public interface ResOperationLikeNode extends ResNamedElement {
 
     @NotNull public PsiElement getIdentifier();
 
-    @Nullable public ResType getResType();
+    @Nullable public ResType getType();
 
     @Nullable public ResRequiresClause getRequiresClause();
 
