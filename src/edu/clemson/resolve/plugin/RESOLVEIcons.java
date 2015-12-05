@@ -16,6 +16,9 @@ public interface RESOLVEIcons {
     public static final Icon PRECIS_EXT = IconLoader.getIcon("/edu/clemson/resolve/icons/precis_extension.png");
 
     public static final Icon DEF = IconLoader.getIcon("/edu/clemson/resolve/icons/def.png");
+    public static final Icon TYPE_MODEL = IconLoader.getIcon("/edu/clemson/resolve/icons/type_model.png");
+    public static final Icon TYPE_REPR = IconLoader.getIcon("/edu/clemson/resolve/icons/type_repr.png");
+
     public static final Icon VARIABLE = AllIcons.Nodes.Variable;
     Icon FIELD = AllIcons.Nodes.Field;
 

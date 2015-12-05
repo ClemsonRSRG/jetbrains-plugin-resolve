@@ -32,6 +32,7 @@ public class RESOLVESyntaxHighlighter extends SyntaxHighlighterBase {
         fillMap(ATTRIBUTES, COLON, ResTypes.COLON);
         fillMap(ATTRIBUTES, SEMICOLON, ResTypes.SEMICOLON);
         fillMap(ATTRIBUTES, COMMA, ResTypes.COMMA);
+        fillMap(ATTRIBUTES, RESOLVEParserDefinition.PARAMETER_MODES, PARAMETER_MODE);
         fillMap(ATTRIBUTES, RESOLVEParserDefinition.OPERATORS, OPERATOR);
         fillMap(ATTRIBUTES, RESOLVEParserDefinition.KEYWORDS, KEYWORD);
         fillMap(ATTRIBUTES, RESOLVEParserDefinition.NUMBERS, NUMBER);

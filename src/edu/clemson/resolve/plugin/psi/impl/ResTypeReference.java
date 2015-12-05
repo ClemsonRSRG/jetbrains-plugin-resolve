@@ -10,10 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.OrderedSet;
-import edu.clemson.resolve.plugin.psi.ResFile;
-import edu.clemson.resolve.plugin.psi.ResMathReferenceExp;
-import edu.clemson.resolve.plugin.psi.ResNamedElement;
-import edu.clemson.resolve.plugin.psi.ResTypeReferenceExp;
+import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -70,11 +67,27 @@ public class ResTypeReference
         PsiFile file = myElement.getContainingFile();
         if (!(file instanceof ResFile)) return false;
         ResolveState state = ResolveState.initial();
-        //ResTypeReferenceExp qualifier = myElement.getQualifier();
-        //if (qualifier != null) {
-            //return processQualifierExpression(((ResFile)file), qualifier, processor, state);
-        //}
-        return processUnqualifiedResolve(((ResFile)file), processor, state, true);
+        ResTypeReferenceExp qualifier = myElement.getQualifier();
+        if (qualifier != null) {
+            return processQualifierExpression(((ResFile)file), qualifier, processor, state);
+        }
+        return processUnqualifiedResolve(((ResFile) file), processor, state, true);
+    }
+
+    private static boolean processQualifierExpression(@NotNull ResFile file,
+                                                      @NotNull ResTypeReferenceExp qualifier,
+                                                      @NotNull ResScopeProcessor processor,
+                                                      @NotNull ResolveState state) {
+        PsiReference targetRef = qualifier.getReference();
+        PsiElement target = targetRef.resolve();
+        if (target == null || target == qualifier) return false;
+        if (target instanceof ResFacilityDecl) {
+           ResFile specFile = ((ResFacilityDecl) target).getSpecification();
+            if (specFile != null) {
+                ResReference.processModuleLevelEntities(specFile, processor, state, false);
+            }
+        }
+        return false;
     }
 
     private boolean processUnqualifiedResolve(@NotNull ResFile file,
@@ -88,7 +101,7 @@ public class ResTypeReference
         if (!processNamedElements(processor, state, result, localResolve)) return false;
 
         if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
-        if (ResReference.processUsesRequests(file, processor, state, myElement)) return false;
+        if (!ResReference.processUsesRequests(file, processor, state, myElement, false)) return false;
         return true;
     }
 
@@ -96,7 +109,9 @@ public class ResTypeReference
                                                @NotNull ResScopeProcessor processor,
                                                @NotNull ResolveState state,
                                                boolean localProcessing) {
-        return processNamedElements(processor, state, file.getTypes(), localProcessing);
+        if (!processNamedElements(processor, state, file.getFacilities(), localProcessing)) return false;
+        if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
+        return true;
     }
 
     private boolean processNamedElements(@NotNull PsiScopeProcessor processor,
@@ -122,10 +137,9 @@ public class ResTypeReference
                                 boolean completion) {
             super(origin.getIdentifier(), origin, completion);
         }
-        @Override protected boolean crossOff(@NotNull PsiElement element) {
-            //TODO: something like:
-            // e instanceof ResTypeLikeDecl || e instanceof ResFacilityDecl
-            return false;
+        @Override protected boolean crossOff(@NotNull PsiElement e) {
+            return e instanceof ResTypeLikeNodeDecl ||
+                    e instanceof ResFacilityDecl;
         }
     }
 }

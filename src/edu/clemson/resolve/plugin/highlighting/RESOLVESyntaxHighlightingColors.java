@@ -26,7 +26,7 @@ public class RESOLVESyntaxHighlightingColors {
     public static final TextAttributesKey TYPE_REFERENCE = createTextAttributesKey("RESOLVE_TYPE_REFERENCE", DefaultLanguageHighlighterColors.CLASS_REFERENCE);
     public static final TextAttributesKey STRUCT_MEMBER = createTextAttributesKey("RESOLVE_STRUCT_MEMBER", DefaultLanguageHighlighterColors.LOCAL_VARIABLE);
     public static final TextAttributesKey FUNCTION_PARAMETER = createTextAttributesKey("RESOLVE_FUNCTION_PARAMETER", DefaultLanguageHighlighterColors.LOCAL_VARIABLE);
-    public static final TextAttributesKey PARAMETER_MODE = createTextAttributesKey("RESOLVE_PARAMETER_MODE", DefaultLanguageHighlighterColors.LOCAL_VARIABLE);
+    public static final TextAttributesKey PARAMETER_MODE = createTextAttributesKey("RESOLVE_PARAMETER_MODE", DefaultLanguageHighlighterColors.KEYWORD);
 
     private RESOLVESyntaxHighlightingColors() {
     }

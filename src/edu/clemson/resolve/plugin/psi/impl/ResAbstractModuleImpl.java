@@ -78,7 +78,7 @@ public abstract class ResAbstractModuleImpl
                 });
     }
 
-    /*@NotNull public List<ResFacilityDecl> getFacilities() {
+    @NotNull public List<ResFacilityDecl> getFacilities() {
         return CachedValuesManager.getCachedValue(this,
                 new CachedValueProvider<List<ResFacilityDecl>>() {
                     @Override
@@ -89,7 +89,7 @@ public abstract class ResAbstractModuleImpl
                 });
     }
 
-    @NotNull public List<ResOperationDecl> getOperations() {
+    /*@NotNull public List<ResOperationDecl> getOperations() {
         return CachedValuesManager.getCachedValue(this,
                 new CachedValueProvider<List<ResOperationDecl>>() {
                     @Override

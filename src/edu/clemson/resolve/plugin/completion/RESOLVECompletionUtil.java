@@ -11,6 +11,7 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import edu.clemson.resolve.plugin.RESOLVEIcons;
 import edu.clemson.resolve.plugin.psi.*;
+import groovy.lang.Lazy;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,8 +20,14 @@ import javax.swing.*;
 public class RESOLVECompletionUtil {
 
     public static final int VAR_PRIORITY = 10;
-
+    public static final int FACILITY_PRIORITY = 5;
     public static final int DEFINITION_PRIORITY = 15;
+    public static final int TYPE_PRIORITY = 20;
+
+    private static class Lazy {
+        private static final QualifierInsertHandler FACILITY_INSERT_HANDLER =
+                new QualifierInsertHandler("::", true); //TODO: it'd be nice if there were a way for the user to set padding options..
+    }
 
     public static final LookupElementRenderer<LookupElement> VARIABLE_RENDERER =
             new LookupElementRenderer<LookupElement>() {
@@ -163,5 +170,34 @@ public class RESOLVECompletionUtil {
                         .withRenderer(DEFINITION_RENDERER)
                         .withInsertHandler(h != null ? h : DEFINITION_INSERT_HANDLER),
                 priority);
+    }
+
+    @NotNull public static LookupElement createTypeLookupElement(
+            @NotNull ResTypeLikeNodeDecl t) {
+        return createTypeLookupElement(t, StringUtil.notNullize(
+                t.getName()), null, TYPE_PRIORITY);
+    }
+
+    @NotNull public static LookupElement createTypeLookupElement(
+            @NotNull ResTypeLikeNodeDecl t, @NotNull String lookupString,
+            @Nullable InsertHandler<LookupElement> handler, double priority) {
+        LookupElementBuilder builder =
+                LookupElementBuilder.createWithSmartPointer(lookupString, t)
+                        .withInsertHandler(handler).withIcon(t.getIcon(0));
+        return PrioritizedLookupElement.withPriority(builder, priority);
+    }
+
+    @Nullable public static LookupElement createFacilityLookupElement(
+            @NotNull ResFacilityDecl facility) {
+        return createFacilityLookupElement(facility,
+                facility.getIdentifier().getText());
+    }
+
+    @Nullable public static LookupElement createFacilityLookupElement(
+            @NotNull ResFacilityDecl facility, @NotNull String name) {
+        return PrioritizedLookupElement.withPriority(
+                LookupElementBuilder.create(name)
+                        .withInsertHandler(Lazy.FACILITY_INSERT_HANDLER)
+                        .withIcon(RESOLVEIcons.FACILITY), FACILITY_PRIORITY);
     }
 }

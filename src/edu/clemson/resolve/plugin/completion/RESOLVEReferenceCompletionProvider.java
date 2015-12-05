@@ -61,7 +61,7 @@ public class RESOLVEReferenceCompletionProvider
             ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
                 @Override
                 protected boolean accept(@NotNull PsiElement e) {
-                    return e instanceof ResTypeLikeNodeDecl; //|| e instanceof ResFacilityDecl;//e != spec &&
+                    return e instanceof ResTypeLikeNodeDecl || e instanceof ResFacilityDecl;//e != spec &&
                     // !(insideParameter &&
                     //         (e instanceof ResNamedSignatureOwner || e instanceof ResVarDef));
                 }
@@ -74,7 +74,7 @@ public class RESOLVEReferenceCompletionProvider
                 @Override
                 protected boolean accept(@NotNull PsiElement e) {
                     return e instanceof ResMathDefinitionSignature ||
-                            e instanceof ResMathVarDef;
+                            e instanceof ResMathVarDef || e instanceof ResParamDef;
                 }
             };
             ((ResMathVarLikeReference) reference).processResolveVariants(aProcessor);
@@ -107,12 +107,7 @@ public class RESOLVEReferenceCompletionProvider
                                     RESOLVECompletionUtil.DEFINITION_PRIORITY);
                 }
             }
-            else {
-                //TODO: Apply type info to the lookup renderers for these 'var like' elements
-                return RESOLVECompletionUtil
-                        .createVariableLikeLookupElement((ResNamedElement) o);
-            }
-        /*    if (o instanceof ResTypeLikeNodeDecl) {
+            else if (o instanceof ResTypeLikeNodeDecl) {
                 return RESOLVECompletionUtil
                         .createTypeLookupElement((ResTypeLikeNodeDecl) o);
             }
@@ -120,6 +115,12 @@ public class RESOLVEReferenceCompletionProvider
                 return RESOLVECompletionUtil
                         .createFacilityLookupElement(((ResFacilityDecl) o));
             }
+            else {
+                //TODO: Apply type info to the lookup renderers for these 'var like' elements
+                return RESOLVECompletionUtil
+                        .createVariableLikeLookupElement((ResNamedElement) o);
+            }
+        /*
             else if (o instanceof ResNamedSignatureOwner &&
                     ((ResNamedSignatureOwner)o).getName() != null) {
                 String name = ((ResNamedSignatureOwner)o).getName();

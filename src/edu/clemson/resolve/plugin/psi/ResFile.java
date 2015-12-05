@@ -50,13 +50,13 @@ public class ResFile extends PsiFileBase {
                 new ArrayList<ResTypeLikeNodeDecl>();
     }
 
-    /*@NotNull public List<ResFacilityDecl> getFacilities() {
+    @NotNull public List<ResFacilityDecl> getFacilities() {
         ResModuleDecl enclosedModule = getEnclosedModule();
         return enclosedModule != null ? enclosedModule.getFacilities() :
                 new ArrayList<ResFacilityDecl>();
     }
 
-    @NotNull public List<ResOperationDecl> getOperationDecls() {
+    /*@NotNull public List<ResOperationDecl> getOperationDecls() {
         ResModuleDecl enclosedModule = getEnclosedModule();
         List<ResOperationDecl> result = enclosedModule != null ?
                 enclosedModule.getOperations() :

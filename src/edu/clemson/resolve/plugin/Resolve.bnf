@@ -145,7 +145,8 @@
     extends("Math.*(DefinitionDecl)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathDefinitionImpl"
     extends("Math.*(Signature)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathSignatureImpl"
     extends(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleImpl"
-    extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation)Decl)|ModuleSpec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
+    extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Facility)Decl)|ModuleSpec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
+    extends("OperationDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractOperationLikeNode"
     extends("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeNodeImpl"
 
     implements(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.ResModuleDecl"
@@ -154,11 +155,11 @@
     implements(".*ReferenceExp")="edu.clemson.resolve.plugin.psi.ResReferenceExpBase"
     implements("Math.*Signature")="edu.clemson.resolve.plugin.psi.ResMathDefinitionSignature"
     implements("Math.*DefinitionDecl")="edu.clemson.resolve.plugin.psi.ResMathDefinitionDecl"
-    implements(".*((Var|Param|Field)Def|(MathTheorem|TypeParam)Decl|ModuleSpec)")="edu.clemson.resolve.plugin.psi.ResNamedElement"
+    implements(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Facility)Decl|ModuleSpec)")="edu.clemson.resolve.plugin.psi.ResNamedElement"
     implements("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
     implements(".*Block")="edu.clemson.resolve.plugin.psi.ResBlock"
 
-    extends("Math(Minus|Plus|Div|Mult|Custom)InfixApplyExp")=MathInfixApplyExp // this attributes can be placed directly after rule
+    extends("Math(Minus|Cat|Range|Plus|Div|Mult|Custom)InfixApplyExp")=MathInfixApplyExp // this attributes can be placed directly after rule
 
     extends("Math.*(Exp)")=MathExp
 
@@ -169,15 +170,16 @@
 ModuleDecl ::=
       PrecisModuleDecl
     | PrecisExtensionModuleDecl
-    | ConceptModuleDecl <<eof>>
-
-PrecisExtensionModuleDecl ::= 'Precis' 'Extension' identifier 'for'
-ModuleSpec ('extended_by' ModuleSpec)? ';'
-PrecisBlock
-'end' identifier ';' {pin(".*")=2}
+    | ConceptModuleDecl
+    | FacilityModuleDecl <<eof>>
 
 PrecisModuleDecl ::= 'Precis' identifier ';'
 UsesItemList?
+PrecisBlock
+'end' identifier ';' {pin(".*")=2}
+
+PrecisExtensionModuleDecl ::= 'Precis' 'Extension' identifier 'for'
+ModuleSpec ('extended_by' ModuleSpec)? ';'
 PrecisBlock
 'end' identifier ';' {pin(".*")=2}
 
@@ -186,15 +188,24 @@ UsesItemList?
 ConceptBlock
 'end' identifier ';' {pin(".*")=1}
 
+FacilityModuleDecl ::= 'Facility' identifier ';'
+UsesItemList?
+FacilityBlock
+'end' identifier ';' {pin(".*")=1}
+
 UsesItemList ::= 'uses' UsesItem (',' UsesItem)* ';'
 
 ModuleSpec ::= identifier {pin=1 methods=[getReferences resolve getModuleSpecTextRange]}
 
 UsesItem ::= ModuleSpec
 
+// Module blocks & items
+
 PrecisBlock ::= PrecisItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
 
 ConceptBlock ::= ConceptItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
+
+FacilityBlock ::= FacilityItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
 
 private ItemsRecover ::= !('end')
 
@@ -211,6 +222,9 @@ private ConceptItem ::=
     | OperationDecl {pin=1 recoverWhile=ConceptItemRecover}
 
 private ConceptItemRecover ::= !('Type'|'Operation'|'end')
+
+private FacilityItem ::=
+      FacilityDecl
 
 // -------------------------------------------------
 //  P R O G   P A R A M E T E R   A N D   V A R   S T U F F
@@ -251,9 +265,7 @@ FieldDef ::= identifier
 OperationDecl ::= 'Operation' identifier OperationLikeParameters (':' Type)? ';'
     RequiresClause? EnsuresClause? {pin=2}
 
-// -------------------------------------------------
-//  T Y P E S
-// -------------------------------------------------
+// Types
 
 //TOOD: Really this should just be namedType (w/o records). Right now this
 //allows anonymous record types .. which is ok .. I GUESS.
@@ -263,6 +275,11 @@ TypeReferenceExp ::= identifier { methods=[getReference getQualifier] }
 left QualifiedTypeReferenceExp ::= '::' identifier {elementType=TypeReferenceExp}
 
 RecordType ::= 'Record' RecordVarDeclGroup* 'end' {extends=Type}
+
+// Facilities
+
+FacilityDecl ::= 'Facility' identifier 'is' ModuleSpec
+('externally')? 'implemented' 'by' ModuleSpec ';' {pin=2 methods=[getSpecification]}
 
 // -------------------------------------------------
 //  M A T H   C O N S T R U C T S   &   E X P R S
@@ -328,7 +345,7 @@ MathQuantifiedExp ::= ('Forall'|'Exists') MathVarDeclGroup ',' MathAssertionExp 
 MathExp ::=
       MathBooleanInfixApplyExp
     | MathRelationalInfixApplyExp
-    | MathRangeApplyExp
+    | MathRangeInfixApplyExp
     | MathAddGroup
     | MathMultGroup
     | MathCatInfixApplyExp
@@ -346,7 +363,7 @@ MathBooleanInfixApplyExp ::= MathExp ('and'|'or') MathExp
 MathMultInfixApplyExp ::= MathExp '*' MathExp
 MathDivInfixApplyExp ::= MathExp '/' MathExp
 MathCatInfixApplyExp ::= MathExp 'o' MathExp
-MathRangeApplyExp ::= MathExp '->' MathExp
+MathRangeInfixApplyExp ::= MathExp '->' MathExp
 
 MathRelationalInfixApplyExp ::= MathExp ('<' | '>' | '<=' | '>=' | '=' | '/=') MathExp
 MathCustomInfixApplyExp ::= MathExp identifier MathExp

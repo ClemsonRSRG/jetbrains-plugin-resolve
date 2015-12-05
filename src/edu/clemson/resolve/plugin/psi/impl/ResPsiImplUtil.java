@@ -13,6 +13,8 @@ import edu.clemson.resolve.plugin.psi.impl.imports.ResModuleReferenceSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public class ResPsiImplUtil {
 
     @NotNull public static TextRange getModuleSpecTextRange(
@@ -20,6 +22,14 @@ public class ResPsiImplUtil {
         String text = moduleSpec.getText();
         return !text.isEmpty() ? TextRange.create(0, text.length() - 1) :
                 TextRange.EMPTY_RANGE;
+    }
+
+    @Nullable public static ResFile getSpecification(ResFacilityDecl o) {
+        if (o.getModuleSpecList().isEmpty()) return null;
+        ResModuleSpec specification = o.getModuleSpecList().get(0);
+        PsiFile specFile = specification.resolve();
+        if (!(specFile instanceof ResFile)) return null;
+        return (ResFile)specFile;
     }
 
     @NotNull public static PsiElement getIdentifier(ResMathReferenceExp o) {

@@ -84,8 +84,7 @@ public class ResMathVarLikeReference
         if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
 
         if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
-        if (!ResReference.processUsesRequests(file, processor, state, myElement)) return false;
-        //processImplicitUsesRequests(
+        if (!ResReference.processUsesRequests(file, processor, state, myElement, true)) return false;
         if (!processBuiltin(processor, state, myElement)) return false;
 
         return true;
@@ -102,9 +101,10 @@ public class ResMathVarLikeReference
                                                 @NotNull ResScopeProcessorBase processor) {
         ResMathDefinitionDecl def =
                 PsiTreeUtil.getParentOfType(e, ResMathDefinitionDecl.class);
-        if (def != null) {
-            processTopLevelMathDef(def, processor);
-        }
+        ResOperationLikeNode operation =
+                PsiTreeUtil.getParentOfType(e, ResOperationLikeNode.class);
+        if (def != null) processTopLevelMathDef(def, processor);
+        if (operation != null) processOperationParams(processor, operation.getParameters());
     }
 
     private boolean processTopLevelMathDef(@NotNull ResMathDefinitionDecl o,
@@ -112,16 +112,30 @@ public class ResMathVarLikeReference
         List<ResMathDefinitionSignature> sigs = o.getSignatures();
         if (sigs.size() == 1) {
             ResMathDefinitionSignature sig = o.getSignatures().get(0);
-            if (!processParameters(processor, sig.getParameters())) return false;
+            if (!processDefinitionParams(processor, sig.getParameters())) return false;
         } //size > 1 ? then we're categorical; size == 0, we're null
         return true;
     }
 
-    private boolean processParameters(@NotNull ResScopeProcessorBase processor,
-                                      @NotNull List<ResMathVarDeclGroup> parameters) {
+    //TODO: Maybe find someway to coalesce procesOperationParams and processDefinitionParams
+    //into a single method "processParamLikeThings()" -- first you need to abstract
+    //the notion of a parameterDeclGroup list though and make
+    private boolean processDefinitionParams(
+            @NotNull ResScopeProcessorBase processor,
+            @NotNull List<ResMathVarDeclGroup> parameters) {
         for (ResMathVarDeclGroup declaration : parameters) {
             if (!processNamedElements(processor, ResolveState.initial(), declaration.getMathVarDefList(), true)) return false;
            //if (!processImplicitTypeParameters(processor, ResolveState.initial(), declaration.getMathExp(), true)) return false;
+        }
+        return true;
+    }
+
+    private boolean processOperationParams(
+            @NotNull ResScopeProcessorBase processor,
+            @NotNull List<ResParamDecl> parameters) {
+        for (ResParamDecl declaration : parameters) {
+            if (!processNamedElements(processor, ResolveState.initial(),
+                    declaration.getParamDefList(), true)) return false;
         }
         return true;
     }

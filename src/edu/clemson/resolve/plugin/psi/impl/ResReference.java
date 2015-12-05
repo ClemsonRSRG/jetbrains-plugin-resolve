@@ -112,7 +112,8 @@ public class ResReference
     static boolean processUsesRequests(@NotNull ResFile file,
                                        @NotNull ResScopeProcessor processor,
                                        @NotNull ResolveState state,
-                                       @NotNull ResCompositeElement element) {
+                                       @NotNull ResCompositeElement element,
+                                       boolean searchImplicitUses) {
         for (ResUsesItem u : file.getUsesItems()) {
             //this file resolve is failing for whatever reason when we're trying to add completions... is this a concurrency thing maybe?
             //works the rest of the time...
@@ -121,7 +122,7 @@ public class ResReference
             if (!processModuleLevelEntities((ResFile) resolvedModule, processor, state, false)) return false;
         }
         ResModuleDecl module = file.getEnclosedModule();
-        if (module != null) {
+        if (module != null && searchImplicitUses) {
             //Now process module decl implicit imports
             for (ResModuleSpec moduleSpec : module.getModuleSpecList()) {
                 PsiElement resolvedModule = moduleSpec.resolve();
@@ -139,9 +140,10 @@ public class ResReference
         //if (!processNamedElements(processor, state, file.getConstants(), localProcessing)) return false;
         //if (!processNamedElements(processor, state, file.getVars(), localProcessing)) return false;
        /* if (!processNamedElements(processor, state, file.getOperationImpls(), localProcessing)) return false;
-        if (!processNamedElements(processor, state, file.getOperationDecls(), localProcessing)) return false;
-        if (!processNamedElements(processor, state, file.getFacilities(), localProcessing)) return false;
-        if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;*/
+        if (!processNamedElements(processor, state, file.getOperationDecls(), localProcessing)) return false;*/
+        List<ResFacilityDecl> facilityDecls = file.getFacilities();
+        if (!processNamedElements(processor, state, facilityDecls, localProcessing)) return false;
+        if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getMathDefinitionSignatures(), localProcessing)) return false;
         return true;
     }
