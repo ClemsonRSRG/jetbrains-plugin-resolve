@@ -7,6 +7,7 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.plugin.psi.ResMathDefinitionDecl;
 import edu.clemson.resolve.plugin.psi.ResNamedElement;
+import edu.clemson.resolve.plugin.psi.ResOperationLikeNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,6 +36,7 @@ public abstract class ResScopeProcessorBase extends ResScopeProcessor {
     @Override public boolean execute(@NotNull PsiElement psiElement,
                                      @NotNull ResolveState resolveState) {
         if (psiElement instanceof ResMathDefinitionDecl) return false;
+        if (psiElement instanceof ResOperationLikeNode) return false;
 
         if (!(psiElement instanceof ResNamedElement)) return true;
         String name = ((ResNamedElement)psiElement).getName();

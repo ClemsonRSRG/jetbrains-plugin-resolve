@@ -8,9 +8,8 @@ import java.util.List;
 
 /**
  * A interface for anything in the language resembling an operation. This
- * includes top level operation declarations, procedure implementations,
- * private operation declarations (with impls) as would be found in a facility;
- * everything.
+ * includes top level operation declarations, procedure implementations, and
+ * private operation declarations (with impls) as would be found in a facility.
  *
  * @author dan welch <dtw.welch@gmail.com>
  * @since 0.0.1
@@ -21,7 +20,7 @@ public interface ResOperationLikeNode extends ResNamedElement {
 
     @Nullable public ResType getType();
 
-    @NotNull List<ResParamDecl> getParameters();
+    @NotNull List<ResParamDecl> getParamDeclList();
 
     @Nullable public ResRequiresClause getRequiresClause();
 

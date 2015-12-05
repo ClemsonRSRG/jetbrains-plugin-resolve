@@ -145,8 +145,7 @@
     extends("Math.*(DefinitionDecl)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathDefinitionImpl"
     extends("Math.*(Signature)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathSignatureImpl"
     extends(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleImpl"
-    extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Facility)Decl)|ModuleSpec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
-    extends("OperationDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractOperationLikeNode"
+    extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|Facility)Decl)|ModuleSpec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
     extends("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeNodeImpl"
 
     implements(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.ResModuleDecl"
@@ -240,7 +239,7 @@ ParamDecl ::= ParameterMode ParamDefinitionListNoPin ':' Type {pin=1}
 private ParamDefinitionListNoPin ::= ParamDef &(!(';'|')')) (',' ParamDef)* {pin=1}
 ParamDef ::= identifier
 
-OperationLikeParameters ::= '(' OpParamList? ')' {pin=1}
+private OperationLikeParameters ::= '(' OpParamList? ')' {pin=1}
 private OpParamList ::= ParamDecl (';' ParamDecl)* {pin=1 recoverWhile=ParamListRec}
 
 TypeParamDecl ::= 'type' identifier {pin=2}

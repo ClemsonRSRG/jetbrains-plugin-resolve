@@ -104,7 +104,8 @@ public class ResMathVarLikeReference
         ResOperationLikeNode operation =
                 PsiTreeUtil.getParentOfType(e, ResOperationLikeNode.class);
         if (def != null) processTopLevelMathDef(def, processor);
-        if (operation != null) processOperationParams(processor, operation.getParameters());
+        if (operation != null) processOperationParams(processor, operation.getParamDeclList());
+        //TODO: process moduleparams now
     }
 
     private boolean processTopLevelMathDef(@NotNull ResMathDefinitionDecl o,
