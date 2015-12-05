@@ -67,12 +67,12 @@ public abstract class ResAbstractModuleImpl
         return signatures;
     }
 
-    @NotNull public List<ResTypeNodeDecl> getTypes() {
+    @NotNull public List<ResTypeLikeNodeDecl> getTypes() {
         return CachedValuesManager.getCachedValue(this,
-                new CachedValueProvider<List<ResTypeNodeDecl>>() {
+                new CachedValueProvider<List<ResTypeLikeNodeDecl>>() {
                     @Override
-                    public Result<List<ResTypeNodeDecl>> compute() {
-                        return Result.create(calc(ResTypeNodeDecl.class),
+                    public Result<List<ResTypeLikeNodeDecl>> compute() {
+                        return Result.create(calc(ResTypeLikeNodeDecl.class),
                                 ResAbstractModuleImpl.this);
                     }
                 });

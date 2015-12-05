@@ -13,6 +13,7 @@ import edu.clemson.resolve.plugin.psi.*;
 import edu.clemson.resolve.plugin.psi.impl.ResMathVarLikeReference;
 import edu.clemson.resolve.plugin.psi.impl.ResReference;
 import edu.clemson.resolve.plugin.psi.impl.ResScopeProcessor;
+import edu.clemson.resolve.plugin.psi.impl.ResTypeReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,6 +55,18 @@ public class RESOLVEReferenceCompletionProvider
             if (element instanceof ResRefExp && PsiTreeUtil.getParentOfType(element, ResCompositeLit.class) != null) {
                 new ResFieldNameReference(((ResRefExp)element)).processResolveVariants(new MyResScopeProcessor(result, false));
             }*/
+        }
+        if (reference instanceof ResTypeReference) {
+            PsiElement element = reference.getElement();
+            ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
+                @Override
+                protected boolean accept(@NotNull PsiElement e) {
+                    return e instanceof ResTypeLikeNodeDecl; //|| e instanceof ResFacilityDecl;//e != spec &&
+                    // !(insideParameter &&
+                    //         (e instanceof ResNamedSignatureOwner || e instanceof ResVarDef));
+                }
+            };
+            ((ResTypeReference) reference).processResolveVariants(aProcessor);
         }
         else if (reference instanceof ResMathVarLikeReference) {
             PsiElement element = reference.getElement();
@@ -99,9 +112,9 @@ public class RESOLVEReferenceCompletionProvider
                 return RESOLVECompletionUtil
                         .createVariableLikeLookupElement((ResNamedElement) o);
             }
-        /*    if (o instanceof ResTypeNodeDecl) {
+        /*    if (o instanceof ResTypeLikeNodeDecl) {
                 return RESOLVECompletionUtil
-                        .createTypeLookupElement((ResTypeNodeDecl) o);
+                        .createTypeLookupElement((ResTypeLikeNodeDecl) o);
             }
             else if (o instanceof ResFacilityDecl) {
                 return RESOLVECompletionUtil

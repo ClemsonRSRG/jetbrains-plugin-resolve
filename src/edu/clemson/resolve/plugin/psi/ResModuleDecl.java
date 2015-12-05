@@ -16,7 +16,7 @@ public interface ResModuleDecl extends ResNamedElement {
 
     @NotNull public List<ResMathDefinitionSignature> getMathDefinitionSignatures();
 
-    @NotNull public List<ResTypeNodeDecl> getTypes();
+    @NotNull public List<ResTypeLikeNodeDecl> getTypes();
 
     /*@NotNull public List<ResFacilityDecl> getFacilities();
 

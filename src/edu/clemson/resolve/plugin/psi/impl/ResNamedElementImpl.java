@@ -73,7 +73,7 @@ public abstract class ResNamedElementImpl
         else if (this instanceof ResPrecisExtensionModuleDecl) icon = RESOLVEIcons.PRECIS_EXT;
         /*else if (this instanceof ResConceptModuleDecl) icon = RESOLVEIcons.CONCEPT;
         else if (this instanceof ResPrecisModuleDecl) icon = RESOLVEIcons.PRECIS;
-        else if (this instanceof ResTypeNodeDecl) icon = RESOLVEIcons.TYPE;
+        else if (this instanceof ResTypeLikeNodeDecl) icon = RESOLVEIcons.TYPE;
         else if (this instanceof ResVarDef) icon = RESOLVEIcons.VARIABLE;
         else if (this instanceof ResFieldDef) icon = RESOLVEIcons.FIELD;*/
         //TODO: complete the icon list here as you go along
