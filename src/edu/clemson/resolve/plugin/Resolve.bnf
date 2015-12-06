@@ -348,6 +348,7 @@ MathExp ::=
     | MathRangeInfixApplyExp
     | MathAddGroup
     | MathMultGroup
+    | MathIncomingUnaryApplyExp
     | MathCatInfixApplyExp
     | MathPrefixApplyExp
     | MathCustomInfixApplyExp
@@ -364,6 +365,7 @@ MathMultInfixApplyExp ::= MathExp '*' MathExp
 MathDivInfixApplyExp ::= MathExp '/' MathExp
 MathCatInfixApplyExp ::= MathExp 'o' MathExp
 MathRangeInfixApplyExp ::= MathExp '->' MathExp
+MathIncomingUnaryApplyExp ::= '@' MathExp
 
 MathRelationalInfixApplyExp ::= MathExp ('<' | '>' | '<=' | '>=' | '=' | '/=') MathExp
 MathCustomInfixApplyExp ::= MathExp identifier MathExp
@@ -397,7 +399,7 @@ MathPrefixApplyExp ::=
 
 private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
 
-MathSymbolExp ::= MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}
+MathSymbolExp ::=  MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}
 
 left MathQualifiedReferenceExp ::= '::' MathNameIdentifier {elementType=MathReferenceExp}
 

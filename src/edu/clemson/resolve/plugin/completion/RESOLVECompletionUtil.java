@@ -40,6 +40,8 @@ public class RESOLVECompletionUtil {
                     String typeText = "";
                     Icon icon = v instanceof ResMathVarDef ? RESOLVEIcons.VARIABLE :
                                 v instanceof ResParamDef ? RESOLVEIcons.PARAMETER :
+                                v instanceof ResTypeParamDecl ? RESOLVEIcons.GENERIC_TYPE :
+
                            /* v instanceof ResFieldDefinition ? RESOLVEIcons.FIELD :
                                             v instanceof ResConstDefinition ? RESOLVEIcons.CONSTANT :*/
                             null;
@@ -172,13 +174,13 @@ public class RESOLVECompletionUtil {
     }
 
     @NotNull public static LookupElement createTypeLookupElement(
-            @NotNull ResTypeLikeNodeDecl t) {
+            @NotNull ResNamedElement t) {
         return createTypeLookupElement(t, StringUtil.notNullize(
                 t.getName()), null, TYPE_PRIORITY);
     }
 
     @NotNull public static LookupElement createTypeLookupElement(
-            @NotNull ResTypeLikeNodeDecl t, @NotNull String lookupString,
+            @NotNull ResNamedElement t, @NotNull String lookupString,
             @Nullable InsertHandler<LookupElement> handler, double priority) {
         LookupElementBuilder builder =
                 LookupElementBuilder.createWithSmartPointer(lookupString, t)

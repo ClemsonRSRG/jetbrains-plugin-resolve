@@ -44,6 +44,18 @@ public class ResFile extends PsiFileBase {
                 new ArrayList<ResUsesItem>();
     }
 
+    @NotNull public List<ResTypeParamDecl> getGenericTypeParams() {
+        ResModuleDecl enclosedModule = getEnclosedModule();
+        List<ResTypeParamDecl> genericTypes = new ArrayList<ResTypeParamDecl>();
+        if (enclosedModule == null) return genericTypes;
+        ResModuleParameters params = enclosedModule.getModuleParameters();
+        if (params instanceof ResSpecModuleParameters) {
+            genericTypes.addAll(((ResSpecModuleParameters) params)
+                    .getTypeParamDeclList());
+        }
+        return genericTypes;
+    }
+
     @NotNull public List<ResTypeLikeNodeDecl> getTypes() {
         ResModuleDecl enclosedModule = getEnclosedModule();
         return enclosedModule != null ? enclosedModule.getTypes() :

@@ -111,6 +111,7 @@ public class ResTypeReference
                                                boolean localProcessing) {
         if (!processNamedElements(processor, state, file.getFacilities(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
+        if (!processNamedElements(processor, state, file.getGenericTypeParams(), localProcessing)) return false;
         return true;
     }
 

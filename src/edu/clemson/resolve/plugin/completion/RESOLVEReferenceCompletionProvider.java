@@ -61,9 +61,9 @@ public class RESOLVEReferenceCompletionProvider
             ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
                 @Override
                 protected boolean accept(@NotNull PsiElement e) {
-                    return e instanceof ResTypeLikeNodeDecl || e instanceof ResFacilityDecl;//e != spec &&
-                    // !(insideParameter &&
-                    //         (e instanceof ResNamedSignatureOwner || e instanceof ResVarDef));
+                    return e instanceof ResTypeLikeNodeDecl ||
+                           e instanceof ResFacilityDecl ||
+                           e instanceof ResTypeParamDecl;
                 }
             };
             ((ResTypeReference) reference).processResolveVariants(aProcessor);
@@ -108,9 +108,9 @@ public class RESOLVEReferenceCompletionProvider
                                     RESOLVECompletionUtil.DEFINITION_PRIORITY);
                 }
             }
-            else if (o instanceof ResTypeLikeNodeDecl) {
+            else if (o instanceof ResTypeLikeNodeDecl || o instanceof ResTypeParamDecl) {
                 return RESOLVECompletionUtil
-                        .createTypeLookupElement((ResTypeLikeNodeDecl) o);
+                        .createTypeLookupElement((ResNamedElement)o);
             }
             else if (o instanceof ResFacilityDecl) {
                 return RESOLVECompletionUtil
