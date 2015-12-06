@@ -330,7 +330,7 @@ private ParamListRec ::= !(')')
 private MathDefinitionParamList ::= MathVarDeclGroup (',' MathVarDeclGroup)* {pin=1 recoverWhile=ParamListRec}
 
 MathOutfixDefinitionSignature ::=
-        ('|'|'||') MathSingletonVarDecl ('|'|'||')  ':' MathExp {pin=1}
+        ('|'|'||'|'<') MathSingletonVarDecl ('|'|'||'|'>')  ':' MathExp {pin=1}
 
 MathSingletonVarDecl ::= MathVarDef ':' MathExp {pin=2 extends=MathVarDeclGroup}
 
@@ -345,6 +345,7 @@ MathQuantifiedExp ::= ('Forall'|'Exists') MathVarDeclGroup ',' MathAssertionExp 
 MathExp ::=
       MathBooleanInfixApplyExp
     | MathRelationalInfixApplyExp
+    | MathOutfixApplyExp
     | MathRangeInfixApplyExp
     | MathAddGroup
     | MathMultGroup
@@ -380,7 +381,6 @@ private MathPrimary ::=
         | MathGeneralizedApplyExp
         | MathNestedExp
         | MathSetExp
-        | MathOutfixApplyExp
         | MathLiteralExp
 
 MathGeneralizedApplyExp ::= MathExp '[' MathExp ',' '[' MathExp ']'']' {pin=2}
@@ -392,7 +392,7 @@ fake MathInfixApplyExp ::= MathExp+ {
 MathOutfixApplyExp ::=
       '<' MathExp '>'
     | '|' MathExp '|'
-    | '||' MathExp '||'
+    | '||' MathExp '||' {pin=1}
 
 MathPrefixApplyExp ::=
     MathExp '(' MathArgList')' {pin=2}
