@@ -103,13 +103,17 @@ public class ResMathVarLikeReference
                 PsiTreeUtil.getParentOfType(e, ResMathDefinitionDecl.class);
         ResOperationLikeNode operation =
                 PsiTreeUtil.getParentOfType(e, ResOperationLikeNode.class);
-        if (def != null) processTopLevelMathDef(def, processor);
+        ResModuleDecl module =
+                PsiTreeUtil.getParentOfType(e, ResModuleDecl.class);
+        if (def != null) processDefinitionParams(processor, def);
         if (operation != null) processOperationParams(processor, operation.getParamDeclList());
+        if (module != null) processModuleParams(processor, module)
         //TODO: process moduleparams now
     }
 
-    private boolean processTopLevelMathDef(@NotNull ResMathDefinitionDecl o,
-                                           @NotNull ResScopeProcessorBase processor) {
+    /** processing parameters of the definition we happen to be within */
+    private boolean processDefinitionParams(@NotNull ResScopeProcessorBase processor,
+                                            @NotNull ResMathDefinitionDecl o) {
         List<ResMathDefinitionSignature> sigs = o.getSignatures();
         if (sigs.size() == 1) {
             ResMathDefinitionSignature sig = o.getSignatures().get(0);
@@ -118,9 +122,6 @@ public class ResMathVarLikeReference
         return true;
     }
 
-    //TODO: Maybe find someway to coalesce procesOperationParams and processDefinitionParams
-    //into a single method "processParamLikeThings()" -- first you need to abstract
-    //the notion of a parameterDeclGroup list though and make
     private boolean processDefinitionParams(
             @NotNull ResScopeProcessorBase processor,
             @NotNull List<ResMathVarDeclGroup> parameters) {
@@ -134,6 +135,15 @@ public class ResMathVarLikeReference
     private boolean processOperationParams(
             @NotNull ResScopeProcessorBase processor,
             @NotNull List<ResParamDecl> parameters) {
+        for (ResParamDecl declaration : parameters) {
+            if (!processNamedElements(processor, ResolveState.initial(),
+                    declaration.getParamDefList(), true)) return false;
+        }
+        return true;
+    }
+
+    private boolean processModuleParams(@NotNull ResScopeProcessorBase processor,
+                                        @NotNull ResModuleDecl o) {
         for (ResParamDecl declaration : parameters) {
             if (!processNamedElements(processor, ResolveState.initial(),
                     declaration.getParamDefList(), true)) return false;

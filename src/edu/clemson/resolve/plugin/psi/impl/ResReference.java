@@ -141,8 +141,7 @@ public class ResReference
         //if (!processNamedElements(processor, state, file.getVars(), localProcessing)) return false;
        /* if (!processNamedElements(processor, state, file.getOperationImpls(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getOperationDecls(), localProcessing)) return false;*/
-        List<ResFacilityDecl> facilityDecls = file.getFacilities();
-        if (!processNamedElements(processor, state, facilityDecls, localProcessing)) return false;
+        if (!processNamedElements(processor, state, file.getFacilities(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getMathDefinitionSignatures(), localProcessing)) return false;
         return true;
