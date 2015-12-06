@@ -36,6 +36,10 @@ public abstract class ResAbstractModuleImpl
         return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleSpec.class);
     }
 
+    @Nullable public ResModuleParameters getModuleParameters() {
+        return PsiTreeUtil.findChildOfType(this, ResModuleParameters.class);
+    }
+
     @NotNull @Override public List<ResUsesItem> getUsesItems() {
         return getUsesItemList() != null ? getUsesItemList().getUsesItemList() :
                 ContainerUtil.<ResUsesItem>newArrayList();

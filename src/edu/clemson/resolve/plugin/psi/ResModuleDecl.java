@@ -1,6 +1,7 @@
 package edu.clemson.resolve.plugin.psi;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public interface ResModuleDecl extends ResNamedElement {
 
     @NotNull public List<ResFacilityDecl> getFacilities();
 
+    @Nullable public ResModuleParameters getModuleParameters();
 
     /*@NotNull public List<ResOperationDecl> getOperations();
 

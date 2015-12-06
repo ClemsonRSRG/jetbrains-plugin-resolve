@@ -71,10 +71,11 @@ public class RESOLVEReferenceCompletionProvider
         else if (reference instanceof ResMathVarLikeReference) {
             PsiElement element = reference.getElement();
             ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
-                @Override
-                protected boolean accept(@NotNull PsiElement e) {
+                @Override protected boolean accept(@NotNull PsiElement e) {
                     return e instanceof ResMathDefinitionSignature ||
-                            e instanceof ResMathVarDef || e instanceof ResParamDef;
+                            e instanceof ResMathVarDef ||
+                            e instanceof ResParamDef ||
+                            e instanceof ResTypeParamDecl;
                 }
             };
             ((ResMathVarLikeReference) reference).processResolveVariants(aProcessor);

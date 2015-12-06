@@ -10,10 +10,7 @@ import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static edu.clemson.resolve.plugin.psi.impl.ResReference.processModuleLevelEntities;
 
@@ -80,7 +77,7 @@ public class ResMathVarLikeReference
 
         //this processes any named elements we've found searching up the tree in the previous line
         if (!processNamedElements(processor, state, result, localResolve)) return false;
-        processMathParameterLikeThings(myElement, delegate);
+        ResReference.processParameterLikeThings(myElement, delegate);
         if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
 
         if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
@@ -95,60 +92,6 @@ public class ResMathVarLikeReference
                                   @NotNull ResCompositeElement element) {
         ResFile f = ResElementFactory.getHardCodedMathFile(element.getProject());
         return processModuleLevelEntities(f, processor, state, true);
-    }
-
-    private void processMathParameterLikeThings(@NotNull ResCompositeElement e,
-                                                @NotNull ResScopeProcessorBase processor) {
-        ResMathDefinitionDecl def =
-                PsiTreeUtil.getParentOfType(e, ResMathDefinitionDecl.class);
-        ResOperationLikeNode operation =
-                PsiTreeUtil.getParentOfType(e, ResOperationLikeNode.class);
-        ResModuleDecl module =
-                PsiTreeUtil.getParentOfType(e, ResModuleDecl.class);
-        if (def != null) processDefinitionParams(processor, def);
-        if (operation != null) processOperationParams(processor, operation.getParamDeclList());
-        if (module != null) processModuleParams(processor, module)
-        //TODO: process moduleparams now
-    }
-
-    /** processing parameters of the definition we happen to be within */
-    private boolean processDefinitionParams(@NotNull ResScopeProcessorBase processor,
-                                            @NotNull ResMathDefinitionDecl o) {
-        List<ResMathDefinitionSignature> sigs = o.getSignatures();
-        if (sigs.size() == 1) {
-            ResMathDefinitionSignature sig = o.getSignatures().get(0);
-            if (!processDefinitionParams(processor, sig.getParameters())) return false;
-        } //size > 1 ? then we're categorical; size == 0, we're null
-        return true;
-    }
-
-    private boolean processDefinitionParams(
-            @NotNull ResScopeProcessorBase processor,
-            @NotNull List<ResMathVarDeclGroup> parameters) {
-        for (ResMathVarDeclGroup declaration : parameters) {
-            if (!processNamedElements(processor, ResolveState.initial(), declaration.getMathVarDefList(), true)) return false;
-           //if (!processImplicitTypeParameters(processor, ResolveState.initial(), declaration.getMathExp(), true)) return false;
-        }
-        return true;
-    }
-
-    private boolean processOperationParams(
-            @NotNull ResScopeProcessorBase processor,
-            @NotNull List<ResParamDecl> parameters) {
-        for (ResParamDecl declaration : parameters) {
-            if (!processNamedElements(processor, ResolveState.initial(),
-                    declaration.getParamDefList(), true)) return false;
-        }
-        return true;
-    }
-
-    private boolean processModuleParams(@NotNull ResScopeProcessorBase processor,
-                                        @NotNull ResModuleDecl o) {
-        for (ResParamDecl declaration : parameters) {
-            if (!processNamedElements(processor, ResolveState.initial(),
-                    declaration.getParamDefList(), true)) return false;
-        }
-        return true;
     }
 
     private boolean processNamedElements(@NotNull PsiScopeProcessor processor,
@@ -177,8 +120,7 @@ public class ResMathVarLikeReference
                                        boolean completion) {
             super(origin.getIdentifier(), origin, completion);
         }
-        @Override protected boolean crossOff(@NotNull PsiElement element) {
-
+        @Override protected boolean crossOff(@NotNull PsiElement e) {
             return false;
         }
     }

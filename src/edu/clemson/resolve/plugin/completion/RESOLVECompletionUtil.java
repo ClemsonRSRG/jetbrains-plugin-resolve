@@ -19,7 +19,7 @@ import javax.swing.*;
 
 public class RESOLVECompletionUtil {
 
-    public static final int VAR_PRIORITY = 10;
+    public static final int VAR_PRIORITY = 30;
     public static final int FACILITY_PRIORITY = 5;
     public static final int DEFINITION_PRIORITY = 15;
     public static final int TYPE_PRIORITY = 20;
