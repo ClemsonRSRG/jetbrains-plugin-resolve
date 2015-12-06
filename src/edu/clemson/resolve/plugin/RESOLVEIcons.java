@@ -18,6 +18,7 @@ public interface RESOLVEIcons {
     public static final Icon DEF = IconLoader.getIcon("/edu/clemson/resolve/icons/def.png");
     public static final Icon TYPE_MODEL = IconLoader.getIcon("/edu/clemson/resolve/icons/type_model.png");
     public static final Icon TYPE_REPR = IconLoader.getIcon("/edu/clemson/resolve/icons/type_repr.png");
+    public static final Icon GENERIC_TYPE = IconLoader.getIcon("/edu/clemson/resolve/icons/generic_type.png");
 
     public static final Icon PARAMETER = IconLoader.getIcon("/edu/clemson/resolve/icons/parameter.png");
 

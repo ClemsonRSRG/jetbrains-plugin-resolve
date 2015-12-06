@@ -39,9 +39,8 @@ public class RESOLVECompletionUtil {
                     ResNamedElement v = (ResNamedElement)o;
                     String typeText = "";
                     Icon icon = v instanceof ResMathVarDef ? RESOLVEIcons.VARIABLE :
-             /*       v instanceof ResParamDefinition ? RESOLVEIcons.PARAMETER :
-                            v instanceof ResFieldDefinition ? RESOLVEIcons.FIELD :
-                                    v instanceof ResReceiver ? RESOLVEIcons.RECEIVER :
+                                v instanceof ResParamDef ? RESOLVEIcons.PARAMETER :
+                           /* v instanceof ResFieldDefinition ? RESOLVEIcons.FIELD :
                                             v instanceof ResConstDefinition ? RESOLVEIcons.CONSTANT :*/
                             null;
 
