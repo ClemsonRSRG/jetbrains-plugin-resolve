@@ -159,8 +159,7 @@
     implements("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
     implements(".*Block")="edu.clemson.resolve.plugin.psi.ResBlock"
 
-    extends("Math(Minus|Cat|Range|Plus|Div|Mult|Custom)InfixApplyExp")=MathInfixApplyExp // this attributes can be placed directly after rule
-
+    extends("Math((Minus|Cat|Range|Plus|Div|Mult|Custom)InfixApplyExp|SelectorExp)")=MathInfixApplyExp // this attributes can be placed directly after rule
     extends("Math.*(Exp)")=MathExp
 
     generateTokenAccessors=true
@@ -353,7 +352,7 @@ MathExp ::=
     | MathCatInfixApplyExp
     | MathPrefixApplyExp
     | MathCustomInfixApplyExp
-    | MathPrimary
+    | MathPrimary {methods=[getResMathMetaTypeExp]}
 
 //private rules for operators with the same precedence
 private MathAddGroup ::= MathPlusInfixApplyExp | MathMinusInfixApplyExp
@@ -382,13 +381,15 @@ private MathPrimary ::=
           MathSymbolExp
         | MathTypeAssertionExp
         | MathSetComprehensionExp
-        | MathGeneralizedApplyExp
         | MathNestedExp
         | MathSetExp
+        | MathSelectorExp
+        | MathCartProdExp
         | MathLiteralExp
 
+MathSelectorExp ::= MathExp '.' MathExp
 
-MathGeneralizedApplyExp ::= MathExp '[' MathExp ',' '[' MathExp ']'']' {pin=2}
+MathCartProdExp ::= 'Cart_Prod' (MathVarDeclGroup ';')+ 'end' {pin=1}
 
 fake MathInfixApplyExp ::= MathExp+ {
   methods=[left="MathExp[0]" right="MathExp[1]"]

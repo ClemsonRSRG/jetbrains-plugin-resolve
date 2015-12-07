@@ -9,6 +9,7 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -71,6 +72,14 @@ public class ResMathVarLikeReference
                                               @NotNull ResScopeProcessor processor,
                                               @NotNull ResolveState state,
                                               boolean localResolve) {
+
+        PsiElement parent = myElement.getParent();
+        if (parent instanceof ResMathSelectorExp) {
+            boolean result = processMathSelector((ResMathSelectorExp)parent, processor, state, myElement);
+            if (processor.isCompletion()) return result;
+            if (!result || ResPsiImplUtil.prevDot(myElement)) return false;
+        }
+
         ResScopeProcessorBase delegate = createDelegate(processor);
         ResolveUtil.treeWalkUp(myElement, delegate);
         Collection<? extends ResNamedElement> result = delegate.getVariants();
@@ -84,6 +93,18 @@ public class ResMathVarLikeReference
         if (!ResReference.processUsesRequests(file, processor, state, myElement, true)) return false;
         if (!processBuiltin(processor, state, myElement)) return false;
 
+        return true;
+    }
+
+    private boolean processMathSelector(@NotNull ResMathSelectorExp parent,
+                                        @NotNull ResScopeProcessor processor,
+                                        @NotNull ResolveState state,
+                                        @Nullable PsiElement another) {
+        /*List<ResMathExp> list = parent.getMathExpList();
+        if (list.size() > 1 && list.get(1).isEquivalentTo(another)) {
+            ResType type = list.get(0).getResType(createContext());
+            if (type != null && !processResType(type, processor, state)) return false;
+        }*/
         return true;
     }
 
