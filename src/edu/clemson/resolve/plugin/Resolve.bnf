@@ -49,6 +49,8 @@
 
         LESS_OR_EQUAL           = '<='
         LESS                    = '<'
+        LANGLE                  = '(<'
+        RANGLE                  = '>)'
         GREATER_OR_EQUAL        = '>='
         GREATER                 = '>'
 
@@ -345,10 +347,10 @@ MathQuantifiedExp ::= ('Forall'|'Exists') MathVarDeclGroup ',' MathAssertionExp 
 MathExp ::=
       MathBooleanInfixApplyExp
     | MathRelationalInfixApplyExp
-    | MathOutfixApplyExp
     | MathRangeInfixApplyExp
     | MathAddGroup
     | MathMultGroup
+    | MathOutfixGroup
     | MathIncomingUnaryApplyExp
     | MathCatInfixApplyExp
     | MathPrefixApplyExp
@@ -358,6 +360,7 @@ MathExp ::=
 //private rules for operators with the same precedence
 private MathAddGroup ::= MathPlusInfixApplyExp | MathMinusInfixApplyExp
 private MathMultGroup ::= MathMultInfixApplyExp | MathDivInfixApplyExp
+private MathOutfixGroup ::= MathBarOutfixApplyExp | MathAngleOutfixApplyExp
 
 MathPlusInfixApplyExp ::= MathExp '+' MathExp
 MathMinusInfixApplyExp ::= MathExp ('-'|'~') MathExp
@@ -374,6 +377,9 @@ MathCustomInfixApplyExp ::= MathExp identifier MathExp
 MathTypeAssertionExp ::= MathExp ':' MathExp {pin=2}
 MathNestedExp ::= '(' MathAssertionExp ')'
 
+MathBarOutfixApplyExp ::= '|' MathExp '|'
+MathAngleOutfixApplyExp ::= '<' MathExp '>'
+
 private MathPrimary ::=
           MathSymbolExp
         | MathTypeAssertionExp
@@ -383,16 +389,15 @@ private MathPrimary ::=
         | MathSetExp
         | MathLiteralExp
 
+
 MathGeneralizedApplyExp ::= MathExp '[' MathExp ',' '[' MathExp ']'']' {pin=2}
 
 fake MathInfixApplyExp ::= MathExp+ {
   methods=[left="MathExp[0]" right="MathExp[1]"]
 }
 
-MathOutfixApplyExp ::=
-      '<' MathExp '>'
-    | '|' MathExp '|'
-    | '||' MathExp '||' {pin=1}
+//MathOutfixApplyExp ::=
+ //     '|' MathExp '|'
 
 MathPrefixApplyExp ::=
     MathExp '(' MathArgList')' {pin=2}
