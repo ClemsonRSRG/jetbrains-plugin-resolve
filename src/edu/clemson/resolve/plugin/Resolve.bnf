@@ -105,7 +105,7 @@
         LAMBDA                  = 'lambda'
         FAMILY_TYPE             = 'Type'
         PARAM_TYPE              = 'type'
-        FAMILY                  = 'Family'
+        FAMILY                  = 'family'
         FOR                     = 'for'
         MODELED                 = 'modeled'
         CATEGORICAL             = 'Categorical'

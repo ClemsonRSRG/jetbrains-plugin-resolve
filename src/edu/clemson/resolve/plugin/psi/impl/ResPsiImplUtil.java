@@ -148,7 +148,7 @@ public class ResPsiImplUtil {
             PsiElement resolve = reference != null ? reference.resolve() : null;
             int i;
             i=0;
-            //if (resolve instanceof ReTypeOwner) return typeOrParameterType((GoTypeOwner)resolve, context);
+            //if (resolve instanceof ReTypeOwner) return typeOrParameterType((ResTypeOwner)resolve, context);
         }
         else if (o instanceof ResMathSelectorExp) {
             ResMathExp item = ContainerUtil.getLastItem(

@@ -140,7 +140,7 @@ ESCAPES = [abfnrtv]
 "externally"                            { return EXTERNALLY; }
 "Facility"                              { return FACILITY;  }
 "false"                                 { return FALSE; }
-"Family"                                { return FAMILY; }
+"family"                                { return FAMILY; }
 "Forall"                                { return FORALL; }
 "for"                                   { return FOR; }
 "hypo"                                  { return HYPO; }
