@@ -67,6 +67,11 @@
         BAR                     = '|'
         DBL_BAR                 = '||'
 
+        UNION                   = 'union'
+        INTERSECT               = 'intersect'
+        IS_IN                   = 'is_in'
+        IS_NOT_IN               = 'is_not_in'
+
         // Keywords
         INT                     = 'int'
         FACILITY                = 'Facility'
@@ -184,6 +189,7 @@ PrecisBlock
 
 ConceptModuleDecl ::= 'Concept' identifier SpecModuleParameters? ';'
 UsesItemList?
+RequiresClause?
 ConceptBlock
 'end' identifier ';' {pin(".*")=1}
 
@@ -284,14 +290,22 @@ FacilityDecl ::= 'Facility' identifier 'is' ModuleSpec
 //  M A T H   C O N S T R U C T S   &   E X P R S
 // -------------------------------------------------
 
-TypeModelDecl ::= 'Type' 'Family' identifier TypeModelPortion ';'
-    'exemplar' identifier ';' {pin=3}
+TypeModelDecl ::= 'Type' 'family' identifier TypeModelPortion ';'
+    'exemplar' identifier ';'
+    ConstraintsClause?
+    IntializationClause? {pin=3}
 
 private TypeModelPortion ::= 'is' 'modeled' 'by' MathExp {pin=4}
 
-RequiresClause ::= 'requires' MathAssertionExp ';' {pin=1}
+IntializationClause ::= 'initialization' (EnsuresClause) {pin=1};
+
+EntailsClause ::= 'which_entails' MathAssertionExp {pin=1}
+
+RequiresClause ::= 'requires' MathAssertionExp (EntailsClause)? ';' {pin=1}
 
 EnsuresClause ::= 'ensures' MathAssertionExp ';' {pin=1}
+
+ConstraintsClause ::= 'constraints' MathAssertionExp ';' {pin=1}
 
 MathTheoremDecl ::= ('Theorem'|'Corollary') identifier ':'
 MathAssertionExp ';' {pin = 2}
@@ -364,7 +378,7 @@ MathMinusInfixApplyExp ::= MathExp ('-'|'~') MathExp
 MathBooleanInfixApplyExp ::= MathExp ('and'|'or') MathExp
 MathMultInfixApplyExp ::= MathExp '*' MathExp
 MathDivInfixApplyExp ::= MathExp '/' MathExp
-MathCatInfixApplyExp ::= MathExp 'o' MathExp
+MathCatInfixApplyExp ::= MathExp ('o'|'union'|'intersect'|'is_in'|'is_not_in') MathExp
 MathRangeInfixApplyExp ::= MathExp '->' MathExp
 MathIncomingUnaryApplyExp ::= '@' MathExp
 
@@ -389,7 +403,8 @@ private MathPrimary ::=
 
 MathSelectorExp ::= MathExp '.' MathExp
 
-MathCartProdExp ::= 'Cart_Prod' (MathVarDeclGroup ';')+ 'end' {pin=1}
+private ResMathCartVarGroup ::= MathVarDeclGroup ';' {pin=1}
+MathCartProdExp ::= 'Cart_Prod' ResMathCartVarGroup+  'end' {pin=1}
 
 fake MathInfixApplyExp ::= MathExp+ {
   methods=[left="MathExp[0]" right="MathExp[1]"]
