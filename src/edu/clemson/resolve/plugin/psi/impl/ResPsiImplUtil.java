@@ -13,6 +13,8 @@ import edu.clemson.resolve.plugin.psi.impl.imports.ResModuleReferenceSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public class ResPsiImplUtil {
 
     @NotNull public static TextRange getModuleSpecTextRange(
@@ -20,6 +22,14 @@ public class ResPsiImplUtil {
         String text = moduleSpec.getText();
         return !text.isEmpty() ? TextRange.create(0, text.length() - 1) :
                 TextRange.EMPTY_RANGE;
+    }
+
+    @Nullable public static ResFile getSpecification(ResFacilityDecl o) {
+        if (o.getModuleSpecList().isEmpty()) return null;
+        ResModuleSpec specification = o.getModuleSpecList().get(0);
+        PsiFile specFile = specification.resolve();
+        if (!(specFile instanceof ResFile)) return null;
+        return (ResFile)specFile;
     }
 
     @NotNull public static PsiElement getIdentifier(ResMathReferenceExp o) {
@@ -69,12 +79,6 @@ public class ResPsiImplUtil {
         return null;
     }
 
-    @NotNull public static PsiReference[] getReferences(@NotNull ResUsesItem o) {
-        return PsiReference.EMPTY_ARRAY;
-        //if (o.getTextLength() == 0) return PsiReference.EMPTY_ARRAY;
-        //return new ResUsesReferenceSet(o).getAllReferences();
-    }
-
     public static boolean processDeclarations(@NotNull ResCompositeElement o,
                                               @NotNull PsiScopeProcessor processor,
                                               @NotNull ResolveState state,
@@ -91,6 +95,16 @@ public class ResPsiImplUtil {
         }
         return ResCompositeElementImpl.processDeclarationsDefault(
                 o, processor, state, lastParent, place);
+    }
+
+    @Nullable public static ResTypeReferenceExp getQualifier(
+            @NotNull ResTypeReferenceExp o) {
+        return PsiTreeUtil.getChildOfType(o, ResTypeReferenceExp.class);
+    }
+
+    @NotNull public static PsiReference getReference(
+            @NotNull ResTypeReferenceExp o) {
+        return new ResTypeReference(o);
     }
 
     public static boolean prevDot(@Nullable PsiElement parent) {

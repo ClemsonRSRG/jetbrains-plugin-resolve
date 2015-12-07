@@ -10,10 +10,7 @@ import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static edu.clemson.resolve.plugin.psi.impl.ResReference.processModuleLevelEntities;
 
@@ -80,11 +77,11 @@ public class ResMathVarLikeReference
 
         //this processes any named elements we've found searching up the tree in the previous line
         if (!processNamedElements(processor, state, result, localResolve)) return false;
-        processMathParameterLikeThings(myElement, delegate);
+        ResReference.processParameterLikeThings(myElement, delegate);
         if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
 
         if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
-        if (!ResReference.processUsesRequests(file, processor, state, myElement)) return false;
+        if (!ResReference.processUsesRequests(file, processor, state, myElement, true)) return false;
         if (!processBuiltin(processor, state, myElement)) return false;
 
         return true;
@@ -95,34 +92,6 @@ public class ResMathVarLikeReference
                                   @NotNull ResCompositeElement element) {
         ResFile f = ResElementFactory.getHardCodedMathFile(element.getProject());
         return processModuleLevelEntities(f, processor, state, true);
-    }
-
-    private void processMathParameterLikeThings(@NotNull ResCompositeElement e,
-                                                @NotNull ResScopeProcessorBase processor) {
-        ResMathDefinitionDecl def =
-                PsiTreeUtil.getParentOfType(e, ResMathDefinitionDecl.class);
-        if (def != null) {
-            processTopLevelMathDef(def, processor);
-        }
-    }
-
-    private boolean processTopLevelMathDef(@NotNull ResMathDefinitionDecl o,
-                                           @NotNull ResScopeProcessorBase processor) {
-        List<ResMathDefinitionSignature> sigs = o.getSignatures();
-        if (sigs.size() == 1) {
-            ResMathDefinitionSignature sig = o.getSignatures().get(0);
-            if (!processParameters(processor, sig.getParameters())) return false;
-        } //size > 1 ? then we're categorical; size == 0, we're null
-        return true;
-    }
-
-    private boolean processParameters(@NotNull ResScopeProcessorBase processor,
-                                      @NotNull List<ResMathVarDeclGroup> parameters) {
-        for (ResMathVarDeclGroup declaration : parameters) {
-            if (!processNamedElements(processor, ResolveState.initial(), declaration.getMathVarDefList(), true)) return false;
-           //if (!processImplicitTypeParameters(processor, ResolveState.initial(), declaration.getMathExp(), true)) return false;
-        }
-        return true;
     }
 
     private boolean processNamedElements(@NotNull PsiScopeProcessor processor,
@@ -151,8 +120,7 @@ public class ResMathVarLikeReference
                                        boolean completion) {
             super(origin.getIdentifier(), origin, completion);
         }
-        @Override protected boolean crossOff(@NotNull PsiElement element) {
-
+        @Override protected boolean crossOff(@NotNull PsiElement e) {
             return false;
         }
     }

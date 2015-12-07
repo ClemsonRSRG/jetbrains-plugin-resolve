@@ -33,10 +33,9 @@ public class ResFile extends PsiFileBase {
 
     @NotNull public List<ResMathDefinitionSignature> getMathDefinitionSignatures() {
         ResModuleDecl enclosedModule = getEnclosedModule();
-        List<ResMathDefinitionSignature> foundDecls =  enclosedModule != null ?
+        return enclosedModule != null ?
                 enclosedModule.getMathDefinitionSignatures() :
                 new ArrayList<ResMathDefinitionSignature>();
-        return foundDecls;
     }
 
     @NotNull public List<ResUsesItem> getUsesItems() {
@@ -45,19 +44,31 @@ public class ResFile extends PsiFileBase {
                 new ArrayList<ResUsesItem>();
     }
 
-    /*@NotNull public List<ResTypeLikeNodeDecl> getTypes() {
+    @NotNull public List<ResTypeParamDecl> getGenericTypeParams() {
+        ResModuleDecl enclosedModule = getEnclosedModule();
+        List<ResTypeParamDecl> genericTypes = new ArrayList<ResTypeParamDecl>();
+        if (enclosedModule == null) return genericTypes;
+        ResModuleParameters params = enclosedModule.getModuleParameters();
+        if (params instanceof ResSpecModuleParameters) {
+            genericTypes.addAll(((ResSpecModuleParameters) params)
+                    .getTypeParamDeclList());
+        }
+        return genericTypes;
+    }
+
+    @NotNull public List<ResTypeLikeNodeDecl> getTypes() {
         ResModuleDecl enclosedModule = getEnclosedModule();
         return enclosedModule != null ? enclosedModule.getTypes() :
                 new ArrayList<ResTypeLikeNodeDecl>();
-    }*/
+    }
 
-    /*@NotNull public List<ResFacilityDecl> getFacilities() {
+    @NotNull public List<ResFacilityDecl> getFacilities() {
         ResModuleDecl enclosedModule = getEnclosedModule();
         return enclosedModule != null ? enclosedModule.getFacilities() :
                 new ArrayList<ResFacilityDecl>();
     }
 
-    @NotNull public List<ResOperationDecl> getOperationDecls() {
+    /*@NotNull public List<ResOperationDecl> getOperationDecls() {
         ResModuleDecl enclosedModule = getEnclosedModule();
         List<ResOperationDecl> result = enclosedModule != null ?
                 enclosedModule.getOperations() :

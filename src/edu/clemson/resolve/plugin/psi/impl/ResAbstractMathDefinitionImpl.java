@@ -18,11 +18,11 @@ import java.util.List;
  * <p>See note in {@link ResMathDefinitionDecl} as to why we don't extend
  * {@link edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl}.</p>
  */
-public abstract class ResAbstractMathDefinitionDeclImpl
+public abstract class ResAbstractMathDefinitionImpl
         extends
             ResCompositeElementImpl implements ResMathDefinitionDecl {
 
-    public ResAbstractMathDefinitionDeclImpl(@NotNull ASTNode node) {
+    public ResAbstractMathDefinitionImpl(@NotNull ASTNode node) {
         super(node);
     }
 

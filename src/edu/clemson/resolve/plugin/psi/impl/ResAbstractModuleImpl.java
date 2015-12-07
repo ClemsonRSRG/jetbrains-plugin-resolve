@@ -2,33 +2,25 @@ package edu.clemson.resolve.plugin.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
-import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.impl.ElementBase;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.ui.RowIcon;
-import com.intellij.util.IncorrectOperationException;
-import com.intellij.util.PlatformIcons;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
-import edu.clemson.resolve.plugin.RESOLVEIcons;
 import edu.clemson.resolve.plugin.ResTypes;
 import edu.clemson.resolve.plugin.psi.*;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ResAbstractModuleDeclImpl
+public abstract class ResAbstractModuleImpl
         extends
             ResNamedElementImpl implements ResModuleDecl {
 
-    public ResAbstractModuleDeclImpl(@NotNull ASTNode node) {
+    public ResAbstractModuleImpl(@NotNull ASTNode node) {
         super(node);
     }
 
@@ -44,6 +36,19 @@ public abstract class ResAbstractModuleDeclImpl
         return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleSpec.class);
     }
 
+    @Nullable public ResModuleParameters getModuleParameters() {
+        return PsiTreeUtil.findChildOfType(this, ResModuleParameters.class);
+    }
+
+    @NotNull @Override public List<ResUsesItem> getUsesItems() {
+        return getUsesItemList() != null ? getUsesItemList().getUsesItemList() :
+                ContainerUtil.<ResUsesItem>newArrayList();
+    }
+
+    @Nullable public ResUsesItemList getUsesItemList() {
+        return PsiTreeUtil.findChildOfType(this, ResUsesItemList.class);
+    }
+
     @NotNull @Override public
             List<ResMathDefinitionDecl> getMathDefinitionDecls() {
         return CachedValuesManager.getCachedValue(this,
@@ -51,7 +56,7 @@ public abstract class ResAbstractModuleDeclImpl
                     @Override
                     public Result<List<ResMathDefinitionDecl>> compute() {
                         return Result.create(calc(ResMathDefinitionDecl.class),
-                                ResAbstractModuleDeclImpl.this);
+                                ResAbstractModuleImpl.this);
                     }
                 });
     }
@@ -66,23 +71,13 @@ public abstract class ResAbstractModuleDeclImpl
         return signatures;
     }
 
-    @NotNull @Override public List<ResUsesItem> getUsesItems() {
-        return getUsesItemList() != null ? getUsesItemList().getUsesItemList() :
-                ContainerUtil.<ResUsesItem>newArrayList();
-    }
-
-    @Nullable public ResUsesItemList getUsesItemList() {
-        return PsiTreeUtil.findChildOfType(this, ResUsesItemList.class);
-    }
-
-    /*@NotNull public List<ResTypeLikeNodeDecl> getTypes() {
-        final ResBlock body = this.getModuleBlock();
+    @NotNull public List<ResTypeLikeNodeDecl> getTypes() {
         return CachedValuesManager.getCachedValue(this,
                 new CachedValueProvider<List<ResTypeLikeNodeDecl>>() {
                     @Override
                     public Result<List<ResTypeLikeNodeDecl>> compute() {
                         return Result.create(calc(ResTypeLikeNodeDecl.class),
-                                ResAbstractModuleDeclImpl.this);
+                                ResAbstractModuleImpl.this);
                     }
                 });
     }
@@ -93,18 +88,18 @@ public abstract class ResAbstractModuleDeclImpl
                     @Override
                     public Result<List<ResFacilityDecl>> compute() {
                         return Result.create(calc(ResFacilityDecl.class),
-                                ResAbstractModuleDeclImpl.this);
+                                ResAbstractModuleImpl.this);
                     }
                 });
     }
 
-    @NotNull public List<ResOperationDecl> getOperations() {
+    /*@NotNull public List<ResOperationDecl> getOperations() {
         return CachedValuesManager.getCachedValue(this,
                 new CachedValueProvider<List<ResOperationDecl>>() {
                     @Override
                     public Result<List<ResOperationDecl>> compute() {
                         return Result.create(calc(ResOperationDecl.class),
-                                ResAbstractModuleDeclImpl.this);
+                                ResAbstractModuleImpl.this);
                     }
                 });
     }
@@ -115,7 +110,7 @@ public abstract class ResAbstractModuleDeclImpl
                     @Override
                     public Result<List<ResOperationWithBodyNode>> compute() {
                         return Result.create(calc(ResOperationWithBodyNode.class),
-                                ResAbstractModuleDeclImpl.this);
+                                ResAbstractModuleImpl.this);
                     }
                 });
     }*/

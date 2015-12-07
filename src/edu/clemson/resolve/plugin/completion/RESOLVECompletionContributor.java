@@ -15,14 +15,9 @@ import static com.intellij.patterns.PlatformPatterns.*;
 public class RESOLVECompletionContributor extends CompletionContributor {
 
     public RESOLVECompletionContributor() {
-        extend(CompletionType.BASIC, referenceExp(),
-                new RESOLVEReferenceCompletionProvider());
-        extend(CompletionType.BASIC, mathReferenceExp(),
-                new RESOLVEReferenceCompletionProvider());
-        //extend(CompletionType.BASIC, resReference(),
-        //        new RESOLVEReferenceCompletionProvider());
-        extend(CompletionType.BASIC, usesReference(),
-                new RESOLVEUsesCompletionProvider());
+        extend(CompletionType.BASIC, referenceExp(), new RESOLVEReferenceCompletionProvider());
+        extend(CompletionType.BASIC, mathReferenceExp(), new RESOLVEReferenceCompletionProvider());
+        extend(CompletionType.BASIC, usesReference(), new RESOLVEUsesCompletionProvider());
     }
 
     private static PsiElementPattern.Capture<PsiElement> referenceExp() {

@@ -96,6 +96,7 @@ ESCAPES = [abfnrtv]
 
 "<="                                    { return LESS_OR_EQUAL; }
 "<"                                     { return LESS; }
+
 ">="                                    { return GREATER_OR_EQUAL; }
 ">"                                     { return GREATER; }
 

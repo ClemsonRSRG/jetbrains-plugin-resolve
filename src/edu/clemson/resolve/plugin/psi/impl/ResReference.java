@@ -5,12 +5,14 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -95,7 +97,7 @@ public class ResReference
                                               @NotNull ResolveState state,
                                               boolean localResolve) {
         //ResScopeProcessorBase delegate = createVarDelegate(processor);
-
+        //processParameterLikeThings
         return true;
     }
 
@@ -112,7 +114,8 @@ public class ResReference
     static boolean processUsesRequests(@NotNull ResFile file,
                                        @NotNull ResScopeProcessor processor,
                                        @NotNull ResolveState state,
-                                       @NotNull ResCompositeElement element) {
+                                       @NotNull ResCompositeElement element,
+                                       boolean searchImplicitUses) {
         for (ResUsesItem u : file.getUsesItems()) {
             //this file resolve is failing for whatever reason when we're trying to add completions... is this a concurrency thing maybe?
             //works the rest of the time...
@@ -121,7 +124,11 @@ public class ResReference
             if (!processModuleLevelEntities((ResFile) resolvedModule, processor, state, false)) return false;
         }
         ResModuleDecl module = file.getEnclosedModule();
-        if (module != null) {
+
+        //The "searchImplicitUses" is here since, in the context of a a concept (or enhancement) realiz
+        //we don't want to find the type model, we should be dealing in repr types. So in the context
+        //of the typeReference class our searchImplicitUses will be if module != ResConceptImplModule || module != ResConceptExtImplModule
+        if (module != null && searchImplicitUses) {
             //Now process module decl implicit imports
             for (ResModuleSpec moduleSpec : module.getModuleSpecList()) {
                 PsiElement resolvedModule = moduleSpec.resolve();
@@ -139,10 +146,78 @@ public class ResReference
         //if (!processNamedElements(processor, state, file.getConstants(), localProcessing)) return false;
         //if (!processNamedElements(processor, state, file.getVars(), localProcessing)) return false;
        /* if (!processNamedElements(processor, state, file.getOperationImpls(), localProcessing)) return false;
-        if (!processNamedElements(processor, state, file.getOperationDecls(), localProcessing)) return false;
+        if (!processNamedElements(processor, state, file.getOperationDecls(), localProcessing)) return false;*/
         if (!processNamedElements(processor, state, file.getFacilities(), localProcessing)) return false;
-        if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;*/
+        if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getMathDefinitionSignatures(), localProcessing)) return false;
+        return true;
+    }
+
+    protected static void processParameterLikeThings(
+            @NotNull ResCompositeElement e,
+            @NotNull ResScopeProcessorBase processor) {
+        ResMathDefinitionDecl def =
+                PsiTreeUtil.getParentOfType(e, ResMathDefinitionDecl.class);
+        ResOperationLikeNode operation =
+                PsiTreeUtil.getParentOfType(e, ResOperationLikeNode.class);
+        ResModuleDecl module =
+                PsiTreeUtil.getParentOfType(e, ResModuleDecl.class);
+        if (def != null) processDefinitionParams(processor, def);
+        if (operation != null) processProgParamDecls(processor, operation.getParamDeclList());
+        if (module != null) processModuleParams(processor, module);
+        //TODO: process moduleparams now
+    }
+
+    /** processing parameters of the definition we happen to be within */
+    private static boolean processDefinitionParams(
+            @NotNull ResScopeProcessorBase processor,
+            @NotNull ResMathDefinitionDecl o) {
+        List<ResMathDefinitionSignature> sigs = o.getSignatures();
+        if (sigs.size() == 1) {
+            ResMathDefinitionSignature sig = o.getSignatures().get(0);
+            if (!processDefinitionParams(processor, sig.getParameters())) return false;
+        } //size > 1 ? then we're categorical; size == 0, we're null
+        return true;
+    }
+
+    private static boolean processDefinitionParams(
+            @NotNull ResScopeProcessorBase processor,
+            @NotNull List<ResMathVarDeclGroup> parameters) {
+        for (ResMathVarDeclGroup declaration : parameters) {
+            if (!processNamedElements(processor, ResolveState.initial(), declaration.getMathVarDefList(), true)) return false;
+            //if (!processImplicitTypeParameters(processor, ResolveState.initial(), declaration.getMathExp(), true)) return false;
+        }
+        return true;
+    }
+
+    private static boolean processProgParamDecls(
+            @NotNull ResScopeProcessorBase processor,
+            @NotNull List<ResParamDecl> parameters) {
+        for (ResParamDecl declaration : parameters) {
+            if (!processNamedElements(processor, ResolveState.initial(),
+                    declaration.getParamDefList(), true)) return false;
+        }
+        return true;
+    }
+
+    private static boolean processModuleParams(
+            @NotNull ResScopeProcessorBase processor,
+            @NotNull ResModuleDecl o) {
+        ResModuleParameters paramNode = o.getModuleParameters();
+        List<ResTypeParamDecl> typeParamDecls =
+                new ArrayList<ResTypeParamDecl>();
+        List<ResParamDecl> constantParamDeclGrps =
+                new ArrayList<ResParamDecl>();
+        List<ResMathDefinitionDecl> definitionParams =
+                new ArrayList<ResMathDefinitionDecl>();
+        if (paramNode instanceof ResSpecModuleParameters) {
+            typeParamDecls.addAll(((ResSpecModuleParameters) paramNode).getTypeParamDeclList());
+            constantParamDeclGrps.addAll(((ResSpecModuleParameters) paramNode).getParamDeclList());
+        }
+        //TODO: else if (paramNode instanceof ResImplModuleParameters) ..
+
+        processProgParamDecls(processor, constantParamDeclGrps);
+        processNamedElements(processor, ResolveState.initial(), typeParamDecls, true);
         return true;
     }
 

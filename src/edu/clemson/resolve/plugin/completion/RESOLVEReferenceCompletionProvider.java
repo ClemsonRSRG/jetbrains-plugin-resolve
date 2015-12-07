@@ -13,6 +13,7 @@ import edu.clemson.resolve.plugin.psi.*;
 import edu.clemson.resolve.plugin.psi.impl.ResMathVarLikeReference;
 import edu.clemson.resolve.plugin.psi.impl.ResReference;
 import edu.clemson.resolve.plugin.psi.impl.ResScopeProcessor;
+import edu.clemson.resolve.plugin.psi.impl.ResTypeReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,13 +56,26 @@ public class RESOLVEReferenceCompletionProvider
                 new ResFieldNameReference(((ResRefExp)element)).processResolveVariants(new MyResScopeProcessor(result, false));
             }*/
         }
-        else if (reference instanceof ResMathVarLikeReference) {
+        if (reference instanceof ResTypeReference) {
             PsiElement element = reference.getElement();
             ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
                 @Override
                 protected boolean accept(@NotNull PsiElement e) {
+                    return e instanceof ResTypeLikeNodeDecl ||
+                           e instanceof ResFacilityDecl ||
+                           e instanceof ResTypeParamDecl;
+                }
+            };
+            ((ResTypeReference) reference).processResolveVariants(aProcessor);
+        }
+        else if (reference instanceof ResMathVarLikeReference) {
+            PsiElement element = reference.getElement();
+            ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
+                @Override protected boolean accept(@NotNull PsiElement e) {
                     return e instanceof ResMathDefinitionSignature ||
-                            e instanceof ResMathVarDef;
+                            e instanceof ResMathVarDef ||
+                            e instanceof ResParamDef ||
+                            e instanceof ResTypeParamDecl;
                 }
             };
             ((ResMathVarLikeReference) reference).processResolveVariants(aProcessor);
@@ -94,19 +108,20 @@ public class RESOLVEReferenceCompletionProvider
                                     RESOLVECompletionUtil.DEFINITION_PRIORITY);
                 }
             }
-            else {
-                //TODO: Apply type info to the lookup renderers for these 'var like' elements
+            else if (o instanceof ResTypeLikeNodeDecl || o instanceof ResTypeParamDecl) {
                 return RESOLVECompletionUtil
-                        .createVariableLikeLookupElement((ResNamedElement) o);
-            }
-        /*    if (o instanceof ResTypeLikeNodeDecl) {
-                return RESOLVECompletionUtil
-                        .createTypeLookupElement((ResTypeLikeNodeDecl) o);
+                        .createTypeLookupElement((ResNamedElement)o);
             }
             else if (o instanceof ResFacilityDecl) {
                 return RESOLVECompletionUtil
                         .createFacilityLookupElement(((ResFacilityDecl) o));
             }
+            else {
+                //TODO: Apply type info to the lookup renderers for these 'var like' elements
+                return RESOLVECompletionUtil
+                        .createVariableLikeLookupElement((ResNamedElement) o);
+            }
+        /*
             else if (o instanceof ResNamedSignatureOwner &&
                     ((ResNamedSignatureOwner)o).getName() != null) {
                 String name = ((ResNamedSignatureOwner)o).getName();
