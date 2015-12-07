@@ -293,9 +293,16 @@ OperationDecl ::= 'Operation' identifier OperationLikeParameters (':' Type)? ';'
     RequiresClause? EnsuresClause? {pin=2}
 
 OperationProcedureDecl ::= 'Operation' identifier OperationLikeParameters (':' Type)? ';'
+RequiresClause? EnsuresClause?
 ('Recursive')? 'Procedure'
 
-'end' identifier ';' {pin=2}
+'end' CloseIdentifier ';' {pin=1}
+
+/** We cannot have two identifiers referenced in a rule (where one, say, the
+ *  first, is pinned): the code doesn't gen a getter for your pinned
+ *  identifier. This intermediate rule is simply a workaround for this.
+ */
+CloseIdentifier ::= identifier
 
 // -------------------------------------------------
 //  M A T H   C O N S T R U C T S   &   E X P R S
