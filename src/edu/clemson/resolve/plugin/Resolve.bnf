@@ -150,11 +150,11 @@
     extends("Math.*(DefinitionDecl)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathDefinitionImpl"
     extends("Math.*(Signature)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathSignatureImpl"
     extends(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleImpl"
-    extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|Facility)Decl)|ModuleSpec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
+    extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|OperationProcedure|Facility)Decl)|ModuleSpec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
     extends("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeNodeImpl"
 
     implements(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.ResModuleDecl"
-    implements("OperationDecl")="edu.clemson.resolve.plugin.psi.ResOperationLikeNode"
+    implements("OperationDecl|OperationProcedureDecl")="edu.clemson.resolve.plugin.psi.ResOperationLikeNode"
 
     implements(".*ReferenceExp")="edu.clemson.resolve.plugin.psi.ResReferenceExpBase"
     implements("Math.*Signature")="edu.clemson.resolve.plugin.psi.ResMathDefinitionSignature"
@@ -231,6 +231,9 @@ private ConceptItemRecover ::= !('Type'|'Operation'|'end')
 
 private FacilityItem ::=
       FacilityDecl
+    | OperationProcedureDecl {pin=1 recoverWhile=FacilityItemRecover}
+
+private FacilityItemRecover ::= !('Facility'|'Operation'|'end')
 
 // -------------------------------------------------
 //  P R O G   P A R A M E T E R   A N D   V A R   S T U F F
@@ -268,9 +271,6 @@ FieldVarSpec ::= FieldVarDefList ':' Type {pin=1}
 private FieldVarDefList ::= FieldDef &(!(';'))(',' FieldDef)*
 FieldDef ::= identifier
 
-OperationDecl ::= 'Operation' identifier OperationLikeParameters (':' Type)? ';'
-    RequiresClause? EnsuresClause? {pin=2}
-
 // Types
 
 //TOOD: Really this should just be namedType (w/o records). Right now this
@@ -286,6 +286,16 @@ RecordType ::= 'Record' RecordVarDeclGroup* 'end' {extends=Type}
 
 FacilityDecl ::= 'Facility' identifier 'is' ModuleSpec
 ('externally')? 'implemented' 'by' ModuleSpec ';' {pin=2 methods=[getSpecification]}
+
+// operations
+
+OperationDecl ::= 'Operation' identifier OperationLikeParameters (':' Type)? ';'
+    RequiresClause? EnsuresClause? {pin=2}
+
+OperationProcedureDecl ::= 'Operation' identifier OperationLikeParameters (':' Type)? ';'
+('Recursive')? 'Procedure'
+
+'end' identifier ';' {pin=2}
 
 // -------------------------------------------------
 //  M A T H   C O N S T R U C T S   &   E X P R S
