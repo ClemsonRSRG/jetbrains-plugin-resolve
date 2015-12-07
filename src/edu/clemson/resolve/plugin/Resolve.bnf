@@ -49,8 +49,6 @@
 
         LESS_OR_EQUAL           = '<='
         LESS                    = '<'
-        LANGLE                  = '(<'
-        RANGLE                  = '>)'
         GREATER_OR_EQUAL        = '>='
         GREATER                 = '>'
 
