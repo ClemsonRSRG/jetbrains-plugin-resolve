@@ -397,11 +397,19 @@ private MathPrimary ::=
         | MathSetComprehensionExp
         | MathNestedExp
         | MathSetExp
+        | MathLambdaExp
         | MathSelectorExp
+        | MathAlternativeExp
         | MathCartProdExp
         | MathLiteralExp
 
 MathSelectorExp ::= MathExp '.' MathExp
+
+MathLambdaExp ::= lambda MathDefinitionParams '.' '(' MathExp ')' {pin=1}
+
+MathAlternativeExp ::= '{{' (MathAlternativeItemExp)* '}}'
+
+MathAlternativeItemExp ::= MathExp ('if' MathExp ';' | 'otherwise' ';') {pin=1}
 
 private ResMathCartVarGroup ::= MathVarDeclGroup ';' {pin=1}
 MathCartProdExp ::= 'Cart_Prod' ResMathCartVarGroup+  'end' {pin=1}
