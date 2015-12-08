@@ -231,9 +231,10 @@ private ConceptItemRecover ::= !('Type'|'Operation'|'end')
 
 private FacilityItem ::=
       FacilityDecl
-    | OperationProcedureDecl {pin=1 recoverWhile=FacilityItemRecover}
+    | OperationProcedureDecl
+    | TypeReprDecl {pin=1 recoverWhile=FacilityItemRecover}
 
-private FacilityItemRecover ::= !('Facility'|'Operation'|'end')
+private FacilityItemRecover ::= !('Facility'|'Operation'|'Type'|'end')
 
 // -------------------------------------------------
 //  P R O G   P A R A M E T E R   A N D   V A R   S T U F F
@@ -245,12 +246,16 @@ private SpecModuleParamList ::= SpecParamDecl  (';' SpecParamDecl)* {recoverWhil
 
 private SpecParamDecl ::= TypeParamDecl | ParamDecl
 
+private OperationLikeParameters ::= '(' OpParamList? ')' {pin=1}
+private OpParamList ::= ParamDecl (';' ParamDecl)* {pin=1 recoverWhile=ParamListRec}
 ParamDecl ::= ParameterMode ParamDefinitionListNoPin ':' Type {pin=1}
 private ParamDefinitionListNoPin ::= ParamDef &(!(';'|')')) (',' ParamDef)* {pin=1}
 ParamDef ::= identifier
 
-private OperationLikeParameters ::= '(' OpParamList? ')' {pin=1}
-private OpParamList ::= ParamDecl (';' ParamDecl)* {pin=1 recoverWhile=ParamListRec}
+RecordVarDeclGroup ::= FieldVarDeclGroup ';' {pin=1}
+FieldVarDeclGroup ::= FieldVarDefList ':' Type {pin=1}
+private FieldVarDefList ::= FieldDef &(!(';'))(',' FieldDef)*
+FieldDef ::= identifier
 
 TypeParamDecl ::= 'type' identifier {pin=2}
 
@@ -265,13 +270,9 @@ ParameterMode ::=
     | identifier //TODO: would like to get rid of identifier here, but results
                  //in an uglier (partial) psi; which makes keyword completion
                  //patterns much harder
-
-RecordVarDeclGroup ::= FieldVarSpec ';' {pin=1}
-FieldVarSpec ::= FieldVarDefList ':' Type {pin=1}
-private FieldVarDefList ::= FieldDef &(!(';'))(',' FieldDef)*
-FieldDef ::= identifier
-
 // Types
+
+TypeReprDecl ::= 'Type' identifier '=' (RecordType|Type) ';' {pin=2 methods=[getResTypeInner]}
 
 //TOOD: Really this should just be namedType (w/o records). Right now this
 //allows anonymous record types .. which is ok .. I GUESS.
