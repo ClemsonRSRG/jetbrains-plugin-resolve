@@ -16,4 +16,5 @@ public interface ResNamedElement
     @Nullable public PsiElement getIdentifier();
 
     @NotNull public PsiFile getContainingFile();
+
 }

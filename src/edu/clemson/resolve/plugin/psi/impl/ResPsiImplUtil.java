@@ -19,8 +19,6 @@ import edu.clemson.resolve.plugin.psi.impl.imports.ResModuleReferenceSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
 public class ResPsiImplUtil {
 
     @NotNull public static TextRange getModuleSpecTextRange(
@@ -47,9 +45,33 @@ public class ResPsiImplUtil {
         return PsiTreeUtil.getChildOfType(o, ResMathReferenceExp.class);
     }
 
+    @Nullable public static ResTypeReferenceExp getQualifier(
+            @NotNull ResTypeReferenceExp o) {
+        return PsiTreeUtil.getChildOfType(o, ResTypeReferenceExp.class);
+    }
+
+    @Nullable public static ResReferenceExp getQualifier(
+            @NotNull ResReferenceExp o) {
+        return PsiTreeUtil.getChildOfType(o, ResReferenceExp.class);
+    }
+
+    @NotNull public static PsiReference getReference(
+            @NotNull ResTypeReferenceExp o) {
+        return new ResTypeReference(o);
+    }
+
+    @NotNull public static ResReference getReference(
+            @NotNull ResReferenceExp o) {
+        return new ResReference(o);
+    }
+
     @NotNull public static ResMathVarLikeReference getReference(
             @NotNull ResMathReferenceExp o) {
         return new ResMathVarLikeReference(o);
+    }
+
+    @Nullable public static PsiReference getReference(@NotNull ResVarDef o) {
+        return null;
     }
 
     @NotNull public static PsiReference[] getReferences(
@@ -63,6 +85,42 @@ public class ResPsiImplUtil {
         String text = o.getText();
         if (text == null) return "";
         return text.replaceAll("\\s+", " ");
+    }
+
+    @Nullable public static ResType getResTypeInner(@NotNull ResTypeReprDecl o,
+                                                    @SuppressWarnings("UnusedParameters")
+                                                    @Nullable ResolveState context) {
+        return o.getType();
+    }
+
+    @Nullable public static ResType getResType(@NotNull final ResExp o,
+                                               @Nullable final ResolveState context) {
+        return RecursionManager.doPreventingRecursion(o, true, new Computable<ResType>() {
+            @Override
+            public ResType compute() {
+                if (context != null) return getResTypeInner(o, context);
+                return CachedValuesManager.getCachedValue(o, new CachedValueProvider<ResType>() {
+                    @Nullable
+                    @Override
+                    public Result<ResType> compute() {
+                        return Result.create(getResTypeInner(o, null),
+                                PsiModificationTracker.MODIFICATION_COUNT);
+                    }
+                });
+            }
+        });
+    }
+
+    @Nullable public static ResType getResTypeInner(@NotNull final ResExp o,
+                                                    @Nullable ResolveState context) {
+        if (o instanceof ResReferenceExp) {
+            PsiReference reference = o.getReference();
+            PsiElement resolve = reference != null ? reference.resolve() : null;
+            int i;
+            i=0;
+           // if (resolve instanceof ResTypeOwner) return typeOrParameterType((ResTypeOwner)resolve, context);
+        }
+        return null;
     }
 
     /**
@@ -104,16 +162,6 @@ public class ResPsiImplUtil {
                 o, processor, state, lastParent, place);
     }
 
-    @Nullable public static ResTypeReferenceExp getQualifier(
-            @NotNull ResTypeReferenceExp o) {
-        return PsiTreeUtil.getChildOfType(o, ResTypeReferenceExp.class);
-    }
-
-    @NotNull public static PsiReference getReference(
-            @NotNull ResTypeReferenceExp o) {
-        return new ResTypeReference(o);
-    }
-
     public static boolean prevDot(@Nullable PsiElement parent) {
         PsiElement prev = parent == null ? null :
                 PsiTreeUtil.prevVisibleLeaf(parent);
@@ -129,11 +177,11 @@ public class ResPsiImplUtil {
         return RecursionManager.doPreventingRecursion(o, true,
                 new Computable<ResMathExp>() {
                     @Override public ResMathExp compute() {
-                        if (context != null) return getGoTypeMetaExpInner(o, context);
+                        if (context != null) return getResMathTypeMetaExpInner(o, context);
                         return CachedValuesManager.getCachedValue(o,
                                 new CachedValueProvider<ResMathExp>() {
                             @Nullable @Override public Result<ResMathExp> compute() {
-                                return Result.create(getGoTypeMetaExpInner(o, null),
+                                return Result.create(getResMathTypeMetaExpInner(o, null),
                                         PsiModificationTracker.MODIFICATION_COUNT);
                             }
                         });
@@ -141,7 +189,7 @@ public class ResPsiImplUtil {
                 });
     }
 
-    @Nullable public static ResMathExp getGoTypeMetaExpInner(
+    @Nullable public static ResMathExp getResMathTypeMetaExpInner(
             @NotNull final ResMathExp o, @Nullable ResolveState context) {
         if (o instanceof ResMathReferenceExp) {
             PsiReference reference = o.getReference();

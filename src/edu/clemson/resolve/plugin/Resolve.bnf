@@ -151,7 +151,8 @@
     extends("Math.*(Signature)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathSignatureImpl"
     extends(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleImpl"
     extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|OperationProcedure|Facility)Decl)|ModuleSpec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
-    extends("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeNodeImpl"
+    extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeNodeImpl"
+    extends("(Selector)Exp")=InfixExp
 
     implements(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.ResModuleDecl"
     implements("OperationDecl|OperationProcedureDecl")="edu.clemson.resolve.plugin.psi.ResOperationLikeNode"
@@ -161,11 +162,15 @@
     implements("Math.*DefinitionDecl")="edu.clemson.resolve.plugin.psi.ResMathDefinitionDecl"
     implements("SpecModuleParameters")="edu.clemson.resolve.plugin.psi.ResModuleParameters" //TODO: ImplModuleParameters
     implements(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Facility)Decl|ModuleSpec)")="edu.clemson.resolve.plugin.psi.ResNamedElement"
-    implements("(TypeModel)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
+    implements("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
     implements(".*Block")="edu.clemson.resolve.plugin.psi.ResBlock"
 
     extends("Math((Minus|Cat|Range|Plus|Div|Mult|Custom)InfixApplyExp|SelectorExp)")=MathInfixApplyExp // this attributes can be placed directly after rule
     extends("Math.*(Exp)")=MathExp
+    extends(".*(Exp)")=Exp
+
+    pin(".*Statement")=1
+    extends(".*Statement")=Statement
 
     generateTokenAccessors=true
     pin('.*List(?:_\d.*)?')=1
@@ -200,17 +205,13 @@ FacilityBlock
 'end' identifier ';' {pin(".*")=1}
 
 UsesItemList ::= 'uses' UsesItem (',' UsesItem)* ';'
-
 ModuleSpec ::= identifier {pin=1 methods=[getReferences resolve getModuleSpecTextRange]}
-
 UsesItem ::= ModuleSpec
 
 // Module blocks & items
 
 PrecisBlock ::= PrecisItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
-
 ConceptBlock ::= ConceptItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
-
 FacilityBlock ::= FacilityItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
 
 private ItemsRecover ::= !('end')
@@ -236,14 +237,28 @@ private FacilityItem ::=
 
 private FacilityItemRecover ::= !('Facility'|'Operation'|'Type'|'end')
 
-// -------------------------------------------------
-//  P R O G   P A R A M E T E R   A N D   V A R   S T U F F
-// -------------------------------------------------
+// Types
+
+TypeModelDecl ::= 'Type' 'family' identifier TypeModelPortion ';'
+    'exemplar' identifier ';'
+    ConstraintsClause?
+    IntializationClause? {pin=3}
+
+private TypeModelPortion ::= 'is' 'modeled' 'by' MathExp {pin=4}
+
+TypeReprDecl ::= 'Type' identifier '=' (RecordType|Type) ';' {pin=2 methods=[getResTypeInner]}
+
+//TOOD: Really this should just be namedType (w/o records). Right now this
+//allows anonymous record types .. which is ok .. I GUESS.
+Type ::= RecordType | NamedType
+private NamedType ::= TypeReferenceExp QualifiedTypeReferenceExp?
+TypeReferenceExp ::= identifier { methods=[getReference getQualifier] }
+left QualifiedTypeReferenceExp ::= '::' identifier {elementType=TypeReferenceExp}
+
+RecordType ::= 'Record' RecordVarDeclGroup* 'end' {extends=Type}
 
 SpecModuleParameters ::= '(' SpecModuleParamList ')' {pin=1 }
-
 private SpecModuleParamList ::= SpecParamDecl  (';' SpecParamDecl)* {recoverWhile=ParamListRec}
-
 private SpecParamDecl ::= TypeParamDecl | ParamDecl
 
 private OperationLikeParameters ::= '(' OpParamList? ')' {pin=1}
@@ -251,6 +266,12 @@ private OpParamList ::= ParamDecl (';' ParamDecl)* {pin=1 recoverWhile=ParamList
 ParamDecl ::= ParameterMode ParamDefinitionListNoPin ':' Type {pin=1}
 private ParamDefinitionListNoPin ::= ParamDef &(!(';'|')')) (',' ParamDef)* {pin=1}
 ParamDef ::= identifier
+
+//TODO
+VarDeclGroup ::= 'Var' VarSpec ';' {pin=1}
+VarSpec ::= VarDefList ':' Type {pin=1}//{methods=[processDeclarations]}
+private VarDefList ::= VarDef &(!(';'))(',' VarDef)*
+VarDef ::= identifier {methods=[getResTypeInner getReference]}
 
 RecordVarDeclGroup ::= FieldVarDeclGroup ';' {pin=1}
 FieldVarDeclGroup ::= FieldVarDefList ':' Type {pin=1}
@@ -270,19 +291,6 @@ ParameterMode ::=
     | identifier //TODO: would like to get rid of identifier here, but results
                  //in an uglier (partial) psi; which makes keyword completion
                  //patterns much harder
-// Types
-
-TypeReprDecl ::= 'Type' identifier '=' (RecordType|Type) ';' {pin=2 methods=[getResTypeInner]}
-
-//TOOD: Really this should just be namedType (w/o records). Right now this
-//allows anonymous record types .. which is ok .. I GUESS.
-Type ::= RecordType | NamedType
-private NamedType ::= TypeReferenceExp QualifiedTypeReferenceExp?
-TypeReferenceExp ::= identifier { methods=[getReference getQualifier] }
-left QualifiedTypeReferenceExp ::= '::' identifier {elementType=TypeReferenceExp}
-
-RecordType ::= 'Record' RecordVarDeclGroup* 'end' {extends=Type}
-
 // Facilities
 
 FacilityDecl ::= 'Facility' identifier 'is' ModuleSpec
@@ -290,14 +298,20 @@ FacilityDecl ::= 'Facility' identifier 'is' ModuleSpec
 
 // operations
 
-OperationDecl ::= 'Operation' identifier OperationLikeParameters (':' Type)? ';'
+OperationDecl ::=
+'Operation' identifier OperationLikeParameters (':' Type)? ';'
     RequiresClause? EnsuresClause? {pin=2}
 
-OperationProcedureDecl ::= 'Operation' identifier OperationLikeParameters (':' Type)? ';'
+OperationProcedureDecl ::=
+'Operation' identifier OperationLikeParameters (':' Type)? ';'
 RequiresClause? EnsuresClause?
 ('Recursive')? 'Procedure'
+OpBlock
+'end' CloseIdentifier ';' {pin=2}
 
-'end' CloseIdentifier ';' {pin=1}
+OpBlock ::=
+VarDeclGroup*
+Statements?
 
 /** We cannot have two identifiers referenced in a rule (where one, say, the
  *  first, is pinned): the code doesn't gen a getter for your pinned
@@ -305,16 +319,50 @@ RequiresClause? EnsuresClause?
  */
 CloseIdentifier ::= identifier
 
-// -------------------------------------------------
-//  M A T H   C O N S T R U C T S   &   E X P R S
-// -------------------------------------------------
+private Statements ::= Statement* {recoverWhile=StatementRecover}
 
-TypeModelDecl ::= 'Type' 'family' identifier TypeModelPortion ';'
-    'exemplar' identifier ';'
-    ConstraintsClause?
-    IntializationClause? {pin=3}
+Statement ::=
+      SimpleStatement
+   // | IfStatement
 
-private TypeModelPortion ::= 'is' 'modeled' 'by' MathExp {pin=4}
+private StatementRecover ::= !('end'|':='|':=:'|'If'|identifier)
+SimpleStatement ::=
+      Exp (AssignStatement|SwapStatement)? ';' {pin(".*")=1}
+
+left AssignStatement ::= ':=' Exp {pin=1}
+left SwapStatement ::= ':=:' Exp {pin=1}
+
+// Prog exprs
+
+Exp ::=
+      //OrExpr
+     Primary {methods=[getResType] implements="edu.clemson.resolve.plugin.psi.ResTypeOwner"}
+
+fake InfixExp ::= Exp+ {
+  methods=[left="Exp[0]" right="Exp[1]"]
+}
+
+private Primary ::=
+      NameExp
+   // | CallExpr
+  //  | SelectorExp
+
+NameExp ::= ReferenceExp QualifiedReferenceExp? {elementType=ReferenceExp}
+
+left QualifiedReferenceExp ::= '::' identifier {elementType=ReferenceExp}
+ReferenceExp ::= identifier { methods=[getReference getQualifier] extends=Exp}
+
+//CallExpr ::= NameExpr ArgumentList
+
+/*ArgumentList ::= '(' ExpressionArgList? ')' {pin=1}
+private ExpressionArgList ::= ProgExpWithRecover (',' ProgExpWithRecover)* {pin(".*")=1}
+private ProgExpWithRecover ::= ProgExp {recoverWhile=ProgExpListRecover}
+private ProgExpListRecover ::= !('%' | '+' | '-' | '(' | ')' | ',' | '*' | '++' | '<' | '<=' | '>' | '>=' | 'end' | 'Operation' | 'Type' | 'Facility')
+*/
+
+SelectorExp ::= Exp '.' Exp
+
+// Math clauses and exprs
 
 IntializationClause ::= 'initialization' (EnsuresClause) {pin=1};
 
@@ -400,6 +448,7 @@ MathDivInfixApplyExp ::= MathExp '/' MathExp
 MathCatInfixApplyExp ::= MathExp ('o'|'union'|'intersect'|'is_in'|'is_not_in') MathExp
 MathRangeInfixApplyExp ::= MathExp '->' MathExp
 MathIncomingUnaryApplyExp ::= '@' MathExp
+MathPrefixApplyExp ::= MathExp '(' MathArgList')' {pin=2}
 
 MathRelationalInfixApplyExp ::= MathExp ('<' | '>' | '<=' | '>=' | '=' | '/=') MathExp
 MathCustomInfixApplyExp ::= MathExp identifier MathExp
@@ -425,9 +474,7 @@ private MathPrimary ::=
 MathSelectorExp ::= MathExp '.' MathExp
 
 MathLambdaExp ::= lambda MathDefinitionParams '.' '(' MathExp ')' {pin=1}
-
 MathAlternativeExp ::= '{{' (MathAlternativeItemExp)* '}}'
-
 MathAlternativeItemExp ::= MathExp ('if' MathExp ';' | 'otherwise' ';') {pin=1}
 
 private ResMathCartVarGroup ::= MathVarDeclGroup ';' {pin=1}
@@ -437,24 +484,17 @@ fake MathInfixApplyExp ::= MathExp+ {
   methods=[left="MathExp[0]" right="MathExp[1]"]
 }
 
-MathPrefixApplyExp ::=
-    MathExp '(' MathArgList')' {pin=2}
-
 private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
 
 MathSymbolExp ::=  MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}
-
 left MathQualifiedReferenceExp ::= '::' MathNameIdentifier {elementType=MathReferenceExp}
-
 MathReferenceExp ::= MathNameIdentifier {methods=[getReference getQualifier getIdentifier] extends=MathExp}
 
 MathSetComprehensionExp ::= '{' MathSingletonVarDecl '|' MathExp '}'
-
 MathSetExp ::= '{' MathSetElementsList? '}' {pin=2}
-
 MathSetElementsList ::= MathExp (',' MathExp)* {recoverWhile=MathSetEleRecover}
-
 private MathSetEleRecover ::= !('}')
+
 MathLiteralExp ::= (int|'true'|'false')
 
 MathNameIdentifier ::= identifier|('and'|'or'|'not'|'o'|'true'|'false'|int|'+'|'-')
