@@ -195,6 +195,7 @@ ConceptBlock
 
 FacilityModuleDecl ::= 'Facility' identifier ';'
 UsesItemList?
+RequiresClause?
 FacilityBlock
 'end' identifier ';' {pin(".*")=1}
 
