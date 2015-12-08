@@ -175,7 +175,7 @@ ModuleDecl ::=
       PrecisModuleDecl
     | PrecisExtensionModuleDecl
     | ConceptModuleDecl
-    | FacilityModuleDecl <<eof>>
+    | FacilityModuleDecl
 
 PrecisModuleDecl ::= 'Precis' identifier ';'
 UsesItemList?
@@ -195,7 +195,6 @@ ConceptBlock
 
 FacilityModuleDecl ::= 'Facility' identifier ';'
 UsesItemList?
-RequiresClause?
 FacilityBlock
 'end' identifier ';' {pin(".*")=1}
 
