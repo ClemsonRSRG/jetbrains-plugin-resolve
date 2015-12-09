@@ -10,6 +10,7 @@ import com.intellij.codeInsight.lookup.LookupElementRenderer;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.Function;
 import com.intellij.util.ui.UIUtil;
 import edu.clemson.resolve.plugin.RESOLVEIcons;
 import edu.clemson.resolve.plugin.psi.*;
@@ -87,7 +88,13 @@ public class RESOLVECompletionUtil {
                     String typeText = "";
                     String paramText = "";
 
-                    paramText = oAsOp.getParamDeclList().toString();
+                    paramText += "(" + StringUtil.join(oAsOp.getParamDeclList(),
+                            new Function<ResParamDecl, String>() {
+                        @Override public String fun(ResParamDecl resParamDecl) {
+                            return resParamDecl.getText();
+                        }
+                    }, ", ") + ")";
+
                     ResType type = oAsOp.getType();
                     if (type != null) typeText = type.getText();
 
