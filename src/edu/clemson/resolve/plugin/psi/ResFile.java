@@ -68,15 +68,15 @@ public class ResFile extends PsiFileBase {
                 new ArrayList<ResFacilityDecl>();
     }
 
-    /*@NotNull public List<ResOperationDecl> getOperationDecls() {
+    @NotNull public List<ResOperationLikeNode> getOperationLikeThings() {
         ResModuleDecl enclosedModule = getEnclosedModule();
-        List<ResOperationDecl> result = enclosedModule != null ?
-                enclosedModule.getOperations() :
-                new ArrayList<ResOperationDecl>();
+        List<ResOperationLikeNode> result = enclosedModule != null ?
+                enclosedModule.getOperationLikeThings() :
+                new ArrayList<ResOperationLikeNode>();
         return result;
     }
 
-    @NotNull public List<ResOperationWithBodyNode> getOperationImpls() {
+    /*@NotNull public List<ResOperationWithBodyNode> getOperationImpls() {
         ResModuleDecl enclosedModule = getEnclosedModule();
         return enclosedModule != null ? enclosedModule.getOperationsWithImpls() :
                 new ArrayList<ResOperationWithBodyNode>();

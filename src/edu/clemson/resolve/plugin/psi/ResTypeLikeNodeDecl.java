@@ -5,7 +5,7 @@ import edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeNodeImpl;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Encompasses type model declarations and type representation declarations.
+ * Encompasses type model and representation declarations.
  * Implementations of common methods between the two constructs can be found
  * in {@link ResAbstractTypeLikeNodeImpl}.
  *

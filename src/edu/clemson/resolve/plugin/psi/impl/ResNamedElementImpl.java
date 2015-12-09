@@ -67,6 +67,27 @@ public abstract class ResNamedElementImpl
                 this, processor, state, lastParent, place);
     }
 
+    @Nullable @Override public ResType getResType(
+            @Nullable ResolveState context) {
+        if (context != null) return getResTypeInner(context);
+        return CachedValuesManager.getCachedValue(this,
+                new CachedValueProvider<ResType>() {
+                    @Nullable @Override public Result<ResType> compute() {
+                        return Result.create(getResTypeInner(null),
+                                PsiModificationTracker.MODIFICATION_COUNT);
+                    }
+                });
+    }
+
+    @Nullable protected ResType getResTypeInner(
+            @Nullable ResolveState context) {
+        return findSiblingType();
+    }
+
+    @Nullable @Override public ResType findSiblingType() {
+        return PsiTreeUtil.getNextSiblingOfType(this, ResType.class);
+    }
+
     @Nullable @Override public Icon getIcon(int flags) {
         Icon icon = null;
         if (this instanceof ResPrecisModuleDecl) icon = RESOLVEIcons.PRECIS;
@@ -74,14 +95,13 @@ public abstract class ResNamedElementImpl
         else if (this instanceof ResConceptModuleDecl) icon = RESOLVEIcons.CONCEPT;
         else if (this instanceof ResFacilityModuleDecl) icon = RESOLVEIcons.FACILITY;
         else if (this instanceof ResTypeModelDecl) icon = RESOLVEIcons.TYPE_MODEL;
+        else if (this instanceof ResTypeReprDecl) icon = RESOLVEIcons.TYPE_REPR;
         else if (this instanceof ResFacilityDecl) icon = RESOLVEIcons.FACILITY;
         else if (this instanceof ResTypeParamDecl) icon = RESOLVEIcons.GENERIC_TYPE;
         else if (this instanceof ResMathVarDef) icon = RESOLVEIcons.VARIABLE;
+        else if (this instanceof ResOperationDecl) icon = RESOLVEIcons.FUNCTION_DECL;
+        else if (this instanceof ResOperationWithBodyNode) icon = RESOLVEIcons.FUNCTION_IMPL;
         else if (this instanceof ResParamDef) icon = RESOLVEIcons.PARAMETER;
-
-/*        else if (this instanceof ResTypeReprDecl) icon = RESOLVEIcons.TYPE;
-        else if (this instanceof ResVarDef) icon = RESOLVEIcons.VARIABLE;
-        else if (this instanceof ResFieldDef) icon = RESOLVEIcons.FIELD;*/
         //TODO: complete the icon list here as you go along
         if (icon != null) {
             if ((flags & Iconable.ICON_FLAG_VISIBILITY) != 0) {

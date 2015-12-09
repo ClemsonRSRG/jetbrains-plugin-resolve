@@ -46,8 +46,8 @@
         <liveTemplateContext implementation="edu.clemson.resolve.plugin.template.RESOLVEEverywhereContextType"/>
         <!--<liveTemplateContext implementation="edu.clemson.resolve.plugin.template.RESOLVELiveTemplateContextType$RESOLVEFileContextType"/> -->
 
-        <!--<completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVEKeywordCompletionContributor"/>-->
         <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVECompletionContributor"/>
+        <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVEKeywordCompletionContributor"/>
 
         <lang.syntaxHighlighterFactory key="RESOLVE" implementationClass="edu.clemson.resolve.plugin.highlighting.RESOLVESyntaxHighlighterFactory"/>
         <colorSettingsPage implementation="edu.clemson.resolve.plugin.highlighting.RESOLVEColorsAndFontsPage"/>

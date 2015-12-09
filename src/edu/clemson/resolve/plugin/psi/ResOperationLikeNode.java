@@ -11,7 +11,7 @@ import java.util.List;
  * includes top level operation declarations, procedure implementations, and
  * private operation declarations (with impls) as would be found in a facility.
  *
- * @author dan welch <dtw.welch@gmail.com>
+ * @author dtwelch <dtw.welch@gmail.com>
  * @since 0.0.1
  */
 public interface ResOperationLikeNode extends ResNamedElement {

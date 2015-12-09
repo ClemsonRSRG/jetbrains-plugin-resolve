@@ -9,8 +9,12 @@ import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.codeInsight.lookup.LookupElementRenderer;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.Function;
+import com.intellij.util.ui.UIUtil;
 import edu.clemson.resolve.plugin.RESOLVEIcons;
 import edu.clemson.resolve.plugin.psi.*;
+import edu.clemson.resolve.plugin.psi.impl.ResPsiImplUtil;
 import groovy.lang.Lazy;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,14 +24,31 @@ import javax.swing.*;
 public class RESOLVECompletionUtil {
 
     public static final int VAR_PRIORITY = 30;
+    public static final int FUNCTION_PRIORITY = 15;
     public static final int FACILITY_PRIORITY = 5;
-    public static final int DEFINITION_PRIORITY = 15;
+    public static final int DEFINITION_PRIORITY = 10;
     public static final int TYPE_PRIORITY = 20;
+    public static final int KEYWORD_PRIORITY = 35;
 
     private static class Lazy {
         private static final QualifierInsertHandler FACILITY_INSERT_HANDLER =
                 new QualifierInsertHandler("::", true); //TODO: it'd be nice if there were a way for the user to set padding options..
     }
+
+    public static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER =
+            new InsertHandler<LookupElement>() {
+                @Override
+                public void handleInsert(InsertionContext context, LookupElement item) {
+                    PsiElement element = item.getPsiElement();
+                    if (!(element instanceof ResOperationLikeNode)) return;
+                    ResOperationLikeNode elementAsOp = (ResOperationLikeNode)element;
+                    int paramsCount = elementAsOp.getParamDeclList().size();
+                    InsertHandler<LookupElement> handler =
+                            paramsCount == 0 ? ParenthesesInsertHandler.NO_PARAMETERS :
+                                    ParenthesesInsertHandler.WITH_PARAMETERS;
+                    handler.handleInsert(context, item);
+                }
+            };
 
     public static final LookupElementRenderer<LookupElement> VARIABLE_RENDERER =
             new LookupElementRenderer<LookupElement>() {
@@ -37,14 +58,13 @@ public class RESOLVECompletionUtil {
                     PsiElement o = element.getPsiElement();
                     if (!(o instanceof ResNamedElement)) return;
                     ResNamedElement v = (ResNamedElement)o;
-                    String typeText = "";
+                    ResType type = v.getResType(null);
+                    String text = ResPsiImplUtil.getText(type);
                     Icon icon = v instanceof ResMathVarDef ? RESOLVEIcons.VARIABLE :
+                                v instanceof ResVarDef ? RESOLVEIcons.VARIABLE :
                                 v instanceof ResParamDef ? RESOLVEIcons.PARAMETER :
                                 v instanceof ResTypeParamDecl ? RESOLVEIcons.GENERIC_TYPE :
-
-                           /* v instanceof ResFieldDefinition ? RESOLVEIcons.FIELD :
-                                            v instanceof ResConstDefinition ? RESOLVEIcons.CONSTANT :*/
-                            null;
+                                v instanceof ResFieldDef ? RESOLVEIcons.RECORD_FIELD : null;
 
                     if (v instanceof ResMathVarDef) {
                         //Todo: Need to write a getResTypeInner method and put it into the psi util class;
@@ -52,14 +72,42 @@ public class RESOLVECompletionUtil {
                         //typeText += v.get
                     }
                     p.setIcon(icon);
-                    //p.setTailText(calcTailTextForFields(v), true);
-                    //p.setTypeText(text);
+                    p.setTailText(calcTailTextForFields(v), true);
+                    p.setTypeText(text);
                     p.setTypeGrayed(true);
                     p.setItemText(element.getLookupString());
                 }
             };
 
-    //TODO: If it's infix we don't want to insert parens.
+    public static final LookupElementRenderer<LookupElement> FUNCTION_RENDERER =
+            new LookupElementRenderer<LookupElement>() {
+                @Override public void renderElement(LookupElement element,
+                                                    LookupElementPresentation p) {
+                    PsiElement o = element.getPsiElement();
+                    if (!(o instanceof ResOperationLikeNode)) return;
+                    ResOperationLikeNode oAsOp = (ResOperationLikeNode)o;
+                    String typeText = "";
+                    String paramText = "";
+
+                    paramText += "(" + StringUtil.join(oAsOp.getParamDeclList(),
+                            new Function<ResParamDecl, String>() {
+                        @Override public String fun(ResParamDecl resParamDecl) {
+                            return resParamDecl.getText();
+                        }
+                    }, ", ") + ")";
+
+                    ResType type = oAsOp.getType();
+                    if (type != null) typeText = type.getText();
+
+                    p.setIcon(oAsOp.getIcon(0));
+                    p.setTypeText(typeText);
+                    p.setTypeGrayed(true);
+                    //p.setTailText(calcTailText(f), true);
+                    p.setItemText(element.getLookupString() + paramText);
+                }
+            };
+
+    //TODO: Insert handler for infix defn signatures; Whitespace on lhs and rhs of name
     public static final InsertHandler<LookupElement> DEFINITION_INSERT_HANDLER =
             new InsertHandler<LookupElement>() {
                 @Override public void handleInsert(InsertionContext context,
@@ -90,6 +138,7 @@ public class RESOLVECompletionUtil {
                     ResMathDefinitionSignature signature = (ResMathDefinitionSignature)o;
                     String typeText = "";
 
+                    //Todo, move the following printing business logic into a method somewhere in ResPsiImplUtil
                     ResCompositeElement mathType = signature.getMathTypeExp();
                     boolean first = true;
                     for (ResMathVarDeclGroup grp : signature.getParameters()) {
@@ -127,28 +176,20 @@ public class RESOLVECompletionUtil {
         return new CamelHumpMatcher(prefix, false);
     }
 
+    @NotNull public static LookupElement createFunctionOrMethodLookupElement(
+            @NotNull ResOperationLikeNode f, @NotNull String lookupString,
+            @Nullable InsertHandler<LookupElement> h, double priority) {
+        return PrioritizedLookupElement.withPriority(LookupElementBuilder
+                .createWithSmartPointer(lookupString, f)
+                .withRenderer(FUNCTION_RENDERER)
+                .withInsertHandler(h != null ? h : FUNCTION_INSERT_HANDLER), priority);
+    }
+
     @Nullable public static LookupElement createVariableLikeLookupElement(
             @NotNull ResNamedElement v) {
         String name = v.getName();
         if (StringUtil.isEmpty(name)) return null;
-        return createVariableLikeLookupElement(v, name, /*v instanceof ResFieldDef
-                ? new SingleCharInsertHandler(':') {
-            @Override
-            public void handleInsert(@NotNull InsertionContext context, LookupElement item) {
-                PsiFile file = context.getFile();
-                if (!(file instanceof ResFile)) return;
-                context.commitDocument();
-                int offset = context.getStartOffset();
-                PsiElement at = file.findElementAt(offset);
-                ResCompositeElement ref = PsiTreeUtil.getParentOfType(at, GoValue.class, GoReferenceExpression.class);
-                if (ref instanceof ResRefExp && (((ResRefExp)ref).getQualifier() != null || GoPsiImplUtil.prevDot(ref))) {
-                    return;
-                }
-                ResValue value = PsiTreeUtil.getParentOfType(at, ResValue.class);
-                if (value == null || PsiTreeUtil.getPrevSiblingOfType(value, ResKey.class) != null) return;
-                super.handleInsert(context, item);
-            }
-        } :*/ null, VAR_PRIORITY);
+        return createVariableLikeLookupElement(v, name, null, VAR_PRIORITY);
     }
 
     @NotNull public static LookupElement createVariableLikeLookupElement(
@@ -200,5 +241,17 @@ public class RESOLVECompletionUtil {
                 LookupElementBuilder.create(name)
                         .withInsertHandler(Lazy.FACILITY_INSERT_HANDLER)
                         .withIcon(RESOLVEIcons.FACILITY), FACILITY_PRIORITY);
+    }
+
+    @Nullable private static String calcTailTextForFields(
+            @NotNull ResNamedElement v) {
+        String name = null;
+        if (v instanceof ResFieldDef) {
+            ResTypeLikeNodeDecl spec =
+                    PsiTreeUtil.getParentOfType(v, ResTypeLikeNodeDecl.class);
+            name = spec != null ? spec.getName() : null;
+        }
+        return StringUtil.isNotEmpty(name) ? " " +
+                UIUtil.rightArrow() + " " + name : null;
     }
 }

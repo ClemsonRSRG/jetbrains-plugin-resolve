@@ -17,7 +17,7 @@ public class RESOLVEKeywordCompletionContributor
         extends
             CompletionContributor implements DumbAware {
 
-  /*  public RESOLVEKeywordCompletionContributor() {
+    public RESOLVEKeywordCompletionContributor() {
 
         extend(CompletionType.BASIC, modulePattern(),
                 new RESOLVEKeywordCompletionProvider(
@@ -73,7 +73,7 @@ public class RESOLVEKeywordCompletionContributor
     }
 
     private static Capture<PsiElement> vanillaUsesPattern() {
-        return onKeywordStartWithParent(psiElement(ResModuleBlock.class)
+        return onKeywordStartWithParent(psiElement(ResBlock.class)
                 .withParent(ResModuleDecl.class)
                 .isFirstAcceptedChild(psiElement()));
     }
@@ -85,12 +85,12 @@ public class RESOLVEKeywordCompletionContributor
     //TODO: Fix, allows erroneous interleaving w/ stats
     private static Capture<PsiElement> variablePattern() {
         return psiElement(ResTypes.IDENTIFIER)
-                .withParent(psiElement(ResTypes.REFERENCE_EXPRESSION));
+                .withParent(psiElement(ResTypes.REFERENCE_EXP));
     }
 
     private static Capture<PsiElement> recordTypePattern() {
         return psiElement(ResTypes.IDENTIFIER)
-                .withParent(psiElement(ResTypes.TYPE_REFERENCE_EXPRESSION)
+                .withParent(psiElement(ResTypes.TYPE_REFERENCE_EXP)
                         .withParent(psiElement()
                                 .withParent(ResTypeReprDecl.class)));
     }
@@ -124,8 +124,8 @@ public class RESOLVEKeywordCompletionContributor
 
     private static Capture<PsiElement> topLevelModulePattern(
             Class<? extends ResModuleDecl> moduleType,
-            Class<? extends ResModuleBlock> blockType) {
+            Class<? extends ResBlock> blockType) {
       return onKeywordStartWithParent(psiElement(blockType)
               .withParent(moduleType));
-    }*/
+    }
 }
