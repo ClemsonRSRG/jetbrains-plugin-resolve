@@ -9,8 +9,9 @@ type vertex struct {
 	foo int;
 }
 
-func foo()  {
+func foo(birdy int,
+					jackrabbit int)  {
 	var pss person;
 	pss.vert.foo;
-	pss =
+	f
 }

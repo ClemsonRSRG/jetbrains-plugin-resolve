@@ -9,6 +9,7 @@ import edu.clemson.resolve.plugin.ResTypes;
 import edu.clemson.resolve.plugin.psi.ResMathNameIdentifier;
 import edu.clemson.resolve.plugin.psi.ResModuleSpec;
 import edu.clemson.resolve.plugin.psi.ResReferenceExpBase;
+import org.jetbrains.annotations.NotNull;
 
 import static com.intellij.patterns.PlatformPatterns.*;
 
@@ -38,10 +39,8 @@ public class RESOLVECompletionContributor extends CompletionContributor {
    //             .withReference(ResCachedReference.class));
    // }
 
-    /**
-     * Allow autoPopup to appear after custom symbol
-     */
-   // public boolean invokeAutoPopup(@NotNull PsiElement position, char typeChar) {
-   //     return typeChar != ';' && typeChar != ' ' && typeChar != ')';
-   // }
+    /** Allow autoPopup to appear after custom symbol */
+    public boolean invokeAutoPopup(@NotNull PsiElement position, char typeChar) {
+        return typeChar != ';' && typeChar != ' ' && typeChar != ')';
+    }
 }

@@ -125,21 +125,6 @@ public class RESOLVEReferenceCompletionProvider
                 return RESOLVECompletionUtil
                         .createVariableLikeLookupElement((ResNamedElement) o);
             }
-        /*
-            else if (o instanceof ResNamedSignatureOwner &&
-                    ((ResNamedSignatureOwner)o).getName() != null) {
-                String name = ((ResNamedSignatureOwner)o).getName();
-                if (name != null) {
-                    return RESOLVECompletionUtil
-                            .createFunctionOrMethodLookupElement(
-                                    (ResNamedSignatureOwner) o, name, null,
-                                    RESOLVECompletionUtil.FUNCTION_PRIORITY);
-                }
-            }
-            else {
-                return RESOLVECompletionUtil
-                        .createVariableLikeLookupElement((ResNamedElement) o);
-            }*/
         }
         return null;
     }

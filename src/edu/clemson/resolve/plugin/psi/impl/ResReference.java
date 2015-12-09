@@ -92,10 +92,30 @@ public class ResReference
         if (!(file instanceof ResFile)) return false;
         ResolveState state = ResolveState.initial();
         ResReferenceExpBase qualifier = myElement.getQualifier();
-        return //qualifier != null
-                // ? processQualifierExpression(((ResFile)file), qualifier, processor, state)
-                //:
+        return qualifier != null ?
+                processQualifierExpression(((ResFile)file), qualifier, processor, state) :
                 processUnqualifiedResolve(((ResFile) file), processor, state, true);
+    }
+
+
+    private boolean processQualifierExpression(@NotNull ResFile file,
+                                               @NotNull ResReferenceExpBase qualifier,
+                                               @NotNull ResScopeProcessor processor,
+                                               @NotNull ResolveState state) {
+        PsiReference reference = qualifier.getReference();
+        PsiElement target = reference != null ? reference.resolve() : null;
+        if (target == null || target == qualifier) return false;
+        if (target instanceof ResFacilityDecl) {
+            ResFile spec = ((ResFacilityDecl)target).getSpecification();
+            if (spec == null) return false;
+            processModuleLevelEntities(spec, processor, state, false);
+        }
+        //Todo look into the logic down here
+        if (target instanceof ResTypeOwner) {
+            ResType type = ((ResTypeOwner)target).getResType(createContext());
+            if (type != null && !processResType(type, processor, state)) return false;
+        }
+        return true;
     }
 
     private boolean processUnqualifiedResolve(@NotNull ResFile file,
