@@ -95,6 +95,7 @@ public abstract class ResNamedElementImpl
         else if (this instanceof ResConceptModuleDecl) icon = RESOLVEIcons.CONCEPT;
         else if (this instanceof ResFacilityModuleDecl) icon = RESOLVEIcons.FACILITY;
         else if (this instanceof ResTypeModelDecl) icon = RESOLVEIcons.TYPE_MODEL;
+        else if (this instanceof ResTypeReprDecl) icon = RESOLVEIcons.TYPE_REPR;
         else if (this instanceof ResFacilityDecl) icon = RESOLVEIcons.FACILITY;
         else if (this instanceof ResTypeParamDecl) icon = RESOLVEIcons.GENERIC_TYPE;
         else if (this instanceof ResMathVarDef) icon = RESOLVEIcons.VARIABLE;
