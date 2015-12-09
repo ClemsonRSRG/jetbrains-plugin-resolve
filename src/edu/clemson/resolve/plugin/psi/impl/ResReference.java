@@ -11,6 +11,7 @@ import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,7 +20,7 @@ import java.util.List;
 public class ResReference
         extends
             PsiPolyVariantReferenceBase<ResReferenceExpBase> {
-
+    public static final Key<SmartPsiElementPointer<ResReferenceExpBase>> CONTEXT = Key.create("CONTEXT");
     public static final Key<String > ACTUAL_NAME = Key.create("ACTUAL_NAME");
 
     private static final ResolveCache
@@ -34,6 +35,10 @@ public class ResReference
                             .resolveInner();
                 }
             };
+
+    @NotNull private PsiElement getIdentifier() {
+        return myElement.getIdentifier();
+    }
 
     public ResReference(@NotNull ResReferenceExpBase o) {
         super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(),
@@ -96,20 +101,47 @@ public class ResReference
                                               @NotNull ResScopeProcessor processor,
                                               @NotNull ResolveState state,
                                               boolean localResolve) {
-        //ResScopeProcessorBase delegate = createVarDelegate(processor);
-        //processParameterLikeThings
+        PsiElement parent = myElement.getParent();
+        if (parent instanceof ResSelectorExp) {
+            boolean result = processSelector((ResSelectorExp)parent, processor, state, myElement);
+            if (processor.isCompletion()) return result;
+            if (!result || ResPsiImplUtil.prevDot(myElement)) return false;
+        }
+        PsiElement grandPa = parent.getParent();
+        if (grandPa instanceof ResSelectorExp && !processSelector((ResSelectorExp)grandPa, processor, state, parent)) return false;
+        if (ResPsiImplUtil.prevDot(parent)) return false;
+
+        if (!processBlock(processor, state, true)) return false;
+
         return true;
     }
 
-    /*@NotNull private ResVarProcessor createVarDelegate(
-            @NotNull ResScopeProcessor processor) {
-        return new ResVarProcessor(getName(), myElement, processor.isCompletion(), true) {
-            @Override
-            protected boolean crossOff(@NotNull PsiElement e) {
-                return super.crossOff(e);
-            }
-        };
-    }*/
+    private boolean processSelector(@NotNull ResSelectorExp parent,
+                                    @NotNull ResScopeProcessor processor,
+                                    @NotNull ResolveState state,
+                                    @Nullable PsiElement another) {
+        List<ResExp> list = parent.getExpList();
+        if (list.size() > 1 && list.get(1).isEquivalentTo(another)) {
+            ResType type = list.get(0).getResType(createContext());
+            //if (type != null && !processResType(type, processor, state)) return false;
+        }
+        return true;
+    }
+
+    @NotNull public ResolveState createContext() {
+        return ResolveState.initial().put(CONTEXT,
+                SmartPointerManager.getInstance(myElement.getProject())
+                        .createSmartPsiElementPointer(myElement));
+    }
+
+    private boolean processBlock(@NotNull ResScopeProcessor processor,
+                                 @NotNull ResolveState state,
+                                 boolean localResolve) {
+        ResScopeProcessorBase delegate = createDelegate(processor);
+        ResolveUtil.treeWalkUp(myElement, delegate);
+        return processNamedElements(processor, state, delegate.getVariants(),
+                localResolve);
+    }
 
     static boolean processUsesRequests(@NotNull ResFile file,
                                        @NotNull ResScopeProcessor processor,
@@ -240,6 +272,17 @@ public class ResReference
                     !processor.execute(definition, state)) return false;
         }
         return true;
+    }
+
+    @NotNull private ResVarReference.ResVarProcessor createDelegate(
+            @NotNull ResScopeProcessor processor) {
+        return new ResVarReference.ResVarProcessor(getIdentifier(), myElement,
+                processor.isCompletion(), true) {
+            @Override protected boolean crossOff(@NotNull PsiElement e) {
+                if (e instanceof ResFieldDef) return true;
+                return super.crossOff(e); //&& !(e instanceof ResTypeSpec);
+            }
+        };
     }
 
     private String getName() {

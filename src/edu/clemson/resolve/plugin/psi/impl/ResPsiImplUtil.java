@@ -71,7 +71,7 @@ public class ResPsiImplUtil {
     }
 
     @Nullable public static PsiReference getReference(@NotNull ResVarDef o) {
-        return null;
+        return new ResVarReference(o);
     }
 
     @NotNull public static PsiReference[] getReferences(
@@ -123,6 +123,15 @@ public class ResPsiImplUtil {
         return null;
     }
 
+    @Nullable public static ResType getResTypeInner(@NotNull ResVarDef o,
+                                                    @Nullable ResolveState context) {
+        PsiElement parent = o.getParent();
+        if (parent instanceof ResVarSpec) {
+            return ((ResVarSpec)parent).getType();
+        }
+        return null;
+    }
+
     /**
      * ok, in the go plugin don't be fooled by the seeming lack of connection between
      * UsesReferenceHelper and the FileContextProvider -- these are responsible
@@ -149,9 +158,8 @@ public class ResPsiImplUtil {
                                               PsiElement lastParent,
                                               @NotNull PsiElement place) {
         boolean isAncestor = PsiTreeUtil.isAncestor(o, place, false);
-        //if (o instanceof ResVarSpec) return isAncestor || ResCompositeElementImpl.processDeclarationsDefault(o, processor, state, lastParent, place);
-        if (isAncestor)
-            return ResCompositeElementImpl.processDeclarationsDefault(o, processor, state, lastParent, place);
+        if (o instanceof ResVarSpec) return isAncestor || ResCompositeElementImpl.processDeclarationsDefault(o, processor, state, lastParent, place);
+        if (isAncestor) return ResCompositeElementImpl.processDeclarationsDefault(o, processor, state, lastParent, place);
 
         if (o instanceof ResBlock) { //||
             // o instanceof ResIfStatement ||
