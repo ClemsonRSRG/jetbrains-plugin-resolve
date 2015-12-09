@@ -95,7 +95,7 @@ public class ResReference
         return //qualifier != null
                 // ? processQualifierExpression(((ResFile)file), qualifier, processor, state)
                 //:
-                processUnqualifiedResolve(((ResFile)file), processor, state, true);
+                processUnqualifiedResolve(((ResFile) file), processor, state, true);
     }
 
     private boolean processUnqualifiedResolve(@NotNull ResFile file,
@@ -241,10 +241,7 @@ public class ResReference
                                                         @NotNull ResScopeProcessor processor,
                                                         @NotNull ResolveState state,
                                                         boolean localProcessing) {
-        //if (!processNamedElements(processor, state, file.getConstants(), localProcessing)) return false;
-        //if (!processNamedElements(processor, state, file.getVars(), localProcessing)) return false;
-       /* if (!processNamedElements(processor, state, file.getOperationImpls(), localProcessing)) return false;
-        if (!processNamedElements(processor, state, file.getOperationDecls(), localProcessing)) return false;*/
+        if (!processNamedElements(processor, state, file.getOperationLikeThings(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getFacilities(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getMathDefinitionSignatures(), localProcessing)) return false;

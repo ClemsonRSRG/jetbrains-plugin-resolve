@@ -3,10 +3,7 @@ package edu.clemson.resolve.plugin.psi.impl;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
-import edu.clemson.resolve.plugin.psi.ResBlock;
-import edu.clemson.resolve.plugin.psi.ResCompositeElement;
-import edu.clemson.resolve.plugin.psi.ResOpBlock;
-import edu.clemson.resolve.plugin.psi.ResVarDef;
+import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -69,8 +66,10 @@ public class ResVarReference extends ResCachedReference<ResVarDef> {
             //TODO: NOT RIGHT YET.. SHOULD JUST BE A GENERAL FXN BLOCK...
             return PsiTreeUtil.getParentOfType(o, ResOpBlock.class);
         }
-        @Override protected boolean crossOff(@NotNull PsiElement element) {
-            return !(element instanceof ResVarDef);
+        @Override protected boolean crossOff(@NotNull PsiElement e) {
+            return !(e instanceof ResVarDef) &&
+                   !(e instanceof ResParamDef) &&
+                   !(e instanceof ResFieldDef);
         }
     }
 }

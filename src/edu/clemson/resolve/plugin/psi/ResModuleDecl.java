@@ -23,8 +23,6 @@ public interface ResModuleDecl extends ResNamedElement {
 
     @Nullable public ResModuleParameters getModuleParameters();
 
-    /*@NotNull public List<ResOperationDecl> getOperations();
+    @NotNull public List<ResOperationLikeNode> getOperationLikeThings();
 
-    @NotNull public List<ResOperationWithBodyNode> getOperationsWithImpls();
-    */
 }

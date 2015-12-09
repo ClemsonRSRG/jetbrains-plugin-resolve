@@ -306,7 +306,7 @@ OperationProcedureDecl ::=
 RequiresClause? EnsuresClause?
 ('Recursive')? 'Procedure'
 OpBlock
-'end' CloseIdentifier ';' {pin=2}
+'end' CloseIdentifier ';' {pin=2 implements="edu.clemson.resolve.plugin.psi.ResOperationWithBodyNode"}
 
 OpBlock ::=
 VarDeclGroup*
@@ -347,21 +347,19 @@ fake InfixExp ::= Exp+ {
 private Primary ::=
         NameExp
       | SelectorExp
-
-   // | CallExpr
+      | CallExp
 
 NameExp ::= ReferenceExp QualifiedReferenceExp? {elementType=ReferenceExp}
 
 left QualifiedReferenceExp ::= '::' identifier {elementType=ReferenceExp}
 ReferenceExp ::= identifier { methods=[getReference getQualifier] extends=Exp}
 
-//CallExpr ::= NameExpr ArgumentList
+CallExp ::= NameExp ArgumentList {extends=Exp}
 
-/*ArgumentList ::= '(' ExpressionArgList? ')' {pin=1}
-private ExpressionArgList ::= ProgExpWithRecover (',' ProgExpWithRecover)* {pin(".*")=1}
-private ProgExpWithRecover ::= ProgExp {recoverWhile=ProgExpListRecover}
-private ProgExpListRecover ::= !('%' | '+' | '-' | '(' | ')' | ',' | '*' | '++' | '<' | '<=' | '>' | '>=' | 'end' | 'Operation' | 'Type' | 'Facility')
-*/
+ArgumentList ::= '(' ExpressionArgList? ')' {pin=1}
+private ExpressionArgList ::= ExpressionWithRecover (',' ExpressionWithRecover)* {pin(".*")=1}
+private ExpressionWithRecover ::= Exp {recoverWhile=ExpressionListRecover}
+private ExpressionListRecover ::= !('%' | '+' | '-' | '(' | ')' | ',' | '*' | '++' | '<' | '<=' | '>' | '>=' | 'end' | 'Operation' | 'Type' | 'Facility')
 
 // Math clauses and exprs
 

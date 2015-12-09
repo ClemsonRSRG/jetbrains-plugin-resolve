@@ -99,11 +99,9 @@ public abstract class ResNamedElementImpl
         else if (this instanceof ResFacilityDecl) icon = RESOLVEIcons.FACILITY;
         else if (this instanceof ResTypeParamDecl) icon = RESOLVEIcons.GENERIC_TYPE;
         else if (this instanceof ResMathVarDef) icon = RESOLVEIcons.VARIABLE;
+        else if (this instanceof ResOperationDecl) icon = RESOLVEIcons.FUNCTION_DECL;
+        else if (this instanceof ResOperationWithBodyNode) icon = RESOLVEIcons.FUNCTION_IMPL;
         else if (this instanceof ResParamDef) icon = RESOLVEIcons.PARAMETER;
-
-/*        else if (this instanceof ResTypeReprDecl) icon = RESOLVEIcons.TYPE;
-        else if (this instanceof ResVarDef) icon = RESOLVEIcons.VARIABLE;
-        else if (this instanceof ResFieldDef) icon = RESOLVEIcons.FIELD;*/
         //TODO: complete the icon list here as you go along
         if (icon != null) {
             if ((flags & Iconable.ICON_FLAG_VISIBILITY) != 0) {

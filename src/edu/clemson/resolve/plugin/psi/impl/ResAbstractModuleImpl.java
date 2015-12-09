@@ -93,27 +93,16 @@ public abstract class ResAbstractModuleImpl
                 });
     }
 
-    /*@NotNull public List<ResOperationDecl> getOperations() {
+    @NotNull public List<ResOperationLikeNode> getOperationLikeThings() {
         return CachedValuesManager.getCachedValue(this,
-                new CachedValueProvider<List<ResOperationDecl>>() {
+                new CachedValueProvider<List<ResOperationLikeNode>>() {
                     @Override
-                    public Result<List<ResOperationDecl>> compute() {
-                        return Result.create(calc(ResOperationDecl.class),
+                    public Result<List<ResOperationLikeNode>> compute() {
+                        return Result.create(calc(ResOperationLikeNode.class),
                                 ResAbstractModuleImpl.this);
                     }
                 });
     }
-
-    @NotNull public List<ResOperationWithBodyNode> getOperationsWithImpls() {
-        return CachedValuesManager.getCachedValue(this,
-                new CachedValueProvider<List<ResOperationWithBodyNode>>() {
-                    @Override
-                    public Result<List<ResOperationWithBodyNode>> compute() {
-                        return Result.create(calc(ResOperationWithBodyNode.class),
-                                ResAbstractModuleImpl.this);
-                    }
-                });
-    }*/
 
     @NotNull private <T extends ResCompositeElement> List<T> calc(
             final Class<? extends T> type) {

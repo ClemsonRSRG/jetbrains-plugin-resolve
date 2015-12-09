@@ -111,6 +111,15 @@ public class RESOLVEReferenceCompletionProvider
                 return RESOLVECompletionUtil
                         .createFacilityLookupElement(((ResFacilityDecl) o));
             }
+            else if (o instanceof ResOperationLikeNode) {
+                String name = ((ResOperationLikeNode)o).getName();
+                if (name != null) {
+                    return RESOLVECompletionUtil
+                            .createFunctionOrMethodLookupElement(
+                                    (ResOperationLikeNode) o, name, null,
+                                    RESOLVECompletionUtil.FUNCTION_PRIORITY);
+                }
+            }
             else {
                 //TODO: Apply type info to the lookup renderers for these 'var like' elements
                 return RESOLVECompletionUtil
