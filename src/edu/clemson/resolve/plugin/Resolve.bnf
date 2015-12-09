@@ -152,7 +152,6 @@
     extends(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleImpl"
     extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|OperationProcedure|Facility)Decl)|ModuleSpec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
     extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeNodeImpl"
-    extends("(Selector)Exp")=InfixExp
 
     implements(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.ResModuleDecl"
     implements("OperationDecl|OperationProcedureDecl")="edu.clemson.resolve.plugin.psi.ResOperationLikeNode"
@@ -167,7 +166,7 @@
 
     extends("Math((Minus|Cat|Range|Plus|Div|Mult|Custom)InfixApplyExp|SelectorExp)")=MathInfixApplyExp // this attributes can be placed directly after rule
     extends("Math.*(Exp)")=MathExp
-    extends(".*(Exp)")=Exp
+    extends("OrInfixExp|SelectorExp")=InfixExp
 
     pin(".*Statement")=1
     extends(".*Statement")=Statement
@@ -335,17 +334,21 @@ left SwapStatement ::= ':=:' Exp {pin=1}
 // Prog exprs
 
 Exp ::=
-      //OrExpr
-     Primary {methods=[getResType] implements="edu.clemson.resolve.plugin.psi.ResTypeOwner"}
+      OrInfixExp
+    | Primary {methods=[getResType] implements="edu.clemson.resolve.plugin.psi.ResTypeOwner"}
+
+OrInfixExp ::= Exp 'or' Exp {extends=Exp}
+SelectorExp ::= Exp '.' Exp {extends=Exp}
 
 fake InfixExp ::= Exp+ {
   methods=[left="Exp[0]" right="Exp[1]"]
 }
 
 private Primary ::=
-      NameExp
+        NameExp
+      | SelectorExp
+
    // | CallExpr
-  //  | SelectorExp
 
 NameExp ::= ReferenceExp QualifiedReferenceExp? {elementType=ReferenceExp}
 
@@ -360,7 +363,6 @@ private ProgExpWithRecover ::= ProgExp {recoverWhile=ProgExpListRecover}
 private ProgExpListRecover ::= !('%' | '+' | '-' | '(' | ')' | ',' | '*' | '++' | '<' | '<=' | '>' | '>=' | 'end' | 'Operation' | 'Type' | 'Facility')
 */
 
-SelectorExp ::= Exp '.' Exp
 
 // Math clauses and exprs
 
