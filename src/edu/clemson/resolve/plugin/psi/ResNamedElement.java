@@ -9,12 +9,14 @@ import org.jetbrains.annotations.Nullable;
 
 public interface ResNamedElement
         extends
-            ResCompositeElement, PsiNameIdentifierOwner, NavigationItem {
+            ResTypeOwner, ResCompositeElement, PsiNameIdentifierOwner, NavigationItem {
 
     public boolean isPublic();
 
     @Nullable public PsiElement getIdentifier();
 
     @NotNull public PsiFile getContainingFile();
+
+    @Nullable ResType findSiblingType();
 
 }

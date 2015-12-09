@@ -24,5 +24,5 @@ public interface RESOLVEIcons {
     public static final Icon PARAMETER = IconLoader.getIcon("/edu/clemson/resolve/icons/parameter_alt.png");
     public static final Icon VARIABLE = IconLoader.getIcon("/edu/clemson/resolve/icons/variable.png");
 
-    Icon FIELD = AllIcons.Nodes.Field;
+    public static final Icon RECORD_FIELD = IconLoader.getIcon("/edu/clemson/resolve/icons/record_field.png");
 }

@@ -48,15 +48,12 @@ public class RESOLVEReferenceCompletionProvider
             PsiReference[] references = ((PsiMultiReference)reference).getReferences();
             ContainerUtil.sort(references, PsiMultiReference.COMPARATOR);
             fillVariantsByReference(ArrayUtil.getFirstElement(references), result);
-        } else if ..*/
-        if (reference instanceof ResReference) {
-            /*((ResReference)reference).processResolveVariants(new MyResScopeProcessor(result, false));
-            PsiElement element = reference.getElement();
-            if (element instanceof ResRefExp && PsiTreeUtil.getParentOfType(element, ResCompositeLit.class) != null) {
-                new ResFieldNameReference(((ResRefExp)element)).processResolveVariants(new MyResScopeProcessor(result, false));
-            }*/
+        }*/
+        else if (reference instanceof ResReference) {
+            ((ResReference)reference).processResolveVariants(
+                    new MyRESOLVEScopeProcessor(result, false));
         }
-        if (reference instanceof ResTypeReference) {
+        else if (reference instanceof ResTypeReference) {
             PsiElement element = reference.getElement();
             ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
                 @Override
@@ -80,9 +77,6 @@ public class RESOLVEReferenceCompletionProvider
             };
             ((ResMathVarLikeReference) reference).processResolveVariants(aProcessor);
         }
-        /*else if (reference instanceof ResCachedReference) {
-            ((ResCachedReference)reference).processResolveVariants(new MyResScopeProcessor(result, false));
-        }*/
     }
 
     private static void addElement(@NotNull PsiElement o,
@@ -108,7 +102,8 @@ public class RESOLVEReferenceCompletionProvider
                                     RESOLVECompletionUtil.DEFINITION_PRIORITY);
                 }
             }
-            else if (o instanceof ResTypeLikeNodeDecl || o instanceof ResTypeParamDecl) {
+            else if (o instanceof ResTypeLikeNodeDecl ||
+                     o instanceof ResTypeParamDecl) {
                 return RESOLVECompletionUtil
                         .createTypeLookupElement((ResNamedElement)o);
             }

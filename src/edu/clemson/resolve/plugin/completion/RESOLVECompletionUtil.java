@@ -9,8 +9,11 @@ import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.codeInsight.lookup.LookupElementRenderer;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.ui.UIUtil;
 import edu.clemson.resolve.plugin.RESOLVEIcons;
 import edu.clemson.resolve.plugin.psi.*;
+import edu.clemson.resolve.plugin.psi.impl.ResPsiImplUtil;
 import groovy.lang.Lazy;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,14 +40,12 @@ public class RESOLVECompletionUtil {
                     PsiElement o = element.getPsiElement();
                     if (!(o instanceof ResNamedElement)) return;
                     ResNamedElement v = (ResNamedElement)o;
-                    String typeText = "";
+                    ResType type = v.getResType(null);
+                    String text = ResPsiImplUtil.getText(type);
                     Icon icon = v instanceof ResMathVarDef ? RESOLVEIcons.VARIABLE :
                                 v instanceof ResParamDef ? RESOLVEIcons.PARAMETER :
                                 v instanceof ResTypeParamDecl ? RESOLVEIcons.GENERIC_TYPE :
-
-                           /* v instanceof ResFieldDefinition ? RESOLVEIcons.FIELD :
-                                            v instanceof ResConstDefinition ? RESOLVEIcons.CONSTANT :*/
-                            null;
+                                v instanceof ResFieldDef ? RESOLVEIcons.RECORD_FIELD : null;
 
                     if (v instanceof ResMathVarDef) {
                         //Todo: Need to write a getResTypeInner method and put it into the psi util class;
@@ -52,14 +53,14 @@ public class RESOLVECompletionUtil {
                         //typeText += v.get
                     }
                     p.setIcon(icon);
-                    //p.setTailText(calcTailTextForFields(v), true);
-                    //p.setTypeText(text);
+                    p.setTailText(calcTailTextForFields(v), true);
+                    p.setTypeText(text);
                     p.setTypeGrayed(true);
                     p.setItemText(element.getLookupString());
                 }
             };
 
-    //TODO: If it's infix we don't want to insert parens.
+    //TODO: Insert handler for infix defn signatures; Whitespace on lhs and rhs of name
     public static final InsertHandler<LookupElement> DEFINITION_INSERT_HANDLER =
             new InsertHandler<LookupElement>() {
                 @Override public void handleInsert(InsertionContext context,
@@ -90,6 +91,7 @@ public class RESOLVECompletionUtil {
                     ResMathDefinitionSignature signature = (ResMathDefinitionSignature)o;
                     String typeText = "";
 
+                    //Todo, move the following printing business logic into a method somewhere in ResPsiImplUtil
                     ResCompositeElement mathType = signature.getMathTypeExp();
                     boolean first = true;
                     for (ResMathVarDeclGroup grp : signature.getParameters()) {
@@ -131,24 +133,7 @@ public class RESOLVECompletionUtil {
             @NotNull ResNamedElement v) {
         String name = v.getName();
         if (StringUtil.isEmpty(name)) return null;
-        return createVariableLikeLookupElement(v, name, /*v instanceof ResFieldDef
-                ? new SingleCharInsertHandler(':') {
-            @Override
-            public void handleInsert(@NotNull InsertionContext context, LookupElement item) {
-                PsiFile file = context.getFile();
-                if (!(file instanceof ResFile)) return;
-                context.commitDocument();
-                int offset = context.getStartOffset();
-                PsiElement at = file.findElementAt(offset);
-                ResCompositeElement ref = PsiTreeUtil.getParentOfType(at, GoValue.class, GoReferenceExpression.class);
-                if (ref instanceof ResRefExp && (((ResRefExp)ref).getQualifier() != null || GoPsiImplUtil.prevDot(ref))) {
-                    return;
-                }
-                ResValue value = PsiTreeUtil.getParentOfType(at, ResValue.class);
-                if (value == null || PsiTreeUtil.getPrevSiblingOfType(value, ResKey.class) != null) return;
-                super.handleInsert(context, item);
-            }
-        } :*/ null, VAR_PRIORITY);
+        return createVariableLikeLookupElement(v, name, null, VAR_PRIORITY);
     }
 
     @NotNull public static LookupElement createVariableLikeLookupElement(
@@ -200,5 +185,17 @@ public class RESOLVECompletionUtil {
                 LookupElementBuilder.create(name)
                         .withInsertHandler(Lazy.FACILITY_INSERT_HANDLER)
                         .withIcon(RESOLVEIcons.FACILITY), FACILITY_PRIORITY);
+    }
+
+    @Nullable private static String calcTailTextForFields(
+            @NotNull ResNamedElement v) {
+        String name = null;
+        if (v instanceof ResFieldDef) {
+            ResTypeLikeNodeDecl spec =
+                    PsiTreeUtil.getParentOfType(v, ResTypeLikeNodeDecl.class);
+            name = spec != null ? spec.getName() : null;
+        }
+        return StringUtil.isNotEmpty(name) ? " " +
+                UIUtil.rightArrow() + " " + name : null;
     }
 }

@@ -254,9 +254,9 @@ private NamedType ::= TypeReferenceExp QualifiedTypeReferenceExp?
 TypeReferenceExp ::= identifier { methods=[getReference getQualifier] }
 left QualifiedTypeReferenceExp ::= '::' identifier {elementType=TypeReferenceExp}
 
-RecordType ::= 'Record' RecordVarDeclGroup* 'end' {extends=Type}
+RecordType ::= 'Record' RecordVarDeclGroup* 'end' {pin=1 extends=Type}
 
-SpecModuleParameters ::= '(' SpecModuleParamList ')' {pin=1 }
+SpecModuleParameters ::= '(' SpecModuleParamList ')' {pin=1}
 private SpecModuleParamList ::= SpecParamDecl  (';' SpecParamDecl)* {recoverWhile=ParamListRec}
 private SpecParamDecl ::= TypeParamDecl | ParamDecl
 
@@ -362,7 +362,6 @@ private ExpressionArgList ::= ProgExpWithRecover (',' ProgExpWithRecover)* {pin(
 private ProgExpWithRecover ::= ProgExp {recoverWhile=ProgExpListRecover}
 private ProgExpListRecover ::= !('%' | '+' | '-' | '(' | ')' | ',' | '*' | '++' | '<' | '<=' | '>' | '>=' | 'end' | 'Operation' | 'Type' | 'Facility')
 */
-
 
 // Math clauses and exprs
 

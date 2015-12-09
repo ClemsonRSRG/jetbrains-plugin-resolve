@@ -116,9 +116,15 @@ public class ResPsiImplUtil {
         if (o instanceof ResReferenceExp) {
             PsiReference reference = o.getReference();
             PsiElement resolve = reference != null ? reference.resolve() : null;
-            int i;
-            i=0;
-           // if (resolve instanceof ResTypeOwner) return typeOrParameterType((ResTypeOwner)resolve, context);
+
+            //TODO: Look closer at this line, I really don't think we need TypeOwner... wait... no. just Make
+            //sure ResNamedElement doesn't extend ResTypeOwner. Do it only for Exp and ResTypeRepr, paramDef, varDef, OperationDecl, OpProcedureDecl, etc.
+            //some code dup but I kinda like it better. Let me think about it more.
+            if (resolve instanceof ResTypeOwner) return ((ResTypeOwner) resolve).getResType(context);
+        }
+        else if (o instanceof ResSelectorExp) {
+            ResExp item = ContainerUtil.getLastItem(((ResSelectorExp) o).getExpList());
+            return item != null ? item.getResType(context) : null;
         }
         return null;
     }
