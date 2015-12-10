@@ -159,7 +159,7 @@
     implements(".*ReferenceExp")="edu.clemson.resolve.plugin.psi.ResReferenceExpBase"
     implements("Math.*Signature")="edu.clemson.resolve.plugin.psi.ResMathDefinitionSignature"
     implements("Math.*DefinitionDecl")="edu.clemson.resolve.plugin.psi.ResMathDefinitionDecl"
-    implements("SpecModuleParameters")="edu.clemson.resolve.plugin.psi.ResModuleParameters" //TODO: ImplModuleParameters
+    implements("(Spec|Impl)ModuleParameters")="edu.clemson.resolve.plugin.psi.ResModuleParameters"
     implements(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Facility)Decl|ModuleSpec)")="edu.clemson.resolve.plugin.psi.ResNamedElement"
     implements("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.ResTypeLikeNodeDecl"
     implements(".*Block")="edu.clemson.resolve.plugin.psi.ResBlock"
@@ -179,7 +179,7 @@ ModuleDecl ::=
       PrecisModuleDecl
     | PrecisExtensionModuleDecl
     | ConceptModuleDecl
-    | ConceptModuleImplDecl
+    | ConceptImplModuleDecl
     | FacilityModuleDecl
 
 PrecisModuleDecl ::= 'Precis' identifier ';'
@@ -198,12 +198,12 @@ RequiresClause?
 ConceptBlock
 'end' identifier ';' {pin(".*")=1}
 
-ConceptModuleImplDecl ::= 'Implementation' identifier SpecModuleParameters?
+ConceptImplModuleDecl ::= 'Implementation' identifier ImplModuleParameters?
 'for' identifier ';'
 UsesItemList?
 RequiresClause?
 ImplBlock
-'end' identifier ';'
+'end' identifier ';' {pin(".*")=1}
 
 FacilityModuleDecl ::= 'Facility' identifier ';'
 UsesItemList?
@@ -239,7 +239,12 @@ private ConceptItem ::=
 private ConceptItemRecover ::= !('Type'|'Operation'|'end')
 
 private ImplItem ::=
+      TypeReprDecl
+    | OperationProcedureDecl
+    | FacilityDecl {pin=1 recoverWhile=ImplItemRecover}
+    //TODO: Need procedureDecls
 
+private ImplItemRecover ::= !('Type'|'Operation'|'Facility'|'end')
 
 private FacilityItem ::=
       FacilityDecl
@@ -271,6 +276,10 @@ RecordType ::= 'Record' RecordVarDeclGroup* 'end' {pin=1 extends=Type}
 SpecModuleParameters ::= '(' SpecModuleParamList ')' {pin=1}
 private SpecModuleParamList ::= SpecParamDecl  (';' SpecParamDecl)* {recoverWhile=ParamListRec}
 private SpecParamDecl ::= TypeParamDecl | ParamDecl
+
+ImplModuleParameters ::= '(' ImplModuleParamList ')' {pin=1}
+private ImplModuleParamList ::= ImplParamDecl  (';' ImplParamDecl)* {recoverWhile=ParamListRec}
+private ImplParamDecl ::= ParamDecl //TODO: OperationDecl goes here too
 
 private OperationLikeParameters ::= '(' OpParamList? ')' {pin=1}
 private OpParamList ::= ParamDecl (';' ParamDecl)* {pin=1 recoverWhile=ParamListRec}

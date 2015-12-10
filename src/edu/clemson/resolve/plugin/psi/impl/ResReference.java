@@ -233,7 +233,7 @@ public class ResReference
                                        @NotNull ResScopeProcessor processor,
                                        @NotNull ResolveState state,
                                        @NotNull ResCompositeElement element,
-                                       boolean searchImplicitUses) {
+                                       boolean searchModuleHeaderImplicitUses) {
         for (ResUsesItem u : file.getUsesItems()) {
             //this file resolve is failing for whatever reason when we're trying to add completions... is this a concurrency thing maybe?
             //works the rest of the time...
@@ -243,10 +243,10 @@ public class ResReference
         }
         ResModuleDecl module = file.getEnclosedModule();
 
-        //The "searchImplicitUses" is here since, in the context of a a concept (or enhancement) realiz
+        //The "searchModuleHeaderImplicitUses" is here since, in the context of a a concept (or enhancement) realiz
         //we don't want to find the type model, we should be dealing in repr types. So in the context
-        //of the typeReference class our searchImplicitUses will be if module != ResConceptImplModule || module != ResConceptExtImplModule
-        if (module != null && searchImplicitUses) {
+        //of the typeReference class our searchModuleHeaderImplicitUses will be if module != ResConceptImplModule || module != ResConceptExtImplModule
+        if (module != null && searchModuleHeaderImplicitUses) {
             //Now process module decl implicit imports
             for (ResModuleSpec moduleSpec : module.getModuleSpecList()) {
                 PsiElement resolvedModule = moduleSpec.resolve();
