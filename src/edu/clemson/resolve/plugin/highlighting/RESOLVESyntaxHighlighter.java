@@ -29,7 +29,7 @@ public class RESOLVESyntaxHighlighter extends SyntaxHighlighterBase {
         fillMap(ATTRIBUTES, BAD_CHARACTER, TokenType.BAD_CHARACTER);
         fillMap(ATTRIBUTES, IDENTIFIER, ResTypes.IDENTIFIER);
         fillMap(ATTRIBUTES, DOT, ResTypes.DOT, ResTypes.DOT_DOT, ResTypes.TRIPLE_DOT);
-        fillMap(ATTRIBUTES, COLON, ResTypes.COLON);
+        fillMap(ATTRIBUTES, COLON, ResTypes.COLON, ResTypes.COLONCOLON);
         fillMap(ATTRIBUTES, SEMICOLON, ResTypes.SEMICOLON);
         fillMap(ATTRIBUTES, COMMA, ResTypes.COMMA);
         fillMap(ATTRIBUTES, RESOLVEParserDefinition.PARAMETER_MODES, PARAMETER_MODE);

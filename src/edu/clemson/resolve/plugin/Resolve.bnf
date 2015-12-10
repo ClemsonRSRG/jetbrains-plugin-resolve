@@ -322,15 +322,16 @@ private Statements ::= Statement* {recoverWhile=StatementRecover}
 
 Statement ::=
       SimpleStatement
-   // | IfStatement
+    | WhileStatement
 
-private StatementRecover ::= !('end'|':='|':=:'|'If'|identifier)
+private StatementRecover ::= !('end'|':='|':=:'|'If'|'While'|identifier)
 SimpleStatement ::=
       Exp (AssignStatement|SwapStatement)? ';' {pin(".*")=1}
 
 left AssignStatement ::= ':=' Exp {pin=1}
 left SwapStatement ::= ':=:' Exp {pin=1}
 
+WhileStatement ::= 'While' Exp 'do' Statements 'end' ';'
 // Prog exprs
 
 Exp ::=
