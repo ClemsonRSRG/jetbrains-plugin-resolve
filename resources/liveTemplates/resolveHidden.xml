@@ -80,4 +80,19 @@
         </context>
     </template>
 
+    <template description='While' id='resolve_lang_While' name='resolve_lang_While' toReformat='true' toShortenFQNames='true'
+              value='While $COND$&#10;    maintaining true;&#10;do&#10;    $END$&#10;end;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;cond&quot;' expression='' name='COND'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+
+    <template description='If' id='resolve_lang_If' name='resolve_lang_If' toReformat='true' toShortenFQNames='true'
+              value='If $COND$ then&#10;    $END$&#10;end;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;cond&quot;' expression='' name='COND'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
 </templateSet>

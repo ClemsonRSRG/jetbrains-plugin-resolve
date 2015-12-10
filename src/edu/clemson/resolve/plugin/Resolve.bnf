@@ -323,8 +323,9 @@ private Statements ::= Statement* {recoverWhile=StatementRecover}
 Statement ::=
       SimpleStatement
     | WhileStatement
+    | IfStatement
 
-private StatementRecover ::= !('end'|':='|':=:'|'If'|'While'|identifier)
+private StatementRecover ::= !('end'|':='|':=:'|'If'|'While'|'else'|identifier)
 SimpleStatement ::=
       Exp (AssignStatement|SwapStatement)? ';' {pin(".*")=1}
 
@@ -334,6 +335,10 @@ left SwapStatement ::= ':=:' Exp {pin=1}
 WhileStatement ::= 'While' Exp
 ChangingClause? MaintainingClause? DecreasingClause?
 'do' Statements 'end' ';'
+
+IfStatement ::= 'If' Exp 'then' Statements (ElseStatement)? 'end' ';' {pin=1}
+ElseStatement ::= 'else' Statements {pin=1}
+
 // Prog exprs
 
 Exp ::=
@@ -348,9 +353,10 @@ fake InfixExp ::= Exp+ {
 }
 
 private Primary ::=
-        NameExp
-      | SelectorExp
-      | CallExp
+      NameExp
+    | SelectorExp
+    | CallExp
+    | LiteralExp
 
 NameExp ::= ReferenceExp QualifiedReferenceExp? {elementType=ReferenceExp}
 
@@ -362,9 +368,13 @@ CallExp ::= NameExp ArgumentList {extends=Exp}
 ArgumentList ::= '(' ExpressionArgList? ')' {pin=1}
 private ExpressionArgList ::= ExpressionWithRecover (',' ExpressionWithRecover)* {pin(".*")=1}
 private ExpressionWithRecover ::= Exp {recoverWhile=ExpressionListRecover}
-private ExpressionListRecover ::= !('%' | '+' | '-' | '(' | ')' | ',' | '*' | '++' | '<' | '<=' | '>' | '>=' | 'end' | 'Operation' | 'Type' | 'Facility')
+private ExpressionListRecover ::= !('%' | '+' | '-' | '(' | ')' | ',' | '*' | '++' | '<' | '<=' | '>' | '>=' | 'end' | 'Operation' | 'Type' | 'Facility' |';')
 
+LiteralExp ::= int|StringLiteral|BooleanLiteral {extends=Exp}
 // Math clauses and exprs
+
+BooleanLiteral ::= true | false
+StringLiteral ::= string | raw_string
 
 IntializationClause ::= 'initialization' (EnsuresClause) {pin=1};
 
@@ -376,7 +386,7 @@ EnsuresClause ::= 'ensures' MathAssertionExp ';' {pin=1}
 
 ConstraintsClause ::= 'constraints' MathAssertionExp ';' {pin=1}
 
-ChangingClause ::= 'changing' MathAssertionExp ';' {pin=1}
+ChangingClause ::= 'changing' ExpressionArgList ';' {pin=1}
 MaintainingClause ::= 'maintaining' MathAssertionExp ';' {pin=1}
 DecreasingClause ::= 'decreasing' MathAssertionExp ';' {pin=1}
 
@@ -444,7 +454,7 @@ MathExp ::=
 //private rules for operators with the same precedence
 private MathAddGroup ::= MathPlusInfixApplyExp | MathMinusInfixApplyExp
 private MathMultGroup ::= MathMultInfixApplyExp | MathDivInfixApplyExp
-private MathOutfixGroup ::= MathBarOutfixApplyExp | MathAngleOutfixApplyExp
+private MathOutfixGroup ::= MathBarOutfixApplyExp | MathAngleOutfixApplyExp | MathDblBarOutfixApplyExp
 
 MathPlusInfixApplyExp ::= MathExp '+' MathExp
 MathMinusInfixApplyExp ::= MathExp ('-'|'~') MathExp
@@ -463,6 +473,7 @@ MathTypeAssertionExp ::= MathExp ':' MathExp {pin=2}
 MathNestedExp ::= '(' MathAssertionExp ')'
 
 MathBarOutfixApplyExp ::= '|' MathExp '|'
+MathDblBarOutfixApplyExp ::= '||' MathExp '||'
 MathAngleOutfixApplyExp ::= '<' MathExp '>'
 
 private MathPrimary ::=

@@ -41,6 +41,10 @@ public class RESOLVECompletionContributor extends CompletionContributor {
 
     /** Allow autoPopup to appear after custom symbol */
     public boolean invokeAutoPopup(@NotNull PsiElement position, char typeChar) {
-        return typeChar != ';' && typeChar != ' ' && typeChar != ')';
+        return typeChar != ';' &&
+               typeChar != ' ' &&
+               typeChar != ')' &&
+               typeChar != ':' &&
+               typeChar != '=';
     }
 }

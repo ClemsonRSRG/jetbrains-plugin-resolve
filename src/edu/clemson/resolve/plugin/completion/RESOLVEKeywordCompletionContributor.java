@@ -53,6 +53,14 @@ public class RESOLVEKeywordCompletionContributor
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "type"));
 
+        extend(CompletionType.BASIC, statementPattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "While", "If"));
+
+        extend(CompletionType.BASIC, elseStatementPattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "else"));
+
         extend(CompletionType.BASIC, variablePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "Var"));
@@ -79,7 +87,19 @@ public class RESOLVEKeywordCompletionContributor
         return onKeywordStartWithParent(ResBlock.class);
     }
 
-    //TODO: Fix, allows erroneous interleaving w/ stats
+    private static Capture<PsiElement> statementPattern() {
+        return psiElement(ResTypes.IDENTIFIER)
+                .withParent(psiElement(ResTypes.REFERENCE_EXP)
+                        .withParent(psiElement(ResTypes.SIMPLE_STATEMENT)));
+    }
+
+    private static Capture<PsiElement> elseStatementPattern() {
+        return psiElement(ResTypes.IDENTIFIER)
+                .withParent(psiElement(ResTypes.REFERENCE_EXP)
+                        .withParent(psiElement(ResTypes.SIMPLE_STATEMENT)
+                                .withParent(psiElement(ResTypes.IF_STATEMENT))));
+    }
+
     private static Capture<PsiElement> variablePattern() {
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(ResTypes.REFERENCE_EXP));
