@@ -179,6 +179,7 @@ ModuleDecl ::=
       PrecisModuleDecl
     | PrecisExtensionModuleDecl
     | ConceptModuleDecl
+    | ConceptModuleImplDecl
     | FacilityModuleDecl
 
 PrecisModuleDecl ::= 'Precis' identifier ';'
@@ -197,6 +198,13 @@ RequiresClause?
 ConceptBlock
 'end' identifier ';' {pin(".*")=1}
 
+ConceptModuleImplDecl ::= 'Implementation' identifier SpecModuleParameters?
+'for' identifier ';'
+UsesItemList?
+RequiresClause?
+ImplBlock
+'end' identifier ';'
+
 FacilityModuleDecl ::= 'Facility' identifier ';'
 UsesItemList?
 RequiresClause?
@@ -212,6 +220,7 @@ UsesItem ::= ModuleSpec
 PrecisBlock ::= PrecisItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
 ConceptBlock ::= ConceptItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
 FacilityBlock ::= FacilityItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
+ImplBlock ::= ImplItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
 
 private ItemsRecover ::= !('end')
 
@@ -228,6 +237,9 @@ private ConceptItem ::=
     | OperationDecl {pin=1 recoverWhile=ConceptItemRecover}
 
 private ConceptItemRecover ::= !('Type'|'Operation'|'end')
+
+private ImplItem ::=
+
 
 private FacilityItem ::=
       FacilityDecl
@@ -343,14 +355,26 @@ ElseStatement ::= 'else' Statements {pin=1}
 
 Exp ::=
       OrInfixExp
-    | Primary {methods=[getResType] implements="edu.clemson.resolve.plugin.psi.ResTypeOwner"}
-
-OrInfixExp ::= Exp 'or' Exp {extends=Exp}
-SelectorExp ::= Exp '.' Exp {extends=Exp}
+    | AndInfixExp
+    | RelationalInfixExp
+    | AddInfixExp
+    | MulInfixExp
+    | UnaryExp
+    | Primary
+    | ParenExp {methods=[getResType] implements="edu.clemson.resolve.plugin.psi.ResTypeOwner"}
 
 fake InfixExp ::= Exp+ {
   methods=[left="Exp[0]" right="Exp[1]"]
 }
+
+OrInfixExp ::= Exp 'or' Exp {extends=Exp}
+AndInfixExp ::= Exp 'and' Exp {extends=Exp}
+RelationalInfixExp ::= Exp ('=' | '/=' | '<' | '<=' | '>' | '>=') Exp {extends=Exp}
+AddInfixExp ::= Exp ('+' | '-') Exp {extends=Exp}
+MulInfixExp ::= Exp ('*' | '/' | '%') Exp {extends=Exp}
+UnaryExp ::=  ('+' | '-' | 'not') Exp {extends=Exp}
+SelectorExp ::= Exp '.' Exp {extends=Exp}
+ParenExp ::= '(' Exp ')' {extends=Exp}
 
 private Primary ::=
       NameExp
