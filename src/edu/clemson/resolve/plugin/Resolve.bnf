@@ -331,7 +331,9 @@ SimpleStatement ::=
 left AssignStatement ::= ':=' Exp {pin=1}
 left SwapStatement ::= ':=:' Exp {pin=1}
 
-WhileStatement ::= 'While' Exp 'do' Statements 'end' ';'
+WhileStatement ::= 'While' Exp
+ChangingClause? MaintainingClause? DecreasingClause?
+'do' Statements 'end' ';'
 // Prog exprs
 
 Exp ::=
@@ -373,6 +375,10 @@ RequiresClause ::= 'requires' MathAssertionExp (EntailsClause)? ';' {pin=1}
 EnsuresClause ::= 'ensures' MathAssertionExp ';' {pin=1}
 
 ConstraintsClause ::= 'constraints' MathAssertionExp ';' {pin=1}
+
+ChangingClause ::= 'changing' MathAssertionExp ';' {pin=1}
+MaintainingClause ::= 'maintaining' MathAssertionExp ';' {pin=1}
+DecreasingClause ::= 'decreasing' MathAssertionExp ';' {pin=1}
 
 MathTheoremDecl ::= ('Theorem'|'Corollary') identifier ':'
 MathAssertionExp ';' {pin = 2}
