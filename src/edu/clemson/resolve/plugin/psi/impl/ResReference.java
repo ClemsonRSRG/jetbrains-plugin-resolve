@@ -246,7 +246,7 @@ public class ResReference
         //The "searchModuleHeaderImplicitUses" is here since, in the context of a a concept (or enhancement) realiz
         //we don't want to find the type model, we should be dealing in repr types. So in the context
         //of the typeReference class our searchModuleHeaderImplicitUses will be if module != ResConceptImplModule || module != ResConceptExtImplModule
-        if (module != null && searchModuleHeaderImplicitUses) {
+        if (module != null) {
             //Now process module decl implicit imports
             for (ResModuleSpec moduleSpec : module.getModuleSpecList()) {
                 PsiElement resolvedModule = moduleSpec.resolve();
@@ -260,10 +260,23 @@ public class ResReference
     protected static boolean processModuleLevelEntities(@NotNull ResFile file,
                                                         @NotNull ResScopeProcessor processor,
                                                         @NotNull ResolveState state,
+                                                        boolean localProcessing,
+                                                        boolean implSearchingSpec) {
+        if (!processNamedElements(processor, state, file.getOperationLikeThings(), localProcessing)) return false;
+        if (!processNamedElements(processor, state, file.getFacilities(), localProcessing)) return false;
+        if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
+        if (!processNamedElements(processor, state, file.getMathDefinitionSignatures(), localProcessing)) return false;
+        return true;
+    }
+
+    protected static boolean processModuleLevelEntities(@NotNull ResFile file,
+                                                        @NotNull ResScopeProcessor processor,
+                                                        @NotNull ResolveState state,
                                                         boolean localProcessing) {
         if (!processNamedElements(processor, state, file.getOperationLikeThings(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getFacilities(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
+        if (!processNamedElements(processor, state, file.getGenericTypeParams(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getMathDefinitionSignatures(), localProcessing)) return false;
         return true;
     }

@@ -18,6 +18,15 @@
         </context>
     </template>
 
+    <template description='Implementation module declaration' id='resolve_lang_Implementation' name='resolve_lang_Implementation' toReformat='true' toShortenFQNames='true'
+              value='Implementation $NAME$ for $CONCEPT$;&#10;    $END$ &#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;concept&quot;' expression='' name='CONCEPT'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+
     <template description='Operation procedure declaration' id='resolve_lang_OperationProcedure' name='resolve_lang_Operation_Procedure' toReformat='true' toShortenFQNames='true'
               value='Operation $NAME$ ($END$);&#10;    Procedure &#10;        &#10;end $NAME$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>

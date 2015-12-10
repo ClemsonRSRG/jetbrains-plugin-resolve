@@ -22,7 +22,7 @@ public class RESOLVEKeywordCompletionContributor
         extend(CompletionType.BASIC, modulePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                        "Concept", "Facility"));
+                        "Concept", "Facility", "Implementation"));
 
         extend(CompletionType.BASIC, usesPattern(),
                 new RESOLVEKeywordCompletionProvider(
@@ -80,7 +80,9 @@ public class RESOLVEKeywordCompletionContributor
         return onKeywordStartWithParent(psiElement(ResBlock.class)
                 .withParent(ResModuleDecl.class)
                 .andOr(psiElement().isFirstAcceptedChild(psiElement()),
-                        psiElement().afterSibling(psiElement(ResModuleParameters.class))));
+                        psiElement().afterSibling(psiElement(ResModuleSpec.class)),
+                        psiElement()
+                                .afterSibling(psiElement(ResModuleParameters.class))));
     }
 
     private static Capture<PsiElement> otherUsesPattern() {

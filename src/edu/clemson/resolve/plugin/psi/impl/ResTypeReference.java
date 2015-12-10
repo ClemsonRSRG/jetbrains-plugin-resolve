@@ -98,14 +98,14 @@ public class ResTypeReference
         ResolveUtil.treeWalkUp(myElement, delegate);
         Collection<? extends ResNamedElement> result = delegate.getVariants();
         //this processes any named elements we've found searching up the tree in the previous line
-        if (!processNamedElements(processor, state, result, localResolve)) return false;
+        if (!ResReference.processNamedElements(processor, state, result, localResolve)) return false;
 
-        if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
+        if (!ResReference.processModuleLevelEntities(file, processor, state, localResolve)) return false;
         if (!ResReference.processUsesRequests(file, processor, state, myElement, false)) return false;
         return true;
     }
 
-    private boolean processModuleLevelEntities(@NotNull ResFile file,
+    /*private boolean processModuleLevelEntities(@NotNull ResFile file,
                                                @NotNull ResScopeProcessor processor,
                                                @NotNull ResolveState state,
                                                boolean localProcessing) {
@@ -113,9 +113,9 @@ public class ResTypeReference
         if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getGenericTypeParams(), localProcessing)) return false;
         return true;
-    }
+    }*/
 
-    private boolean processNamedElements(@NotNull PsiScopeProcessor processor,
+    /*private boolean processNamedElements(@NotNull PsiScopeProcessor processor,
                                          @NotNull ResolveState state,
                                          @NotNull Collection<? extends ResNamedElement> elements,
                                          boolean localResolve) {
@@ -124,7 +124,7 @@ public class ResTypeReference
             if ((definition.isPublic() || localResolve) && !processor.execute(definition, state)) return false;
         }
         return true;
-    }
+    }*/
 
     @NotNull private ResTypeProcessor createDelegate(
             @NotNull ResScopeProcessor processor) {
@@ -140,7 +140,8 @@ public class ResTypeReference
         }
         @Override protected boolean crossOff(@NotNull PsiElement e) {
             return e instanceof ResTypeLikeNodeDecl ||
-                    e instanceof ResFacilityDecl;
+                    e instanceof ResFacilityDecl ||
+                    e instanceof ResTypeParamDecl;
         }
     }
 }

@@ -199,7 +199,7 @@ ConceptBlock
 'end' identifier ';' {pin(".*")=1}
 
 ConceptImplModuleDecl ::= 'Implementation' identifier ImplModuleParameters?
-'for' identifier ';'
+'for' ModuleSpec ';'
 UsesItemList?
 RequiresClause?
 ImplBlock
