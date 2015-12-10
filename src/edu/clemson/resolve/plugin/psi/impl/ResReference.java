@@ -111,10 +111,10 @@ public class ResReference
             processModuleLevelEntities(spec, processor, state, false);
         }
         //Todo look into the logic down here
-        if (target instanceof ResTypeOwner) {
+      /*  if (target instanceof ResTypeOwner) {
             ResType type = ((ResTypeOwner)target).getResType(createContext());
             if (type != null && !processResType(type, processor, state)) return false;
-        }
+        }*/
         return true;
     }
 

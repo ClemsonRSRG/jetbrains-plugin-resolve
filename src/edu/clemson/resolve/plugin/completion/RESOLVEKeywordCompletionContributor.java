@@ -24,11 +24,7 @@ public class RESOLVEKeywordCompletionContributor
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
                         "Concept", "Facility"));
 
-        //TODO: Find a good way to combine these into a single pattern..
-        extend(CompletionType.BASIC, vanillaUsesPattern(),
-                new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "uses"));
-        extend(CompletionType.BASIC, otherUsesPattern(),
+        extend(CompletionType.BASIC, usesPattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "uses"));
 
@@ -72,10 +68,11 @@ public class RESOLVEKeywordCompletionContributor
         return onKeywordStartWithParent(ResFile.class);
     }
 
-    private static Capture<PsiElement> vanillaUsesPattern() {
+    private static Capture<PsiElement> usesPattern() {
         return onKeywordStartWithParent(psiElement(ResBlock.class)
                 .withParent(ResModuleDecl.class)
-                .isFirstAcceptedChild(psiElement()));
+                .andOr(psiElement().isFirstAcceptedChild(psiElement()),
+                        psiElement().afterSibling(psiElement(ResModuleParameters.class))));
     }
 
     private static Capture<PsiElement> otherUsesPattern() {
