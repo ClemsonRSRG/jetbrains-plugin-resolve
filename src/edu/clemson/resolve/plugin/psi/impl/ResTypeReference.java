@@ -8,7 +8,6 @@ import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -95,13 +94,13 @@ public class ResTypeReference
         //this processes any named elements we've found searching up the tree in the previous line
         if (!ResReference.processNamedElements(processor, state, result, localResolve)) return false;
         if (!ResReference.processModuleLevelEntities(file, processor, state, localResolve)) return false;
-        if (!ResReference.processNamedUsesRequests(file, processor, state, myElement)) return false;
+        if (!ResReference.processExplicitlyNamedAndInheritedUsesRequests(file, processor, state, myElement)) return false;
 
         //TODO: add uses items from concept implicitly to the impl
         //TODO: Factor this logic out into a processEnclosingParentSpecifications()
         ResModuleDecl module = file.getEnclosedModule();
         if (module instanceof ResImplModuleDecl) {
-            List<ResModuleSpec> implicitUsesSpecs = module.getImplicitUsesSpecs();
+            List<ResModuleSpec> implicitUsesSpecs = module.getModuleSignatureSpecs();
             for (ResModuleSpec s : implicitUsesSpecs) {
                 PsiElement resolvedModule = s.resolve();
                 if (resolvedModule == null || !(resolvedModule instanceof ResFile)) return true;

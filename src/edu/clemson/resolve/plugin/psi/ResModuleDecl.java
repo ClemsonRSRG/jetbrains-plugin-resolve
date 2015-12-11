@@ -12,7 +12,7 @@ public interface ResModuleDecl extends ResNamedElement {
 
     @NotNull public List<ResUsesItem> getUsesItems();
 
-    @NotNull public List<ResModuleSpec> getModuleSpecList();
+    @NotNull public List<ResModuleSpec> getSuperModuleSpecList();
 
     @NotNull public List<ResMathDefinitionDecl> getMathDefinitionDecls();
 
@@ -27,10 +27,10 @@ public interface ResModuleDecl extends ResNamedElement {
     @NotNull public List<ResOperationLikeNode> getOperationLikeThings();
 
     /**
-     * All modules referenced in the signature of a module; for example,
-     * in the case of {@code Impl X for Y;}; this will contain the
+     * All module specs (names) referenced in the signature of a module; for
+     * example, in the case of {@code Impl X for Y;}; this will contain the
      * {@code ResModuleSpec} for {@code Y}.
      */
-    @NotNull public List<ResModuleSpec> getImplicitUsesSpecs();
+    @NotNull public List<ResModuleSpec> getModuleSignatureSpecs();
 
 }

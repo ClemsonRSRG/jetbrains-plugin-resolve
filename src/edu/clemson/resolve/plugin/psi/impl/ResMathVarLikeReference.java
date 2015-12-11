@@ -89,9 +89,21 @@ public class ResMathVarLikeReference
         if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
 
         if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
-        if (!ResReference.processNamedUsesRequests(file, processor, state, myElement)) return false;
+        if (!ResReference.processExplicitlyNamedAndInheritedUsesRequests(file, processor, state, myElement)) return false;
+        if (!processSuperModules(file, processor, state)) return false;
         if (!processBuiltin(processor, state, myElement)) return false;
+        return true;
+    }
 
+    private boolean processSuperModules(@NotNull ResFile file,
+                                        @NotNull ResScopeProcessor processor,
+                                        @NotNull ResolveState state) {
+
+        for(ResModuleSpec spec : file.getSuperModuleSpecList()) {
+            PsiElement resolvedModule = spec.resolve();
+            if (resolvedModule == null || !(resolvedModule instanceof ResFile)) continue;
+            if (!processModuleLevelEntities((ResFile) resolvedModule, processor, state, false)) return false;
+        }
         return true;
     }
 

@@ -108,11 +108,13 @@ public class ResReference
             if (spec == null) return false;
             processModuleLevelEntities(spec, processor, state, false);
         }
-        //Todo look into the logic down here
-      /*  if (target instanceof ResTypeOwner) {
-            ResType type = ((ResTypeOwner)target).getResType(createContext());
-            if (type != null && !processResType(type, processor, state)) return false;
-        }*/
+        else if (target instanceof ResFile) {
+            ResModuleDecl module = ((ResFile) target).getEnclosedModule();
+            if (module != null) {
+                processModuleLevelEntities(
+                        (ResFile)target, processor, state, false);
+            }
+        }
         return true;
     }
 
@@ -133,7 +135,7 @@ public class ResReference
         if (!processBlock(processor, state, true)) return false;
         if (!processParameterLikeThings(processor, state, true)) return false;
         if (!processModuleLevelEntities(file, processor, state, true)) return false;
-
+        if (!processSuperModules(file, processor, state)) return false;
         return true;
     }
 
@@ -227,17 +229,17 @@ public class ResReference
                 localResolve);
     }
 
-    static boolean processNamedUsesRequests(@NotNull ResFile file,
-                                            @NotNull ResScopeProcessor processor,
-                                            @NotNull ResolveState state,
-                                            @NotNull ResCompositeElement element) {
+    static boolean processExplicitlyNamedAndInheritedUsesRequests(@NotNull ResFile file,
+                                                                  @NotNull ResScopeProcessor processor,
+                                                                  @NotNull ResolveState state,
+                                                                  @NotNull ResCompositeElement element) {
         //process specifications uses requests
         Set<ResUsesItem> usesItemsToSearch = new HashSet<ResUsesItem>();
 
         ResModuleDecl module = file.getEnclosedModule();
         if (module != null) {
             //Now process module decl implicit imports
-            for (ResModuleSpec moduleSpec : module.getModuleSpecList()) {
+            for (ResModuleSpec moduleSpec : module.getSuperModuleSpecList()) {
                 PsiElement resolvedEle = moduleSpec.resolve();
                 if (resolvedEle != null && resolvedEle instanceof ResFile) {
                     usesItemsToSearch.addAll(((ResFile) resolvedEle).getUsesItems());
@@ -251,6 +253,20 @@ public class ResReference
             PsiElement resolvedModule = u.getModuleSpec().resolve();
             if (resolvedModule == null || !(resolvedModule instanceof ResFile)) continue;
             if (!processModuleLevelEntities((ResFile) resolvedModule, processor, state, false)) return false;
+        }
+        return true;
+    }
+
+    private boolean processSuperModules(@NotNull ResFile file,
+                                        @NotNull ResScopeProcessor processor,
+                                        @NotNull ResolveState state) {
+
+        for(ResModuleSpec spec : file.getSuperModuleSpecList()) {
+            PsiElement resolvedFile = spec.resolve();
+            if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
+            ResScopeProcessorBase delegate = createDelegate(processor);
+            if (!processParameterLikeThings(((ResFile) resolvedFile).getEnclosedModule(), delegate)) return false;
+            processNamedElements(processor, state, delegate.getVariants(), false);
         }
         return true;
     }
@@ -276,7 +292,7 @@ public class ResReference
                 localResolve);
     }
 
-    protected static void processParameterLikeThings(
+    protected static boolean processParameterLikeThings(
             @NotNull ResCompositeElement e,
             @NotNull ResScopeProcessorBase processor) {
         ResMathDefinitionDecl def =
@@ -285,10 +301,12 @@ public class ResReference
                 PsiTreeUtil.getParentOfType(e, ResOperationLikeNode.class);
         ResModuleDecl module =
                 PsiTreeUtil.getParentOfType(e, ResModuleDecl.class);
+        if (e instanceof ResModuleDecl) module = (ResModuleDecl)e;
         if (def != null) processDefinitionParams(processor, def);
         if (operation != null) processProgParamDecls(processor, operation.getParamDeclList());
         if (module != null) processModuleParams(processor, module);
         //TODO: process moduleparams now
+        return true;
     }
 
     /** processing parameters of the definition we happen to be within */

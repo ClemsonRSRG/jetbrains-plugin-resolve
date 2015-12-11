@@ -28,7 +28,7 @@ public abstract class ResAbstractModuleImpl
         return findNotNullChildByClass(ResBlock.class);
     }
 
-    @Nullable public List<ResModuleSpec> getImplicitUsesSpecs() {
+    @Nullable public List<ResModuleSpec> getModuleSignatureSpecs() {
         return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleSpec.class);
     }
 
@@ -36,7 +36,7 @@ public abstract class ResAbstractModuleImpl
         return findChildByType(ResTypes.IDENTIFIER);
     }
 
-    @NotNull public List<ResModuleSpec> getModuleSpecList() {
+    @NotNull public List<ResModuleSpec> getSuperModuleSpecList() {
         return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleSpec.class);
     }
 

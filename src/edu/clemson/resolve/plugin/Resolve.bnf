@@ -150,7 +150,7 @@
     extends("Math.*(DefinitionDecl)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathDefinitionImpl"
     extends("Math.*(Signature)")="edu.clemson.resolve.plugin.psi.impl.ResAbstractMathSignatureImpl"
     extends(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractModuleImpl"
-    extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|OperationProcedure|Facility)Decl)|ModuleSpec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
+    extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|Procedure|OperationProcedure|Facility)Decl)|ModuleSpec")="edu.clemson.resolve.plugin.psi.impl.ResNamedElementImpl"
     extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.plugin.psi.impl.ResAbstractTypeLikeNodeImpl"
 
     implements(".*ModuleDecl")="edu.clemson.resolve.plugin.psi.ResModuleDecl"
@@ -212,6 +212,7 @@ FacilityBlock
 'end' identifier ';' {pin(".*")=1}
 
 UsesItemList ::= 'uses' UsesItem (',' UsesItem)* ';'
+//TODO: Change this to ModuleIdentifier
 ModuleSpec ::= identifier {pin=1 methods=[getReferences resolve getModuleSpecTextRange]}
 UsesItem ::= ModuleSpec
 
@@ -241,10 +242,10 @@ private ConceptItemRecover ::= !('Type'|'Operation'|'end')
 private ImplItem ::=
       TypeReprDecl
     | OperationProcedureDecl
-    | FacilityDecl {pin=1 recoverWhile=ImplItemRecover}
-    //TODO: Need procedureDecls
+    | FacilityDecl
+    | ProcedureDecl {pin=1 recoverWhile=ImplItemRecover}
 
-private ImplItemRecover ::= !('Type'|'Operation'|'Facility'|'end')
+private ImplItemRecover ::= !('Type'|'Operation'|'Facility'|'Recursive'|'Procedure'|'end')
 
 private FacilityItem ::=
       FacilityDecl
@@ -328,6 +329,11 @@ RequiresClause? EnsuresClause?
 ('Recursive')? 'Procedure'
 OpBlock
 'end' CloseIdentifier ';' {pin=2 implements="edu.clemson.resolve.plugin.psi.ResOperationWithBodyNode"}
+
+ProcedureDecl ::=
+('Recursive')? 'Procedure' identifier OperationLikeParameters (':' Type)? ';'
+OpBlock
+'end' CloseIdentifier ';' {pin=3 implements="edu.clemson.resolve.plugin.psi.ResOperationWithBodyNode"}
 
 OpBlock ::=
 VarDeclGroup*

@@ -11,7 +11,7 @@ import java.util.List;
 
 public abstract class RESOLVECompletionTestBase
         extends
-        LightPlatformCodeInsightFixtureTestCase {
+            LightPlatformCodeInsightFixtureTestCase {
 
     @Override protected void setUp() throws Exception {
         super.setUp();

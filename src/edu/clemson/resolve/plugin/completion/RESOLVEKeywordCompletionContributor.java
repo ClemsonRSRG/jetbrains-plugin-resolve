@@ -38,7 +38,7 @@ public class RESOLVEKeywordCompletionContributor
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
                         "OperationProcedure", "TypeRepresentation",
-                        "FacilityDeclaration"));
+                        "FacilityDeclaration", "Procedure"));
 
         extend(CompletionType.BASIC, conceptModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
@@ -87,8 +87,7 @@ public class RESOLVEKeywordCompletionContributor
                 .withParent(ResModuleDecl.class)
                 .andOr(psiElement().isFirstAcceptedChild(psiElement()),
                         psiElement().afterSibling(psiElement(ResModuleSpec.class)),
-                        psiElement()
-                                .afterSibling(psiElement(ResModuleParameters.class))));
+                        psiElement().afterSibling(psiElement(ResModuleParameters.class))));
     }
 
     private static Capture<PsiElement> otherUsesPattern() {
