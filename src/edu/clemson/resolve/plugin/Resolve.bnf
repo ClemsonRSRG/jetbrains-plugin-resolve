@@ -314,8 +314,8 @@ ParameterMode ::=
                  //patterns much harder
 // Facilities
 
-FacilityDecl ::= 'Facility' identifier 'is' ModuleSpec
-('externally')? 'implemented' 'by' ModuleSpec ';' {pin=2 methods=[getSpecification]}
+FacilityDecl ::= 'Facility' identifier 'is' ModuleSpec ArgumentList?
+('externally')? 'implemented' 'by' ModuleSpec ArgumentList? ';' {pin=2 methods=[getSpecification]}
 
 // operations
 
@@ -404,10 +404,10 @@ ReferenceExp ::= identifier { methods=[getReference getQualifier] extends=Exp}
 
 CallExp ::= NameExp ArgumentList {extends=Exp}
 
-ArgumentList ::= '(' ExpressionArgList? ')' {pin=1}
-private ExpressionArgList ::= ExpressionWithRecover (',' ExpressionWithRecover)* {pin(".*")=1}
-private ExpressionWithRecover ::= Exp {recoverWhile=ExpressionListRecover}
-private ExpressionListRecover ::= !('%' | '+' | '-' | '(' | ')' | ',' | '*' | '++' | '<' | '<=' | '>' | '>=' | 'end' | 'Operation' | 'Type' | 'Facility' |';')
+ArgumentList ::= '(' ExpArgumentList? ')' {pin=1}
+private ExpArgumentList ::= ExpWithRecover (',' ExpWithRecover)* {pin(".*")=1}
+private ExpWithRecover ::= Exp {recoverWhile=ExpListRecover}
+private ExpListRecover ::= !('%' | '+' | '-' | '(' | ')' | ',' | '*' | '++' | '<' | '<=' | '>' | '>=' | 'end' | 'Operation' | 'Type' | 'Facility' |';')
 
 LiteralExp ::= int|StringLiteral|BooleanLiteral {extends=Exp}
 // Math clauses and exprs
@@ -425,7 +425,7 @@ EnsuresClause ::= 'ensures' MathAssertionExp ';' {pin=1}
 
 ConstraintsClause ::= 'constraints' MathAssertionExp ';' {pin=1}
 
-ChangingClause ::= 'changing' ExpressionArgList ';' {pin=1}
+ChangingClause ::= 'changing' ExpArgumentList ';' {pin=1}
 MaintainingClause ::= 'maintaining' MathAssertionExp ';' {pin=1}
 DecreasingClause ::= 'decreasing' MathAssertionExp ';' {pin=1}
 

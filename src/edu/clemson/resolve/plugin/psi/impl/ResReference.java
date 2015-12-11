@@ -135,7 +135,9 @@ public class ResReference
         if (!processBlock(processor, state, true)) return false;
         if (!processParameterLikeThings(processor, state, true)) return false;
         if (!processModuleLevelEntities(file, processor, state, true)) return false;
+        if (!processVarExplicitlyNamedAndInheritedUsesRequests(file, processor, state, myElement)) return false;
         if (!processSuperModules(file, processor, state)) return false;
+
         return true;
     }
 
@@ -229,6 +231,15 @@ public class ResReference
                 localResolve);
     }
 
+    private boolean processVarExplicitlyNamedAndInheritedUsesRequests(@NotNull ResFile file,
+                                                              @NotNull ResScopeProcessor processor,
+                                                              @NotNull ResolveState state,
+                                                              @NotNull ResCompositeElement element) {
+        ResScopeProcessorBase delegate = createDelegate(processor);
+        processExplicitlyNamedAndInheritedUsesRequests(file, delegate, state, element);
+        return processNamedElements(processor, state, delegate.getVariants(), false);
+    }
+
     static boolean processExplicitlyNamedAndInheritedUsesRequests(@NotNull ResFile file,
                                                                   @NotNull ResScopeProcessor processor,
                                                                   @NotNull ResolveState state,
@@ -236,6 +247,7 @@ public class ResReference
         //process specifications uses requests
         Set<ResUsesItem> usesItemsToSearch = new HashSet<ResUsesItem>();
 
+        //first get all inherited named uses requests
         ResModuleDecl module = file.getEnclosedModule();
         if (module != null) {
             //Now process module decl implicit imports
@@ -248,11 +260,10 @@ public class ResReference
         }
         usesItemsToSearch.addAll(file.getUsesItems());
         for (ResUsesItem u : usesItemsToSearch) {
-            //this file resolve is failing for whatever reason when we're trying to add completions... is this a concurrency thing maybe?
-            //works the rest of the time...
             PsiElement resolvedModule = u.getModuleSpec().resolve();
             if (resolvedModule == null || !(resolvedModule instanceof ResFile)) continue;
-            if (!processModuleLevelEntities((ResFile) resolvedModule, processor, state, false)) return false;
+
+            processModuleLevelEntities((ResFile) resolvedModule, processor, state, false);
         }
         return true;
     }
