@@ -14,9 +14,7 @@ import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class ResReference
         extends
@@ -229,43 +227,31 @@ public class ResReference
                 localResolve);
     }
 
-    static boolean processUsesRequests(@NotNull ResFile file,
-                                       @NotNull ResScopeProcessor processor,
-                                       @NotNull ResolveState state,
-                                       @NotNull ResCompositeElement element,
-                                       boolean searchModuleHeaderImplicitUses) {
-        for (ResUsesItem u : file.getUsesItems()) {
+    static boolean processNamedUsesRequests(@NotNull ResFile file,
+                                            @NotNull ResScopeProcessor processor,
+                                            @NotNull ResolveState state,
+                                            @NotNull ResCompositeElement element) {
+        //process specifications uses requests
+        Set<ResUsesItem> usesItemsToSearch = new HashSet<ResUsesItem>();
+
+        ResModuleDecl module = file.getEnclosedModule();
+        if (module != null) {
+            //Now process module decl implicit imports
+            for (ResModuleSpec moduleSpec : module.getModuleSpecList()) {
+                PsiElement resolvedEle = moduleSpec.resolve();
+                if (resolvedEle != null && resolvedEle instanceof ResFile) {
+                    usesItemsToSearch.addAll(((ResFile) resolvedEle).getUsesItems());
+                }
+            }
+        }
+        usesItemsToSearch.addAll(file.getUsesItems());
+        for (ResUsesItem u : usesItemsToSearch) {
             //this file resolve is failing for whatever reason when we're trying to add completions... is this a concurrency thing maybe?
             //works the rest of the time...
             PsiElement resolvedModule = u.getModuleSpec().resolve();
             if (resolvedModule == null || !(resolvedModule instanceof ResFile)) continue;
             if (!processModuleLevelEntities((ResFile) resolvedModule, processor, state, false)) return false;
         }
-        ResModuleDecl module = file.getEnclosedModule();
-
-        //The "searchModuleHeaderImplicitUses" is here since, in the context of a a concept (or enhancement) realiz
-        //we don't want to find the type model, we should be dealing in repr types. So in the context
-        //of the typeReference class our searchModuleHeaderImplicitUses will be if module != ResConceptImplModule || module != ResConceptExtImplModule
-        if (module != null) {
-            //Now process module decl implicit imports
-            for (ResModuleSpec moduleSpec : module.getModuleSpecList()) {
-                PsiElement resolvedModule = moduleSpec.resolve();
-                if (resolvedModule == null || !(resolvedModule instanceof ResFile)) continue;
-                if (!processModuleLevelEntities((ResFile) resolvedModule, processor, state, false)) return false;
-            }
-        }
-        return true;
-    }
-
-    protected static boolean processModuleLevelEntities(@NotNull ResFile file,
-                                                        @NotNull ResScopeProcessor processor,
-                                                        @NotNull ResolveState state,
-                                                        boolean localProcessing,
-                                                        boolean implSearchingSpec) {
-        if (!processNamedElements(processor, state, file.getOperationLikeThings(), localProcessing)) return false;
-        if (!processNamedElements(processor, state, file.getFacilities(), localProcessing)) return false;
-        if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
-        if (!processNamedElements(processor, state, file.getMathDefinitionSignatures(), localProcessing)) return false;
         return true;
     }
 

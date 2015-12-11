@@ -1,21 +1,16 @@
 package edu.clemson.resolve.plugin.psi.impl;
 
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 //TODO: Thinking ahead to type appearances in concept/enhancement realizations,
 //we might just need to have to specify that we DONT want to search the
@@ -99,9 +94,22 @@ public class ResTypeReference
         Collection<? extends ResNamedElement> result = delegate.getVariants();
         //this processes any named elements we've found searching up the tree in the previous line
         if (!ResReference.processNamedElements(processor, state, result, localResolve)) return false;
-
         if (!ResReference.processModuleLevelEntities(file, processor, state, localResolve)) return false;
-        if (!ResReference.processUsesRequests(file, processor, state, myElement, false)) return false;
+        if (!ResReference.processNamedUsesRequests(file, processor, state, myElement)) return false;
+
+        //TODO: add uses items from concept implicitly to the impl
+        //TODO: Factor this logic out into a processEnclosingParentSpecifications()
+        ResModuleDecl module = file.getEnclosedModule();
+        if (module instanceof ResImplModuleDecl) {
+            List<ResModuleSpec> implicitUsesSpecs = module.getImplicitUsesSpecs();
+            for (ResModuleSpec s : implicitUsesSpecs) {
+                PsiElement resolvedModule = s.resolve();
+                if (resolvedModule == null || !(resolvedModule instanceof ResFile)) return true;
+                //search the parent module for any generic types.
+                if (!ResReference.processNamedElements(processor, state,
+                        ((ResFile) resolvedModule).getGenericTypeParams(), false)) return false;
+            }
+        }
         return true;
     }
 
@@ -113,9 +121,9 @@ public class ResTypeReference
         if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getGenericTypeParams(), localProcessing)) return false;
         return true;
-    }*/
+    }
 
-    /*private boolean processNamedElements(@NotNull PsiScopeProcessor processor,
+    private boolean processNamedElements(@NotNull PsiScopeProcessor processor,
                                          @NotNull ResolveState state,
                                          @NotNull Collection<? extends ResNamedElement> elements,
                                          boolean localResolve) {

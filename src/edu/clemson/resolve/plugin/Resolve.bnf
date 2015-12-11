@@ -179,7 +179,7 @@ ModuleDecl ::=
       PrecisModuleDecl
     | PrecisExtensionModuleDecl
     | ConceptModuleDecl
-    | ConceptImplModuleDecl
+    | ImplModuleDecl
     | FacilityModuleDecl
 
 PrecisModuleDecl ::= 'Precis' identifier ';'
@@ -198,7 +198,7 @@ RequiresClause?
 ConceptBlock
 'end' identifier ';' {pin(".*")=1}
 
-ConceptImplModuleDecl ::= 'Implementation' identifier ImplModuleParameters?
+ImplModuleDecl ::= 'Implementation' identifier ImplModuleParameters? /*('of' ModuleSpec)?*/
 'for' ModuleSpec ';'
 UsesItemList?
 RequiresClause?

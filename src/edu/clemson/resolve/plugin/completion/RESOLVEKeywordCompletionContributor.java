@@ -34,6 +34,12 @@ public class RESOLVEKeywordCompletionContributor
                         "OperationProcedure", "TypeRepresentation",
                         "FacilityDeclaration"));
 
+        extend(CompletionType.BASIC, implementationModulePattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY,
+                        "OperationProcedure", "TypeRepresentation",
+                        "FacilityDeclaration"));
+
         extend(CompletionType.BASIC, conceptModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "TypeFamily",
@@ -127,6 +133,11 @@ public class RESOLVEKeywordCompletionContributor
     private static Capture<PsiElement> conceptModulePattern() {
         return topLevelModulePattern(ResConceptModuleDecl.class,
                 ResConceptBlock.class);
+    }
+
+    private static Capture<PsiElement> implementationModulePattern() {
+        return topLevelModulePattern(ResImplModuleDecl.class,
+                ResImplBlock.class);
     }
 
     private static Capture<PsiElement> onKeywordStartWithParent(

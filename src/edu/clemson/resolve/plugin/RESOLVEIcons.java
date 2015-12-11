@@ -12,6 +12,7 @@ public interface RESOLVEIcons {
     public static final Icon FACILITY = IconLoader.getIcon("/edu/clemson/resolve/icons/facility.png");
 
     public static final Icon CONCEPT = IconLoader.getIcon("/edu/clemson/resolve/icons/concept.png");
+    public static final Icon IMPL = IconLoader.getIcon("/edu/clemson/resolve/icons/implementation.png");
     public static final Icon CONCEPT_EXT = IconLoader.getIcon("/edu/clemson/resolve/icons/concept_extension.png");
 
     public static final Icon PRECIS = IconLoader.getIcon("/edu/clemson/resolve/icons/precis.png");

@@ -28,6 +28,10 @@ public abstract class ResAbstractModuleImpl
         return findNotNullChildByClass(ResBlock.class);
     }
 
+    @Nullable public List<ResModuleSpec> getImplicitUsesSpecs() {
+        return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleSpec.class);
+    }
+
     @Nullable @Override public PsiElement getIdentifier() {
         return findChildByType(ResTypes.IDENTIFIER);
     }

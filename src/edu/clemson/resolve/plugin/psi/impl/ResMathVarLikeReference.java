@@ -4,7 +4,6 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.plugin.psi.*;
@@ -90,7 +89,7 @@ public class ResMathVarLikeReference
         if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
 
         if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
-        if (!ResReference.processUsesRequests(file, processor, state, myElement, true)) return false;
+        if (!ResReference.processNamedUsesRequests(file, processor, state, myElement)) return false;
         if (!processBuiltin(processor, state, myElement)) return false;
 
         return true;
