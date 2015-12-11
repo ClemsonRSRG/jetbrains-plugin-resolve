@@ -129,6 +129,7 @@ ESCAPES = [abfnrtv]
 "correspondence"                        { return CORRESPONDENCE; }
 "decreasing"                            { return DECREASING; }
 "Definition"                            { return DEFINITION; }
+"Defines"                               { return DEFINES; }
 "else"                                  { return ELSE; }
 "Extension"                             { return EXTENSION; }
 "extended_by"                           { return EXTENDED_BY; }

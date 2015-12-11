@@ -82,6 +82,7 @@
         EXTENSION               = 'Extension'
         EXTENDED_BY             = 'extended_by'
         CART_PROD               = 'Cart_Prod'
+        DEFINES                 = 'Defines'
         DEFINITION              = 'Definition'
         CONSTRAINTS             = 'constraints'
         CONVENTIONS             = 'conventions'
@@ -235,24 +236,27 @@ private PrecisItemRecover ::= !('Definition'|'Implicit'|'Theorem'|'Corollary'|'C
 
 private ConceptItem ::=
       TypeModelDecl
-    | OperationDecl {pin=1 recoverWhile=ConceptItemRecover}
+    | OperationDecl
+    | MathStandardDefinitionDecl {pin=1 recoverWhile=ConceptItemRecover}
 
-private ConceptItemRecover ::= !('Type'|'Operation'|'end')
+private ConceptItemRecover ::= !('Type'|'Operation'|'Definition'|'end')
 
 private ImplItem ::=
       TypeReprDecl
     | OperationProcedureDecl
     | FacilityDecl
-    | ProcedureDecl {pin=1 recoverWhile=ImplItemRecover}
+    | ProcedureDecl
+    | MathStandardDefinitionDecl {pin=1 recoverWhile=ImplItemRecover}
 
-private ImplItemRecover ::= !('Type'|'Operation'|'Facility'|'Recursive'|'Procedure'|'end')
+private ImplItemRecover ::= !('Type'|'Operation'|'Facility'|'Recursive'|'Definition'|'Procedure'|'end')
 
 private FacilityItem ::=
       FacilityDecl
     | OperationProcedureDecl
-    | TypeReprDecl {pin=1 recoverWhile=FacilityItemRecover}
+    | TypeReprDecl
+    | MathStandardDefinitionDecl {pin=1 recoverWhile=FacilityItemRecover}
 
-private FacilityItemRecover ::= !('Facility'|'Operation'|'Type'|'end')
+private FacilityItemRecover ::= !('Facility'|'Definition'|'Operation'|'Type'|'end')
 
 // Types
 
@@ -436,9 +440,9 @@ MathStandardDefinitionDecl ::= ('Implicit')? 'Definition'
     MathDefinitionSignature ('is' MathAssertionExp)? ';' {pin=2}
 
 MathCategoricalDefinitionDecl ::= 'Categorical' 'Definition' 'for'
-CategoricalSigList 'is' MathExp ';' {pin=1}
+MathDefinitionSignatureList 'is' MathExp ';' {pin=1}
 
-private CategoricalSigList ::= MathPrefixDefinitionSignature
+private MathDefinitionSignatureList ::= MathPrefixDefinitionSignature
 (',' MathPrefixDefinitionSignature)* {recoverWhile=CategoricalSigListRec}
 
 private CategoricalSigListRec ::= !('is')

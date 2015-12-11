@@ -22,7 +22,7 @@ public class RESOLVEKeywordCompletionContributor
         extend(CompletionType.BASIC, modulePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                        "Concept", "Facility", "Implementation"));
+                        "Concept", "Facility", "Precis", "Implementation"));
 
         extend(CompletionType.BASIC, usesPattern(),
                 new RESOLVEKeywordCompletionProvider(
@@ -32,18 +32,23 @@ public class RESOLVEKeywordCompletionContributor
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
                         "OperationProcedure", "TypeRepresentation",
-                        "FacilityDeclaration"));
+                        "FacilityDeclaration", "Definition"));
+
+        extend(CompletionType.BASIC, precisModulePattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY,
+                        "Definition", "Theorem", "Corollary"));
 
         extend(CompletionType.BASIC, implementationModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
                         "OperationProcedure", "TypeRepresentation",
-                        "FacilityDeclaration", "Procedure"));
+                        "FacilityDeclaration", "Procedure", "Definition"));
 
         extend(CompletionType.BASIC, conceptModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "TypeFamily",
-                        "OperationDeclaration"));
+                        "OperationDeclaration", "Definition"));
 
         extend(CompletionType.BASIC, parameterModePattern(),
                 new RESOLVEKeywordCompletionProvider(
@@ -122,6 +127,11 @@ public class RESOLVEKeywordCompletionContributor
     private static Capture<PsiElement> parameterModePattern() {
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(ResParameterMode.class);
+    }
+
+    private static Capture<PsiElement> precisModulePattern() {
+        return topLevelModulePattern(ResPrecisModuleDecl.class,
+                ResPrecisBlock.class);
     }
 
     private static Capture<PsiElement> facilityModulePattern() {

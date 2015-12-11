@@ -10,6 +10,14 @@
         </context>
     </template>
 
+    <template description='Precis module declaration' id='resolve_lang_Precis' name='resolve_lang_Precis' toReformat='true' toShortenFQNames='true'
+              value='Precis $NAME$;&#10;    $END$ &#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+
     <template description='Concept module declaration' id='resolve_lang_Concept' name='resolve_lang_Concept' toReformat='true' toShortenFQNames='true'
               value='Concept $NAME$;&#10;    $END$ &#10;end $NAME$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
@@ -28,8 +36,9 @@
     </template>
 
     <template description='Operation procedure declaration' id='resolve_lang_OperationProcedure' name='resolve_lang_Operation_Procedure' toReformat='true' toShortenFQNames='true'
-              value='Operation $NAME$ ($END$);&#10;    Procedure &#10;        &#10;end $NAME$;'>
+              value='Operation $NAME$ ($PARAMS$);&#10;    Procedure&#10;    $END$&#10;end $NAME$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;params&quot;' expression='' name='PARAMS'/>
         <context>
             <option name='RESOLVE' value='true'/>
         </context>
