@@ -11,6 +11,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.List;
 
+//TODO: Thinking ahead to type appearances in concept/enhancement realizations,
+//we might just need to have to specify that we DONT want to search the
+//spec we're enhancing (and that should be easy since we already have a specialized
+//processor for types, or b.) somehow ignore type models when we'r
 public class ResTypeReference
         extends
             PsiPolyVariantReferenceBase<ResTypeReferenceExp> {
@@ -107,6 +111,27 @@ public class ResTypeReference
         }
         return true;
     }
+
+    /*private boolean processModuleLevelEntities(@NotNull ResFile file,
+                                               @NotNull ResScopeProcessor processor,
+                                               @NotNull ResolveState state,
+                                               boolean localProcessing) {
+        if (!processNamedElements(processor, state, file.getFacilities(), localProcessing)) return false;
+        if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
+        if (!processNamedElements(processor, state, file.getGenericTypeParams(), localProcessing)) return false;
+        return true;
+    }
+
+    private boolean processNamedElements(@NotNull PsiScopeProcessor processor,
+                                         @NotNull ResolveState state,
+                                         @NotNull Collection<? extends ResNamedElement> elements,
+                                         boolean localResolve) {
+        for (ResNamedElement definition : elements) {
+            //if (definition instanceof ResTypeLikeDecl && !allowed((ResTypeLikeDecl)definition)) continue;
+            if ((definition.isPublic() || localResolve) && !processor.execute(definition, state)) return false;
+        }
+        return true;
+    }*/
 
     @NotNull private ResTypeProcessor createDelegate(
             @NotNull ResScopeProcessor processor) {

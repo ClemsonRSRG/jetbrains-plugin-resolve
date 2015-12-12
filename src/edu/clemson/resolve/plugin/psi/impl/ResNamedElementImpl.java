@@ -93,6 +93,7 @@ public abstract class ResNamedElementImpl
         if (this instanceof ResPrecisModuleDecl) icon = RESOLVEIcons.PRECIS;
         else if (this instanceof ResPrecisExtensionModuleDecl) icon = RESOLVEIcons.PRECIS_EXT;
         else if (this instanceof ResConceptModuleDecl) icon = RESOLVEIcons.CONCEPT;
+        else if (this instanceof ResConceptExtensionModuleDecl) icon = RESOLVEIcons.CONCEPT_EXT;
         else if (this instanceof ResImplModuleDecl) icon = RESOLVEIcons.IMPL;
         else if (this instanceof ResFacilityModuleDecl) icon = RESOLVEIcons.FACILITY;
         else if (this instanceof ResTypeModelDecl) icon = RESOLVEIcons.TYPE_MODEL;

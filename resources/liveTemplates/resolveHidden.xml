@@ -18,9 +18,27 @@
         </context>
     </template>
 
+    <template description='Precis extension module declaration' id='resolve_lang_PrecisExt' name='resolve_lang_PrecisExt' toReformat='true' toShortenFQNames='true'
+              value='Precis Extension $NAME$ for $PRECIS$;&#10;    $END$&#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;precis&quot;' expression='' name='PRECIS'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+
     <template description='Concept module declaration' id='resolve_lang_Concept' name='resolve_lang_Concept' toReformat='true' toShortenFQNames='true'
               value='Concept $NAME$;&#10;    $END$ &#10;end $NAME$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Concept extension module declaration' id='resolve_lang_ConceptExt' name='resolve_lang_ConceptExt' toReformat='true' toShortenFQNames='true'
+              value='Concept Extension $NAME$ for $CONCEPT$;&#10;    $END$&#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;concept&quot;' expression='' name='CONCEPT'/>
         <context>
             <option name='RESOLVE' value='true'/>
         </context>

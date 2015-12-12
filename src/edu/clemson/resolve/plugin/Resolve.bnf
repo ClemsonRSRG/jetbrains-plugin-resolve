@@ -202,11 +202,11 @@ ConceptBlock
 'end' identifier ';' {pin(".*")=1}
 
 ImplModuleDecl ::= 'Implementation' identifier ImplModuleParameters?
-'for' ModuleSpec ('of' ModuleSpec SpecModuleParameters?)? ';'
+'for' ModuleSpec ('of' ModuleSpec)? ';'
 UsesItemList?
 RequiresClause?
 ImplBlock
-'end' identifier ';' {pin(".*")=1}
+'end' identifier ';' {pin(".*")=1 methods=[getExtensionSpec getBaseConceptSpec]}
 
 FacilityModuleDecl ::= 'Facility' identifier ';'
 UsesItemList?

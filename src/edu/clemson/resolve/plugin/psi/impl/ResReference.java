@@ -268,21 +268,25 @@ public class ResReference
         return true;
     }
 
+    //TODO: This is good enough for now in terms of processing specs/super modules,
+    //but ideally in the future we can tune this some more. For instance, now if we're
+    //in an enhancement impl for do nothing, we'd get two do_nothings() one from the
+    //spec and one from the impl, etc. The simplicity of this is nice right now though.
     private boolean processSuperModules(@NotNull ResFile file,
                                         @NotNull ResScopeProcessor processor,
                                         @NotNull ResolveState state) {
-
+        //ok, the specIdx deserves an explanation: this numbers which spec we're processing.
+        //so in terms of enh impl: Impl X for Y [Idx=0] of Z [Idx=1]
+        int specIdx=0;
         for(ResModuleSpec spec : file.getSuperModuleSpecList()) {
             PsiElement resolvedFile = spec.resolve();
             if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
             ResFile eleFile = (ResFile)resolvedFile;
             ResScopeProcessorBase delegate = createDelegate(processor);
             processParameterLikeThings(((ResFile) resolvedFile).getEnclosedModule(), delegate);
-            if (((ResFile) resolvedFile).getEnclosedModule() instanceof
-                    ResConceptExtensionImplModuleDecl) {
-                processModuleLevelEntities(eleFile, processor, state, false);
-            }
+            processModuleLevelEntities(eleFile, processor, state, false);
             processNamedElements(processor, state, delegate.getVariants(), false);
+            specIdx++;
         }
         return true;
     }

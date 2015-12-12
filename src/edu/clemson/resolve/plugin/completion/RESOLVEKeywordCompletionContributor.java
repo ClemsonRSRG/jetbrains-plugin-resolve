@@ -22,7 +22,8 @@ public class RESOLVEKeywordCompletionContributor
         extend(CompletionType.BASIC, modulePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                        "Concept", "Facility", "Precis", "Implementation"));
+                        "Concept", "ConceptExt", "Facility", "Precis",
+                        "PrecisExt", "Implementation"));
 
         extend(CompletionType.BASIC, usesPattern(),
                 new RESOLVEKeywordCompletionProvider(
