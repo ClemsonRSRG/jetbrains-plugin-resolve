@@ -158,6 +158,7 @@ ESCAPES = [abfnrtv]
 "modeled"                               { return MODELED; }
 "Operation"                             { return OPERATION; }
 "otherwise"                             { return OTHERWISE; }
+"of"                                    { return OF; }
 "Procedure"                             { return PROCEDURE; }
 "Precis"                                { return PRECIS; }
 "Recursive"                             { return RECURSIVE; }

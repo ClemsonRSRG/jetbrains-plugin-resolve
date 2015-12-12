@@ -128,6 +128,7 @@
         WHILE                   = 'While'
         WITH                    = 'with'
         DO                      = 'do'
+        OF                      = 'of'
         STRING                  = 'string'
         WHICH_ENTAILS           = 'which_entails'
         CHAR                    = 'char'
@@ -179,6 +180,7 @@
 ModuleDecl ::=
       PrecisModuleDecl
     | PrecisExtensionModuleDecl
+    | ConceptExtensionModuleDecl
     | ConceptModuleDecl
     | ImplModuleDecl
     | FacilityModuleDecl
@@ -199,8 +201,8 @@ RequiresClause?
 ConceptBlock
 'end' identifier ';' {pin(".*")=1}
 
-ImplModuleDecl ::= 'Implementation' identifier ImplModuleParameters? /*('of' ModuleSpec)?*/
-'for' ModuleSpec ';'
+ImplModuleDecl ::= 'Implementation' identifier ImplModuleParameters?
+'for' ModuleSpec ('of' ModuleSpec SpecModuleParameters?)? ';'
 UsesItemList?
 RequiresClause?
 ImplBlock
@@ -211,6 +213,13 @@ UsesItemList?
 RequiresClause?
 FacilityBlock
 'end' identifier ';' {pin(".*")=1}
+
+ConceptExtensionModuleDecl ::=
+'Concept' 'Extension' identifier SpecModuleParameters? 'for' ModuleSpec ';'
+UsesItemList?
+RequiresClause?
+ConceptBlock
+'end' identifier ';' {pin(".*")=2}
 
 UsesItemList ::= 'uses' UsesItem (',' UsesItem)* ';'
 //TODO: Change this to ModuleIdentifier

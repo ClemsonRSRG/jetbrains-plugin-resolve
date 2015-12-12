@@ -275,8 +275,13 @@ public class ResReference
         for(ResModuleSpec spec : file.getSuperModuleSpecList()) {
             PsiElement resolvedFile = spec.resolve();
             if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
+            ResFile eleFile = (ResFile)resolvedFile;
             ResScopeProcessorBase delegate = createDelegate(processor);
-            if (!processParameterLikeThings(((ResFile) resolvedFile).getEnclosedModule(), delegate)) return false;
+            processParameterLikeThings(((ResFile) resolvedFile).getEnclosedModule(), delegate);
+            if (((ResFile) resolvedFile).getEnclosedModule() instanceof
+                    ResConceptExtensionImplModuleDecl) {
+                processModuleLevelEntities(eleFile, processor, state, false);
+            }
             processNamedElements(processor, state, delegate.getVariants(), false);
         }
         return true;
