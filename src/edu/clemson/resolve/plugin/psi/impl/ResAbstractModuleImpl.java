@@ -28,11 +28,15 @@ public abstract class ResAbstractModuleImpl
         return findNotNullChildByClass(ResBlock.class);
     }
 
+    @Nullable public List<ResModuleSpec> getModuleSignatureSpecs() {
+        return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleSpec.class);
+    }
+
     @Nullable @Override public PsiElement getIdentifier() {
         return findChildByType(ResTypes.IDENTIFIER);
     }
 
-    @NotNull public List<ResModuleSpec> getModuleSpecList() {
+    @NotNull public List<ResModuleSpec> getSuperModuleSpecList() {
         return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleSpec.class);
     }
 

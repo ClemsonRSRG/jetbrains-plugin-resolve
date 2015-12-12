@@ -4,7 +4,6 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.plugin.psi.*;
@@ -90,9 +89,21 @@ public class ResMathVarLikeReference
         if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
 
         if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
-        if (!ResReference.processUsesRequests(file, processor, state, myElement, true)) return false;
+        if (!ResReference.processExplicitlyNamedAndInheritedUsesRequests(file, processor, state)) return false;
+        if (!processSuperModules(file, processor, state)) return false;
         if (!processBuiltin(processor, state, myElement)) return false;
+        return true;
+    }
 
+    private boolean processSuperModules(@NotNull ResFile file,
+                                        @NotNull ResScopeProcessor processor,
+                                        @NotNull ResolveState state) {
+
+        for(ResModuleSpec spec : file.getSuperModuleSpecList()) {
+            PsiElement resolvedModule = spec.resolve();
+            if (resolvedModule == null || !(resolvedModule instanceof ResFile)) continue;
+            if (!processModuleLevelEntities((ResFile) resolvedModule, processor, state, false)) return false;
+        }
         return true;
     }
 

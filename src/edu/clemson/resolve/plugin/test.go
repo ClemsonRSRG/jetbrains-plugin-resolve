@@ -11,7 +11,7 @@ type vertex struct {
 
 func foo(birdy int,
 					jackrabbit int)  {
-	var pss person;
-	pss.vert.foo;
-	f
+	for birdy {
+		birdy
+	}
 }

@@ -14,9 +14,7 @@ import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class ResReference
         extends
@@ -97,7 +95,6 @@ public class ResReference
                 processUnqualifiedResolve(((ResFile) file), processor, state, true);
     }
 
-
     private boolean processQualifierExpression(@NotNull ResFile file,
                                                @NotNull ResReferenceExpBase qualifier,
                                                @NotNull ResScopeProcessor processor,
@@ -110,11 +107,13 @@ public class ResReference
             if (spec == null) return false;
             processModuleLevelEntities(spec, processor, state, false);
         }
-        //Todo look into the logic down here
-      /*  if (target instanceof ResTypeOwner) {
-            ResType type = ((ResTypeOwner)target).getResType(createContext());
-            if (type != null && !processResType(type, processor, state)) return false;
-        }*/
+        else if (target instanceof ResFile) {
+            ResModuleDecl module = ((ResFile) target).getEnclosedModule();
+            if (module != null) {
+                processModuleLevelEntities(
+                        (ResFile)target, processor, state, false);
+            }
+        }
         return true;
     }
 
@@ -135,7 +134,8 @@ public class ResReference
         if (!processBlock(processor, state, true)) return false;
         if (!processParameterLikeThings(processor, state, true)) return false;
         if (!processModuleLevelEntities(file, processor, state, true)) return false;
-
+        if (!processVarNamedAndInheritedUsesRequests(file, processor, state)) return false;
+        if (!processVarSuperModules(file, processor, state)) return false;
         return true;
     }
 
@@ -229,30 +229,69 @@ public class ResReference
                 localResolve);
     }
 
-    static boolean processUsesRequests(@NotNull ResFile file,
-                                       @NotNull ResScopeProcessor processor,
-                                       @NotNull ResolveState state,
-                                       @NotNull ResCompositeElement element,
-                                       boolean searchImplicitUses) {
-        for (ResUsesItem u : file.getUsesItems()) {
-            //this file resolve is failing for whatever reason when we're trying to add completions... is this a concurrency thing maybe?
-            //works the rest of the time...
+    private boolean processVarNamedAndInheritedUsesRequests(@NotNull ResFile file,
+                                                            @NotNull ResScopeProcessor processor,
+                                                            @NotNull ResolveState state) {
+        ResScopeProcessorBase delegate = createDelegate(processor);
+        processExplicitlyNamedAndInheritedUsesRequests(file, delegate, state);
+        return processNamedElements(processor, state, delegate.getVariants(), false);
+    }
+
+    static boolean processExplicitlyNamedAndInheritedUsesRequests(@NotNull ResFile file,
+                                                                  @NotNull ResScopeProcessor processor,
+                                                                  @NotNull ResolveState state) {
+        //process specifications uses requests
+        Set<ResUsesItem> usesItemsToSearch = new HashSet<ResUsesItem>();
+
+        //first get all inherited named uses requests
+        ResModuleDecl module = file.getEnclosedModule();
+        if (module != null) {
+            //Now process module decl implicit imports
+            for (ResModuleSpec moduleSpec : module.getSuperModuleSpecList()) {
+                PsiElement resolvedEle = moduleSpec.resolve();
+                if (resolvedEle != null && resolvedEle instanceof ResFile) {
+                    usesItemsToSearch.addAll(((ResFile) resolvedEle).getUsesItems());
+                }
+            }
+        }
+        usesItemsToSearch.addAll(file.getUsesItems());
+        for (ResUsesItem u : usesItemsToSearch) {
             PsiElement resolvedModule = u.getModuleSpec().resolve();
             if (resolvedModule == null || !(resolvedModule instanceof ResFile)) continue;
-            if (!processModuleLevelEntities((ResFile) resolvedModule, processor, state, false)) return false;
-        }
-        ResModuleDecl module = file.getEnclosedModule();
 
-        //The "searchImplicitUses" is here since, in the context of a a concept (or enhancement) realiz
-        //we don't want to find the type model, we should be dealing in repr types. So in the context
-        //of the typeReference class our searchImplicitUses will be if module != ResConceptImplModule || module != ResConceptExtImplModule
-        if (module != null && searchImplicitUses) {
-            //Now process module decl implicit imports
-            for (ResModuleSpec moduleSpec : module.getModuleSpecList()) {
-                PsiElement resolvedModule = moduleSpec.resolve();
-                if (resolvedModule == null || !(resolvedModule instanceof ResFile)) continue;
-                if (!processModuleLevelEntities((ResFile) resolvedModule, processor, state, false)) return false;
-            }
+            processModuleLevelEntities((ResFile) resolvedModule, processor, state, false);
+        }
+        return true;
+    }
+
+    private boolean processVarSuperModules(@NotNull ResFile file,
+                                           @NotNull ResScopeProcessor processor,
+                                           @NotNull ResolveState state) {
+        ResScopeProcessorBase delegate = createDelegate(processor);
+        processSuperModules(file, processor, delegate, state);
+        return processNamedElements(processor, state, delegate.getVariants(), false);
+    }
+
+    //TODO: This is good enough for now in terms of processing specs/super modules,
+    //but ideally in the future we can tune this some more. For instance, now if we're
+    //in an enhancement impl for do nothing, we'd get two do_nothings() one from the
+    //spec and one from the impl, etc. The simplicity of this is nice right now though.
+    protected static boolean processSuperModules(@NotNull ResFile file,
+                                                 @NotNull ResScopeProcessor processor,
+                                                 @NotNull ResScopeProcessorBase delegate,
+                                                 @NotNull ResolveState state) {
+        //ok, the specIdx deserves an explanation: this numbers which spec we're processing.
+        //so in terms of enh impl: Impl X for Y [Idx=0] of Z [Idx=1]
+        int specIdx=0;
+        for(ResModuleSpec spec : file.getSuperModuleSpecList()) {
+            PsiElement resolvedFile = spec.resolve();
+            if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
+            ResFile eleFile = (ResFile)resolvedFile;
+            //ResScopeProcessorBase delegate = createDelegate(processor);
+            processParameterLikeThings(((ResFile) resolvedFile).getEnclosedModule(), delegate);
+            processModuleLevelEntities(eleFile, processor, state, false);
+           // processNamedElements(processor, state, delegate.getVariants(), false);
+            specIdx++;
         }
         return true;
     }
@@ -264,6 +303,7 @@ public class ResReference
         if (!processNamedElements(processor, state, file.getOperationLikeThings(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getFacilities(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
+        if (!processNamedElements(processor, state, file.getGenericTypeParams(), localProcessing)) return false;
         if (!processNamedElements(processor, state, file.getMathDefinitionSignatures(), localProcessing)) return false;
         return true;
     }
@@ -277,7 +317,7 @@ public class ResReference
                 localResolve);
     }
 
-    protected static void processParameterLikeThings(
+    protected static boolean processParameterLikeThings(
             @NotNull ResCompositeElement e,
             @NotNull ResScopeProcessorBase processor) {
         ResMathDefinitionDecl def =
@@ -286,10 +326,12 @@ public class ResReference
                 PsiTreeUtil.getParentOfType(e, ResOperationLikeNode.class);
         ResModuleDecl module =
                 PsiTreeUtil.getParentOfType(e, ResModuleDecl.class);
+        if (e instanceof ResModuleDecl) module = (ResModuleDecl)e;
         if (def != null) processDefinitionParams(processor, def);
         if (operation != null) processProgParamDecls(processor, operation.getParamDeclList());
         if (module != null) processModuleParams(processor, module);
         //TODO: process moduleparams now
+        return true;
     }
 
     /** processing parameters of the definition we happen to be within */

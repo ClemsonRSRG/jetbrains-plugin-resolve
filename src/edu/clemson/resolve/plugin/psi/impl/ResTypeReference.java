@@ -1,21 +1,18 @@
 package edu.clemson.resolve.plugin.psi.impl;
 
-import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
-import com.intellij.psi.formatter.FormatterUtil;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
-import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+
+import static edu.clemson.resolve.plugin.psi.impl.ResReference.processNamedElements;
+import static edu.clemson.resolve.plugin.psi.impl.ResReference.processSuperModules;
 
 //TODO: Thinking ahead to type appearances in concept/enhancement realizations,
 //we might just need to have to specify that we DONT want to search the
@@ -99,33 +96,23 @@ public class ResTypeReference
         Collection<? extends ResNamedElement> result = delegate.getVariants();
         //this processes any named elements we've found searching up the tree in the previous line
         if (!processNamedElements(processor, state, result, localResolve)) return false;
+        if (!ResReference.processModuleLevelEntities(file, processor, state, localResolve)) return false;
+        if (!ResReference.processExplicitlyNamedAndInheritedUsesRequests(file, processor, state)) return false;
 
-        if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
-        if (!ResReference.processUsesRequests(file, processor, state, myElement, false)) return false;
+        //TODO: What we really need to avoid finding both the models and reprs
+        // is some flag, say, "stopAfterFirst" (I think...)
+        if (!processTypeSuperModules(file, processor, state)) return false;
         return true;
     }
 
-    private boolean processModuleLevelEntities(@NotNull ResFile file,
-                                               @NotNull ResScopeProcessor processor,
-                                               @NotNull ResolveState state,
-                                               boolean localProcessing) {
-        if (!processNamedElements(processor, state, file.getFacilities(), localProcessing)) return false;
-        if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
-        if (!processNamedElements(processor, state, file.getGenericTypeParams(), localProcessing)) return false;
-        return true;
+    private boolean processTypeSuperModules(@NotNull ResFile file,
+                                            @NotNull ResScopeProcessor processor,
+                                            @NotNull ResolveState state) {
+        ResScopeProcessorBase delegate = createDelegate(processor);
+        processSuperModules(file, processor, delegate, state);
+        return processNamedElements(processor, state, delegate.getVariants(), false);
     }
-
-    private boolean processNamedElements(@NotNull PsiScopeProcessor processor,
-                                         @NotNull ResolveState state,
-                                         @NotNull Collection<? extends ResNamedElement> elements,
-                                         boolean localResolve) {
-        for (ResNamedElement definition : elements) {
-            //if (definition instanceof ResTypeLikeDecl && !allowed((ResTypeLikeDecl)definition)) continue;
-            if ((definition.isPublic() || localResolve) && !processor.execute(definition, state)) return false;
-        }
-        return true;
-    }
-
+    
     @NotNull private ResTypeProcessor createDelegate(
             @NotNull ResScopeProcessor processor) {
         return new ResTypeProcessor(myElement, processor.isCompletion());
@@ -139,8 +126,9 @@ public class ResTypeReference
             super(origin.getIdentifier(), origin, completion);
         }
         @Override protected boolean crossOff(@NotNull PsiElement e) {
-            return e instanceof ResTypeLikeNodeDecl ||
-                    e instanceof ResFacilityDecl;
+            return !(e instanceof ResTypeLikeNodeDecl) &&
+                   !(e instanceof ResFacilityDecl) &&
+                   !(e instanceof ResTypeParamDecl);
         }
     }
 }

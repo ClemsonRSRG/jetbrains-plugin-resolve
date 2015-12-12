@@ -69,7 +69,9 @@ public class ResVarReference extends ResCachedReference<ResVarDef> {
         @Override protected boolean crossOff(@NotNull PsiElement e) {
             return !(e instanceof ResVarDef) &&
                    !(e instanceof ResParamDef) &&
-                   !(e instanceof ResFieldDef);
+                   !(e instanceof ResFieldDef) &&
+                   !(e instanceof ResTypeLikeNodeDecl) &&
+                   !(e instanceof ResFacilityDecl);
         }
     }
 }

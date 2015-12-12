@@ -22,7 +22,7 @@ public interface ResOperationLikeNode extends ResNamedElement {
 
     @NotNull List<ResParamDecl> getParamDeclList();
 
-    @Nullable public ResRequiresClause getRequiresClause();
+    /*@Nullable public ResRequiresClause getRequiresClause();
 
-    @Nullable public ResEnsuresClause getEnsuresClause();
+    @Nullable public ResEnsuresClause getEnsuresClause();*/
 }

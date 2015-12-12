@@ -1,5 +1,6 @@
 package edu.clemson.resolve.plugin.psi;
 
+import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,7 +12,7 @@ public interface ResModuleDecl extends ResNamedElement {
 
     @NotNull public List<ResUsesItem> getUsesItems();
 
-    @NotNull public List<ResModuleSpec> getModuleSpecList();
+    @NotNull public List<ResModuleSpec> getSuperModuleSpecList();
 
     @NotNull public List<ResMathDefinitionDecl> getMathDefinitionDecls();
 
@@ -24,5 +25,12 @@ public interface ResModuleDecl extends ResNamedElement {
     @Nullable public ResModuleParameters getModuleParameters();
 
     @NotNull public List<ResOperationLikeNode> getOperationLikeThings();
+
+    /**
+     * All module specs (names) referenced in the signature of a module; for
+     * example, in the case of {@code Impl X for Y;}; this will contain the
+     * {@code ResModuleSpec} for {@code Y}.
+     */
+    @NotNull public List<ResModuleSpec> getModuleSignatureSpecs();
 
 }

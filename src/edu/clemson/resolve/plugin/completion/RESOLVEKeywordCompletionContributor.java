@@ -22,7 +22,8 @@ public class RESOLVEKeywordCompletionContributor
         extend(CompletionType.BASIC, modulePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                        "Concept", "Facility"));
+                        "Concept", "ConceptExt", "Facility", "Precis",
+                        "PrecisExt", "Implementation"));
 
         extend(CompletionType.BASIC, usesPattern(),
                 new RESOLVEKeywordCompletionProvider(
@@ -32,12 +33,33 @@ public class RESOLVEKeywordCompletionContributor
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
                         "OperationProcedure", "TypeRepresentation",
-                        "FacilityDeclaration"));
+                        "FacilityDeclaration", "Definition"));
+
+        extend(CompletionType.BASIC, precisModulePattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY,
+                        "Definition", "Theorem", "Corollary"));
+
+        extend(CompletionType.BASIC, precisExtModulePattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY,
+                        "Definition", "Theorem", "Corollary"));
+
+        extend(CompletionType.BASIC, implementationModulePattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY,
+                        "OperationProcedure", "TypeRepresentation",
+                        "FacilityDeclaration", "Procedure", "Definition"));
 
         extend(CompletionType.BASIC, conceptModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "TypeFamily",
-                        "OperationDeclaration"));
+                        "OperationDeclaration", "Definition"));
+
+        extend(CompletionType.BASIC, conceptExtModulePattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "TypeFamily",
+                        "OperationDeclaration", "Definition"));
 
         extend(CompletionType.BASIC, parameterModePattern(),
                 new RESOLVEKeywordCompletionProvider(
@@ -52,6 +74,14 @@ public class RESOLVEKeywordCompletionContributor
         extend(CompletionType.BASIC, typeParamPattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "type"));
+
+        extend(CompletionType.BASIC, statementPattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "While", "If"));
+
+        extend(CompletionType.BASIC, elseStatementPattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "else"));
 
         extend(CompletionType.BASIC, variablePattern(),
                 new RESOLVEKeywordCompletionProvider(
@@ -72,6 +102,7 @@ public class RESOLVEKeywordCompletionContributor
         return onKeywordStartWithParent(psiElement(ResBlock.class)
                 .withParent(ResModuleDecl.class)
                 .andOr(psiElement().isFirstAcceptedChild(psiElement()),
+                        psiElement().afterSibling(psiElement(ResModuleSpec.class)),
                         psiElement().afterSibling(psiElement(ResModuleParameters.class))));
     }
 
@@ -79,7 +110,19 @@ public class RESOLVEKeywordCompletionContributor
         return onKeywordStartWithParent(ResBlock.class);
     }
 
-    //TODO: Fix, allows erroneous interleaving w/ stats
+    private static Capture<PsiElement> statementPattern() {
+        return psiElement(ResTypes.IDENTIFIER)
+                .withParent(psiElement(ResTypes.REFERENCE_EXP)
+                        .withParent(psiElement(ResTypes.SIMPLE_STATEMENT)));
+    }
+
+    private static Capture<PsiElement> elseStatementPattern() {
+        return psiElement(ResTypes.IDENTIFIER)
+                .withParent(psiElement(ResTypes.REFERENCE_EXP)
+                        .withParent(psiElement(ResTypes.SIMPLE_STATEMENT)
+                                .withParent(psiElement(ResTypes.IF_STATEMENT))));
+    }
+
     private static Capture<PsiElement> variablePattern() {
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(ResTypes.REFERENCE_EXP));
@@ -97,6 +140,16 @@ public class RESOLVEKeywordCompletionContributor
                 .withParent(ResParameterMode.class);
     }
 
+    private static Capture<PsiElement> precisModulePattern() {
+        return topLevelModulePattern(ResPrecisModuleDecl.class,
+                ResPrecisBlock.class);
+    }
+
+    private static Capture<PsiElement> precisExtModulePattern() {
+        return topLevelModulePattern(ResPrecisExtensionModuleDecl.class,
+                ResPrecisBlock.class);
+    }
+
     private static Capture<PsiElement> facilityModulePattern() {
         return topLevelModulePattern(ResFacilityModuleDecl.class,
                 ResFacilityBlock.class);
@@ -105,6 +158,16 @@ public class RESOLVEKeywordCompletionContributor
     private static Capture<PsiElement> conceptModulePattern() {
         return topLevelModulePattern(ResConceptModuleDecl.class,
                 ResConceptBlock.class);
+    }
+
+    private static Capture<PsiElement> conceptExtModulePattern() {
+        return topLevelModulePattern(ResConceptExtensionModuleDecl.class,
+                ResConceptBlock.class);
+    }
+
+    private static Capture<PsiElement> implementationModulePattern() {
+        return topLevelModulePattern(ResImplModuleDecl.class,
+                ResImplBlock.class);
     }
 
     private static Capture<PsiElement> onKeywordStartWithParent(
