@@ -40,6 +40,11 @@ public class RESOLVEKeywordCompletionContributor
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
                         "Definition", "Theorem", "Corollary"));
 
+        extend(CompletionType.BASIC, precisExtModulePattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY,
+                        "Definition", "Theorem", "Corollary"));
+
         extend(CompletionType.BASIC, implementationModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
@@ -47,6 +52,11 @@ public class RESOLVEKeywordCompletionContributor
                         "FacilityDeclaration", "Procedure", "Definition"));
 
         extend(CompletionType.BASIC, conceptModulePattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "TypeFamily",
+                        "OperationDeclaration", "Definition"));
+
+        extend(CompletionType.BASIC, conceptExtModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "TypeFamily",
                         "OperationDeclaration", "Definition"));
@@ -135,6 +145,11 @@ public class RESOLVEKeywordCompletionContributor
                 ResPrecisBlock.class);
     }
 
+    private static Capture<PsiElement> precisExtModulePattern() {
+        return topLevelModulePattern(ResPrecisExtensionModuleDecl.class,
+                ResPrecisBlock.class);
+    }
+
     private static Capture<PsiElement> facilityModulePattern() {
         return topLevelModulePattern(ResFacilityModuleDecl.class,
                 ResFacilityBlock.class);
@@ -142,6 +157,11 @@ public class RESOLVEKeywordCompletionContributor
 
     private static Capture<PsiElement> conceptModulePattern() {
         return topLevelModulePattern(ResConceptModuleDecl.class,
+                ResConceptBlock.class);
+    }
+
+    private static Capture<PsiElement> conceptExtModulePattern() {
+        return topLevelModulePattern(ResConceptExtensionModuleDecl.class,
                 ResConceptBlock.class);
     }
 

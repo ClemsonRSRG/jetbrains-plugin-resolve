@@ -72,7 +72,9 @@ public class ResPsiImplUtil {
 
     @Nullable public static ResReferenceExp getQualifier(
             @NotNull ResReferenceExp o) {
-        return PsiTreeUtil.getChildOfType(o, ResReferenceExp.class);
+        ResReferenceExp child =
+                PsiTreeUtil.getChildOfType(o, ResReferenceExp.class);
+        return child;
     }
 
     @NotNull public static PsiReference getReference(

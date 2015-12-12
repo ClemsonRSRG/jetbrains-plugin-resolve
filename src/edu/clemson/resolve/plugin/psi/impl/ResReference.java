@@ -95,7 +95,6 @@ public class ResReference
                 processUnqualifiedResolve(((ResFile) file), processor, state, true);
     }
 
-
     private boolean processQualifierExpression(@NotNull ResFile file,
                                                @NotNull ResReferenceExpBase qualifier,
                                                @NotNull ResScopeProcessor processor,
