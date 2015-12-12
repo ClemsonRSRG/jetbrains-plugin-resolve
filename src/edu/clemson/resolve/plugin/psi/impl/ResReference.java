@@ -135,9 +135,8 @@ public class ResReference
         if (!processBlock(processor, state, true)) return false;
         if (!processParameterLikeThings(processor, state, true)) return false;
         if (!processModuleLevelEntities(file, processor, state, true)) return false;
-        if (!processVarExplicitlyNamedAndInheritedUsesRequests(file, processor, state, myElement)) return false;
-        if (!processSuperModules(file, processor, state)) return false;
-
+        if (!processVarNamedAndInheritedUsesRequests(file, processor, state)) return false;
+        if (!processVarSuperModules(file, processor, state)) return false;
         return true;
     }
 
@@ -231,19 +230,17 @@ public class ResReference
                 localResolve);
     }
 
-    private boolean processVarExplicitlyNamedAndInheritedUsesRequests(@NotNull ResFile file,
-                                                              @NotNull ResScopeProcessor processor,
-                                                              @NotNull ResolveState state,
-                                                              @NotNull ResCompositeElement element) {
+    private boolean processVarNamedAndInheritedUsesRequests(@NotNull ResFile file,
+                                                            @NotNull ResScopeProcessor processor,
+                                                            @NotNull ResolveState state) {
         ResScopeProcessorBase delegate = createDelegate(processor);
-        processExplicitlyNamedAndInheritedUsesRequests(file, delegate, state, element);
+        processExplicitlyNamedAndInheritedUsesRequests(file, delegate, state);
         return processNamedElements(processor, state, delegate.getVariants(), false);
     }
 
     static boolean processExplicitlyNamedAndInheritedUsesRequests(@NotNull ResFile file,
                                                                   @NotNull ResScopeProcessor processor,
-                                                                  @NotNull ResolveState state,
-                                                                  @NotNull ResCompositeElement element) {
+                                                                  @NotNull ResolveState state) {
         //process specifications uses requests
         Set<ResUsesItem> usesItemsToSearch = new HashSet<ResUsesItem>();
 
@@ -268,13 +265,22 @@ public class ResReference
         return true;
     }
 
+    private boolean processVarSuperModules(@NotNull ResFile file,
+                                           @NotNull ResScopeProcessor processor,
+                                           @NotNull ResolveState state) {
+        ResScopeProcessorBase delegate = createDelegate(processor);
+        processSuperModules(file, processor, delegate, state);
+        return processNamedElements(processor, state, delegate.getVariants(), false);
+    }
+
     //TODO: This is good enough for now in terms of processing specs/super modules,
     //but ideally in the future we can tune this some more. For instance, now if we're
     //in an enhancement impl for do nothing, we'd get two do_nothings() one from the
     //spec and one from the impl, etc. The simplicity of this is nice right now though.
-    private boolean processSuperModules(@NotNull ResFile file,
-                                        @NotNull ResScopeProcessor processor,
-                                        @NotNull ResolveState state) {
+    protected static boolean processSuperModules(@NotNull ResFile file,
+                                                 @NotNull ResScopeProcessor processor,
+                                                 @NotNull ResScopeProcessorBase delegate,
+                                                 @NotNull ResolveState state) {
         //ok, the specIdx deserves an explanation: this numbers which spec we're processing.
         //so in terms of enh impl: Impl X for Y [Idx=0] of Z [Idx=1]
         int specIdx=0;
@@ -282,10 +288,10 @@ public class ResReference
             PsiElement resolvedFile = spec.resolve();
             if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
             ResFile eleFile = (ResFile)resolvedFile;
-            ResScopeProcessorBase delegate = createDelegate(processor);
+            //ResScopeProcessorBase delegate = createDelegate(processor);
             processParameterLikeThings(((ResFile) resolvedFile).getEnclosedModule(), delegate);
             processModuleLevelEntities(eleFile, processor, state, false);
-            processNamedElements(processor, state, delegate.getVariants(), false);
+           // processNamedElements(processor, state, delegate.getVariants(), false);
             specIdx++;
         }
         return true;

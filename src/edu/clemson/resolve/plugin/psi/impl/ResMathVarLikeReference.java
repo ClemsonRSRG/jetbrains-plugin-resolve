@@ -89,7 +89,7 @@ public class ResMathVarLikeReference
         if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
 
         if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
-        if (!ResReference.processExplicitlyNamedAndInheritedUsesRequests(file, processor, state, myElement)) return false;
+        if (!ResReference.processExplicitlyNamedAndInheritedUsesRequests(file, processor, state)) return false;
         if (!processSuperModules(file, processor, state)) return false;
         if (!processBuiltin(processor, state, myElement)) return false;
         return true;

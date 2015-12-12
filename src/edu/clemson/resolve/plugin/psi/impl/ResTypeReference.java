@@ -11,6 +11,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.List;
 
+import static edu.clemson.resolve.plugin.psi.impl.ResReference.processNamedElements;
+import static edu.clemson.resolve.plugin.psi.impl.ResReference.processSuperModules;
+
 //TODO: Thinking ahead to type appearances in concept/enhancement realizations,
 //we might just need to have to specify that we DONT want to search the
 //spec we're enhancing (and that should be easy since we already have a specialized
@@ -92,47 +95,24 @@ public class ResTypeReference
         ResolveUtil.treeWalkUp(myElement, delegate);
         Collection<? extends ResNamedElement> result = delegate.getVariants();
         //this processes any named elements we've found searching up the tree in the previous line
-        if (!ResReference.processNamedElements(processor, state, result, localResolve)) return false;
+        if (!processNamedElements(processor, state, result, localResolve)) return false;
         if (!ResReference.processModuleLevelEntities(file, processor, state, localResolve)) return false;
-        if (!ResReference.processExplicitlyNamedAndInheritedUsesRequests(file, processor, state, myElement)) return false;
+        if (!ResReference.processExplicitlyNamedAndInheritedUsesRequests(file, processor, state)) return false;
 
-        //TODO: add uses items from concept implicitly to the impl
-        //TODO: Factor this logic out into a processEnclosingParentSpecifications()
-        ResModuleDecl module = file.getEnclosedModule();
-        if (module instanceof ResImplModuleDecl) {
-            List<ResModuleSpec> implicitUsesSpecs = module.getModuleSignatureSpecs();
-            for (ResModuleSpec s : implicitUsesSpecs) {
-                PsiElement resolvedModule = s.resolve();
-                if (resolvedModule == null || !(resolvedModule instanceof ResFile)) return true;
-                //search the parent module for any generic types.
-                if (!ResReference.processNamedElements(processor, state,
-                        ((ResFile) resolvedModule).getGenericTypeParams(), false)) return false;
-            }
-        }
+        //TODO: What we really need to avoid finding both the models and reprs
+        // is some flag, say, "stopAfterFirst" (I think...)
+        if (!processTypeSuperModules(file, processor, state)) return false;
         return true;
     }
 
-    /*private boolean processModuleLevelEntities(@NotNull ResFile file,
-                                               @NotNull ResScopeProcessor processor,
-                                               @NotNull ResolveState state,
-                                               boolean localProcessing) {
-        if (!processNamedElements(processor, state, file.getFacilities(), localProcessing)) return false;
-        if (!processNamedElements(processor, state, file.getTypes(), localProcessing)) return false;
-        if (!processNamedElements(processor, state, file.getGenericTypeParams(), localProcessing)) return false;
-        return true;
+    private boolean processTypeSuperModules(@NotNull ResFile file,
+                                            @NotNull ResScopeProcessor processor,
+                                            @NotNull ResolveState state) {
+        ResScopeProcessorBase delegate = createDelegate(processor);
+        processSuperModules(file, processor, delegate, state);
+        return processNamedElements(processor, state, delegate.getVariants(), false);
     }
-
-    private boolean processNamedElements(@NotNull PsiScopeProcessor processor,
-                                         @NotNull ResolveState state,
-                                         @NotNull Collection<? extends ResNamedElement> elements,
-                                         boolean localResolve) {
-        for (ResNamedElement definition : elements) {
-            //if (definition instanceof ResTypeLikeDecl && !allowed((ResTypeLikeDecl)definition)) continue;
-            if ((definition.isPublic() || localResolve) && !processor.execute(definition, state)) return false;
-        }
-        return true;
-    }*/
-
+    
     @NotNull private ResTypeProcessor createDelegate(
             @NotNull ResScopeProcessor processor) {
         return new ResTypeProcessor(myElement, processor.isCompletion());
@@ -146,9 +126,9 @@ public class ResTypeReference
             super(origin.getIdentifier(), origin, completion);
         }
         @Override protected boolean crossOff(@NotNull PsiElement e) {
-            return e instanceof ResTypeLikeNodeDecl ||
-                    e instanceof ResFacilityDecl ||
-                    e instanceof ResTypeParamDecl;
+            return !(e instanceof ResTypeLikeNodeDecl) &&
+                   !(e instanceof ResFacilityDecl) &&
+                   !(e instanceof ResTypeParamDecl);
         }
     }
 }
