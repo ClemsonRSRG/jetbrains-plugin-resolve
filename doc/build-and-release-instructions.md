@@ -1,14 +1,13 @@
 # Cutting a Release of the RESOLVE Plugin
 
 Assuming you've read and succesfully carried out the instructions [specified](https://github.com/Welchd1/resolve-intellij-plugin/blob/master/doc/contributing-instructions.md)
-and subsequently changed the plugin in some way, the following is a
-description of some basic steps you need to go through in order to deploy a new
-version of the plugin.
+(and subsequently changed the plugin in some way), the following describes some of the
+basic steps you will need to go through to deploy a new version of the plugin.
 
 ## Testing
 Before deploying you should use JUnit to execute plugin tests. This can be done
-natively in IntelliJ without the use of complex build tools like Maven.
-Simply right click on the green `tests` folder and then select `Run All Tests`
+natively in IntelliJ without the use of complex build tools like Maven by 
+imply right clicking on the green `tests` folder and then selecting `Run All Tests`
 from the menu:
 
 ![running tests](https://github.com/Welchd1/resolve-intellij-plugin/blob/master/doc/images/running-tests.png)
@@ -16,12 +15,12 @@ from the menu:
 If you see a bunch of green checkmarks appear in the bottom window, chances are that all 
 is well. If your looking to add some tests for a specific feature, go ahead and give 
 [this](https://github.com/Welchd1/resolve-intellij-plugin/blob/master/doc/writing-tests.md) 
-a read through.
+a read through for more details on working with IntelliJ specific test fixtures.
 
 ## Deploying
 
 After adding and/or executing tests, you can package up the plugin for release by 
-clicking the `Prepare Plugin Module ... for Deployment` button:
+clicking the `Prepare Plugin Module ... for Deployment` button under `Build`:
 
 ![deploying](https://github.com/Welchd1/resolve-intellij-plugin/blob/master/doc/images/deploying.png)
 
