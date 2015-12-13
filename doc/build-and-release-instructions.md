@@ -15,8 +15,8 @@ a read through.
 
 ## Deploying
 
-After adding and executing tests, you can package up the plugin for release by clicking 
-the `Prepare Plugin Module ... for deployment` button:
+After adding and/or executing tests, you can package up the plugin for release by 
+clicking the `Prepare Plugin Module ... for Deployment` button:
 
 ![deploying](https://github.com/Welchd1/resolve-intellij-plugin/blob/master/doc/images/deploying.png)
 
