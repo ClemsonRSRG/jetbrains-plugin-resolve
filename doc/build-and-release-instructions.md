@@ -1,5 +1,10 @@
 # Cutting a Release of the RESOLVE Plugin
 
+Assuming you've read and succesfully carried out the instructions [specified](https://github.com/Welchd1/resolve-intellij-plugin/blob/master/doc/contributing-instructions.md)
+and subsequently changed the plugin in some way, the following is a
+description of some basic steps you need to go through in order to deploy a new
+version of the plugin.
+
 ## Testing
 Before deploying you should use JUnit to execute plugin tests. This can be done
 natively in IntelliJ without the use of complex build tools like Maven.
