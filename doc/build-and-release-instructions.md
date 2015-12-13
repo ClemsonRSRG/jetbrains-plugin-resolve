@@ -8,9 +8,28 @@ from the menu:
 
 ![running tests](https://github.com/Welchd1/resolve-intellij-plugin/blob/master/doc/images/running-tests.png)
 
+If you see a bunch of green checkmarks appear in the bottom window, chances are that all 
+is well. If your looking to add some tests for a specific feature, go ahead and give 
+[this](https://github.com/Welchd1/resolve-intellij-plugin/blob/master/doc/writing-tests.md) 
+a read through.
+
 ## Deploying
 
-### Tagging a github release
+After adding and executing tests, you can package up the plugin for release by clicking 
+the `Prepare Plugin Module ... for deployment` button:
+
+![deploying](https://github.com/Welchd1/resolve-intellij-plugin/blob/master/doc/images/deploying.png)
+
+### Github
+
+Create a release candidate tag 0.x-rc-1 or full 0.x tag. For example,
+
+```bash
+git tag -a 0.2 -m 'RESOLVE plugin release 0.2'
+git push origin 0.2
+```
+
+Create a pre-release or full release at github; [Example 0.1-rc-1](https://github.com/Welchd1/resolve-intellij-plugin/blob/master/releases/tag/0.2-rc-1).
 
 ## Submitting to Jetbrains
 
