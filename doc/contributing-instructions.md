@@ -46,21 +46,33 @@ the `new` button near the project SDK button and navigate to the folder
 containing the IntelliJ sources cloned in step 1.
 
 Once you see the IntelliJ sdk appear
-(similar to the way it displayed in the above picture), clicking next should
+(similar to how it's displayed in the above picture -- don't worry about the version numbers: those will be different), clicking next should
 bring up a page that looks something like:
 
 ![new project2](https://github.com/Welchd1/resolve-intellij-plugin/blob/master/doc/images/new-project2.png)
 
 Click the button with three dots to the right of `Project Location` and navigate
-to `resolve-intellij-plugin` folder cloned in step 2, the fields in the window
-should then automatically update and look something like this:
+to `resolve-intellij-plugin` folder cloned in step 2. Upon doing so, the fields in the window
+should automatically update and look something like this:
 
 ![new project3](https://github.com/Welchd1/resolve-intellij-plugin/blob/master/doc/images/new-project3.png)
 
-Finally, click finish.
+Now click finish.
 
 ## Step 4: mark module content roots
 
-Todo
+With the above steps complete, all that's really left to do is mark existing content roots based on the sorts of files they contain. To do this, open the project structure window by clicking this button:
 
+![proj structure](https://github.com/Welchd1/resolve-intellij-plugin/blob/master/doc/images/prog-structure.png)
+
+which should bring up the following window:
+
+![content-roots](https://github.com/Welchd1/resolve-intellij-plugin/blob/master/doc/images/content-roots.png)
+
+Note that when this window comes up you might need to do some navigating to get to the exact screen shown above (it should be fairly straightforward based on what's highlighted). The following folders must be 'marked' as follows:
+
+* **src** should be marked "sources" (in blue)
+* **gen** should be marked "sources" (in blue) -- if it doesn't exist then create a new directory named gen and mark that
+* **tests** should be marked "tests" (in green)
+* **resources** should be marked "resources" 
 
