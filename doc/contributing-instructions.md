@@ -63,7 +63,7 @@ Now click finish.
 
 With the above steps complete, all that's really left to do is mark existing content roots based on the sorts of files they contain. To do this, open the project structure window by clicking this button:
 
-![proj structure](https://github.com/Welchd1/resolve-intellij-plugin/blob/master/doc/images/prog-structure.png)
+![proj structure](https://github.com/Welchd1/resolve-intellij-plugin/blob/master/doc/images/proj-structure.png)
 
 which should bring up the following window:
 
