@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
  * Q: I see that this class extends {@link ResTypeOwner}, but the node I want
  * to extend {@code this} doesn't have a sensible {@link ResType}! Is this OK?<br>
  * A: Sure, right now this is here mainly for convenience. Notice that the
- * method is annotated {@code Nullable}, indicating that it's fine if your
+ * method is annotated {@link Nullable}, indicating that it's fine if your
  * node has no real type info. In the future, this class might be adjusted so
  * that it doesn't extend {@link ResTypeOwner} -- pushing that off to more
  * specific extending classes (e.g.: {@link ResVarDef}, etc)<p>
