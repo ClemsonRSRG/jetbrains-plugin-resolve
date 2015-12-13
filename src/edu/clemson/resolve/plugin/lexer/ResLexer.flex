@@ -123,7 +123,7 @@ ESCAPES = [abfnrtv]
 "Categorical"                           { return CATEGORICAL; }
 "changing"                              { return CHANGING; }
 "Concept"                               { return CONCEPT;  }
-"constraints"                           { return CONSTRAINTS; }
+("constraints"|"Constraints")           { return CONSTRAINTS; }
 "conventions"                           { return CONVENTIONS; }
 "Corollary"                             { return COROLLARY; }
 "correspondence"                        { return CORRESPONDENCE; }
