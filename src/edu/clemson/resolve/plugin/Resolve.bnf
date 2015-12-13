@@ -206,7 +206,7 @@ ImplModuleDecl ::= 'Implementation' identifier ImplModuleParameters?
 UsesItemList?
 RequiresClause?
 ImplBlock
-'end' identifier ';' {pin(".*")=1 methods=[getExtensionSpec getBaseConceptSpec]}
+'end' identifier ';' {pin(".*")=1}
 
 FacilityModuleDecl ::= 'Facility' identifier ';'
 UsesItemList?
@@ -246,9 +246,10 @@ private PrecisItemRecover ::= !('Definition'|'Implicit'|'Theorem'|'Corollary'|'C
 private ConceptItem ::=
       TypeModelDecl
     | OperationDecl
-    | MathStandardDefinitionDecl {pin=1 recoverWhile=ConceptItemRecover}
+    | MathStandardDefinitionDecl
+    | ConstraintsClause {pin=1 recoverWhile=ConceptItemRecover}
 
-private ConceptItemRecover ::= !('Type'|'Operation'|'Definition'|'end')
+private ConceptItemRecover ::= !('Type'|'Operation'|'Definition'|'constraints'|'Constraints'|'end')
 
 private ImplItem ::=
       TypeReprDecl
@@ -436,7 +437,7 @@ RequiresClause ::= 'requires' MathAssertionExp (EntailsClause)? ';' {pin=1}
 
 EnsuresClause ::= 'ensures' MathAssertionExp ';' {pin=1}
 
-ConstraintsClause ::= 'constraints' MathAssertionExp ';' {pin=1}
+ConstraintsClause ::= ('constraints'|'Constraints') MathAssertionExp ';' {pin=1}
 
 ChangingClause ::= 'changing' ExpArgumentList ';' {pin=1}
 MaintainingClause ::= 'maintaining' MathAssertionExp ';' {pin=1}
@@ -566,4 +567,4 @@ private MathSetEleRecover ::= !('}')
 
 MathLiteralExp ::= (int|'true'|'false')
 
-MathNameIdentifier ::= identifier|('and'|'or'|'not'|'o'|'true'|'false'|int|'+'|'-')
+MathNameIdentifier ::= identifier|('o'|'true'|'false'|int|'+'|'-'|'*'|'/'|'>'|'<'|'<='|'>='|'not')

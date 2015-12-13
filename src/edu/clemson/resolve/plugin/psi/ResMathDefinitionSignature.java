@@ -5,6 +5,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * The signature of a mathematical definition ({@link ResMathDefinitionDecl}).
+ * This holds the 'meat' of a definition including its name, 'return type',
+ * and any formal parameters.
+ */
 public interface ResMathDefinitionSignature extends ResNamedElement {
 
     @NotNull public List<ResMathVarDeclGroup> getParameters();
