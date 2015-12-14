@@ -7,7 +7,7 @@ basic steps you will need to go through to deploy a new version of the plugin.
 ## Testing
 Before deploying you should use JUnit to execute plugin tests. This can be done
 natively in IntelliJ without the use of complex build tools like Maven by 
-imply right clicking on the green `tests` folder and then selecting `Run All Tests`
+simply right clicking on the green `tests` folder and then selecting `Run All Tests`
 from the menu:
 
 ![running tests](https://github.com/Welchd1/resolve-intellij-plugin/blob/master/doc/images/running-tests.png)
