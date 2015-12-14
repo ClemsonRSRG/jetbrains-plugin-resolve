@@ -6,6 +6,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * Represents the root of all module like declarations in RESOLVE.
+ */
 public interface ResModuleDecl extends ResNamedElement {
 
     @NotNull public ResBlock getBlock();
@@ -25,12 +28,5 @@ public interface ResModuleDecl extends ResNamedElement {
     @Nullable public ResModuleParameters getModuleParameters();
 
     @NotNull public List<ResOperationLikeNode> getOperationLikeThings();
-
-    /**
-     * All module specs (names) referenced in the signature of a module; for
-     * example, in the case of {@code Impl X for Y;}; this will contain the
-     * {@code ResModuleSpec} for {@code Y}.
-     */
-    @NotNull public List<ResModuleSpec> getModuleSignatureSpecs();
 
 }

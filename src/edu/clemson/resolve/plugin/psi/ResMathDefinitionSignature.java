@@ -7,8 +7,8 @@ import java.util.List;
 
 /**
  * The signature of a mathematical definition ({@link ResMathDefinitionDecl}).
- * This holds the 'meat' of a definition including its name, 'return type',
- * and any formal parameters.
+ * This holds the 'meat' of a definition including its name, 'return type'
+ * (which in this case is just a {@link ResMathExp}, and any formal parameters.
  */
 public interface ResMathDefinitionSignature extends ResNamedElement {
 

@@ -27,15 +27,16 @@ import static edu.clemson.resolve.plugin.highlighting.RESOLVESyntaxHighlightingC
  * To change it, see dialog: Editor > Colors & Fonts > Language Defaults.
  *
  * From <a href="http://www.jetbrains.org/intellij/sdk/docs/reference_guide/custom_language_support/syntax_highlighting_and_error_highlighting.html">doc</a>:
- * "The mapping of the TextAttributesKey to specific attributes used
- * in an editor is defined by the EditorColorsScheme class, and can
- * be configured by the user if the plugin provides an appropriate
- * configuration interface.
+ * "The mapping of the TextAttributesKey to specific attributes used in an
+ * editor is defined by the EditorColorsScheme class, and can be configured by
+ * the user if the plugin provides an appropriate configuration interface.
  * ...
- * The syntax highlighter returns the {@link TextAttributesKey}
- * instances for each token type which needs special highlighting.
- * For highlighting lexer errors, the standard TextAttributesKey
- * for bad characters HighlighterColors.BAD_CHARACTER can be used."
+ * The syntax highlighter returns the {@link TextAttributesKey} instances for
+ * each token type which needs special highlighting. For highlighting lexer
+ * errors, the standard TextAttributesKey for bad characters
+ * {@code HighlighterColors.BAD_CHARACTER} can be used."
+ *
+ * @since 0.0.1
  */
 public class RESOLVESyntaxHighlighter extends SyntaxHighlighterBase {
 
