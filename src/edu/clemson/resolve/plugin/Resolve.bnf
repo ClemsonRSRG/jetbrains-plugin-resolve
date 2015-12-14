@@ -46,6 +46,7 @@
 
         TRUE                    = 'true'
         FALSE                   = 'false'
+        IMPLIES                 = 'implies'
 
         LESS_OR_EQUAL           = '<='
         LESS                    = '<'
@@ -83,6 +84,7 @@
         EXTENDED_BY             = 'extended_by'
         CART_PROD               = 'Cart_Prod'
         DEFINES                 = 'Defines'
+        IFF                     = 'iff'
         DEFINITION              = 'Definition'
         CONSTRAINTS             = 'constraints'
         CONVENTIONS             = 'conventions'
@@ -493,6 +495,7 @@ MathQuantifiedExp ::= ('Forall'|'Exists') MathVarDeclGroup ',' MathAssertionExp 
 
 MathExp ::=
       MathBooleanInfixApplyExp
+
     | MathRelationalInfixApplyExp
     | MathRangeInfixApplyExp
     | MathAddGroup
@@ -511,7 +514,7 @@ private MathOutfixGroup ::= MathBarOutfixApplyExp | MathAngleOutfixApplyExp | Ma
 
 MathPlusInfixApplyExp ::= MathExp '+' MathExp
 MathMinusInfixApplyExp ::= MathExp ('-'|'~') MathExp
-MathBooleanInfixApplyExp ::= MathExp ('and'|'or') MathExp
+MathBooleanInfixApplyExp ::= MathExp ('and'|'or'|'implies'|'iff') MathExp
 MathMultInfixApplyExp ::= MathExp '*' MathExp
 MathDivInfixApplyExp ::= MathExp '/' MathExp
 MathCatInfixApplyExp ::= MathExp ('o'|'union'|'intersect'|'is_in'|'is_not_in') MathExp

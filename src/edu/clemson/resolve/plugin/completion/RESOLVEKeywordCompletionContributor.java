@@ -3,13 +3,11 @@ package edu.clemson.resolve.plugin.completion;
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.openapi.project.DumbAware;
-import com.intellij.patterns.ElementPattern;
 import com.intellij.patterns.PsiElementPattern.Capture;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
 import edu.clemson.resolve.plugin.ResTypes;
 import edu.clemson.resolve.plugin.psi.*;
-import org.eclipse.jdt.internal.compiler.ast.ReferenceExpression;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
@@ -86,6 +84,10 @@ public class RESOLVEKeywordCompletionContributor
         extend(CompletionType.BASIC, variablePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "Var"));
+
+        extend(CompletionType.BASIC, quantifiedMathExp(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Forall", "Exists"));
     }
 
     private static Capture<PsiElement> typeParamPattern() {
@@ -104,6 +106,12 @@ public class RESOLVEKeywordCompletionContributor
                 .andOr(psiElement().isFirstAcceptedChild(psiElement()),
                         psiElement().afterSibling(psiElement(ResModuleSpec.class)),
                         psiElement().afterSibling(psiElement(ResModuleParameters.class))));
+    }
+
+    private static Capture<PsiElement> quantifiedMathExp() {
+        return psiElement(ResTypes.IDENTIFIER)
+                .withParent(psiElement(ResTypes.MATH_NAME_IDENTIFIER)
+                        .withParent(psiElement(ResTypes.MATH_REFERENCE_EXP)));
     }
 
     private static Capture<PsiElement> otherUsesPattern() {

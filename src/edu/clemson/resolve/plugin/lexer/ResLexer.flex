@@ -146,6 +146,8 @@ ESCAPES = [abfnrtv]
 "for"                                   { return FOR; }
 "hypo"                                  { return HYPO; }
 "if"                                    { return IF; }
+"iff"                                   { return IFF; }
+"implies"                               { return IMPLIES; }
 "If"                                    { return PROG_IF; }
 "is"                                    { return IS; }
 "implemented"                           { return IMPLEMENTED; }
