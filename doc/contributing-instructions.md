@@ -76,3 +76,5 @@ Note that when this window comes up you might need to do some navigating to get 
 * **tests** should be marked "tests" (in green)
 * **resources** should be marked "resources" 
 
+Once your configuration looks like the one pictured above, you should be good
+to go.
