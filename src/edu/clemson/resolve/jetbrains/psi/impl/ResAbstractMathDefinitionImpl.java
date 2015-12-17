@@ -8,12 +8,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-/**
- * An abstract base class from which all RESOLVE math definition-like
- * constructs extend.
+/** An abstract base class from which all RESOLVE math definition-like
+ *  constructs extend.
  *
- * <p>See note in {@link ResMathDefinitionDecl} as to why we don't extend
- * {@link edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl}.</p>
+ *  <p>See note in {@link ResMathDefinitionDecl} as to why we don't extend
+ *  {@link edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl}.</p>
  */
 public abstract class ResAbstractMathDefinitionImpl
         extends
