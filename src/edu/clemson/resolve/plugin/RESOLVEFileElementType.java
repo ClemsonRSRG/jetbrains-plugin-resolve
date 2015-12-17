@@ -1,9 +1,11 @@
 package edu.clemson.resolve.plugin;
 
 import com.intellij.psi.tree.IStubFileElementType;
-import edu.clemson.resolve.plugin.stubs.ResFileStub;
+import edu.clemson.resolve.plugin.psi.ResFile;
 
-public class RESOLVEFileElementType extends IStubFileElementType<ResFileStub> {
+public class RESOLVEFileElementType
+        extends
+            IStubFileElementType<ResFile.ResFileStub> {
 
     public static final IStubFileElementType INSTANCE =
             new RESOLVEFileElementType();

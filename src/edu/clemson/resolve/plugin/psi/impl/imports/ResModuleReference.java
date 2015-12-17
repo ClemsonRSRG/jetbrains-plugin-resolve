@@ -12,7 +12,6 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.io.fs.FileSystem;
 import edu.clemson.resolve.plugin.psi.ResFile;
 import edu.clemson.resolve.plugin.psi.ResMathReferenceExp;
 import edu.clemson.resolve.plugin.util.RESOLVEUtil;

@@ -6,12 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-/**
- * The {@link LanguageFileType} for RESOLVE files.
- *
- * @author <dtw.welch@gmail.com>
- * @since 0.1
- */
+/** The {@link LanguageFileType} for RESOLVE files. */
 public class RESOLVEFileType extends LanguageFileType {
 
     public static final RESOLVEFileType INSTANCE = new RESOLVEFileType();

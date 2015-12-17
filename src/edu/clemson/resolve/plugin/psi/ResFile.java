@@ -4,6 +4,7 @@ import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.stubs.PsiFileStubImpl;
 import com.intellij.psi.util.PsiTreeUtil;
 import edu.clemson.resolve.plugin.RESOLVEFileType;
 import edu.clemson.resolve.plugin.RESOLVELanguage;
@@ -100,4 +101,9 @@ public class ResFile extends PsiFileBase {
                 new ArrayList<ResOperationWithBodyNode>();
     }*/
 
+    public static class ResFileStub extends PsiFileStubImpl<ResFile> {
+        public ResFileStub(ResFile file) {
+            super(file);
+        }
+    }
 }
