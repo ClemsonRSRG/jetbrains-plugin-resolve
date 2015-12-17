@@ -1,4 +1,4 @@
-# BNF information, tips and tricks
+# Some general language plugin development notes
 
 Getting up and running, working-with, and keeping track of all the Jetbrains plugin support tools can make your head spin when starting development of a language plugin. The purpose of this doc is to simply point out some helpful tools for working with grammarkit .bnf style grammars, and to specify a process for prepping and maintaining the resulting grammar and lexer.
 
@@ -18,9 +18,9 @@ Install by going to `Preferences` (OSX) (or `Settings` on Windows) > `Plugins` >
 
 ### Psi viewer
 
-Since you're likely going to spend most of your time typing in little sample programs and staring at the PSI structure that results, the [psi viewer](https://plugins.jetbrains.com/plugin/227) is really helpful (follow the same installation procedure as provided for grammarkit).
+Since you're likely going to spend most of your time typing in little sample programs and staring at the PSI structure that results, [psi viewer](https://plugins.jetbrains.com/plugin/227) is really helpful (follow the same installation procedure as provided for grammarkit).
 
-Putting the caret anywhere in the editor, you can navigate through the hierarchy and check out the various properties of a given Psi node. 
+Placing the caret anywhere in the editor, you can navigate through the hierarchy and check out the various properties of a given Psi node. It even allows you to filter whitespace, etc using the buttons at the top of the panel.
 
 ![psi viewer](https://github.com/Welchd1/jetbrains-plugin-resolve/blob/master/doc/images/psi-viewer.png)
 
@@ -30,6 +30,9 @@ To compile the JFlex lexer we'll be using, it's helpful to install a plugin that
 
 ![run bash](https://github.com/Welchd1/jetbrains-plugin-resolve/blob/master/doc/images/run-bash.png)
 
-## Howto: generating lexer for jflex spec
+## Howto: generating a jflex lexer and parser
+
+Given the tools listed above, getting your lexer and parser properly generated shouldn't be too much of a headache. First, go ahead and create a folder at the top level of the project, right underneath `jetbrains-plugin-resolve`, named `gen` and be sure to mark it as a sources folder (if you've forgotten how to do this, re-read the end of the [contributing instructions](https://github.com/Welchd1/jetbrains-plugin-resolve/blob/master/doc/contributing-instructions.md)). 
+
 *howto generate lexer from jflex spec, howto generate parser from bnf (each without getting mired in errors)*
 
