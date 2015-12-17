@@ -28,13 +28,6 @@
     -->
 
     <extensions defaultExtensionNs="com.intellij">
-
-        <!--<stubIndex implementation="edu.clemson.resolve.plugin.stubs.index.RESOLVEAllVisibleNamesIndex"/>
-        <stubIndex implementation="edu.clemson.resolve.plugin.stubs.index.RESOLVETypesIndex"/>-->
-
-        <!-- sdk -->
-        <projectService serviceInterface="edu.clemson.resolve.plugin.sdk.RESOLVESdkService" serviceImplementation="edu.clemson.resolve.plugin.sdk.RESOLVESmallIDEsSdkService" overrides="false"/>
-
         <fileIconPatcher implementation="edu.clemson.resolve.plugin.RESOLVEFileIconPatcher"/>
         <fileTypeFactory implementation="edu.clemson.resolve.plugin.RESOLVEFileTypeFactory"/>
 
@@ -49,7 +42,7 @@
         <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVECompletionContributor"/>
         <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.plugin.completion.RESOLVEKeywordCompletionContributor"/>
 
-        <lang.syntaxHighlighterFactory key="RESOLVE" implementationClass="edu.clemson.resolve.plugin.highlighting.RESOLVESyntaxHighlighterFactory"/>
+        <lang.syntaxHighlighterFactory implementationClass="edu.clemson.resolve.plugin.highlighting.RESOLVESyntaxHighlighterFactory"/>
         <colorSettingsPage implementation="edu.clemson.resolve.plugin.highlighting.RESOLVEColorsAndFontsPage"/>
 
     </extensions>
