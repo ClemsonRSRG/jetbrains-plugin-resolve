@@ -28,7 +28,7 @@ Putting the caret anywhere in the editor, you can navigate through the hierarchy
 
 To compile the JFlex lexer we'll be using, it's helpful to install a plugin that allows you to easily run bash/shell scripts through IntelliJ's GUI. I happen to use [this one](https://plugins.jetbrains.com/plugin/4230?pr=idea), simply because it's the one IntelliJ suggests when viewing a raw `.sh` file for the first time -- though I'm sure there are a multitude of others that work just as well too. 
 
-![run bash](https://github.com/Welchd1/jetbrains-plugin-resolve/blob/doc/doc/images/run-bash.png)
+![run bash](https://github.com/Welchd1/jetbrains-plugin-resolve/blob/master/doc/images/run-bash.png)
 
 ## Howto: generating lexer for jflex spec
 *howto generate lexer from jflex spec, howto generate parser from bnf (each without getting mired in errors)*
