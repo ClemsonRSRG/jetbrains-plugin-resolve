@@ -14,8 +14,10 @@ Install by going to `Preferences` (OSX) (or `Settings` on Windows) > `Plugins` >
 
 ### Psi viewer
 
-Since you're likely going to spend most of your time typing in little sample programs and staring at the PSI structure that results, the [Psi viewer](https://plugins.jetbrains.com/plugin/227) plugin is essential (follow the same installation procedure as provided for grammarkit).
+Since you're likely going to spend most of your time typing in little sample programs and staring at the PSI structure that results, the [psi viewer](https://plugins.jetbrains.com/plugin/227) is really helpful (follow the same installation procedure as provided for grammarkit).
 
+Putting the caret anywhere in the editor, you can navigate through the hierarchy and check out the various properties of a give Psi node. 
+![psi-viewer](https://github.com/Welchd1/jetbrains-plugin-resolve/blob/master/doc/images/psi-viewer.png)
 *pic*
 
 
