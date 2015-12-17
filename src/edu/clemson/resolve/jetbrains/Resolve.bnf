@@ -1,0 +1,573 @@
+{
+    parserClass='edu.clemson.resolve.jetbrains.parser.ResParser'
+
+    implements='edu.clemson.resolve.jetbrains.psi.ResCompositeElement'
+    extends='edu.clemson.resolve.jetbrains.psi.impl.ResCompositeElementImpl'
+
+    elementTypeHolderClass='edu.clemson.resolve.jetbrains.ResTypes'
+    elementTypeClass='edu.clemson.resolve.jetbrains.psi.ResCompositeElementType'
+    tokenTypeClass='edu.clemson.resolve.jetbrains.psi.ResTokenType'
+
+    psiClassPrefix='Res'
+    psiImplClassSuffix='Impl'
+    psiPackage='edu.clemson.resolve.jetbrains.psi'
+    psiImplPackage='edu.clemson.resolve.jetbrains.psi.impl'
+    psiImplUtilClass="edu.clemson.resolve.jetbrains.psi.impl.ResPsiImplUtil"
+
+    tokens=[
+        // Punctuation
+        AT                      = '@'
+        TRIPLE_DOT              = '...'
+        DOT_DOT                 = '..'
+        DOT                     = '.'
+        DBL_LBRACE              = '{{'
+        LBRACE                  = '{'
+        RBRACE                  = '}'
+        DBL_RBRACE              = '}}'
+        LBRACK                  = '['
+        RBRACK                  = ']'
+        LPAREN                  = '('
+        RPAREN                  = ')'
+        COLON                   = ':'
+        COLONCOLON              = '::'
+        SEMICOLON               = ';'
+        COMMA                   = ','
+        IND_BASE                = '(i.)'
+        IND_HYPO                = '(ii.)'
+
+        // Operators
+        EQUALS                  = '='
+        NEQUALS                 = '/='
+
+        AND                     = 'and'
+        OR                      = 'or'
+        NOT                     = 'not'
+        CAT                     = 'o'
+
+        TRUE                    = 'true'
+        FALSE                   = 'false'
+        IMPLIES                 = 'implies'
+
+        LESS_OR_EQUAL           = '<='
+        LESS                    = '<'
+        GREATER_OR_EQUAL        = '>='
+        GREATER                 = '>'
+
+        MOD                     = '%'
+        MUL                     = '*'
+        QUOTIENT                = '/'
+        PLUS_PLUS               = '++'
+        PLUS                    = '+'
+        MINUS_MINUS             = '--'
+        MINUS                   = '-'
+
+        COLON_EQUALS            = ':='
+        COLON_EQUALS_COLON      = ':=:'
+        RARROW                  = '->'
+        TILDE                   = '~'
+        BAR                     = '|'
+        DBL_BAR                 = '||'
+
+        UNION                   = 'union'
+        INTERSECT               = 'intersect'
+        IS_IN                   = 'is_in'
+        IS_NOT_IN               = 'is_not_in'
+
+        // Keywords
+        INT                     = 'int'
+        FACILITY                = 'Facility'
+        PRECIS                  = 'Precis'
+        BASE                    = 'base'
+        HYPO                    = 'hypo'
+        CONCEPT                 = 'Concept'
+        EXTENSION               = 'Extension'
+        EXTENDED_BY             = 'extended_by'
+        CART_PROD               = 'Cart_Prod'
+        DEFINES                 = 'Defines'
+        IFF                     = 'iff'
+        DEFINITION              = 'Definition'
+        CONSTRAINTS             = 'constraints'
+        CONVENTIONS             = 'conventions'
+        CORRESPONDENCE          = 'correspondence'
+        EXTENSION               = 'Extension'
+        END                     = 'end'
+        ELSE                    = 'else'
+        USES                    = 'uses'
+        IS                      = 'is'
+        IF                      = 'if'
+        PROG_IF                 = 'If'
+        CHANGING                = 'changing'
+        MAINTAINING             = 'maintaining'
+        DECREASING              = 'decreasing'
+        OTHERWISE               = 'otherwise'
+        FORALL                  = 'Forall'
+        EXISTS                  = 'Exists'
+        EXTERNALLY              = 'externally'
+        IMPLEMENTED             = 'implemented'
+        INITIALIZATION          = 'initialization'
+        IMPLEMENTATION          = 'Implementation'
+        INDUCTIVE               = 'Inductive'
+        IMPLICIT                = 'Implicit'
+        THEOREM                 = 'Theorem'
+        COROLLARY               = 'Corollary'
+        LAMBDA                  = 'lambda'
+        FAMILY_TYPE             = 'Type'
+        PARAM_TYPE              = 'type'
+        FAMILY                  = 'family'
+        FOR                     = 'for'
+        MODELED                 = 'modeled'
+        CATEGORICAL             = 'Categorical'
+        EXEMPLAR                = 'exemplar'
+        OPERATION               = 'Operation'
+        RECURSIVE               = 'Recursive'
+        RECORD                  = 'Record'
+        REQUIRES                = 'requires'
+        ENSURES                 = 'ensures'
+        PROCEDURE               = 'Procedure'
+        VAR                     = 'Var'
+        BY                      = 'by'
+        THEN                    = 'then'
+        WHILE                   = 'While'
+        WITH                    = 'with'
+        DO                      = 'do'
+        OF                      = 'of'
+        STRING                  = 'string'
+        WHICH_ENTAILS           = 'which_entails'
+        CHAR                    = 'char'
+        raw_string              = 'raw_string'
+
+        // Parameter modes
+        ALTERS                  = 'alters'
+        UPDATES                 = 'updates'
+        CLEARS                  = 'clears'
+        RESTORES                = 'restores'
+        PRESERVES               = 'preserves'
+        REPLACES                = 'replaces'
+        EVALUATES               = 'evaluates'
+
+        //these two are so grammarkit's live preview feature will work right,
+        //disregard them otherwise
+        space                   = "regexp:\s+"
+        identifier              = 'regexp:\p{Alpha}\w*'
+    ]
+
+    extends("Math.*(DefinitionDecl)")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractMathDefinitionImpl"
+    extends("Math.*(Signature)")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractMathSignatureImpl"
+    extends(".*ModuleDecl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractModuleImpl"
+    extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|Procedure|OperationProcedure|Facility)Decl)|ModuleSpec")="edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl"
+    extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractTypeLikeNodeImpl"
+
+    implements(".*ModuleDecl")="edu.clemson.resolve.jetbrains.psi.ResModuleDecl"
+    implements("OperationDecl|OperationProcedureDecl")="edu.clemson.resolve.jetbrains.psi.ResOperationLikeNode"
+
+    implements(".*ReferenceExp")="edu.clemson.resolve.jetbrains.psi.ResReferenceExpBase"
+    implements("Math.*Signature")="edu.clemson.resolve.jetbrains.psi.ResMathDefinitionSignature"
+    implements("Math.*DefinitionDecl")="edu.clemson.resolve.jetbrains.psi.ResMathDefinitionDecl"
+    implements("(Spec|Impl)ModuleParameters")="edu.clemson.resolve.jetbrains.psi.ResModuleParameters"
+    implements(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Facility)Decl|ModuleSpec)")="edu.clemson.resolve.jetbrains.psi.ResNamedElement"
+    implements("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.jetbrains.psi.ResTypeLikeNodeDecl"
+    implements(".*Block")="edu.clemson.resolve.jetbrains.psi.ResBlock"
+
+    extends("Math((Minus|Cat|Range|Plus|Div|Mult|Custom)InfixApplyExp|SelectorExp)")=MathInfixApplyExp // this attributes can be placed directly after rule
+    extends("Math.*(Exp)")=MathExp
+    extends("OrInfixExp|SelectorExp")=InfixExp
+
+    pin(".*Statement")=1
+    extends(".*Statement")=Statement
+
+    generateTokenAccessors=true
+    pin('.*List(?:_\d.*)?')=1
+}
+
+ModuleDecl ::=
+      PrecisModuleDecl
+    | PrecisExtensionModuleDecl
+    | ConceptExtensionModuleDecl
+    | ConceptModuleDecl
+    | ImplModuleDecl
+    | FacilityModuleDecl
+
+PrecisModuleDecl ::= 'Precis' identifier ';'
+UsesItemList?
+PrecisBlock
+'end' identifier ';' {pin(".*")=2}
+
+PrecisExtensionModuleDecl ::= 'Precis' 'Extension' identifier 'for'
+ModuleSpec ('extended_by' ModuleSpec)? ';'
+PrecisBlock
+'end' identifier ';' {pin(".*")=2}
+
+ConceptModuleDecl ::= 'Concept' identifier SpecModuleParameters? ';'
+UsesItemList?
+RequiresClause?
+ConceptBlock
+'end' identifier ';' {pin(".*")=1}
+
+ImplModuleDecl ::= 'Implementation' identifier ImplModuleParameters?
+'for' ModuleSpec ('of' ModuleSpec)? ';'
+UsesItemList?
+RequiresClause?
+ImplBlock
+'end' identifier ';' {pin(".*")=1}
+
+FacilityModuleDecl ::= 'Facility' identifier ';'
+UsesItemList?
+RequiresClause?
+FacilityBlock
+'end' identifier ';' {pin(".*")=1}
+
+ConceptExtensionModuleDecl ::=
+'Concept' 'Extension' identifier SpecModuleParameters? 'for' ModuleSpec ';'
+UsesItemList?
+RequiresClause?
+ConceptBlock
+'end' identifier ';' {pin(".*")=2}
+
+UsesItemList ::= 'uses' UsesItem (',' UsesItem)* ';'
+//TODO: Change this to ModuleIdentifier
+ModuleSpec ::= identifier {pin=1 methods=[getReferences resolve getModuleSpecTextRange]}
+UsesItem ::= ModuleSpec
+
+// Module blocks & items
+
+PrecisBlock ::= PrecisItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
+ConceptBlock ::= ConceptItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
+FacilityBlock ::= FacilityItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
+ImplBlock ::= ImplItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
+
+private ItemsRecover ::= !('end')
+
+private PrecisItem ::=
+          MathTheoremDecl
+        | MathStandardDefinitionDecl
+        | MathCategoricalDefinitionDecl
+        | MathInductiveDefinitionDecl {pin=1 recoverWhile=PrecisItemRecover}
+
+private PrecisItemRecover ::= !('Definition'|'Implicit'|'Theorem'|'Corollary'|'Categorical'|'Inductive'|'end')
+
+private ConceptItem ::=
+      TypeModelDecl
+    | OperationDecl
+    | MathStandardDefinitionDecl
+    | ConstraintsClause {pin=1 recoverWhile=ConceptItemRecover}
+
+private ConceptItemRecover ::= !('Type'|'Operation'|'Definition'|'constraints'|'Constraints'|'end')
+
+private ImplItem ::=
+      TypeReprDecl
+    | OperationProcedureDecl
+    | FacilityDecl
+    | ProcedureDecl
+    | MathStandardDefinitionDecl {pin=1 recoverWhile=ImplItemRecover}
+
+private ImplItemRecover ::= !('Type'|'Operation'|'Facility'|'Recursive'|'Definition'|'Procedure'|'end')
+
+private FacilityItem ::=
+      FacilityDecl
+    | OperationProcedureDecl
+    | TypeReprDecl
+    | MathStandardDefinitionDecl {pin=1 recoverWhile=FacilityItemRecover}
+
+private FacilityItemRecover ::= !('Facility'|'Definition'|'Operation'|'Type'|'end')
+
+// Types
+
+TypeModelDecl ::= 'Type' 'family' identifier TypeModelPortion ';'
+    'exemplar' identifier ';'
+    ConstraintsClause?
+    IntializationClause? {pin=3}
+
+private TypeModelPortion ::= 'is' 'modeled' 'by' MathExp {pin=4}
+
+TypeReprDecl ::= 'Type' identifier '=' (RecordType|Type) ';' {pin=2 methods=[getResTypeInner]}
+
+//TOOD: Really this should just be namedType (w/o records). Right now this
+//allows anonymous record types .. which is ok .. I GUESS.
+Type ::= RecordType | NamedType
+private NamedType ::= TypeReferenceExp QualifiedTypeReferenceExp?
+TypeReferenceExp ::= identifier { methods=[getReference getQualifier] }
+left QualifiedTypeReferenceExp ::= '::' identifier {elementType=TypeReferenceExp}
+
+RecordType ::= 'Record' RecordVarDeclGroup* 'end' {pin=1 extends=Type}
+
+SpecModuleParameters ::= '(' SpecModuleParamList ')' {pin=1}
+private SpecModuleParamList ::= SpecParamDecl  (';' SpecParamDecl)* {recoverWhile=ParamListRec}
+private SpecParamDecl ::= TypeParamDecl | ParamDecl
+
+ImplModuleParameters ::= '(' ImplModuleParamList ')' {pin=1}
+private ImplModuleParamList ::= ImplParamDecl  (';' ImplParamDecl)* {recoverWhile=ParamListRec}
+private ImplParamDecl ::= ParamDecl //TODO: OperationDecl goes here too
+
+private OperationLikeParameters ::= '(' OpParamList? ')' {pin=1}
+private OpParamList ::= ParamDecl (';' ParamDecl)* {pin=1 recoverWhile=ParamListRec}
+ParamDecl ::= ParameterMode ParamDefinitionListNoPin ':' Type {pin=1}
+private ParamDefinitionListNoPin ::= ParamDef &(!(';'|')')) (',' ParamDef)* {pin=1}
+ParamDef ::= identifier
+
+//TODO
+VarDeclGroup ::= 'Var' VarSpec ';' {pin=1}
+VarSpec ::= VarDefList ':' Type {pin=1}//{methods=[processDeclarations]}
+private VarDefList ::= VarDef &(!(';'))(',' VarDef)*
+VarDef ::= identifier {methods=[getResTypeInner getReference]}
+
+RecordVarDeclGroup ::= FieldVarDeclGroup ';' {pin=1}
+FieldVarDeclGroup ::= FieldVarDefList ':' Type {pin=1}
+private FieldVarDefList ::= FieldDef &(!(';'))(',' FieldDef)*
+FieldDef ::= identifier
+
+TypeParamDecl ::= 'type' identifier {pin=2}
+
+ParameterMode ::=
+      'alters'
+    | 'updates'
+    | 'clears'
+    | 'restores'
+    | 'preserves'
+    | 'replaces'
+    | 'evaluates'
+    | identifier //TODO: would like to get rid of identifier here, but results
+                 //in an uglier (partial) psi; which makes keyword completion
+                 //patterns much harder
+// Facilities
+
+FacilityDecl ::= 'Facility' identifier 'is' ModuleSpec ArgumentList?
+('externally')? 'implemented' 'by' ModuleSpec ArgumentList? ';' {pin=2 methods=[getSpecification]}
+
+// operations
+
+OperationDecl ::=
+'Operation' identifier OperationLikeParameters (':' Type)? ';'
+    RequiresClause? EnsuresClause? {pin=2}
+
+OperationProcedureDecl ::=
+'Operation' identifier OperationLikeParameters (':' Type)? ';'
+RequiresClause? EnsuresClause?
+('Recursive')? 'Procedure'
+OpBlock
+'end' CloseIdentifier ';' {pin=2 implements="edu.clemson.resolve.jetbrains.psi.ResOperationWithBodyNode"}
+
+ProcedureDecl ::=
+('Recursive')? 'Procedure' identifier OperationLikeParameters (':' Type)? ';'
+OpBlock
+'end' CloseIdentifier ';' {pin=3 implements="edu.clemson.resolve.jetbrains.psi.ResOperationWithBodyNode"}
+
+OpBlock ::=
+VarDeclGroup*
+Statements?
+
+/** We cannot have two identifiers referenced in a rule (where one, say, the
+ *  first, is pinned): the code doesn't gen a getter for your pinned
+ *  identifier. This intermediate rule is simply a workaround for this.
+ */
+CloseIdentifier ::= identifier
+
+private Statements ::= Statement* {recoverWhile=StatementRecover}
+
+Statement ::=
+      SimpleStatement
+    | WhileStatement
+    | IfStatement
+
+private StatementRecover ::= !('end'|':='|':=:'|'If'|'While'|'else'|identifier)
+SimpleStatement ::=
+      Exp (AssignStatement|SwapStatement)? ';' {pin(".*")=1}
+
+left AssignStatement ::= ':=' Exp {pin=1}
+left SwapStatement ::= ':=:' Exp {pin=1}
+
+WhileStatement ::= 'While' Exp
+ChangingClause? MaintainingClause? DecreasingClause?
+'do' Statements 'end' ';'
+
+IfStatement ::= 'If' Exp 'then' Statements (ElseStatement)? 'end' ';' {pin=1}
+ElseStatement ::= 'else' Statements {pin=1}
+
+// Prog exprs
+
+Exp ::=
+      OrInfixExp
+    | AndInfixExp
+    | RelationalInfixExp
+    | AddInfixExp
+    | MulInfixExp
+    | UnaryExp
+    | Primary
+    | ParenExp {methods=[getResType] implements="edu.clemson.resolve.jetbrains.psi.ResTypeOwner"}
+
+fake InfixExp ::= Exp+ {
+  methods=[left="Exp[0]" right="Exp[1]"]
+}
+
+OrInfixExp ::= Exp 'or' Exp {extends=Exp}
+AndInfixExp ::= Exp 'and' Exp {extends=Exp}
+RelationalInfixExp ::= Exp ('=' | '/=' | '<' | '<=' | '>' | '>=') Exp {extends=Exp}
+AddInfixExp ::= Exp ('+' | '-') Exp {extends=Exp}
+MulInfixExp ::= Exp ('*' | '/' | '%') Exp {extends=Exp}
+UnaryExp ::=  ('+' | '-' | 'not') Exp {extends=Exp}
+SelectorExp ::= Exp '.' Exp {extends=Exp}
+ParenExp ::= '(' Exp ')' {extends=Exp}
+
+private Primary ::=
+      NameExp
+    | SelectorExp
+    | CallExp
+    | LiteralExp
+
+NameExp ::= ReferenceExp QualifiedReferenceExp? {elementType=ReferenceExp}
+
+left QualifiedReferenceExp ::= '::' identifier {elementType=ReferenceExp}
+ReferenceExp ::= identifier { methods=[getReference getQualifier] extends=Exp}
+
+CallExp ::= NameExp ArgumentList {extends=Exp}
+
+ArgumentList ::= '(' ExpArgumentList? ')' {pin=1}
+private ExpArgumentList ::= ExpWithRecover (',' ExpWithRecover)* {pin(".*")=1}
+private ExpWithRecover ::= Exp {recoverWhile=ExpListRecover}
+private ExpListRecover ::= !('%' | '+' | '-' | '(' | ')' | ',' | '*' | '++' | '<' | '<=' | '>' | '>=' | 'end' | 'Operation' | 'Type' | 'Facility' |';')
+
+LiteralExp ::= int|StringLiteral|BooleanLiteral {extends=Exp}
+// Math clauses and exprs
+
+BooleanLiteral ::= true | false
+StringLiteral ::= string | raw_string
+
+IntializationClause ::= 'initialization' (EnsuresClause) {pin=1};
+
+EntailsClause ::= 'which_entails' MathAssertionExp {pin=1}
+
+RequiresClause ::= 'requires' MathAssertionExp (EntailsClause)? ';' {pin=1}
+
+EnsuresClause ::= 'ensures' MathAssertionExp ';' {pin=1}
+
+ConstraintsClause ::= ('constraints'|'Constraints') MathAssertionExp ';' {pin=1}
+
+ChangingClause ::= 'changing' ExpArgumentList ';' {pin=1}
+MaintainingClause ::= 'maintaining' MathAssertionExp ';' {pin=1}
+DecreasingClause ::= 'decreasing' MathAssertionExp ';' {pin=1}
+
+MathTheoremDecl ::= ('Theorem'|'Corollary') identifier ':'
+MathAssertionExp ';' {pin = 2}
+
+MathStandardDefinitionDecl ::= ('Implicit')? 'Definition'
+    MathDefinitionSignature ('is' MathAssertionExp)? ';' {pin=2}
+
+MathCategoricalDefinitionDecl ::= 'Categorical' 'Definition' 'for'
+MathDefinitionSignatureList 'is' MathExp ';' {pin=1}
+
+private MathDefinitionSignatureList ::= MathPrefixDefinitionSignature
+(',' MathPrefixDefinitionSignature)* {recoverWhile=CategoricalSigListRec}
+
+private CategoricalSigListRec ::= !('is')
+
+MathInductiveDefinitionDecl ::= 'Inductive' 'Definition'
+MathDefinitionSignature 'is'
+'(i.)' MathExp ';'
+'(ii.)' MathExp ';' {pin=1}
+
+private MathDefinitionSignature ::=
+           MathPrefixDefinitionSignature
+        |  MathOutfixDefinitionSignature
+        |  MathInfixDefinitionSignature
+
+MathPrefixDefinitionSignature ::=
+          MathNameIdentifier MathDefinitionParams? ':' MathExp {pin=1}
+
+MathInfixDefinitionSignature ::=
+        '(' MathSingletonVarDecl ')' MathNameIdentifier
+        '(' MathSingletonVarDecl ')' ':' MathExp {pin=4}
+
+private MathDefinitionParams ::= '(' MathDefinitionParamList ')' { pin=1}
+private ParamListRec ::= !(')')
+private MathDefinitionParamList ::= MathVarDeclGroup (',' MathVarDeclGroup)* {pin=1 recoverWhile=ParamListRec}
+
+MathOutfixDefinitionSignature ::=
+        ('|'|'||'|'<') MathSingletonVarDecl ('|'|'||'|'>')  ':' MathExp {pin=1}
+
+MathSingletonVarDecl ::= MathVarDef ':' MathExp {pin=2 extends=MathVarDeclGroup}
+
+MathVarDeclGroup ::= MathVarDeclList ':' MathExp {pin=1}
+private MathVarDeclList ::= MathVarDef &(!(')')) (',' MathVarDef)* {pin=1}
+MathVarDef ::= identifier
+
+MathAssertionExp ::= MathQuantifiedExp|MathExp
+
+MathQuantifiedExp ::= ('Forall'|'Exists') MathVarDeclGroup ',' MathAssertionExp {pin=1}
+
+MathExp ::=
+      MathBooleanInfixApplyExp
+
+    | MathRelationalInfixApplyExp
+    | MathRangeInfixApplyExp
+    | MathAddGroup
+    | MathMultGroup
+    | MathOutfixGroup
+    | MathIncomingUnaryApplyExp
+    | MathCatInfixApplyExp
+    | MathPrefixApplyExp
+    | MathCustomInfixApplyExp
+    | MathPrimary {methods=[getResMathMetaTypeExp]}
+
+//private rules for operators with the same precedence
+private MathAddGroup ::= MathPlusInfixApplyExp | MathMinusInfixApplyExp
+private MathMultGroup ::= MathMultInfixApplyExp | MathDivInfixApplyExp
+private MathOutfixGroup ::= MathBarOutfixApplyExp | MathAngleOutfixApplyExp | MathDblBarOutfixApplyExp
+
+MathPlusInfixApplyExp ::= MathExp '+' MathExp
+MathMinusInfixApplyExp ::= MathExp ('-'|'~') MathExp
+MathBooleanInfixApplyExp ::= MathExp ('and'|'or'|'implies'|'iff') MathExp
+MathMultInfixApplyExp ::= MathExp '*' MathExp
+MathDivInfixApplyExp ::= MathExp '/' MathExp
+MathCatInfixApplyExp ::= MathExp ('o'|'union'|'intersect'|'is_in'|'is_not_in') MathExp
+MathRangeInfixApplyExp ::= MathExp '->' MathExp
+MathIncomingUnaryApplyExp ::= '@' MathExp
+MathPrefixApplyExp ::= MathExp '(' MathArgList')' {pin=2}
+
+MathRelationalInfixApplyExp ::= MathExp ('<' | '>' | '<=' | '>=' | '=' | '/=') MathExp
+MathCustomInfixApplyExp ::= MathExp identifier MathExp
+
+MathTypeAssertionExp ::= MathExp ':' MathExp {pin=2}
+MathNestedExp ::= '(' MathAssertionExp ')'
+
+MathBarOutfixApplyExp ::= '|' MathExp '|'
+MathDblBarOutfixApplyExp ::= '||' MathExp '||'
+MathAngleOutfixApplyExp ::= '<' MathExp '>'
+
+private MathPrimary ::=
+          MathSymbolExp
+        | MathTypeAssertionExp
+        | MathSetComprehensionExp
+        | MathNestedExp
+        | MathSetExp
+        | MathLambdaExp
+        | MathSelectorExp
+        | MathAlternativeExp
+        | MathCartProdExp
+        | MathLiteralExp
+
+MathSelectorExp ::= MathExp '.' MathExp
+
+MathLambdaExp ::= lambda MathDefinitionParams '.' '(' MathExp ')' {pin=1}
+MathAlternativeExp ::= '{{' (MathAlternativeItemExp)* '}}'
+MathAlternativeItemExp ::= MathExp ('if' MathExp ';' | 'otherwise' ';') {pin=1}
+
+private ResMathCartVarGroup ::= MathVarDeclGroup ';' {pin=1}
+MathCartProdExp ::= 'Cart_Prod' ResMathCartVarGroup+  'end' {pin=1}
+
+fake MathInfixApplyExp ::= MathExp+ {
+  methods=[left="MathExp[0]" right="MathExp[1]"]
+}
+
+private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
+
+MathSymbolExp ::=  MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}
+left MathQualifiedReferenceExp ::= '::' MathNameIdentifier {elementType=MathReferenceExp}
+MathReferenceExp ::= MathNameIdentifier {methods=[getReference getQualifier getIdentifier] extends=MathExp}
+
+MathSetComprehensionExp ::= '{' MathSingletonVarDecl '|' MathExp '}'
+MathSetExp ::= '{' MathSetElementsList? '}' {pin=2}
+MathSetElementsList ::= MathExp (',' MathExp)* {recoverWhile=MathSetEleRecover}
+private MathSetEleRecover ::= !('}')
+
+MathLiteralExp ::= (int|'true'|'false')
+
+MathNameIdentifier ::= identifier|('o'|'true'|'false'|int|'+'|'-'|'*'|'/'|'>'|'<'|'<='|'>='|'not')

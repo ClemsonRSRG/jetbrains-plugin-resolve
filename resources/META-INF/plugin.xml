@@ -1,35 +1,66 @@
 <idea-plugin version="2">
-  <id>com.your.company.unique.plugin.id</id>
-  <name>Plugin display name here</name>
-  <version>1.0</version>
-  <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+    <id>edu.clemson.resolve.jetbrains</id>
+    <name>RESOLVE langauge plugin</name>
+    <version>1.0</version>
+    <vendor email="dtw.welch@gmail.com" url="https://github.com/Welchd1/jetbrains-plugin-resolve">RESOLVE Project</vendor>
 
-  <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
+    <description><![CDATA[
+        <p>
+        This plugin is designed to provide Intellij support for the RESOLVE
+        specification and programming language. Currently supported features
+        inclue: syntax highlighting, goto-declaration, and usage search for
+        operations, variables, modules, and facilities.
     ]]></description>
 
-  <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
-    ]]>
-  </change-notes>
+    <change-notes><![CDATA[
+        Add change notes here.<br>
+        <em>most HTML tags may be used</em>
+        ]]>
+    </change-notes>
 
-  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-  <idea-version since-build="141.0"/>
+    <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
+    <idea-version since-build="131"/>
 
-  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+    <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
        on how to target different products -->
-  <!-- uncomment to enable plugin in all products
-  <depends>com.intellij.modules.lang</depends>
-  -->
+    <!-- uncomment to enable jetbrains in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
 
-  <extensions defaultExtensionNs="com.intellij">
-    <!-- Add your extensions here -->
-  </extensions>
+    <extensions defaultExtensionNs="com.intellij">
+        <fileIconPatcher implementation="edu.clemson.resolve.jetbrains.RESOLVEFileIconPatcher"/>
+        <fileTypeFactory implementation="edu.clemson.resolve.jetbrains.RESOLVEFileTypeFactory"/>
 
-  <actions>
-    <!-- Add your actions here -->
-  </actions>
+        <lang.parserDefinition language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.RESOLVEParserDefinition"/>
+        <lang.braceMatcher language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.editor.RESOLVEBraceMatcher"/>
+
+        <!-- project -->
+        <defaultLiveTemplatesProvider implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplatesProvider"/>
+        <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVEEverywhereContextType"/>
+        <!--<liveTemplateContext implementation="edu.clemson.resolve.jetbrainsins.template.RESOLVELiveTemplateContextType$RESOLVEFileContextType"/> -->
+
+        <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.completion.RESOLVECompletionContributor"/>
+        <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.completion.RESOLVEKeywordCompletionContributor"/>
+
+        <lang.syntaxHighlighterFactory key="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.highlighting.RESOLVESyntaxHighlighterFactory"/>
+        <colorSettingsPage implementation="edu.clemson.resolve.jetbrains.highlighting.RESOLVEColorsAndFontsPage"/>
+
+    </extensions>
+
+<application-components>
+    <!-- Add your application components here -->
+    </application-components>
+
+    <project-components>
+
+    </project-components>
+
+    <actions>
+        <!--<action id="RESOLVE.NewRESOLVEFile"
+            class="edu.clemson.resolve.jetbrainsins.RESOLVECreateFileAction"
+            text="RESOLVE File" description="Create new RESOLVE file">
+            <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
+        </action>-->
+    </actions>
 
 </idea-plugin>
