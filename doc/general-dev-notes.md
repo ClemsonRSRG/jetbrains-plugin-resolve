@@ -30,9 +30,27 @@ To compile the JFlex lexer we'll be using, it's helpful to install a plugin that
 
 ![run bash](https://github.com/Welchd1/jetbrains-plugin-resolve/blob/master/doc/images/run-bash.png)
 
-## Howto: generating a jflex lexer and parser
+## Howto: generating a jflex lexer and grammarkit parser for the *first time*
 
-Given the tools listed above, getting your lexer and parser properly generated shouldn't be too much of a headache. First, go ahead and create a folder at the top level of the project, right underneath `jetbrains-plugin-resolve`, named `gen` and be sure to mark it as a sources folder (if you've forgotten how to do this, re-read the end of the [contributing instructions](https://github.com/Welchd1/jetbrains-plugin-resolve/blob/master/doc/contributing-instructions.md)). 
+Given the tools listed above, now you want to get your parser and lexer generated properly. First, go ahead and create a folder at the top level of the project, right underneath `jetbrains-plugin-resolve`, named `gen` and be sure to mark it as a sources folder (if you've forgotten how to do this, re-read the end of the [contributing instructions](https://github.com/Welchd1/jetbrains-plugin-resolve/blob/master/doc/contributing-instructions.md)). 
 
-*howto generate lexer from jflex spec, howto generate parser from bnf (each without getting mired in errors)*
+**NOTE:** *Since this section assumes you're doing this for the first time, if there happens to already be a `gen` folder with things inside, go ahead and keep the `gen` folder, but delete all contents.*
+
+Now simply right click on `Resolve.bnf` and select `Generate Parser Code`. Now open up the `gen` folder you created in the previous step and check to make sure that there are two folders (`parser`, `psi`), and a Java interface named `ResTypes`. While you're inside `gen`, go ahead and create another folder at the same level as the others named `lexer`.
+
+Next we're going to generate an *intermediate* lexer. To do this, once again right click on `Resolve.bnf` and select `Generate JFlex Lexer`. The tool will ask you to select a folder where the generated lexer should go -- so put it in the empty `gen/lexer` folder we just made. You should now see a `ResLexer.flex` file sitting in the lexer directory we created, so now we generate a java recognizer from this by right clicking it and selecting `Run JFlex Generator`. 
+
+Now, assuming you've installed the bash plugin mentioned in the previous section, we're going to generate the *real* lexer for our language by right clicking the `gen_lexer.sh` script (in `src/edu.clemson.resolve.jetbrains.lexer`) and pressing the green 'play' button (labeled `run 'gen_lexer.sh'`).
+
+|**intermediate vs. real lexers**|
+|-------------|
+*If you're wondering why the hell I refer to the lexer as intermediate -- well apparently JFlex doesn't do the best job at automatically generating lexers from grammars, meaning it's better to handcode one (which is what we've done) -- we just need an intermediate one to hush up a bunch Java errors that come up when try to generate code our real lexer for the first time.*|
+
+This will likely fail, due to some java errors in the generated file. So go ahead and comment out any lines causing errors in our real generated lexer then redo the previous step (meaning, re-run `gen_lexer.sh`) and the real lexer should then generate without issue -- replacing the fake, intermediate one we used earlier. If we hadn't gen'd the intermediate lexer, you'd have an unmanageable number of java errrors to comment out. 
+
+### Why the hell is this so confusing?
+
+Good question. I don't have a satisfactory answer other than I might be doing it wrong :). That being said, I have yet to find an easier way. The good news however is that you should be set to go, now that you have the real lexer generated, you can regenerate `Resolve.bnf` at will (and as long as you don't delete the `lexer` folder in `gen`, things should be pretty easy to update. 
+
+To help eliminate the annoyances of this, I no longer ignore the `gen` folder in the `.gitignore`, so new contributors shouldn't have to contend with these annoyances. 
 
