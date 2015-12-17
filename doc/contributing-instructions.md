@@ -31,7 +31,7 @@ working directory (once again, I'm just using `Documents`) and run the following
 command to retrieve a up to date copy of the RESOLVE plugin sourcecode:
 
 ```
-git clone https://github.com/Welchd1/resolve-intellij-plugin.git
+git clone https://github.com/Welchd1/jetbrains-plugin-resolve.git
 ```
 
 ## Step 3: create an IntelliJ plugin module
@@ -52,7 +52,7 @@ bring up a page that looks something like:
 ![new project2](https://github.com/Welchd1/resolve-intellij-plugin/blob/master/doc/images/new-project2.png)
 
 Click the button with three dots to the right of `Project Location` and navigate
-to `resolve-intellij-plugin` folder cloned in step 2. Upon doing so, the fields in the window
+to `jetbrains-plugin-resolve` (**the picture is outdated, this is the new folder name**) folder cloned in step 2. Upon doing so, the fields in the window
 should automatically update and look something like this:
 
 ![new project3](https://github.com/Welchd1/resolve-intellij-plugin/blob/master/doc/images/new-project3.png)
