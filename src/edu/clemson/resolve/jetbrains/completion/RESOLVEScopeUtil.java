@@ -1,4 +1,4 @@
-package edu.clemson.resolve.jetbrains.util;
+package edu.clemson.resolve.jetbrains.completion;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
@@ -10,7 +10,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class RESOLVEUtil {
+public class RESOLVEScopeUtil {
 
     @NotNull public static GlobalSearchScope moduleScopeWithoutLibraries(
             @NotNull Module module) {

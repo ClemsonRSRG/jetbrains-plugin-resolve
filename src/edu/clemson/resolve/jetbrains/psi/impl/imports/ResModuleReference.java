@@ -7,7 +7,7 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.util.ArrayUtil;
-import edu.clemson.resolve.jetbrains.util.RESOLVEUtil;
+import edu.clemson.resolve.jetbrains.completion.RESOLVEScopeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,7 +47,7 @@ public class ResModuleReference extends FileReference {
         PsiFile[] foundFiles =
                 FilenameIndex.getFilesByName(sourceFile.getProject(),
                         getText() + ".resolve",
-                        RESOLVEUtil.moduleScope(getDirectory()));
+                        RESOLVEScopeUtil.moduleScope(getDirectory()));
         if (foundFiles.length != 0) {
             PsiFile file = foundFiles[0];
             PsiElementResolveResult result =

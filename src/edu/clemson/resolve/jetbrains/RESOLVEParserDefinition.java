@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
+import com.intellij.psi.tree.IStubFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import edu.clemson.resolve.jetbrains.lexer.ResolveLexer;
 import edu.clemson.resolve.jetbrains.parser.ResParser;
@@ -23,10 +24,12 @@ import static edu.clemson.resolve.jetbrains.ResTypes.*;
  *  {@link #createLexer(Project)} and {@link #createParser(Project)},
  *  respectively.
  *
- *  @since 0.0.1
  *  @see LanguageParserDefinitions#forLanguage(Language)
  */
 public class RESOLVEParserDefinition implements ParserDefinition {
+
+    public static final IFileElementType FILE =
+            new IFileElementType(RESOLVELanguage.INSTANCE);
 
     public static final IElementType LINE_COMMENT =
             new ResTokenType("RESOLVE_LINE_COMMENT");
@@ -76,7 +79,7 @@ public class RESOLVEParserDefinition implements ParserDefinition {
      *  is called from {@link #createFile(FileViewProvider)} at least.
      */
     @NotNull @Override public IFileElementType getFileNodeType() {
-        return RESOLVEFileElementType.INSTANCE;
+        return FILE;
     }
 
     /** "Tokens of those types are automatically skipped by PsiBuilder." This

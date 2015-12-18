@@ -18,7 +18,6 @@ import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.psi.ResFile;
 import edu.clemson.resolve.jetbrains.psi.ResModuleDecl;
 import edu.clemson.resolve.jetbrains.psi.ResModuleSpec;
-import edu.clemson.resolve.jetbrains.util.RESOLVEUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,8 +59,8 @@ public class RESOLVEUsesCompletionProvider
                                       boolean withLibraries) {
         if (module != null) {
             GlobalSearchScope scope = withLibraries ?
-                    RESOLVEUtil.moduleScope(module) :
-                    RESOLVEUtil.moduleScopeWithoutLibraries(module);
+                    RESOLVEScopeUtil.moduleScope(module) :
+                    RESOLVEScopeUtil.moduleScopeWithoutLibraries(module);
             for (VirtualFile file : FileTypeIndex
                     .getFiles(RESOLVEFileType.INSTANCE, scope)) {
 

@@ -100,10 +100,4 @@ public class ResFile extends PsiFileBase {
         return enclosedModule != null ? enclosedModule.getOperationsWithImpls() :
                 new ArrayList<ResOperationWithBodyNode>();
     }*/
-
-    public static class ResFileStub extends PsiFileStubImpl<ResFile> {
-        public ResFileStub(ResFile file) {
-            super(file);
-        }
-    }
 }
