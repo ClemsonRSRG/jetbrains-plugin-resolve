@@ -7,9 +7,8 @@ import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * Allows users to click the button on the side panel of the editor and view
- * a hierarchical view of the module they are currently looking at.
+/** Allows users to click the button on the side panel of the editor and view
+ *  a hierarchical view of the module they are currently looking at.
  */
 public class RESOLVEStructureViewFactory implements PsiStructureViewFactory {
 
