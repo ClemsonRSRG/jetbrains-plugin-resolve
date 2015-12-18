@@ -1,6 +1,6 @@
 # Some general language plugin development notes
 
-Getting up and running, working-with, and keeping track of all the Jetbrains plugin support tools can make your head spin when starting development of a language plugin. The purpose of this doc is to simply point out some helpful tools for working with grammarkit .bnf style grammars, and to specify a process for prepping and maintaining the resulting grammar and lexer.
+Getting up and running, working-with, and keeping track of all the Jetbrains plugin support tools can make your head spin when starting development of a language plugin. The purpose of this doc is to simply point out some helpful tools for working with grammarkit `.bnf` style grammars, and to specify a process for prepping and maintaining the resulting grammar and lexer.
 
 ## Starting out: some helpful/required tools
 
@@ -48,7 +48,7 @@ Now, assuming you've installed the bash plugin mentioned in the previous section
 
 This will likely fail, due to some java errors in the generated file. So go ahead and comment out any lines causing errors in our real generated lexer then redo the previous step (meaning, re-run `gen_lexer.sh`) and the real lexer should then generate without issue -- replacing the fake, intermediate one we used earlier. If we hadn't gen'd the intermediate lexer, you'd have an unmanageable number of java errrors to comment out. 
 
-### Why the hell is this so confusing?
+## Why the hell is this last step so confusing?
 
 Good question. I don't have a satisfactory answer other than I might be doing it wrong :). That being said, I have yet to find an easier way. The good news however is that you should be set to go, now that you have the real lexer generated, you can regenerate `Resolve.bnf` at will (and as long as you don't delete the `lexer` folder in `gen`, things should be pretty easy to update. 
 
