@@ -36,12 +36,12 @@ public class RESOLVEKeywordCompletionContributor
         extend(CompletionType.BASIC, precisModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                        "Definition", "Theorem", "Corollary"));
+                        "Implicit", "Definition", "Theorem", "Corollary"));
 
         extend(CompletionType.BASIC, precisExtModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                        "Definition", "Theorem", "Corollary"));
+                        "Implicit", "Definition", "Theorem", "Corollary"));
 
         extend(CompletionType.BASIC, implementationModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
@@ -52,7 +52,7 @@ public class RESOLVEKeywordCompletionContributor
         extend(CompletionType.BASIC, conceptModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "TypeFamily",
-                        "OperationDeclaration", "Definition"));
+                        "OperationDeclaration", "Definition", "Implicit"));
 
         extend(CompletionType.BASIC, conceptExtModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
@@ -85,9 +85,10 @@ public class RESOLVEKeywordCompletionContributor
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "Var"));
 
-        extend(CompletionType.BASIC, quantifiedMathExp(),
+        extend(CompletionType.BASIC, miscMathKeywords(),
                 new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Forall", "Exists"));
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY,
+                        "Forall", "Exists", "lambda"));
     }
 
     private static Capture<PsiElement> typeParamPattern() {
@@ -108,7 +109,7 @@ public class RESOLVEKeywordCompletionContributor
                         psiElement().afterSibling(psiElement(ResModuleParameters.class))));
     }
 
-    private static Capture<PsiElement> quantifiedMathExp() {
+    private static Capture<PsiElement> miscMathKeywords() {
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(ResTypes.MATH_NAME_IDENTIFIER)
                         .withParent(psiElement(ResTypes.MATH_REFERENCE_EXP)));
