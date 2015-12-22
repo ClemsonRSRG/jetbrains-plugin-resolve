@@ -107,4 +107,17 @@ public class RESOLVECompletionTest extends RESOLVECompletionTestBase {
                 "replaces", "type", "Definition");
     }
 
+    public void testTypeReprKeywordCombos() {
+        doTestInclude("Implementation T for U; Type X = Record x : I end; <caret> end T;",
+                "correspondence", "conventions", "initialization_repr");
+        doTestInclude("Implementation T for U; Type X = Record x : I end; conventions x; <caret> end T;",
+                "correspondence", "initialization_repr");
+        doTestInclude("Implementation T for U; Type X = Record x : I end; correspondence x; <caret> end T;",
+                "initialization_repr");
+    }
+
+    //TODO: will include "OperationDecl" & parameter modes (no 'type')
+    public void testImplModuleParameterKeywords() {
+
+    }
 }

@@ -75,6 +75,10 @@ public class RESOLVEKeywordCompletionContributor
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "type"));
 
+        extend(CompletionType.BASIC, definitionParameterPattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Definition"));
+
         extend(CompletionType.BASIC, statementPattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "While", "If"));
@@ -105,12 +109,11 @@ public class RESOLVEKeywordCompletionContributor
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "initialization_repr"));
     }
 
-    /*private static Capture<PsiElement> keywordAfterSiblings(
-            ElementPattern<? extends PsiElement> prevSiblings) {
+    private static Capture<PsiElement> definitionParameterPattern() {
         return psiElement(ResTypes.IDENTIFIER)
-                .withParent(ResParameterMode.class)
-                .inside(ResSpecModuleParameters.class);
-    }*/
+                .withParent(psiElement().withParent(psiElement(ResParamDecl.class)
+                        .withParent(ResSpecModuleParameters.class)));
+    }
 
     private static Capture<PsiElement> typeParamPattern() {
         return psiElement(ResTypes.IDENTIFIER)
@@ -128,6 +131,14 @@ public class RESOLVEKeywordCompletionContributor
                 .andOr(psiElement().isFirstAcceptedChild(psiElement()),
                         psiElement().afterSibling(psiElement(ResModuleSpec.class)),
                         psiElement().afterSibling(psiElement(ResModuleParameters.class))));
+    }
+
+    //TODO: Generalize the conventions, correspondence etc rules to use this one
+    private static Capture<PsiElement> keywordAfterSiblings(
+            ElementPattern<? extends PsiElement> prevSiblings) {
+        return psiElement(ResTypes.IDENTIFIER)
+                .withParent(ResParameterMode.class)
+                .inside(ResSpecModuleParameters.class);
     }
 
     private static Capture<PsiElement> conventionsPattern() {
