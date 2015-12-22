@@ -96,17 +96,37 @@ public class RESOLVEKeywordCompletionContributor
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
                         "Forall", "Exists", "lambda"));
 
-        extend(CompletionType.BASIC, conventionsPattern(),
+        extend(CompletionType.BASIC, keywordAfterSiblings(
+                ResTypeReprDecl.class, psiElement(ResRecordType.class)),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "conventions"));
 
-        extend(CompletionType.BASIC, correspondencePattern(),
+        extend(CompletionType.BASIC, keywordAfterSiblings(
+                ResTypeReprDecl.class,
+                psiElement().andOr(psiElement(ResRecordType.class),
+                                   psiElement(ResConventionsClause.class))),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "correspondence"));
 
-        extend(CompletionType.BASIC, reprInitializationPattern(),
+        extend(CompletionType.BASIC, keywordAfterSiblings(
+                ResTypeReprDecl.class,
+                psiElement().andOr(psiElement(ResRecordType.class),
+                                   psiElement(ResConventionsClause.class),
+                                   psiElement(ResCorrespondenceClause.class))),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "initialization_repr"));
+
+        extend(CompletionType.BASIC, keywordAfterSiblings(
+                ResTypeModelDecl.class, psiElement(ResMathReferenceExp.class)),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "constraints"));
+
+        extend(CompletionType.BASIC, keywordAfterSiblings(
+                ResTypeModelDecl.class,
+                psiElement().andOr(psiElement(ResMathReferenceExp.class),
+                                   psiElement(ResConstraintsClause.class))),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "initialization"));
     }
 
     private static Capture<PsiElement> definitionParameterPattern() {
@@ -133,38 +153,13 @@ public class RESOLVEKeywordCompletionContributor
                         psiElement().afterSibling(psiElement(ResModuleParameters.class))));
     }
 
-    //TODO: Generalize the conventions, correspondence etc rules to use this one
-    private static Capture<PsiElement> keywordAfterSiblings(
+    private static <T extends ResCompositeElement> Capture<PsiElement> keywordAfterSiblings(
+            Class<T> immediateSiblingClass,
             ElementPattern<? extends PsiElement> prevSiblings) {
         return psiElement(ResTypes.IDENTIFIER)
-                .withParent(ResParameterMode.class)
-                .inside(ResSpecModuleParameters.class);
-    }
-
-    private static Capture<PsiElement> conventionsPattern() {
-        return psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(PsiErrorElement.class)
-                        .afterSibling(psiElement(ResTypeReprDecl.class)
-                                .withLastChild(psiElement(ResRecordType.class))));
-    }
-
-    private static Capture<PsiElement> correspondencePattern() {
-        return psiElement(ResTypes.IDENTIFIER)
-                .withParent(psiElement(PsiErrorElement.class)
-                        .afterSibling(psiElement(ResTypeReprDecl.class)
-                                .withLastChild(psiElement()
-                                        .andOr(psiElement(ResRecordType.class),
-                                            psiElement(ResConventionsClause.class)))));
-    }
-
-    private static Capture<PsiElement> reprInitializationPattern() {
-        return psiElement(ResTypes.IDENTIFIER)
-                .withParent(psiElement(PsiErrorElement.class)
-                        .afterSibling(psiElement(ResTypeReprDecl.class)
-                                .withLastChild(psiElement()
-                                        .andOr(psiElement(ResRecordType.class),
-                                                psiElement(ResConventionsClause.class),
-                                                psiElement(ResCorrespondenceClause.class)))));
+                        .afterSibling(psiElement(immediateSiblingClass)
+                                .withLastChild(prevSiblings)));
     }
 
     private static Capture<PsiElement> miscMathKeywords() {
@@ -194,6 +189,7 @@ public class RESOLVEKeywordCompletionContributor
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(ResTypes.REFERENCE_EXP));
     }
+    
     private static Capture<PsiElement> recordTypePattern() {
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(ResTypes.TYPE_REFERENCE_EXP)
