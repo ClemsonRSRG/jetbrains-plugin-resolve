@@ -3,7 +3,7 @@
 <templateSet group="ResolveHiddenTemplate">
 
     <template description='Facility module declaration' id='resolve_lang_Facility' name='resolve_lang_Facility' toReformat='true' toShortenFQNames='true'
-              value='Facility $NAME$;&#10;    $END$ &#10;end $NAME$;'>
+              value='Facility $NAME$;&#10;    $END$&#10;end $NAME$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
         <context>
             <option name='RESOLVE' value='true'/>
@@ -112,6 +112,13 @@
 
     <template description='Record type' id='resolve_lang_Record' name='resolve_lang_Record' toReformat='true' toShortenFQNames='true'
               value='Record&#10;        $END$&#10;    end'>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Representation initialization' id='resolve_lang_initialization_repr' name='resolve_lang_initialization_repr' toReformat='true' toShortenFQNames='true'
+              value='initialization&#10;    requires true;&#10;    ensures true;&#10;    $END$&#10;end;'>
         <context>
             <option name='RESOLVE' value='true'/>
         </context>

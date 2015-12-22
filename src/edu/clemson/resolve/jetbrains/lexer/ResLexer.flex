@@ -93,6 +93,10 @@ ESCAPES = [abfnrtv]
 "or"                                    { return OR; }
 "not"                                   { return NOT; }
 "o"                                     { return CAT; }
+"is_in"                                 { return IS_IN; }
+"is_not_in"                             { return IS_NOT_IN; }
+"union"                                 { return UNION; }
+"intersect"                             { return INTERSECT; }
 
 "<="                                    { return LESS_OR_EQUAL; }
 "<"                                     { return LESS; }

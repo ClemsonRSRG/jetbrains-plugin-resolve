@@ -1,6 +1,6 @@
-Concept Spiral_Spec(type Label; evaluates k, Max_Length : Std_Ints.Int);
+Concept Spiral_Spec(type Label; evaluates k, Max_Length : Std_Ints::Int);
 
-    Type Family Spiral_Pos is modeled by Cart_Prod
+    Type family Spiral_Pos is modeled by Cart_Prod
             Lab : Sp_Loc(k) -> T;
             Curr_Loc, Trmnl_Loc : Sp_Loc(k);
         end;

@@ -48,6 +48,11 @@
         FALSE                   = 'false'
         IMPLIES                 = 'implies'
 
+        UNION                   = 'union'
+        INTERSECT               = 'intersect'
+        IS_IN                   = 'is_in'
+        IS_NOT_IN               = 'is_not_in'
+
         LESS_OR_EQUAL           = '<='
         LESS                    = '<'
         GREATER_OR_EQUAL        = '>='
@@ -67,11 +72,6 @@
         TILDE                   = '~'
         BAR                     = '|'
         DBL_BAR                 = '||'
-
-        UNION                   = 'union'
-        INTERSECT               = 'intersect'
-        IS_IN                   = 'is_in'
-        IS_NOT_IN               = 'is_not_in'
 
         // Keywords
         INT                     = 'int'
@@ -279,10 +279,15 @@ TypeModelDecl ::= 'Type' 'family' identifier TypeModelPortion ';'
 
 private TypeModelPortion ::= 'is' 'modeled' 'by' MathExp {pin=4}
 
-TypeReprDecl ::= 'Type' identifier '=' (RecordType|Type) ';' {pin=2 methods=[getResTypeInner]}
+TypeReprDecl ::= 'Type' identifier '=' (RecordType|Type) ';'
+ConventionsClause?
+CorrespondenceClause?
+TypeImplInit?
+{pin=2 methods=[getResTypeInner]}
 
-//TOOD: Really this should just be namedType (w/o records). Right now this
-//allows anonymous record types .. which is ok .. I GUESS.
+TypeImplInit ::= 'initialization' (RequiresClause)? (EnsuresClause)?
+OpBlock 'end' ';'
+
 Type ::= RecordType | NamedType
 private NamedType ::= TypeReferenceExp QualifiedTypeReferenceExp?
 TypeReferenceExp ::= identifier { methods=[getReference getQualifier] }
@@ -292,7 +297,7 @@ RecordType ::= 'Record' RecordVarDeclGroup* 'end' {pin=1 extends=Type}
 
 SpecModuleParameters ::= '(' SpecModuleParamList ')' {pin=1}
 private SpecModuleParamList ::= SpecParamDecl  (';' SpecParamDecl)* {recoverWhile=ParamListRec}
-private SpecParamDecl ::= TypeParamDecl | ParamDecl
+private SpecParamDecl ::= TypeParamDecl | ParamDecl | MathStandardDefinitionDecl
 
 ImplModuleParameters ::= '(' ImplModuleParamList ')' {pin=1}
 private ImplModuleParamList ::= ImplParamDecl  (';' ImplParamDecl)* {recoverWhile=ParamListRec}
@@ -304,7 +309,6 @@ ParamDecl ::= ParameterMode ParamDefinitionListNoPin ':' Type {pin=1}
 private ParamDefinitionListNoPin ::= ParamDef &(!(';'|')')) (',' ParamDef)* {pin=1}
 ParamDef ::= identifier
 
-//TODO
 VarDeclGroup ::= 'Var' VarSpec ';' {pin=1}
 VarSpec ::= VarDefList ':' Type {pin=1}//{methods=[processDeclarations]}
 private VarDefList ::= VarDef &(!(';'))(',' VarDef)*
@@ -441,6 +445,10 @@ EnsuresClause ::= 'ensures' MathAssertionExp ';' {pin=1}
 
 ConstraintsClause ::= ('constraints'|'Constraints') MathAssertionExp ';' {pin=1}
 
+ConventionsClause ::= 'conventions' MathAssertionExp ';' {pin=1}
+
+CorrespondenceClause ::= 'correspondence' MathAssertionExp ';' {pin=1}
+
 ChangingClause ::= 'changing' ExpArgumentList ';' {pin=1}
 MaintainingClause ::= 'maintaining' MathAssertionExp ';' {pin=1}
 DecreasingClause ::= 'decreasing' MathAssertionExp ';' {pin=1}
@@ -495,42 +503,41 @@ MathQuantifiedExp ::= ('Forall'|'Exists') MathVarDeclGroup ',' MathAssertionExp 
 
 MathExp ::=
       MathBooleanInfixApplyExp
-
     | MathRelationalInfixApplyExp
-    | MathRangeInfixApplyExp
-    | MathAddGroup
-    | MathMultGroup
+    | MathApplicationInfixApplyExp
+    | MathAddInfixApplyExp
+    | MathMultInfixApplyExp
     | MathOutfixGroup
     | MathIncomingUnaryApplyExp
-    | MathCatInfixApplyExp
+    | MathJoiningInfixApplyExp
     | MathPrefixApplyExp
-    | MathCustomInfixApplyExp
     | MathPrimary {methods=[getResMathMetaTypeExp]}
 
 //private rules for operators with the same precedence
-private MathAddGroup ::= MathPlusInfixApplyExp | MathMinusInfixApplyExp
-private MathMultGroup ::= MathMultInfixApplyExp | MathDivInfixApplyExp
 private MathOutfixGroup ::= MathBarOutfixApplyExp | MathAngleOutfixApplyExp | MathDblBarOutfixApplyExp
 
-MathPlusInfixApplyExp ::= MathExp '+' MathExp
-MathMinusInfixApplyExp ::= MathExp ('-'|'~') MathExp
-MathBooleanInfixApplyExp ::= MathExp ('and'|'or'|'implies'|'iff') MathExp
-MathMultInfixApplyExp ::= MathExp '*' MathExp
-MathDivInfixApplyExp ::= MathExp '/' MathExp
-MathCatInfixApplyExp ::= MathExp ('o'|'union'|'intersect'|'is_in'|'is_not_in') MathExp
-MathRangeInfixApplyExp ::= MathExp '->' MathExp
+MathAddInfixApplyExp ::= MathExp MathAddOp MathExp
+MathBooleanInfixApplyExp ::= MathExp MathBooleanOp MathExp
+MathMultInfixApplyExp ::= MathExp MathMultOp MathExp
+MathRelationalInfixApplyExp ::= MathExp MathRelationalOp MathExp
+MathJoiningInfixApplyExp ::= MathExp MathJoiningOp MathExp
+
+MathApplicationInfixApplyExp ::= MathExp MathApplicationOp MathExp
 MathIncomingUnaryApplyExp ::= '@' MathExp
 MathPrefixApplyExp ::= MathExp '(' MathArgList')' {pin=2}
-
-MathRelationalInfixApplyExp ::= MathExp ('<' | '>' | '<=' | '>=' | '=' | '/=') MathExp
-MathCustomInfixApplyExp ::= MathExp identifier MathExp
-
 MathTypeAssertionExp ::= MathExp ':' MathExp {pin=2}
 MathNestedExp ::= '(' MathAssertionExp ')'
 
 MathBarOutfixApplyExp ::= '|' MathExp '|'
 MathDblBarOutfixApplyExp ::= '||' MathExp '||'
 MathAngleOutfixApplyExp ::= '<' MathExp '>'
+
+private MathAddOp ::= (MathReferenceExp '::')? ('+'|'-'|'~')
+private MathMultOp ::= (MathReferenceExp '::')? ('+'|'/')
+private MathBooleanOp ::= (MathReferenceExp '::')? ('and'|'or'|'implies'|'iff'|'is_in'|'is_not_in')
+private MathRelationalOp ::= (MathReferenceExp '::')? ('<' | '>' | '<=' | '>=' | '=' | '/=')
+private MathJoiningOp ::= (MathReferenceExp '::')? ('o'|'union'|'intersect')
+private MathApplicationOp ::= (MathReferenceExp '::')? ('..'|'->')
 
 private MathPrimary ::=
           MathSymbolExp

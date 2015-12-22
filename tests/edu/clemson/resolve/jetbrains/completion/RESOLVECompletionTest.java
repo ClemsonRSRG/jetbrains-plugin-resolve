@@ -1,9 +1,15 @@
 package edu.clemson.resolve.jetbrains.completion;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.List;
 
 public class RESOLVECompletionTest extends RESOLVECompletionTestBase {
+
+    @NotNull @Override protected String getBasePath() {
+        return "completion";
+    }
 
     public void testSimpleUsesRef() throws IOException {
         myFixture.getTempDirFixture().createFile("A.resolve", "Precis A; Definition xss : V; end A;");
@@ -42,11 +48,63 @@ public class RESOLVECompletionTest extends RESOLVECompletionTestBase {
                 "end Foo;", "xs", "ys", "pz");
     }
 
-    public void testExclusivelyHardCodedMathRefs() {
+    //Too much in flux currently with this particular test.
+    /*public void testExclusivelyHardCodedMathRefs() {
         doTestEquals("Precis Foo; Corollary C1: <caret>; " +
                         "end Foo",
-                "Powerset", "Cls", "SSet", "and", "or", "true", "false", "B",
-                "implies", "not", "iff", "Entity", "El");
+                "Powerset", "Cls", "SSet", "or", "true", "false", "B",
+                "implies", "not", "Entity", "El", "Exists", "Forall", "lambda");
+    }*/
+
+    public void testTopLevelModuleKeywords() {
+        myFixture.testCompletionVariants(
+                "./testData/completion/" + getTestName(false) + ".resolve",
+                "Precis", "PrecisExt", "Facility", "Concept", "ConceptExt",
+                "Implementation");
+    }
+
+    public void testTopLevelPrecisModuleKeywords() {
+        myFixture.testCompletionVariants(
+                "./testData/completion/" + getTestName(false) + ".resolve",
+                "uses", "Corollary", "Definition", "Implicit", "Theorem");
+    }
+
+    public void testTopLevelFacilityModuleKeywords() {
+        myFixture.testCompletionVariants(
+                "./testData/completion/" + getTestName(false) + ".resolve",
+                "uses", "Definition", "Implicit", "OperationProcedure",
+                "TypeRepresentation", "FacilityDeclaration");
+    }
+
+    //uses already declared, should be no completion for it
+    public void testSimpleModuleUsesKeyword() {
+        myFixture.testCompletionVariants(
+                "./testData/completion/" + getTestName(false) + ".resolve",
+                "Definition", "Implicit", "OperationProcedure",
+                "TypeRepresentation", "FacilityDeclaration");
+    }
+
+    public void testComplicatedHeaderUsesKeyword() {
+        doTestInclude("Concept T(type Entry; evaluates k : Int); <caret> end T;", "uses");
+    }
+
+    public void testTopLevelConceptModuleKeywords() {
+        myFixture.testCompletionVariants("./testData/completion/" +
+                getTestName(false) + ".resolve", "TypeFamily", "Implicit",
+                "Definition", "constraints", "OperationDeclaration");
+    }
+
+    public void testOpParameterModeKeywords() {
+        myFixture.testCompletionVariants("./testData/completion/" +
+                        getTestName(false) + ".resolve", "updates",
+                "evaluates", "restores", "preserves", "clears", "alters", "replaces");
+    }
+
+    public void testSpecModuleParameterKeywords() {
+        myFixture.testCompletionVariants("./testData/completion/" +
+                        getTestName(false) + ".resolve", "updates",
+                "evaluates", "restores", "preserves", "clears", "alters",
+                "replaces", "type", "Definition");
     }
 
 }
