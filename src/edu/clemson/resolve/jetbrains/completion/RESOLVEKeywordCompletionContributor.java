@@ -12,6 +12,7 @@ import edu.clemson.resolve.jetbrains.psi.*;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
+//TODO: requires and ensures keyword completions would certainly be nice..
 public class RESOLVEKeywordCompletionContributor
         extends
             CompletionContributor implements DumbAware {
@@ -189,7 +190,7 @@ public class RESOLVEKeywordCompletionContributor
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(ResTypes.REFERENCE_EXP));
     }
-    
+
     private static Capture<PsiElement> recordTypePattern() {
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(ResTypes.TYPE_REFERENCE_EXP)

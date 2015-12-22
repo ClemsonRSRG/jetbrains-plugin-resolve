@@ -45,6 +45,9 @@
         <lang.syntaxHighlighterFactory key="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.highlighting.RESOLVESyntaxHighlighterFactory"/>
         <colorSettingsPage implementation="edu.clemson.resolve.jetbrains.highlighting.RESOLVEColorsAndFontsPage"/>
 
+        <lang.psiStructureViewFactory language="RESOLVE"
+                                      implementationClass="edu.clemson.resolve.jetbrains.editor.RESOLVEStructureViewFactory"/>
+
     </extensions>
 
 <application-components>
