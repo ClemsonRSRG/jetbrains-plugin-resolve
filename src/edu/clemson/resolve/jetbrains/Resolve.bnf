@@ -437,7 +437,7 @@ StringLiteral ::= string | raw_string
 
 IntializationClause ::= 'initialization' (EnsuresClause) {pin=1};
 
-EntailsClause ::= 'which_entails' MathAssertionExp {pin=1}
+EntailsClause ::= 'which_entails' MathExp (',' MathExp)* {pin=1}
 
 RequiresClause ::= 'requires' MathAssertionExp (EntailsClause)? ';' {pin=1}
 
@@ -445,7 +445,7 @@ EnsuresClause ::= 'ensures' MathAssertionExp ';' {pin=1}
 
 ConstraintsClause ::= ('constraints'|'Constraints') MathAssertionExp ';' {pin=1}
 
-ConventionsClause ::= 'conventions' MathAssertionExp ';' {pin=1}
+ConventionsClause ::= 'conventions' MathAssertionExp (EntailsClause)? ';' {pin=1}
 
 CorrespondenceClause ::= 'correspondence' MathAssertionExp ';' {pin=1}
 

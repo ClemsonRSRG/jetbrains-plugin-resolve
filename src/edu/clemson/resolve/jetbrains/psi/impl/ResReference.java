@@ -318,6 +318,15 @@ public class ResReference
     }
 
     protected static boolean processParameterLikeThings(
+            @NotNull ResFile e,
+            @NotNull ResScopeProcessorBase processor) {
+        if (e.getEnclosedModule() != null) {
+            processParameterLikeThings(e.getEnclosedModule(), processor);
+        }
+        return true;
+    }
+
+    protected static boolean processParameterLikeThings(
             @NotNull ResCompositeElement e,
             @NotNull ResScopeProcessorBase processor) {
         ResMathDefinitionDecl def =
@@ -330,7 +339,6 @@ public class ResReference
         if (def != null) processDefinitionParams(processor, def);
         if (operation != null) processProgParamDecls(processor, operation.getParamDeclList());
         if (module != null) processModuleParams(processor, module);
-        //TODO: process moduleparams now
         return true;
     }
 

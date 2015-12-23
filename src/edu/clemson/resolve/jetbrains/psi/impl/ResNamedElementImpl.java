@@ -34,7 +34,7 @@ public abstract class ResNamedElementImpl
     }
 
     public boolean isPublic() {
-        return !(this instanceof ResTypeReprDecl);
+        return true;
     }
 
     @Nullable @Override public String getName() {

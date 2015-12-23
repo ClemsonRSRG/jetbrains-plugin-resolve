@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 import static edu.clemson.resolve.jetbrains.psi.impl.ResReference.processModuleLevelEntities;
+import static edu.clemson.resolve.jetbrains.psi.impl.ResReference.processParameterLikeThings;
 
 public class ResMathVarLikeReference
         extends
@@ -98,13 +99,25 @@ public class ResMathVarLikeReference
     private boolean processSuperModules(@NotNull ResFile file,
                                         @NotNull ResScopeProcessor processor,
                                         @NotNull ResolveState state) {
-
         for(ResModuleSpec spec : file.getSuperModuleSpecList()) {
-            PsiElement resolvedModule = spec.resolve();
-            if (resolvedModule == null || !(resolvedModule instanceof ResFile)) continue;
-            if (!processModuleLevelEntities((ResFile) resolvedModule, processor, state, false)) return false;
+            PsiElement resolvedFile = spec.resolve();
+            if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
+            ResModuleDecl resolvedModule = ((ResFile) resolvedFile).getEnclosedModule();
+            if (resolvedModule == null) continue;
+            if (!processModuleLevelEntities((ResFile) resolvedFile, processor, state, false)) return false;
+            if (!processSuperModuleParams(resolvedModule, processor, state, true)) return false;
         }
         return true;
+    }
+
+    private boolean processSuperModuleParams(@NotNull ResModuleDecl superModule,
+                                             @NotNull ResScopeProcessor processor,
+                                             @NotNull ResolveState state,
+                                             boolean localResolve) {
+        ResScopeProcessorBase delegate = createDelegate(processor);
+        ResReference.processParameterLikeThings(superModule, delegate);
+        return processNamedElements(processor, state, delegate.getVariants(),
+                localResolve);
     }
 
     private boolean processMathSelector(@NotNull ResMathSelectorExp parent,
