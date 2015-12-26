@@ -533,7 +533,7 @@ MathDblBarOutfixApplyExp ::= '||' MathExp '||'
 MathAngleOutfixApplyExp ::= '<' MathExp '>'
 
 private MathAddOp ::= (MathReferenceExp '::')? ('+'|'-'|'~')
-private MathMultOp ::= (MathReferenceExp '::')? ('+'|'/')
+private MathMultOp ::= (MathReferenceExp '::')? ('*'|'/')
 private MathBooleanOp ::= (MathReferenceExp '::')? ('and'|'or'|'implies'|'iff'|'is_in'|'is_not_in')
 private MathRelationalOp ::= (MathReferenceExp '::')? ('<' | '>' | '<=' | '>=' | '=' | '/=')
 private MathJoiningOp ::= (MathReferenceExp '::')? ('o'|'union'|'intersect')

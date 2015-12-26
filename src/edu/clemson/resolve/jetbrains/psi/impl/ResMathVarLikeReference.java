@@ -1,10 +1,13 @@
 package edu.clemson.resolve.jetbrains.psi.impl;
 
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.util.ArrayUtil;
+import com.intellij.util.ObjectUtils;
+import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.jetbrains.psi.*;
 import org.jetbrains.annotations.NotNull;
@@ -18,6 +21,7 @@ import static edu.clemson.resolve.jetbrains.psi.impl.ResReference.processParamet
 public class ResMathVarLikeReference
         extends
             PsiPolyVariantReferenceBase<ResMathReferenceExp> {
+    public static final Key<SmartPsiElementPointer<ResMathReferenceExp>> CONTEXT = Key.create("CONTEXT");
 
     public ResMathVarLikeReference(@NotNull ResMathReferenceExp o) {
         super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(),
@@ -124,12 +128,18 @@ public class ResMathVarLikeReference
                                         @NotNull ResScopeProcessor processor,
                                         @NotNull ResolveState state,
                                         @Nullable PsiElement another) {
-        /*List<ResMathExp> list = parent.getMathExpList();
-        if (list.size() > 1 && list.get(1).isEquivalentTo(another)) {
-            ResType type = list.get(0).getResType(createContext());
-            if (type != null && !processResType(type, processor, state)) return false;
-        }*/
+        List<ResMathExp> list = parent.getMathExpList();
+        if (list.size() > 1 && list.get(0).isEquivalentTo(another)) {
+         //   ResMathExp type = list.get(0).getResMathMetaTypeExp(createContext());
+            //if (type != null && !processResType(type, processor, state)) return false;
+        }
         return true;
+    }
+
+    @NotNull public ResolveState createContext() {
+        return ResolveState.initial().put(CONTEXT,
+                SmartPointerManager.getInstance(myElement.getProject())
+                        .createSmartPsiElementPointer(myElement));
     }
 
     private boolean processBuiltin(@NotNull ResScopeProcessor processor,
