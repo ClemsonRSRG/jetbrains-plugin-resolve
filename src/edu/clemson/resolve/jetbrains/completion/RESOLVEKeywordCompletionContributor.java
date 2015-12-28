@@ -38,12 +38,14 @@ public class RESOLVEKeywordCompletionContributor
         extend(CompletionType.BASIC, precisModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                        "Implicit", "Definition", "Theorem", "Corollary"));
+                        "Implicit", "Definition", "Theorem", "Corollary",
+                        "Inductive"));
 
         extend(CompletionType.BASIC, precisExtModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                        "Implicit", "Definition", "Theorem", "Corollary"));
+                        "Implicit", "Definition", "Theorem", "Corollary",
+                        "Inductive"));
 
         extend(CompletionType.BASIC, implementationModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
