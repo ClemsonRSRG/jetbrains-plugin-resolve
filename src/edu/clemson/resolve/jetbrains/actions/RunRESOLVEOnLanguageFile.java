@@ -1,5 +1,6 @@
 package edu.clemson.resolve.jetbrains.actions;
 
+import com.google.common.base.Strings;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.notification.Notification;
@@ -9,6 +10,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import edu.clemson.resolve.compiler.RESOLVECompiler;
 import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
@@ -124,17 +126,31 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
                                                      VirtualFile vfile) {
         Map<String,String> args = new HashMap<String, String>();
         String qualFileName = vfile.getPath();
+        String package_ = ConfigRESOLVEPerLanguageFile.getProp(
+                project, qualFileName, ConfigRESOLVEPerLanguageFile
+                        .PROP_PACKAGE, MISSING);
+        if ( package_.equals(MISSING) ) {
+            package_ = ProjectRootManager.getInstance(project).getFileIndex()
+                    .getPackageNameByDirectory(vfile.getParent());
+            if ( Strings.isNullOrEmpty(package_)) {
+                package_ = MISSING;
+            }
+        }
+       if ( !package_.equals(MISSING)) {
+           args.put("-package", package_);
+       }
 
         VirtualFile contentRoot =
                 ConfigRESOLVEPerLanguageFile.getContentRoot(project, vfile);
         String outputDirName =
                 ConfigRESOLVEPerLanguageFile.getOutputDirName(
-                        project, qualFileName, contentRoot);
+                        project, qualFileName, contentRoot, package_);
         args.put("-o", outputDirName);
+        args.put("-genCode", "Java");
 
-        //String libDir = ConfigRESOLVEPerLanguageFile.getProp(project, qualFileName, ConfigRESOLVEPerLanguageFile.PROP_LIB_DIR, sourcePath);
-        //args.put("-lib", libDir);
-        args.put("-genCode", "");
+        String libDir = contentRoot.getPath();
+        args.put("-lib", libDir);
+
         return args;
     }
 
@@ -142,12 +158,12 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
         VirtualFile contentRoot =
                 ConfigRESOLVEPerLanguageFile.getContentRoot(project, targetFile);
         Map<String,String> argMap = getRESOLVEArgs(project, targetFile);
-        /*String package_ = argMap.get("-package");
+        String package_ = argMap.get("-package");
         if ( package_==null ) {
             package_ = MISSING;
-        }*/
+        }
         return ConfigRESOLVEPerLanguageFile.getOutputDirName(project,
-                targetFile.getPath(), contentRoot);
+                targetFile.getPath(), contentRoot, package_);
     }
 
 }

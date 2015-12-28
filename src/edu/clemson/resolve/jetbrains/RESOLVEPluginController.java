@@ -31,7 +31,7 @@ public class RESOLVEPluginController implements ProjectComponent {
     public static final String PLUGIN_ID = "edu.clemson.resolve.jetbrains";
     public static final Logger LOG = Logger.getInstance("RESOLVEPluginController");
 
-    public static final String CONSOLE_WINDOW_ID = "RESOLVE Compiler Output";
+    public static final String CONSOLE_WINDOW_ID = "RESOLVE Output";
     public boolean projectIsClosed = false;
 
     public Project project;

@@ -16,13 +16,15 @@ import java.io.File;
 public class ConfigRESOLVEPerLanguageFile extends DialogWrapper {
 
     public static final String PROP_OUTPUT_DIR = "output-dir";
-    //public static final String PROP_PACKAGE = "package";
+    public static final String PROP_PACKAGE = "package";
 
     private JPanel dialogContents;
 
     private TextFieldWithBrowseButton outputDirField;
+    private JTextField textField1;
     private TextFieldWithBrowseButton libDirField;
     private JCheckBox genVCsCheckBox;
+    private JTextField packageField;
 
     public ConfigRESOLVEPerLanguageFile(final Project project,
                                         String qualFileName) {
@@ -37,10 +39,15 @@ public class ConfigRESOLVEPerLanguageFile extends DialogWrapper {
     }
 
     public static String getOutputDirName(Project project, String qualFileName,
-                                          VirtualFile contentRoot) {
-        String outputDirName = contentRoot.getPath()+File.separator
-                + RunRESOLVEOnLanguageFile.OUTPUT_DIR_NAME;
-        outputDirName = getProp(project, qualFileName, PROP_OUTPUT_DIR, outputDirName);
+                                          VirtualFile contentRoot, String package_) {
+        String outputDirName = contentRoot.getPath()+File.separator+
+                RunRESOLVEOnLanguageFile.OUTPUT_DIR_NAME;
+        outputDirName =
+                getProp(project, qualFileName, PROP_OUTPUT_DIR, outputDirName);
+        if ( !package_.equals(RunRESOLVEOnLanguageFile.MISSING) ) {
+            outputDirName += File.separator+package_
+                    .replace('.', File.separatorChar);
+        }
         return outputDirName;
     }
 
@@ -75,8 +82,8 @@ public class ConfigRESOLVEPerLanguageFile extends DialogWrapper {
         PropertiesComponent props = PropertiesComponent.getInstance(project);
         String s = props.getValue(getPropNameForFile(qualFileName, PROP_OUTPUT_DIR), "");
         outputDirField.setText(s);
-        //s = props.getValue(getPropNameForFile(qualFileName, PROP_PACKAGE), "");
-        //packageField.setText(s);
+        s = props.getValue(getPropNameForFile(qualFileName, PROP_PACKAGE), "");
+        packageField.setText(s);
     }
 
     public void saveValues(Project project, String qualFileName) {
@@ -90,14 +97,13 @@ public class ConfigRESOLVEPerLanguageFile extends DialogWrapper {
         else {
             props.unsetValue(getPropNameForFile(qualFileName, PROP_OUTPUT_DIR));
         }
-
-        /*v = packageField.getText();
+        v = packageField.getText();
         if ( v.trim().length()>0 ) {
             props.setValue(getPropNameForFile(qualFileName, PROP_PACKAGE), v);
         }
         else {
             props.unsetValue(getPropNameForFile(qualFileName, PROP_PACKAGE));
-        }*/
+        }
     }
 
     public static String getPropNameForFile(String qualFileName, String prop) {
@@ -111,8 +117,8 @@ public class ConfigRESOLVEPerLanguageFile extends DialogWrapper {
     @Override public String toString() {
         return "ConfigRESOLVEPerLanguageFile{"+
                 "textField2="+
-               // "  packageField="+packageField+
-                "  outputDirField="+outputDirField+
+                "  packageField="+packageField+
+                ", outputDirField="+outputDirField+
                 '}';
     }
 }
