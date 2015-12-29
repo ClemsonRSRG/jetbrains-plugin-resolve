@@ -83,6 +83,7 @@ public class RESOLVEPluginController implements ProjectComponent {
 
         consoleWindow = toolWindowManager.registerToolWindow(CONSOLE_WINDOW_ID, true, ToolWindowAnchor.BOTTOM);
         consoleWindow.getContentManager().addContent(content);
+
         consoleWindow.setIcon(RESOLVEIcons.MODULE);
     }
 
@@ -90,7 +91,7 @@ public class RESOLVEPluginController implements ProjectComponent {
         LOG.info("projectClosed " + project.getName());
         projectIsClosed = true;
         //uninstallListeners();
-
+        
         console.dispose();
         consoleWindow = null;
         project = null;

@@ -26,6 +26,13 @@ import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/** Executes the resolve compiler on a given
+ *  {@link edu.clemson.resolve.jetbrains.RESOLVEFileType}. This code is
+ *  adapted from the code written for this purpose in the ANTLRv4 intellij
+ *  plugin written by Terence Parr and others, found here:
+ *
+ *  <a href="https://github.com/antlr/intellij-plugin-v4">https://github.com/antlr/intellij-plugin-v4/a>
+ */
 public class RunRESOLVEOnLanguageFile extends Task.Modal {
 
     public static final Logger LOG = Logger.getInstance("RunRESOLVEOnLanguageFile");
