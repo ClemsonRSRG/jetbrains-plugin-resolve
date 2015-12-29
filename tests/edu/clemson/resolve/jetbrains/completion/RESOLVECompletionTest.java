@@ -66,7 +66,8 @@ public class RESOLVECompletionTest extends RESOLVECompletionTestBase {
     public void testTopLevelPrecisModuleKeywords() {
         myFixture.testCompletionVariants(
                 "./testData/completion/" + getTestName(false) + ".resolve",
-                "uses", "Corollary", "Definition", "Implicit", "Theorem");
+                "uses", "Corollary", "Categorical", "Inductive", "Definition",
+                "Implicit", "Theorem");
     }
 
     public void testTopLevelFacilityModuleKeywords() {

@@ -460,7 +460,7 @@ MathStandardDefinitionDecl ::= ('Implicit')? 'Definition'
     MathDefinitionSignature ('is' MathAssertionExp)? ';' {pin=2}
 
 MathCategoricalDefinitionDecl ::= 'Categorical' 'Definition' 'for'
-MathDefinitionSignatureList 'is' MathExp ';' {pin=1}
+MathDefinitionSignatureList 'is' MathExp ';' {pin=2}
 
 private MathDefinitionSignatureList ::= MathPrefixDefinitionSignature
 (',' MathPrefixDefinitionSignature)* {recoverWhile=CategoricalSigListRec}
@@ -470,7 +470,7 @@ private CategoricalSigListRec ::= !('is')
 MathInductiveDefinitionDecl ::= 'Inductive' 'Definition'
 MathDefinitionSignature 'is'
 '(i.)' MathAssertionExp ';'
-'(ii.)' MathAssertionExp ';' {pin=1}
+'(ii.)' MathAssertionExp ';' {pin=2}
 
 private MathDefinitionSignature ::=
            MathPrefixDefinitionSignature

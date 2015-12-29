@@ -1,6 +1,7 @@
 package edu.clemson.resolve.jetbrains.actions;
 
 import com.google.common.base.Strings;
+import com.intellij.codeInspection.LocalQuickFix;
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.notification.Notification;
@@ -53,7 +54,7 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
             resolve(targetFile);
         }
     }
-
+    //See "ImplementMethodsFix" in the intellij sources
     /** Run RESOLVE on file according to preferences in intellij for this file.
      *  Writes set of generated files or empty set if error.
      */

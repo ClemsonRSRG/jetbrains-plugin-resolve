@@ -39,7 +39,7 @@ public class RESOLVEKeywordCompletionContributor
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
                         "Implicit", "Definition", "Theorem", "Corollary",
-                        "Inductive"));
+                        "Inductive", "Categorical"));
 
         extend(CompletionType.BASIC, precisExtModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
