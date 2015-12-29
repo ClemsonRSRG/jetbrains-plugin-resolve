@@ -460,7 +460,7 @@ MathStandardDefinitionDecl ::= ('Implicit')? 'Definition'
     MathDefinitionSignature ('is' MathAssertionExp)? ';' {pin=2}
 
 MathCategoricalDefinitionDecl ::= 'Categorical' 'Definition' 'for'
-MathDefinitionSignatureList 'is' MathExp ';' {pin=1}
+MathDefinitionSignatureList 'is' MathExp ';' {pin=2}
 
 private MathDefinitionSignatureList ::= MathPrefixDefinitionSignature
 (',' MathPrefixDefinitionSignature)* {recoverWhile=CategoricalSigListRec}
@@ -469,8 +469,8 @@ private CategoricalSigListRec ::= !('is')
 
 MathInductiveDefinitionDecl ::= 'Inductive' 'Definition'
 MathDefinitionSignature 'is'
-'(i.)' MathExp ';'
-'(ii.)' MathExp ';' {pin=1}
+'(i.)' MathAssertionExp ';'
+'(ii.)' MathAssertionExp ';' {pin=2}
 
 private MathDefinitionSignature ::=
            MathPrefixDefinitionSignature
@@ -511,10 +511,15 @@ MathExp ::=
     | MathIncomingUnaryApplyExp
     | MathJoiningInfixApplyExp
     | MathPrefixApplyExp
+    | MathPrefixGeneralizedApplyExp
     | MathPrimary {methods=[getResMathMetaTypeExp]}
 
 //private rules for operators with the same precedence
-private MathOutfixGroup ::= MathBarOutfixApplyExp | MathAngleOutfixApplyExp | MathDblBarOutfixApplyExp
+private MathOutfixGroup ::=
+      MathBarOutfixApplyExp
+    | MathAngleOutfixApplyExp
+    | MathDblBarOutfixApplyExp
+    | MathSqBrOutfixApplyExp
 
 MathAddInfixApplyExp ::= MathExp MathAddOp MathExp
 MathBooleanInfixApplyExp ::= MathExp MathBooleanOp MathExp
@@ -524,16 +529,21 @@ MathJoiningInfixApplyExp ::= MathExp MathJoiningOp MathExp
 
 MathApplicationInfixApplyExp ::= MathExp MathApplicationOp MathExp
 MathIncomingUnaryApplyExp ::= '@' MathExp
-MathPrefixApplyExp ::= MathExp '(' MathArgList')' {pin=2}
+MathPrefixApplyExp ::= MathExp '(' MathArgList ')' {pin=2}
+MathPrefixGeneralizedApplyExp ::= MathExp '[' GeneralizedApplyArgList']' {pin=2 recoverWhile=GeneralizedApplyArgList}
+private GeneralizedApplyArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=GeneralizedApplyRecover}
+private GeneralizedApplyRecover ::= !(']')
+
 MathTypeAssertionExp ::= MathExp ':' MathExp {pin=2}
 MathNestedExp ::= '(' MathAssertionExp ')'
 
 MathBarOutfixApplyExp ::= '|' MathExp '|'
 MathDblBarOutfixApplyExp ::= '||' MathExp '||'
 MathAngleOutfixApplyExp ::= '<' MathExp '>'
+MathSqBrOutfixApplyExp ::= '[' MathExp ']'
 
 private MathAddOp ::= (MathReferenceExp '::')? ('+'|'-'|'~')
-private MathMultOp ::= (MathReferenceExp '::')? ('+'|'/')
+private MathMultOp ::= (MathReferenceExp '::')? ('*'|'/')
 private MathBooleanOp ::= (MathReferenceExp '::')? ('and'|'or'|'implies'|'iff'|'is_in'|'is_not_in')
 private MathRelationalOp ::= (MathReferenceExp '::')? ('<' | '>' | '<=' | '>=' | '=' | '/=')
 private MathJoiningOp ::= (MathReferenceExp '::')? ('o'|'union'|'intersect')

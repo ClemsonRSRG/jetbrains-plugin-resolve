@@ -1,6 +1,3 @@
-# Build intermediate
-/gen/
-
 # Build output
 /out/
 
