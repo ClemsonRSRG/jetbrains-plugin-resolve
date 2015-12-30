@@ -103,9 +103,17 @@ public class ResReference
         PsiElement target = reference != null ? reference.resolve() : null;
         if (target == null || target == qualifier) return false;
         if (target instanceof ResFacilityDecl) {
-            ResFile spec = ((ResFacilityDecl)target).getSpecification();
-            if (spec == null) return false;
-            processModuleLevelEntities(spec, processor, state, false);
+            ResFacilityDecl facility =  ((ResFacilityDecl)target);
+            if (facility.getSpecification() != null) {
+                processModuleLevelEntities(facility.getSpecification(),
+                        processor, state, false);
+            }
+            for (ResExtensionPairing p : facility.getExtensionPairingList()) {
+                if (p.getModuleSpecList().isEmpty()) continue;
+                ResFile spec = (ResFile)p.getModuleSpecList().get(0).resolve();
+                if (spec == null) continue;
+                processModuleLevelEntities(spec, processor, state, false);
+            }
         }
         else if (target instanceof ResFile) {
             ResModuleDecl module = ((ResFile) target).getEnclosedModule();

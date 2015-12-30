@@ -85,6 +85,7 @@
         CART_PROD               = 'Cart_Prod'
         DEFINES                 = 'Defines'
         IFF                     = 'iff'
+        EXTENDED                = 'extended'
         DEFINITION              = 'Definition'
         CONSTRAINTS             = 'constraints'
         CONVENTIONS             = 'conventions'
@@ -334,10 +335,18 @@ ParameterMode ::=
                  //patterns much harder
 // Facilities
 
-FacilityDecl ::= 'Facility' identifier 'is' ModuleSpec ArgumentList?
-('externally')? 'implemented' 'by' ModuleSpec ArgumentList? ';' {pin=2 methods=[getSpecification]}
+FacilityDecl ::= 'Facility' identifier 'is' ModuleSpec ModuleArgList?
+('externally')? 'implemented' 'by' ModuleSpec ModuleArgList?
+ExtensionList? ';' {pin=2 methods=[getSpecification]}
 
+private ExtensionList ::= (ExtensionPairing)* {recoverWhile=ExtensionListRec}
+private ExtensionListRec ::= !(';')
+
+ExtensionPairing ::= 'extended' 'by' ModuleSpec ModuleArgList? ('externally')?
+'implemented' 'by' ModuleSpec ModuleArgList? {pin=1}
 // operations
+
+ModuleArgList ::= '(' ExpArgumentList ')' {pin=1}
 
 OperationDecl ::=
 'Operation' identifier OperationLikeParameters (':' Type)? ';'

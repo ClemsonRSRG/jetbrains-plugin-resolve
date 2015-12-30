@@ -137,6 +137,7 @@ ESCAPES = [abfnrtv]
 "else"                                  { return ELSE; }
 "Extension"                             { return EXTENSION; }
 "extended_by"                           { return EXTENDED_BY; }
+"extended"                              { return EXTENDED; }
 "do"                                    { return DO; }
 "end"                                   { return END;  }
 "ensures"                               { return ENSURES; }
