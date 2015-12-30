@@ -1,4 +1,4 @@
-package edu.clemson.resolve.jetbrains.codeInsight;
+package edu.clemson.resolve.jetbrains.intention;
 
 import com.intellij.codeInspection.IntentionAndQuickFixAction;
 import com.intellij.openapi.editor.Editor;
@@ -21,8 +21,7 @@ public class ImplementOperationsFix extends IntentionAndQuickFixAction {
     }
 
     @NotNull @Override public String getFamilyName() {
-        return "Create default implementations of all operations declared " +
-                "in the specification";
+        return "Implement operations";
     }
 
     @Override public void applyFix(@NotNull Project project,
