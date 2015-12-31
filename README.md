@@ -52,7 +52,7 @@ We currently support live templates for the following constructs:
 - procedures
 
 ### Reference completion
-![Ref completion](resources/images/basic-ref-completion.png)
+![Ref completion](resources/images/reference-completion.png)
 
 ### Goto declaration
 
