@@ -28,7 +28,7 @@ See our [github releases](https://github.com/Welchd1/resolve-intellij-plugin/rel
 ## Screenshots
 
 ### Syntax highlighting and error reporting
-![Syntax highlighter](resources/images/syntax-error.png)
+![Syntax errors](resources/images/syntax-errors.png)
 
 ### Keyword completion
 ![Keyword completion](resources/images/keyword-completion.png)
