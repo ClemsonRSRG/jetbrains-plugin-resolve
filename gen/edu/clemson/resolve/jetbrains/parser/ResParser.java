@@ -80,6 +80,9 @@ public class ResParser implements PsiParser, LightPsiParser {
     else if (t == EXP) {
       r = Exp(b, 0, -1);
     }
+    else if (t == EXTENSION_PAIRING) {
+      r = ExtensionPairing(b, 0);
+    }
     else if (t == FACILITY_BLOCK) {
       r = FacilityBlock(b, 0);
     }
@@ -232,6 +235,9 @@ public class ResParser implements PsiParser, LightPsiParser {
     }
     else if (t == MATH_VAR_DEF) {
       r = MathVarDef(b, 0);
+    }
+    else if (t == MODULE_ARG_LIST) {
+      r = ModuleArgList(b, 0);
     }
     else if (t == MODULE_SPEC) {
       r = ModuleSpec(b, 0);
@@ -868,6 +874,105 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // (ExtensionPairing)*
+  static boolean ExtensionList(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExtensionList")) return false;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    int c = current_position_(b);
+    while (true) {
+      if (!ExtensionList_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "ExtensionList", c)) break;
+      c = current_position_(b);
+    }
+    exit_section_(b, l, m, null, true, false, ExtensionListRec_parser_);
+    return true;
+  }
+
+  // (ExtensionPairing)
+  private static boolean ExtensionList_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExtensionList_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = ExtensionPairing(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // !(';')
+  static boolean ExtensionListRec(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExtensionListRec")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NOT_, null);
+    r = !ExtensionListRec_0(b, l + 1);
+    exit_section_(b, l, m, null, r, false, null);
+    return r;
+  }
+
+  // (';')
+  private static boolean ExtensionListRec_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExtensionListRec_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, SEMICOLON);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // 'extended' 'by' ModuleSpec ModuleArgList? ('externally')?
+  // 'implemented' 'by' ModuleSpec ModuleArgList?
+  public static boolean ExtensionPairing(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExtensionPairing")) return false;
+    if (!nextTokenIs(b, EXTENDED)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeToken(b, EXTENDED);
+    p = r; // pin = 1
+    r = r && report_error_(b, consumeToken(b, BY));
+    r = p && report_error_(b, ModuleSpec(b, l + 1)) && r;
+    r = p && report_error_(b, ExtensionPairing_3(b, l + 1)) && r;
+    r = p && report_error_(b, ExtensionPairing_4(b, l + 1)) && r;
+    r = p && report_error_(b, consumeToken(b, IMPLEMENTED)) && r;
+    r = p && report_error_(b, consumeToken(b, BY)) && r;
+    r = p && report_error_(b, ModuleSpec(b, l + 1)) && r;
+    r = p && ExtensionPairing_8(b, l + 1) && r;
+    exit_section_(b, l, m, EXTENSION_PAIRING, r, p, null);
+    return r || p;
+  }
+
+  // ModuleArgList?
+  private static boolean ExtensionPairing_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExtensionPairing_3")) return false;
+    ModuleArgList(b, l + 1);
+    return true;
+  }
+
+  // ('externally')?
+  private static boolean ExtensionPairing_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExtensionPairing_4")) return false;
+    ExtensionPairing_4_0(b, l + 1);
+    return true;
+  }
+
+  // ('externally')
+  private static boolean ExtensionPairing_4_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExtensionPairing_4_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, EXTERNALLY);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ModuleArgList?
+  private static boolean ExtensionPairing_8(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExtensionPairing_8")) return false;
+    ModuleArgList(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
   // FacilityItem*
   public static boolean FacilityBlock(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FacilityBlock")) return false;
@@ -883,8 +988,9 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // 'Facility' identifier 'is' ModuleSpec ArgumentList?
-  // ('externally')? 'implemented' 'by' ModuleSpec ArgumentList? ';'
+  // 'Facility' identifier 'is' ModuleSpec ModuleArgList?
+  // ('externally')? 'implemented' 'by' ModuleSpec ModuleArgList?
+  // ExtensionList? ';'
   public static boolean FacilityDecl(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FacilityDecl")) return false;
     if (!nextTokenIs(b, FACILITY)) return false;
@@ -901,15 +1007,16 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = p && report_error_(b, consumeToken(b, BY)) && r;
     r = p && report_error_(b, ModuleSpec(b, l + 1)) && r;
     r = p && report_error_(b, FacilityDecl_9(b, l + 1)) && r;
+    r = p && report_error_(b, FacilityDecl_10(b, l + 1)) && r;
     r = p && consumeToken(b, SEMICOLON) && r;
     exit_section_(b, l, m, FACILITY_DECL, r, p, null);
     return r || p;
   }
 
-  // ArgumentList?
+  // ModuleArgList?
   private static boolean FacilityDecl_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FacilityDecl_4")) return false;
-    ArgumentList(b, l + 1);
+    ModuleArgList(b, l + 1);
     return true;
   }
 
@@ -930,10 +1037,17 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ArgumentList?
+  // ModuleArgList?
   private static boolean FacilityDecl_9(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FacilityDecl_9")) return false;
-    ArgumentList(b, l + 1);
+    ModuleArgList(b, l + 1);
+    return true;
+  }
+
+  // ExtensionList?
+  private static boolean FacilityDecl_10(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FacilityDecl_10")) return false;
+    ExtensionList(b, l + 1);
     return true;
   }
 
@@ -2373,6 +2487,21 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, IDENTIFIER);
     exit_section_(b, m, MATH_VAR_DEF, r);
     return r;
+  }
+
+  /* ********************************************************** */
+  // '(' ExpArgumentList ')'
+  public static boolean ModuleArgList(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ModuleArgList")) return false;
+    if (!nextTokenIs(b, LPAREN)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeToken(b, LPAREN);
+    p = r; // pin = 1
+    r = r && report_error_(b, ExpArgumentList(b, l + 1));
+    r = p && consumeToken(b, RPAREN) && r;
+    exit_section_(b, l, m, MODULE_ARG_LIST, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -4230,6 +4359,11 @@ public class ResParser implements PsiParser, LightPsiParser {
   final static Parser ExpListRecover_parser_ = new Parser() {
     public boolean parse(PsiBuilder b, int l) {
       return ExpListRecover(b, l + 1);
+    }
+  };
+  final static Parser ExtensionListRec_parser_ = new Parser() {
+    public boolean parse(PsiBuilder b, int l) {
+      return ExtensionListRec(b, l + 1);
     }
   };
   final static Parser FacilityItemRecover_parser_ = new Parser() {

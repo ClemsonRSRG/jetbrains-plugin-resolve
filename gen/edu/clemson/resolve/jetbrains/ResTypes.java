@@ -29,6 +29,7 @@ public interface ResTypes {
   IElementType ENSURES_CLAUSE = new ResCompositeElementType("ENSURES_CLAUSE");
   IElementType ENTAILS_CLAUSE = new ResCompositeElementType("ENTAILS_CLAUSE");
   IElementType EXP = new ResCompositeElementType("EXP");
+  IElementType EXTENSION_PAIRING = new ResCompositeElementType("EXTENSION_PAIRING");
   IElementType FACILITY_BLOCK = new ResCompositeElementType("FACILITY_BLOCK");
   IElementType FACILITY_DECL = new ResCompositeElementType("FACILITY_DECL");
   IElementType FACILITY_MODULE_DECL = new ResCompositeElementType("FACILITY_MODULE_DECL");
@@ -80,6 +81,7 @@ public interface ResTypes {
   IElementType MATH_TYPE_ASSERTION_EXP = new ResCompositeElementType("MATH_TYPE_ASSERTION_EXP");
   IElementType MATH_VAR_DECL_GROUP = new ResCompositeElementType("MATH_VAR_DECL_GROUP");
   IElementType MATH_VAR_DEF = new ResCompositeElementType("MATH_VAR_DEF");
+  IElementType MODULE_ARG_LIST = new ResCompositeElementType("MODULE_ARG_LIST");
   IElementType MODULE_SPEC = new ResCompositeElementType("MODULE_SPEC");
   IElementType MUL_INFIX_EXP = new ResCompositeElementType("MUL_INFIX_EXP");
   IElementType OPERATION_DECL = new ResCompositeElementType("OPERATION_DECL");
@@ -157,6 +159,7 @@ public interface ResTypes {
   IElementType EVALUATES = new ResTokenType("evaluates");
   IElementType EXEMPLAR = new ResTokenType("exemplar");
   IElementType EXISTS = new ResTokenType("Exists");
+  IElementType EXTENDED = new ResTokenType("extended");
   IElementType EXTENDED_BY = new ResTokenType("extended_by");
   IElementType EXTENSION = new ResTokenType("Extension");
   IElementType EXTERNALLY = new ResTokenType("externally");
@@ -295,6 +298,9 @@ public interface ResTypes {
       }
       else if (type == EXP) {
         return new ResExpImpl(node);
+      }
+      else if (type == EXTENSION_PAIRING) {
+        return new ResExtensionPairingImpl(node);
       }
       else if (type == FACILITY_BLOCK) {
         return new ResFacilityBlockImpl(node);
@@ -448,6 +454,9 @@ public interface ResTypes {
       }
       else if (type == MATH_VAR_DEF) {
         return new ResMathVarDefImpl(node);
+      }
+      else if (type == MODULE_ARG_LIST) {
+        return new ResModuleArgListImpl(node);
       }
       else if (type == MODULE_SPEC) {
         return new ResModuleSpecImpl(node);

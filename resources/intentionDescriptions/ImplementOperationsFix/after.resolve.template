@@ -1,0 +1,10 @@
+Implementation X for Y;
+    Procedure Cat();
+    end Cat;
+
+    Procedure Dog();
+    end Dog;
+
+    Procedure Fishy();
+    end Fishy;
+end X;
