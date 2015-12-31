@@ -194,7 +194,7 @@ PrecisBlock
 'end' identifier ';' {pin(".*")=2}
 
 PrecisExtensionModuleDecl ::= 'Precis' 'Extension' identifier 'for'
-ModuleSpec ('extended_by' ModuleSpec)? ';'
+ModuleSpec ('with' ModuleSpec)? ';'
 PrecisBlock
 'end' identifier ';' {pin(".*")=2}
 

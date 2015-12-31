@@ -179,6 +179,7 @@ ESCAPES = [abfnrtv]
 "uses"                                  { return USES; }
 "Var"                                   { return VAR; }
 "While"                                 { return WHILE; }
+"with"                                  { return WITH; }
 "which_entails"                         { return WHICH_ENTAILS; }
 
 // Parameter modes

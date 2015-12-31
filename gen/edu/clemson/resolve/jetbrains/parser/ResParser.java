@@ -2936,7 +2936,7 @@ public class ResParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // 'Precis' 'Extension' identifier 'for'
-  // ModuleSpec ('extended_by' ModuleSpec)? ';'
+  // ModuleSpec ('with' ModuleSpec)? ';'
   // PrecisBlock
   // 'end' identifier ';'
   public static boolean PrecisExtensionModuleDecl(PsiBuilder b, int l) {
@@ -2960,19 +2960,19 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // ('extended_by' ModuleSpec)?
+  // ('with' ModuleSpec)?
   private static boolean PrecisExtensionModuleDecl_5(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PrecisExtensionModuleDecl_5")) return false;
     PrecisExtensionModuleDecl_5_0(b, l + 1);
     return true;
   }
 
-  // 'extended_by' ModuleSpec
+  // 'with' ModuleSpec
   private static boolean PrecisExtensionModuleDecl_5_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PrecisExtensionModuleDecl_5_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, EXTENDED_BY);
+    r = consumeToken(b, WITH);
     r = r && ModuleSpec(b, l + 1);
     exit_section_(b, m, null, r);
     return r;

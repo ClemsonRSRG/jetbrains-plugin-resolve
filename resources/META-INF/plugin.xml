@@ -47,12 +47,6 @@
 
         <lang.psiStructureViewFactory language="RESOLVE"
                                       implementationClass="edu.clemson.resolve.jetbrains.editor.RESOLVEStructureViewFactory"/>
-
-        <intentionAction>
-            <className>edu.clemson.resolve.jetbrains.intention.ImplementOperationsFix</className>
-            <category>Implement operations</category>
-            <descriptionDirectoryName>resources/inspectionDescriptions/ImplementOperationsFix</descriptionDirectoryName>
-        </intentionAction>
     </extensions>
 
     <application-components>
@@ -62,7 +56,6 @@
     <project-components>
         <component>
             <implementation-class>edu.clemson.resolve.jetbrains.RESOLVEPluginController</implementation-class>
-            <implementation-class>edu.clemson.resolve.jetbrains.intention.ImplementOperationsFix</implementation-class>
         </component>
     </project-components>
 
