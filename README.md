@@ -1,6 +1,6 @@
 # IntelliJ Idea Plugin for RESOLVE (lite)
 
-An [Jetbrains](https://www.jetbrains.com/idea/) plugin for the
+A [Jetbrains](https://www.jetbrains.com/idea/) plugin for the
 RESOLVE specification and programming language. Compatible with IntelliJ v13.x-15.x.
 
 
