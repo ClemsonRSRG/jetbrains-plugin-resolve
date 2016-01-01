@@ -3,7 +3,6 @@
 A [Jetbrains](https://www.jetbrains.com/idea/) plugin for the
 RESOLVE specification and programming language. Compatible with IntelliJ v13.x-15.x.
 
-
 ## At a glance
 
 The initial release(s) of this plugin provides the following features
@@ -68,7 +67,7 @@ You can generate code for a `.resolve` file by right clicking and selecting the 
 
 ![Code gen](resources/images/generate-code.png)
 
-By default, generated code will get written to `\gen` at which point, then can be executed by simply creating a java run configuration. After this, execution results will display as usual in the IDE's terminal:
+By default, generated code will get written to `\gen` at which point, it can be executed by simply creating a standard java run configuration. After this, execution results will display as usual in the IDE's terminal:
 
 ![Output console](resources/images/compiler-output.png)
 
