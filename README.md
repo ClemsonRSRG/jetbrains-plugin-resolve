@@ -54,29 +54,23 @@ We currently support live templates for the following constructs:
 ### Reference completion
 ![Ref completion](resources/images/reference-completion.png)
 
-### Goto declaration
-
-![Goto declaration](resources/images/basic-goto-decl.png)
-
 ### File type legend
 
 ![Standard libs](resources/images/icon-legend.png)
 
-Think of orange circular icons as non-executable *specification* based modules
-(e.g. concepts, extension) and greenish/teal icons as *implementations* --
-with blue reserved exclusively for RESOLVE's mathematical developments.
+Think of orange circular icons as non-executable *specification* based modules (e.g. concepts, extension) and greenish/teal icons as *implementations* -- with blue reserved exclusively for RESOLVE's mathematical developments.
 
 The IDE will automatically update a file's icon based on the module declared
 within.
 
-### RESOLVE tool output
-You can generate code for a `.resolve` file by right clicking on the file and pressing play:
+### RESOLVE compiler integration
+You can generate code for a `.resolve` file by right clicking and selecting the "generate code" button:
 
-![Output console](resources/images/run-option.png)
+![Code gen](resources/images/generate-code.png)
 
 By default, generated code will get written to `\gen` at which point, then can be executed by simply creating a java run configuration. After this, execution results will display as usual in the IDE's terminal:
 
-![Output console](resources/images/execution.png)
+![Output console](resources/images/compiler-output.png)
 
 ### Color preferences
 
