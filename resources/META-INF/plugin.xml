@@ -1,15 +1,15 @@
 <idea-plugin version="2">
     <id>edu.clemson.resolve.jetbrains</id>
     <name>RESOLVE langauge plugin</name>
-    <version>1.0</version>
+    <version>0.1.1a</version>
     <vendor email="dtw.welch@gmail.com" url="https://github.com/Welchd1/jetbrains-plugin-resolve">RESOLVE Project</vendor>
 
     <description><![CDATA[
         <p>
         This plugin is designed to provide Intellij support for the RESOLVE
         specification and programming language. Currently supported features
-        inclue: syntax highlighting, goto-declaration, and usage search for
-        operations, variables, modules, and facilities.
+        inclue: syntax highlighting, limited completion for keywords & refs,
+        goto-declaration, and symbol usage search.
     ]]></description>
 
     <change-notes><![CDATA[
