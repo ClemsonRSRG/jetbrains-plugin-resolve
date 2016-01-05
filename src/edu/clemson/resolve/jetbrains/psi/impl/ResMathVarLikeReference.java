@@ -142,6 +142,14 @@ public class ResMathVarLikeReference
     private boolean processCartProdFields(@NotNull ResMathExp type,
                                           @NotNull ResScopeProcessor processor,
                                           @NotNull ResolveState state) {
+        if (type instanceof ResMathReferenceExp) {
+
+            //TODO: O.K., in order for this next line to actually work (i.e. return something not null when a
+            //type family is referenced) then we need to make mathVarLike Reference resolve type families (probably reprs too)
+            PsiElement x = ((ResMathReferenceExp)type).getReference().resolve();
+            int i;
+            i=0;
+        }
         if (type instanceof ResMathCartProdExp) {
             ResScopeProcessorBase delegate = createDelegate(processor);
             type.processDeclarations(delegate, ResolveState.initial(), null, myElement);
