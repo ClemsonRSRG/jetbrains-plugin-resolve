@@ -77,6 +77,9 @@ public class ResParser implements PsiParser, LightPsiParser {
     else if (t == ENTAILS_CLAUSE) {
       r = EntailsClause(b, 0);
     }
+    else if (t == EXEMPLAR_DECL) {
+      r = ExemplarDecl(b, 0);
+    }
     else if (t == EXP) {
       r = Exp(b, 0, -1);
     }
@@ -786,6 +789,21 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = r && MathExp(b, l + 1, -1);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  /* ********************************************************** */
+  // 'exemplar' identifier ';'
+  public static boolean ExemplarDecl(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExemplarDecl")) return false;
+    if (!nextTokenIs(b, EXEMPLAR)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeToken(b, EXEMPLAR);
+    r = r && consumeToken(b, IDENTIFIER);
+    p = r; // pin = 2
+    r = r && consumeToken(b, SEMICOLON);
+    exit_section_(b, l, m, EXEMPLAR_DECL, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -3485,7 +3503,7 @@ public class ResParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // 'Type' 'family' identifier TypeModelPortion ';'
-  //     'exemplar' identifier ';'
+  //     ExemplarDecl
   //     ConstraintsClause?
   //     IntializationClause?
   public static boolean TypeModelDecl(PsiBuilder b, int l) {
@@ -3499,25 +3517,23 @@ public class ResParser implements PsiParser, LightPsiParser {
     p = r; // pin = 3
     r = r && report_error_(b, TypeModelPortion(b, l + 1));
     r = p && report_error_(b, consumeToken(b, SEMICOLON)) && r;
-    r = p && report_error_(b, consumeToken(b, EXEMPLAR)) && r;
-    r = p && report_error_(b, consumeToken(b, IDENTIFIER)) && r;
-    r = p && report_error_(b, consumeToken(b, SEMICOLON)) && r;
-    r = p && report_error_(b, TypeModelDecl_8(b, l + 1)) && r;
-    r = p && TypeModelDecl_9(b, l + 1) && r;
+    r = p && report_error_(b, ExemplarDecl(b, l + 1)) && r;
+    r = p && report_error_(b, TypeModelDecl_6(b, l + 1)) && r;
+    r = p && TypeModelDecl_7(b, l + 1) && r;
     exit_section_(b, l, m, TYPE_MODEL_DECL, r, p, null);
     return r || p;
   }
 
   // ConstraintsClause?
-  private static boolean TypeModelDecl_8(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "TypeModelDecl_8")) return false;
+  private static boolean TypeModelDecl_6(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeModelDecl_6")) return false;
     ConstraintsClause(b, l + 1);
     return true;
   }
 
   // IntializationClause?
-  private static boolean TypeModelDecl_9(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "TypeModelDecl_9")) return false;
+  private static boolean TypeModelDecl_7(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeModelDecl_7")) return false;
     IntializationClause(b, l + 1);
     return true;
   }

@@ -28,6 +28,7 @@ public interface ResTypes {
   IElementType ELSE_STATEMENT = new ResCompositeElementType("ELSE_STATEMENT");
   IElementType ENSURES_CLAUSE = new ResCompositeElementType("ENSURES_CLAUSE");
   IElementType ENTAILS_CLAUSE = new ResCompositeElementType("ENTAILS_CLAUSE");
+  IElementType EXEMPLAR_DECL = new ResCompositeElementType("EXEMPLAR_DECL");
   IElementType EXP = new ResCompositeElementType("EXP");
   IElementType EXTENSION_PAIRING = new ResCompositeElementType("EXTENSION_PAIRING");
   IElementType FACILITY_BLOCK = new ResCompositeElementType("FACILITY_BLOCK");
@@ -295,6 +296,9 @@ public interface ResTypes {
       }
       else if (type == ENTAILS_CLAUSE) {
         return new ResEntailsClauseImpl(node);
+      }
+      else if (type == EXEMPLAR_DECL) {
+        return new ResExemplarDeclImpl(node);
       }
       else if (type == EXP) {
         return new ResExpImpl(node);

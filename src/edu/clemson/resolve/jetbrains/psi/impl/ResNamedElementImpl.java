@@ -79,6 +79,18 @@ public abstract class ResNamedElementImpl
                 });
     }
 
+    @Nullable @Override public ResMathExp getResMathMetaTypeExp(
+            @Nullable ResolveState context) {
+        if (context != null) return getResMathMetaTypeExpInner(context);
+        return CachedValuesManager.getCachedValue(this,
+                new CachedValueProvider<ResMathExp>() {
+                    @Nullable @Override public Result<ResMathExp> compute() {
+                        return Result.create(getResMathMetaTypeExpInner(null),
+                                PsiModificationTracker.MODIFICATION_COUNT);
+                    }
+                });
+    }
+
     @Nullable protected ResType getResTypeInner(
             @Nullable ResolveState context) {
         return findSiblingType();
@@ -86,6 +98,15 @@ public abstract class ResNamedElementImpl
 
     @Nullable @Override public ResType findSiblingType() {
         return PsiTreeUtil.getNextSiblingOfType(this, ResType.class);
+    }
+
+    @Nullable protected ResMathExp getResMathMetaTypeExpInner(
+            @Nullable ResolveState context) {
+        return findSiblingMathMetaType();
+    }
+
+    @Nullable @Override public ResMathExp findSiblingMathMetaType() {
+        return PsiTreeUtil.getNextSiblingOfType(this, ResMathExp.class);
     }
 
     @Nullable @Override public Icon getIcon(int flags) {

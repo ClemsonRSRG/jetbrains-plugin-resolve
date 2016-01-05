@@ -155,7 +155,7 @@
     extends("Math.*(DefinitionDecl)")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractMathDefinitionImpl"
     extends("Math.*(Signature)")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractMathSignatureImpl"
     extends(".*ModuleDecl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractModuleImpl"
-    extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|Procedure|OperationProcedure|Facility)Decl)|ModuleSpec")="edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl"
+    extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|Procedure|OperationProcedure|Exemplar|Facility)Decl)|ModuleSpec")="edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl"
     extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractTypeLikeNodeImpl"
 
     implements(".*ModuleDecl")="edu.clemson.resolve.jetbrains.psi.ResModuleDecl"
@@ -165,7 +165,7 @@
     implements("Math.*Signature")="edu.clemson.resolve.jetbrains.psi.ResMathDefinitionSignature"
     implements("Math.*DefinitionDecl")="edu.clemson.resolve.jetbrains.psi.ResMathDefinitionDecl"
     implements("(Spec|Impl)ModuleParameters")="edu.clemson.resolve.jetbrains.psi.ResModuleParameters"
-    implements(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Facility)Decl|ModuleSpec)")="edu.clemson.resolve.jetbrains.psi.ResNamedElement"
+    implements(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Exemplar|Facility)Decl|ModuleSpec)")="edu.clemson.resolve.jetbrains.psi.ResNamedElement"
     implements("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.jetbrains.psi.ResTypeLikeNodeDecl"
     implements(".*Block")="edu.clemson.resolve.jetbrains.psi.ResBlock"
 
@@ -274,9 +274,11 @@ private FacilityItemRecover ::= !('Facility'|'Definition'|'Operation'|'Type'|'en
 // Types
 
 TypeModelDecl ::= 'Type' 'family' identifier TypeModelPortion ';'
-    'exemplar' identifier ';'
+    ExemplarDecl
     ConstraintsClause?
     IntializationClause? {pin=3}
+
+ExemplarDecl ::= 'exemplar' identifier ';' {pin=2 methods=[getResMathMetaTypeExpInner]}
 
 private TypeModelPortion ::= 'is' 'modeled' 'by' MathExp {pin=4}
 

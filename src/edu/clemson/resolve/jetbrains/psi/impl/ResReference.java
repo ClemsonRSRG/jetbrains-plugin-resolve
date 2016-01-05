@@ -439,7 +439,7 @@ public class ResReference
         return myElement.getIdentifier().getText();
     }
 
-    @Nullable private static PsiFile getContextFile(
+    @Nullable protected static PsiFile getContextFile(
             @NotNull ResolveState state) {
         SmartPsiElementPointer<ResReferenceExpBase> context =
                 state.get(CONTEXT);

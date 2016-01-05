@@ -214,14 +214,22 @@ public class ResPsiImplUtil {
                 });
     }
 
+    @Nullable public static ResMathExp getResMathMetaTypeExpInner(@NotNull ResExemplarDecl o,
+                                                                  @SuppressWarnings("UnusedParameters")
+                                                                  @Nullable ResolveState context) {
+        ResTypeModelDecl model =
+                PsiTreeUtil.getParentOfType(o, ResTypeModelDecl.class);
+        return model == null ? null : model.getMathExp();
+    }
+
     @Nullable public static ResMathExp getResMathTypeMetaExpInner(
             @NotNull final ResMathExp o, @Nullable ResolveState context) {
         if (o instanceof ResMathReferenceExp) {
             PsiReference reference = o.getReference();
             PsiElement resolve = reference != null ? reference.resolve() : null;
-            int i;
-            i=0;
-            //if (resolve instanceof ReTypeOwner) return typeOrParameterType((ResTypeOwner)resolve, context);
+            if (resolve instanceof ResMathMetaTypeExpOwner) {
+                return ((ResMathMetaTypeExpOwner) resolve).getResMathMetaTypeExp(context);
+            }
         }
         else if (o instanceof ResMathSelectorExp) {
             ResMathExp item = ContainerUtil.getLastItem(

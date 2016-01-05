@@ -130,8 +130,22 @@ public class ResMathVarLikeReference
                                         @Nullable PsiElement another) {
         List<ResMathExp> list = parent.getMathExpList();
         if (list.size() > 1 && list.get(0).isEquivalentTo(another)) {
-         //   ResMathExp type = list.get(0).getResMathMetaTypeExp(createContext());
-            //if (type != null && !processResType(type, processor, state)) return false;
+            ResMathExp type = list.get(0).getResMathMetaTypeExp(createContext());
+            if (type != null && !processCartProdFields(type, processor, state)) return false;
+        }
+        return true;
+    }
+
+    private boolean processCartProdFields(@NotNull ResMathExp type,
+                                          @NotNull ResScopeProcessor processor,
+                                          @NotNull ResolveState state) {
+        if (type instanceof ResMathCartProdExp) {
+            ResScopeProcessorBase delegate = createDelegate(processor);
+            type.processDeclarations(delegate, ResolveState.initial(), null, myElement);
+            //List<ResTypeReferenceExp> structRefs = ContainerUtil.newArrayList();
+            for (ResMathVarDeclGroup d : ((ResMathCartProdExp) type).getMathVarDeclGroupList()) {
+                if (!processNamedElements(processor, state, d.getMathVarDefList(), true)) return false;
+            }
         }
         return true;
     }
