@@ -204,7 +204,7 @@ public class ResParser implements PsiParser, LightPsiParser {
       r = MathExp(b, 0, 0);
     }
     else if (t == MATH_SELECTOR_EXP) {
-      r = MathExp(b, 0, 9);
+      r = MathExp(b, 0, 10);
     }
     else if (t == MATH_SET_COMPREHENSION_EXP) {
       r = MathSetComprehensionExp(b, 0);
@@ -228,7 +228,7 @@ public class ResParser implements PsiParser, LightPsiParser {
       r = MathTheoremDecl(b, 0);
     }
     else if (t == MATH_TYPE_ASSERTION_EXP) {
-      r = MathExp(b, 0, 9);
+      r = MathExp(b, 0, 10);
     }
     else if (t == MATH_VAR_DECL_GROUP) {
       r = MathVarDeclGroup(b, 0);
@@ -4009,7 +4009,8 @@ public class ResParser implements PsiParser, LightPsiParser {
   // 7: BINARY(MathJoiningInfixApplyExp)
   // 8: POSTFIX(MathPrefixApplyExp)
   // 9: POSTFIX(MathPrefixGeneralizedApplyExp)
-  // 10: ATOM(MathSymbolExp) BINARY(MathTypeAssertionExp) PREFIX(MathSetComprehensionExp) PREFIX(MathNestedExp) ATOM(MathSetExp) ATOM(MathLambdaExp) BINARY(MathSelectorExp) ATOM(MathAlternativeExp) ATOM(MathCartProdExp) ATOM(MathLiteralExp)
+  // 10: ATOM(MathNestedExp)
+  // 11: ATOM(MathSymbolExp) BINARY(MathTypeAssertionExp) PREFIX(MathSetComprehensionExp) ATOM(MathSetExp) ATOM(MathLambdaExp) BINARY(MathSelectorExp) ATOM(MathAlternativeExp) ATOM(MathCartProdExp) ATOM(MathLiteralExp)
   public static boolean MathExp(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "MathExp")) return false;
     addVariant(b, "<math exp>");
@@ -4020,9 +4021,9 @@ public class ResParser implements PsiParser, LightPsiParser {
     if (!r) r = MathDblBarOutfixApplyExp(b, l + 1);
     if (!r) r = MathSqBrOutfixApplyExp(b, l + 1);
     if (!r) r = MathIncomingUnaryApplyExp(b, l + 1);
+    if (!r) r = MathNestedExp(b, l + 1);
     if (!r) r = MathSymbolExp(b, l + 1);
     if (!r) r = MathSetComprehensionExp(b, l + 1);
-    if (!r) r = MathNestedExp(b, l + 1);
     if (!r) r = MathSetExp(b, l + 1);
     if (!r) r = MathLambdaExp(b, l + 1);
     if (!r) r = MathAlternativeExp(b, l + 1);
@@ -4071,12 +4072,12 @@ public class ResParser implements PsiParser, LightPsiParser {
         r = true;
         exit_section_(b, l, m, MATH_PREFIX_GENERALIZED_APPLY_EXP, r, true, null);
       }
-      else if (g < 10 && consumeTokenSmart(b, COLON)) {
-        r = MathExp(b, l, 10);
+      else if (g < 11 && consumeTokenSmart(b, COLON)) {
+        r = MathExp(b, l, 11);
         exit_section_(b, l, m, MATH_TYPE_ASSERTION_EXP, r, true, null);
       }
-      else if (g < 10 && consumeTokenSmart(b, DOT)) {
-        r = MathExp(b, l, 10);
+      else if (g < 11 && consumeTokenSmart(b, DOT)) {
+        r = MathExp(b, l, 11);
         exit_section_(b, l, m, MATH_SELECTOR_EXP, r, true, null);
       }
       else {
@@ -4175,6 +4176,20 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r;
   }
 
+  // '(' MathAssertionExp ')'
+  public static boolean MathNestedExp(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathNestedExp")) return false;
+    if (!nextTokenIsFast(b, LPAREN)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeTokenSmart(b, LPAREN);
+    p = r; // pin = 1
+    r = r && report_error_(b, MathAssertionExp(b, l + 1));
+    r = p && consumeToken(b, RPAREN) && r;
+    exit_section_(b, l, m, MATH_NESTED_EXP, r, p, null);
+    return r || p;
+  }
+
   // MathReferenceExp MathQualifiedReferenceExp?
   public static boolean MathSymbolExp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathSymbolExp")) return false;
@@ -4216,19 +4231,6 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = r && consumeToken(b, BAR);
     exit_section_(b, m, null, r);
     return r;
-  }
-
-  public static boolean MathNestedExp(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathNestedExp")) return false;
-    if (!nextTokenIsFast(b, LPAREN)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, null);
-    r = consumeTokenSmart(b, LPAREN);
-    p = r;
-    r = p && MathExp(b, l, -1);
-    r = p && report_error_(b, consumeToken(b, RPAREN)) && r;
-    exit_section_(b, l, m, MATH_NESTED_EXP, r, p, null);
-    return r || p;
   }
 
   // '{' MathSetElementsList? '}'

@@ -521,6 +521,7 @@ MathExp ::=
     | MathJoiningInfixApplyExp
     | MathPrefixApplyExp
     | MathPrefixGeneralizedApplyExp
+    | MathNestedExp
     | MathPrimary {methods=[getResMathMetaTypeExp]}
 
 //private rules for operators with the same precedence
@@ -544,7 +545,7 @@ private GeneralizedApplyArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=G
 private GeneralizedApplyRecover ::= !(']')
 
 MathTypeAssertionExp ::= MathExp ':' MathExp {pin=2}
-MathNestedExp ::= '(' MathAssertionExp ')'
+MathNestedExp ::= '(' MathAssertionExp ')' {pin=1}
 
 MathBarOutfixApplyExp ::= '|' MathExp '|'
 MathDblBarOutfixApplyExp ::= '||' MathExp '||'
@@ -562,7 +563,7 @@ private MathPrimary ::=
           MathSymbolExp
         | MathTypeAssertionExp
         | MathSetComprehensionExp
-        | MathNestedExp
+       // | MathNestedExp
         | MathSetExp
         | MathLambdaExp
         | MathSelectorExp
