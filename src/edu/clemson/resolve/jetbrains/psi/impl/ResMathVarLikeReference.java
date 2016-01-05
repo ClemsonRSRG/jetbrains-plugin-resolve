@@ -83,6 +83,9 @@ public class ResMathVarLikeReference
             if (processor.isCompletion()) return result;
             if (!result || ResPsiImplUtil.prevDot(myElement)) return false;
         }
+        PsiElement grandPa = parent.getParent();
+        if (grandPa instanceof ResMathSelectorExp && !processMathSelector((ResMathSelectorExp) grandPa, processor, state, parent)) return false;
+        if (ResPsiImplUtil.prevDot(parent)) return false;
 
         ResScopeProcessorBase delegate = createDelegate(processor);
         ResolveUtil.treeWalkUp(myElement, delegate);
@@ -129,7 +132,7 @@ public class ResMathVarLikeReference
                                         @NotNull ResolveState state,
                                         @Nullable PsiElement another) {
         List<ResMathExp> list = parent.getMathExpList();
-        if (list.size() > 1 && list.get(0).isEquivalentTo(another)) {
+        if (list.size() > 1) {
             ResMathExp type = list.get(0).getResMathMetaTypeExp(createContext());
             if (type != null && !processCartProdFields(type, processor, state)) return false;
         }

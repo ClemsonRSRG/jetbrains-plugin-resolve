@@ -61,6 +61,7 @@ public class RESOLVECompletionUtil {
                     String text = ResPsiImplUtil.getText(type);
                     Icon icon = v instanceof ResMathVarDef ? RESOLVEIcons.VARIABLE :
                                 v instanceof ResVarDef ? RESOLVEIcons.VARIABLE :
+                                v instanceof ResExemplarDecl ? RESOLVEIcons.EXEMPLAR :
                                 v instanceof ResParamDef ? RESOLVEIcons.PARAMETER :
                                 v instanceof ResTypeParamDecl ? RESOLVEIcons.GENERIC_TYPE :
                                 v instanceof ResFieldDef ? RESOLVEIcons.RECORD_FIELD : null;
