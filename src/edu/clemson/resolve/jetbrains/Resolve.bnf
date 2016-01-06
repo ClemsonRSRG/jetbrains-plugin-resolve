@@ -304,7 +304,7 @@ private SpecParamDecl ::= TypeParamDecl | ParamDecl | MathStandardDefinitionDecl
 
 ImplModuleParameters ::= '(' ImplModuleParamList ')' {pin=1}
 private ImplModuleParamList ::= ImplParamDecl  (';' ImplParamDecl)* {recoverWhile=ParamListRec}
-private ImplParamDecl ::= ParamDecl //TODO: OperationDecl goes here too
+private ImplParamDecl ::= ParamDecl|OperationDecl
 
 private OperationLikeParameters ::= '(' OpParamList? ')' {pin=1}
 private OpParamList ::= ParamDecl (';' ParamDecl)* {pin=1 recoverWhile=ParamListRec}

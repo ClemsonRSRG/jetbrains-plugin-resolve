@@ -1523,9 +1523,15 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ParamDecl
+  // ParamDecl|OperationDecl
   static boolean ImplParamDecl(PsiBuilder b, int l) {
-    return ParamDecl(b, l + 1);
+    if (!recursion_guard_(b, l, "ImplParamDecl")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = ParamDecl(b, l + 1);
+    if (!r) r = OperationDecl(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   /* ********************************************************** */
