@@ -102,11 +102,36 @@ public abstract class ResNamedElementImpl
 
     @Nullable protected ResMathExp getResMathMetaTypeExpInner(
             @Nullable ResolveState context) {
-        return findSiblingMathMetaType();
+        ResMathExp nextExp = findSiblingMathMetaType();
+        return nextExp;
     }
 
+    /** Ok, here's the deal: this will basically look to our right hand side
+     *  siblings of {@code this} AST (Jetbrains speak: PSI) node for a math exp
+     *  and return the first one it finds.
+     *  <p>
+     *  Here's the thing though, this is
+     *  not good/flexible enough since we also want to return a ResType, think
+     *  in the case of a parameter decl: there we'll want a ResType, resolve
+     *  that,
+     *  and get back to the math expr.</p>
+     */
     @Nullable @Override public ResMathExp findSiblingMathMetaType() {
-        return PsiTreeUtil.getNextSiblingOfType(this, ResMathExp.class);
+        ResMathExp purelyMathTypeExp =
+                PsiTreeUtil.getNextSiblingOfType(this, ResMathExp.class);
+        if (purelyMathTypeExp != null) return purelyMathTypeExp;
+
+        //ok, maybe we're dealing with a programmatic type or something...
+        ResType progType = findSiblingType();
+        if (progType != null && progType.getTypeReferenceExp() != null) {
+            PsiElement resolvedProgramType = progType.getTypeReferenceExp()
+                    .getReference().resolve();
+            if (resolvedProgramType instanceof ResTypeLikeNodeDecl) {
+                return ((ResTypeLikeNodeDecl) resolvedProgramType)
+                        .getMathMetaTypeExp();
+            }
+        }
+        return null;
     }
 
     @Nullable @Override public Icon getIcon(int flags) {
