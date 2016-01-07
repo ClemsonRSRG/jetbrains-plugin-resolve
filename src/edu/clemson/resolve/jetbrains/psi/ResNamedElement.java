@@ -31,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface ResNamedElement
         extends
-            ResTypeOwner, ResCompositeElement, PsiNameIdentifierOwner, NavigationItem {
+            ResTypeOwner, ResMathMetaTypeExpOwner, ResCompositeElement, PsiNameIdentifierOwner, NavigationItem {
 
     public boolean isPublic();
 
@@ -40,5 +40,7 @@ public interface ResNamedElement
     @NotNull public PsiFile getContainingFile();
 
     @Nullable ResType findSiblingType();
+
+    @Nullable ResMathExp findSiblingMathMetaType();
 
 }

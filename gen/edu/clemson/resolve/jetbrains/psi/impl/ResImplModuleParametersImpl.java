@@ -23,6 +23,12 @@ public class ResImplModuleParametersImpl extends ResCompositeElementImpl impleme
 
   @Override
   @NotNull
+  public List<ResOperationDecl> getOperationDeclList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResOperationDecl.class);
+  }
+
+  @Override
+  @NotNull
   public List<ResParamDecl> getParamDeclList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ResParamDecl.class);
   }

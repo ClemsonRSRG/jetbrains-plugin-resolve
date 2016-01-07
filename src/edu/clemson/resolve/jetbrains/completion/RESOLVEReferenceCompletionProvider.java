@@ -72,7 +72,8 @@ public class RESOLVEReferenceCompletionProvider
                     return e instanceof ResMathDefinitionSignature ||
                             e instanceof ResMathVarDef ||
                             e instanceof ResParamDef ||
-                            e instanceof ResTypeParamDecl;
+                            e instanceof ResTypeParamDecl ||
+                            e instanceof ResExemplarDecl;
                 }
             };
             ((ResMathVarLikeReference) reference).processResolveVariants(aProcessor);

@@ -48,6 +48,30 @@ public class RESOLVECompletionTest extends RESOLVECompletionTestBase {
                 "end Foo;", "xs", "ys", "pz");
     }
 
+    public void testSimpleProgSelectorAccessExp1() {
+        myFixture.testCompletionVariants(
+                "./testData/completion/" + getTestName(false) + ".resolve",
+                "color", "year");
+    }
+
+    public void testSimpleProgSelectorAccessExp2() {
+        myFixture.testCompletionVariants(
+                "./testData/completion/" + getTestName(false) + ".resolve",
+                "year", "color", "damaged", "used", "prev_owner");
+    }
+
+    public void testNestedProgSelectorAccessExp() {
+        myFixture.testCompletionVariants(
+                "./testData/completion/" + getTestName(false) + ".resolve",
+                "smoker", "has_insurance");
+    }
+
+    public void testMathSelectorAccessExp2() {
+        myFixture.testCompletionVariants(
+                "./testData/completion/" + getTestName(false) + ".resolve",
+                "x", "y", "z", "Curr_Place", "Curr_Pos");
+    }
+
     //Too much in flux currently with this particular test.
     /*public void testExclusivelyHardCodedMathRefs() {
         doTestEquals("Precis Foo; Corollary C1: <caret>; " +

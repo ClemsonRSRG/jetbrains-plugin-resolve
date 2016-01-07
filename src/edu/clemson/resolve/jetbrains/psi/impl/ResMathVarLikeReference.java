@@ -83,6 +83,9 @@ public class ResMathVarLikeReference
             if (processor.isCompletion()) return result;
             if (!result || ResPsiImplUtil.prevDot(myElement)) return false;
         }
+        PsiElement grandPa = parent.getParent();
+        if (grandPa instanceof ResMathSelectorExp && !processMathSelector((ResMathSelectorExp) grandPa, processor, state, parent)) return false;
+        if (ResPsiImplUtil.prevDot(parent)) return false;
 
         ResScopeProcessorBase delegate = createDelegate(processor);
         ResolveUtil.treeWalkUp(myElement, delegate);
@@ -129,9 +132,31 @@ public class ResMathVarLikeReference
                                         @NotNull ResolveState state,
                                         @Nullable PsiElement another) {
         List<ResMathExp> list = parent.getMathExpList();
-        if (list.size() > 1 && list.get(0).isEquivalentTo(another)) {
-         //   ResMathExp type = list.get(0).getResMathMetaTypeExp(createContext());
-            //if (type != null && !processResType(type, processor, state)) return false;
+        if (list.size() > 1) {
+            ResMathExp type = list.get(0).getResMathMetaTypeExp(createContext());
+            if (type != null && !processCartProdFields(type, processor, state)) return false;
+        }
+        return true;
+    }
+
+    private boolean processCartProdFields(@NotNull ResMathExp type,
+                                          @NotNull ResScopeProcessor processor,
+                                          @NotNull ResolveState state) {
+        if (type instanceof ResMathReferenceExp) {
+            PsiElement resolvedType =
+                    ((ResMathReferenceExp)type).getReference().resolve();
+            if (resolvedType instanceof ResTypeModelDecl) {
+                ResTypeModelDecl asTypeModel = (ResTypeModelDecl) resolvedType;
+                if (asTypeModel.getMathExp() != null) type = asTypeModel.getMathExp();
+            }
+        }
+        if (type instanceof ResMathCartProdExp) {
+            ResScopeProcessorBase delegate = createDelegate(processor);
+            type.processDeclarations(delegate, ResolveState.initial(), null, myElement);
+            //List<ResTypeReferenceExp> structRefs = ContainerUtil.newArrayList();
+            for (ResMathVarDeclGroup d : ((ResMathCartProdExp) type).getMathVarDeclGroupList()) {
+                if (!processNamedElements(processor, state, d.getMathVarDefList(), true)) return false;
+            }
         }
         return true;
     }

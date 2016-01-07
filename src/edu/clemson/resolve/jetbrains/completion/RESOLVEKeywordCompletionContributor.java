@@ -82,6 +82,10 @@ public class RESOLVEKeywordCompletionContributor
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "Definition"));
 
+        extend(CompletionType.BASIC, operationParamPattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "OperationDeclaration"));
+
         extend(CompletionType.BASIC, statementPattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "While", "If"));
@@ -94,7 +98,7 @@ public class RESOLVEKeywordCompletionContributor
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "Var"));
 
-        extend(CompletionType.BASIC, miscMathKeywords(),
+        extend(CompletionType.BASIC, mathQuantifierKeywords(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
                         "Forall", "Exists", "lambda"));
@@ -144,6 +148,12 @@ public class RESOLVEKeywordCompletionContributor
                 .inside(ResSpecModuleParameters.class);
     }
 
+    private static Capture<PsiElement> operationParamPattern() {
+        return psiElement(ResTypes.IDENTIFIER)
+                .withParent(ResParameterMode.class)
+                .inside(ResImplModuleParameters.class);
+    }
+
     private static Capture<PsiElement> modulePattern() {
         return onKeywordStartWithParent(ResFile.class);
     }
@@ -165,10 +175,13 @@ public class RESOLVEKeywordCompletionContributor
                                 .withLastChild(prevSiblings)));
     }
 
-    private static Capture<PsiElement> miscMathKeywords() {
+    //TODO: if you look were we extend this, remove lambda from there and give it it's own pattern...
+    private static Capture<PsiElement> mathQuantifierKeywords() {
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(ResTypes.MATH_NAME_IDENTIFIER)
-                        .withParent(psiElement(ResTypes.MATH_REFERENCE_EXP)));
+                        .withParent(psiElement(ResTypes.MATH_REFERENCE_EXP)
+                                .andOr(psiElement().isFirstAcceptedChild(psiElement()),
+                                       psiElement().withParent(ResMathQuantifiedExp.class))));
     }
 
     private static Capture<PsiElement> otherUsesPattern() {
@@ -190,7 +203,8 @@ public class RESOLVEKeywordCompletionContributor
 
     private static Capture<PsiElement> variablePattern() {
         return psiElement(ResTypes.IDENTIFIER)
-                .withParent(psiElement(ResTypes.REFERENCE_EXP));
+                .withParent(psiElement(ResTypes.REFERENCE_EXP)
+                        .isFirstAcceptedChild(psiElement()));
     }
 
     private static Capture<PsiElement> recordTypePattern() {

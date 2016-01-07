@@ -25,6 +25,7 @@ public interface RESOLVEIcons {
     public static final Icon VARIABLE = IconLoader.getIcon("/edu/clemson/resolve/icons/variable.png");
 
     public static final Icon RECORD_FIELD = IconLoader.getIcon("/edu/clemson/resolve/icons/record_field.png");
+    public static final Icon EXEMPLAR = IconLoader.getIcon("/edu/clemson/resolve/icons/exemplar.png");
 
     public static final Icon FUNCTION_DECL = IconLoader.getIcon("/edu/clemson/resolve/icons/function.png");
     public static final Icon FUNCTION_IMPL = IconLoader.getIcon("/edu/clemson/resolve/icons/function_impl.png");

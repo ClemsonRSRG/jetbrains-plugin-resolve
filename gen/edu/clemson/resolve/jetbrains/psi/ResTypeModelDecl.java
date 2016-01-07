@@ -11,6 +11,9 @@ public interface ResTypeModelDecl extends ResTypeLikeNodeDecl {
   ResConstraintsClause getConstraintsClause();
 
   @Nullable
+  ResExemplarDecl getExemplarDecl();
+
+  @Nullable
   ResIntializationClause getIntializationClause();
 
   @Nullable
@@ -18,9 +21,6 @@ public interface ResTypeModelDecl extends ResTypeLikeNodeDecl {
 
   @Nullable
   PsiElement getBy();
-
-  @Nullable
-  PsiElement getExemplar();
 
   @NotNull
   PsiElement getFamily();
@@ -33,5 +33,11 @@ public interface ResTypeModelDecl extends ResTypeLikeNodeDecl {
 
   @Nullable
   PsiElement getModeled();
+
+  @Nullable
+  PsiElement getSemicolon();
+
+  @NotNull
+  PsiElement getIdentifier();
 
 }

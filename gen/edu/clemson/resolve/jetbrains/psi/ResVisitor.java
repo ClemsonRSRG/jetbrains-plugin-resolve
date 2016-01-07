@@ -78,6 +78,10 @@ public class ResVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitExemplarDecl(@NotNull ResExemplarDecl o) {
+    visitNamedElement(o);
+  }
+
   public void visitExp(@NotNull ResExp o) {
     visitTypeOwner(o);
   }

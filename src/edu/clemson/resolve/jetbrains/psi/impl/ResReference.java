@@ -392,14 +392,23 @@ public class ResReference
                 new ArrayList<ResParamDecl>();
         List<ResMathDefinitionDecl> definitionParams =
                 new ArrayList<ResMathDefinitionDecl>();
+        List<ResMathDefinitionSignature> defnSigs = new ArrayList<>();
+
         if (paramNode instanceof ResSpecModuleParameters) {
             typeParamDecls.addAll(((ResSpecModuleParameters) paramNode).getTypeParamDeclList());
             constantParamDeclGrps.addAll(((ResSpecModuleParameters) paramNode).getParamDeclList());
+            definitionParams.addAll(((ResSpecModuleParameters) paramNode).getMathStandardDefinitionDeclList());
+        }
+        if (paramNode instanceof ResImplModuleParameters) {
+            //definitionParams.addAll(((ResImplModuleParameters) paramNode).g
+        }
+        for (ResMathDefinitionDecl d : definitionParams) {
+            defnSigs.addAll(d.getSignatures());
         }
         //TODO: else if (paramNode instanceof ResImplModuleParameters) ..
-
         processProgParamDecls(processor, constantParamDeclGrps);
         processNamedElements(processor, ResolveState.initial(), typeParamDecls, true);
+        processNamedElements(processor, ResolveState.initial(), defnSigs, true);
         return true;
     }
 
@@ -439,7 +448,7 @@ public class ResReference
         return myElement.getIdentifier().getText();
     }
 
-    @Nullable private static PsiFile getContextFile(
+    @Nullable protected static PsiFile getContextFile(
             @NotNull ResolveState state) {
         SmartPsiElementPointer<ResReferenceExpBase> context =
                 state.get(CONTEXT);

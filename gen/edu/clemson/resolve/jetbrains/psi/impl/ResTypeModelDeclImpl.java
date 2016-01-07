@@ -29,6 +29,12 @@ public class ResTypeModelDeclImpl extends ResAbstractTypeLikeNodeImpl implements
 
   @Override
   @Nullable
+  public ResExemplarDecl getExemplarDecl() {
+    return findChildByClass(ResExemplarDecl.class);
+  }
+
+  @Override
+  @Nullable
   public ResIntializationClause getIntializationClause() {
     return findChildByClass(ResIntializationClause.class);
   }
@@ -43,12 +49,6 @@ public class ResTypeModelDeclImpl extends ResAbstractTypeLikeNodeImpl implements
   @Nullable
   public PsiElement getBy() {
     return findChildByType(BY);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getExemplar() {
-    return findChildByType(EXEMPLAR);
   }
 
   @Override
@@ -73,6 +73,18 @@ public class ResTypeModelDeclImpl extends ResAbstractTypeLikeNodeImpl implements
   @Nullable
   public PsiElement getModeled() {
     return findChildByType(MODELED);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getIdentifier() {
+    return findNotNullChildByType(IDENTIFIER);
   }
 
 }
