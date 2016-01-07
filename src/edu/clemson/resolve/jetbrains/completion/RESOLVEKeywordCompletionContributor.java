@@ -82,6 +82,10 @@ public class RESOLVEKeywordCompletionContributor
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "Definition"));
 
+        extend(CompletionType.BASIC, operationParamPattern(),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "OperationDeclaration"));
+
         extend(CompletionType.BASIC, statementPattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "While", "If"));
@@ -142,6 +146,12 @@ public class RESOLVEKeywordCompletionContributor
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(ResParameterMode.class)
                 .inside(ResSpecModuleParameters.class);
+    }
+
+    private static Capture<PsiElement> operationParamPattern() {
+        return psiElement(ResTypes.IDENTIFIER)
+                .withParent(ResParameterMode.class)
+                .inside(ResImplModuleParameters.class);
     }
 
     private static Capture<PsiElement> modulePattern() {
