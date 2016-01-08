@@ -148,7 +148,7 @@ public abstract class ResNamedElementImpl
         else if (this instanceof ResTypeParamDecl) icon = RESOLVEIcons.GENERIC_TYPE;
         else if (this instanceof ResMathVarDef) icon = RESOLVEIcons.VARIABLE;
         else if (this instanceof ResOperationDecl) icon = RESOLVEIcons.FUNCTION_DECL;
-        else if (this instanceof ResOperationWithBodyNode) icon = RESOLVEIcons.FUNCTION_IMPL;
+        else if (this instanceof ResAnnotatableOperationLikeNode) icon = RESOLVEIcons.FUNCTION_IMPL;
         else if (this instanceof ResParamDef) icon = RESOLVEIcons.PARAMETER;
         //TODO: complete the icon list here as you go along
         if (icon != null) {

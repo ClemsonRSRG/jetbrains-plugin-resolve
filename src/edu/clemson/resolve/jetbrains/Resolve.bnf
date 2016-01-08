@@ -359,12 +359,12 @@ OperationProcedureDecl ::=
 RequiresClause? EnsuresClause?
 ('Recursive')? 'Procedure'
 OpBlock
-'end' CloseIdentifier ';' {pin=2 implements="edu.clemson.resolve.jetbrains.psi.ResOperationWithBodyNode"}
+'end' CloseIdentifier ';' {pin=2}
 
 ProcedureDecl ::=
 ('Recursive')? 'Procedure' identifier OperationLikeParameters (':' Type)? ';'
 OpBlock
-'end' CloseIdentifier ';' {pin=3 implements="edu.clemson.resolve.jetbrains.psi.ResOperationWithBodyNode"}
+'end' CloseIdentifier ';' {pin=3}
 
 OpBlock ::=
 VarDeclGroup*

@@ -288,8 +288,6 @@ public class ResReference
                                                  @NotNull ResScopeProcessor processor,
                                                  @NotNull ResScopeProcessorBase delegate,
                                                  @NotNull ResolveState state) {
-        //ok, the specIdx deserves an explanation: this numbers which spec we're processing.
-        //so in terms of enh impl: Impl X for Y [Idx=0] of Z [Idx=1]
         int specIdx=0;
         for(ResModuleSpec spec : file.getSuperModuleSpecList()) {
             PsiElement resolvedFile = spec.resolve();
