@@ -160,6 +160,7 @@ public interface ResTypes {
   IElementType EVALUATES = new ResTokenType("evaluates");
   IElementType EXEMPLAR = new ResTokenType("exemplar");
   IElementType EXISTS = new ResTokenType("Exists");
+  IElementType EXISTS1 = new ResTokenType("∃");
   IElementType EXTENDED = new ResTokenType("extended");
   IElementType EXTENDED_BY = new ResTokenType("extended_by");
   IElementType EXTENSION = new ResTokenType("Extension");
@@ -169,7 +170,8 @@ public interface ResTypes {
   IElementType FAMILY = new ResTokenType("family");
   IElementType FAMILY_TYPE = new ResTokenType("Type");
   IElementType FOR = new ResTokenType("for");
-  IElementType FORALL = new ResTokenType("Forall");
+  IElementType FORALL = new ResTokenType("∀");
+  IElementType FORALL1 = new ResTokenType("Forall");
   IElementType GREATER = new ResTokenType(">");
   IElementType GREATER_OR_EQUAL = new ResTokenType(">=");
   IElementType HYPO = new ResTokenType("hypo");

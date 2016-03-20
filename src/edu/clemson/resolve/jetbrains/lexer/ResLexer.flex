@@ -143,11 +143,13 @@ ESCAPES = [abfnrtv]
 "ensures"                               { return ENSURES; }
 "exemplar"                              { return EXEMPLAR; }
 "Exists"                                { return EXISTS; }
+"∃"                                     { return EXISTS; }
 "externally"                            { return EXTERNALLY; }
 "Facility"                              { return FACILITY;  }
 "false"                                 { return FALSE; }
 "family"                                { return FAMILY; }
 "Forall"                                { return FORALL; }
+"∀"                                     { return FORALL; }
 "for"                                   { return FOR; }
 "hypo"                                  { return HYPO; }
 "if"                                    { return IF; }

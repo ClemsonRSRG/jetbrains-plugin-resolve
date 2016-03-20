@@ -2,4 +2,17 @@
 
 <templateSet group="Resolve">
 
+    <template description='Universal quantification' id='Forall' name='Forall' toReformat='true' toShortenFQNames='true'
+              value='∀ $END$'>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Existential quantification' id='Exists' name='Exists' toReformat='true' toShortenFQNames='true'
+              value='∃ $END$'>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
 </templateSet>

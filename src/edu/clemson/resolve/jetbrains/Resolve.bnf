@@ -101,8 +101,10 @@
         MAINTAINING             = 'maintaining'
         DECREASING              = 'decreasing'
         OTHERWISE               = 'otherwise'
-        FORALL                  = 'Forall'
+        FORALL                  = '∀'
+        FORALL1                 = 'Forall'
         EXISTS                  = 'Exists'
+        EXISTS1                 = '∃'
         EXTERNALLY              = 'externally'
         IMPLEMENTED             = 'implemented'
         INITIALIZATION          = 'initialization'
@@ -510,7 +512,7 @@ MathVarDef ::= identifier
 
 MathAssertionExp ::= MathQuantifiedExp|MathExp
 
-MathQuantifiedExp ::= ('Forall'|'Exists') MathVarDeclGroup ',' MathAssertionExp {pin=1}
+MathQuantifiedExp ::= ('∃'|'∀'|'Exists'|'Forall') MathVarDeclGroup ',' MathAssertionExp {pin=1}
 
 MathExp ::=
       MathBooleanInfixApplyExp

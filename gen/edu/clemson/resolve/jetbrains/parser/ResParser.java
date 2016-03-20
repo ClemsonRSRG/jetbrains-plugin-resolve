@@ -2181,10 +2181,9 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ('Forall'|'Exists') MathVarDeclGroup ',' MathAssertionExp
+  // ('∃'|'∀'|'Exists'|'Forall') MathVarDeclGroup ',' MathAssertionExp
   public static boolean MathQuantifiedExp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathQuantifiedExp")) return false;
-    if (!nextTokenIs(b, "<math quantified exp>", EXISTS, FORALL)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _COLLAPSE_, "<math quantified exp>");
     r = MathQuantifiedExp_0(b, l + 1);
@@ -2196,13 +2195,15 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // 'Forall'|'Exists'
+  // '∃'|'∀'|'Exists'|'Forall'
   private static boolean MathQuantifiedExp_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathQuantifiedExp_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, FORALL);
+    r = consumeToken(b, EXISTS1);
+    if (!r) r = consumeToken(b, FORALL);
     if (!r) r = consumeToken(b, EXISTS);
+    if (!r) r = consumeToken(b, FORALL1);
     exit_section_(b, m, null, r);
     return r;
   }
