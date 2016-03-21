@@ -520,6 +520,7 @@ MathExp ::=
     | MathApplicationInfixApplyExp
     | MathAddInfixApplyExp
     | MathMultInfixApplyExp
+    | MathIdentInfixApplyExp
     | MathOutfixGroup
     | MathIncomingUnaryApplyExp
     | MathJoiningInfixApplyExp
@@ -540,6 +541,7 @@ MathBooleanInfixApplyExp ::= MathExp MathBooleanOp MathExp
 MathMultInfixApplyExp ::= MathExp MathMultOp MathExp
 MathRelationalInfixApplyExp ::= MathExp MathRelationalOp MathExp
 MathJoiningInfixApplyExp ::= MathExp MathJoiningOp MathExp
+MathIdentInfixApplyExp  ::= MathExp identifier MathExp
 
 MathApplicationInfixApplyExp ::= MathExp MathApplicationOp MathExp
 MathIncomingUnaryApplyExp ::= '@' MathExp

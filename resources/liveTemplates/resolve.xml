@@ -9,10 +9,24 @@
         </context>
     </template>
 
-    <template description='Existential quantifier' name='Exists' toReformat='true' toShortenFQNames='true'
-              value='Exists $END$'>
+    <template description='∃' name='Exists' toReformat='true' toShortenFQNames='true'
+              value='∃ $END$'>
         <context>
-            <option name='RESOLVE_FILE' value='true'/>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='∀' name='Forall' toReformat='true' toShortenFQNames='true'
+              value='∀ $END$'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='≤' name='leq' toReformat='true' toShortenFQNames='true'
+              value='≤ $END$'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
         </context>
     </template>
 

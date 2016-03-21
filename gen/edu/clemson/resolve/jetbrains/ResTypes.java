@@ -55,6 +55,7 @@ public interface ResTypes {
   IElementType MATH_CATEGORICAL_DEFINITION_DECL = new ResCompositeElementType("MATH_CATEGORICAL_DEFINITION_DECL");
   IElementType MATH_DBL_BAR_OUTFIX_APPLY_EXP = new ResCompositeElementType("MATH_DBL_BAR_OUTFIX_APPLY_EXP");
   IElementType MATH_EXP = new ResCompositeElementType("MATH_EXP");
+  IElementType MATH_IDENT_INFIX_APPLY_EXP = new ResCompositeElementType("MATH_IDENT_INFIX_APPLY_EXP");
   IElementType MATH_INCOMING_UNARY_APPLY_EXP = new ResCompositeElementType("MATH_INCOMING_UNARY_APPLY_EXP");
   IElementType MATH_INDUCTIVE_DEFINITION_DECL = new ResCompositeElementType("MATH_INDUCTIVE_DEFINITION_DECL");
   IElementType MATH_INFIX_DEFINITION_SIGNATURE = new ResCompositeElementType("MATH_INFIX_DEFINITION_SIGNATURE");
@@ -379,6 +380,9 @@ public interface ResTypes {
       }
       else if (type == MATH_EXP) {
         return new ResMathExpImpl(node);
+      }
+      else if (type == MATH_IDENT_INFIX_APPLY_EXP) {
+        return new ResMathIdentInfixApplyExpImpl(node);
       }
       else if (type == MATH_INCOMING_UNARY_APPLY_EXP) {
         return new ResMathIncomingUnaryApplyExpImpl(node);

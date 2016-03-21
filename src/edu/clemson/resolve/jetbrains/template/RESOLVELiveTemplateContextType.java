@@ -13,6 +13,7 @@ import edu.clemson.resolve.jetbrains.RESOLVELanguage;
 import edu.clemson.resolve.jetbrains.ResTypes;
 import edu.clemson.resolve.jetbrains.highlighting.RESOLVESyntaxHighlighter;
 import edu.clemson.resolve.jetbrains.psi.ResFile;
+import edu.clemson.resolve.jetbrains.psi.ResMathIdentInfixApplyExp;
 import edu.clemson.resolve.jetbrains.psi.ResMathReferenceExp;
 import edu.clemson.resolve.jetbrains.psi.ResType;
 import org.jetbrains.annotations.NonNls;
@@ -79,7 +80,8 @@ public abstract class RESOLVELiveTemplateContextType
         }
 
         @Override protected boolean isInContext(@NotNull PsiElement element) {
-            return element instanceof ResMathReferenceExp;
+            return element instanceof ResMathReferenceExp ||
+                    (element instanceof ResMathIdentInfixApplyExp); //for infix math exprs mostly
         }
     }
 

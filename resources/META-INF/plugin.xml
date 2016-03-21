@@ -38,8 +38,7 @@
         <defaultLiveTemplatesProvider implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplatesProvider"/>
         <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVEEverywhereContextType"/>
         <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEFileContextType"/>
-        <!--<liveTemplateContext implementation="com.goide.template.GoLiveTemplateContextType$GoFileContextType"/>-->
-        <!--<liveTemplateContext implementation="edu.clemson.resolve.jetbrainsins.template.RESOLVELiveTemplateContextType$RESOLVEFileContextType"/> -->
+        <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEMathRefContextType"/>
 
         <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.completion.RESOLVECompletionContributor"/>
         <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.completion.RESOLVEKeywordCompletionContributor"/>
