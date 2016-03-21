@@ -99,10 +99,10 @@ public class RESOLVEKeywordCompletionContributor
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "Var"));
 
-        extend(CompletionType.BASIC, mathQuantifierKeywords(),
+        /*extend(CompletionType.BASIC, mathQuantifierKeywords(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                        "Forall", "Exists", "lambda"));
+                        "Forall", "Exists", "lambda"));*/
 
         extend(CompletionType.BASIC, keywordAfterSiblings(
                 ResTypeReprDecl.class, psiElement(ResRecordType.class)),

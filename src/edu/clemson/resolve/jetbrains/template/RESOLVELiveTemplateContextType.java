@@ -1,6 +1,8 @@
 package edu.clemson.resolve.jetbrains.template;
 
+import com.intellij.codeInsight.template.EverywhereContextType;
 import com.intellij.codeInsight.template.TemplateContextType;
+import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.psi.PsiComment;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -9,7 +11,10 @@ import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.util.PsiUtilCore;
 import edu.clemson.resolve.jetbrains.RESOLVELanguage;
 import edu.clemson.resolve.jetbrains.ResTypes;
+import edu.clemson.resolve.jetbrains.highlighting.RESOLVESyntaxHighlighter;
 import edu.clemson.resolve.jetbrains.psi.ResFile;
+import edu.clemson.resolve.jetbrains.psi.ResMathReferenceExp;
+import edu.clemson.resolve.jetbrains.psi.ResType;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,8 +30,7 @@ public abstract class RESOLVELiveTemplateContextType
     }
 
     public boolean isInContext(@NotNull PsiFile file, int offset) {
-        if (PsiUtilCore.getLanguageAtOffset(file, offset)
-                .isKindOf(RESOLVELanguage.INSTANCE)) {
+        if (PsiUtilCore.getLanguageAtOffset(file, offset).isKindOf(RESOLVELanguage.INSTANCE)) {
             PsiElement element = getFirstCompositeElement(file.findElementAt(offset));
             return element != null && isInContext(element);
         }
@@ -49,11 +53,15 @@ public abstract class RESOLVELiveTemplateContextType
 
     protected abstract boolean isInContext(@NotNull PsiElement element);
 
+    public SyntaxHighlighter createHighlighter() {
+        return new RESOLVESyntaxHighlighter();
+    }
+
     public static class RESOLVEFileContextType
             extends
                 RESOLVELiveTemplateContextType {
         protected RESOLVEFileContextType() {
-            super("RESOLVE_FILE", "Resolve file",
+            super("RESOLVE_FILE", "RESOLVE file",
                     RESOLVEEverywhereContextType.class);
         }
 
@@ -61,4 +69,18 @@ public abstract class RESOLVELiveTemplateContextType
             return element.getParent() instanceof ResFile;
         }
     }
+
+    public static class RESOLVEMathRefContextType
+            extends
+                RESOLVELiveTemplateContextType {
+        protected RESOLVEMathRefContextType() {
+            super("RESOLVE_MATH_REF", "math reference",
+                    RESOLVEEverywhereContextType.class);
+        }
+
+        @Override protected boolean isInContext(@NotNull PsiElement element) {
+            return element instanceof ResMathReferenceExp;
+        }
+    }
+
 }

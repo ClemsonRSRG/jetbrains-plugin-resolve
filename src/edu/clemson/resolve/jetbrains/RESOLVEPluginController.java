@@ -84,7 +84,7 @@ public class RESOLVEPluginController implements ProjectComponent {
         consoleWindow = toolWindowManager.registerToolWindow(CONSOLE_WINDOW_ID, true, ToolWindowAnchor.BOTTOM);
         consoleWindow.getContentManager().addContent(content);
 
-        consoleWindow.setIcon(RESOLVEIcons.MODULE);
+        consoleWindow.setIcon(RESOLVEIcons.TOOL_ICON);
     }
 
     @Override public void projectClosed() {

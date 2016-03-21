@@ -1,18 +1,19 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
-<templateSet group="Resolve">
+<templateSet group="RESOLVE">
 
-    <template description='Universal quantification' id='Forall' name='Forall' toReformat='true' toShortenFQNames='true'
-              value='∀ $END$'>
+    <template description='Concept module declaration' name='Concept' toReformat='true' toShortenFQNames='true'
+              value='Concept foo;&#10;	"$END$"&#10;end foo;'>
         <context>
-            <option name='RESOLVE' value='true'/>
+            <option name='RESOLVE_FILE' value='true'/>
         </context>
     </template>
 
-    <template description='Existential quantification' id='Exists' name='Exists' toReformat='true' toShortenFQNames='true'
-              value='∃ $END$'>
+    <template description='Existential quantifier' name='Exists' toReformat='true' toShortenFQNames='true'
+              value='Exists $END$'>
         <context>
-            <option name='RESOLVE' value='true'/>
+            <option name='RESOLVE_FILE' value='true'/>
         </context>
     </template>
+
 </templateSet>
