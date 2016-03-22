@@ -83,6 +83,9 @@ ESCAPES = [abfnrtv]
 "⟨"                                     { return LANGLE; }
 "⟩"                                     { return RANGLE; }
 
+"⎡"                                     { return LCEIL; }
+"⎤"                                     { return RCEIL; }
+
 ":"                                     { return COLON; }
 "::"                                    { return COLONCOLON; }
 ";"                                     { return SEMICOLON; }

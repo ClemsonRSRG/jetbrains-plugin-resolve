@@ -203,7 +203,10 @@ public class ResParser implements PsiParser, LightPsiParser {
     else if (t == MATH_PREFIX_DEFINITION_SIGNATURE) {
       r = MathPrefixDefinitionSignature(b, 0);
     }
-    else if (t == MATH_PREFIX_GENERALIZED_APPLY_EXP) {
+    else if (t == MATH_PREFIX_GENERALIZED_CEIL_APPLY_EXP) {
+      r = MathExp(b, 0, 10);
+    }
+    else if (t == MATH_PREFIX_GENERALIZED_SQBR_APPLY_EXP) {
       r = MathExp(b, 0, 9);
     }
     else if (t == MATH_QUANTIFIED_EXP) {
@@ -216,7 +219,7 @@ public class ResParser implements PsiParser, LightPsiParser {
       r = MathExp(b, 0, 0);
     }
     else if (t == MATH_SELECTOR_EXP) {
-      r = MathExp(b, 0, 11);
+      r = MathExp(b, 0, 12);
     }
     else if (t == MATH_SET_COMPREHENSION_EXP) {
       r = MathSetComprehensionExp(b, 0);
@@ -240,7 +243,7 @@ public class ResParser implements PsiParser, LightPsiParser {
       r = MathTheoremDecl(b, 0);
     }
     else if (t == MATH_TYPE_ASSERTION_EXP) {
-      r = MathExp(b, 0, 11);
+      r = MathExp(b, 0, 12);
     }
     else if (t == MATH_VAR_DECL_GROUP) {
       r = MathVarDeclGroup(b, 0);
@@ -389,9 +392,9 @@ public class ResParser implements PsiParser, LightPsiParser {
       MATH_BOOLEAN_INFIX_APPLY_EXP, MATH_CART_PROD_EXP, MATH_CUP_OUTFIX_APPLY_EXP, MATH_DBL_BAR_OUTFIX_APPLY_EXP,
       MATH_EXP, MATH_IDENT_INFIX_APPLY_EXP, MATH_INCOMING_UNARY_APPLY_EXP, MATH_JOINING_INFIX_APPLY_EXP,
       MATH_LAMBDA_EXP, MATH_LITERAL_EXP, MATH_MULT_INFIX_APPLY_EXP, MATH_NESTED_EXP,
-      MATH_PREFIX_APPLY_EXP, MATH_PREFIX_GENERALIZED_APPLY_EXP, MATH_QUANTIFIED_EXP, MATH_REFERENCE_EXP,
-      MATH_RELATIONAL_INFIX_APPLY_EXP, MATH_SELECTOR_EXP, MATH_SET_COMPREHENSION_EXP, MATH_SET_EXP,
-      MATH_SQ_BR_OUTFIX_APPLY_EXP, MATH_TYPE_ASSERTION_EXP),
+      MATH_PREFIX_APPLY_EXP, MATH_PREFIX_GENERALIZED_CEIL_APPLY_EXP, MATH_PREFIX_GENERALIZED_SQBR_APPLY_EXP, MATH_QUANTIFIED_EXP,
+      MATH_REFERENCE_EXP, MATH_RELATIONAL_INFIX_APPLY_EXP, MATH_SELECTOR_EXP, MATH_SET_COMPREHENSION_EXP,
+      MATH_SET_EXP, MATH_SQ_BR_OUTFIX_APPLY_EXP, MATH_TYPE_ASSERTION_EXP),
   };
 
   /* ********************************************************** */
@@ -1293,7 +1296,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !(']')
+  // !(']'|'⎤')
   static boolean GeneralizedApplyRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "GeneralizedApplyRecover")) return false;
     boolean r;
@@ -1303,12 +1306,13 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (']')
+  // ']'|'⎤'
   private static boolean GeneralizedApplyRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "GeneralizedApplyRecover_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, RBRACK);
+    if (!r) r = consumeToken(b, RCEIL);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -4056,9 +4060,10 @@ public class ResParser implements PsiParser, LightPsiParser {
   // 7: PREFIX(MathIncomingUnaryApplyExp)
   // 8: BINARY(MathJoiningInfixApplyExp)
   // 9: POSTFIX(MathPrefixApplyExp)
-  // 10: POSTFIX(MathPrefixGeneralizedApplyExp)
-  // 11: ATOM(MathNestedExp)
-  // 12: ATOM(MathSymbolExp) BINARY(MathTypeAssertionExp) PREFIX(MathSetComprehensionExp) ATOM(MathSetExp) ATOM(MathLambdaExp) BINARY(MathSelectorExp) ATOM(MathAlternativeExp) ATOM(MathCartProdExp) ATOM(MathLiteralExp)
+  // 10: POSTFIX(MathPrefixGeneralizedSqbrApplyExp)
+  // 11: POSTFIX(MathPrefixGeneralizedCeilApplyExp)
+  // 12: ATOM(MathNestedExp)
+  // 13: ATOM(MathSymbolExp) BINARY(MathTypeAssertionExp) PREFIX(MathSetComprehensionExp) ATOM(MathSetExp) ATOM(MathLambdaExp) BINARY(MathSelectorExp) ATOM(MathAlternativeExp) ATOM(MathCartProdExp) ATOM(MathLiteralExp)
   public static boolean MathExp(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "MathExp")) return false;
     addVariant(b, "<math exp>");
@@ -4122,16 +4127,20 @@ public class ResParser implements PsiParser, LightPsiParser {
         r = true;
         exit_section_(b, l, m, MATH_PREFIX_APPLY_EXP, r, true, null);
       }
-      else if (g < 10 && MathPrefixGeneralizedApplyExp_0(b, l + 1)) {
+      else if (g < 10 && MathPrefixGeneralizedSqbrApplyExp_0(b, l + 1)) {
         r = true;
-        exit_section_(b, l, m, MATH_PREFIX_GENERALIZED_APPLY_EXP, r, true, null);
+        exit_section_(b, l, m, MATH_PREFIX_GENERALIZED_SQBR_APPLY_EXP, r, true, null);
       }
-      else if (g < 12 && consumeTokenSmart(b, COLON)) {
-        r = MathExp(b, l, 12);
+      else if (g < 11 && MathPrefixGeneralizedCeilApplyExp_0(b, l + 1)) {
+        r = true;
+        exit_section_(b, l, m, MATH_PREFIX_GENERALIZED_CEIL_APPLY_EXP, r, true, null);
+      }
+      else if (g < 13 && consumeTokenSmart(b, COLON)) {
+        r = MathExp(b, l, 13);
         exit_section_(b, l, m, MATH_TYPE_ASSERTION_EXP, r, true, null);
       }
-      else if (g < 12 && consumeTokenSmart(b, DOT)) {
-        r = MathExp(b, l, 12);
+      else if (g < 13 && consumeTokenSmart(b, DOT)) {
+        r = MathExp(b, l, 13);
         exit_section_(b, l, m, MATH_SELECTOR_EXP, r, true, null);
       }
       else {
@@ -4245,13 +4254,25 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   // '[' GeneralizedApplyArgList ']'
-  private static boolean MathPrefixGeneralizedApplyExp_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathPrefixGeneralizedApplyExp_0")) return false;
+  private static boolean MathPrefixGeneralizedSqbrApplyExp_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathPrefixGeneralizedSqbrApplyExp_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeTokenSmart(b, LBRACK);
     r = r && GeneralizedApplyArgList(b, l + 1);
     r = r && consumeToken(b, RBRACK);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // '⎡' GeneralizedApplyArgList '⎤'
+  private static boolean MathPrefixGeneralizedCeilApplyExp_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathPrefixGeneralizedCeilApplyExp_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, LCEIL);
+    r = r && GeneralizedApplyArgList(b, l + 1);
+    r = r && consumeToken(b, RCEIL);
     exit_section_(b, m, null, r);
     return r;
   }

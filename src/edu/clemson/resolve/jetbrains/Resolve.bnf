@@ -95,6 +95,8 @@
         LANGLE                  = '⟨'
         RANGLE                  = '⟩'
 
+        LCEIL                   = '⎡'
+        RCEIL                   = '⎤'
         // Keywords
         INT                     = 'int'
         FACILITY                = 'Facility'
@@ -547,7 +549,8 @@ MathExp ::=
     | MathIncomingUnaryApplyExp
     | MathJoiningInfixApplyExp
     | MathPrefixApplyExp
-    | MathPrefixGeneralizedApplyExp
+    | MathPrefixGeneralizedSqbrApplyExp
+    | MathPrefixGeneralizedCeilApplyExp
     | MathNestedExp
     | MathPrimary {methods=[getResMathMetaTypeExp]}
 
@@ -570,9 +573,10 @@ MathIdentInfixApplyExp  ::= MathExp identifier MathExp
 MathApplicationInfixApplyExp ::= MathExp MathApplicationOp MathExp
 MathIncomingUnaryApplyExp ::= '@' MathExp
 MathPrefixApplyExp ::= MathExp '(' MathArgList ')' {pin=2}
-MathPrefixGeneralizedApplyExp ::= MathExp '[' GeneralizedApplyArgList']' {pin=2 recoverWhile=GeneralizedApplyArgList}
+MathPrefixGeneralizedSqbrApplyExp ::= MathExp '[' GeneralizedApplyArgList']' {pin=2 recoverWhile=GeneralizedApplyArgList}
+MathPrefixGeneralizedCeilApplyExp ::= MathExp '⎡' GeneralizedApplyArgList'⎤' {pin=2 recoverWhile=GeneralizedApplyArgList}
 private GeneralizedApplyArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=GeneralizedApplyRecover}
-private GeneralizedApplyRecover ::= !(']')
+private GeneralizedApplyRecover ::= !(']'|'⎤')
 
 MathTypeAssertionExp ::= MathExp ':' MathExp {pin=2}
 MathNestedExp ::= '(' MathAssertionExp ')' {pin=1}

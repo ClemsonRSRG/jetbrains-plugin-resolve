@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="resolve-0.0.1-complete">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../resolve-lite/compiler/target/resolve-0.0.1-complete.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/resolve-0.0.1-complete.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

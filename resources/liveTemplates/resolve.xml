@@ -157,6 +157,15 @@
         </context>
     </template>
 
+    <template description='generalized app ⎡..⎤' name='ceilapp' toReformat='true' toShortenFQNames='true'
+              value='$FUNCTION$⎡$END$⎤'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='FUNCTION'/>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
     <template description='ː' name='hcolon' toReformat='true' toShortenFQNames='true'
               value='ː'>
         <context>

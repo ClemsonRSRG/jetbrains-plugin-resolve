@@ -70,7 +70,8 @@ public interface ResTypes {
   IElementType MATH_OUTFIX_DEFINITION_SIGNATURE = new ResCompositeElementType("MATH_OUTFIX_DEFINITION_SIGNATURE");
   IElementType MATH_PREFIX_APPLY_EXP = new ResCompositeElementType("MATH_PREFIX_APPLY_EXP");
   IElementType MATH_PREFIX_DEFINITION_SIGNATURE = new ResCompositeElementType("MATH_PREFIX_DEFINITION_SIGNATURE");
-  IElementType MATH_PREFIX_GENERALIZED_APPLY_EXP = new ResCompositeElementType("MATH_PREFIX_GENERALIZED_APPLY_EXP");
+  IElementType MATH_PREFIX_GENERALIZED_CEIL_APPLY_EXP = new ResCompositeElementType("MATH_PREFIX_GENERALIZED_CEIL_APPLY_EXP");
+  IElementType MATH_PREFIX_GENERALIZED_SQBR_APPLY_EXP = new ResCompositeElementType("MATH_PREFIX_GENERALIZED_SQBR_APPLY_EXP");
   IElementType MATH_QUANTIFIED_EXP = new ResCompositeElementType("MATH_QUANTIFIED_EXP");
   IElementType MATH_REFERENCE_EXP = new ResCompositeElementType("MATH_REFERENCE_EXP");
   IElementType MATH_RELATIONAL_INFIX_APPLY_EXP = new ResCompositeElementType("MATH_RELATIONAL_INFIX_APPLY_EXP");
@@ -204,6 +205,7 @@ public interface ResTypes {
   IElementType LANGLE = new ResTokenType("⟨");
   IElementType LBRACE = new ResTokenType("{");
   IElementType LBRACK = new ResTokenType("[");
+  IElementType LCEIL = new ResTokenType("⎡");
   IElementType LCURVE = new ResTokenType("⎝");
   IElementType LESS = new ResTokenType("<");
   IElementType LESS_OR_EQUAL = new ResTokenType("<=");
@@ -236,6 +238,7 @@ public interface ResTypes {
   IElementType RAW_STRING = new ResTokenType("raw_string");
   IElementType RBRACE = new ResTokenType("}");
   IElementType RBRACK = new ResTokenType("]");
+  IElementType RCEIL = new ResTokenType("⎤");
   IElementType RCURVE = new ResTokenType("⎠");
   IElementType RECORD = new ResTokenType("Record");
   IElementType RECURSIVE = new ResTokenType("Recursive");
@@ -444,8 +447,11 @@ public interface ResTypes {
       else if (type == MATH_PREFIX_DEFINITION_SIGNATURE) {
         return new ResMathPrefixDefinitionSignatureImpl(node);
       }
-      else if (type == MATH_PREFIX_GENERALIZED_APPLY_EXP) {
-        return new ResMathPrefixGeneralizedApplyExpImpl(node);
+      else if (type == MATH_PREFIX_GENERALIZED_CEIL_APPLY_EXP) {
+        return new ResMathPrefixGeneralizedCeilApplyExpImpl(node);
+      }
+      else if (type == MATH_PREFIX_GENERALIZED_SQBR_APPLY_EXP) {
+        return new ResMathPrefixGeneralizedSqbrApplyExpImpl(node);
       }
       else if (type == MATH_QUANTIFIED_EXP) {
         return new ResMathQuantifiedExpImpl(node);
