@@ -53,6 +53,7 @@ public interface ResTypes {
   IElementType MATH_BOOLEAN_INFIX_APPLY_EXP = new ResCompositeElementType("MATH_BOOLEAN_INFIX_APPLY_EXP");
   IElementType MATH_CART_PROD_EXP = new ResCompositeElementType("MATH_CART_PROD_EXP");
   IElementType MATH_CATEGORICAL_DEFINITION_DECL = new ResCompositeElementType("MATH_CATEGORICAL_DEFINITION_DECL");
+  IElementType MATH_CUP_OUTFIX_APPLY_EXP = new ResCompositeElementType("MATH_CUP_OUTFIX_APPLY_EXP");
   IElementType MATH_DBL_BAR_OUTFIX_APPLY_EXP = new ResCompositeElementType("MATH_DBL_BAR_OUTFIX_APPLY_EXP");
   IElementType MATH_EXP = new ResCompositeElementType("MATH_EXP");
   IElementType MATH_IDENT_INFIX_APPLY_EXP = new ResCompositeElementType("MATH_IDENT_INFIX_APPLY_EXP");
@@ -131,6 +132,7 @@ public interface ResTypes {
   IElementType BY = new ResTokenType("by");
   IElementType CART_PROD = new ResTokenType("Cart_Prod");
   IElementType CAT = new ResTokenType("o");
+  IElementType CAT1 = new ResTokenType("∘");
   IElementType CATEGORICAL = new ResTokenType("Categorical");
   IElementType CHANGING = new ResTokenType("changing");
   IElementType CHAR = new ResTokenType("char");
@@ -171,10 +173,11 @@ public interface ResTypes {
   IElementType FAMILY = new ResTokenType("family");
   IElementType FAMILY_TYPE = new ResTokenType("Type");
   IElementType FOR = new ResTokenType("for");
-  IElementType FORALL = new ResTokenType("∀");
-  IElementType FORALL1 = new ResTokenType("Forall");
+  IElementType FORALL = new ResTokenType("Forall");
+  IElementType FORALL1 = new ResTokenType("∀");
   IElementType GREATER = new ResTokenType(">");
   IElementType GREATER_OR_EQUAL = new ResTokenType(">=");
+  IElementType GREATER_OR_EQUAL1 = new ResTokenType("≥");
   IElementType HYPO = new ResTokenType("hypo");
   IElementType IDENTIFIER = new ResTokenType("identifier");
   IElementType IF = new ResTokenType("if");
@@ -189,14 +192,19 @@ public interface ResTypes {
   IElementType INITIALIZATION = new ResTokenType("initialization");
   IElementType INT = new ResTokenType("int");
   IElementType INTERSECT = new ResTokenType("intersect");
+  IElementType INTERSECT1 = new ResTokenType("∩");
   IElementType IS = new ResTokenType("is");
   IElementType IS_IN = new ResTokenType("is_in");
+  IElementType IS_IN1 = new ResTokenType("∈");
   IElementType IS_NOT_IN = new ResTokenType("is_not_in");
+  IElementType IS_NOT_IN1 = new ResTokenType("∉");
   IElementType LAMBDA = new ResTokenType("lambda");
   IElementType LBRACE = new ResTokenType("{");
   IElementType LBRACK = new ResTokenType("[");
+  IElementType LCURVE = new ResTokenType("⎝");
   IElementType LESS = new ResTokenType("<");
   IElementType LESS_OR_EQUAL = new ResTokenType("<=");
+  IElementType LESS_OR_EQUAL1 = new ResTokenType("≤");
   IElementType LPAREN = new ResTokenType("(");
   IElementType MAINTAINING = new ResTokenType("maintaining");
   IElementType MINUS = new ResTokenType("-");
@@ -219,9 +227,11 @@ public interface ResTypes {
   IElementType PROG_IF = new ResTokenType("If");
   IElementType QUOTIENT = new ResTokenType("/");
   IElementType RARROW = new ResTokenType("->");
+  IElementType RARROW1 = new ResTokenType("→");
   IElementType RAW_STRING = new ResTokenType("raw_string");
   IElementType RBRACE = new ResTokenType("}");
   IElementType RBRACK = new ResTokenType("]");
+  IElementType RCURVE = new ResTokenType("⎠");
   IElementType RECORD = new ResTokenType("Record");
   IElementType RECURSIVE = new ResTokenType("Recursive");
   IElementType REPLACES = new ResTokenType("replaces");
@@ -236,6 +246,7 @@ public interface ResTypes {
   IElementType TRIPLE_DOT = new ResTokenType("...");
   IElementType TRUE = new ResTokenType("true");
   IElementType UNION = new ResTokenType("union");
+  IElementType UNION1 = new ResTokenType("∪");
   IElementType UPDATES = new ResTokenType("updates");
   IElementType USES = new ResTokenType("uses");
   IElementType VAR = new ResTokenType("Var");
@@ -374,6 +385,9 @@ public interface ResTypes {
       }
       else if (type == MATH_CATEGORICAL_DEFINITION_DECL) {
         return new ResMathCategoricalDefinitionDeclImpl(node);
+      }
+      else if (type == MATH_CUP_OUTFIX_APPLY_EXP) {
+        return new ResMathCupOutfixApplyExpImpl(node);
       }
       else if (type == MATH_DBL_BAR_OUTFIX_APPLY_EXP) {
         return new ResMathDblBarOutfixApplyExpImpl(node);

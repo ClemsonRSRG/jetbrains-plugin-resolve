@@ -74,6 +74,9 @@ ESCAPES = [abfnrtv]
 "["                                     { return LBRACK; }
 "]"                                     { return RBRACK; }
 
+"⎝"                                     { return LCURVE; }
+"⎠"                                     { return RCURVE; }
+
 "("                                     { return LPAREN; }
 ")"                                     { return RPAREN; }
 
@@ -93,16 +96,29 @@ ESCAPES = [abfnrtv]
 "or"                                    { return OR; }
 "not"                                   { return NOT; }
 "o"                                     { return CAT; }
+"∘"                                     { return CAT; }
+
 "is_in"                                 { return IS_IN; }
+"∈"                                     { return IS_IN; }
 "is_not_in"                             { return IS_NOT_IN; }
+"∉"                                     { return IS_NOT_IN; }
+
 "union"                                 { return UNION; }
+"∪"                                     { return UNION; }
+
 "intersect"                             { return INTERSECT; }
+"∩"                                     { return INTERSECT; }
 
 "<="                                    { return LESS_OR_EQUAL; }
+"≤"                                     { return LESS_OR_EQUAL; }
 "<"                                     { return LESS; }
 
 ">="                                    { return GREATER_OR_EQUAL; }
+"≥"                                     { return GREATER_OR_EQUAL; }
 ">"                                     { return GREATER; }
+
+"->"                                    { return RARROW; }
+"→"                                     { return RARROW; }
 
 "%"                                     { return MOD; }
 "*"                                     { return MUL; }
@@ -114,7 +130,7 @@ ESCAPES = [abfnrtv]
 
 ":="                                    { return COLON_EQUALS; }
 ":=:"                                   { return COLON_EQUALS_COLON; }
-"->"                                    { return RARROW; }
+
 "~"			                            { return TILDE; }
 "|"                                     { return BAR; }
 "||"                                    { return DBL_BAR; }

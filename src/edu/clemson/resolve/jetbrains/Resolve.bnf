@@ -43,20 +43,31 @@
         OR                      = 'or'
         NOT                     = 'not'
         CAT                     = 'o'
+        CAT1                    = '∘'
 
         TRUE                    = 'true'
         FALSE                   = 'false'
         IMPLIES                 = 'implies'
 
         UNION                   = 'union'
+        UNION1                  = '∪'
         INTERSECT               = 'intersect'
+        INTERSECT1              = '∩'
         IS_IN                   = 'is_in'
+        IS_In1                  = '∈'
         IS_NOT_IN               = 'is_not_in'
+        IS_NOT_IN1              = '∉'
 
         LESS_OR_EQUAL           = '<='
+        LESS_OR_EQUAL1           = '≤'
         LESS                    = '<'
+
         GREATER_OR_EQUAL        = '>='
+        GREATER_OR_EQUAL1        = '≥'
         GREATER                 = '>'
+
+        RARROW                  = '->'
+        RARROW1                 = '→'
 
         MOD                     = '%'
         MUL                     = '*'
@@ -68,10 +79,12 @@
 
         COLON_EQUALS            = ':='
         COLON_EQUALS_COLON      = ':=:'
-        RARROW                  = '->'
+
         TILDE                   = '~'
         BAR                     = '|'
         DBL_BAR                 = '||'
+        LCURVE                  = '⎝'
+        RCURVE                  = '⎠'
 
         // Keywords
         INT                     = 'int'
@@ -101,10 +114,10 @@
         MAINTAINING             = 'maintaining'
         DECREASING              = 'decreasing'
         OTHERWISE               = 'otherwise'
-        FORALL                  = '∀'
-        FORALL1                 = 'Forall'
+        FORALL1                  = '∀'
+        FORALL                  = 'Forall'
         EXISTS                  = 'Exists'
-        EXISTS1                 = '∃'
+        EXISTS1                  = '∃'
         EXTERNALLY              = 'externally'
         IMPLEMENTED             = 'implemented'
         INITIALIZATION          = 'initialization'
@@ -535,6 +548,7 @@ private MathOutfixGroup ::=
     | MathAngleOutfixApplyExp
     | MathDblBarOutfixApplyExp
     | MathSqBrOutfixApplyExp
+    | MathCupOutfixApplyExp
 
 MathAddInfixApplyExp ::= MathExp MathAddOp MathExp
 MathBooleanInfixApplyExp ::= MathExp MathBooleanOp MathExp
@@ -557,13 +571,14 @@ MathBarOutfixApplyExp ::= '|' MathExp '|'
 MathDblBarOutfixApplyExp ::= '||' MathExp '||'
 MathAngleOutfixApplyExp ::= '<' MathExp '>'
 MathSqBrOutfixApplyExp ::= '[' MathExp ']'
+MathCupOutfixApplyExp ::= '⎝' MathExp '⎠'
 
 private MathAddOp ::= (MathReferenceExp '::')? ('+'|'-'|'~')
 private MathMultOp ::= (MathReferenceExp '::')? ('*'|'/')
-private MathBooleanOp ::= (MathReferenceExp '::')? ('and'|'or'|'implies'|'iff'|'is_in'|'is_not_in')
-private MathRelationalOp ::= (MathReferenceExp '::')? ('<' | '>' | '<=' | '>=' | '=' | '/=')
+private MathBooleanOp ::= (MathReferenceExp '::')? ('and'|'or'|'implies'|'iff'|'is_in'|'∈'|'is_not_in')
+private MathRelationalOp ::= (MathReferenceExp '::')? ('<' | '>' | '<=' | '≤' | '>=' | '≥' | '=' | '/=')
 private MathJoiningOp ::= (MathReferenceExp '::')? ('o'|'union'|'intersect')
-private MathApplicationOp ::= (MathReferenceExp '::')? ('..'|'->')
+private MathApplicationOp ::= (MathReferenceExp '::')? ('..'|'->'|'→')
 
 private MathPrimary ::=
           MathSymbolExp

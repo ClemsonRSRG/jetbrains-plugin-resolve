@@ -24,10 +24,74 @@
     </template>
 
     <template description='≤' name='leq' toReformat='true' toShortenFQNames='true'
-              value='≤ $END$'>
+              value='≤'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
         </context>
     </template>
 
+    <template description='≥' name='geq' toReformat='true' toShortenFQNames='true'
+              value='≥'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='∘' name='circ' toReformat='true' toShortenFQNames='true'
+              value='∘'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='∈' name='in' toReformat='true' toShortenFQNames='true'
+              value='∈'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='∉' name='nin' toReformat='true' toShortenFQNames='true'
+              value='∉'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='∪' name='cup' toReformat='true' toShortenFQNames='true'
+              value='∪'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='∩' name='cap' toReformat='true' toShortenFQNames='true'
+              value='∩'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='→' name='rightarrow' toReformat='true' toShortenFQNames='true'
+              value='→'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='(outfix) ⎝..⎠' name='lcurve' toReformat='true' toShortenFQNames='true'
+              value='⎝$END$⎠'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='ː' name='hcolon' toReformat='true' toShortenFQNames='true'
+              value='ː'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+    <!-- Ok, so we're going to add <option name=RESOLVEMATHDEF ... >' to each
+         block except ones for ∀ and ∃ -->
 </templateSet>
