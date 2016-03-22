@@ -12,10 +12,7 @@ import com.intellij.psi.util.PsiUtilCore;
 import edu.clemson.resolve.jetbrains.RESOLVELanguage;
 import edu.clemson.resolve.jetbrains.ResTypes;
 import edu.clemson.resolve.jetbrains.highlighting.RESOLVESyntaxHighlighter;
-import edu.clemson.resolve.jetbrains.psi.ResFile;
-import edu.clemson.resolve.jetbrains.psi.ResMathIdentInfixApplyExp;
-import edu.clemson.resolve.jetbrains.psi.ResMathReferenceExp;
-import edu.clemson.resolve.jetbrains.psi.ResType;
+import edu.clemson.resolve.jetbrains.psi.*;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -61,6 +58,7 @@ public abstract class RESOLVELiveTemplateContextType
     public static class RESOLVEFileContextType
             extends
                 RESOLVELiveTemplateContextType {
+
         protected RESOLVEFileContextType() {
             super("RESOLVE_FILE", "RESOLVE file",
                     RESOLVEEverywhereContextType.class);
@@ -74,6 +72,7 @@ public abstract class RESOLVELiveTemplateContextType
     public static class RESOLVEMathRefContextType
             extends
                 RESOLVELiveTemplateContextType {
+
         protected RESOLVEMathRefContextType() {
             super("RESOLVE_MATH_REF", "math reference",
                     RESOLVEEverywhereContextType.class);
@@ -82,6 +81,20 @@ public abstract class RESOLVELiveTemplateContextType
         @Override protected boolean isInContext(@NotNull PsiElement element) {
             return element instanceof ResMathReferenceExp ||
                     (element instanceof ResMathIdentInfixApplyExp); //for infix math exprs mostly
+        }
+    }
+
+    public static class RESOLVEMathDefContextType
+            extends
+                RESOLVELiveTemplateContextType {
+
+        protected RESOLVEMathDefContextType() {
+            super("RESOLVE_MATH_DEF", "math definition",
+                    RESOLVEEverywhereContextType.class);
+        }
+
+        @Override protected boolean isInContext(@NotNull PsiElement element) {
+            return element instanceof ResMathDefinitionSignature;
         }
     }
 

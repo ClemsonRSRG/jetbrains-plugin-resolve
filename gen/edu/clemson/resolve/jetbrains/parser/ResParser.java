@@ -131,6 +131,9 @@ public class ResParser implements PsiParser, LightPsiParser {
     else if (t == MATH_ALTERNATIVE_ITEM_EXP) {
       r = MathAlternativeItemExp(b, 0);
     }
+    else if (t == MATH_ANGLE_1_OUTFIX_APPLY_EXP) {
+      r = MathAngle1OutfixApplyExp(b, 0);
+    }
     else if (t == MATH_ANGLE_OUTFIX_APPLY_EXP) {
       r = MathAngleOutfixApplyExp(b, 0);
     }
@@ -381,14 +384,14 @@ public class ResParser implements PsiParser, LightPsiParser {
     create_token_set_(ADD_INFIX_EXP, AND_INFIX_EXP, CALL_EXP, EXP,
       LITERAL_EXP, MUL_INFIX_EXP, OR_INFIX_EXP, PAREN_EXP,
       REFERENCE_EXP, RELATIONAL_INFIX_EXP, SELECTOR_EXP, UNARY_EXP),
-    create_token_set_(MATH_ADD_INFIX_APPLY_EXP, MATH_ALTERNATIVE_EXP, MATH_ALTERNATIVE_ITEM_EXP, MATH_ANGLE_OUTFIX_APPLY_EXP,
-      MATH_APPLICATION_INFIX_APPLY_EXP, MATH_ASSERTION_EXP, MATH_BAR_OUTFIX_APPLY_EXP, MATH_BOOLEAN_INFIX_APPLY_EXP,
-      MATH_CART_PROD_EXP, MATH_CUP_OUTFIX_APPLY_EXP, MATH_DBL_BAR_OUTFIX_APPLY_EXP, MATH_EXP,
-      MATH_IDENT_INFIX_APPLY_EXP, MATH_INCOMING_UNARY_APPLY_EXP, MATH_JOINING_INFIX_APPLY_EXP, MATH_LAMBDA_EXP,
-      MATH_LITERAL_EXP, MATH_MULT_INFIX_APPLY_EXP, MATH_NESTED_EXP, MATH_PREFIX_APPLY_EXP,
-      MATH_PREFIX_GENERALIZED_APPLY_EXP, MATH_QUANTIFIED_EXP, MATH_REFERENCE_EXP, MATH_RELATIONAL_INFIX_APPLY_EXP,
-      MATH_SELECTOR_EXP, MATH_SET_COMPREHENSION_EXP, MATH_SET_EXP, MATH_SQ_BR_OUTFIX_APPLY_EXP,
-      MATH_TYPE_ASSERTION_EXP),
+    create_token_set_(MATH_ADD_INFIX_APPLY_EXP, MATH_ALTERNATIVE_EXP, MATH_ALTERNATIVE_ITEM_EXP, MATH_ANGLE_1_OUTFIX_APPLY_EXP,
+      MATH_ANGLE_OUTFIX_APPLY_EXP, MATH_APPLICATION_INFIX_APPLY_EXP, MATH_ASSERTION_EXP, MATH_BAR_OUTFIX_APPLY_EXP,
+      MATH_BOOLEAN_INFIX_APPLY_EXP, MATH_CART_PROD_EXP, MATH_CUP_OUTFIX_APPLY_EXP, MATH_DBL_BAR_OUTFIX_APPLY_EXP,
+      MATH_EXP, MATH_IDENT_INFIX_APPLY_EXP, MATH_INCOMING_UNARY_APPLY_EXP, MATH_JOINING_INFIX_APPLY_EXP,
+      MATH_LAMBDA_EXP, MATH_LITERAL_EXP, MATH_MULT_INFIX_APPLY_EXP, MATH_NESTED_EXP,
+      MATH_PREFIX_APPLY_EXP, MATH_PREFIX_GENERALIZED_APPLY_EXP, MATH_QUANTIFIED_EXP, MATH_REFERENCE_EXP,
+      MATH_RELATIONAL_INFIX_APPLY_EXP, MATH_SELECTOR_EXP, MATH_SET_COMPREHENSION_EXP, MATH_SET_EXP,
+      MATH_SQ_BR_OUTFIX_APPLY_EXP, MATH_TYPE_ASSERTION_EXP),
   };
 
   /* ********************************************************** */
@@ -873,7 +876,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, RPAREN);
     if (!r) r = consumeToken(b, COMMA);
     if (!r) r = consumeToken(b, MUL);
-    if (!r) r = consumeToken(b, PLUS_PLUS);
+    if (!r) r = consumeToken(b, "++");
     if (!r) r = consumeToken(b, LESS);
     if (!r) r = consumeToken(b, LESS_OR_EQUAL);
     if (!r) r = consumeToken(b, GREATER);
@@ -1998,7 +2001,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (MathReferenceExp '::')? ('o'|'union'|'intersect')
+  // (MathReferenceExp '::')? ('o'|'union'|'∪'|'∪₊'|'intersect'|'∩'|'∩₊')
   static boolean MathJoiningOp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathJoiningOp")) return false;
     boolean r;
@@ -2027,14 +2030,18 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // 'o'|'union'|'intersect'
+  // 'o'|'union'|'∪'|'∪₊'|'intersect'|'∩'|'∩₊'
   private static boolean MathJoiningOp_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathJoiningOp_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, CAT);
     if (!r) r = consumeToken(b, UNION);
+    if (!r) r = consumeToken(b, UNION1);
+    if (!r) r = consumeToken(b, UNION_PLUS);
     if (!r) r = consumeToken(b, INTERSECT);
+    if (!r) r = consumeToken(b, INTERSECT1);
+    if (!r) r = consumeToken(b, INTERSECT_PLUS);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -2081,7 +2088,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier|('o'|'true'|'false'|int|'+'|'-'|'*'|'/'|'>'|'<'|'<='|'>='|'not')
+  // identifier|('o'|'true'|'false'|int|'+'|'-'|'*'|'/'|'>'|'<'|'<='|'>='|'not'|'⌐'|'≼'|'ϒ'|'∪₊'|'≤ᵤ')
   public static boolean MathNameIdentifier(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathNameIdentifier")) return false;
     boolean r;
@@ -2092,7 +2099,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // 'o'|'true'|'false'|int|'+'|'-'|'*'|'/'|'>'|'<'|'<='|'>='|'not'
+  // 'o'|'true'|'false'|int|'+'|'-'|'*'|'/'|'>'|'<'|'<='|'>='|'not'|'⌐'|'≼'|'ϒ'|'∪₊'|'≤ᵤ'
   private static boolean MathNameIdentifier_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathNameIdentifier_1")) return false;
     boolean r;
@@ -2110,6 +2117,11 @@ public class ResParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, LESS_OR_EQUAL);
     if (!r) r = consumeToken(b, GREATER_OR_EQUAL);
     if (!r) r = consumeToken(b, NOT);
+    if (!r) r = consumeToken(b, NEG);
+    if (!r) r = consumeToken(b, PRECCURLYEQ);
+    if (!r) r = consumeToken(b, VROD);
+    if (!r) r = consumeToken(b, UNION_PLUS);
+    if (!r) r = consumeToken(b, LESS_OR_EQUAL_U);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -2229,7 +2241,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (MathReferenceExp '::')? ('<' | '>' | '<=' | '≤' | '>=' | '≥' | '=' | '/=')
+  // (MathReferenceExp '::')? ('<' | '>' | '<=' | '≤' | '≤ᵤ' | '>=' | '≥' | '=' | '/=')
   static boolean MathRelationalOp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathRelationalOp")) return false;
     boolean r;
@@ -2258,7 +2270,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // '<' | '>' | '<=' | '≤' | '>=' | '≥' | '=' | '/='
+  // '<' | '>' | '<=' | '≤' | '≤ᵤ' | '>=' | '≥' | '=' | '/='
   private static boolean MathRelationalOp_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathRelationalOp_1")) return false;
     boolean r;
@@ -2267,6 +2279,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, GREATER);
     if (!r) r = consumeToken(b, LESS_OR_EQUAL);
     if (!r) r = consumeToken(b, LESS_OR_EQUAL1);
+    if (!r) r = consumeToken(b, LESS_OR_EQUAL_U);
     if (!r) r = consumeToken(b, GREATER_OR_EQUAL);
     if (!r) r = consumeToken(b, GREATER_OR_EQUAL1);
     if (!r) r = consumeToken(b, EQUALS);
@@ -4039,7 +4052,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   // 3: BINARY(MathAddInfixApplyExp)
   // 4: BINARY(MathMultInfixApplyExp)
   // 5: BINARY(MathIdentInfixApplyExp)
-  // 6: PREFIX(MathBarOutfixApplyExp) PREFIX(MathAngleOutfixApplyExp) PREFIX(MathDblBarOutfixApplyExp) PREFIX(MathSqBrOutfixApplyExp) PREFIX(MathCupOutfixApplyExp)
+  // 6: PREFIX(MathBarOutfixApplyExp) PREFIX(MathAngleOutfixApplyExp) PREFIX(MathDblBarOutfixApplyExp) PREFIX(MathSqBrOutfixApplyExp) PREFIX(MathCupOutfixApplyExp) PREFIX(MathAngle1OutfixApplyExp)
   // 7: PREFIX(MathIncomingUnaryApplyExp)
   // 8: BINARY(MathJoiningInfixApplyExp)
   // 9: POSTFIX(MathPrefixApplyExp)
@@ -4056,6 +4069,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     if (!r) r = MathDblBarOutfixApplyExp(b, l + 1);
     if (!r) r = MathSqBrOutfixApplyExp(b, l + 1);
     if (!r) r = MathCupOutfixApplyExp(b, l + 1);
+    if (!r) r = MathAngle1OutfixApplyExp(b, l + 1);
     if (!r) r = MathIncomingUnaryApplyExp(b, l + 1);
     if (!r) r = MathNestedExp(b, l + 1);
     if (!r) r = MathSymbolExp(b, l + 1);
@@ -4190,6 +4204,19 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = p && MathExp(b, l, 6);
     r = p && report_error_(b, consumeToken(b, RCURVE)) && r;
     exit_section_(b, l, m, MATH_CUP_OUTFIX_APPLY_EXP, r, p, null);
+    return r || p;
+  }
+
+  public static boolean MathAngle1OutfixApplyExp(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathAngle1OutfixApplyExp")) return false;
+    if (!nextTokenIsFast(b, LANGLE)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeTokenSmart(b, LANGLE);
+    p = r;
+    r = p && MathExp(b, l, 6);
+    r = p && report_error_(b, consumeToken(b, RANGLE)) && r;
+    exit_section_(b, l, m, MATH_ANGLE_1_OUTFIX_APPLY_EXP, r, p, null);
     return r || p;
   }
 

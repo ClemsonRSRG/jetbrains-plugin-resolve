@@ -42,6 +42,7 @@
         AND                     = 'and'
         OR                      = 'or'
         NOT                     = 'not'
+        NEG                     = '⌐'
         CAT                     = 'o'
         CAT1                    = '∘'
 
@@ -51,30 +52,35 @@
 
         UNION                   = 'union'
         UNION1                  = '∪'
+        UNION_PLUS              = '∪₊'
+
         INTERSECT               = 'intersect'
         INTERSECT1              = '∩'
+        INTERSECT_PLUS          = '∩₊'
+
         IS_IN                   = 'is_in'
         IS_In1                  = '∈'
         IS_NOT_IN               = 'is_not_in'
         IS_NOT_IN1              = '∉'
-
+        PRECCURLYEQ             = '≼'
         LESS_OR_EQUAL           = '<='
-        LESS_OR_EQUAL1           = '≤'
+        LESS_OR_EQUAL1          = '≤'
+        LESS_OR_EQUAL_U         = '≤ᵤ'
+
         LESS                    = '<'
 
         GREATER_OR_EQUAL        = '>='
-        GREATER_OR_EQUAL1        = '≥'
+        GREATER_OR_EQUAL1       = '≥'
         GREATER                 = '>'
 
         RARROW                  = '->'
         RARROW1                 = '→'
+        VROD                    = 'ϒ'
 
         MOD                     = '%'
         MUL                     = '*'
         QUOTIENT                = '/'
-        PLUS_PLUS               = '++'
         PLUS                    = '+'
-        MINUS_MINUS             = '--'
         MINUS                   = '-'
 
         COLON_EQUALS            = ':='
@@ -85,6 +91,9 @@
         DBL_BAR                 = '||'
         LCURVE                  = '⎝'
         RCURVE                  = '⎠'
+
+        LANGLE                  = '⟨'
+        RANGLE                  = '⟩'
 
         // Keywords
         INT                     = 'int'
@@ -549,6 +558,7 @@ private MathOutfixGroup ::=
     | MathDblBarOutfixApplyExp
     | MathSqBrOutfixApplyExp
     | MathCupOutfixApplyExp
+    | MathAngle1OutfixApplyExp
 
 MathAddInfixApplyExp ::= MathExp MathAddOp MathExp
 MathBooleanInfixApplyExp ::= MathExp MathBooleanOp MathExp
@@ -570,14 +580,16 @@ MathNestedExp ::= '(' MathAssertionExp ')' {pin=1}
 MathBarOutfixApplyExp ::= '|' MathExp '|'
 MathDblBarOutfixApplyExp ::= '||' MathExp '||'
 MathAngleOutfixApplyExp ::= '<' MathExp '>'
+MathAngle1OutfixApplyExp ::= '⟨' MathExp '⟩'
+
 MathSqBrOutfixApplyExp ::= '[' MathExp ']'
 MathCupOutfixApplyExp ::= '⎝' MathExp '⎠'
 
 private MathAddOp ::= (MathReferenceExp '::')? ('+'|'-'|'~')
 private MathMultOp ::= (MathReferenceExp '::')? ('*'|'/')
 private MathBooleanOp ::= (MathReferenceExp '::')? ('and'|'or'|'implies'|'iff'|'is_in'|'∈'|'is_not_in')
-private MathRelationalOp ::= (MathReferenceExp '::')? ('<' | '>' | '<=' | '≤' | '>=' | '≥' | '=' | '/=')
-private MathJoiningOp ::= (MathReferenceExp '::')? ('o'|'union'|'intersect')
+private MathRelationalOp ::= (MathReferenceExp '::')? ('<' | '>' | '<=' | '≤' | '≤ᵤ' | '>=' | '≥' | '=' | '/=')
+private MathJoiningOp ::= (MathReferenceExp '::')? ('o'|'union'|'∪'|'∪₊'|'intersect'|'∩'|'∩₊')
 private MathApplicationOp ::= (MathReferenceExp '::')? ('..'|'->'|'→')
 
 private MathPrimary ::=
@@ -618,4 +630,4 @@ private MathSetEleRecover ::= !('}')
 
 MathLiteralExp ::= (int|'true'|'false')
 
-MathNameIdentifier ::= identifier|('o'|'true'|'false'|int|'+'|'-'|'*'|'/'|'>'|'<'|'<='|'>='|'not')
+MathNameIdentifier ::= identifier|('o'|'true'|'false'|int|'+'|'-'|'*'|'/'|'>'|'<'|'<='|'>='|'not'|'⌐'|'≼'|'ϒ'|'∪₊'|'≤ᵤ')

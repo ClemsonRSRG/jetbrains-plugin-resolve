@@ -80,6 +80,9 @@ ESCAPES = [abfnrtv]
 "("                                     { return LPAREN; }
 ")"                                     { return RPAREN; }
 
+"⟨"                                     { return LANGLE; }
+"⟩"                                     { return RANGLE; }
+
 ":"                                     { return COLON; }
 "::"                                    { return COLONCOLON; }
 ";"                                     { return SEMICOLON; }
@@ -88,13 +91,15 @@ ESCAPES = [abfnrtv]
 "(ii.)"                                 { return IND_HYPO; }
 
 // Operators
-
+"ϒ"                                     { return VROD; }
+"≼"                                     { return PRECCURLYEQ; }
 "="                                     { return EQUALS; }
 "/="                                    { return NEQUALS; }
 
 "and"                                   { return AND; }
 "or"                                    { return OR; }
 "not"                                   { return NOT; }
+"⌐"                                     { return NOT; }
 "o"                                     { return CAT; }
 "∘"                                     { return CAT; }
 
@@ -105,12 +110,15 @@ ESCAPES = [abfnrtv]
 
 "union"                                 { return UNION; }
 "∪"                                     { return UNION; }
+"∪₊"                                    { return UNION_PLUS; }
 
 "intersect"                             { return INTERSECT; }
 "∩"                                     { return INTERSECT; }
+"∩₊"                                    { return INTERSECT_PLUS; }
 
 "<="                                    { return LESS_OR_EQUAL; }
 "≤"                                     { return LESS_OR_EQUAL; }
+"≤ᵤ"                                    { return LESS_OR_EQUAL_U; }
 "<"                                     { return LESS; }
 
 ">="                                    { return GREATER_OR_EQUAL; }
@@ -123,9 +131,7 @@ ESCAPES = [abfnrtv]
 "%"                                     { return MOD; }
 "*"                                     { return MUL; }
 "/"                                     { return QUOTIENT; }
-"++"                                    { return PLUS_PLUS; }
 "+"                                     { return PLUS; }
-"--"                                    { return MINUS_MINUS; }
 "-"                                     { return MINUS; }
 
 ":="                                    { return COLON_EQUALS; }

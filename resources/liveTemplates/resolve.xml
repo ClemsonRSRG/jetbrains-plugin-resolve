@@ -27,6 +27,7 @@
               value='≤'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
         </context>
     </template>
 
@@ -34,6 +35,7 @@
               value='≥'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
         </context>
     </template>
 
@@ -41,6 +43,23 @@
               value='∘'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='≼' name='preccurlyeq' toReformat='true' toShortenFQNames='true'
+              value='≼'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='ϒ' name='vrod' toReformat='true' toShortenFQNames='true'
+              value='ϒ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
         </context>
     </template>
 
@@ -65,10 +84,26 @@
         </context>
     </template>
 
+    <template description='∪₊' name='pcup' toReformat='true' toShortenFQNames='true'
+              value='∪₊'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
     <template description='∩' name='cap' toReformat='true' toShortenFQNames='true'
               value='∩'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='∩₊' name='pcap' toReformat='true' toShortenFQNames='true'
+              value='∩₊'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
         </context>
     </template>
 
@@ -79,10 +114,46 @@
         </context>
     </template>
 
-    <template description='(outfix) ⎝..⎠' name='lcurve' toReformat='true' toShortenFQNames='true'
+    <template description='≤ᵤ' name='lequ' toReformat='true' toShortenFQNames='true'
+              value='≤ᵤ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⌐' name='neg' toReformat='true' toShortenFQNames='true'
+              value='⌐'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <!--================================
+      -         OUTFIX TEMPLATES
+        ================================-->
+
+    <template description='outfix ⟨..⟩' name='langle' toReformat='true' toShortenFQNames='true'
+              value='⟨$END$⟩'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='outfix ||..||' name='dblbar' toReformat='true' toShortenFQNames='true'
+              value='||$END$||'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='outfix ⎝..⎠' name='lcurve' toReformat='true' toShortenFQNames='true'
               value='⎝$END$⎠'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
         </context>
     </template>
 

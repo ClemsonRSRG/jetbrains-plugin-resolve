@@ -59,8 +59,8 @@ public class RESOLVEParserDefinition implements ParserDefinition {
 
     public static final TokenSet OPERATORS = TokenSet.create(AT,
             EQUALS, NEQUALS, AND, OR, NOT, CAT, LESS_OR_EQUAL, LESS,
-            GREATER_OR_EQUAL, GREATER, MOD, MUL, QUOTIENT, PLUS_PLUS, PLUS,
-            MINUS_MINUS, MINUS, COLON_EQUALS, COLON_EQUALS_COLON, RARROW,
+            GREATER_OR_EQUAL, GREATER, MOD, MUL, QUOTIENT, PLUS, MINUS,
+            COLON_EQUALS, COLON_EQUALS_COLON, RARROW,
             TILDE, UNION, INTERSECT, IS_IN, IS_NOT_IN, BAR, DBL_BAR, IFF,
             IMPLIES, TRUE, FALSE);
 

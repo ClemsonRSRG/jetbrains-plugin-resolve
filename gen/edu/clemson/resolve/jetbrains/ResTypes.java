@@ -46,6 +46,7 @@ public interface ResTypes {
   IElementType MATH_ADD_INFIX_APPLY_EXP = new ResCompositeElementType("MATH_ADD_INFIX_APPLY_EXP");
   IElementType MATH_ALTERNATIVE_EXP = new ResCompositeElementType("MATH_ALTERNATIVE_EXP");
   IElementType MATH_ALTERNATIVE_ITEM_EXP = new ResCompositeElementType("MATH_ALTERNATIVE_ITEM_EXP");
+  IElementType MATH_ANGLE_1_OUTFIX_APPLY_EXP = new ResCompositeElementType("MATH_ANGLE_1_OUTFIX_APPLY_EXP");
   IElementType MATH_ANGLE_OUTFIX_APPLY_EXP = new ResCompositeElementType("MATH_ANGLE_OUTFIX_APPLY_EXP");
   IElementType MATH_APPLICATION_INFIX_APPLY_EXP = new ResCompositeElementType("MATH_APPLICATION_INFIX_APPLY_EXP");
   IElementType MATH_ASSERTION_EXP = new ResCompositeElementType("MATH_ASSERTION_EXP");
@@ -193,25 +194,28 @@ public interface ResTypes {
   IElementType INT = new ResTokenType("int");
   IElementType INTERSECT = new ResTokenType("intersect");
   IElementType INTERSECT1 = new ResTokenType("∩");
+  IElementType INTERSECT_PLUS = new ResTokenType("∩₊");
   IElementType IS = new ResTokenType("is");
   IElementType IS_IN = new ResTokenType("is_in");
   IElementType IS_IN1 = new ResTokenType("∈");
   IElementType IS_NOT_IN = new ResTokenType("is_not_in");
   IElementType IS_NOT_IN1 = new ResTokenType("∉");
   IElementType LAMBDA = new ResTokenType("lambda");
+  IElementType LANGLE = new ResTokenType("⟨");
   IElementType LBRACE = new ResTokenType("{");
   IElementType LBRACK = new ResTokenType("[");
   IElementType LCURVE = new ResTokenType("⎝");
   IElementType LESS = new ResTokenType("<");
   IElementType LESS_OR_EQUAL = new ResTokenType("<=");
   IElementType LESS_OR_EQUAL1 = new ResTokenType("≤");
+  IElementType LESS_OR_EQUAL_U = new ResTokenType("≤ᵤ");
   IElementType LPAREN = new ResTokenType("(");
   IElementType MAINTAINING = new ResTokenType("maintaining");
   IElementType MINUS = new ResTokenType("-");
-  IElementType MINUS_MINUS = new ResTokenType("--");
   IElementType MOD = new ResTokenType("%");
   IElementType MODELED = new ResTokenType("modeled");
   IElementType MUL = new ResTokenType("*");
+  IElementType NEG = new ResTokenType("⌐");
   IElementType NEQUALS = new ResTokenType("/=");
   IElementType NOT = new ResTokenType("not");
   IElementType OF = new ResTokenType("of");
@@ -220,12 +224,13 @@ public interface ResTypes {
   IElementType OTHERWISE = new ResTokenType("otherwise");
   IElementType PARAM_TYPE = new ResTokenType("type");
   IElementType PLUS = new ResTokenType("+");
-  IElementType PLUS_PLUS = new ResTokenType("++");
+  IElementType PRECCURLYEQ = new ResTokenType("≼");
   IElementType PRECIS = new ResTokenType("Precis");
   IElementType PRESERVES = new ResTokenType("preserves");
   IElementType PROCEDURE = new ResTokenType("Procedure");
   IElementType PROG_IF = new ResTokenType("If");
   IElementType QUOTIENT = new ResTokenType("/");
+  IElementType RANGLE = new ResTokenType("⟩");
   IElementType RARROW = new ResTokenType("->");
   IElementType RARROW1 = new ResTokenType("→");
   IElementType RAW_STRING = new ResTokenType("raw_string");
@@ -247,9 +252,11 @@ public interface ResTypes {
   IElementType TRUE = new ResTokenType("true");
   IElementType UNION = new ResTokenType("union");
   IElementType UNION1 = new ResTokenType("∪");
+  IElementType UNION_PLUS = new ResTokenType("∪₊");
   IElementType UPDATES = new ResTokenType("updates");
   IElementType USES = new ResTokenType("uses");
   IElementType VAR = new ResTokenType("Var");
+  IElementType VROD = new ResTokenType("ϒ");
   IElementType WHICH_ENTAILS = new ResTokenType("which_entails");
   IElementType WHILE = new ResTokenType("While");
   IElementType WITH = new ResTokenType("with");
@@ -364,6 +371,9 @@ public interface ResTypes {
       }
       else if (type == MATH_ALTERNATIVE_ITEM_EXP) {
         return new ResMathAlternativeItemExpImpl(node);
+      }
+      else if (type == MATH_ANGLE_1_OUTFIX_APPLY_EXP) {
+        return new ResMathAngle1OutfixApplyExpImpl(node);
       }
       else if (type == MATH_ANGLE_OUTFIX_APPLY_EXP) {
         return new ResMathAngleOutfixApplyExpImpl(node);
