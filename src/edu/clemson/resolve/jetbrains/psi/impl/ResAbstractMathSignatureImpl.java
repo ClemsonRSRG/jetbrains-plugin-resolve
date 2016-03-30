@@ -31,6 +31,6 @@ public abstract class ResAbstractMathSignatureImpl
      *  In other words, it's tough doing completion for non-identifier like things
      */
     @Nullable @Override public PsiElement getIdentifier() {
-        return findChildByClass(ResMathNameIdentifier.class);
+        return findChildByClass(ResMathSymbolName.class);
     }
 }

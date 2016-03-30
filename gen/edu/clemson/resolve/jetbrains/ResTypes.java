@@ -59,17 +59,17 @@ public interface ResTypes {
   IElementType MATH_EXP = new ResCompositeElementType("MATH_EXP");
   IElementType MATH_IDENT_INFIX_APPLY_EXP = new ResCompositeElementType("MATH_IDENT_INFIX_APPLY_EXP");
   IElementType MATH_INCOMING_UNARY_APPLY_EXP = new ResCompositeElementType("MATH_INCOMING_UNARY_APPLY_EXP");
-  IElementType MATH_INDUCTIVE_DEFINITION_DECL = new ResCompositeElementType("MATH_INDUCTIVE_DEFINITION_DECL");
-  IElementType MATH_INFIX_DEFINITION_SIGNATURE = new ResCompositeElementType("MATH_INFIX_DEFINITION_SIGNATURE");
+  IElementType MATH_INDUCTIVE_DEFN_DECL = new ResCompositeElementType("MATH_INDUCTIVE_DEFN_DECL");
+  IElementType MATH_INFIX_DEFN_SIG = new ResCompositeElementType("MATH_INFIX_DEFN_SIG");
   IElementType MATH_JOINING_INFIX_APPLY_EXP = new ResCompositeElementType("MATH_JOINING_INFIX_APPLY_EXP");
   IElementType MATH_LAMBDA_EXP = new ResCompositeElementType("MATH_LAMBDA_EXP");
   IElementType MATH_LITERAL_EXP = new ResCompositeElementType("MATH_LITERAL_EXP");
   IElementType MATH_MULT_INFIX_APPLY_EXP = new ResCompositeElementType("MATH_MULT_INFIX_APPLY_EXP");
-  IElementType MATH_NAME_IDENTIFIER = new ResCompositeElementType("MATH_NAME_IDENTIFIER");
   IElementType MATH_NESTED_EXP = new ResCompositeElementType("MATH_NESTED_EXP");
-  IElementType MATH_OUTFIX_DEFINITION_SIGNATURE = new ResCompositeElementType("MATH_OUTFIX_DEFINITION_SIGNATURE");
+  IElementType MATH_OUTFIX_DEFN_SIG = new ResCompositeElementType("MATH_OUTFIX_DEFN_SIG");
+  IElementType MATH_POSTFIX_DEFN_SIG = new ResCompositeElementType("MATH_POSTFIX_DEFN_SIG");
   IElementType MATH_PREFIX_APPLY_EXP = new ResCompositeElementType("MATH_PREFIX_APPLY_EXP");
-  IElementType MATH_PREFIX_DEFINITION_SIGNATURE = new ResCompositeElementType("MATH_PREFIX_DEFINITION_SIGNATURE");
+  IElementType MATH_PREFIX_DEFN_SIG = new ResCompositeElementType("MATH_PREFIX_DEFN_SIG");
   IElementType MATH_PREFIX_GENERALIZED_CEIL_APPLY_EXP = new ResCompositeElementType("MATH_PREFIX_GENERALIZED_CEIL_APPLY_EXP");
   IElementType MATH_PREFIX_GENERALIZED_SQBR_APPLY_EXP = new ResCompositeElementType("MATH_PREFIX_GENERALIZED_SQBR_APPLY_EXP");
   IElementType MATH_QUANTIFIED_EXP = new ResCompositeElementType("MATH_QUANTIFIED_EXP");
@@ -79,11 +79,12 @@ public interface ResTypes {
   IElementType MATH_SET_COMPREHENSION_EXP = new ResCompositeElementType("MATH_SET_COMPREHENSION_EXP");
   IElementType MATH_SET_ELEMENTS_LIST = new ResCompositeElementType("MATH_SET_ELEMENTS_LIST");
   IElementType MATH_SET_EXP = new ResCompositeElementType("MATH_SET_EXP");
-  IElementType MATH_SINGLETON_VAR_DECL = new ResCompositeElementType("MATH_SINGLETON_VAR_DECL");
   IElementType MATH_SQ_BR_OUTFIX_APPLY_EXP = new ResCompositeElementType("MATH_SQ_BR_OUTFIX_APPLY_EXP");
-  IElementType MATH_STANDARD_DEFINITION_DECL = new ResCompositeElementType("MATH_STANDARD_DEFINITION_DECL");
+  IElementType MATH_STANDARD_DEFN_DECL = new ResCompositeElementType("MATH_STANDARD_DEFN_DECL");
+  IElementType MATH_SYMBOL_NAME = new ResCompositeElementType("MATH_SYMBOL_NAME");
   IElementType MATH_THEOREM_DECL = new ResCompositeElementType("MATH_THEOREM_DECL");
   IElementType MATH_TYPE_ASSERTION_EXP = new ResCompositeElementType("MATH_TYPE_ASSERTION_EXP");
+  IElementType MATH_VAR_DECL = new ResCompositeElementType("MATH_VAR_DECL");
   IElementType MATH_VAR_DECL_GROUP = new ResCompositeElementType("MATH_VAR_DECL_GROUP");
   IElementType MATH_VAR_DEF = new ResCompositeElementType("MATH_VAR_DEF");
   IElementType MODULE_ARG_LIST = new ResCompositeElementType("MODULE_ARG_LIST");
@@ -234,7 +235,7 @@ public interface ResTypes {
   IElementType QUOTIENT = new ResTokenType("/");
   IElementType RANGLE = new ResTokenType("⟩");
   IElementType RARROW = new ResTokenType("->");
-  IElementType RARROW1 = new ResTokenType("→");
+  IElementType RARROW1 = new ResTokenType("⟶");
   IElementType RAW_STRING = new ResTokenType("raw_string");
   IElementType RBRACE = new ResTokenType("}");
   IElementType RBRACK = new ResTokenType("]");
@@ -414,11 +415,11 @@ public interface ResTypes {
       else if (type == MATH_INCOMING_UNARY_APPLY_EXP) {
         return new ResMathIncomingUnaryApplyExpImpl(node);
       }
-      else if (type == MATH_INDUCTIVE_DEFINITION_DECL) {
-        return new ResMathInductiveDefinitionDeclImpl(node);
+      else if (type == MATH_INDUCTIVE_DEFN_DECL) {
+        return new ResMathInductiveDefnDeclImpl(node);
       }
-      else if (type == MATH_INFIX_DEFINITION_SIGNATURE) {
-        return new ResMathInfixDefinitionSignatureImpl(node);
+      else if (type == MATH_INFIX_DEFN_SIG) {
+        return new ResMathInfixDefnSigImpl(node);
       }
       else if (type == MATH_JOINING_INFIX_APPLY_EXP) {
         return new ResMathJoiningInfixApplyExpImpl(node);
@@ -432,20 +433,20 @@ public interface ResTypes {
       else if (type == MATH_MULT_INFIX_APPLY_EXP) {
         return new ResMathMultInfixApplyExpImpl(node);
       }
-      else if (type == MATH_NAME_IDENTIFIER) {
-        return new ResMathNameIdentifierImpl(node);
-      }
       else if (type == MATH_NESTED_EXP) {
         return new ResMathNestedExpImpl(node);
       }
-      else if (type == MATH_OUTFIX_DEFINITION_SIGNATURE) {
-        return new ResMathOutfixDefinitionSignatureImpl(node);
+      else if (type == MATH_OUTFIX_DEFN_SIG) {
+        return new ResMathOutfixDefnSigImpl(node);
+      }
+      else if (type == MATH_POSTFIX_DEFN_SIG) {
+        return new ResMathPostfixDefnSigImpl(node);
       }
       else if (type == MATH_PREFIX_APPLY_EXP) {
         return new ResMathPrefixApplyExpImpl(node);
       }
-      else if (type == MATH_PREFIX_DEFINITION_SIGNATURE) {
-        return new ResMathPrefixDefinitionSignatureImpl(node);
+      else if (type == MATH_PREFIX_DEFN_SIG) {
+        return new ResMathPrefixDefnSigImpl(node);
       }
       else if (type == MATH_PREFIX_GENERALIZED_CEIL_APPLY_EXP) {
         return new ResMathPrefixGeneralizedCeilApplyExpImpl(node);
@@ -474,20 +475,23 @@ public interface ResTypes {
       else if (type == MATH_SET_EXP) {
         return new ResMathSetExpImpl(node);
       }
-      else if (type == MATH_SINGLETON_VAR_DECL) {
-        return new ResMathSingletonVarDeclImpl(node);
-      }
       else if (type == MATH_SQ_BR_OUTFIX_APPLY_EXP) {
         return new ResMathSqBrOutfixApplyExpImpl(node);
       }
-      else if (type == MATH_STANDARD_DEFINITION_DECL) {
-        return new ResMathStandardDefinitionDeclImpl(node);
+      else if (type == MATH_STANDARD_DEFN_DECL) {
+        return new ResMathStandardDefnDeclImpl(node);
+      }
+      else if (type == MATH_SYMBOL_NAME) {
+        return new ResMathSymbolNameImpl(node);
       }
       else if (type == MATH_THEOREM_DECL) {
         return new ResMathTheoremDeclImpl(node);
       }
       else if (type == MATH_TYPE_ASSERTION_EXP) {
         return new ResMathTypeAssertionExpImpl(node);
+      }
+      else if (type == MATH_VAR_DECL) {
+        return new ResMathVarDeclImpl(node);
       }
       else if (type == MATH_VAR_DECL_GROUP) {
         return new ResMathVarDeclGroupImpl(node);

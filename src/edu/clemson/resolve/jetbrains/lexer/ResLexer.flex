@@ -129,7 +129,7 @@ ESCAPES = [abfnrtv]
 ">"                                     { return GREATER; }
 
 "->"                                    { return RARROW; }
-"→"                                     { return RARROW; }
+"⟶"                                     { return RARROW; }
 
 "%"                                     { return MOD; }
 "*"                                     { return MUL; }

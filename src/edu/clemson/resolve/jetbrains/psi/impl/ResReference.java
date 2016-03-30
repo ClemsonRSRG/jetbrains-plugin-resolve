@@ -395,7 +395,7 @@ public class ResReference
         if (paramNode instanceof ResSpecModuleParameters) {
             typeParamDecls.addAll(((ResSpecModuleParameters) paramNode).getTypeParamDeclList());
             constantParamDeclGrps.addAll(((ResSpecModuleParameters) paramNode).getParamDeclList());
-            definitionParams.addAll(((ResSpecModuleParameters) paramNode).getMathStandardDefinitionDeclList());
+            definitionParams.addAll(((ResSpecModuleParameters) paramNode).getMathStandardDefnDeclList());
         }
         if (paramNode instanceof ResImplModuleParameters) {
             //definitionParams.addAll(((ResImplModuleParameters) paramNode).g

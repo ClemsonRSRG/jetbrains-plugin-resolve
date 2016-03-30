@@ -170,11 +170,11 @@ public class ResParser implements PsiParser, LightPsiParser {
     else if (t == MATH_INCOMING_UNARY_APPLY_EXP) {
       r = MathIncomingUnaryApplyExp(b, 0);
     }
-    else if (t == MATH_INDUCTIVE_DEFINITION_DECL) {
-      r = MathInductiveDefinitionDecl(b, 0);
+    else if (t == MATH_INDUCTIVE_DEFN_DECL) {
+      r = MathInductiveDefnDecl(b, 0);
     }
-    else if (t == MATH_INFIX_DEFINITION_SIGNATURE) {
-      r = MathInfixDefinitionSignature(b, 0);
+    else if (t == MATH_INFIX_DEFN_SIG) {
+      r = MathInfixDefnSig(b, 0);
     }
     else if (t == MATH_JOINING_INFIX_APPLY_EXP) {
       r = MathExp(b, 0, 7);
@@ -188,20 +188,20 @@ public class ResParser implements PsiParser, LightPsiParser {
     else if (t == MATH_MULT_INFIX_APPLY_EXP) {
       r = MathExp(b, 0, 3);
     }
-    else if (t == MATH_NAME_IDENTIFIER) {
-      r = MathNameIdentifier(b, 0);
-    }
     else if (t == MATH_NESTED_EXP) {
       r = MathNestedExp(b, 0);
     }
-    else if (t == MATH_OUTFIX_DEFINITION_SIGNATURE) {
-      r = MathOutfixDefinitionSignature(b, 0);
+    else if (t == MATH_OUTFIX_DEFN_SIG) {
+      r = MathOutfixDefnSig(b, 0);
+    }
+    else if (t == MATH_POSTFIX_DEFN_SIG) {
+      r = MathPostfixDefnSig(b, 0);
     }
     else if (t == MATH_PREFIX_APPLY_EXP) {
       r = MathExp(b, 0, 8);
     }
-    else if (t == MATH_PREFIX_DEFINITION_SIGNATURE) {
-      r = MathPrefixDefinitionSignature(b, 0);
+    else if (t == MATH_PREFIX_DEFN_SIG) {
+      r = MathPrefixDefnSig(b, 0);
     }
     else if (t == MATH_PREFIX_GENERALIZED_CEIL_APPLY_EXP) {
       r = MathExp(b, 0, 10);
@@ -230,20 +230,23 @@ public class ResParser implements PsiParser, LightPsiParser {
     else if (t == MATH_SET_EXP) {
       r = MathSetExp(b, 0);
     }
-    else if (t == MATH_SINGLETON_VAR_DECL) {
-      r = MathSingletonVarDecl(b, 0);
-    }
     else if (t == MATH_SQ_BR_OUTFIX_APPLY_EXP) {
       r = MathSqBrOutfixApplyExp(b, 0);
     }
-    else if (t == MATH_STANDARD_DEFINITION_DECL) {
-      r = MathStandardDefinitionDecl(b, 0);
+    else if (t == MATH_STANDARD_DEFN_DECL) {
+      r = MathStandardDefnDecl(b, 0);
+    }
+    else if (t == MATH_SYMBOL_NAME) {
+      r = MathSymbolName(b, 0);
     }
     else if (t == MATH_THEOREM_DECL) {
       r = MathTheoremDecl(b, 0);
     }
     else if (t == MATH_TYPE_ASSERTION_EXP) {
       r = MathExp(b, 0, 12);
+    }
+    else if (t == MATH_VAR_DECL) {
+      r = MathVarDecl(b, 0);
     }
     else if (t == MATH_VAR_DECL_GROUP) {
       r = MathVarDeclGroup(b, 0);
@@ -380,7 +383,7 @@ public class ResParser implements PsiParser, LightPsiParser {
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
     create_token_set_(RECORD_TYPE, TYPE),
-    create_token_set_(MATH_SINGLETON_VAR_DECL, MATH_VAR_DECL_GROUP),
+    create_token_set_(MATH_VAR_DECL, MATH_VAR_DECL_GROUP),
     create_token_set_(MATH_MULT_INFIX_APPLY_EXP, MATH_SELECTOR_EXP),
     create_token_set_(ASSIGN_STATEMENT, ELSE_STATEMENT, IF_STATEMENT, SIMPLE_STATEMENT,
       STATEMENT, SWAP_STATEMENT, WHILE_STATEMENT),
@@ -562,7 +565,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   /* ********************************************************** */
   // TypeModelDecl
   //     | OperationDecl
-  //     | MathStandardDefinitionDecl
+  //     | MathStandardDefnDecl
   //     | ConstraintsClause
   static boolean ConceptItem(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ConceptItem")) return false;
@@ -570,7 +573,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, null);
     r = TypeModelDecl(b, l + 1);
     if (!r) r = OperationDecl(b, l + 1);
-    if (!r) r = MathStandardDefinitionDecl(b, l + 1);
+    if (!r) r = MathStandardDefnDecl(b, l + 1);
     if (!r) r = ConstraintsClause(b, l + 1);
     exit_section_(b, l, m, null, r, false, ConceptItemRecover_parser_);
     return r;
@@ -650,11 +653,12 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ('constraints'|'Constraints') MathAssertionExp ';'
+  // ('constraints') MathAssertionExp ';'
   public static boolean ConstraintsClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ConstraintsClause")) return false;
+    if (!nextTokenIs(b, CONSTRAINTS)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, "<constraints clause>");
+    Marker m = enter_section_(b, l, _NONE_, null);
     r = ConstraintsClause_0(b, l + 1);
     p = r; // pin = 1
     r = r && report_error_(b, MathAssertionExp(b, l + 1));
@@ -663,13 +667,12 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // 'constraints'|'Constraints'
+  // ('constraints')
   private static boolean ConstraintsClause_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ConstraintsClause_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, CONSTRAINTS);
-    if (!r) r = consumeToken(b, "Constraints");
     exit_section_(b, m, null, r);
     return r;
   }
@@ -1086,7 +1089,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   // FacilityDecl
   //     | OperationProcedureDecl
   //     | TypeReprDecl
-  //     | MathStandardDefinitionDecl
+  //     | MathStandardDefnDecl
   static boolean FacilityItem(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FacilityItem")) return false;
     boolean r;
@@ -1094,7 +1097,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = FacilityDecl(b, l + 1);
     if (!r) r = OperationProcedureDecl(b, l + 1);
     if (!r) r = TypeReprDecl(b, l + 1);
-    if (!r) r = MathStandardDefinitionDecl(b, l + 1);
+    if (!r) r = MathStandardDefnDecl(b, l + 1);
     exit_section_(b, l, m, null, r, false, FacilityItemRecover_parser_);
     return r;
   }
@@ -1373,7 +1376,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   //     | OperationProcedureDecl
   //     | FacilityDecl
   //     | ProcedureDecl
-  //     | MathStandardDefinitionDecl
+  //     | MathStandardDefnDecl
   static boolean ImplItem(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ImplItem")) return false;
     boolean r;
@@ -1382,7 +1385,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     if (!r) r = OperationProcedureDecl(b, l + 1);
     if (!r) r = FacilityDecl(b, l + 1);
     if (!r) r = ProcedureDecl(b, l + 1);
-    if (!r) r = MathStandardDefinitionDecl(b, l + 1);
+    if (!r) r = MathStandardDefnDecl(b, l + 1);
     exit_section_(b, l, m, null, r, false, ImplItemRecover_parser_);
     return r;
   }
@@ -1698,7 +1701,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (MathReferenceExp '::')? ('..'|'->'|'→')
+  // (MathReferenceExp '::')? ('..'|'->'|'⟶')
   static boolean MathApplicationOp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathApplicationOp")) return false;
     boolean r;
@@ -1727,7 +1730,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // '..'|'->'|'→'
+  // '..'|'->'|'⟶'
   private static boolean MathApplicationOp_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathApplicationOp_1")) return false;
     boolean r;
@@ -1835,7 +1838,7 @@ public class ResParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // 'Categorical' 'Definition' 'for'
-  // MathDefinitionSignatureList 'is' MathExp ';'
+  // MathPrefixDefnSigs 'is' MathExp ';'
   public static boolean MathCategoricalDefinitionDecl(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathCategoricalDefinitionDecl")) return false;
     if (!nextTokenIs(b, CATEGORICAL)) return false;
@@ -1845,7 +1848,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = r && consumeToken(b, DEFINITION);
     p = r; // pin = 2
     r = r && report_error_(b, consumeToken(b, FOR));
-    r = p && report_error_(b, MathDefinitionSignatureList(b, l + 1)) && r;
+    r = p && report_error_(b, MathPrefixDefnSigs(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, IS)) && r;
     r = p && report_error_(b, MathExp(b, l + 1, -1)) && r;
     r = p && consumeToken(b, SEMICOLON) && r;
@@ -1854,33 +1857,48 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // '(' MathDefnParamList ')'
+  static boolean MathDefinitionParams(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathDefinitionParams")) return false;
+    if (!nextTokenIs(b, LPAREN)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeToken(b, LPAREN);
+    p = r; // pin = 1
+    r = r && report_error_(b, MathDefnParamList(b, l + 1));
+    r = p && consumeToken(b, RPAREN) && r;
+    exit_section_(b, l, m, null, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
   // MathVarDeclGroup (',' MathVarDeclGroup)*
-  static boolean MathDefinitionParamList(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathDefinitionParamList")) return false;
+  static boolean MathDefnParamList(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathDefnParamList")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, null);
     r = MathVarDeclGroup(b, l + 1);
     p = r; // pin = 1
-    r = r && MathDefinitionParamList_1(b, l + 1);
+    r = r && MathDefnParamList_1(b, l + 1);
     exit_section_(b, l, m, null, r, p, ParamListRec_parser_);
     return r || p;
   }
 
   // (',' MathVarDeclGroup)*
-  private static boolean MathDefinitionParamList_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathDefinitionParamList_1")) return false;
+  private static boolean MathDefnParamList_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathDefnParamList_1")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!MathDefinitionParamList_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "MathDefinitionParamList_1", c)) break;
+      if (!MathDefnParamList_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "MathDefnParamList_1", c)) break;
       c = current_position_(b);
     }
     return true;
   }
 
   // ',' MathVarDeclGroup
-  private static boolean MathDefinitionParamList_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathDefinitionParamList_1_0")) return false;
+  private static boolean MathDefnParamList_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathDefnParamList_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, COMMA);
@@ -1890,87 +1908,36 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '(' MathDefinitionParamList ')'
-  static boolean MathDefinitionParams(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathDefinitionParams")) return false;
-    if (!nextTokenIs(b, LPAREN)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, null);
-    r = consumeToken(b, LPAREN);
-    p = r; // pin = 1
-    r = r && report_error_(b, MathDefinitionParamList(b, l + 1));
-    r = p && consumeToken(b, RPAREN) && r;
-    exit_section_(b, l, m, null, r, p, null);
-    return r || p;
-  }
-
-  /* ********************************************************** */
-  // MathPrefixDefinitionSignature
-  //         |  MathOutfixDefinitionSignature
-  //         |  MathInfixDefinitionSignature
-  static boolean MathDefinitionSignature(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathDefinitionSignature")) return false;
+  // MathPrefixDefnSig
+  //         |   MathOutfixDefnSig
+  //         |   MathInfixDefnSig
+  //         |   MathPostfixDefnSig
+  static boolean MathDefnSig(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathDefnSig")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = MathPrefixDefinitionSignature(b, l + 1);
-    if (!r) r = MathOutfixDefinitionSignature(b, l + 1);
-    if (!r) r = MathInfixDefinitionSignature(b, l + 1);
+    r = MathPrefixDefnSig(b, l + 1);
+    if (!r) r = MathOutfixDefnSig(b, l + 1);
+    if (!r) r = MathInfixDefnSig(b, l + 1);
+    if (!r) r = MathPostfixDefnSig(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   /* ********************************************************** */
-  // MathPrefixDefinitionSignature
-  // (',' MathPrefixDefinitionSignature)*
-  static boolean MathDefinitionSignatureList(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathDefinitionSignatureList")) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, null);
-    r = MathPrefixDefinitionSignature(b, l + 1);
-    p = r; // pin = 1
-    r = r && MathDefinitionSignatureList_1(b, l + 1);
-    exit_section_(b, l, m, null, r, p, CategoricalSigListRec_parser_);
-    return r || p;
-  }
-
-  // (',' MathPrefixDefinitionSignature)*
-  private static boolean MathDefinitionSignatureList_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathDefinitionSignatureList_1")) return false;
-    int c = current_position_(b);
-    while (true) {
-      if (!MathDefinitionSignatureList_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "MathDefinitionSignatureList_1", c)) break;
-      c = current_position_(b);
-    }
-    return true;
-  }
-
-  // ',' MathPrefixDefinitionSignature
-  private static boolean MathDefinitionSignatureList_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathDefinitionSignatureList_1_0")) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, null);
-    r = consumeToken(b, COMMA);
-    p = r; // pin = 1
-    r = r && MathPrefixDefinitionSignature(b, l + 1);
-    exit_section_(b, l, m, null, r, p, null);
-    return r || p;
-  }
-
-  /* ********************************************************** */
   // 'Inductive' 'Definition'
-  // MathDefinitionSignature 'is'
+  // MathDefnSig 'is'
   // '(i.)' MathAssertionExp ';'
   // '(ii.)' MathAssertionExp ';'
-  public static boolean MathInductiveDefinitionDecl(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathInductiveDefinitionDecl")) return false;
+  public static boolean MathInductiveDefnDecl(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathInductiveDefnDecl")) return false;
     if (!nextTokenIs(b, INDUCTIVE)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeToken(b, INDUCTIVE);
     r = r && consumeToken(b, DEFINITION);
     p = r; // pin = 2
-    r = r && report_error_(b, MathDefinitionSignature(b, l + 1));
+    r = r && report_error_(b, MathDefnSig(b, l + 1));
     r = p && report_error_(b, consumeToken(b, IS)) && r;
     r = p && report_error_(b, consumeToken(b, IND_BASE)) && r;
     r = p && report_error_(b, MathAssertionExp(b, l + 1)) && r;
@@ -1978,29 +1945,29 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = p && report_error_(b, consumeToken(b, IND_HYPO)) && r;
     r = p && report_error_(b, MathAssertionExp(b, l + 1)) && r;
     r = p && consumeToken(b, SEMICOLON) && r;
-    exit_section_(b, l, m, MATH_INDUCTIVE_DEFINITION_DECL, r, p, null);
+    exit_section_(b, l, m, MATH_INDUCTIVE_DEFN_DECL, r, p, null);
     return r || p;
   }
 
   /* ********************************************************** */
-  // '(' MathSingletonVarDecl ')' MathNameIdentifier
-  //         '(' MathSingletonVarDecl ')' ':' MathExp
-  public static boolean MathInfixDefinitionSignature(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathInfixDefinitionSignature")) return false;
+  // '(' MathVarDecl ')' MathSymbolName
+  //         '(' MathVarDecl ')' ':' MathExp
+  public static boolean MathInfixDefnSig(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathInfixDefnSig")) return false;
     if (!nextTokenIs(b, LPAREN)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeToken(b, LPAREN);
-    r = r && MathSingletonVarDecl(b, l + 1);
+    r = r && MathVarDecl(b, l + 1);
     r = r && consumeToken(b, RPAREN);
-    r = r && MathNameIdentifier(b, l + 1);
+    r = r && MathSymbolName(b, l + 1);
     p = r; // pin = 4
     r = r && report_error_(b, consumeToken(b, LPAREN));
-    r = p && report_error_(b, MathSingletonVarDecl(b, l + 1)) && r;
+    r = p && report_error_(b, MathVarDecl(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, RPAREN)) && r;
     r = p && report_error_(b, consumeToken(b, COLON)) && r;
     r = p && MathExp(b, l + 1, -1) && r;
-    exit_section_(b, l, m, MATH_INFIX_DEFINITION_SIGNATURE, r, p, null);
+    exit_section_(b, l, m, MATH_INFIX_DEFN_SIG, r, p, null);
     return r || p;
   }
 
@@ -2092,78 +2059,43 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier|('o'|'true'|'false'|int|'+'|'-'|'*'|'/'|'>'|'<'|'<='|'>='|'not'|'⌐'|'≼'|'ϒ'|'∪₊'|'≤ᵤ')
-  public static boolean MathNameIdentifier(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathNameIdentifier")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, "<math name identifier>");
-    r = consumeToken(b, IDENTIFIER);
-    if (!r) r = MathNameIdentifier_1(b, l + 1);
-    exit_section_(b, l, m, MATH_NAME_IDENTIFIER, r, false, null);
-    return r;
-  }
-
-  // 'o'|'true'|'false'|int|'+'|'-'|'*'|'/'|'>'|'<'|'<='|'>='|'not'|'⌐'|'≼'|'ϒ'|'∪₊'|'≤ᵤ'
-  private static boolean MathNameIdentifier_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathNameIdentifier_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, CAT);
-    if (!r) r = consumeToken(b, TRUE);
-    if (!r) r = consumeToken(b, FALSE);
-    if (!r) r = consumeToken(b, INT);
-    if (!r) r = consumeToken(b, PLUS);
-    if (!r) r = consumeToken(b, MINUS);
-    if (!r) r = consumeToken(b, MUL);
-    if (!r) r = consumeToken(b, QUOTIENT);
-    if (!r) r = consumeToken(b, GREATER);
-    if (!r) r = consumeToken(b, LESS);
-    if (!r) r = consumeToken(b, LESS_OR_EQUAL);
-    if (!r) r = consumeToken(b, GREATER_OR_EQUAL);
-    if (!r) r = consumeToken(b, NOT);
-    if (!r) r = consumeToken(b, NEG);
-    if (!r) r = consumeToken(b, PRECCURLYEQ);
-    if (!r) r = consumeToken(b, VROD);
-    if (!r) r = consumeToken(b, UNION_PLUS);
-    if (!r) r = consumeToken(b, LESS_OR_EQUAL_U);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // ('|'|'||'|'<') MathSingletonVarDecl ('|'|'||'|'>')  ':' MathExp
-  public static boolean MathOutfixDefinitionSignature(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathOutfixDefinitionSignature")) return false;
+  // ('|'|'||'|'<'|'⎝'|'⟨') MathVarDecl ('⟩'|'⎠'|'|'|'||'|'>') ':' MathExp
+  public static boolean MathOutfixDefnSig(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathOutfixDefnSig")) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, "<math outfix definition signature>");
-    r = MathOutfixDefinitionSignature_0(b, l + 1);
+    Marker m = enter_section_(b, l, _NONE_, "<math outfix defn sig>");
+    r = MathOutfixDefnSig_0(b, l + 1);
     p = r; // pin = 1
-    r = r && report_error_(b, MathSingletonVarDecl(b, l + 1));
-    r = p && report_error_(b, MathOutfixDefinitionSignature_2(b, l + 1)) && r;
+    r = r && report_error_(b, MathVarDecl(b, l + 1));
+    r = p && report_error_(b, MathOutfixDefnSig_2(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, COLON)) && r;
     r = p && MathExp(b, l + 1, -1) && r;
-    exit_section_(b, l, m, MATH_OUTFIX_DEFINITION_SIGNATURE, r, p, null);
+    exit_section_(b, l, m, MATH_OUTFIX_DEFN_SIG, r, p, null);
     return r || p;
   }
 
-  // '|'|'||'|'<'
-  private static boolean MathOutfixDefinitionSignature_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathOutfixDefinitionSignature_0")) return false;
+  // '|'|'||'|'<'|'⎝'|'⟨'
+  private static boolean MathOutfixDefnSig_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathOutfixDefnSig_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, BAR);
     if (!r) r = consumeToken(b, DBL_BAR);
     if (!r) r = consumeToken(b, LESS);
+    if (!r) r = consumeToken(b, LCURVE);
+    if (!r) r = consumeToken(b, LANGLE);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // '|'|'||'|'>'
-  private static boolean MathOutfixDefinitionSignature_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathOutfixDefinitionSignature_2")) return false;
+  // '⟩'|'⎠'|'|'|'||'|'>'
+  private static boolean MathOutfixDefnSig_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathOutfixDefnSig_2")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, BAR);
+    r = consumeToken(b, RANGLE);
+    if (!r) r = consumeToken(b, RCURVE);
+    if (!r) r = consumeToken(b, BAR);
     if (!r) r = consumeToken(b, DBL_BAR);
     if (!r) r = consumeToken(b, GREATER);
     exit_section_(b, m, null, r);
@@ -2171,36 +2103,150 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MathNameIdentifier MathDefinitionParams? ':' MathExp
-  public static boolean MathPrefixDefinitionSignature(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathPrefixDefinitionSignature")) return false;
+  // MathVarDecl '[' MathVarDecl ']' ':' MathExp
+  public static boolean MathPostfixDefnSig(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathPostfixDefnSig")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, "<math prefix definition signature>");
-    r = MathNameIdentifier(b, l + 1);
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = MathVarDecl(b, l + 1);
     p = r; // pin = 1
-    r = r && report_error_(b, MathPrefixDefinitionSignature_1(b, l + 1));
+    r = r && report_error_(b, consumeToken(b, LBRACK));
+    r = p && report_error_(b, MathVarDecl(b, l + 1)) && r;
+    r = p && report_error_(b, consumeToken(b, RBRACK)) && r;
     r = p && report_error_(b, consumeToken(b, COLON)) && r;
     r = p && MathExp(b, l + 1, -1) && r;
-    exit_section_(b, l, m, MATH_PREFIX_DEFINITION_SIGNATURE, r, p, null);
+    exit_section_(b, l, m, MATH_POSTFIX_DEFN_SIG, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
+  // MathPrefixNameList MathDefinitionParams? ':' MathExp
+  public static boolean MathPrefixDefnSig(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathPrefixDefnSig")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, "<math prefix defn sig>");
+    r = MathPrefixNameList(b, l + 1);
+    p = r; // pin = 1
+    r = r && report_error_(b, MathPrefixDefnSig_1(b, l + 1));
+    r = p && report_error_(b, consumeToken(b, COLON)) && r;
+    r = p && MathExp(b, l + 1, -1) && r;
+    exit_section_(b, l, m, MATH_PREFIX_DEFN_SIG, r, p, null);
     return r || p;
   }
 
   // MathDefinitionParams?
-  private static boolean MathPrefixDefinitionSignature_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathPrefixDefinitionSignature_1")) return false;
+  private static boolean MathPrefixDefnSig_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathPrefixDefnSig_1")) return false;
     MathDefinitionParams(b, l + 1);
     return true;
   }
 
   /* ********************************************************** */
-  // '::' MathNameIdentifier
+  // MathPrefixDefnSig
+  // (',' MathPrefixDefnSig)*
+  static boolean MathPrefixDefnSigs(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathPrefixDefnSigs")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = MathPrefixDefnSig(b, l + 1);
+    r = r && MathPrefixDefnSigs_1(b, l + 1);
+    exit_section_(b, l, m, null, r, false, CategoricalSigListRec_parser_);
+    return r;
+  }
+
+  // (',' MathPrefixDefnSig)*
+  private static boolean MathPrefixDefnSigs_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathPrefixDefnSigs_1")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!MathPrefixDefnSigs_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "MathPrefixDefnSigs_1", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // ',' MathPrefixDefnSig
+  private static boolean MathPrefixDefnSigs_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathPrefixDefnSigs_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && MathPrefixDefnSig(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // !(':'|';'|'(')
+  static boolean MathPrefixListRec(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathPrefixListRec")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NOT_, null);
+    r = !MathPrefixListRec_0(b, l + 1);
+    exit_section_(b, l, m, null, r, false, null);
+    return r;
+  }
+
+  // ':'|';'|'('
+  private static boolean MathPrefixListRec_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathPrefixListRec_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COLON);
+    if (!r) r = consumeToken(b, SEMICOLON);
+    if (!r) r = consumeToken(b, LPAREN);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // MathSymbolName (',' MathSymbolName)*
+  static boolean MathPrefixNameList(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathPrefixNameList")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = MathSymbolName(b, l + 1);
+    p = r; // pin = 1
+    r = r && MathPrefixNameList_1(b, l + 1);
+    exit_section_(b, l, m, null, r, p, MathPrefixListRec_parser_);
+    return r || p;
+  }
+
+  // (',' MathSymbolName)*
+  private static boolean MathPrefixNameList_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathPrefixNameList_1")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!MathPrefixNameList_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "MathPrefixNameList_1", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // ',' MathSymbolName
+  private static boolean MathPrefixNameList_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathPrefixNameList_1_0")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeToken(b, COMMA);
+    p = r; // pin = 1
+    r = r && MathSymbolName(b, l + 1);
+    exit_section_(b, l, m, null, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
+  // '::' MathSymbolName
   public static boolean MathQualifiedReferenceExp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathQualifiedReferenceExp")) return false;
     if (!nextTokenIs(b, COLONCOLON)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _LEFT_, null);
     r = consumeToken(b, COLONCOLON);
-    r = r && MathNameIdentifier(b, l + 1);
+    r = r && MathSymbolName(b, l + 1);
     exit_section_(b, l, m, MATH_REFERENCE_EXP, r, false, null);
     return r;
   }
@@ -2234,18 +2280,18 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MathNameIdentifier
+  // MathSymbolName
   public static boolean MathReferenceExp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathReferenceExp")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, "<math reference exp>");
-    r = MathNameIdentifier(b, l + 1);
+    r = MathSymbolName(b, l + 1);
     exit_section_(b, l, m, MATH_REFERENCE_EXP, r, false, null);
     return r;
   }
 
   /* ********************************************************** */
-  // (MathReferenceExp '::')? ('<' | '>' | '<=' | '≤' | '≤ᵤ' | '>=' | '≥' | '=' | '/=')
+  // (MathReferenceExp '::')? ('<'|'>'|'<='|'≤'|'≤ᵤ'|'>='|'≥'|'='|'/=')
   static boolean MathRelationalOp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathRelationalOp")) return false;
     boolean r;
@@ -2274,7 +2320,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // '<' | '>' | '<=' | '≤' | '≤ᵤ' | '>=' | '≥' | '=' | '/='
+  // '<'|'>'|'<='|'≤'|'≤ᵤ'|'>='|'≥'|'='|'/='
   private static boolean MathRelationalOp_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathRelationalOp_1")) return false;
     boolean r;
@@ -2351,48 +2397,33 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MathVarDef ':' MathExp
-  public static boolean MathSingletonVarDecl(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathSingletonVarDecl")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, null);
-    r = MathVarDef(b, l + 1);
-    r = r && consumeToken(b, COLON);
-    p = r; // pin = 2
-    r = r && MathExp(b, l + 1, -1);
-    exit_section_(b, l, m, MATH_SINGLETON_VAR_DECL, r, p, null);
-    return r || p;
-  }
-
-  /* ********************************************************** */
   // ('Implicit')? 'Definition'
-  //     MathDefinitionSignature ('is' MathAssertionExp)? ';'
-  public static boolean MathStandardDefinitionDecl(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathStandardDefinitionDecl")) return false;
-    if (!nextTokenIs(b, "<math standard definition decl>", DEFINITION, IMPLICIT)) return false;
+  //     MathDefnSig ('is' MathAssertionExp)? ';'
+  public static boolean MathStandardDefnDecl(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathStandardDefnDecl")) return false;
+    if (!nextTokenIs(b, "<math standard defn decl>", DEFINITION, IMPLICIT)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, "<math standard definition decl>");
-    r = MathStandardDefinitionDecl_0(b, l + 1);
+    Marker m = enter_section_(b, l, _NONE_, "<math standard defn decl>");
+    r = MathStandardDefnDecl_0(b, l + 1);
     r = r && consumeToken(b, DEFINITION);
     p = r; // pin = 2
-    r = r && report_error_(b, MathDefinitionSignature(b, l + 1));
-    r = p && report_error_(b, MathStandardDefinitionDecl_3(b, l + 1)) && r;
+    r = r && report_error_(b, MathDefnSig(b, l + 1));
+    r = p && report_error_(b, MathStandardDefnDecl_3(b, l + 1)) && r;
     r = p && consumeToken(b, SEMICOLON) && r;
-    exit_section_(b, l, m, MATH_STANDARD_DEFINITION_DECL, r, p, null);
+    exit_section_(b, l, m, MATH_STANDARD_DEFN_DECL, r, p, null);
     return r || p;
   }
 
   // ('Implicit')?
-  private static boolean MathStandardDefinitionDecl_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathStandardDefinitionDecl_0")) return false;
-    MathStandardDefinitionDecl_0_0(b, l + 1);
+  private static boolean MathStandardDefnDecl_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathStandardDefnDecl_0")) return false;
+    MathStandardDefnDecl_0_0(b, l + 1);
     return true;
   }
 
   // ('Implicit')
-  private static boolean MathStandardDefinitionDecl_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathStandardDefinitionDecl_0_0")) return false;
+  private static boolean MathStandardDefnDecl_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathStandardDefnDecl_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, IMPLICIT);
@@ -2401,15 +2432,15 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   // ('is' MathAssertionExp)?
-  private static boolean MathStandardDefinitionDecl_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathStandardDefinitionDecl_3")) return false;
-    MathStandardDefinitionDecl_3_0(b, l + 1);
+  private static boolean MathStandardDefnDecl_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathStandardDefnDecl_3")) return false;
+    MathStandardDefnDecl_3_0(b, l + 1);
     return true;
   }
 
   // 'is' MathAssertionExp
-  private static boolean MathStandardDefinitionDecl_3_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathStandardDefinitionDecl_3_0")) return false;
+  private static boolean MathStandardDefnDecl_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathStandardDefnDecl_3_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, IS);
@@ -2419,7 +2450,46 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ('Theorem'|'Corollary') identifier ':'
+  // identifier|('o'|'true'|'false'|int|'+'|'-'|'*'|'/'|'>'|'<'|'<='|'>='|'not'|'⌐'|'≼'|'ϒ'|'∪₊'|'≤ᵤ')
+  public static boolean MathSymbolName(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathSymbolName")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, "<math symbol name>");
+    r = consumeToken(b, IDENTIFIER);
+    if (!r) r = MathSymbolName_1(b, l + 1);
+    exit_section_(b, l, m, MATH_SYMBOL_NAME, r, false, null);
+    return r;
+  }
+
+  // 'o'|'true'|'false'|int|'+'|'-'|'*'|'/'|'>'|'<'|'<='|'>='|'not'|'⌐'|'≼'|'ϒ'|'∪₊'|'≤ᵤ'
+  private static boolean MathSymbolName_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathSymbolName_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, CAT);
+    if (!r) r = consumeToken(b, TRUE);
+    if (!r) r = consumeToken(b, FALSE);
+    if (!r) r = consumeToken(b, INT);
+    if (!r) r = consumeToken(b, PLUS);
+    if (!r) r = consumeToken(b, MINUS);
+    if (!r) r = consumeToken(b, MUL);
+    if (!r) r = consumeToken(b, QUOTIENT);
+    if (!r) r = consumeToken(b, GREATER);
+    if (!r) r = consumeToken(b, LESS);
+    if (!r) r = consumeToken(b, LESS_OR_EQUAL);
+    if (!r) r = consumeToken(b, GREATER_OR_EQUAL);
+    if (!r) r = consumeToken(b, NOT);
+    if (!r) r = consumeToken(b, NEG);
+    if (!r) r = consumeToken(b, PRECCURLYEQ);
+    if (!r) r = consumeToken(b, VROD);
+    if (!r) r = consumeToken(b, UNION_PLUS);
+    if (!r) r = consumeToken(b, LESS_OR_EQUAL_U);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // ('Corollary'|'Theorem') identifier ':'
   // MathAssertionExp ';'
   public static boolean MathTheoremDecl(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathTheoremDecl")) return false;
@@ -2436,15 +2506,30 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // 'Theorem'|'Corollary'
+  // 'Corollary'|'Theorem'
   private static boolean MathTheoremDecl_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathTheoremDecl_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, THEOREM);
-    if (!r) r = consumeToken(b, COROLLARY);
+    r = consumeToken(b, COROLLARY);
+    if (!r) r = consumeToken(b, THEOREM);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  /* ********************************************************** */
+  // MathVarDef ':' MathExp
+  public static boolean MathVarDecl(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathVarDecl")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = MathVarDef(b, l + 1);
+    r = r && consumeToken(b, COLON);
+    p = r; // pin = 2
+    r = r && MathExp(b, l + 1, -1);
+    exit_section_(b, l, m, MATH_VAR_DECL, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -3033,17 +3118,17 @@ public class ResParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // MathTheoremDecl
-  //         | MathStandardDefinitionDecl
+  //         | MathStandardDefnDecl
   //         | MathCategoricalDefinitionDecl
-  //         | MathInductiveDefinitionDecl
+  //         | MathInductiveDefnDecl
   static boolean PrecisItem(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PrecisItem")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, null);
     r = MathTheoremDecl(b, l + 1);
-    if (!r) r = MathStandardDefinitionDecl(b, l + 1);
+    if (!r) r = MathStandardDefnDecl(b, l + 1);
     if (!r) r = MathCategoricalDefinitionDecl(b, l + 1);
-    if (!r) r = MathInductiveDefinitionDecl(b, l + 1);
+    if (!r) r = MathInductiveDefnDecl(b, l + 1);
     exit_section_(b, l, m, null, r, false, PrecisItemRecover_parser_);
     return r;
   }
@@ -3375,14 +3460,14 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // TypeParamDecl | ParamDecl | MathStandardDefinitionDecl
+  // TypeParamDecl | ParamDecl | MathStandardDefnDecl
   static boolean SpecParamDecl(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SpecParamDecl")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = TypeParamDecl(b, l + 1);
     if (!r) r = ParamDecl(b, l + 1);
-    if (!r) r = MathStandardDefinitionDecl(b, l + 1);
+    if (!r) r = MathStandardDefnDecl(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -3942,7 +4027,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // '=' | '/=' | '<' | '<=' | '>' | '>='
+  // '='|'/='|'<'|'<='|'>'|'>='
   private static boolean RelationalInfixExp_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RelationalInfixExp_0")) return false;
     boolean r;
@@ -3957,7 +4042,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // '+' | '-'
+  // '+'|'-'
   private static boolean AddInfixExp_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AddInfixExp_0")) return false;
     boolean r;
@@ -3968,7 +4053,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // '*' | '/' | '%'
+  // '*'|'/'|'%'
   private static boolean MulInfixExp_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MulInfixExp_0")) return false;
     boolean r;
@@ -3991,7 +4076,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // '+' | '-' | 'not'
+  // '+'|'-'|'not'
   private static boolean UnaryExp_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "UnaryExp_0")) return false;
     boolean r;
@@ -4059,11 +4144,11 @@ public class ResParser implements PsiParser, LightPsiParser {
   // 6: PREFIX(MathBarOutfixApplyExp) PREFIX(MathAngleOutfixApplyExp) PREFIX(MathDblBarOutfixApplyExp) PREFIX(MathSqBrOutfixApplyExp) PREFIX(MathCupOutfixApplyExp) PREFIX(MathAngle1OutfixApplyExp)
   // 7: PREFIX(MathIncomingUnaryApplyExp)
   // 8: BINARY(MathJoiningInfixApplyExp)
-  // 9: POSTFIX(MathPrefixApplyExp)
+  // 9: BINARY(MathPrefixApplyExp)
   // 10: POSTFIX(MathPrefixGeneralizedSqbrApplyExp)
   // 11: POSTFIX(MathPrefixGeneralizedCeilApplyExp)
-  // 12: ATOM(MathNestedExp)
-  // 13: ATOM(MathSymbolExp) BINARY(MathTypeAssertionExp) PREFIX(MathSetComprehensionExp) ATOM(MathSetExp) ATOM(MathLambdaExp) BINARY(MathSelectorExp) ATOM(MathAlternativeExp) ATOM(MathCartProdExp) ATOM(MathLiteralExp)
+  // 12: PREFIX(MathNestedExp)
+  // 13: ATOM(MathSymbolExp) BINARY(MathTypeAssertionExp) PREFIX(MathSetComprehensionExp) ATOM(MathSetExp) PREFIX(MathLambdaExp) BINARY(MathSelectorExp) ATOM(MathAlternativeExp) ATOM(MathCartProdExp) ATOM(MathLiteralExp)
   public static boolean MathExp(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "MathExp")) return false;
     addVariant(b, "<math exp>");
@@ -4123,8 +4208,9 @@ public class ResParser implements PsiParser, LightPsiParser {
         r = MathExp(b, l, 8);
         exit_section_(b, l, m, MATH_JOINING_INFIX_APPLY_EXP, r, true, null);
       }
-      else if (g < 9 && MathPrefixApplyExp_0(b, l + 1)) {
-        r = true;
+      else if (g < 9 && consumeTokenSmart(b, LPAREN)) {
+        r = report_error_(b, MathExp(b, l, 9));
+        r = MathPrefixApplyExp_1(b, l + 1) && r;
         exit_section_(b, l, m, MATH_PREFIX_APPLY_EXP, r, true, null);
       }
       else if (g < 10 && MathPrefixGeneralizedSqbrApplyExp_0(b, l + 1)) {
@@ -4241,16 +4327,51 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // '(' MathArgList ')'
-  private static boolean MathPrefixApplyExp_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathPrefixApplyExp_0")) return false;
+  // (',' MathExp)* ')'
+  private static boolean MathPrefixApplyExp_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathPrefixApplyExp_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokenSmart(b, LPAREN);
-    r = r && MathArgList(b, l + 1);
+    r = MathPrefixApplyExp_1_0(b, l + 1);
     r = r && consumeToken(b, RPAREN);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  // (',' MathExp)*
+  private static boolean MathPrefixApplyExp_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathPrefixApplyExp_1_0")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!MathPrefixApplyExp_1_0_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "MathPrefixApplyExp_1_0", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // ',' MathExp
+  private static boolean MathPrefixApplyExp_1_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathPrefixApplyExp_1_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && MathExp(b, l + 1, -1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  public static boolean MathNestedExp(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathNestedExp")) return false;
+    if (!nextTokenIsFast(b, LPAREN)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeTokenSmart(b, LPAREN);
+    p = r;
+    r = p && MathExp(b, l, 12);
+    r = p && report_error_(b, consumeToken(b, RPAREN)) && r;
+    exit_section_(b, l, m, MATH_NESTED_EXP, r, p, null);
+    return r || p;
   }
 
   // '[' GeneralizedApplyArgList ']'
@@ -4275,20 +4396,6 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = r && consumeToken(b, RCEIL);
     exit_section_(b, m, null, r);
     return r;
-  }
-
-  // '(' MathAssertionExp ')'
-  public static boolean MathNestedExp(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathNestedExp")) return false;
-    if (!nextTokenIsFast(b, LPAREN)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, null);
-    r = consumeTokenSmart(b, LPAREN);
-    p = r; // pin = 1
-    r = r && report_error_(b, MathAssertionExp(b, l + 1));
-    r = p && consumeToken(b, RPAREN) && r;
-    exit_section_(b, l, m, MATH_NESTED_EXP, r, p, null);
-    return r || p;
   }
 
   // MathReferenceExp MathQualifiedReferenceExp?
@@ -4322,13 +4429,13 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // '{' MathSingletonVarDecl '|'
+  // '{' MathVarDecl '|'
   private static boolean MathSetComprehensionExp_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathSetComprehensionExp_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeTokenSmart(b, LBRACE);
-    r = r && MathSingletonVarDecl(b, l + 1);
+    r = r && MathVarDecl(b, l + 1);
     r = r && consumeToken(b, BAR);
     exit_section_(b, m, null, r);
     return r;
@@ -4355,46 +4462,60 @@ public class ResParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // lambda MathDefinitionParams '.' '(' MathExp ')'
   public static boolean MathLambdaExp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathLambdaExp")) return false;
     if (!nextTokenIsFast(b, LAMBDA)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, null);
-    r = consumeTokenSmart(b, LAMBDA);
-    p = r; // pin = 1
-    r = r && report_error_(b, MathDefinitionParams(b, l + 1));
-    r = p && report_error_(b, consumeToken(b, DOT)) && r;
-    r = p && report_error_(b, consumeToken(b, LPAREN)) && r;
-    r = p && report_error_(b, MathExp(b, l + 1, -1)) && r;
-    r = p && consumeToken(b, RPAREN) && r;
+    r = MathLambdaExp_0(b, l + 1);
+    p = r;
+    r = p && MathExp(b, l, -1);
+    r = p && report_error_(b, consumeToken(b, RPAREN)) && r;
     exit_section_(b, l, m, MATH_LAMBDA_EXP, r, p, null);
     return r || p;
   }
 
-  // '{{' (MathAlternativeItemExp)* '}}'
-  public static boolean MathAlternativeExp(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathAlternativeExp")) return false;
-    if (!nextTokenIsFast(b, DBL_LBRACE)) return false;
+  // lambda MathDefinitionParams '.' '('
+  private static boolean MathLambdaExp_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathLambdaExp_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokenSmart(b, DBL_LBRACE);
-    r = r && MathAlternativeExp_1(b, l + 1);
-    r = r && consumeToken(b, DBL_RBRACE);
-    exit_section_(b, m, MATH_ALTERNATIVE_EXP, r);
+    r = consumeTokenSmart(b, LAMBDA);
+    r = r && MathDefinitionParams(b, l + 1);
+    r = r && consumeToken(b, DOT);
+    r = r && consumeToken(b, LPAREN);
+    exit_section_(b, m, null, r);
     return r;
   }
 
-  // (MathAlternativeItemExp)*
+  // '{{' (MathAlternativeItemExp)+ '}}'
+  public static boolean MathAlternativeExp(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathAlternativeExp")) return false;
+    if (!nextTokenIsFast(b, DBL_LBRACE)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeTokenSmart(b, DBL_LBRACE);
+    r = r && MathAlternativeExp_1(b, l + 1);
+    p = r; // pin = 2
+    r = r && consumeToken(b, DBL_RBRACE);
+    exit_section_(b, l, m, MATH_ALTERNATIVE_EXP, r, p, null);
+    return r || p;
+  }
+
+  // (MathAlternativeItemExp)+
   private static boolean MathAlternativeExp_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathAlternativeExp_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = MathAlternativeExp_1_0(b, l + 1);
     int c = current_position_(b);
-    while (true) {
+    while (r) {
       if (!MathAlternativeExp_1_0(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "MathAlternativeExp_1", c)) break;
       c = current_position_(b);
     }
-    return true;
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   // (MathAlternativeItemExp)
@@ -4487,6 +4608,11 @@ public class ResParser implements PsiParser, LightPsiParser {
   final static Parser ItemsRecover_parser_ = new Parser() {
     public boolean parse(PsiBuilder b, int l) {
       return ItemsRecover(b, l + 1);
+    }
+  };
+  final static Parser MathPrefixListRec_parser_ = new Parser() {
+    public boolean parse(PsiBuilder b, int l) {
+      return MathPrefixListRec(b, l + 1);
     }
   };
   final static Parser MathSetEleRecover_parser_ = new Parser() {

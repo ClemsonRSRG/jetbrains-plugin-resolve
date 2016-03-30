@@ -179,7 +179,7 @@ public class RESOLVEKeywordCompletionContributor
     //TODO: if you look were we extend this, remove lambda from there and give it it's own pattern...
     private static Capture<PsiElement> mathQuantifierKeywords() {
         return psiElement(ResTypes.IDENTIFIER)
-                .withParent(psiElement(ResTypes.MATH_NAME_IDENTIFIER)
+                .withParent(psiElement(ResTypes.MATH_SYMBOL_NAME)
                         .withParent(psiElement(ResTypes.MATH_REFERENCE_EXP)
                                 .andOr(psiElement().isFirstAcceptedChild(psiElement()),
                                        psiElement().withParent(ResMathQuantifiedExp.class))));
