@@ -119,6 +119,7 @@ ESCAPES = [abfnrtv]
 "∩"                                     { return INTERSECT; }
 "∩₊"                                    { return INTERSECT_PLUS; }
 
+"λ"                                     { return LAMBDA; }
 "<="                                    { return LESS_OR_EQUAL; }
 "≤"                                     { return LESS_OR_EQUAL; }
 "≤ᵤ"                                    { return LESS_OR_EQUAL_U; }
@@ -129,7 +130,7 @@ ESCAPES = [abfnrtv]
 ">"                                     { return GREATER; }
 
 "->"                                    { return RARROW; }
-"⟶"                                     { return RARROW; }
+"⟶"                                   { return RARROW; }
 
 "%"                                     { return MOD; }
 "*"                                     { return MUL; }

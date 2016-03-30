@@ -203,6 +203,7 @@ public interface ResTypes {
   IElementType IS_NOT_IN = new ResTokenType("is_not_in");
   IElementType IS_NOT_IN1 = new ResTokenType("∉");
   IElementType LAMBDA = new ResTokenType("lambda");
+  IElementType LAMBDA1 = new ResTokenType("λ");
   IElementType LANGLE = new ResTokenType("⟨");
   IElementType LBRACE = new ResTokenType("{");
   IElementType LBRACK = new ResTokenType("[");

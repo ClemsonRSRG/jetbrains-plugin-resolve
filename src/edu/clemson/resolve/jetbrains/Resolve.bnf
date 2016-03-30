@@ -138,6 +138,7 @@
         THEOREM                 = 'Theorem'
         COROLLARY               = 'Corollary'
         LAMBDA                  = 'lambda'
+        LAMBDA1                 = 'λ'
         FAMILY_TYPE             = 'Type'
         PARAM_TYPE              = 'type'
         FAMILY                  = 'family'
@@ -574,28 +575,22 @@ MathIdentInfixApplyExp  ::= MathExp identifier MathExp
 
 MathApplicationInfixApplyExp ::= MathExp MathApplicationOp MathExp
 MathIncomingUnaryApplyExp ::= '@' MathExp
-MathPrefixApplyExp ::= MathExp '(' MathExp (',' MathExp)* ')' {pin=2}//'(' MathArgList ')' {pin=2}
+MathPrefixApplyExp ::= MathExp '(' MathArgList ')' {pin=2}
 MathPrefixGeneralizedSqbrApplyExp ::= MathExp '[' GeneralizedApplyArgList']' {pin=2 recoverWhile=GeneralizedApplyArgList}
 MathPrefixGeneralizedCeilApplyExp ::= MathExp '⎡' GeneralizedApplyArgList'⎤' {pin=2 recoverWhile=GeneralizedApplyArgList}
 private GeneralizedApplyArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=GeneralizedApplyRecover}
 private GeneralizedApplyRecover ::= !(']'|'⎤')
 
 MathTypeAssertionExp ::= MathExp ':' MathExp {pin=2}
-MathNestedExp ::= '(' MathAssertionExp ')' {pin=2}
+MathNestedExp ::= '(' MathAssertionExp ')' {pin=1}
 
-MathBarOutfixApplyExp ::= '|' MathExp '|'
-MathDblBarOutfixApplyExp ::= '||' MathExp '||'
-MathAngleOutfixApplyExp ::= '<' MathExp '>'
-MathAngle1OutfixApplyExp ::= '⟨' MathExp '⟩'
-MathSqBrOutfixApplyExp ::= '[' MathExp ']'
-MathCupOutfixApplyExp ::= '⎝' MathExp '⎠'
-
+private MathMultOp ::= (MathReferenceExp '::')? ('*'|'/'|'%')
 private MathAddOp ::= (MathReferenceExp '::')? ('+'|'-'|'~')
-private MathMultOp ::= (MathReferenceExp '::')? ('*'|'/')
-private MathBooleanOp ::= (MathReferenceExp '::')? ('and'|'or'|'implies'|'iff'|'is_in'|'∈'|'is_not_in')
-private MathRelationalOp ::= (MathReferenceExp '::')? ('<'|'>'|'<='|'≤'|'≤ᵤ'|'>='|'≥'|'='|'/=')
 private MathJoiningOp ::= (MathReferenceExp '::')? ('o'|'union'|'∪'|'∪₊'|'intersect'|'∩'|'∩₊')
 private MathApplicationOp ::= (MathReferenceExp '::')? ('..'|'->'|'⟶')
+private MathRelationalOp ::= (MathReferenceExp '::')? ('<'|'>'|'<='|'≤'|'≤ᵤ'|'>='|'≥'|'='|'/=')
+
+private MathBooleanOp ::= (MathReferenceExp '::')? ('and'|'or'|'implies'|'iff'|'is_in'|'∈'|'is_not_in')
 
 private MathPrimary ::=
           MathSymbolExp
@@ -608,14 +603,33 @@ private MathPrimary ::=
         | MathCartProdExp
         | MathLiteralExp
 
+MathLiteralExp ::= (int|'true'|'false')
+
+MathCartProdExp ::= 'Cart_Prod' ResMathCartVarGroup+  'end' {pin=1}
+private ResMathCartVarGroup ::= MathVarDeclGroup ';' {pin=1}
+
+MathSymbolExp ::=  MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}
+left MathQualifiedReferenceExp ::= '::' MathSymbolName {elementType=MathReferenceExp}
+MathReferenceExp ::= MathSymbolName {methods=[getReference getQualifier getIdentifier] extends=MathExp}
+
+MathBarOutfixApplyExp ::= '|' MathExp '|'
+MathDblBarOutfixApplyExp ::= '||' MathExp '||'
+MathAngleOutfixApplyExp ::= '<' MathExp '>'
+MathAngle1OutfixApplyExp ::= '⟨' MathExp '⟩'
+MathSqBrOutfixApplyExp ::= '[' MathExp ']'
+MathCupOutfixApplyExp ::= '⎝' MathExp '⎠'
+
 MathSelectorExp ::= MathExp '.' MathExp
 
-MathLambdaExp ::= lambda MathDefinitionParams '.' '(' MathExp ')' {pin=5}
+MathSetComprehensionExp ::= '{' MathVarDecl '|' MathExp '}'
+
+MathSetExp ::= '{' MathSetElementsList? '}' {pin=2}
+MathSetElementsList ::= MathExp (',' MathExp)* {recoverWhile=MathSetEleRecover}
+private MathSetEleRecover ::= !('}')
+
+MathLambdaExp ::= (lambda|'λ') MathDefinitionParams '.' '(' MathExp ')' {pin=5}
 MathAlternativeExp ::= '{{' (MathAlternativeItemExp)+ '}}' {pin=2}
 MathAlternativeItemExp ::= MathExp ('if' MathExp ';' | 'otherwise' ';') {pin=1}
-
-private ResMathCartVarGroup ::= MathVarDeclGroup ';' {pin=1}
-MathCartProdExp ::= 'Cart_Prod' ResMathCartVarGroup+  'end' {pin=1}
 
 fake MathInfixApplyExp ::= MathExp+ {
   methods=[left="MathExp[0]" right="MathExp[1]"]
@@ -623,13 +637,4 @@ fake MathInfixApplyExp ::= MathExp+ {
 
 private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
 
-MathSymbolExp ::=  MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}
-left MathQualifiedReferenceExp ::= '::' MathSymbolName {elementType=MathReferenceExp}
-MathReferenceExp ::= MathSymbolName {methods=[getReference getQualifier getIdentifier] extends=MathExp}
 
-MathSetComprehensionExp ::= '{' MathVarDecl '|' MathExp '}'
-MathSetExp ::= '{' MathSetElementsList? '}' {pin=2}
-MathSetElementsList ::= MathExp (',' MathExp)* {recoverWhile=MathSetEleRecover}
-private MathSetEleRecover ::= !('}')
-
-MathLiteralExp ::= (int|'true'|'false')
