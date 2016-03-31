@@ -63,6 +63,13 @@
         </context>
     </template>
 
+    <template description='⊠' name='times' toReformat='true' toShortenFQNames='true'
+              value='⊠'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
     <template description='∈' name='in' toReformat='true' toShortenFQNames='true'
               value='∈'>
         <context>

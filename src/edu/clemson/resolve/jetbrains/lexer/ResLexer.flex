@@ -66,6 +66,8 @@ ESCAPES = [abfnrtv]
 {STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}?
                                         { return STRING; }
 
+// brackets & braces
+
 "{{"                                    { return DBL_LBRACE; }
 "{"                                     { return LBRACE; }
 "}"                                     { return RBRACE; }
@@ -94,6 +96,7 @@ ESCAPES = [abfnrtv]
 "(ii.)"                                 { return IND_HYPO; }
 
 // Operators
+
 "ϒ"                                     { return VROD; }
 "≼"                                     { return PRECCURLYEQ; }
 "="                                     { return EQUALS; }

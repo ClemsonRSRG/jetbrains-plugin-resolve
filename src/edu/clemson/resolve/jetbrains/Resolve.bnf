@@ -377,7 +377,7 @@ ModuleArgList ::= '(' ExpArgumentList ')' {pin=1}
 
 OperationDecl ::=
 'Operation' identifier OperationLikeParameters (':' Type)? ';'
-    RequiresClause? EnsuresClause? {pin=2}
+RequiresClause? EnsuresClause? {pin=2}
 
 OperationProcedureDecl ::=
 'Operation' identifier OperationLikeParameters (':' Type)? ';'
@@ -463,9 +463,10 @@ CallExp ::= NameExp ArgumentList {extends=Exp}
 ArgumentList ::= '(' ExpArgumentList? ')' {pin=1}
 private ExpArgumentList ::= ExpWithRecover (',' ExpWithRecover)* {pin(".*")=1}
 private ExpWithRecover ::= Exp {recoverWhile=ExpListRecover}
-private ExpListRecover ::= !('%' | '+' | '-' | '(' | ')' | ',' | '*' | '++' | '<' | '<=' | '>' | '>=' | 'end' | 'Operation' | 'Type' | 'Facility' |';')
+private ExpListRecover ::= !('%'|'+'|'-'|'('|')'|','|'*'|'<'|'<='|'>'|'>='|'end'|'Operation'|'Type'|'Facility'|';')
 
 LiteralExp ::= int|StringLiteral|BooleanLiteral {extends=Exp}
+
 // Math clauses and exprs
 
 BooleanLiteral ::= true | false
@@ -503,7 +504,9 @@ MathOutfixDefnSig ::=
 MathPostfixDefnSig ::=
 MathVarDecl '[' MathVarDecl ']' ':' MathExp {pin=1}
 
-MathSymbolName ::= identifier|('o'|'true'|'false'|int|'+'|'-'|'*'|'/'|'>'|'<'|'<='|'>='|'not'|'⌐'|'≼'|'ϒ'|'∪₊'|'≤ᵤ')
+MathSymbolName ::= identifier|
+('o'|'true'|'false'|int|'+'|'-'|'*'|'/'|'>'|'≤'|
+ '<'|'<='|'>='|'≥'|'not'|'⌐'|'≼'|'ϒ'|'∪₊'|'≤ᵤ')
 
 private MathDefinitionParams ::= '(' MathDefnParamList ')' { pin=1}
 private ParamListRec ::= !(')')
@@ -564,7 +567,7 @@ MathExp ::=
     | MathPrefixGeneralizedSqbrApplyExp
     | MathPrefixGeneralizedCeilApplyExp
     | MathNestedExp
-    | MathPrimaryExp {methods=[getResMathMetaTypeExp]}
+    | MathPrimeExp {methods=[getResMathMetaTypeExp]}
 
 //private rules for operators with the same precedence
 private MathOutfixGroup ::=
@@ -584,8 +587,8 @@ MathJoiningInfixApplyExp ::= MathExp MathJoiningOp MathExp
 MathEqualityInfixApplyExp ::= MathExp MathEqualityOp MathExp
 MathSetInfixApplyExp ::= MathExp MathSetContainmentOp MathExp
 MathIdentInfixApplyExp  ::= MathExp identifier MathExp
+MathApplicationInfixApplyExp ::= MathExp MathArrowOp MathExp
 
-MathApplicationInfixApplyExp ::= MathExp MathApplicationOp MathExp
 MathIncomingUnaryApplyExp ::= '@' MathExp
 MathPrefixApplyExp ::= MathExp '(' MathArgList ')' {pin=2}
 MathPrefixGeneralizedSqbrApplyExp ::= MathExp '[' GeneralizedApplyArgList']' {pin=2 recoverWhile=GeneralizedApplyArgList}
@@ -599,14 +602,14 @@ MathNestedExp ::= '(' MathAssertionExp ')' {pin=1}
 private MathMultOp ::= (MathReferenceExp '::')? ('*'|'/'|'%')
 private MathAddOp ::= (MathReferenceExp '::')? ('+'|'-'|'~')
 private MathJoiningOp ::= (MathReferenceExp '::')? ('o'|'union'|'∪'|'∪₊'|'intersect'|'∩'|'∩₊')
-private MathApplicationOp ::= (MathReferenceExp '::')? ('..'|'->'|'⟶')
+private MathArrowOp ::= (MathReferenceExp '::')? ('->'|'⟶')
 private MathRelationalOp ::= (MathReferenceExp '::')? ('<'|'>'|'<='|'≤'|'≤ᵤ'|'>='|'≥')
 private MathEqualityOp ::= (MathReferenceExp '::')? ('='|'/='|'≠')
 private MathSetContainmentOp ::= (MathReferenceExp '::')? ('is_in'|'is_not_in'|'∈'|'∉');
 private MathImpliesOp ::= (MathReferenceExp '::')? ('implies')
 private MathBooleanOp ::= (MathReferenceExp '::')? ('iff'|'and'|'or')
 
-private MathPrimaryExp ::=
+private MathPrimeExp ::=
           MathSymbolExp
         | MathTypeAssertionExp
         | MathSetComprehensionExp
