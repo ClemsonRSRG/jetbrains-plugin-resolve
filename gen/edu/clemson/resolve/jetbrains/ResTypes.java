@@ -53,11 +53,13 @@ public interface ResTypes {
   IElementType MATH_BAR_OUTFIX_APPLY_EXP = new ResCompositeElementType("MATH_BAR_OUTFIX_APPLY_EXP");
   IElementType MATH_BOOLEAN_INFIX_APPLY_EXP = new ResCompositeElementType("MATH_BOOLEAN_INFIX_APPLY_EXP");
   IElementType MATH_CART_PROD_EXP = new ResCompositeElementType("MATH_CART_PROD_EXP");
-  IElementType MATH_CATEGORICAL_DEFINITION_DECL = new ResCompositeElementType("MATH_CATEGORICAL_DEFINITION_DECL");
+  IElementType MATH_CATEGORICAL_DEFN_DECL = new ResCompositeElementType("MATH_CATEGORICAL_DEFN_DECL");
   IElementType MATH_CUP_OUTFIX_APPLY_EXP = new ResCompositeElementType("MATH_CUP_OUTFIX_APPLY_EXP");
   IElementType MATH_DBL_BAR_OUTFIX_APPLY_EXP = new ResCompositeElementType("MATH_DBL_BAR_OUTFIX_APPLY_EXP");
+  IElementType MATH_EQUALITY_INFIX_APPLY_EXP = new ResCompositeElementType("MATH_EQUALITY_INFIX_APPLY_EXP");
   IElementType MATH_EXP = new ResCompositeElementType("MATH_EXP");
   IElementType MATH_IDENT_INFIX_APPLY_EXP = new ResCompositeElementType("MATH_IDENT_INFIX_APPLY_EXP");
+  IElementType MATH_IMPLIES_INFIX_APPLY_EXP = new ResCompositeElementType("MATH_IMPLIES_INFIX_APPLY_EXP");
   IElementType MATH_INCOMING_UNARY_APPLY_EXP = new ResCompositeElementType("MATH_INCOMING_UNARY_APPLY_EXP");
   IElementType MATH_INDUCTIVE_DEFN_DECL = new ResCompositeElementType("MATH_INDUCTIVE_DEFN_DECL");
   IElementType MATH_INFIX_DEFN_SIG = new ResCompositeElementType("MATH_INFIX_DEFN_SIG");
@@ -79,6 +81,7 @@ public interface ResTypes {
   IElementType MATH_SET_COMPREHENSION_EXP = new ResCompositeElementType("MATH_SET_COMPREHENSION_EXP");
   IElementType MATH_SET_ELEMENTS_LIST = new ResCompositeElementType("MATH_SET_ELEMENTS_LIST");
   IElementType MATH_SET_EXP = new ResCompositeElementType("MATH_SET_EXP");
+  IElementType MATH_SET_INFIX_APPLY_EXP = new ResCompositeElementType("MATH_SET_INFIX_APPLY_EXP");
   IElementType MATH_SQ_BR_OUTFIX_APPLY_EXP = new ResCompositeElementType("MATH_SQ_BR_OUTFIX_APPLY_EXP");
   IElementType MATH_STANDARD_DEFN_DECL = new ResCompositeElementType("MATH_STANDARD_DEFN_DECL");
   IElementType MATH_SYMBOL_NAME = new ResCompositeElementType("MATH_SYMBOL_NAME");
@@ -221,6 +224,7 @@ public interface ResTypes {
   IElementType MUL = new ResTokenType("*");
   IElementType NEG = new ResTokenType("⌐");
   IElementType NEQUALS = new ResTokenType("/=");
+  IElementType NEQUALS1 = new ResTokenType("≠");
   IElementType NOT = new ResTokenType("not");
   IElementType OF = new ResTokenType("of");
   IElementType OPERATION = new ResTokenType("Operation");
@@ -398,8 +402,8 @@ public interface ResTypes {
       else if (type == MATH_CART_PROD_EXP) {
         return new ResMathCartProdExpImpl(node);
       }
-      else if (type == MATH_CATEGORICAL_DEFINITION_DECL) {
-        return new ResMathCategoricalDefinitionDeclImpl(node);
+      else if (type == MATH_CATEGORICAL_DEFN_DECL) {
+        return new ResMathCategoricalDefnDeclImpl(node);
       }
       else if (type == MATH_CUP_OUTFIX_APPLY_EXP) {
         return new ResMathCupOutfixApplyExpImpl(node);
@@ -407,11 +411,17 @@ public interface ResTypes {
       else if (type == MATH_DBL_BAR_OUTFIX_APPLY_EXP) {
         return new ResMathDblBarOutfixApplyExpImpl(node);
       }
+      else if (type == MATH_EQUALITY_INFIX_APPLY_EXP) {
+        return new ResMathEqualityInfixApplyExpImpl(node);
+      }
       else if (type == MATH_EXP) {
         return new ResMathExpImpl(node);
       }
       else if (type == MATH_IDENT_INFIX_APPLY_EXP) {
         return new ResMathIdentInfixApplyExpImpl(node);
+      }
+      else if (type == MATH_IMPLIES_INFIX_APPLY_EXP) {
+        return new ResMathImpliesInfixApplyExpImpl(node);
       }
       else if (type == MATH_INCOMING_UNARY_APPLY_EXP) {
         return new ResMathIncomingUnaryApplyExpImpl(node);
@@ -475,6 +485,9 @@ public interface ResTypes {
       }
       else if (type == MATH_SET_EXP) {
         return new ResMathSetExpImpl(node);
+      }
+      else if (type == MATH_SET_INFIX_APPLY_EXP) {
+        return new ResMathSetInfixApplyExpImpl(node);
       }
       else if (type == MATH_SQ_BR_OUTFIX_APPLY_EXP) {
         return new ResMathSqBrOutfixApplyExpImpl(node);

@@ -38,6 +38,7 @@
         // Operators
         EQUALS                  = '='
         NEQUALS                 = '/='
+        NEQUALS1                = '≠'
 
         AND                     = 'and'
         OR                      = 'or'
@@ -265,7 +266,7 @@ private ItemsRecover ::= !('end')
 private PrecisItem ::=
           MathTheoremDecl
         | MathStandardDefnDecl
-        | MathCategoricalDefinitionDecl
+        | MathCategoricalDefnDecl
         | MathInductiveDefnDecl {pin=1 recoverWhile=PrecisItemRecover}
 
 private PrecisItemRecover ::= !('Definition'|'Implicit'|'Theorem'|'Corollary'|'Categorical'|'Inductive'|'end')
@@ -470,17 +471,6 @@ LiteralExp ::= int|StringLiteral|BooleanLiteral {extends=Exp}
 BooleanLiteral ::= true | false
 StringLiteral ::= string | raw_string
 
-IntializationClause ::= 'initialization' (EnsuresClause) {pin=1};
-EntailsClause ::= 'which_entails' MathExp (',' MathExp)* {pin=1}
-RequiresClause ::= 'requires' MathAssertionExp (EntailsClause)? ';' {pin=1}
-EnsuresClause ::= 'ensures' MathAssertionExp ';' {pin=1}
-ConstraintsClause ::= ('constraints') MathAssertionExp ';' {pin=1}
-ConventionsClause ::= 'conventions' MathAssertionExp (EntailsClause)? ';' {pin=1}
-CorrespondenceClause ::= 'correspondence' MathAssertionExp ';' {pin=1}
-ChangingClause ::= 'changing' ExpArgumentList ';' {pin=1}
-MaintainingClause ::= 'maintaining' MathAssertionExp ';' {pin=1}
-DecreasingClause ::= 'decreasing' MathAssertionExp ';' {pin=1}
-
 // math constructs
 
 MathTheoremDecl ::= ('Corollary'|'Theorem') identifier ':'
@@ -519,7 +509,7 @@ private MathDefinitionParams ::= '(' MathDefnParamList ')' { pin=1}
 private ParamListRec ::= !(')')
 private MathDefnParamList ::= MathVarDeclGroup (',' MathVarDeclGroup)* {pin=1 recoverWhile=ParamListRec}
 
-MathCategoricalDefinitionDecl ::= 'Categorical' 'Definition' 'for'
+MathCategoricalDefnDecl ::= 'Categorical' 'Definition' 'for'
 MathPrefixDefnSigs 'is' MathExp ';' {pin=2}
 
 MathStandardDefnDecl ::= ('Implicit')? 'Definition'
@@ -530,10 +520,26 @@ MathDefnSig 'is'
 '(i.)' MathAssertionExp ';'
 '(ii.)' MathAssertionExp ';' {pin=2}
 
+// mathematical variables
+
 MathVarDeclGroup ::= MathVarDeclList ':' MathExp {pin=1}
+
 MathVarDecl ::= MathVarDef ':' MathExp {pin=2 extends=MathVarDeclGroup}
 private MathVarDeclList ::= MathVarDef &(!(')')) (',' MathVarDef)* {pin=1}
 MathVarDef ::= identifier
+
+// mathematical clauses
+
+IntializationClause ::= 'initialization' (EnsuresClause) {pin=1};
+EntailsClause ::= 'which_entails' MathExp (',' MathExp)* {pin=1}
+RequiresClause ::= 'requires' MathAssertionExp (EntailsClause)? ';' {pin=1}
+EnsuresClause ::= 'ensures' MathAssertionExp ';' {pin=1}
+ConstraintsClause ::= ('constraints') MathAssertionExp ';' {pin=1}
+ConventionsClause ::= 'conventions' MathAssertionExp (EntailsClause)? ';' {pin=1}
+CorrespondenceClause ::= 'correspondence' MathAssertionExp ';' {pin=1}
+ChangingClause ::= 'changing' ExpArgumentList ';' {pin=1}
+MaintainingClause ::= 'maintaining' MathAssertionExp ';' {pin=1}
+DecreasingClause ::= 'decreasing' MathAssertionExp ';' {pin=1}
 
 // mathematical expressions
 
@@ -543,8 +549,11 @@ MathQuantifiedExp ::= ('∃'|'∀'|'Exists'|'Forall') MathVarDeclGroup ',' MathA
 
 MathExp ::=
       MathBooleanInfixApplyExp
+    | MathImpliesInfixApplyExp
+    | MathEqualityInfixApplyExp
     | MathRelationalInfixApplyExp
     | MathApplicationInfixApplyExp
+    | MathSetInfixApplyExp
     | MathAddInfixApplyExp
     | MathMultInfixApplyExp
     | MathIdentInfixApplyExp
@@ -555,7 +564,7 @@ MathExp ::=
     | MathPrefixGeneralizedSqbrApplyExp
     | MathPrefixGeneralizedCeilApplyExp
     | MathNestedExp
-    | MathPrimary {methods=[getResMathMetaTypeExp]}
+    | MathPrimaryExp {methods=[getResMathMetaTypeExp]}
 
 //private rules for operators with the same precedence
 private MathOutfixGroup ::=
@@ -568,9 +577,12 @@ private MathOutfixGroup ::=
 
 MathAddInfixApplyExp ::= MathExp MathAddOp MathExp
 MathBooleanInfixApplyExp ::= MathExp MathBooleanOp MathExp
+MathImpliesInfixApplyExp ::= MathExp MathImpliesOp MathExp
 MathMultInfixApplyExp ::= MathExp MathMultOp MathExp
 MathRelationalInfixApplyExp ::= MathExp MathRelationalOp MathExp
 MathJoiningInfixApplyExp ::= MathExp MathJoiningOp MathExp
+MathEqualityInfixApplyExp ::= MathExp MathEqualityOp MathExp
+MathSetInfixApplyExp ::= MathExp MathSetContainmentOp MathExp
 MathIdentInfixApplyExp  ::= MathExp identifier MathExp
 
 MathApplicationInfixApplyExp ::= MathExp MathApplicationOp MathExp
@@ -588,11 +600,13 @@ private MathMultOp ::= (MathReferenceExp '::')? ('*'|'/'|'%')
 private MathAddOp ::= (MathReferenceExp '::')? ('+'|'-'|'~')
 private MathJoiningOp ::= (MathReferenceExp '::')? ('o'|'union'|'∪'|'∪₊'|'intersect'|'∩'|'∩₊')
 private MathApplicationOp ::= (MathReferenceExp '::')? ('..'|'->'|'⟶')
-private MathRelationalOp ::= (MathReferenceExp '::')? ('<'|'>'|'<='|'≤'|'≤ᵤ'|'>='|'≥'|'='|'/=')
+private MathRelationalOp ::= (MathReferenceExp '::')? ('<'|'>'|'<='|'≤'|'≤ᵤ'|'>='|'≥')
+private MathEqualityOp ::= (MathReferenceExp '::')? ('='|'/='|'≠')
+private MathSetContainmentOp ::= (MathReferenceExp '::')? ('is_in'|'is_not_in'|'∈'|'∉');
+private MathImpliesOp ::= (MathReferenceExp '::')? ('implies')
+private MathBooleanOp ::= (MathReferenceExp '::')? ('iff'|'and'|'or')
 
-private MathBooleanOp ::= (MathReferenceExp '::')? ('and'|'or'|'implies'|'iff'|'is_in'|'∈'|'is_not_in')
-
-private MathPrimary ::=
+private MathPrimaryExp ::=
           MathSymbolExp
         | MathTypeAssertionExp
         | MathSetComprehensionExp

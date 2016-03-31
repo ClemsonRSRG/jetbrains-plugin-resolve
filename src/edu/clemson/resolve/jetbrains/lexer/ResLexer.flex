@@ -98,6 +98,7 @@ ESCAPES = [abfnrtv]
 "≼"                                     { return PRECCURLYEQ; }
 "="                                     { return EQUALS; }
 "/="                                    { return NEQUALS; }
+"≠"                                     { return NEQUALS1; }
 
 "and"                                   { return AND; }
 "or"                                    { return OR; }
