@@ -296,7 +296,13 @@ private FacilityItem ::=
 
 private FacilityItemRecover ::= !('Facility'|'Definition'|'Operation'|'Type'|'end')
 
-// Types
+// type refs & decls
+
+Type ::= RecordType | NamedType
+private NamedType ::= TypeReferenceExp QualifiedTypeReferenceExp?
+TypeReferenceExp ::= identifier { methods=[getReference getQualifier] }
+left QualifiedTypeReferenceExp ::= '::' identifier {elementType=TypeReferenceExp}
+RecordType ::= 'Record' RecordVarDeclGroup* 'end' {pin=1 extends=Type}
 
 TypeModelDecl ::= 'Type' 'family' identifier TypeModelPortion ';'
     ExemplarDecl
@@ -316,12 +322,7 @@ TypeImplInit?
 TypeImplInit ::= 'initialization' (RequiresClause)? (EnsuresClause)?
 OpBlock 'end' ';'
 
-Type ::= RecordType | NamedType
-private NamedType ::= TypeReferenceExp QualifiedTypeReferenceExp?
-TypeReferenceExp ::= identifier { methods=[getReference getQualifier] }
-left QualifiedTypeReferenceExp ::= '::' identifier {elementType=TypeReferenceExp}
-
-RecordType ::= 'Record' RecordVarDeclGroup* 'end' {pin=1 extends=Type}
+// parameter and parameter-list related rules
 
 SpecModuleParameters ::= '(' SpecModuleParamList ')' {pin=1}
 private SpecModuleParamList ::= SpecParamDecl  (';' SpecParamDecl)* {recoverWhile=ParamListRec}
@@ -337,16 +338,6 @@ ParamDecl ::= ParameterMode ParamDefinitionListNoPin ':' Type {pin=1}
 private ParamDefinitionListNoPin ::= ParamDef &(!(';'|')')) (',' ParamDef)* {pin=1}
 ParamDef ::= identifier
 
-VarDeclGroup ::= 'Var' VarSpec ';' {pin=1}
-VarSpec ::= VarDefList ':' Type {pin=1}//{methods=[processDeclarations]}
-private VarDefList ::= VarDef &(!(';'))(',' VarDef)*
-VarDef ::= identifier {methods=[getResTypeInner getReference]}
-
-RecordVarDeclGroup ::= FieldVarDeclGroup ';' {pin=1}
-FieldVarDeclGroup ::= FieldVarDefList ':' Type {pin=1}
-private FieldVarDefList ::= FieldDef &(!(';'))(',' FieldDef)*
-FieldDef ::= identifier
-
 TypeParamDecl ::= 'type' identifier {pin=2}
 
 ParameterMode ::=
@@ -360,7 +351,20 @@ ParameterMode ::=
     | identifier //TODO: would like to get rid of identifier here, but results
                  //in an uglier (partial) psi; which makes keyword completion
                  //patterns much harder
-// Facilities
+
+// prog variable decls
+
+RecordVarDeclGroup ::= FieldVarDeclGroup ';' {pin=1}
+FieldVarDeclGroup ::= FieldVarDefList ':' Type {pin=1}
+private FieldVarDefList ::= FieldDef &(!(';'))(',' FieldDef)*
+FieldDef ::= identifier
+
+VarDeclGroup ::= 'Var' VarSpec ';' {pin=1}
+VarSpec ::= VarDefList ':' Type {pin=1}//{methods=[processDeclarations]}
+private VarDefList ::= VarDef &(!(';'))(',' VarDef)*
+VarDef ::= identifier {methods=[getResTypeInner getReference]}
+
+// facility decls
 
 FacilityDecl ::= 'Facility' identifier 'is' ModuleSpec ModuleArgList?
 ('externally')? 'implemented' 'by' ModuleSpec ModuleArgList?
