@@ -35,6 +35,12 @@ public class ResMathMultInfixApplyExpImpl extends ResMathInfixApplyExpImpl imple
 
   @Override
   @Nullable
+  public PsiElement getHtimes() {
+    return findChildByType(HTIMES);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getMod() {
     return findChildByType(MOD);
   }
@@ -49,6 +55,12 @@ public class ResMathMultInfixApplyExpImpl extends ResMathInfixApplyExpImpl imple
   @Nullable
   public PsiElement getQuotient() {
     return findChildByType(QUOTIENT);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getTimes() {
+    return findChildByType(TIMES);
   }
 
 }

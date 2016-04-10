@@ -109,6 +109,8 @@ ESCAPES = [abfnrtv]
 "⌐"                                     { return NOT; }
 "o"                                     { return CAT; }
 "∘"                                     { return CAT; }
+"ᴴ⨯"                                    { return HTIMES; }
+"⨯"                                     { return TIMES; }
 
 "is_in"                                 { return IS_IN; }
 "∈"                                     { return IS_IN; }

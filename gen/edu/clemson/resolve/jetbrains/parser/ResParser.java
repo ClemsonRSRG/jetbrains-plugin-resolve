@@ -2104,7 +2104,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (MathReferenceExp '::')? ('*'|'/'|'%')
+  // (MathReferenceExp '::')? ('*'|'/'|'%'|'⨯'|'ᴴ⨯')
   static boolean MathMultOp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathMultOp")) return false;
     boolean r;
@@ -2133,7 +2133,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // '*'|'/'|'%'
+  // '*'|'/'|'%'|'⨯'|'ᴴ⨯'
   private static boolean MathMultOp_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathMultOp_1")) return false;
     boolean r;
@@ -2141,6 +2141,8 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, MUL);
     if (!r) r = consumeToken(b, QUOTIENT);
     if (!r) r = consumeToken(b, MOD);
+    if (!r) r = consumeToken(b, TIMES);
+    if (!r) r = consumeToken(b, HTIMES);
     exit_section_(b, m, null, r);
     return r;
   }

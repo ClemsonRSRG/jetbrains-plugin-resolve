@@ -46,7 +46,8 @@
         NEG                     = '⌐'
         CAT                     = 'o'
         CAT1                    = '∘'
-
+        HTIMES                  = 'ᴴ⨯'
+        TIMES                   = '⨯'
         TRUE                    = 'true'
         FALSE                   = 'false'
         IMPLIES                 = 'implies'
@@ -603,7 +604,7 @@ private GeneralizedApplyRecover ::= !(']'|'⎤')
 MathTypeAssertionExp ::= MathExp ':' MathExp {pin=2}
 MathNestedExp ::= '(' MathAssertionExp ')' {pin=1}
 
-private MathMultOp ::= (MathReferenceExp '::')? ('*'|'/'|'%')
+private MathMultOp ::= (MathReferenceExp '::')? ('*'|'/'|'%'|'⨯'|'ᴴ⨯')
 private MathAddOp ::= (MathReferenceExp '::')? ('+'|'-'|'~')
 private MathJoiningOp ::= (MathReferenceExp '::')? ('o'|'union'|'∪'|'∪₊'|'intersect'|'∩'|'∩₊')
 private MathArrowOp ::= (MathReferenceExp '::')? ('->'|'⟶')

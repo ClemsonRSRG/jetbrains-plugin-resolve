@@ -14,6 +14,9 @@ public interface ResMathMultInfixApplyExp extends ResMathInfixApplyExp {
   PsiElement getColoncolon();
 
   @Nullable
+  PsiElement getHtimes();
+
+  @Nullable
   PsiElement getMod();
 
   @Nullable
@@ -21,5 +24,8 @@ public interface ResMathMultInfixApplyExp extends ResMathInfixApplyExp {
 
   @Nullable
   PsiElement getQuotient();
+
+  @Nullable
+  PsiElement getTimes();
 
 }

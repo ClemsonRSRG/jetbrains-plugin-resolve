@@ -184,6 +184,7 @@ public interface ResTypes {
   IElementType GREATER = new ResTokenType(">");
   IElementType GREATER_OR_EQUAL = new ResTokenType(">=");
   IElementType GREATER_OR_EQUAL1 = new ResTokenType("≥");
+  IElementType HTIMES = new ResTokenType("ᴴ⨯");
   IElementType HYPO = new ResTokenType("hypo");
   IElementType IDENTIFIER = new ResTokenType("identifier");
   IElementType IF = new ResTokenType("if");
@@ -257,6 +258,7 @@ public interface ResTypes {
   IElementType THEN = new ResTokenType("then");
   IElementType THEOREM = new ResTokenType("Theorem");
   IElementType TILDE = new ResTokenType("~");
+  IElementType TIMES = new ResTokenType("⨯");
   IElementType TRIPLE_DOT = new ResTokenType("...");
   IElementType TRUE = new ResTokenType("true");
   IElementType UNION = new ResTokenType("union");
