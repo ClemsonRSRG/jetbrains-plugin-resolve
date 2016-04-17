@@ -54,6 +54,7 @@ public interface ResTypes {
   IElementType MATH_BOOLEAN_INFIX_APPLY_EXP = new ResCompositeElementType("MATH_BOOLEAN_INFIX_APPLY_EXP");
   IElementType MATH_CART_PROD_EXP = new ResCompositeElementType("MATH_CART_PROD_EXP");
   IElementType MATH_CATEGORICAL_DEFN_DECL = new ResCompositeElementType("MATH_CATEGORICAL_DEFN_DECL");
+  IElementType MATH_CLASSIFICATION_THEOREM_DECL = new ResCompositeElementType("MATH_CLASSIFICATION_THEOREM_DECL");
   IElementType MATH_CUP_OUTFIX_APPLY_EXP = new ResCompositeElementType("MATH_CUP_OUTFIX_APPLY_EXP");
   IElementType MATH_DBL_BAR_OUTFIX_APPLY_EXP = new ResCompositeElementType("MATH_DBL_BAR_OUTFIX_APPLY_EXP");
   IElementType MATH_EQUALITY_INFIX_APPLY_EXP = new ResCompositeElementType("MATH_EQUALITY_INFIX_APPLY_EXP");
@@ -406,6 +407,9 @@ public interface ResTypes {
       }
       else if (type == MATH_CATEGORICAL_DEFN_DECL) {
         return new ResMathCategoricalDefnDeclImpl(node);
+      }
+      else if (type == MATH_CLASSIFICATION_THEOREM_DECL) {
+        return new ResMathClassificationTheoremDeclImpl(node);
       }
       else if (type == MATH_CUP_OUTFIX_APPLY_EXP) {
         return new ResMathCupOutfixApplyExpImpl(node);

@@ -2,7 +2,7 @@ package edu.clemson.resolve.jetbrains.actions;
 
 import com.intellij.execution.ui.ConsoleView;
 import com.intellij.execution.ui.ConsoleViewContentType;
-import edu.clemson.resolve.compiler.RESOLVECompiler;
+import edu.clemson.resolve.RESOLVECompiler;
 import edu.clemson.resolve.compiler.RESOLVECompilerListener;
 import edu.clemson.resolve.compiler.RESOLVEMessage;
 import org.antlr.v4.tool.ANTLRMessage;

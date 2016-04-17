@@ -29,14 +29,14 @@ public class ResMathLambdaExpImpl extends ResMathExpImpl implements ResMathLambd
 
   @Override
   @NotNull
-  public List<ResMathVarDeclGroup> getMathVarDeclGroupList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResMathVarDeclGroup.class);
+  public ResMathVarDecl getMathVarDecl() {
+    return findNotNullChildByClass(ResMathVarDecl.class);
   }
 
   @Override
   @NotNull
-  public PsiElement getDot() {
-    return findNotNullChildByType(DOT);
+  public PsiElement getComma() {
+    return findNotNullChildByType(COMMA);
   }
 
   @Override

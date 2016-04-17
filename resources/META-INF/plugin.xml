@@ -49,6 +49,7 @@
 
         <lang.psiStructureViewFactory language="RESOLVE"
                                       implementationClass="edu.clemson.resolve.jetbrains.editor.RESOLVEStructureViewFactory"/>
+        <externalAnnotator language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.annotation.RESOLVEExternalAnnotator"/>
     </extensions>
 
     <application-components>

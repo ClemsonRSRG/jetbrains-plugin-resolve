@@ -13,7 +13,7 @@ import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import edu.clemson.resolve.compiler.RESOLVECompiler;
+import edu.clemson.resolve.RESOLVECompiler;
 import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
 import edu.clemson.resolve.misc.Utils;
 import org.jetbrains.annotations.NotNull;
@@ -156,8 +156,8 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
         args.put("-o", outputDirName);
         args.put("-genCode", "Java");
 
-        String libDir = contentRoot.getPath();
-        args.put("-lib", libDir);
+        //String libDir = contentRoot.getPath();
+        //args.put("-lib", libDir);
 
         return args;
     }

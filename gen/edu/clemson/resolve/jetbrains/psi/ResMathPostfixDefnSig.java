@@ -19,7 +19,13 @@ public interface ResMathPostfixDefnSig extends ResCompositeElement {
   @Nullable
   PsiElement getLbrack();
 
+  @NotNull
+  PsiElement getLparen();
+
   @Nullable
   PsiElement getRbrack();
+
+  @Nullable
+  PsiElement getRparen();
 
 }

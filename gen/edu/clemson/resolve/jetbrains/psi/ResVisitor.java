@@ -186,6 +186,10 @@ public class ResVisitor extends PsiElementVisitor {
     visitMathDefinitionDecl(o);
   }
 
+  public void visitMathClassificationTheoremDecl(@NotNull ResMathClassificationTheoremDecl o) {
+    visitCompositeElement(o);
+  }
+
   public void visitMathCupOutfixApplyExp(@NotNull ResMathCupOutfixApplyExp o) {
     visitMathExp(o);
   }
