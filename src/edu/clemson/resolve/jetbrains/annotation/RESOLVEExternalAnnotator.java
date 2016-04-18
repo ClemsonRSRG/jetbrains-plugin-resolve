@@ -13,9 +13,6 @@ import edu.clemson.resolve.compiler.CompilerMessage;
 import edu.clemson.resolve.compiler.LanguageSemanticsMessage;
 import edu.clemson.resolve.compiler.RESOLVEMessage;
 import edu.clemson.resolve.jetbrains.actions.RunRESOLVEOnLanguageFile;
-import org.antlr.runtime.ANTLRInputStream;
-import org.antlr.runtime.ANTLRReaderStream;
-import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.v4.Tool;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
@@ -51,7 +48,7 @@ public class RESOLVEExternalAnnotator
     }
 
     /** Called 2nd; run antlr on file */
-    @Nullable @Override public List<RESOLVEExternalAnnotator.Issue> doAnnotate(
+    @Override @Nullable public List<RESOLVEExternalAnnotator.Issue> doAnnotate(
             final PsiFile file) {
         String grammarFileName = file.getVirtualFile().getPath();
         LOG.info("doAnnotate "+grammarFileName);
@@ -80,26 +77,11 @@ public class RESOLVEExternalAnnotator
         try {
             org.antlr.v4.runtime.ANTLRInputStream in = new org.antlr.v4.runtime.ANTLRInputStream(fileContents);
             VirtualFile vfile = file.getVirtualFile();
-
             in.name = vfile.getPath();
             AnnotatedModule ast = resolve.parseModule(in);
-
             if ( ast==null || ast.hasErrors ) return Collections.emptyList();
-
-            //TODO: Set filename for 'ast'
-
-            if ( vfile==null ) {
-                LOG.error("doAnnotate no virtual file for "+file);
-                return listener.issues;
-            }
-
-
-            ast.fileName = vfile.getPath();
             resolve.processCommandLineTargets(ast);
-
-          /*  g.fileName = vfile.getPath();
-            antlr.process(g, false);
-
+          /*
             Map<String, GrammarAST> unusedRules = getUnusedParserRules(g);
             if ( unusedRules!=null ) {
                 for (String r : unusedRules.keySet()) {
@@ -118,7 +100,6 @@ public class RESOLVEExternalAnnotator
         }
         return listener.issues;
     }
-
 
     /** Called 3rd */
     @Override public void apply(@NotNull PsiFile file,
