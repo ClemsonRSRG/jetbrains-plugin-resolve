@@ -1,17 +1,23 @@
 package edu.clemson.resolve.jetbrains.annotation;
 
+import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.ExternalAnnotator;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import edu.clemson.resolve.RESOLVECompiler;
+import edu.clemson.resolve.compiler.AnnotatedModule;
 import edu.clemson.resolve.compiler.CompilerMessage;
 import edu.clemson.resolve.compiler.LanguageSemanticsMessage;
 import edu.clemson.resolve.compiler.RESOLVEMessage;
 import edu.clemson.resolve.jetbrains.actions.RunRESOLVEOnLanguageFile;
+import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.ANTLRReaderStream;
+import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.v4.Tool;
+import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.tool.*;
 import org.antlr.v4.tool.ast.GrammarAST;
@@ -62,7 +68,8 @@ public class RESOLVEExternalAnnotator
             ApplicationManager.getApplication().runReadAction(new Runnable() {
                 @Override
                 public void run() {
-                    resolve.workingDirectory = file.getContainingDirectory().toString();
+                    //TODO: Clean that line up... needs to be virtual file.
+                    resolve.workingDirectory = file.getVirtualFile().getParent().getCanonicalPath();
                 }
             });
         }
@@ -71,27 +78,25 @@ public class RESOLVEExternalAnnotator
         AnnotatorCompilerListener listener = new AnnotatorCompilerListener();
         resolve.addListener(listener);
         try {
-            StringReader sr = new StringReader(fileContents);
-            ANTLRReaderStream in = new ANTLRReaderStream(sr);
-            in.name = file.getName();
-
-            resolve.processCommandLineTargets();
-          /*  GrammarRootAST ast = resolve.parse(file.getName(), in);
-            if ( ast==null || ast.hasErrors ) return Collections.emptyList();
-            Grammar g = antlr.createGrammar(ast);
-            g.fileName = grammarFileName;
-
-            String vocabName = g.getOptionString("tokenVocab");
-            if ( vocabName!=null ) { // import vocab to avoid spurious warnings
-                LOG.info("token vocab file "+vocabName);
-                g.importTokensFromTokensFile();
-            }*/
-
+            org.antlr.v4.runtime.ANTLRInputStream in = new org.antlr.v4.runtime.ANTLRInputStream(fileContents);
             VirtualFile vfile = file.getVirtualFile();
+
+            in.name = vfile.getPath();
+            AnnotatedModule ast = resolve.parseModule(in);
+
+            if ( ast==null || ast.hasErrors ) return Collections.emptyList();
+
+            //TODO: Set filename for 'ast'
+
             if ( vfile==null ) {
                 LOG.error("doAnnotate no virtual file for "+file);
                 return listener.issues;
             }
+
+
+            ast.fileName = vfile.getPath();
+            resolve.processCommandLineTargets(ast);
+
           /*  g.fileName = vfile.getPath();
             antlr.process(g, false);
 
@@ -113,6 +118,48 @@ public class RESOLVEExternalAnnotator
         }
         return listener.issues;
     }
+
+
+    /** Called 3rd */
+    @Override public void apply(@NotNull PsiFile file,
+                                List<RESOLVEExternalAnnotator.Issue> issues,
+                                @NotNull AnnotationHolder holder) {
+        for (int i = 0; i < issues.size(); i++) {
+            Issue issue = issues.get(i);
+            for (int j = 0; j < issue.offendingTokens.size(); j++) {
+                Token t = issue.offendingTokens.get(j);
+                if ( t instanceof org.antlr.v4.runtime.CommonToken ) {
+                    org.antlr.v4.runtime.CommonToken ct = (org.antlr.v4.runtime.CommonToken)t;
+                    int startIndex = ct.getStartIndex();
+                    int stopIndex = ct.getStopIndex();
+                    TextRange range = new TextRange(startIndex, stopIndex + 1);
+                    ErrorSeverity severity = ErrorSeverity.INFO;
+                    if ( issue.msg.getErrorType()!=null ) {
+                        severity = issue.msg.getErrorType().severity;
+                    }
+                    switch ( severity ) {
+                        case ERROR:
+                        case ERROR_ONE_OFF:
+                        case FATAL:
+                            holder.createErrorAnnotation(range, issue.annotation);
+                            break;
+
+                        case WARNING:
+                            holder.createWarningAnnotation(range, issue.annotation);
+                            break;
+
+                        case WARNING_ONE_OFF:
+                        case INFO:
+                            holder.createWeakWarningAnnotation(range, issue.annotation);
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+        super.apply(file, issues, holder);
+    }
+
 
     public void processIssue(final PsiFile file, Issue issue) {
         File languageFile = new File(file.getVirtualFile().getPath());
