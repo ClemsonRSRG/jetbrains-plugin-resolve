@@ -40,20 +40,17 @@ public class RESOLVEModuleType extends ModuleType<RESOLVEModuleBuilder> {
         return RESOLVEIcons.MODULE;
     }
 
-    @Nullable
-    @Override
-    public Icon getNodeIcon(boolean isOpened) {
+    @Nullable @Override public Icon getNodeIcon(boolean isOpened) {
         return RESOLVEIcons.TOOL_ICON;
     }
 
-    @NotNull
-    @Override
-    public ModuleWizardStep[] createWizardSteps(@NotNull WizardContext wizardContext,
-                                                @NotNull final GoModuleBuilder moduleBuilder,
-                                                @NotNull ModulesProvider modulesProvider) {
-        return new ModuleWizardStep[]{new ProjectJdkForModuleStep(wizardContext, GoSdkType.getInstance()) {
-            @Override
-            public void updateDataModel() {
+    @NotNull @Override public ModuleWizardStep[] createWizardSteps(
+            @NotNull WizardContext wizardContext,
+            @NotNull final RESOLVEModuleBuilder moduleBuilder,
+            @NotNull ModulesProvider modulesProvider) {
+        return new ModuleWizardStep[]{
+                new ProjectJdkForModuleStep(wizardContext, RESOLVESdkType.getInstance()) {
+            @Override public void updateDataModel() {
                 super.updateDataModel();
                 moduleBuilder.setModuleJdk(getJdk());
             }

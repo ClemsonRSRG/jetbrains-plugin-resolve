@@ -2,6 +2,7 @@ package edu.clemson.resolve.jetbrains;
 
 import com.intellij.lang.Language;
 import com.intellij.openapi.fileTypes.LanguageFileType;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class RESOLVELanguage extends Language {
@@ -11,14 +12,15 @@ public class RESOLVELanguage extends Language {
         super("RESOLVE");
     }
 
-    @Nullable
-    @Override
-    public LanguageFileType getAssociatedFileType() {
+    @NotNull @Override public String getDisplayName() {
+        return RESOLVEConstants.RESOLVE;
+    }
+
+    @Nullable @Override public LanguageFileType getAssociatedFileType() {
         return RESOLVEFileType.INSTANCE;
     }
 
-    @Override
-    public boolean isCaseSensitive() {
+    @Override public boolean isCaseSensitive() {
         return true;
     }
 }
