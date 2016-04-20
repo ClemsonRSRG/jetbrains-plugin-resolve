@@ -12,15 +12,20 @@ public class RESOLVELanguage extends Language {
         super("RESOLVE");
     }
 
-    @NotNull @Override public String getDisplayName() {
+    @NotNull
+    @Override
+    public String getDisplayName() {
         return RESOLVEConstants.RESOLVE;
     }
 
-    @Nullable @Override public LanguageFileType getAssociatedFileType() {
+    @Nullable
+    @Override
+    public LanguageFileType getAssociatedFileType() {
         return RESOLVEFileType.INSTANCE;
     }
 
-    @Override public boolean isCaseSensitive() {
+    @Override
+    public boolean isCaseSensitive() {
         return true;
     }
 }

@@ -6,7 +6,8 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.vfs.VirtualFile;
-import edu.clemson.resolve.compiler.RESOLVECompiler;
+
+import edu.clemson.resolve.RESOLVECompiler;
 import org.antlr.v4.Tool;
 
 public class ConfigureRESOLVEAction extends AnAction implements DumbAware {

@@ -6,7 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class RESOLVEFileTypeFactory extends FileTypeFactory {
 
-    @Override public void createFileTypes(
+    @Override
+    public void createFileTypes(
             @NotNull FileTypeConsumer fileTypeConsumer) {
         fileTypeConsumer.consume(RESOLVEFileType.INSTANCE, "resolve");
     }

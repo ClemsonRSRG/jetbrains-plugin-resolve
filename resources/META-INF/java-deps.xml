@@ -1,0 +1,12 @@
+<idea-plugin version="2">
+    <extensions defaultExtensionNs="com.intellij">
+        <moduleType id="RESOLVE_MODULE" implementationClass="edu.clemson.resolve.jetbrains.RESOLVEModuleType"/>
+        <!-- uncomment below for project structure module editability options (not needed now tho) -->
+        <!--<moduleConfigurationEditorProvider implementation="edu.clemson.resolve.configuration.RESOLVEModuleEditorsProvider" order="first"/>
+        <editorNotificationProvider implementation="com.goide.inspections.WrongModuleTypeNotificationProvider"/>
+
+        <projectStructureDetector implementation="com.goide.project.GoProjectStructureDetector"/>-->
+
+        <projectService serviceInterface="edu.clemson.resolve.jetbrains.sdk.ResSdkService" serviceImplementation="edu.clemson.resolve.jetbrains.sdk.ResIdeaSdkService" overrides="true"/>
+    </extensions>
+</idea-plugin>

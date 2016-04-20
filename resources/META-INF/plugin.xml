@@ -21,11 +21,13 @@
     <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
     <idea-version since-build="131"/>
 
-    <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
-       on how to target different products -->
-    <!-- uncomment to enable jetbrains in all products
     <depends>com.intellij.modules.lang</depends>
-    -->
+    <depends optional="true" config-file="java-deps.xml">com.intellij.modules.java</depends>
+   <!-- <module-components>
+        <component>
+            <implementation-class>com.goide.project.GoModuleLibrariesInitializer</implementation-class>
+        </component>
+    </module-components>-->
 
     <extensions defaultExtensionNs="com.intellij">
         <fileIconPatcher implementation="edu.clemson.resolve.jetbrains.RESOLVEFileIconPatcher"/>
@@ -40,6 +42,14 @@
         <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEFileContextType"/>
         <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEMathRefContextType"/>
         <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEMathDefContextType"/>
+
+        <!-- sdk -->
+        <sdkType implementation="edu.clemson.resolve.jetbrains.sdk.RESOLVESdkType"/>
+        <projectService serviceInterface="edu.clemson.resolve.jetbrains.sdk.ResSdkService" serviceImplementation="edu.clemson.resolve.jetbrains.sdk.ResSmallSdkService"
+                        overrides="false"/>
+        <library.presentationProvider implementation="edu.clemson.resolve.jetbrains.sdk.RESOLVESdkLibraryPresentationProvider"/>
+
+        <directoryProjectGenerator implementation="edu.clemson.resolve.jetbrains.RESOLVEProjectGenerator"/> <!-- for small IDEs-->
 
         <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.completion.RESOLVECompletionContributor"/>
         <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.completion.RESOLVEKeywordCompletionContributor"/>
