@@ -17,8 +17,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.intellij.util.containers.ContainerUtil.newLinkedHashSet;
 
 public class RESOLVESdkUtil {
     private static final Pattern RESOLVE_VERSION_PATTERN = Pattern.compile("resolve-([\\d.]+\\w+(\\d+)?)-complete");
@@ -75,6 +78,14 @@ public class RESOLVESdkUtil {
         VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(
                 VfsUtilCore.pathToUrl(FileUtil.join(sdkPath, srcPath)));
         return file != null && file.isDirectory() ? file : null;
+    }
+
+    @NotNull
+    public static LinkedHashSet<VirtualFile> getSourcesPathsToLookup(
+            @NotNull Project project, @Nullable Module module) {
+        LinkedHashSet<VirtualFile> sdkSrcs = newLinkedHashSet();
+        ContainerUtil.addIfNotNull(sdkSrcs, getSdkSrcDir(project, module));
+        return sdkSrcs;
     }
 
     @Nullable

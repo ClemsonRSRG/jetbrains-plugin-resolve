@@ -80,9 +80,9 @@ public class RESOLVESdkType extends SdkType {
 
     @Nullable
     @Override
-    public AdditionalDataConfigurable
-    createAdditionalDataConfigurable(
-            @NotNull SdkModel sdkModel, @NotNull SdkModificator sdkModificator) {
+    public AdditionalDataConfigurable createAdditionalDataConfigurable(
+            @NotNull SdkModel sdkModel,
+            @NotNull SdkModificator sdkModificator) {
         return null;
     }
 
