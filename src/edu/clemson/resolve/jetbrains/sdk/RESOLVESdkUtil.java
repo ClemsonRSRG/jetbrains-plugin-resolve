@@ -36,7 +36,7 @@ public class RESOLVESdkUtil {
                         @Nullable
                         @Override
                         public Result<VirtualFile> compute() {
-                            ResSdkService sdkService = ResSdkService.getInstance(module.getProject());
+                            RESOLVESdkService sdkService = RESOLVESdkService.getInstance(module.getProject());
                             return Result.create(getInnerSdkSrcDir(sdkService, module), sdkService);
                         }
                     });
@@ -46,7 +46,7 @@ public class RESOLVESdkUtil {
                     @Nullable
                     @Override
                     public Result<VirtualFile> compute() {
-                        ResSdkService sdkService = ResSdkService.getInstance(project);
+                        RESOLVESdkService sdkService = RESOLVESdkService.getInstance(project);
                         return Result.create(getInnerSdkSrcDir(sdkService, null), sdkService);
                     }
                 });
@@ -64,7 +64,7 @@ public class RESOLVESdkUtil {
 
     @Nullable
     private static VirtualFile getInnerSdkSrcDir(
-            @NotNull ResSdkService sdkService, @Nullable Module module) {
+            @NotNull RESOLVESdkService sdkService, @Nullable Module module) {
         String sdkHomePath = sdkService.getSdkHomePath(module);
         return sdkHomePath != null ? getSdkSrcDir(sdkHomePath) : null;
     }
@@ -80,7 +80,7 @@ public class RESOLVESdkUtil {
     @Nullable
     public static VirtualFile suggestSdkDirectory() {
         if (SystemInfo.isWindows) {
-            return LocalFileSystem.getInstance().findFileByPath("C:\\RESOLVE");
+            return LocalFileSystem.getInstance().findFileByPath("C:\\resolve");
         }
         if (SystemInfo.isMac || SystemInfo.isLinux) {
             VirtualFile usrLocal = LocalFileSystem.getInstance()
@@ -109,12 +109,12 @@ public class RESOLVESdkUtil {
             }
             if (compilerCandidate == null) {
                 version = null;
-                ResSdkService.LOG.debug("Cannot find compiler jar in resolve sdk home directory");
+                RESOLVESdkService.LOG.debug("Cannot find compiler jar in resolve sdk home directory");
             } else {
                 String fileName = compilerCandidate.getName();
                 version = parseRESOLVEVersion(fileName);
                 if (version == null) {
-                    ResSdkService.LOG.debug("Cannot retrieve go version from compiler jar name: " + fileName);
+                    RESOLVESdkService.LOG.debug("Cannot retrieve go version from compiler jar name: " + fileName);
                 }
                 sdkRoot.putUserData(RESOLVE_VERSION_DATA_KEY, StringUtil.notNullize(version));
             }
@@ -138,16 +138,5 @@ public class RESOLVESdkUtil {
             return matcher.group(1);
         }
         return null;
-    }
-
-    /**
-     * Retrieves root directories from RESOLVEPATH env-variable. This method
-     * doesn't consider user defined libraries.
-     */
-    @NotNull
-    public static Collection<VirtualFile>
-    getRESOLVEPathRootsFromEnvironment() {
-        return ResEnvironmentRESOLVEPathModificationTracker
-                .getRESOLVEEnvironmentRESOLVEPathRoots();
     }
 }

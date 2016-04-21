@@ -44,12 +44,12 @@ public class RESOLVESdkType extends SdkType {
 
     @Override
     public boolean isValidSdkHome(@NotNull String sdkHomePath) {
-        ResSdkService.LOG.debug("Validating sdk path: " + sdkHomePath);
+        RESOLVESdkService.LOG.debug("Validating sdk path: " + sdkHomePath);
         //note that we don't explicitly validate the resolve compiler jar
         //exists here--no need, as this will return null if it doesn't
         // (the version is embedded in it)
         if (getVersionString(sdkHomePath) == null) {
-            ResSdkService.LOG.debug("Cannot retrieve version for sdk " +
+            RESOLVESdkService.LOG.debug("Cannot retrieve version for sdk " +
                     "(or the compiler-jar): " + sdkHomePath);
             return false;
         }

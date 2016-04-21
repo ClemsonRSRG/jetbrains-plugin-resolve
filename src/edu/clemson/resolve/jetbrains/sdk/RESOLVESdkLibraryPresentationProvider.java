@@ -33,7 +33,7 @@ public class RESOLVESdkLibraryPresentationProvider
     public DummyLibraryProperties detect(
             @NotNull List<VirtualFile> classesRoots) {
         for (VirtualFile root : classesRoots) {
-            if (ResSmallSdkService.isRESOLVESdkLibRoot(root)) {
+            if (RESOLVESmallSdkService.isRESOLVESdkLibRoot(root)) {
                 return DummyLibraryProperties.INSTANCE;
             }
         }

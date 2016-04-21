@@ -16,9 +16,9 @@ import edu.clemson.resolve.jetbrains.RESOLVEModuleType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ResIdeaSdkService extends ResSdkService {
+public class RESOLVEIdeaSdkService extends RESOLVESdkService {
 
-    public ResIdeaSdkService(@NotNull Project project) {
+    public RESOLVEIdeaSdkService(@NotNull Project project) {
         super(project);
         project.getMessageBus().connect(project).subscribe(
                 ProjectTopics.PROJECT_ROOTS, new ModuleRootAdapter() {
@@ -39,7 +39,7 @@ public class ResIdeaSdkService extends ResSdkService {
                     public Result<String> compute() {
                         Sdk sdk = getRESOLVESdk(module);
                         return Result.create(sdk != null ? sdk.getHomePath() : null,
-                                ResIdeaSdkService.this);
+                                RESOLVEIdeaSdkService.this);
                     }
                 });
     }
@@ -60,7 +60,7 @@ public class ResIdeaSdkService extends ResSdkService {
                     public Result<String> compute() {
                         Sdk sdk = getRESOLVESdk(module);
                         return Result.create(sdk != null ? sdk.getVersionString() :
-                                null, ResIdeaSdkService.this);
+                                null, RESOLVEIdeaSdkService.this);
                     }
                 });
     }

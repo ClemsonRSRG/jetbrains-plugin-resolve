@@ -15,20 +15,20 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
 
-public abstract class ResSdkService extends SimpleModificationTracker {
+public abstract class RESOLVESdkService extends SimpleModificationTracker {
 
-    public static final Logger LOG = Logger.getInstance(ResSdkService.class);
+    public static final Logger LOG = Logger.getInstance(RESOLVESdkService.class);
 
     @NotNull
     final Project project;
     private static String dummyTestSdkVersion;
 
-    protected ResSdkService(@NotNull Project project) {
+    protected RESOLVESdkService(@NotNull Project project) {
         this.project = project;
     }
 
-    public static ResSdkService getInstance(@NotNull Project project) {
-        return ServiceManager.getService(project, ResSdkService.class);
+    public static RESOLVESdkService getInstance(@NotNull Project project) {
+        return ServiceManager.getService(project, RESOLVESdkService.class);
     }
 
     @Nullable

@@ -45,7 +45,7 @@
 
         <!-- sdk -->
         <sdkType implementation="edu.clemson.resolve.jetbrains.sdk.RESOLVESdkType"/>
-        <projectService serviceInterface="edu.clemson.resolve.jetbrains.sdk.ResSdkService" serviceImplementation="edu.clemson.resolve.jetbrains.sdk.ResSmallSdkService"
+        <projectService serviceInterface="edu.clemson.resolve.jetbrains.sdk.RESOLVESdkService" serviceImplementation="edu.clemson.resolve.jetbrains.sdk.RESOLVESmallSdkService"
                         overrides="false"/>
         <library.presentationProvider implementation="edu.clemson.resolve.jetbrains.sdk.RESOLVESdkLibraryPresentationProvider"/>
 

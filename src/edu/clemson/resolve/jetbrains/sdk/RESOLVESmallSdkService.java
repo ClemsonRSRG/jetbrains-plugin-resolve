@@ -16,10 +16,10 @@ import com.intellij.util.ObjectUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ResSmallSdkService extends ResSdkService {
+public class RESOLVESmallSdkService extends RESOLVESdkService {
     public static final String LIBRARY_NAME = "RESOLVE SDK";
 
-    protected ResSmallSdkService(@NotNull Project project) {
+    protected RESOLVESmallSdkService(@NotNull Project project) {
         super(project);
     }
 
@@ -52,7 +52,7 @@ public class ResSmallSdkService extends ResSdkService {
                                         }
                                         return null;
                                     }
-                                }), ResSmallSdkService.this);
+                                }), RESOLVESmallSdkService.this);
                     }
                 });
     }
@@ -78,7 +78,7 @@ public class ResSmallSdkService extends ResSdkService {
                         if (sdkHomePath != null) {
                             result = RESOLVESdkUtil.retrieveRESOLVEVersion(sdkHomePath);
                         }
-                        return Result.create(result, ResSmallSdkService.this);
+                        return Result.create(result, RESOLVESmallSdkService.this);
                     }
                 });
     }
