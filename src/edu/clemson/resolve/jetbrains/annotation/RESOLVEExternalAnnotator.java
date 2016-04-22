@@ -60,12 +60,14 @@ public class RESOLVEExternalAnnotator
         args.add(0, fileName);
         final RESOLVECompiler resolve =
                 new RESOLVECompiler(args.toArray(new String[args.size()]));
+
+        //if lib isn't specified, best we can do is run it on the containing folder
+        //for that particular file..
         if ( !args.contains("-lib") ) {
             // getContainingDirectory() must be identified as a read operation on file system
             ApplicationManager.getApplication().runReadAction(new Runnable() {
                 @Override
                 public void run() {
-                    //TODO: Clean that line up... needs to be virtual file.
                     resolve.workingDirectory = file.getVirtualFile().getParent().getCanonicalPath();
                 }
             });

@@ -16,6 +16,7 @@ import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.regex.Matcher;
@@ -58,7 +59,7 @@ public class RESOLVESdkUtil {
     @Nullable
     private static VirtualFile getSdkSrcDir(@NotNull String sdkPath,
                                             @NotNull String sdkVersion) {
-        String srcPath = "src";
+        String srcPath = "workspace";
         VirtualFile file = VirtualFileManager.getInstance()
                 .findFileByUrl(VfsUtilCore.pathToUrl(
                         FileUtil.join(sdkPath, srcPath)));
@@ -74,7 +75,7 @@ public class RESOLVESdkUtil {
 
     @Nullable
     private static VirtualFile getSdkSrcDir(@NotNull String sdkPath) {
-        String srcPath = "src";
+        String srcPath = "workspace";
         VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(
                 VfsUtilCore.pathToUrl(FileUtil.join(sdkPath, srcPath)));
         return file != null && file.isDirectory() ? file : null;
@@ -91,11 +92,12 @@ public class RESOLVESdkUtil {
     @Nullable
     public static VirtualFile suggestSdkDirectory() {
         if (SystemInfo.isWindows) {
-            return LocalFileSystem.getInstance().findFileByPath("C:\\resolve");
+            return LocalFileSystem.getInstance()
+                    .findFileByPath("C:\\resolve-lite");
         }
         if (SystemInfo.isMac || SystemInfo.isLinux) {
             VirtualFile usrLocal = LocalFileSystem.getInstance()
-                    .findFileByPath("/usr/local/resolve");
+                    .findFileByPath("/usr/local/resolve-lite");
             if (usrLocal != null) return usrLocal;
         }
         return null;
@@ -111,8 +113,14 @@ public class RESOLVESdkUtil {
             if (cachedVersion != null) {
                 return !cachedVersion.isEmpty() ? cachedVersion : null;
             }
+            VirtualFile compilerDir = sdkRoot.findFileByRelativePath("compiler");
+            if (compilerDir == null || !compilerDir.isDirectory()) {
+                RESOLVESdkService.LOG.debug("Cannot find compiler jar in resolve sdk home directory");
+                return null;
+            }
             VirtualFile compilerCandidate = null;
-            for (VirtualFile f : sdkRoot.getChildren()) {
+
+            for (VirtualFile f : compilerDir.getChildren()) {
                 if (f.getName().endsWith(".jar")) {
                     compilerCandidate = f;
                     break;

@@ -14,7 +14,7 @@ import java.util.List;
 
 public class RESOLVESdkLibraryPresentationProvider
         extends
-            LibraryPresentationProvider<DummyLibraryProperties> {
+        LibraryPresentationProvider<DummyLibraryProperties> {
 
     private static final LibraryKind KIND = LibraryKind.create("resolve");
 

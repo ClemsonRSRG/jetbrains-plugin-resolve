@@ -21,7 +21,6 @@ public class ConfigRESOLVEPerLanguageFile extends DialogWrapper {
     private JPanel dialogContents;
 
     private TextFieldWithBrowseButton outputDirField;
-    private JTextField textField1;
     private TextFieldWithBrowseButton libDirField;
     private JCheckBox genVCsCheckBox;
     private JTextField packageField;

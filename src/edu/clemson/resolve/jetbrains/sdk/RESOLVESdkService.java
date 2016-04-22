@@ -19,8 +19,7 @@ public abstract class RESOLVESdkService extends SimpleModificationTracker {
 
     public static final Logger LOG = Logger.getInstance(RESOLVESdkService.class);
 
-    @NotNull
-    final Project project;
+    @NotNull final Project project;
     private static String dummyTestSdkVersion;
 
     protected RESOLVESdkService(@NotNull Project project) {
@@ -34,6 +33,7 @@ public abstract class RESOLVESdkService extends SimpleModificationTracker {
     @Nullable
     public abstract String getSdkHomePath(@Nullable Module module);
 
+    //TODO TODO: This isn't right anymore
     @NotNull
     public static String libraryRootToSdkPath(
             @NotNull VirtualFile root) {

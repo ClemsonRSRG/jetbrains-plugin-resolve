@@ -150,28 +150,25 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
 
         VirtualFile contentRoot =
                 ConfigRESOLVEPerLanguageFile.getContentRoot(project, vfile);
+        String libDir = contentRoot.getPath();
+        args.put("-lib", libDir);
+
         String outputDirName =
                 ConfigRESOLVEPerLanguageFile.getOutputDirName(
                         project, qualFileName, contentRoot, package_);
         args.put("-o", outputDirName);
         args.put("-genCode", "Java");
 
-        //String libDir = contentRoot.getPath();
-        //args.put("-lib", libDir);
+
 
         return args;
     }
 
-    public String getOutputDirName() {
+    public String getOutputDir() {
         VirtualFile contentRoot =
                 ConfigRESOLVEPerLanguageFile.getContentRoot(project, targetFile);
-        Map<String,String> argMap = getRESOLVEArgs(project, targetFile);
-        String package_ = argMap.get("-package");
-        if ( package_==null ) {
-            package_ = MISSING;
-        }
-        return ConfigRESOLVEPerLanguageFile.getOutputDirName(project,
-                targetFile.getPath(), contentRoot, package_);
+        return contentRoot.getPath()+File.separator+
+                RunRESOLVEOnLanguageFile.OUTPUT_DIR_NAME;
     }
 
 }

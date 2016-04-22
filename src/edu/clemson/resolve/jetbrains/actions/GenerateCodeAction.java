@@ -35,10 +35,12 @@ public class GenerateCodeAction extends AnAction implements DumbAware {
 
     public static void selectedFileIsRESOLVEFile(AnActionEvent e) {
         VirtualFile vfile = getRESOLVEFileFromEvent(e);
-        if ( vfile==null ) {
+        if ( vfile==null || e.getProject() == null) {
             e.getPresentation().setEnabled(false);
             return;
         }
+        //RESOLVESdkService.getInstance(e.getProject()).isRESOLVEModule(e.getProject().get)
+
         e.getPresentation().setEnabled(true); // enable action if we're looking at RESOLVE file
         e.getPresentation().setVisible(true);
     }
@@ -89,13 +91,13 @@ public class GenerateCodeAction extends AnAction implements DumbAware {
 
         // refresh from disk to see new files
         Set<File> generatedFiles = new HashSet<File>();
-        generatedFiles.add(new File(gen.getOutputDirName()));
+        generatedFiles.add(new File(gen.getOutputDir()));
         LocalFileSystem.getInstance().refreshIoFiles(generatedFiles, true, true, null);
         // pop up a notification
         Notification notification =
                 new Notification(RunRESOLVEOnLanguageFile.groupDisplayId,
                         "Java code for " + resolveFile.getName() + " generated",
-                        "to " + gen.getOutputDirName(),
+                        "to " + gen.getOutputDir(),
                         NotificationType.INFORMATION);
         Notifications.Bus.notify(notification, project);
     }

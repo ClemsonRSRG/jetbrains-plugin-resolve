@@ -20,27 +20,14 @@ public class ResModuleReference extends FileReference {
         super(fileReferenceSet, range, index, text);
     }
 
-    @NotNull @Override public Object[] getVariants() {
+    @NotNull
+    @Override
+    public Object[] getVariants() {
         return ArrayUtil.EMPTY_OBJECT_ARRAY;
     }
 
-    @Override public PsiFileSystemItem resolve() {
-       /* PsiDirectory sourceFile = getDirectory();
-        Collection<PsiFileSystemItem> contexts =
-                this.getFileReferenceSet().getDefaultContexts();
-
-        PsiFile[] foundFiles =
-                FilenameIndex.getFilesByName(sourceFile.getProject(),
-                        getText() + ".resolve",
-                RESOLVEUtil.moduleScope(getDirectory()));
-
-        if (foundFiles.length != 0) {
-            PsiFile file = foundFiles[0];
-            PsiElementResolveResult result =
-                    new PsiElementResolveResult(FileReference.getOriginalFile(file));
-            return (PsiFileSystemItem) result.getElement();
-        }
-        return null;*/
+    @Override
+    public PsiFileSystemItem resolve() {
         PsiDirectory sourceFile = getDirectory();
         Collection<PsiFileSystemItem> contexts =
                 this.getFileReferenceSet().getDefaultContexts();
@@ -54,19 +41,6 @@ public class ResModuleReference extends FileReference {
                     new PsiElementResolveResult(FileReference.getOriginalFile(file));
             return (PsiFileSystemItem) result.getElement();
         }
-        /*for (PsiFileSystemItem f : contexts) {
-
-            String text = getText();
-            VirtualFile x = f.getVirtualFile().findChild(getText() + ".resolve");
-            if (x == null) continue;
-            PsiFile file = f.getManager().findFile(x);
-
-            if (file != null) {
-                PsiElementResolveResult result =
-                        new PsiElementResolveResult(FileReference.getOriginalFile(file));
-                return (PsiFileSystemItem) result.getElement();
-            }
-        }*/
         return null;
     }
 
@@ -74,7 +48,8 @@ public class ResModuleReference extends FileReference {
         return true;
     }*/
 
-    @Override protected Object createLookupItem(PsiElement candidate) {
+    @Override
+    protected Object createLookupItem(PsiElement candidate) {
         return null;/*LookupElementBuilder
                 .create(((ResFile)candidate).getVirtualFile().getNameWithoutExtension())
                 .withIcon(candidate.getIcon(0)).withTypeText(
@@ -82,7 +57,8 @@ public class ResModuleReference extends FileReference {
 
     }
 
-    @Nullable private PsiDirectory getDirectory() {
+    @Nullable
+    private PsiDirectory getDirectory() {
         PsiElement originalElement =
                 CompletionUtil.getOriginalElement(getElement());
         PsiFile file = originalElement != null ?
