@@ -47,15 +47,16 @@ public class RESOLVEExternalAnnotator
         return file;
     }
 
-    /** Called 2nd; run antlr on file */
     @Override @Nullable public List<RESOLVEExternalAnnotator.Issue> doAnnotate(
             final PsiFile file) {
         String grammarFileName = file.getVirtualFile().getPath();
         LOG.info("doAnnotate "+grammarFileName);
         String fileContents = file.getText();
-        List<String> args = RunRESOLVEOnLanguageFile
-                .getRESOLVEArgsAsList(
-                        file.getProject(), file.getVirtualFile());
+        Map<String, String> argMap = new LinkedHashMap<>();
+        argMap.put("-lib", RunRESOLVEOnLanguageFile
+                .getContentRoot(file.getProject(), file.getVirtualFile())
+                .getPath());
+        List<String> args = RunRESOLVEOnLanguageFile.getRESOLVEArgsAsList(argMap);
         String fileName = file.getName();
         args.add(0, fileName);
         final RESOLVECompiler resolve =

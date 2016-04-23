@@ -3,6 +3,7 @@ package edu.clemson.resolve.jetbrains;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.ProjectJdkForModuleStep;
 import com.intellij.ide.util.projectWizard.WizardContext;
+import com.intellij.openapi.module.JavaModuleType;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.ModuleTypeManager;
 import com.intellij.openapi.roots.ui.configuration.ModulesProvider;
@@ -57,7 +58,6 @@ public class RESOLVEModuleType extends ModuleType<RESOLVEModuleBuilder> {
     }
 
     @NotNull
-    @Override
     public ModuleWizardStep[] createWizardSteps(
             @NotNull WizardContext wizardContext,
             @NotNull final RESOLVEModuleBuilder moduleBuilder,
