@@ -155,6 +155,4 @@ public class GenerateCodeAction extends AnAction implements DumbAware {
         }
         return result.replace(File.separatorChar, '.');     //rpl all '/' with '.'
     }
-
-
 }
