@@ -52,7 +52,8 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
         this.args.add(fullyQualifiedInputFileName);
     }
 
-    @Override public void run(@NotNull ProgressIndicator indicator) {
+    @Override
+    public void run(@NotNull ProgressIndicator indicator) {
         indicator.setIndeterminate(true);
         if (forceGeneration) {
             resolve(targetFile);
@@ -60,14 +61,16 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
     }
 
     //See "ImplementMethodsFix" in the intellij sources
-    /** Run RESOLVE on file according to preferences in intellij for this file.
-     *  Writes set of generated files or empty set if error.
+
+    /**
+     * Run RESOLVE on file according to preferences in intellij for this file.
+     * Writes set of generated files or empty set if error.
      */
     public void resolve(VirtualFile vfile) {
-        if ( vfile==null ) return;
-        LOG.info("resolve(\""+vfile.getPath()+"\")");
+        if (vfile == null) return;
+        LOG.info("resolve(\"" + vfile.getPath() + "\")");
 
-       // String sourcePath = ConfigRESOLVEPerLanguageFile.getParentDir(vfile);
+        // String sourcePath = ConfigRESOLVEPerLanguageFile.getParentDir(vfile);
 
         LOG.info("args: " + Utils.join(args, " "));
         RESOLVECompiler compiler =
@@ -79,7 +82,7 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
                         .format(Calendar.getInstance()
                                 .getTime());
 
-        console.print(timeStamp+": resolve "+ Utils.join(args, " ")+"\n",
+        console.print(timeStamp + ": resolve " + Utils.join(args, " ") + "\n",
                 ConsoleViewContentType.SYSTEM_OUTPUT);
 
         compiler.removeListeners();
@@ -88,8 +91,7 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
 
         try {
             compiler.processCommandLineTargets();
-        }
-        catch (Throwable e) {
+        } catch (Throwable e) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             e.printStackTrace(pw);
@@ -105,7 +107,7 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
             listener.hasOutput = true; // show console below
         }
 
-        if ( listener.hasOutput ) {
+        if (listener.hasOutput) {
             RESOLVEPluginController.showConsoleWindow(project);
         }
     }
@@ -128,8 +130,8 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
 
     public static String getOutputDir(Project project, VirtualFile vfile) {
         VirtualFile contentRoot = getContentRoot(project, vfile);
-        return contentRoot.getPath()+File.separator+
-                OUTPUT_MODULE_NAME+File.separator+
+        return contentRoot.getPath() + File.separator +
+                OUTPUT_MODULE_NAME + File.separator +
                 RunRESOLVEOnLanguageFile.OUTPUT_DIR_NAME;
     }
 

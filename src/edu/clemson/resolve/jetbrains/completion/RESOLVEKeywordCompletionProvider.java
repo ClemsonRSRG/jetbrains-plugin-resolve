@@ -16,18 +16,23 @@ import org.jetbrains.annotations.Nullable;
 
 public class RESOLVEKeywordCompletionProvider
         extends
-            CompletionProvider<CompletionParameters> {
+        CompletionProvider<CompletionParameters> {
 
     public static final InsertHandler<LookupElement> EMPTY_INSERT_HANDLER =
             new InsertHandler<LookupElement>() {
-        @Override public void handleInsert(InsertionContext context,
-                                           LookupElement element) {}
-    };
+                @Override
+                public void handleInsert(InsertionContext context,
+                                         LookupElement element) {
+                }
+            };
 
     private final int priority;
-    @Nullable private final InsertHandler<LookupElement> insertHandler;
-    @Nullable private final AutoCompletionPolicy completionPolicy;
-    @NotNull private final String[] keywords;
+    @Nullable
+    private final InsertHandler<LookupElement> insertHandler;
+    @Nullable
+    private final AutoCompletionPolicy completionPolicy;
+    @NotNull
+    private final String[] keywords;
 
     public RESOLVEKeywordCompletionProvider(int priority, String... keywords) {
         this(priority, null, null, keywords);
@@ -55,7 +60,8 @@ public class RESOLVEKeywordCompletionProvider
         this.keywords = keywords;
     }
 
-    @Override protected void addCompletions(
+    @Override
+    protected void addCompletions(
             @NotNull CompletionParameters parameters,
             ProcessingContext context,
             @NotNull CompletionResultSet result) {
@@ -64,11 +70,12 @@ public class RESOLVEKeywordCompletionProvider
         }
     }
 
-    @NotNull private LookupElement createKeywordLookupElement(
+    @NotNull
+    private LookupElement createKeywordLookupElement(
             @NotNull final String keyword) {
         final InsertHandler<LookupElement> handler =
                 ObjectUtils.chooseNotNull(this.insertHandler,
-                createTemplateBasedInsertHandler("resolve_lang_" + keyword));
+                        createTemplateBasedInsertHandler("resolve_lang_" + keyword));
         LookupElement result =
                 createKeywordLookupElement(keyword, priority, handler);
         return completionPolicy != null ?
@@ -83,11 +90,13 @@ public class RESOLVEKeywordCompletionProvider
         return PrioritizedLookupElement.withPriority(builder, priority);
     }
 
-    @Nullable  public static InsertHandler<LookupElement>
-                            createTemplateBasedInsertHandler(
+    @Nullable
+    public static InsertHandler<LookupElement>
+    createTemplateBasedInsertHandler(
             @NotNull final String templateId) {
         return new InsertHandler<LookupElement>() {
-            @Override public void handleInsert(@NotNull InsertionContext context,
+            @Override
+            public void handleInsert(@NotNull InsertionContext context,
                                      LookupElement item) {
                 Template template = TemplateSettings.getInstance()
                         .getTemplateById(templateId);
@@ -97,16 +106,14 @@ public class RESOLVEKeywordCompletionProvider
                             context.getTailOffset());
                     TemplateManager.getInstance(context.getProject())
                             .startTemplate(editor, template);
-                }
-                else {
+                } else {
                     final int currentOffset = editor.getCaretModel().getOffset();
                     final CharSequence documentText = editor.getDocument()
                             .getImmutableCharSequence();
                     if (documentText.length() <= currentOffset ||
                             documentText.charAt(currentOffset) != ' ') {
                         EditorModificationUtil.insertStringAtCaret(editor, " ");
-                    }
-                    else {
+                    } else {
                         EditorModificationUtil.moveCaretRelatively(editor, 1);
                     }
                 }

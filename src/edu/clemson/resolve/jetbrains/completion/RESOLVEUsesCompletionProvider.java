@@ -25,13 +25,15 @@ import javax.swing.*;
 
 public class RESOLVEUsesCompletionProvider
         extends
-            CompletionProvider<CompletionParameters> {
+        CompletionProvider<CompletionParameters> {
 
-    /** We fiddle around with TextRange so much in here to strip out the
-     *  "Intellijidearulezzz" suffix that the completion provider apparently
-     *  always feels the need to tack on.
+    /**
+     * We fiddle around with TextRange so much in here to strip out the
+     * "Intellijidearulezzz" suffix that the completion provider apparently
+     * always feels the need to tack on.
      */
-    @Override protected void addCompletions(
+    @Override
+    protected void addCompletions(
             @NotNull CompletionParameters parameters,
             ProcessingContext context,
             @NotNull CompletionResultSet result) {
@@ -69,7 +71,8 @@ public class RESOLVEUsesCompletionProvider
                 if (psiFile != null && psiFile instanceof ResFile) {
                     ResModuleDecl enclosedModule =
                             ((ResFile) psiFile).getEnclosedModule();
-                    if (enclosedModule != null) fileIcon = enclosedModule.getIcon(0);
+                    if (enclosedModule != null)
+                        fileIcon = enclosedModule.getIcon(0);
                 }
                 result.addElement(LookupElementBuilder
                         .create(file.getNameWithoutExtension())

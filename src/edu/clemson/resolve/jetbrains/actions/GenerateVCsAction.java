@@ -6,12 +6,14 @@ import com.intellij.openapi.project.DumbAware;
 
 public class GenerateVCsAction extends AnAction implements DumbAware {
 
-    @Override public void update(AnActionEvent e) {
+    @Override
+    public void update(AnActionEvent e) {
         GenerateCodeAction.selectedFileIsRESOLVEFile(e);
 
     }
 
-    @Override public void actionPerformed(AnActionEvent e) {
+    @Override
+    public void actionPerformed(AnActionEvent e) {
 
     }
 }

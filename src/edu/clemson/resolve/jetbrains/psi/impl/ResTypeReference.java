@@ -19,7 +19,7 @@ import static edu.clemson.resolve.jetbrains.psi.impl.ResReference.processSuperMo
 //processor for types, or b.) somehow ignore type models when we'r
 public class ResTypeReference
         extends
-            PsiPolyVariantReferenceBase<ResTypeReferenceExp> {
+        PsiPolyVariantReferenceBase<ResTypeReferenceExp> {
 
     public ResTypeReference(@NotNull ResTypeReferenceExp o) {
         super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(),
@@ -33,21 +33,25 @@ public class ResTypeReference
                 public ResolveResult[] resolve(
                         @NotNull PsiPolyVariantReferenceBase psiPolyVariantReferenceBase,
                         boolean incompleteCode) {
-                    return ((ResTypeReference)psiPolyVariantReferenceBase).resolveInner();
+                    return ((ResTypeReference) psiPolyVariantReferenceBase).resolveInner();
                 }
             };
 
-    @NotNull private ResolveResult[] resolveInner() {
+    @NotNull
+    private ResolveResult[] resolveInner() {
         Collection<ResolveResult> result = new OrderedSet<ResolveResult>();
         processResolveVariants(ResReference.createResolveProcessor(result, myElement));
         return result.toArray(new ResolveResult[result.size()]);
     }
 
-    @NotNull private PsiElement getIdentifier() {
+    @NotNull
+    private PsiElement getIdentifier() {
         return myElement.getIdentifier();
     }
 
-    @Override @NotNull public ResolveResult[] multiResolve(
+    @Override
+    @NotNull
+    public ResolveResult[] multiResolve(
             boolean incompleteCode) {
         return myElement.isValid()
                 ? ResolveCache.getInstance(myElement.getProject())
@@ -55,7 +59,9 @@ public class ResTypeReference
                 : ResolveResult.EMPTY_ARRAY;
     }
 
-    @NotNull @Override public Object[] getVariants() {
+    @NotNull
+    @Override
+    public Object[] getVariants() {
         return ArrayUtil.EMPTY_OBJECT_ARRAY;
     }
 
@@ -65,7 +71,7 @@ public class ResTypeReference
         ResolveState state = ResolveState.initial();
         ResTypeReferenceExp qualifier = myElement.getQualifier();
         if (qualifier != null) {
-            return processQualifierExpression(((ResFile)file), qualifier, processor, state);
+            return processQualifierExpression(((ResFile) file), qualifier, processor, state);
         }
         return processUnqualifiedResolve(((ResFile) file), processor, state, true);
     }
@@ -78,7 +84,7 @@ public class ResTypeReference
         PsiElement target = targetRef.resolve();
         if (target == null || target == qualifier) return false;
         if (target instanceof ResFacilityDecl) {
-           ResFile specFile = ((ResFacilityDecl) target).getSpecification();
+            ResFile specFile = ((ResFacilityDecl) target).getSpecification();
             if (specFile != null) {
                 ResReference.processModuleLevelEntities(specFile, processor, state, false);
             }
@@ -94,9 +100,12 @@ public class ResTypeReference
         ResolveUtil.treeWalkUp(myElement, delegate);
         Collection<? extends ResNamedElement> result = delegate.getVariants();
         //this processes any named elements we've found searching up the tree in the previous line
-        if (!processNamedElements(processor, state, result, localResolve)) return false;
-        if (!ResReference.processModuleLevelEntities(file, processor, state, localResolve)) return false;
-        if (!ResReference.processExplicitlyNamedAndInheritedUsesRequests(file, processor, state)) return false;
+        if (!processNamedElements(processor, state, result, localResolve))
+            return false;
+        if (!ResReference.processModuleLevelEntities(file, processor, state, localResolve))
+            return false;
+        if (!ResReference.processExplicitlyNamedAndInheritedUsesRequests(file, processor, state))
+            return false;
 
         //TODO: What we really need to avoid finding both the models and reprs
         // is some flag, say, "stopAfterFirst" (I think...)
@@ -111,23 +120,28 @@ public class ResTypeReference
         processSuperModules(file, processor, delegate, state);
         return processNamedElements(processor, state, delegate.getVariants(), false);
     }
-    
-    @NotNull private ResTypeProcessor createDelegate(
+
+    @NotNull
+    private ResTypeProcessor createDelegate(
             @NotNull ResScopeProcessor processor) {
         return new ResTypeProcessor(myElement, processor.isCompletion());
     }
 
-    /** A processor for treewalking */
+    /**
+     * A processor for treewalking
+     */
     protected static class ResTypeProcessor extends ResScopeProcessorBase {
 
         public ResTypeProcessor(@NotNull ResTypeReferenceExp origin,
                                 boolean completion) {
             super(origin.getIdentifier(), origin, completion);
         }
-        @Override protected boolean crossOff(@NotNull PsiElement e) {
+
+        @Override
+        protected boolean crossOff(@NotNull PsiElement e) {
             return !(e instanceof ResTypeLikeNodeDecl) &&
-                   !(e instanceof ResFacilityDecl) &&
-                   !(e instanceof ResTypeParamDecl);
+                    !(e instanceof ResFacilityDecl) &&
+                    !(e instanceof ResTypeParamDecl);
         }
     }
 }

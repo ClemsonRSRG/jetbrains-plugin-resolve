@@ -16,22 +16,28 @@ public class ImplementOperationsFix extends IntentionAndQuickFixAction {
         element = aModule;
     }
 
-    @NotNull @Override public String getName() {
+    @NotNull
+    @Override
+    public String getName() {
         return "Implement operations";
     }
 
-    @NotNull @Override public String getFamilyName() {
+    @NotNull
+    @Override
+    public String getFamilyName() {
         return "Implement operations";
     }
 
-    @Override public void applyFix(@NotNull Project project,
-                                   PsiFile file,
-                                   @Nullable Editor editor) {
+    @Override
+    public void applyFix(@NotNull Project project,
+                         PsiFile file,
+                         @Nullable Editor editor) {
     }
 
-    @Override public boolean isAvailable(@NotNull final Project project,
-                                         @Nullable final Editor editor,
-                                         final PsiFile file) {
+    @Override
+    public boolean isAvailable(@NotNull final Project project,
+                               @Nullable final Editor editor,
+                               final PsiFile file) {
         if (element == null) return false;
         if (!element.isWritable()) return false;
         return true;

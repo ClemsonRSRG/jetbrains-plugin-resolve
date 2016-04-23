@@ -12,14 +12,17 @@ public class AnnotatorCompilerListener implements RESOLVECompilerListener {
 
     public final List<RESOLVEExternalAnnotator.Issue> issues = new ArrayList<>();
 
-    @Override public void info(String msg) {
+    @Override
+    public void info(String msg) {
     }
 
-    @Override public void error(RESOLVEMessage msg) {
+    @Override
+    public void error(RESOLVEMessage msg) {
         issues.add(new RESOLVEExternalAnnotator.Issue(msg));
     }
 
-    @Override public void warning(RESOLVEMessage msg) {
+    @Override
+    public void warning(RESOLVEMessage msg) {
         issues.add(new RESOLVEExternalAnnotator.Issue(msg));
     }
 }

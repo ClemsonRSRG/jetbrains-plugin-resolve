@@ -18,11 +18,13 @@ public class RESOLVEBraceMatcher implements PairedBraceMatcher {
             new BracePair(ResTypes.DBL_LBRACE, ResTypes.DBL_RBRACE, false),
     };
 
-    @Override public BracePair[] getPairs() {
+    @Override
+    public BracePair[] getPairs() {
         return PAIRS;
     }
 
-    @Override public boolean isPairedBracesAllowedBeforeType(
+    @Override
+    public boolean isPairedBracesAllowedBeforeType(
             @NotNull IElementType lbraceType, @Nullable IElementType type) {
         return RESOLVEParserDefinition.COMMENTS.contains(type)
                 || RESOLVEParserDefinition.WHITESPACES.contains(type)
@@ -34,8 +36,9 @@ public class RESOLVEBraceMatcher implements PairedBraceMatcher {
                 || null == type;
     }
 
-    @Override public int getCodeConstructStart(PsiFile file,
-                                               int openingBraceOffset) {
+    @Override
+    public int getCodeConstructStart(PsiFile file,
+                                     int openingBraceOffset) {
         return openingBraceOffset;
     }
 }

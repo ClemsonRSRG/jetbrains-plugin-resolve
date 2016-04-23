@@ -27,9 +27,16 @@ import java.io.File;
 import java.io.StringReader;
 import java.util.*;
 
+/**
+ * Uses the resolve compiler to annotate the actively open editor with error
+ * and warning msgs. This code is adapted to our purposes from the ANTLR4
+ * intellij plugin located here:
+ * <p>
+ * <a href="https://github.com/antlr/intellij-plugin-v4">https://github.com/antlr/intellij-plugin-v4/a>
+ */
 public class RESOLVEExternalAnnotator
         extends
-            ExternalAnnotator<PsiFile, List<RESOLVEExternalAnnotator.Issue>> {
+        ExternalAnnotator<PsiFile, List<RESOLVEExternalAnnotator.Issue>> {
 
     public static final Logger LOG =
             Logger.getInstance("RESOLVEExternalAnnotator");
@@ -38,19 +45,28 @@ public class RESOLVEExternalAnnotator
         String annotation;
         List<Token> offendingTokens = new ArrayList<>();
         RESOLVEMessage msg;
-        public Issue(RESOLVEMessage msg) { this.msg = msg; }
+
+        public Issue(RESOLVEMessage msg) {
+            this.msg = msg;
+        }
     }
 
-    /** Called first; return file */
-    @Override @Nullable public PsiFile collectInformation(
+    /**
+     * Called first; return file
+     */
+    @Override
+    @Nullable
+    public PsiFile collectInformation(
             @NotNull PsiFile file) {
         return file;
     }
 
-    @Override @Nullable public List<RESOLVEExternalAnnotator.Issue> doAnnotate(
+    @Override
+    @Nullable
+    public List<RESOLVEExternalAnnotator.Issue> doAnnotate(
             final PsiFile file) {
         String grammarFileName = file.getVirtualFile().getPath();
-        LOG.info("doAnnotate "+grammarFileName);
+        LOG.info("doAnnotate " + grammarFileName);
         String fileContents = file.getText();
         Map<String, String> argMap = new LinkedHashMap<>();
         argMap.put("-lib", RunRESOLVEOnLanguageFile
@@ -64,7 +80,7 @@ public class RESOLVEExternalAnnotator
 
         //if lib isn't specified, best we can do is run it on the containing folder
         //for that particular file..
-        if ( !args.contains("-lib") ) {
+        if (!args.contains("-lib")) {
             // getContainingDirectory() must be identified as a read operation on file system
             ApplicationManager.getApplication().runReadAction(new Runnable() {
                 @Override
@@ -82,7 +98,7 @@ public class RESOLVEExternalAnnotator
             VirtualFile vfile = file.getVirtualFile();
             in.name = vfile.getPath();
             AnnotatedModule ast = resolve.parseModule(in);
-            if ( ast==null || ast.hasErrors ) return Collections.emptyList();
+            if (ast == null || ast.hasErrors) return Collections.emptyList();
             resolve.processCommandLineTargets(ast);
           /*
             Map<String, GrammarAST> unusedRules = getUnusedParserRules(g);
@@ -97,31 +113,33 @@ public class RESOLVEExternalAnnotator
             for (Issue issue : listener.issues) {
                 processIssue(file, issue);
             }
-        }
-        catch (Exception e) {
-            LOG.error("antlr can't process "+file.getName(), e);
+        } catch (Exception e) {
+            LOG.error("antlr can't process " + file.getName(), e);
         }
         return listener.issues;
     }
 
-    /** Called 3rd */
-    @Override public void apply(@NotNull PsiFile file,
-                                List<RESOLVEExternalAnnotator.Issue> issues,
-                                @NotNull AnnotationHolder holder) {
+    /**
+     * Called 3rd
+     */
+    @Override
+    public void apply(@NotNull PsiFile file,
+                      List<RESOLVEExternalAnnotator.Issue> issues,
+                      @NotNull AnnotationHolder holder) {
         for (int i = 0; i < issues.size(); i++) {
             Issue issue = issues.get(i);
             for (int j = 0; j < issue.offendingTokens.size(); j++) {
                 Token t = issue.offendingTokens.get(j);
-                if ( t instanceof org.antlr.v4.runtime.CommonToken ) {
-                    org.antlr.v4.runtime.CommonToken ct = (org.antlr.v4.runtime.CommonToken)t;
+                if (t instanceof org.antlr.v4.runtime.CommonToken) {
+                    org.antlr.v4.runtime.CommonToken ct = (org.antlr.v4.runtime.CommonToken) t;
                     int startIndex = ct.getStartIndex();
                     int stopIndex = ct.getStopIndex();
                     TextRange range = new TextRange(startIndex, stopIndex + 1);
                     ErrorSeverity severity = ErrorSeverity.INFO;
-                    if ( issue.msg.getErrorType()!=null ) {
+                    if (issue.msg.getErrorType() != null) {
                         severity = issue.msg.getErrorType().severity;
                     }
-                    switch ( severity ) {
+                    switch (severity) {
                         case ERROR:
                         case ERROR_ONE_OFF:
                         case FATAL:
@@ -148,31 +166,23 @@ public class RESOLVEExternalAnnotator
     public void processIssue(final PsiFile file, Issue issue) {
         File languageFile = new File(file.getVirtualFile().getPath());
         File issueFile = new File(issue.msg.fileName);
-        if ( !languageFile.getName().equals(issueFile.getName()) ) {
+        if (!languageFile.getName().equals(issueFile.getName())) {
             return; // ignore errors from external files
         }
         ST msgST = null;
-        /*if ( issue.msg instanceof GrammarInfoMessage ) { // not in ANTLR so must hack it in
-            org.antlr.runtime.Token t = ((GrammarSemanticsMessage)issue.msg).offendingToken;
+        if (issue.msg instanceof LanguageSemanticsMessage) {
+            Token t = ((LanguageSemanticsMessage) issue.msg).offendingToken;
             issue.offendingTokens.add(t);
-            msgST = new ST("unused parser rule <arg>");
-            msgST.add("arg", t.getText());
-            msgST.impl.name = "info";
-        }*/
-        if ( issue.msg instanceof LanguageSemanticsMessage ) {
-            Token t = ((LanguageSemanticsMessage)issue.msg).offendingToken;
-            issue.offendingTokens.add(t);
-        }
-        else if ( issue.msg instanceof CompilerMessage ) {
+        } else if (issue.msg instanceof CompilerMessage) {
             issue.offendingTokens.add(issue.msg.offendingToken);
         }
 
         RESOLVECompiler antlr = new RESOLVECompiler();
-        if ( msgST==null ) {
+        if (msgST == null) {
             msgST = antlr.errMgr.getMessageTemplate(issue.msg);
         }
         String outputMsg = msgST.render();
-        if ( antlr.errMgr.formatWantsSingleLineMessage() ) {
+        if (antlr.errMgr.formatWantsSingleLineMessage()) {
             outputMsg = outputMsg.replace('\n', ' ');
         }
         issue.annotation = outputMsg;

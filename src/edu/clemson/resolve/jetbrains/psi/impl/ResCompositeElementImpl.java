@@ -12,17 +12,19 @@ import org.jetbrains.annotations.Nullable;
 
 public class ResCompositeElementImpl
         extends
-            ASTWrapperPsiElement implements ResCompositeElement {
+        ASTWrapperPsiElement implements ResCompositeElement {
 
     public ResCompositeElementImpl(@NotNull ASTNode node) {
         super(node);
     }
 
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return getNode().getElementType().toString();
     }
 
-    @Override public boolean processDeclarations(
+    @Override
+    public boolean processDeclarations(
             @NotNull PsiScopeProcessor processor,
             @NotNull ResolveState state,
             @Nullable PsiElement lastParent,
@@ -44,7 +46,8 @@ public class ResCompositeElementImpl
                 ResolveUtil.processChildren(o, processor, state, lastParent, place);
     }
 
-    @Override public boolean shouldGoDeeper() {
+    @Override
+    public boolean shouldGoDeeper() {
         return true;
     }
 }

@@ -43,15 +43,17 @@ public class ResModuleReferenceSet extends FileReferenceSet {
                 RESOLVESdkUtil.getSourcesPathsToLookup(project, module);
         return ContainerUtil.mapNotNull(sourceRoots,
                 new Function<VirtualFile, PsiFileSystemItem>() {
-            @Nullable
-            @Override
-            public PsiFileSystemItem fun(VirtualFile file) {
-                return psiManager.findDirectory(file);
-            }
-        });
+                    @Nullable
+                    @Override
+                    public PsiFileSystemItem fun(VirtualFile file) {
+                        return psiManager.findDirectory(file);
+                    }
+                });
     }
 
-    @NotNull @Override public FileReference createFileReference(
+    @NotNull
+    @Override
+    public FileReference createFileReference(
             TextRange range, int index, String text) {
         return new ResModuleReference(this, range, index, text);
     }

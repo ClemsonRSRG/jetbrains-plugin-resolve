@@ -29,12 +29,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-/** Allows users to click the button on the side panel of the editor and view
- *  a hierarchical view of the module they are currently looking at.
+/**
+ * Allows users to click the button on the side panel of the editor and view
+ * a hierarchical view of the module they are currently looking at.
  */
 public class RESOLVEStructureViewFactory implements PsiStructureViewFactory {
 
-    @Nullable @Override public StructureViewBuilder getStructureViewBuilder(
+    @Nullable
+    @Override
+    public StructureViewBuilder getStructureViewBuilder(
             PsiFile psiFile) {
         return null;
     }

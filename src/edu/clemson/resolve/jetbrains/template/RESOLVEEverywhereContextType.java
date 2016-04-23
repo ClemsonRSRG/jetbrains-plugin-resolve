@@ -9,15 +9,16 @@ import org.jetbrains.annotations.NotNull;
 
 public class RESOLVEEverywhereContextType
         extends
-            RESOLVELiveTemplateContextType {
+        RESOLVELiveTemplateContextType {
 
     protected RESOLVEEverywhereContextType() {
         super("RESOLVE", "RESOLVE", EverywhereContextType.class);
     }
 
-    @Override protected boolean isInContext(@NotNull PsiElement element) {
+    @Override
+    protected boolean isInContext(@NotNull PsiElement element) {
         return !(element instanceof PsiComment ||
                 element instanceof LeafPsiElement &&
-                        ((LeafPsiElement)element).getElementType() == ResTypes.STRING);
+                        ((LeafPsiElement) element).getElementType() == ResTypes.STRING);
     }
 }

@@ -11,26 +11,33 @@ import java.util.List;
 
 public abstract class ResAbstractMathSignatureImpl
         extends
-            ResNamedElementImpl implements ResMathDefinitionSignature {
+        ResNamedElementImpl implements ResMathDefinitionSignature {
 
     public ResAbstractMathSignatureImpl(@NotNull ASTNode node) {
         super(node);
     }
 
-    @NotNull @Override public List<ResMathVarDeclGroup> getParameters() {
+    @NotNull
+    @Override
+    public List<ResMathVarDeclGroup> getParameters() {
         return PsiTreeUtil.getChildrenOfTypeAsList(this,
                 ResMathVarDeclGroup.class);
     }
 
-    @Nullable @Override public ResMathExp getMathTypeExp() {
+    @Nullable
+    @Override
+    public ResMathExp getMathTypeExp() {
         return findChildByClass(ResMathExp.class);
     }
 
-    /** This has to be {@code Nullable} at the moment; think about it: We have
-     *  infix and outfix signatures, how would we create the |..| needed?
-     *  In other words, it's tough doing completion for non-identifier like things
+    /**
+     * This has to be {@code Nullable} at the moment; think about it: We have
+     * infix and outfix signatures, how would we create the |..| needed?
+     * In other words, it's tough doing completion for non-identifier like things
      */
-    @Nullable @Override public PsiElement getIdentifier() {
+    @Nullable
+    @Override
+    public PsiElement getIdentifier() {
         return findChildByClass(ResMathSymbolName.class);
     }
 }

@@ -21,9 +21,10 @@ import static edu.clemson.resolve.jetbrains.completion.RESOLVECompletionUtil.cre
 
 public class RESOLVEReferenceCompletionProvider
         extends
-            CompletionProvider<CompletionParameters> {
+        CompletionProvider<CompletionParameters> {
 
-    @Override protected void addCompletions(
+    @Override
+    protected void addCompletions(
             @NotNull CompletionParameters parameters,
             ProcessingContext context,
             @NotNull CompletionResultSet set) {
@@ -50,25 +51,24 @@ public class RESOLVEReferenceCompletionProvider
             fillVariantsByReference(ArrayUtil.getFirstElement(references), result);
         }*/
         else if (reference instanceof ResReference) {
-            ((ResReference)reference).processResolveVariants(
+            ((ResReference) reference).processResolveVariants(
                     new MyRESOLVEScopeProcessor(result, false));
-        }
-        else if (reference instanceof ResTypeReference) {
+        } else if (reference instanceof ResTypeReference) {
             PsiElement element = reference.getElement();
             ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
                 @Override
                 protected boolean accept(@NotNull PsiElement e) {
                     return e instanceof ResTypeLikeNodeDecl ||
-                           e instanceof ResFacilityDecl ||
-                           e instanceof ResTypeParamDecl;
+                            e instanceof ResFacilityDecl ||
+                            e instanceof ResTypeParamDecl;
                 }
             };
             ((ResTypeReference) reference).processResolveVariants(aProcessor);
-        }
-        else if (reference instanceof ResMathVarLikeReference) {
+        } else if (reference instanceof ResMathVarLikeReference) {
             PsiElement element = reference.getElement();
             ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
-                @Override protected boolean accept(@NotNull PsiElement e) {
+                @Override
+                protected boolean accept(@NotNull PsiElement e) {
                     return e instanceof ResMathDefinitionSignature ||
                             e instanceof ResMathVarDef ||
                             e instanceof ResParamDef ||
@@ -90,38 +90,35 @@ public class RESOLVEReferenceCompletionProvider
         }
     }
 
-    @Nullable private static LookupElement createLookupElement(
+    @Nullable
+    private static LookupElement createLookupElement(
             @NotNull PsiElement o, @NotNull ResolveState state,
             boolean forTypes) {
         if (o instanceof ResNamedElement) {
             if (o instanceof ResMathDefinitionSignature) {
-                String name = ((ResMathDefinitionSignature)o).getName();
+                String name = ((ResMathDefinitionSignature) o).getName();
                 if (name != null) {
                     return RESOLVECompletionUtil
                             .createDefinitionLookupElement(
                                     (ResMathDefinitionSignature) o, name, null,
                                     RESOLVECompletionUtil.DEFINITION_PRIORITY);
                 }
-            }
-            else if (o instanceof ResTypeLikeNodeDecl ||
-                     o instanceof ResTypeParamDecl) {
+            } else if (o instanceof ResTypeLikeNodeDecl ||
+                    o instanceof ResTypeParamDecl) {
                 return RESOLVECompletionUtil
-                        .createTypeLookupElement((ResNamedElement)o);
-            }
-            else if (o instanceof ResFacilityDecl) {
+                        .createTypeLookupElement((ResNamedElement) o);
+            } else if (o instanceof ResFacilityDecl) {
                 return RESOLVECompletionUtil
                         .createFacilityLookupElement(((ResFacilityDecl) o));
-            }
-            else if (o instanceof ResOperationLikeNode) {
-                String name = ((ResOperationLikeNode)o).getName();
+            } else if (o instanceof ResOperationLikeNode) {
+                String name = ((ResOperationLikeNode) o).getName();
                 if (name != null) {
                     return RESOLVECompletionUtil
                             .createFunctionOrMethodLookupElement(
                                     (ResOperationLikeNode) o, name, null,
                                     RESOLVECompletionUtil.FUNCTION_PRIORITY);
                 }
-            }
-            else {
+            } else {
                 //TODO: Apply type info to the lookup renderers for these 'var like' elements
                 return RESOLVECompletionUtil
                         .createVariableLikeLookupElement((ResNamedElement) o);
@@ -140,8 +137,9 @@ public class RESOLVEReferenceCompletionProvider
             this.forTypes = forTypes;
         }
 
-        @Override public boolean execute(@NotNull PsiElement o,
-                                         @NotNull ResolveState state) {
+        @Override
+        public boolean execute(@NotNull PsiElement o,
+                               @NotNull ResolveState state) {
             if (accept(o)) {
                 addElement(o, state, forTypes, result);
             }
@@ -152,7 +150,8 @@ public class RESOLVEReferenceCompletionProvider
             return true;
         }
 
-        @Override public boolean isCompletion() {
+        @Override
+        public boolean isCompletion() {
             return true;
         }
     }

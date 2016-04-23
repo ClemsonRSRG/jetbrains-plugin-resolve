@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 //refactoring, etc working.
 public abstract class ResCachedReference<T extends PsiElement>
         extends
-            PsiReferenceBase<T> {
+        PsiReferenceBase<T> {
 
     protected ResCachedReference(@NotNull T element) {
         super(element, TextRange.from(0, element.getTextLength()));
@@ -22,22 +22,27 @@ public abstract class ResCachedReference<T extends PsiElement>
             new ResolveCache.AbstractResolver<PsiReferenceBase, PsiElement>() {
                 @Override
                 public PsiElement resolve(@NotNull PsiReferenceBase base, boolean b) {
-                    return ((ResCachedReference)base).resolveInner();
+                    return ((ResCachedReference) base).resolveInner();
                 }
             };
 
-    @Nullable protected abstract PsiElement resolveInner();
+    @Nullable
+    protected abstract PsiElement resolveInner();
 
     public abstract boolean processResolveVariants(
             @NotNull ResScopeProcessor processor);
 
-    @Nullable @Override public PsiElement resolve() {
+    @Nullable
+    @Override
+    public PsiElement resolve() {
         return myElement.isValid()
                 ? ResolveCache.getInstance(myElement.getProject())
-                    .resolveWithCaching(this, MY_RESOLVER, false, false) : null;
+                .resolveWithCaching(this, MY_RESOLVER, false, false) : null;
     }
 
-    @NotNull @Override public Object[] getVariants() {
+    @NotNull
+    @Override
+    public Object[] getVariants() {
         return ArrayUtil.EMPTY_OBJECT_ARRAY;
     }
 }

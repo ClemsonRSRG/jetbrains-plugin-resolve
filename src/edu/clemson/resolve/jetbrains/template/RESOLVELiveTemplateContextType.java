@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class RESOLVELiveTemplateContextType
         extends
-            TemplateContextType {
+        TemplateContextType {
 
     protected RESOLVELiveTemplateContextType(@NotNull @NonNls String id,
                                              @NotNull String presentableName,
@@ -35,10 +35,11 @@ public abstract class RESOLVELiveTemplateContextType
         return false;
     }
 
-    @Nullable private static PsiElement getFirstCompositeElement(
+    @Nullable
+    private static PsiElement getFirstCompositeElement(
             @Nullable PsiElement at) {
         if (at instanceof PsiComment || at instanceof LeafPsiElement &&
-                ((LeafPsiElement)at).getElementType() == ResTypes.STRING) {
+                ((LeafPsiElement) at).getElementType() == ResTypes.STRING) {
             return at;
         }
         PsiElement result = at;
@@ -57,28 +58,30 @@ public abstract class RESOLVELiveTemplateContextType
 
     public static class RESOLVEFileContextType
             extends
-                RESOLVELiveTemplateContextType {
+            RESOLVELiveTemplateContextType {
 
         protected RESOLVEFileContextType() {
             super("RESOLVE_FILE", "RESOLVE file",
                     RESOLVEEverywhereContextType.class);
         }
 
-        @Override protected boolean isInContext(@NotNull PsiElement element) {
+        @Override
+        protected boolean isInContext(@NotNull PsiElement element) {
             return element.getParent() instanceof ResFile;
         }
     }
 
     public static class RESOLVEMathRefContextType
             extends
-                RESOLVELiveTemplateContextType {
+            RESOLVELiveTemplateContextType {
 
         protected RESOLVEMathRefContextType() {
             super("RESOLVE_MATH_REF", "math reference",
                     RESOLVEEverywhereContextType.class);
         }
 
-        @Override protected boolean isInContext(@NotNull PsiElement element) {
+        @Override
+        protected boolean isInContext(@NotNull PsiElement element) {
             return element instanceof ResMathReferenceExp ||
                     (element instanceof ResMathIdentInfixApplyExp); //for infix math exprs mostly
         }
@@ -86,14 +89,15 @@ public abstract class RESOLVELiveTemplateContextType
 
     public static class RESOLVEMathDefContextType
             extends
-                RESOLVELiveTemplateContextType {
+            RESOLVELiveTemplateContextType {
 
         protected RESOLVEMathDefContextType() {
             super("RESOLVE_MATH_DEF", "math definition",
                     RESOLVEEverywhereContextType.class);
         }
 
-        @Override protected boolean isInContext(@NotNull PsiElement element) {
+        @Override
+        protected boolean isInContext(@NotNull PsiElement element) {
             return element instanceof ResMathDefinitionSignature;
         }
     }

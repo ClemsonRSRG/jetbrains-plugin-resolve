@@ -18,43 +18,53 @@ import java.util.List;
 
 public abstract class ResAbstractModuleImpl
         extends
-            ResNamedElementImpl implements ResModuleDecl {
+        ResNamedElementImpl implements ResModuleDecl {
 
     public ResAbstractModuleImpl(@NotNull ASTNode node) {
         super(node);
     }
 
-    @NotNull public ResBlock getBlock() {
+    @NotNull
+    public ResBlock getBlock() {
         return findNotNullChildByClass(ResBlock.class);
     }
 
-    @Nullable public List<ResModuleSpec> getModuleSignatureSpecs() {
+    @Nullable
+    public List<ResModuleSpec> getModuleSignatureSpecs() {
         return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleSpec.class);
     }
 
-    @Nullable @Override public PsiElement getIdentifier() {
+    @Nullable
+    @Override
+    public PsiElement getIdentifier() {
         return findChildByType(ResTypes.IDENTIFIER);
     }
 
-    @NotNull public List<ResModuleSpec> getSuperModuleSpecList() {
+    @NotNull
+    public List<ResModuleSpec> getSuperModuleSpecList() {
         return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleSpec.class);
     }
 
-    @Nullable public ResModuleParameters getModuleParameters() {
+    @Nullable
+    public ResModuleParameters getModuleParameters() {
         return PsiTreeUtil.findChildOfType(this, ResModuleParameters.class);
     }
 
-    @NotNull @Override public List<ResUsesItem> getUsesItems() {
+    @NotNull
+    @Override
+    public List<ResUsesItem> getUsesItems() {
         return getUsesItemList() != null ? getUsesItemList().getUsesItemList() :
                 ContainerUtil.<ResUsesItem>newArrayList();
     }
 
-    @Nullable public ResUsesItemList getUsesItemList() {
+    @Nullable
+    public ResUsesItemList getUsesItemList() {
         return PsiTreeUtil.findChildOfType(this, ResUsesItemList.class);
     }
 
-    @NotNull @Override public
-            List<ResMathDefinitionDecl> getMathDefinitionDecls() {
+    @NotNull
+    @Override
+    public List<ResMathDefinitionDecl> getMathDefinitionDecls() {
         return CachedValuesManager.getCachedValue(this,
                 new CachedValueProvider<List<ResMathDefinitionDecl>>() {
                     @Override
@@ -65,8 +75,9 @@ public abstract class ResAbstractModuleImpl
                 });
     }
 
-    @NotNull @Override public
-            List<ResMathDefinitionSignature> getMathDefinitionSignatures() {
+    @NotNull
+    @Override
+    public List<ResMathDefinitionSignature> getMathDefinitionSignatures() {
         List<ResMathDefinitionSignature> signatures =
                 new ArrayList<ResMathDefinitionSignature>();
         for (ResMathDefinitionDecl def : getMathDefinitionDecls()) {
@@ -75,7 +86,8 @@ public abstract class ResAbstractModuleImpl
         return signatures;
     }
 
-    @NotNull public List<ResTypeLikeNodeDecl> getTypes() {
+    @NotNull
+    public List<ResTypeLikeNodeDecl> getTypes() {
         return CachedValuesManager.getCachedValue(this,
                 new CachedValueProvider<List<ResTypeLikeNodeDecl>>() {
                     @Override
@@ -86,7 +98,8 @@ public abstract class ResAbstractModuleImpl
                 });
     }
 
-    @NotNull public List<ResFacilityDecl> getFacilities() {
+    @NotNull
+    public List<ResFacilityDecl> getFacilities() {
         return CachedValuesManager.getCachedValue(this,
                 new CachedValueProvider<List<ResFacilityDecl>>() {
                     @Override
@@ -97,7 +110,8 @@ public abstract class ResAbstractModuleImpl
                 });
     }
 
-    @NotNull public List<ResOperationLikeNode> getOperationLikeThings() {
+    @NotNull
+    public List<ResOperationLikeNode> getOperationLikeThings() {
         return CachedValuesManager.getCachedValue(this,
                 new CachedValueProvider<List<ResOperationLikeNode>>() {
                     @Override
@@ -108,7 +122,8 @@ public abstract class ResAbstractModuleImpl
                 });
     }
 
-    @NotNull private <T extends ResCompositeElement> List<T> calc(
+    @NotNull
+    private <T extends ResCompositeElement> List<T> calc(
             final Class<? extends T> type) {
         final List<T> result = ContainerUtil.newArrayList();
         processChildrenDummyAware(this.getBlock(), new Processor<PsiElement>() {
@@ -130,8 +145,7 @@ public abstract class ResAbstractModuleImpl
                      child != null; child = child.getNextSibling()) {
                     if (child instanceof GeneratedParserUtilBase.DummyBlock) {
                         if (!process(child)) return false;
-                    }
-                    else if (!processor.process(child)) return false;
+                    } else if (!processor.process(child)) return false;
                 }
                 return true;
             }

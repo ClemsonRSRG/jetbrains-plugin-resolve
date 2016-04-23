@@ -33,11 +33,13 @@ public class RESOLVECompletionContributor extends CompletionContributor {
     }
 
     // private static PsiElementPattern.Capture<PsiElement> resReference() {
-   //     return psiElement().withParent(psiElement()
-   //             .withReference(ResCachedReference.class));
-   // }
+    //     return psiElement().withParent(psiElement()
+    //             .withReference(ResCachedReference.class));
+    // }
 
-    /** Allow autoPopup to appear after custom symbol */
+    /**
+     * Allow autoPopup to appear after custom symbol
+     */
     public boolean invokeAutoPopup(@NotNull PsiElement position, char typeChar) {
         /*return typeChar != ';' &&
                typeChar != ' ' &&

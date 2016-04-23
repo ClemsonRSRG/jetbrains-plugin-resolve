@@ -20,38 +20,47 @@ public class ResFile extends PsiFileBase {
         super(viewProvider, RESOLVELanguage.INSTANCE);
     }
 
-    @NotNull @Override public FileType getFileType() {
+    @NotNull
+    @Override
+    public FileType getFileType() {
         return RESOLVEFileType.INSTANCE;
     }
 
-    @NotNull @Override public PsiElement[] getChildren() {
+    @NotNull
+    @Override
+    public PsiElement[] getChildren() {
         return super.getChildren();
     }
 
-    @Nullable public ResModuleDecl getEnclosedModule() {
+    @Nullable
+    public ResModuleDecl getEnclosedModule() {
         return PsiTreeUtil.findChildOfType(this, ResModuleDecl.class);
     }
 
-    @NotNull public List<ResMathDefinitionSignature> getMathDefinitionSignatures() {
+    @NotNull
+    public List<ResMathDefinitionSignature> getMathDefinitionSignatures() {
         ResModuleDecl enclosedModule = getEnclosedModule();
         return enclosedModule != null ?
                 enclosedModule.getMathDefinitionSignatures() :
                 new ArrayList<ResMathDefinitionSignature>();
     }
 
-    @NotNull public List<ResUsesItem> getUsesItems() {
+    @NotNull
+    public List<ResUsesItem> getUsesItems() {
         ResModuleDecl enclosedModule = getEnclosedModule();
         return enclosedModule != null ? enclosedModule.getUsesItems() :
                 new ArrayList<ResUsesItem>();
     }
 
-    @NotNull public List<ResModuleSpec> getSuperModuleSpecList() {
+    @NotNull
+    public List<ResModuleSpec> getSuperModuleSpecList() {
         ResModuleDecl enclosedModule = getEnclosedModule();
         return enclosedModule != null ? enclosedModule.getSuperModuleSpecList() :
                 new ArrayList<ResModuleSpec>();
     }
 
-    @NotNull public List<ResTypeParamDecl> getGenericTypeParams() {
+    @NotNull
+    public List<ResTypeParamDecl> getGenericTypeParams() {
         ResModuleDecl enclosedModule = getEnclosedModule();
         List<ResTypeParamDecl> genericTypes = new ArrayList<ResTypeParamDecl>();
         if (enclosedModule == null) return genericTypes;
@@ -63,7 +72,8 @@ public class ResFile extends PsiFileBase {
         return genericTypes;
     }
 
-    @NotNull public List<ResParamDecl> getConstantModuleParams() {
+    @NotNull
+    public List<ResParamDecl> getConstantModuleParams() {
         ResModuleDecl enclosedModule = getEnclosedModule();
         List<ResParamDecl> params = new ArrayList<ResParamDecl>();
         if (enclosedModule == null) return params;
@@ -75,19 +85,22 @@ public class ResFile extends PsiFileBase {
         return params;
     }
 
-    @NotNull public List<ResTypeLikeNodeDecl> getTypes() {
+    @NotNull
+    public List<ResTypeLikeNodeDecl> getTypes() {
         ResModuleDecl enclosedModule = getEnclosedModule();
         return enclosedModule != null ? enclosedModule.getTypes() :
                 new ArrayList<ResTypeLikeNodeDecl>();
     }
 
-    @NotNull public List<ResFacilityDecl> getFacilities() {
+    @NotNull
+    public List<ResFacilityDecl> getFacilities() {
         ResModuleDecl enclosedModule = getEnclosedModule();
         return enclosedModule != null ? enclosedModule.getFacilities() :
                 new ArrayList<ResFacilityDecl>();
     }
 
-    @NotNull public List<ResOperationLikeNode> getOperationLikeThings() {
+    @NotNull
+    public List<ResOperationLikeNode> getOperationLikeThings() {
         ResModuleDecl enclosedModule = getEnclosedModule();
         List<ResOperationLikeNode> result = enclosedModule != null ?
                 enclosedModule.getOperationLikeThings() :
