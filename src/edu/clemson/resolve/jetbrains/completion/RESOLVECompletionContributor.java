@@ -4,7 +4,7 @@ import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
-import edu.clemson.resolve.jetbrains.psi.ResMathNameIdentifier;
+import edu.clemson.resolve.jetbrains.psi.ResMathSymbolName;
 import edu.clemson.resolve.jetbrains.psi.ResModuleSpec;
 import edu.clemson.resolve.jetbrains.psi.ResReferenceExpBase;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +24,7 @@ public class RESOLVECompletionContributor extends CompletionContributor {
     }
 
     private static PsiElementPattern.Capture<PsiElement> mathReferenceExp() {
-        return psiElement().withParent(psiElement(ResMathNameIdentifier.class)
+        return psiElement().withParent(psiElement(ResMathSymbolName.class)
                 .withParent(ResReferenceExpBase.class));
     }
 
@@ -33,11 +33,13 @@ public class RESOLVECompletionContributor extends CompletionContributor {
     }
 
     // private static PsiElementPattern.Capture<PsiElement> resReference() {
-   //     return psiElement().withParent(psiElement()
-   //             .withReference(ResCachedReference.class));
-   // }
+    //     return psiElement().withParent(psiElement()
+    //             .withReference(ResCachedReference.class));
+    // }
 
-    /** Allow autoPopup to appear after custom symbol */
+    /**
+     * Allow autoPopup to appear after custom symbol
+     */
     public boolean invokeAutoPopup(@NotNull PsiElement position, char typeChar) {
         /*return typeChar != ';' &&
                typeChar != ' ' &&

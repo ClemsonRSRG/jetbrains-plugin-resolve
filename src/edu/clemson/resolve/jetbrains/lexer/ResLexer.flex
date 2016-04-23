@@ -66,6 +66,8 @@ ESCAPES = [abfnrtv]
 {STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}?
                                         { return STRING; }
 
+// brackets & braces
+
 "{{"                                    { return DBL_LBRACE; }
 "{"                                     { return LBRACE; }
 "}"                                     { return RBRACE; }
@@ -74,8 +76,17 @@ ESCAPES = [abfnrtv]
 "["                                     { return LBRACK; }
 "]"                                     { return RBRACK; }
 
+"⎝"                                     { return LCURVE; }
+"⎠"                                     { return RCURVE; }
+
 "("                                     { return LPAREN; }
 ")"                                     { return RPAREN; }
+
+"⟨"                                     { return LANGLE; }
+"⟩"                                     { return RANGLE; }
+
+"⎡"                                     { return LCEIL; }
+"⎤"                                     { return RCEIL; }
 
 ":"                                     { return COLON; }
 "::"                                    { return COLONCOLON; }
@@ -86,35 +97,56 @@ ESCAPES = [abfnrtv]
 
 // Operators
 
+"ϒ"                                     { return VROD; }
+"≼"                                     { return PRECCURLYEQ; }
 "="                                     { return EQUALS; }
 "/="                                    { return NEQUALS; }
+"≠"                                     { return NEQUALS1; }
 
 "and"                                   { return AND; }
 "or"                                    { return OR; }
 "not"                                   { return NOT; }
+"⌐"                                     { return NOT; }
 "o"                                     { return CAT; }
-"is_in"                                 { return IS_IN; }
-"is_not_in"                             { return IS_NOT_IN; }
-"union"                                 { return UNION; }
-"intersect"                             { return INTERSECT; }
+"∘"                                     { return CAT; }
+"ᴴ⨯"                                    { return HTIMES; }
+"⨯"                                     { return TIMES; }
 
+"is_in"                                 { return IS_IN; }
+"∈"                                     { return IS_IN; }
+"is_not_in"                             { return IS_NOT_IN; }
+"∉"                                     { return IS_NOT_IN; }
+
+"union"                                 { return UNION; }
+"∪"                                     { return UNION; }
+"∪₊"                                    { return UNION_PLUS; }
+
+"intersect"                             { return INTERSECT; }
+"∩"                                     { return INTERSECT; }
+"∩₊"                                    { return INTERSECT_PLUS; }
+
+"λ"                                     { return LAMBDA; }
 "<="                                    { return LESS_OR_EQUAL; }
+"≤"                                     { return LESS_OR_EQUAL; }
+"≤ᵤ"                                    { return LESS_OR_EQUAL_U; }
 "<"                                     { return LESS; }
 
 ">="                                    { return GREATER_OR_EQUAL; }
+"≥"                                     { return GREATER_OR_EQUAL; }
 ">"                                     { return GREATER; }
+
+"->"                                    { return RARROW; }
+"⟶"                                   { return RARROW; }
 
 "%"                                     { return MOD; }
 "*"                                     { return MUL; }
 "/"                                     { return QUOTIENT; }
-"++"                                    { return PLUS_PLUS; }
 "+"                                     { return PLUS; }
-"--"                                    { return MINUS_MINUS; }
 "-"                                     { return MINUS; }
 
 ":="                                    { return COLON_EQUALS; }
 ":=:"                                   { return COLON_EQUALS_COLON; }
-"->"                                    { return RARROW; }
+
 "~"			                            { return TILDE; }
 "|"                                     { return BAR; }
 "||"                                    { return DBL_BAR; }
@@ -143,11 +175,13 @@ ESCAPES = [abfnrtv]
 "ensures"                               { return ENSURES; }
 "exemplar"                              { return EXEMPLAR; }
 "Exists"                                { return EXISTS; }
+"∃"                                     { return EXISTS; }
 "externally"                            { return EXTERNALLY; }
 "Facility"                              { return FACILITY;  }
 "false"                                 { return FALSE; }
 "family"                                { return FAMILY; }
 "Forall"                                { return FORALL; }
+"∀"                                     { return FORALL; }
 "for"                                   { return FOR; }
 "hypo"                                  { return HYPO; }
 "if"                                    { return IF; }

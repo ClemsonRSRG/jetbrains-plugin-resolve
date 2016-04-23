@@ -25,7 +25,7 @@ import static edu.clemson.resolve.jetbrains.highlighting.RESOLVESyntaxHighlighti
  * {@link com.intellij.openapi.editor.DefaultLanguageHighlighterColors#KEYWORD}
  * is the key that maps to what identifiers look like in the editor.
  * To change it, see dialog: Editor > Colors & Fonts > Language Defaults.
- *
+ * <p>
  * From <a href="http://www.jetbrains.org/intellij/sdk/docs/reference_guide/custom_language_support/syntax_highlighting_and_error_highlighting.html">doc</a>:
  * "The mapping of the TextAttributesKey to specific attributes used in an
  * editor is defined by the EditorColorsScheme class, and can be configured by
@@ -62,11 +62,14 @@ public class RESOLVESyntaxHighlighter extends SyntaxHighlighterBase {
         fillMap(ATTRIBUTES, RESOLVEParserDefinition.STRING_LITERALS, STRING);
     }
 
-    @NotNull @Override public Lexer getHighlightingLexer() {
+    @NotNull
+    @Override
+    public Lexer getHighlightingLexer() {
         return new ResolveLexer();
     }
 
-    @NotNull public TextAttributesKey[] getTokenHighlights(
+    @NotNull
+    public TextAttributesKey[] getTokenHighlights(
             IElementType tokenType) {
         return pack(ATTRIBUTES.get(tokenType));
     }

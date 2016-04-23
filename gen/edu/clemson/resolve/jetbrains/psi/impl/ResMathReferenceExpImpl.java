@@ -23,8 +23,8 @@ public class ResMathReferenceExpImpl extends ResMathExpImpl implements ResMathRe
 
   @Override
   @NotNull
-  public ResMathNameIdentifier getMathNameIdentifier() {
-    return findNotNullChildByClass(ResMathNameIdentifier.class);
+  public ResMathSymbolName getMathSymbolName() {
+    return findNotNullChildByClass(ResMathSymbolName.class);
   }
 
   @NotNull

@@ -10,13 +10,15 @@ import edu.clemson.resolve.jetbrains.psi.ResModuleDecl;
 
 import javax.swing.*;
 
-/** Dynamically updates (patches) icons for {@link PsiFile} instances based on
- *  the {@link ResModuleDecl} declared within.
+/**
+ * Dynamically updates (patches) icons for {@link PsiFile} instances based on
+ * the {@link ResModuleDecl} declared within.
  */
 public class RESOLVEFileIconPatcher implements FileIconPatcher {
 
-    @Override public Icon patchIcon(Icon baseIcon, VirtualFile file,
-                                    int flags, Project project) {
+    @Override
+    public Icon patchIcon(Icon baseIcon, VirtualFile file,
+                          int flags, Project project) {
         if (project == null) {
             return baseIcon;
         }
@@ -29,7 +31,7 @@ public class RESOLVEFileIconPatcher implements FileIconPatcher {
         final PsiFile f = PsiManager.getInstance(project).findFile(file);
         if (!(f instanceof ResFile)) return baseIcon;
 
-        ResModuleDecl enclosedModule = ((ResFile)f).getEnclosedModule();
+        ResModuleDecl enclosedModule = ((ResFile) f).getEnclosedModule();
         if (enclosedModule == null) return RESOLVEIcons.FILE;
         Icon moduleIcon = enclosedModule.getIcon(0);
         return moduleIcon != null ? moduleIcon : baseIcon;

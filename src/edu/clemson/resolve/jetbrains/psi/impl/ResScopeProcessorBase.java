@@ -15,11 +15,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public abstract class ResScopeProcessorBase extends ResScopeProcessor {
-    @NotNull protected final OrderedSet<ResNamedElement> myResult =
+    @NotNull
+    protected final OrderedSet<ResNamedElement> myResult =
             new OrderedSet<ResNamedElement>();
 
-    @NotNull protected final PsiElement origin;
-    @NotNull private final PsiElement requestedNameElement;
+    @NotNull
+    protected final PsiElement origin;
+    @NotNull
+    private final PsiElement requestedNameElement;
     protected final boolean isCompletion;
 
     public ResScopeProcessorBase(@NotNull PsiElement origin, boolean completion) {
@@ -34,30 +37,33 @@ public abstract class ResScopeProcessorBase extends ResScopeProcessor {
         this.isCompletion = completion;
     }
 
-    @Override public boolean execute(@NotNull PsiElement psiElement,
-                                     @NotNull ResolveState resolveState) {
+    @Override
+    public boolean execute(@NotNull PsiElement psiElement,
+                           @NotNull ResolveState resolveState) {
         if (psiElement instanceof ResMathDefinitionDecl) return false;
         if (psiElement instanceof ResOperationLikeNode) return false;
         if (psiElement instanceof ResMathCartProdExp) return false;
 
         if (!(psiElement instanceof ResNamedElement)) return true;
-        String name = ((ResNamedElement)psiElement).getName();
+        String name = ((ResNamedElement) psiElement).getName();
         if (StringUtil.isEmpty(name) || !isCompletion &&
                 !requestedNameElement.textMatches(name)) return true;
         if (crossOff(psiElement)) return true;
         if (psiElement.equals(origin)) return true;
-        return add((ResNamedElement)psiElement) || isCompletion;
+        return add((ResNamedElement) psiElement) || isCompletion;
     }
 
     protected boolean add(@NotNull ResNamedElement psiElement) {
         return !myResult.add(psiElement);
     }
 
-    @Nullable public ResNamedElement getResult() {
+    @Nullable
+    public ResNamedElement getResult() {
         return ContainerUtil.getFirstItem(myResult);
     }
 
-    @NotNull public List<ResNamedElement> getVariants() {
+    @NotNull
+    public List<ResNamedElement> getVariants() {
         return myResult;
     }
 

@@ -9,7 +9,7 @@ import edu.clemson.resolve.jetbrains.psi.impl.ResMathVarLikeReference;
 public interface ResMathReferenceExp extends ResMathExp, ResReferenceExpBase {
 
   @NotNull
-  ResMathNameIdentifier getMathNameIdentifier();
+  ResMathSymbolName getMathSymbolName();
 
   @NotNull
   ResMathVarLikeReference getReference();

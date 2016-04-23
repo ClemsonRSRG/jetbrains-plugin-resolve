@@ -15,15 +15,16 @@ public class QualifierInsertHandler extends BasicInsertHandler<LookupElement> {
         this.insertStr = pad ? " " + aStr + " " : aStr;
     }
 
-    @Override public void handleInsert(@NotNull InsertionContext context,
-                                       LookupElement item) {
+    @Override
+    public void handleInsert(@NotNull InsertionContext context,
+                             LookupElement item) {
         Editor editor = context.getEditor();
         int tailOffset = context.getTailOffset();
         Document document = editor.getDocument();
         context.commitDocument();
         boolean staysAtChar = document.getTextLength() > tailOffset &&
-               String.valueOf(document.getCharsSequence().charAt(tailOffset))
-                       .equals(insertStr);
+                String.valueOf(document.getCharsSequence().charAt(tailOffset))
+                        .equals(insertStr);
 
         context.setAddCompletionChar(false);
         if (!staysAtChar) {

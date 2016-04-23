@@ -6,7 +6,9 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-/** The {@link LanguageFileType} for RESOLVE files. */
+/**
+ * The {@link LanguageFileType} for RESOLVE files.
+ */
 public class RESOLVEFileType extends LanguageFileType {
 
     public static final RESOLVEFileType INSTANCE = new RESOLVEFileType();
@@ -15,19 +17,27 @@ public class RESOLVEFileType extends LanguageFileType {
         super(RESOLVELanguage.INSTANCE);
     }
 
-    @NotNull @Override public String getName() {
+    @NotNull
+    @Override
+    public String getName() {
         return "RESOLVE";
     }
 
-    @NotNull @Override public String getDescription() {
+    @NotNull
+    @Override
+    public String getDescription() {
         return "a RESOLVE file";
     }
 
-    @NotNull @Override public String getDefaultExtension() {
+    @NotNull
+    @Override
+    public String getDefaultExtension() {
         return "resolve";
     }
 
-    @Nullable @Override public Icon getIcon() {
+    @Nullable
+    @Override
+    public Icon getIcon() {
         return RESOLVEIcons.FILE;
     }
 }

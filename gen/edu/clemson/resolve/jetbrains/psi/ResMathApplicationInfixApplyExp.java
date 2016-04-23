@@ -14,9 +14,9 @@ public interface ResMathApplicationInfixApplyExp extends ResMathExp {
   PsiElement getColoncolon();
 
   @Nullable
-  PsiElement getDotDot();
+  PsiElement getRarrow();
 
   @Nullable
-  PsiElement getRarrow();
+  PsiElement getRarrow1();
 
 }

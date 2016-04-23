@@ -12,25 +12,29 @@ import org.jetbrains.annotations.Nullable;
 
 public class RESOLVEScopeUtil {
 
-    @NotNull public static GlobalSearchScope moduleScopeWithoutLibraries(
+    @NotNull
+    public static GlobalSearchScope moduleScopeWithoutLibraries(
             @NotNull Module module) {
         return GlobalSearchScope.moduleWithDependenciesScope(module)
                 .uniteWith(module.getModuleContentWithDependenciesScope());
     }
 
-    @NotNull public static GlobalSearchScope moduleScope(
+    @NotNull
+    public static GlobalSearchScope moduleScope(
             @NotNull PsiElement element) {
         return moduleScope(element.getProject(), ModuleUtilCore
                 .findModuleForPsiElement(element));
     }
 
-    @NotNull public static GlobalSearchScope moduleScope(
+    @NotNull
+    public static GlobalSearchScope moduleScope(
             @NotNull Project project, @Nullable Module module) {
         return module != null ? moduleScope(module) :
                 GlobalSearchScope.projectScope(project);
     }
 
-    @NotNull public static GlobalSearchScope moduleScope(
+    @NotNull
+    public static GlobalSearchScope moduleScope(
             @NotNull Module module) {
         return GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module)
                 .uniteWith(module.getModuleContentWithDependenciesScope());
@@ -41,7 +45,8 @@ public class RESOLVEScopeUtil {
             super(baseScope);
         }
 
-        @Override public boolean contains(@NotNull VirtualFile file) {
+        @Override
+        public boolean contains(@NotNull VirtualFile file) {
             return super.contains(file);
         }
     }

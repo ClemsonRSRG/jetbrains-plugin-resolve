@@ -16,7 +16,7 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
 //TODO: requires and ensures keyword completions would certainly be nice..
 public class RESOLVEKeywordCompletionContributor
         extends
-            CompletionContributor implements DumbAware {
+        CompletionContributor implements DumbAware {
 
     public RESOLVEKeywordCompletionContributor() {
 
@@ -99,10 +99,10 @@ public class RESOLVEKeywordCompletionContributor
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "Var"));
 
-        extend(CompletionType.BASIC, mathQuantifierKeywords(),
+        /*extend(CompletionType.BASIC, mathQuantifierKeywords(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                        "Forall", "Exists", "lambda"));
+                        "Forall", "Exists", "lambda"));*/
 
         extend(CompletionType.BASIC, keywordAfterSiblings(
                 ResTypeReprDecl.class, psiElement(ResRecordType.class)),
@@ -112,15 +112,15 @@ public class RESOLVEKeywordCompletionContributor
         extend(CompletionType.BASIC, keywordAfterSiblings(
                 ResTypeReprDecl.class,
                 psiElement().andOr(psiElement(ResRecordType.class),
-                                   psiElement(ResConventionsClause.class))),
+                        psiElement(ResConventionsClause.class))),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "correspondence"));
 
         extend(CompletionType.BASIC, keywordAfterSiblings(
                 ResTypeReprDecl.class,
                 psiElement().andOr(psiElement(ResRecordType.class),
-                                   psiElement(ResConventionsClause.class),
-                                   psiElement(ResCorrespondenceClause.class))),
+                        psiElement(ResConventionsClause.class),
+                        psiElement(ResCorrespondenceClause.class))),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "initialization_repr"));
 
@@ -132,7 +132,7 @@ public class RESOLVEKeywordCompletionContributor
         extend(CompletionType.BASIC, keywordAfterSiblings(
                 ResTypeModelDecl.class,
                 psiElement().andOr(psiElement(ResMathReferenceExp.class),
-                                   psiElement(ResConstraintsClause.class))),
+                        psiElement(ResConstraintsClause.class))),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "initialization"));
     }
@@ -179,10 +179,10 @@ public class RESOLVEKeywordCompletionContributor
     //TODO: if you look were we extend this, remove lambda from there and give it it's own pattern...
     private static Capture<PsiElement> mathQuantifierKeywords() {
         return psiElement(ResTypes.IDENTIFIER)
-                .withParent(psiElement(ResTypes.MATH_NAME_IDENTIFIER)
+                .withParent(psiElement(ResTypes.MATH_SYMBOL_NAME)
                         .withParent(psiElement(ResTypes.MATH_REFERENCE_EXP)
                                 .andOr(psiElement().isFirstAcceptedChild(psiElement()),
-                                       psiElement().withParent(ResMathQuantifiedExp.class))));
+                                        psiElement().withParent(ResMathQuantifiedExp.class))));
     }
 
     private static Capture<PsiElement> otherUsesPattern() {
@@ -265,7 +265,7 @@ public class RESOLVEKeywordCompletionContributor
     private static Capture<PsiElement> topLevelModulePattern(
             Class<? extends ResModuleDecl> moduleType,
             Class<? extends ResBlock> blockType) {
-      return onKeywordStartWithParent(psiElement(blockType)
-              .withParent(moduleType));
+        return onKeywordStartWithParent(psiElement(blockType)
+                .withParent(moduleType));
     }
 }

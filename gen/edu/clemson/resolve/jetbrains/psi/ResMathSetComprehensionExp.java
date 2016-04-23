@@ -11,7 +11,7 @@ public interface ResMathSetComprehensionExp extends ResMathExp {
   ResMathExp getMathExp();
 
   @NotNull
-  ResMathSingletonVarDecl getMathSingletonVarDecl();
+  ResMathVarDecl getMathVarDecl();
 
   @NotNull
   PsiElement getBar();

@@ -11,12 +11,15 @@ public interface ResMathLambdaExp extends ResMathExp {
   ResMathExp getMathExp();
 
   @NotNull
-  List<ResMathVarDeclGroup> getMathVarDeclGroupList();
-
-  @Nullable
-  PsiElement getDot();
+  ResMathVarDecl getMathVarDecl();
 
   @NotNull
+  PsiElement getComma();
+
+  @Nullable
+  PsiElement getLambda1();
+
+  @Nullable
   PsiElement getLambda();
 
 }

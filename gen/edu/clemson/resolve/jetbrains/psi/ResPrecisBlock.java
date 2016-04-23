@@ -10,13 +10,13 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 public interface ResPrecisBlock extends ResBlock {
 
   @NotNull
-  List<ResMathCategoricalDefinitionDecl> getMathCategoricalDefinitionDeclList();
+  List<ResMathCategoricalDefnDecl> getMathCategoricalDefnDeclList();
 
   @NotNull
-  List<ResMathInductiveDefinitionDecl> getMathInductiveDefinitionDeclList();
+  List<ResMathInductiveDefnDecl> getMathInductiveDefnDeclList();
 
   @NotNull
-  List<ResMathStandardDefinitionDecl> getMathStandardDefinitionDeclList();
+  List<ResMathStandardDefnDecl> getMathStandardDefnDeclList();
 
   @NotNull
   List<ResMathTheoremDecl> getMathTheoremDeclList();

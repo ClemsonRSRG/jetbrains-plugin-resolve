@@ -28,9 +28,9 @@ public class ResConstraintsClauseImpl extends ResCompositeElementImpl implements
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getConstraints() {
-    return findChildByType(CONSTRAINTS);
+    return findNotNullChildByType(CONSTRAINTS);
   }
 
   @Override

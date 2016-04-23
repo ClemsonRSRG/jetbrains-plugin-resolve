@@ -14,13 +14,13 @@ public interface ResMathRelationalInfixApplyExp extends ResMathExp {
   PsiElement getColoncolon();
 
   @Nullable
-  PsiElement getEquals();
-
-  @Nullable
   PsiElement getGreater();
 
   @Nullable
   PsiElement getGreaterOrEqual();
+
+  @Nullable
+  PsiElement getGreaterOrEqual1();
 
   @Nullable
   PsiElement getLess();
@@ -29,6 +29,9 @@ public interface ResMathRelationalInfixApplyExp extends ResMathExp {
   PsiElement getLessOrEqual();
 
   @Nullable
-  PsiElement getNequals();
+  PsiElement getLessOrEqual1();
+
+  @Nullable
+  PsiElement getLessOrEqualU();
 
 }

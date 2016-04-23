@@ -13,9 +13,12 @@ public class ResVarReference extends ResCachedReference<ResVarDef> {
         super(element);
     }
 
-    @Nullable @Override protected PsiElement resolveInner() {
+    @Nullable
+    @Override
+    protected PsiElement resolveInner() {
         ResVarProcessor p = new ResVarProcessor(myElement, false) {
-            @Override protected boolean crossOff(@NotNull PsiElement e) {
+            @Override
+            protected boolean crossOff(@NotNull PsiElement e) {
                 return super.crossOff(e);//e instanceof ResRecordFieldDef || super.condition(e);
             }
         };
@@ -23,10 +26,11 @@ public class ResVarReference extends ResCachedReference<ResVarDef> {
         return p.getResult();
     }
 
-    @Override public boolean processResolveVariants(
+    @Override
+    public boolean processResolveVariants(
             @NotNull final ResScopeProcessor processor) {
         ResVarProcessor p = processor instanceof ResVarProcessor
-                ? ((ResVarProcessor)processor)
+                ? ((ResVarProcessor) processor)
                 : new ResVarProcessor(myElement, processor.isCompletion()) {
             @Override
             public boolean execute(@NotNull PsiElement e, @NotNull ResolveState state) {
@@ -38,7 +42,8 @@ public class ResVarReference extends ResCachedReference<ResVarDef> {
 
     public static class ResVarProcessor extends ResScopeProcessorBase {
 
-        @Nullable private final ResCompositeElement scope;
+        @Nullable
+        private final ResCompositeElement scope;
 
         public ResVarProcessor(@NotNull PsiElement origin, boolean completion) {
             this(origin, origin, completion, false);
@@ -51,7 +56,8 @@ public class ResVarReference extends ResCachedReference<ResVarDef> {
             this.scope = getScope(origin);
         }
 
-        @Nullable public static ResCompositeElement getScope(
+        @Nullable
+        public static ResCompositeElement getScope(
                 @Nullable PsiElement o) {
         /*ResWhileStatement whileStatement = PsiTreeUtil
                 .getParentOfType(o, ResWhileStatement.class);
@@ -66,12 +72,14 @@ public class ResVarReference extends ResCachedReference<ResVarDef> {
             //TODO: NOT RIGHT YET.. SHOULD JUST BE A GENERAL FXN BLOCK...
             return PsiTreeUtil.getParentOfType(o, ResOpBlock.class);
         }
-        @Override protected boolean crossOff(@NotNull PsiElement e) {
+
+        @Override
+        protected boolean crossOff(@NotNull PsiElement e) {
             return !(e instanceof ResVarDef) &&
-                   !(e instanceof ResParamDef) &&
-                   !(e instanceof ResFieldDef) &&
-                   !(e instanceof ResTypeLikeNodeDecl) &&
-                   !(e instanceof ResFacilityDecl);
+                    !(e instanceof ResParamDef) &&
+                    !(e instanceof ResFieldDef) &&
+                    !(e instanceof ResTypeLikeNodeDecl) &&
+                    !(e instanceof ResFacilityDecl);
         }
     }
 }

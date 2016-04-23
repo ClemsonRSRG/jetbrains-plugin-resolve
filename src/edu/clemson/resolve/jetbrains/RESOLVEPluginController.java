@@ -22,9 +22,10 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-/** This object is the controller for the RESOLVE plug-in. It receives
- *  events and can send them on to its contained components; here the main
- *  components being primarily the compiler's console output window.
+/**
+ * This object is the controller for the RESOLVE plug-in. It receives
+ * events and can send them on to its contained components; here the main
+ * components being primarily the compiler's console output window.
  */
 public class RESOLVEPluginController implements ProjectComponent {
 
@@ -45,24 +46,26 @@ public class RESOLVEPluginController implements ProjectComponent {
     public static RESOLVEPluginController getInstance(@NotNull Project project) {
         RESOLVEPluginController pc =
                 project.getComponent(RESOLVEPluginController.class);
-        if ( pc==null ) {
-            LOG.error("getInstance: getComponent() for "+
-                    project.getName()+" returns null");
+        if (pc == null) {
+            LOG.error("getInstance: getComponent() for " +
+                    project.getName() + " returns null");
         }
         return pc;
     }
 
-    @Override public void initComponent() {
+    @Override
+    public void initComponent() {
     }
 
-    @Override public void projectOpened() {
+    @Override
+    public void projectOpened() {
         IdeaPluginDescriptor plugin =
                 PluginManager.getPlugin(PluginId.getId(PLUGIN_ID));
         String version = "unknown";
-        if ( plugin!=null ) {
+        if (plugin != null) {
             version = plugin.getVersion();
         }
-        LOG.info("RESOLVE Compiler Plugin version "+version+", Java version "+
+        LOG.info("RESOLVE Compiler Plugin version " + version + ", Java version " +
                 SystemInfo.JAVA_VERSION);
         // make sure the tool windows are created early
         createToolWindows();
@@ -70,7 +73,7 @@ public class RESOLVEPluginController implements ProjectComponent {
     }
 
     public void createToolWindows() {
-        LOG.info("createToolWindows "+project.getName());
+        LOG.info("createToolWindows " + project.getName());
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
 
@@ -84,14 +87,15 @@ public class RESOLVEPluginController implements ProjectComponent {
         consoleWindow = toolWindowManager.registerToolWindow(CONSOLE_WINDOW_ID, true, ToolWindowAnchor.BOTTOM);
         consoleWindow.getContentManager().addContent(content);
 
-        consoleWindow.setIcon(RESOLVEIcons.MODULE);
+        consoleWindow.setIcon(RESOLVEIcons.TOOL_ICON);
     }
 
-    @Override public void projectClosed() {
+    @Override
+    public void projectClosed() {
         LOG.info("projectClosed " + project.getName());
         projectIsClosed = true;
         //uninstallListeners();
-        
+
         console.dispose();
         consoleWindow = null;
         project = null;
@@ -108,7 +112,8 @@ public class RESOLVEPluginController implements ProjectComponent {
     public static void showConsoleWindow(final Project project) {
         ApplicationManager.getApplication().invokeLater(
                 new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         RESOLVEPluginController
                                 .getInstance(project)
                                 .getConsoleWindow()
@@ -118,10 +123,13 @@ public class RESOLVEPluginController implements ProjectComponent {
         );
     }
 
-    @Override public void disposeComponent() {
+    @Override
+    public void disposeComponent() {
     }
 
-    @NotNull @Override public String getComponentName() {
+    @NotNull
+    @Override
+    public String getComponentName() {
         return "resolve.ProjectComponent";
     }
 }

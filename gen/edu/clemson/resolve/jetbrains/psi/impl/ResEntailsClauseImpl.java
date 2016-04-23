@@ -22,9 +22,9 @@ public class ResEntailsClauseImpl extends ResCompositeElementImpl implements Res
   }
 
   @Override
-  @NotNull
-  public List<ResMathExp> getMathExpList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResMathExp.class);
+  @Nullable
+  public ResMathExp getMathExp() {
+    return findChildByClass(ResMathExp.class);
   }
 
   @Override

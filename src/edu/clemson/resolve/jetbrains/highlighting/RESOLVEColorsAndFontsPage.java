@@ -43,7 +43,8 @@ public class RESOLVEColorsAndFontsPage implements ColorSettingsPage {
     private static final Map<String, TextAttributesKey> ATTRIBUTES_KEY_MAP =
             ContainerUtil.newTroveMap();
 
-    @NotNull public String getDisplayName() {
+    @NotNull
+    public String getDisplayName() {
         return RESOLVEFileType.INSTANCE.getName();
     }
 
@@ -51,19 +52,24 @@ public class RESOLVEColorsAndFontsPage implements ColorSettingsPage {
         return RESOLVEIcons.MODULE;
     }
 
-    @NotNull public AttributesDescriptor[] getAttributeDescriptors() {
+    @NotNull
+    public AttributesDescriptor[] getAttributeDescriptors() {
         return DESCRIPTORS;
     }
 
-    @NotNull public ColorDescriptor[] getColorDescriptors() {
+    @NotNull
+    public ColorDescriptor[] getColorDescriptors() {
         return ColorDescriptor.EMPTY_ARRAY;
     }
 
-    @NotNull public SyntaxHighlighter getHighlighter() {
+    @NotNull
+    public SyntaxHighlighter getHighlighter() {
         return new RESOLVESyntaxHighlighter();
     }
 
-    @NotNull @Override public String getDemoText() {
+    @NotNull
+    @Override
+    public String getDemoText() {
         return
                 "Facility Foo;\n" +
                         "        uses Far, Fizz;\n\n" +
@@ -90,7 +96,8 @@ public class RESOLVEColorsAndFontsPage implements ColorSettingsPage {
 
     }
 
-    @NotNull public Map<String, TextAttributesKey> getAdditionalHighlightingTagToDescriptorMap() {
+    @NotNull
+    public Map<String, TextAttributesKey> getAdditionalHighlightingTagToDescriptorMap() {
         return ATTRIBUTES_KEY_MAP;
     }
 }

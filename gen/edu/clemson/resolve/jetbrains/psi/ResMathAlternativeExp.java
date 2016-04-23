@@ -13,7 +13,7 @@ public interface ResMathAlternativeExp extends ResMathExp {
   @NotNull
   PsiElement getDblLbrace();
 
-  @NotNull
+  @Nullable
   PsiElement getDblRbrace();
 
 }

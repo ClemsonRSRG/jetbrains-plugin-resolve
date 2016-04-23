@@ -35,12 +35,6 @@ public class ResMathRelationalInfixApplyExpImpl extends ResMathExpImpl implement
 
   @Override
   @Nullable
-  public PsiElement getEquals() {
-    return findChildByType(EQUALS);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getGreater() {
     return findChildByType(GREATER);
   }
@@ -49,6 +43,12 @@ public class ResMathRelationalInfixApplyExpImpl extends ResMathExpImpl implement
   @Nullable
   public PsiElement getGreaterOrEqual() {
     return findChildByType(GREATER_OR_EQUAL);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getGreaterOrEqual1() {
+    return findChildByType(GREATER_OR_EQUAL1);
   }
 
   @Override
@@ -65,8 +65,14 @@ public class ResMathRelationalInfixApplyExpImpl extends ResMathExpImpl implement
 
   @Override
   @Nullable
-  public PsiElement getNequals() {
-    return findChildByType(NEQUALS);
+  public PsiElement getLessOrEqual1() {
+    return findChildByType(LESS_OR_EQUAL1);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getLessOrEqualU() {
+    return findChildByType(LESS_OR_EQUAL_U);
   }
 
 }

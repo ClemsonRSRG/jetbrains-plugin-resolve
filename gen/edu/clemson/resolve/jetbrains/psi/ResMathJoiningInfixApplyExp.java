@@ -20,6 +20,18 @@ public interface ResMathJoiningInfixApplyExp extends ResMathExp {
   PsiElement getIntersect();
 
   @Nullable
+  PsiElement getIntersect1();
+
+  @Nullable
+  PsiElement getIntersectPlus();
+
+  @Nullable
   PsiElement getUnion();
+
+  @Nullable
+  PsiElement getUnion1();
+
+  @Nullable
+  PsiElement getUnionPlus();
 
 }

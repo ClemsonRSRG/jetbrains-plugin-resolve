@@ -154,6 +154,10 @@ public class ResVisitor extends PsiElementVisitor {
     visitMathExp(o);
   }
 
+  public void visitMathAngle1OutfixApplyExp(@NotNull ResMathAngle1OutfixApplyExp o) {
+    visitMathExp(o);
+  }
+
   public void visitMathAngleOutfixApplyExp(@NotNull ResMathAngleOutfixApplyExp o) {
     visitMathExp(o);
   }
@@ -178,11 +182,23 @@ public class ResVisitor extends PsiElementVisitor {
     visitMathExp(o);
   }
 
-  public void visitMathCategoricalDefinitionDecl(@NotNull ResMathCategoricalDefinitionDecl o) {
+  public void visitMathCategoricalDefnDecl(@NotNull ResMathCategoricalDefnDecl o) {
     visitMathDefinitionDecl(o);
   }
 
+  public void visitMathClassificationTheoremDecl(@NotNull ResMathClassificationTheoremDecl o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitMathCupOutfixApplyExp(@NotNull ResMathCupOutfixApplyExp o) {
+    visitMathExp(o);
+  }
+
   public void visitMathDblBarOutfixApplyExp(@NotNull ResMathDblBarOutfixApplyExp o) {
+    visitMathExp(o);
+  }
+
+  public void visitMathEqualityInfixApplyExp(@NotNull ResMathEqualityInfixApplyExp o) {
     visitMathExp(o);
   }
 
@@ -190,11 +206,19 @@ public class ResVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitMathIdentInfixApplyExp(@NotNull ResMathIdentInfixApplyExp o) {
+    visitMathExp(o);
+  }
+
+  public void visitMathImpliesInfixApplyExp(@NotNull ResMathImpliesInfixApplyExp o) {
+    visitMathExp(o);
+  }
+
   public void visitMathIncomingUnaryApplyExp(@NotNull ResMathIncomingUnaryApplyExp o) {
     visitMathExp(o);
   }
 
-  public void visitMathInductiveDefinitionDecl(@NotNull ResMathInductiveDefinitionDecl o) {
+  public void visitMathInductiveDefnDecl(@NotNull ResMathInductiveDefnDecl o) {
     visitMathDefinitionDecl(o);
   }
 
@@ -202,8 +226,8 @@ public class ResVisitor extends PsiElementVisitor {
     visitMathExp(o);
   }
 
-  public void visitMathInfixDefinitionSignature(@NotNull ResMathInfixDefinitionSignature o) {
-    visitMathDefinitionSignature(o);
+  public void visitMathInfixDefnSig(@NotNull ResMathInfixDefnSig o) {
+    visitCompositeElement(o);
   }
 
   public void visitMathJoiningInfixApplyExp(@NotNull ResMathJoiningInfixApplyExp o) {
@@ -222,27 +246,31 @@ public class ResVisitor extends PsiElementVisitor {
     visitMathInfixApplyExp(o);
   }
 
-  public void visitMathNameIdentifier(@NotNull ResMathNameIdentifier o) {
-    visitCompositeElement(o);
-  }
-
   public void visitMathNestedExp(@NotNull ResMathNestedExp o) {
     visitMathExp(o);
   }
 
-  public void visitMathOutfixDefinitionSignature(@NotNull ResMathOutfixDefinitionSignature o) {
-    visitMathDefinitionSignature(o);
+  public void visitMathOutfixDefnSig(@NotNull ResMathOutfixDefnSig o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitMathPostfixDefnSig(@NotNull ResMathPostfixDefnSig o) {
+    visitCompositeElement(o);
   }
 
   public void visitMathPrefixApplyExp(@NotNull ResMathPrefixApplyExp o) {
     visitMathExp(o);
   }
 
-  public void visitMathPrefixDefinitionSignature(@NotNull ResMathPrefixDefinitionSignature o) {
-    visitMathDefinitionSignature(o);
+  public void visitMathPrefixDefnSig(@NotNull ResMathPrefixDefnSig o) {
+    visitCompositeElement(o);
   }
 
-  public void visitMathPrefixGeneralizedApplyExp(@NotNull ResMathPrefixGeneralizedApplyExp o) {
+  public void visitMathPrefixGeneralizedCeilApplyExp(@NotNull ResMathPrefixGeneralizedCeilApplyExp o) {
+    visitMathExp(o);
+  }
+
+  public void visitMathPrefixGeneralizedSqbrApplyExp(@NotNull ResMathPrefixGeneralizedSqbrApplyExp o) {
     visitMathExp(o);
   }
 
@@ -275,16 +303,20 @@ public class ResVisitor extends PsiElementVisitor {
     visitMathExp(o);
   }
 
-  public void visitMathSingletonVarDecl(@NotNull ResMathSingletonVarDecl o) {
-    visitMathVarDeclGroup(o);
+  public void visitMathSetInfixApplyExp(@NotNull ResMathSetInfixApplyExp o) {
+    visitMathExp(o);
   }
 
   public void visitMathSqBrOutfixApplyExp(@NotNull ResMathSqBrOutfixApplyExp o) {
     visitMathExp(o);
   }
 
-  public void visitMathStandardDefinitionDecl(@NotNull ResMathStandardDefinitionDecl o) {
+  public void visitMathStandardDefnDecl(@NotNull ResMathStandardDefnDecl o) {
     visitMathDefinitionDecl(o);
+  }
+
+  public void visitMathSymbolName(@NotNull ResMathSymbolName o) {
+    visitCompositeElement(o);
   }
 
   public void visitMathTheoremDecl(@NotNull ResMathTheoremDecl o) {
@@ -293,6 +325,10 @@ public class ResVisitor extends PsiElementVisitor {
 
   public void visitMathTypeAssertionExp(@NotNull ResMathTypeAssertionExp o) {
     visitMathExp(o);
+  }
+
+  public void visitMathVarDecl(@NotNull ResMathVarDecl o) {
+    visitMathVarDeclGroup(o);
   }
 
   public void visitMathVarDeclGroup(@NotNull ResMathVarDeclGroup o) {
@@ -465,10 +501,6 @@ public class ResVisitor extends PsiElementVisitor {
   }
 
   public void visitMathDefinitionDecl(@NotNull ResMathDefinitionDecl o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitMathDefinitionSignature(@NotNull ResMathDefinitionSignature o) {
     visitCompositeElement(o);
   }
 

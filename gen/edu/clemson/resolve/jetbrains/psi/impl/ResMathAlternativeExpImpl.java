@@ -34,9 +34,9 @@ public class ResMathAlternativeExpImpl extends ResMathExpImpl implements ResMath
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getDblRbrace() {
-    return findNotNullChildByType(DBL_RBRACE);
+    return findChildByType(DBL_RBRACE);
   }
 
 }

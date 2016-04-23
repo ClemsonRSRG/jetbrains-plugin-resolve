@@ -47,8 +47,32 @@ public class ResMathJoiningInfixApplyExpImpl extends ResMathExpImpl implements R
 
   @Override
   @Nullable
+  public PsiElement getIntersect1() {
+    return findChildByType(INTERSECT1);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getIntersectPlus() {
+    return findChildByType(INTERSECT_PLUS);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getUnion() {
     return findChildByType(UNION);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getUnion1() {
+    return findChildByType(UNION1);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getUnionPlus() {
+    return findChildByType(UNION_PLUS);
   }
 
 }

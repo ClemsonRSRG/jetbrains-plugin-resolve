@@ -6,13 +6,17 @@ import org.jetbrains.annotations.Nullable;
 
 public class RESOLVELiveTemplatesProvider
         implements
-            DefaultLiveTemplatesProvider {
+        DefaultLiveTemplatesProvider {
 
-    @NotNull @Override public String[] getDefaultLiveTemplateFiles() {
+    @NotNull
+    @Override
+    public String[] getDefaultLiveTemplateFiles() {
         return new String[]{"/liveTemplates/resolve"};
     }
 
-    @Nullable @Override public String[] getHiddenLiveTemplateFiles() {
+    @Nullable
+    @Override
+    public String[] getHiddenLiveTemplateFiles() {
         return new String[]{"/liveTemplates/resolveHidden"};
     }
 }

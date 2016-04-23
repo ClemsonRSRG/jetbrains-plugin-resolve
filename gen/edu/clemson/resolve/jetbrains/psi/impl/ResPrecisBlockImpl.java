@@ -25,20 +25,20 @@ public class ResPrecisBlockImpl extends ResCompositeElementImpl implements ResPr
 
   @Override
   @NotNull
-  public List<ResMathCategoricalDefinitionDecl> getMathCategoricalDefinitionDeclList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResMathCategoricalDefinitionDecl.class);
+  public List<ResMathCategoricalDefnDecl> getMathCategoricalDefnDeclList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResMathCategoricalDefnDecl.class);
   }
 
   @Override
   @NotNull
-  public List<ResMathInductiveDefinitionDecl> getMathInductiveDefinitionDeclList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResMathInductiveDefinitionDecl.class);
+  public List<ResMathInductiveDefnDecl> getMathInductiveDefnDeclList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResMathInductiveDefnDecl.class);
   }
 
   @Override
   @NotNull
-  public List<ResMathStandardDefinitionDecl> getMathStandardDefinitionDeclList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResMathStandardDefinitionDecl.class);
+  public List<ResMathStandardDefnDecl> getMathStandardDefnDeclList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResMathStandardDefnDecl.class);
   }
 
   @Override

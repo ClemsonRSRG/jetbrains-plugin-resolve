@@ -47,24 +47,6 @@ public class ResMathBooleanInfixApplyExpImpl extends ResMathExpImpl implements R
 
   @Override
   @Nullable
-  public PsiElement getImplies() {
-    return findChildByType(IMPLIES);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getIsIn() {
-    return findChildByType(IS_IN);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getIsNotIn() {
-    return findChildByType(IS_NOT_IN);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getOr() {
     return findChildByType(OR);
   }

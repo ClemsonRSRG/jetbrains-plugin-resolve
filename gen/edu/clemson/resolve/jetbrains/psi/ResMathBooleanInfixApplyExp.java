@@ -20,15 +20,6 @@ public interface ResMathBooleanInfixApplyExp extends ResMathExp {
   PsiElement getIff();
 
   @Nullable
-  PsiElement getImplies();
-
-  @Nullable
-  PsiElement getIsIn();
-
-  @Nullable
-  PsiElement getIsNotIn();
-
-  @Nullable
   PsiElement getOr();
 
 }

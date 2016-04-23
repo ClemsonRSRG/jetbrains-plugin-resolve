@@ -13,7 +13,7 @@ public interface ResConceptBlock extends ResBlock {
   List<ResConstraintsClause> getConstraintsClauseList();
 
   @NotNull
-  List<ResMathStandardDefinitionDecl> getMathStandardDefinitionDeclList();
+  List<ResMathStandardDefnDecl> getMathStandardDefnDeclList();
 
   @NotNull
   List<ResOperationDecl> getOperationDeclList();

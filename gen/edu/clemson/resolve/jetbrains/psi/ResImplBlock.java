@@ -13,7 +13,7 @@ public interface ResImplBlock extends ResBlock {
   List<ResFacilityDecl> getFacilityDeclList();
 
   @NotNull
-  List<ResMathStandardDefinitionDecl> getMathStandardDefinitionDeclList();
+  List<ResMathStandardDefnDecl> getMathStandardDefnDeclList();
 
   @NotNull
   List<ResOperationProcedureDecl> getOperationProcedureDeclList();

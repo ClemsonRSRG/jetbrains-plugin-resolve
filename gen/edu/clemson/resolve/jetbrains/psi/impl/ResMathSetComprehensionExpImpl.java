@@ -29,8 +29,8 @@ public class ResMathSetComprehensionExpImpl extends ResMathExpImpl implements Re
 
   @Override
   @NotNull
-  public ResMathSingletonVarDecl getMathSingletonVarDecl() {
-    return findNotNullChildByClass(ResMathSingletonVarDecl.class);
+  public ResMathVarDecl getMathVarDecl() {
+    return findNotNullChildByClass(ResMathVarDecl.class);
   }
 
   @Override

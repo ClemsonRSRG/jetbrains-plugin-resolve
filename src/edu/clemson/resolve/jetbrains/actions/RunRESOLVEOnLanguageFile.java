@@ -13,7 +13,7 @@ import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import edu.clemson.resolve.compiler.RESOLVECompiler;
+import edu.clemson.resolve.RESOLVECompiler;
 import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
 import edu.clemson.resolve.misc.Utils;
 import org.jetbrains.annotations.NotNull;
@@ -26,23 +26,18 @@ import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-/** Executes the resolve compiler on a given
- *  {@link edu.clemson.resolve.jetbrains.RESOLVEFileType}. This code is
- *  adapted from the code written for this purpose in the ANTLRv4 intellij
- *  plugin written by Terence Parr and others, found here:
- *
- *  <a href="https://github.com/antlr/intellij-plugin-v4">https://github.com/antlr/intellij-plugin-v4/a>
- */
 public class RunRESOLVEOnLanguageFile extends Task.Modal {
 
     public static final Logger LOG = Logger.getInstance("RunRESOLVEOnLanguageFile");
-    public static final String OUTPUT_DIR_NAME = "gen" ;
-    public static final String MISSING = "";
+    public static final String OUTPUT_MODULE_NAME = "gen";
+    public static final String OUTPUT_DIR_NAME = "src";
     public static final String groupDisplayId = "RESOLVE Code Generation";
 
     public VirtualFile targetFile;
     public Project project;
+    public String outputDir;
     public boolean forceGeneration;
+    private final List<String> args = new ArrayList<>();
 
     public RunRESOLVEOnLanguageFile(VirtualFile targetFile,
                                     @Nullable final Project project,
@@ -53,27 +48,29 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
         this.targetFile = targetFile;
         this.project = project;
         this.forceGeneration = forceGeneration;
+        String fullyQualifiedInputFileName = targetFile.getCanonicalPath();
+        this.args.add(fullyQualifiedInputFileName);
     }
 
-    @Override public void run(@NotNull ProgressIndicator indicator) {
+    @Override
+    public void run(@NotNull ProgressIndicator indicator) {
         indicator.setIndeterminate(true);
         if (forceGeneration) {
             resolve(targetFile);
         }
     }
+
     //See "ImplementMethodsFix" in the intellij sources
-    /** Run RESOLVE on file according to preferences in intellij for this file.
-     *  Writes set of generated files or empty set if error.
+
+    /**
+     * Run RESOLVE on file according to preferences in intellij for this file.
+     * Writes set of generated files or empty set if error.
      */
     public void resolve(VirtualFile vfile) {
-        if ( vfile==null ) return;
-        LOG.info("resolve(\""+vfile.getPath()+"\")");
-        List<String> args = getRESOLVEArgsAsList(project, vfile);
+        if (vfile == null) return;
+        LOG.info("resolve(\"" + vfile.getPath() + "\")");
 
-        String sourcePath = ConfigRESOLVEPerLanguageFile.getParentDir(vfile);
-        String fullyQualifiedInputFileName =
-                sourcePath+ File.separator+vfile.getName();
-        args.add(fullyQualifiedInputFileName); // add grammar file last
+        // String sourcePath = ConfigRESOLVEPerLanguageFile.getParentDir(vfile);
 
         LOG.info("args: " + Utils.join(args, " "));
         RESOLVECompiler compiler =
@@ -85,7 +82,7 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
                         .format(Calendar.getInstance()
                                 .getTime());
 
-        console.print(timeStamp+": resolve "+ Utils.join(args, " ")+"\n",
+        console.print(timeStamp + ": resolve " + Utils.join(args, " ") + "\n",
                 ConsoleViewContentType.SYSTEM_OUTPUT);
 
         compiler.removeListeners();
@@ -94,8 +91,7 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
 
         try {
             compiler.processCommandLineTargets();
-        }
-        catch (Throwable e) {
+        } catch (Throwable e) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             e.printStackTrace(pw);
@@ -111,67 +107,39 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
             listener.hasOutput = true; // show console below
         }
 
-        if ( listener.hasOutput ) {
+        if (listener.hasOutput) {
             RESOLVEPluginController.showConsoleWindow(project);
         }
     }
 
-    public static List<String> getRESOLVEArgsAsList(Project project,
-                                                    VirtualFile vfile) {
-        Map<String,String> argMap = getRESOLVEArgs(project, vfile);
+    public void addArgs(Map<String, String> argMap) {
+        this.args.addAll(getRESOLVEArgsAsList(argMap));
+    }
+
+    public static List<String> getRESOLVEArgsAsList(Map<String, String> argMap) {
         List<String> args = new ArrayList<String>();
         for (String option : argMap.keySet()) {
             args.add(option);
             String value = argMap.get(option);
-            if ( value.length()!=0 ) {
+            if (value.length() != 0) {
                 args.add(value);
             }
         }
         return args;
     }
 
-    public static Map<String, String> getRESOLVEArgs(Project project,
-                                                     VirtualFile vfile) {
-        Map<String,String> args = new HashMap<String, String>();
-        String qualFileName = vfile.getPath();
-        String package_ = ConfigRESOLVEPerLanguageFile.getProp(
-                project, qualFileName, ConfigRESOLVEPerLanguageFile
-                        .PROP_PACKAGE, MISSING);
-        if ( package_.equals(MISSING) ) {
-            package_ = ProjectRootManager.getInstance(project).getFileIndex()
-                    .getPackageNameByDirectory(vfile.getParent());
-            if ( Strings.isNullOrEmpty(package_)) {
-                package_ = MISSING;
-            }
-        }
-       if ( !package_.equals(MISSING)) {
-           args.put("-package", package_);
-       }
-
-        VirtualFile contentRoot =
-                ConfigRESOLVEPerLanguageFile.getContentRoot(project, vfile);
-        String outputDirName =
-                ConfigRESOLVEPerLanguageFile.getOutputDirName(
-                        project, qualFileName, contentRoot, package_);
-        args.put("-o", outputDirName);
-        args.put("-genCode", "Java");
-
-        String libDir = contentRoot.getPath();
-        args.put("-lib", libDir);
-
-        return args;
+    public static String getOutputDir(Project project, VirtualFile vfile) {
+        VirtualFile contentRoot = getContentRoot(project, vfile);
+        return contentRoot.getPath() + File.separator +
+                OUTPUT_MODULE_NAME + File.separator +
+                RunRESOLVEOnLanguageFile.OUTPUT_DIR_NAME;
     }
 
-    public String getOutputDirName() {
-        VirtualFile contentRoot =
-                ConfigRESOLVEPerLanguageFile.getContentRoot(project, targetFile);
-        Map<String,String> argMap = getRESOLVEArgs(project, targetFile);
-        String package_ = argMap.get("-package");
-        if ( package_==null ) {
-            package_ = MISSING;
-        }
-        return ConfigRESOLVEPerLanguageFile.getOutputDirName(project,
-                targetFile.getPath(), contentRoot, package_);
+    public static VirtualFile getContentRoot(Project project, VirtualFile vfile) {
+        VirtualFile root =
+                ProjectRootManager.getInstance(project)
+                        .getFileIndex().getContentRootForFile(vfile);
+        if (root != null) return root;
+        return vfile.getParent();
     }
-
 }

@@ -35,14 +35,14 @@ public class ResMathApplicationInfixApplyExpImpl extends ResMathExpImpl implemen
 
   @Override
   @Nullable
-  public PsiElement getDotDot() {
-    return findChildByType(DOT_DOT);
+  public PsiElement getRarrow() {
+    return findChildByType(RARROW);
   }
 
   @Override
   @Nullable
-  public PsiElement getRarrow() {
-    return findChildByType(RARROW);
+  public PsiElement getRarrow1() {
+    return findChildByType(RARROW1);
   }
 
 }

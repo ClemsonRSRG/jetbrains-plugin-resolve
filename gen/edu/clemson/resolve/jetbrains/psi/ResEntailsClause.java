@@ -7,8 +7,8 @@ import com.intellij.psi.PsiElement;
 
 public interface ResEntailsClause extends ResCompositeElement {
 
-  @NotNull
-  List<ResMathExp> getMathExpList();
+  @Nullable
+  ResMathExp getMathExp();
 
   @NotNull
   PsiElement getWhichEntails();

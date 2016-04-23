@@ -40,7 +40,7 @@ public class RESOLVECompletionUtil {
                 public void handleInsert(InsertionContext context, LookupElement item) {
                     PsiElement element = item.getPsiElement();
                     if (!(element instanceof ResOperationLikeNode)) return;
-                    ResOperationLikeNode elementAsOp = (ResOperationLikeNode)element;
+                    ResOperationLikeNode elementAsOp = (ResOperationLikeNode) element;
                     int paramsCount = elementAsOp.getParamDeclList().size();
                     InsertHandler<LookupElement> handler =
                             paramsCount == 0 ? ParenthesesInsertHandler.NO_PARAMETERS :
@@ -56,15 +56,15 @@ public class RESOLVECompletionUtil {
                                           LookupElementPresentation p) {
                     PsiElement o = element.getPsiElement();
                     if (!(o instanceof ResNamedElement)) return;
-                    ResNamedElement v = (ResNamedElement)o;
+                    ResNamedElement v = (ResNamedElement) o;
                     ResType type = v.getResType(null);
                     String text = ResPsiImplUtil.getText(type);
                     Icon icon = v instanceof ResMathVarDef ? RESOLVEIcons.VARIABLE :
-                                v instanceof ResVarDef ? RESOLVEIcons.VARIABLE :
-                                v instanceof ResExemplarDecl ? RESOLVEIcons.EXEMPLAR :
-                                v instanceof ResParamDef ? RESOLVEIcons.PARAMETER :
-                                v instanceof ResTypeParamDecl ? RESOLVEIcons.GENERIC_TYPE :
-                                v instanceof ResFieldDef ? RESOLVEIcons.RECORD_FIELD : null;
+                            v instanceof ResVarDef ? RESOLVEIcons.VARIABLE :
+                                    v instanceof ResExemplarDecl ? RESOLVEIcons.EXEMPLAR :
+                                            v instanceof ResParamDef ? RESOLVEIcons.PARAMETER :
+                                                    v instanceof ResTypeParamDecl ? RESOLVEIcons.GENERIC_TYPE :
+                                                            v instanceof ResFieldDef ? RESOLVEIcons.RECORD_FIELD : null;
 
                     if (v instanceof ResMathVarDef) {
                         //Todo: Need to write a getResTypeInner method and put it into the psi util class;
@@ -81,20 +81,22 @@ public class RESOLVECompletionUtil {
 
     public static final LookupElementRenderer<LookupElement> FUNCTION_RENDERER =
             new LookupElementRenderer<LookupElement>() {
-                @Override public void renderElement(LookupElement element,
-                                                    LookupElementPresentation p) {
+                @Override
+                public void renderElement(LookupElement element,
+                                          LookupElementPresentation p) {
                     PsiElement o = element.getPsiElement();
                     if (!(o instanceof ResOperationLikeNode)) return;
-                    ResOperationLikeNode oAsOp = (ResOperationLikeNode)o;
+                    ResOperationLikeNode oAsOp = (ResOperationLikeNode) o;
                     String typeText = "";
                     String paramText = "";
 
                     paramText += "(" + StringUtil.join(oAsOp.getParamDeclList(),
                             new Function<ResParamDecl, String>() {
-                        @Override public String fun(ResParamDecl resParamDecl) {
-                            return resParamDecl.getText();
-                        }
-                    }, ", ") + ")";
+                                @Override
+                                public String fun(ResParamDecl resParamDecl) {
+                                    return resParamDecl.getText();
+                                }
+                            }, ", ") + ")";
 
                     ResType type = oAsOp.getType();
                     if (type != null) typeText = type.getText();
@@ -110,18 +112,20 @@ public class RESOLVECompletionUtil {
     //TODO: Insert handler for infix defn signatures; Whitespace on lhs and rhs of name
     public static final InsertHandler<LookupElement> DEFINITION_INSERT_HANDLER =
             new InsertHandler<LookupElement>() {
-                @Override public void handleInsert(InsertionContext context,
-                                                   LookupElement item) {
+                @Override
+                public void handleInsert(InsertionContext context,
+                                         LookupElement item) {
                     PsiElement element = item.getPsiElement();
-                    if (!(element instanceof ResMathDefinitionSignature)) return;
-                    ResMathDefinitionSignature signature = (ResMathDefinitionSignature)element;
+                    if (!(element instanceof ResMathDefinitionSignature))
+                        return;
+                    ResMathDefinitionSignature signature = (ResMathDefinitionSignature) element;
                     int paramsCount = signature.getParameters().size();
                     //we don't want empty parens for nullary function applications or infix (or outfix)
                     //TODO: Actually, we could define some nice insertion handlers for outfix defns.
                     InsertHandler<LookupElement> handler =
                             paramsCount == 0 //||
-                            //signature instanceof ResMathInfixDefinitionSignature ? //||
-                            //signature instanceof ResMathOutfixDefinitionSignature ?
+                                    //signature instanceof ResMathInfixDefinitionSignature ? //||
+                                    //signature instanceof ResMathOutfixDefinitionSignature ?
                                     ? new BasicInsertHandler<LookupElement>() :
                                     ParenthesesInsertHandler.WITH_PARAMETERS;
                     handler.handleInsert(context, item);
@@ -130,12 +134,13 @@ public class RESOLVECompletionUtil {
 
     public static final LookupElementRenderer<LookupElement> DEFINITION_RENDERER =
             new LookupElementRenderer<LookupElement>() {
-                @Override public void renderElement(LookupElement element,
-                                                    LookupElementPresentation p) {
+                @Override
+                public void renderElement(LookupElement element,
+                                          LookupElementPresentation p) {
                     PsiElement o = element.getPsiElement();
                     if (!(o instanceof ResMathDefinitionSignature)) return;
                     String rangeTypeText = "";
-                    ResMathDefinitionSignature signature = (ResMathDefinitionSignature)o;
+                    ResMathDefinitionSignature signature = (ResMathDefinitionSignature) o;
                     String typeText = "";
 
                     //Todo, move the following printing business logic into a method somewhere in ResPsiImplUtil
@@ -147,9 +152,8 @@ public class RESOLVECompletionUtil {
                                 if (first) {
                                     first = false;
                                     typeText += grp.getMathExp().getText();
-                                }
-                                else {
-                                    typeText +=  " * " +
+                                } else {
+                                    typeText += " * " +
                                             grp.getMathExp().getText();
                                 }
                             }
@@ -166,17 +170,20 @@ public class RESOLVECompletionUtil {
                 }
             };
 
-    @NotNull public static CamelHumpMatcher createPrefixMatcher(
+    @NotNull
+    public static CamelHumpMatcher createPrefixMatcher(
             @NotNull PrefixMatcher original) {
         return createPrefixMatcher(original.getPrefix());
     }
 
-    @NotNull public static CamelHumpMatcher createPrefixMatcher(
+    @NotNull
+    public static CamelHumpMatcher createPrefixMatcher(
             @NotNull String prefix) {
         return new CamelHumpMatcher(prefix, false);
     }
 
-    @NotNull public static LookupElement createFunctionOrMethodLookupElement(
+    @NotNull
+    public static LookupElement createFunctionOrMethodLookupElement(
             @NotNull ResOperationLikeNode f, @NotNull String lookupString,
             @Nullable InsertHandler<LookupElement> h, double priority) {
         return PrioritizedLookupElement.withPriority(LookupElementBuilder
@@ -185,14 +192,16 @@ public class RESOLVECompletionUtil {
                 .withInsertHandler(h != null ? h : FUNCTION_INSERT_HANDLER), priority);
     }
 
-    @Nullable public static LookupElement createVariableLikeLookupElement(
+    @Nullable
+    public static LookupElement createVariableLikeLookupElement(
             @NotNull ResNamedElement v) {
         String name = v.getName();
         if (StringUtil.isEmpty(name)) return null;
         return createVariableLikeLookupElement(v, name, null, VAR_PRIORITY);
     }
 
-    @NotNull public static LookupElement createVariableLikeLookupElement(
+    @NotNull
+    public static LookupElement createVariableLikeLookupElement(
             @NotNull ResNamedElement v, @NotNull String lookupString,
             @Nullable InsertHandler<LookupElement> insertHandler,
             double priority) {
@@ -202,7 +211,8 @@ public class RESOLVECompletionUtil {
                 .withInsertHandler(insertHandler), priority);
     }
 
-    @NotNull public static LookupElement createDefinitionLookupElement(
+    @NotNull
+    public static LookupElement createDefinitionLookupElement(
             @NotNull ResMathDefinitionSignature signature,
             @NotNull String lookupString,
             @Nullable InsertHandler<LookupElement> h,
@@ -214,13 +224,15 @@ public class RESOLVECompletionUtil {
                 priority);
     }
 
-    @NotNull public static LookupElement createTypeLookupElement(
+    @NotNull
+    public static LookupElement createTypeLookupElement(
             @NotNull ResNamedElement t) {
         return createTypeLookupElement(t, StringUtil.notNullize(
                 t.getName()), null, TYPE_PRIORITY);
     }
 
-    @NotNull public static LookupElement createTypeLookupElement(
+    @NotNull
+    public static LookupElement createTypeLookupElement(
             @NotNull ResNamedElement t, @NotNull String lookupString,
             @Nullable InsertHandler<LookupElement> handler, double priority) {
         LookupElementBuilder builder =
@@ -229,13 +241,15 @@ public class RESOLVECompletionUtil {
         return PrioritizedLookupElement.withPriority(builder, priority);
     }
 
-    @Nullable public static LookupElement createFacilityLookupElement(
+    @Nullable
+    public static LookupElement createFacilityLookupElement(
             @NotNull ResFacilityDecl facility) {
         return createFacilityLookupElement(facility,
                 facility.getIdentifier().getText());
     }
 
-    @Nullable public static LookupElement createFacilityLookupElement(
+    @Nullable
+    public static LookupElement createFacilityLookupElement(
             @NotNull ResFacilityDecl facility, @NotNull String name) {
         return PrioritizedLookupElement.withPriority(
                 LookupElementBuilder.create(name)
@@ -243,7 +257,8 @@ public class RESOLVECompletionUtil {
                         .withIcon(RESOLVEIcons.FACILITY), FACILITY_PRIORITY);
     }
 
-    @Nullable private static String calcTailTextForFields(
+    @Nullable
+    private static String calcTailTextForFields(
             @NotNull ResNamedElement v) {
         String name = null;
         if (v instanceof ResFieldDef) {
