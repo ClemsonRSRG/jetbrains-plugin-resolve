@@ -22,6 +22,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
 import edu.clemson.resolve.jetbrains.sdk.RESOLVESdkService;
 import edu.clemson.resolve.misc.Utils;
+import org.jetbrains.jps.model.library.JpsLibrary;
 
 import java.io.File;
 import java.util.HashSet;
@@ -118,7 +119,6 @@ public class GenerateCodeAction extends AnAction implements DumbAware {
         argMap.put("-genCode", "Java");
         gen.addArgs(argMap);
         ProgressManager.getInstance().run(gen); //, "Generating", canBeCancelled, e.getData(PlatformDataKeys.PROJECT));
-
 
         // refresh from disk to see new files
         Set<File> generatedFiles = new HashSet<>();
