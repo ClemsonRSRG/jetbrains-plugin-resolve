@@ -14,7 +14,7 @@ public interface ResModuleDecl extends ResNamedElement {
     public ResBlock getBlock();
 
     @NotNull
-    public List<ResUsesItem> getUsesItems();
+    public List<ResUsesSpec> getUsesSpecs();
 
     @NotNull
     public List<ResModuleSpec> getSuperModuleSpecList();

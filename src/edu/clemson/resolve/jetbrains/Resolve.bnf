@@ -252,10 +252,16 @@ FacilityBlock
 
 // uses, imports
 
-UsesItemList ::= 'uses' UsesItem (',' UsesItem)* ';'
-//TODO: Change this to ModuleIdentifier
+// uses, imports
+
+UsesItemList ::= uses ( UsesSpec | '(' UsesSpecs? ')' ) ';' {
+  pin(".*")=1
+  //methods=[addUsesSpec]
+}
+private UsesSpecs ::= UsesSpec (',' UsesSpec)* {pin=1}
+UsesSpec ::= string {methods=[getReferences resolve getPath getPathTextRange]}
+
 ModuleSpec ::= identifier {pin=1 methods=[getReferences resolve getModuleSpecTextRange]}
-UsesItem ::= ModuleSpec
 
 // Module blocks & items
 

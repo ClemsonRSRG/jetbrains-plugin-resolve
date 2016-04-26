@@ -27,12 +27,11 @@ import java.io.File;
 import java.io.StringReader;
 import java.util.*;
 
-/**
- * Uses the resolve compiler to annotate the actively open editor with error
- * and warning msgs. This code is adapted to our purposes from the ANTLR4
- * intellij plugin located here:
- * <p>
- * <a href="https://github.com/antlr/intellij-plugin-v4">https://github.com/antlr/intellij-plugin-v4/a>
+/** Uses the resolve compiler to annotate the actively open editor with error
+ *  and warning msgs. This code is adapted to our purposes from the ANTLR4
+ *  intellij plugin located here:
+ *  <p>
+ *  <a href="https://github.com/antlr/intellij-plugin-v4">https://github.com/antlr/intellij-plugin-v4/a>
  */
 public class RESOLVEExternalAnnotator
         extends

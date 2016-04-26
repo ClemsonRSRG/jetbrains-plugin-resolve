@@ -8,6 +8,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.codeInsight.lookup.LookupElementRenderer;
 import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Function;
@@ -30,6 +31,7 @@ public class RESOLVECompletionUtil {
     public static final int KEYWORD_PRIORITY = 9;
 
     private static class Lazy {
+        private static final SingleCharInsertHandler DIR_INSERT_HANDLER = new SingleCharInsertHandler('/');
         private static final QualifierInsertHandler FACILITY_INSERT_HANDLER =
                 new QualifierInsertHandler("::", true); //TODO: it'd be nice if there were a way for the user to set padding options..
     }
@@ -39,11 +41,11 @@ public class RESOLVECompletionUtil {
                 @Override
                 public void handleInsert(InsertionContext context, LookupElement item) {
                     PsiElement element = item.getPsiElement();
-                    if (!(element instanceof ResOperationLikeNode)) return;
+                    if ( !(element instanceof ResOperationLikeNode) ) return;
                     ResOperationLikeNode elementAsOp = (ResOperationLikeNode) element;
                     int paramsCount = elementAsOp.getParamDeclList().size();
                     InsertHandler<LookupElement> handler =
-                            paramsCount == 0 ? ParenthesesInsertHandler.NO_PARAMETERS :
+                            paramsCount==0 ? ParenthesesInsertHandler.NO_PARAMETERS :
                                     ParenthesesInsertHandler.WITH_PARAMETERS;
                     handler.handleInsert(context, item);
                 }
@@ -55,7 +57,7 @@ public class RESOLVECompletionUtil {
                 public void renderElement(LookupElement element,
                                           LookupElementPresentation p) {
                     PsiElement o = element.getPsiElement();
-                    if (!(o instanceof ResNamedElement)) return;
+                    if ( !(o instanceof ResNamedElement) ) return;
                     ResNamedElement v = (ResNamedElement) o;
                     ResType type = v.getResType(null);
                     String text = ResPsiImplUtil.getText(type);
@@ -66,7 +68,7 @@ public class RESOLVECompletionUtil {
                                                     v instanceof ResTypeParamDecl ? RESOLVEIcons.GENERIC_TYPE :
                                                             v instanceof ResFieldDef ? RESOLVEIcons.RECORD_FIELD : null;
 
-                    if (v instanceof ResMathVarDef) {
+                    if ( v instanceof ResMathVarDef ) {
                         //Todo: Need to write a getResTypeInner method and put it into the psi util class;
                         //should be called from ResMathVarDefImpl...
                         //typeText += v.get
@@ -85,7 +87,7 @@ public class RESOLVECompletionUtil {
                 public void renderElement(LookupElement element,
                                           LookupElementPresentation p) {
                     PsiElement o = element.getPsiElement();
-                    if (!(o instanceof ResOperationLikeNode)) return;
+                    if ( !(o instanceof ResOperationLikeNode) ) return;
                     ResOperationLikeNode oAsOp = (ResOperationLikeNode) o;
                     String typeText = "";
                     String paramText = "";
@@ -99,7 +101,7 @@ public class RESOLVECompletionUtil {
                             }, ", ") + ")";
 
                     ResType type = oAsOp.getType();
-                    if (type != null) typeText = type.getText();
+                    if ( type!=null ) typeText = type.getText();
 
                     p.setIcon(oAsOp.getIcon(0));
                     p.setTypeText(typeText);
@@ -116,14 +118,14 @@ public class RESOLVECompletionUtil {
                 public void handleInsert(InsertionContext context,
                                          LookupElement item) {
                     PsiElement element = item.getPsiElement();
-                    if (!(element instanceof ResMathDefinitionSignature))
+                    if ( !(element instanceof ResMathDefinitionSignature) )
                         return;
                     ResMathDefinitionSignature signature = (ResMathDefinitionSignature) element;
                     int paramsCount = signature.getParameters().size();
                     //we don't want empty parens for nullary function applications or infix (or outfix)
                     //TODO: Actually, we could define some nice insertion handlers for outfix defns.
                     InsertHandler<LookupElement> handler =
-                            paramsCount == 0 //||
+                            paramsCount==0 //||
                                     //signature instanceof ResMathInfixDefinitionSignature ? //||
                                     //signature instanceof ResMathOutfixDefinitionSignature ?
                                     ? new BasicInsertHandler<LookupElement>() :
@@ -138,7 +140,7 @@ public class RESOLVECompletionUtil {
                 public void renderElement(LookupElement element,
                                           LookupElementPresentation p) {
                     PsiElement o = element.getPsiElement();
-                    if (!(o instanceof ResMathDefinitionSignature)) return;
+                    if ( !(o instanceof ResMathDefinitionSignature) ) return;
                     String rangeTypeText = "";
                     ResMathDefinitionSignature signature = (ResMathDefinitionSignature) o;
                     String typeText = "";
@@ -147,9 +149,9 @@ public class RESOLVECompletionUtil {
                     ResCompositeElement mathType = signature.getMathTypeExp();
                     boolean first = true;
                     for (ResMathVarDeclGroup grp : signature.getParameters()) {
-                        if (grp.getMathExp() != null) {
+                        if ( grp.getMathExp()!=null ) {
                             for (PsiElement e : grp.getMathVarDefList()) {
-                                if (first) {
+                                if ( first ) {
                                     first = false;
                                     typeText += grp.getMathExp().getText();
                                 } else {
@@ -159,8 +161,8 @@ public class RESOLVECompletionUtil {
                             }
                         }
                     }
-                    if (mathType != null) rangeTypeText = mathType.getText();
-                    if (!typeText.equals("")) typeText += " -> ";
+                    if ( mathType!=null ) rangeTypeText = mathType.getText();
+                    if ( !typeText.equals("") ) typeText += " -> ";
                     typeText += rangeTypeText;
                     p.setIcon(RESOLVEIcons.DEF);
                     p.setTypeText(rangeTypeText);
@@ -189,14 +191,14 @@ public class RESOLVECompletionUtil {
         return PrioritizedLookupElement.withPriority(LookupElementBuilder
                 .createWithSmartPointer(lookupString, f)
                 .withRenderer(FUNCTION_RENDERER)
-                .withInsertHandler(h != null ? h : FUNCTION_INSERT_HANDLER), priority);
+                .withInsertHandler(h!=null ? h : FUNCTION_INSERT_HANDLER), priority);
     }
 
     @Nullable
     public static LookupElement createVariableLikeLookupElement(
             @NotNull ResNamedElement v) {
         String name = v.getName();
-        if (StringUtil.isEmpty(name)) return null;
+        if ( StringUtil.isEmpty(name) ) return null;
         return createVariableLikeLookupElement(v, name, null, VAR_PRIORITY);
     }
 
@@ -220,7 +222,7 @@ public class RESOLVECompletionUtil {
         return PrioritizedLookupElement.withPriority(LookupElementBuilder
                         .createWithSmartPointer(lookupString, signature)
                         .withRenderer(DEFINITION_RENDERER)
-                        .withInsertHandler(h != null ? h : DEFINITION_INSERT_HANDLER),
+                        .withInsertHandler(h!=null ? h : DEFINITION_INSERT_HANDLER),
                 priority);
     }
 
@@ -261,12 +263,22 @@ public class RESOLVECompletionUtil {
     private static String calcTailTextForFields(
             @NotNull ResNamedElement v) {
         String name = null;
-        if (v instanceof ResFieldDef) {
+        if ( v instanceof ResFieldDef ) {
             ResTypeLikeNodeDecl spec =
                     PsiTreeUtil.getParentOfType(v, ResTypeLikeNodeDecl.class);
-            name = spec != null ? spec.getName() : null;
+            name = spec!=null ? spec.getName() : null;
         }
         return StringUtil.isNotEmpty(name) ? " " +
                 UIUtil.rightArrow() + " " + name : null;
+    }
+
+    @NotNull
+    public static LookupElementBuilder createDirectoryLookupElement(
+            @NotNull PsiDirectory dir) {
+        return LookupElementBuilder
+                .createWithSmartPointer(dir.getName(), dir)
+                .withIcon(RESOLVEIcons.DIRECTORY)
+                .withInsertHandler(dir.getFiles().length==0 ?
+                        Lazy.DIR_INSERT_HANDLER : null);
     }
 }

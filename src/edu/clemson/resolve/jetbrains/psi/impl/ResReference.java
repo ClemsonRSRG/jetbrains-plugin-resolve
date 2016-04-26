@@ -265,7 +265,7 @@ public class ResReference
                                                                   @NotNull ResScopeProcessor processor,
                                                                   @NotNull ResolveState state) {
         //process specifications uses requests
-        Set<ResUsesItem> usesItemsToSearch = new HashSet<ResUsesItem>();
+        /*Set<ResUsesItem> usesItemsToSearch = new HashSet<ResUsesItem>();
 
         //first get all inherited named uses requests
         ResModuleDecl module = file.getEnclosedModule();
@@ -285,7 +285,7 @@ public class ResReference
                 continue;
 
             processModuleLevelEntities((ResFile) resolvedModule, processor, state, false);
-        }
+        }*/
         return true;
     }
 

@@ -5,6 +5,9 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.stubs.PsiFileStubImpl;
+import com.intellij.psi.stubs.StubElement;
+import com.intellij.psi.util.CachedValueProvider;
+import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import edu.clemson.resolve.jetbrains.RESOLVEFileType;
 import edu.clemson.resolve.jetbrains.RESOLVELanguage;
@@ -46,10 +49,10 @@ public class ResFile extends PsiFileBase {
     }
 
     @NotNull
-    public List<ResUsesItem> getUsesItems() {
+    public List<ResUsesSpec> getUsesSpecs() {
         ResModuleDecl enclosedModule = getEnclosedModule();
-        return enclosedModule != null ? enclosedModule.getUsesItems() :
-                new ArrayList<ResUsesItem>();
+        return enclosedModule != null ? enclosedModule.getUsesSpecs() :
+                new ArrayList<ResUsesSpec>();
     }
 
     @NotNull

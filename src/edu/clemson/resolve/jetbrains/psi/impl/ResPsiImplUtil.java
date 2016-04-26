@@ -3,6 +3,7 @@ package edu.clemson.resolve.jetbrains.psi.impl;
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.RecursionManager;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
@@ -15,7 +16,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.jetbrains.ResTypes;
 import edu.clemson.resolve.jetbrains.psi.*;
-import edu.clemson.resolve.jetbrains.psi.impl.imports.ResModuleReferenceSet;
+import edu.clemson.resolve.jetbrains.psi.impl.imports.ResUsesReferenceSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,6 +39,62 @@ public class ResPsiImplUtil {
         String text = moduleSpec.getText();
         return !text.isEmpty() ? TextRange.create(0, text.length() - 1) :
                 TextRange.EMPTY_RANGE;
+    }
+
+    @NotNull
+    public static TextRange getPathTextRange(@NotNull ResUsesSpec usesSpec) {
+        String text = usesSpec.getText();
+        return !text.isEmpty() && isQuote(text.charAt(0)) ?
+                TextRange.create(1, text.length() - 1) : TextRange.EMPTY_RANGE;
+    }
+
+    private static boolean isQuote(char q) {
+        return q == '"';
+    }
+
+    @Nullable
+    public static PsiDirectory resolve(@NotNull ResUsesSpec usesSpec) {
+        PsiReference[] references = usesSpec.getReferences();
+        for (PsiReference reference : references) {
+            if (reference instanceof FileReferenceOwner) {
+                PsiFileReference lastFileReference =
+                        ((FileReferenceOwner)reference).getLastFileReference();
+                PsiElement result = lastFileReference != null ?
+                        lastFileReference.resolve() : null;
+                return result instanceof PsiDirectory ?
+                        (PsiDirectory)result : null;
+            }
+        }
+        return null;
+    }
+
+    @NotNull
+    public static PsiReference[] getReferences(@NotNull ResUsesSpec o) {
+        if (o.getTextLength() < 2) return PsiReference.EMPTY_ARRAY;
+        return new ResUsesReferenceSet(o).getAllReferences();
+    }
+
+    @NotNull
+    public static String getPath(@NotNull ResUsesSpec o) {
+        return unquote(o.getText());
+    }
+
+    @NotNull
+    private static String unquote(@Nullable String s) {
+        if ( StringUtil.isEmpty(s)) return "";
+        char quote = s.charAt(0);
+        int startOffset = isQuote(quote) ? 1 : 0;
+        int endOffset = s.length();
+        if (s.length() > 1) {
+            char lastChar = s.charAt(s.length() - 1);
+            if (isQuote(quote) && lastChar == quote) {
+                endOffset = s.length() - 1;
+            }
+            if (!isQuote(quote) && isQuote(lastChar)) {
+                endOffset = s.length() - 1;
+            }
+        }
+        return s.substring(startOffset, endOffset);
     }
 
     @Nullable
@@ -101,7 +158,7 @@ public class ResPsiImplUtil {
     public static PsiReference[] getReferences(
             @NotNull ResModuleSpec o) {
         if (o.getTextLength() == 0) return PsiReference.EMPTY_ARRAY;
-        return new ResModuleReferenceSet(o).getAllReferences();
+        return new ResUsesReferenceSet(o).getAllReferences();
     }
 
     @NotNull

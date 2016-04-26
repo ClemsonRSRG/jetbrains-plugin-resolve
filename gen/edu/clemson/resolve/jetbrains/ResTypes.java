@@ -124,8 +124,8 @@ public interface ResTypes {
   IElementType TYPE_REFERENCE_EXP = new ResCompositeElementType("TYPE_REFERENCE_EXP");
   IElementType TYPE_REPR_DECL = new ResCompositeElementType("TYPE_REPR_DECL");
   IElementType UNARY_EXP = new ResCompositeElementType("UNARY_EXP");
-  IElementType USES_ITEM = new ResCompositeElementType("USES_ITEM");
   IElementType USES_ITEM_LIST = new ResCompositeElementType("USES_ITEM_LIST");
+  IElementType USES_SPEC = new ResCompositeElementType("USES_SPEC");
   IElementType VAR_DECL_GROUP = new ResCompositeElementType("VAR_DECL_GROUP");
   IElementType VAR_DEF = new ResCompositeElementType("VAR_DEF");
   IElementType VAR_SPEC = new ResCompositeElementType("VAR_SPEC");
@@ -618,11 +618,11 @@ public interface ResTypes {
       else if (type == UNARY_EXP) {
         return new ResUnaryExpImpl(node);
       }
-      else if (type == USES_ITEM) {
-        return new ResUsesItemImpl(node);
-      }
       else if (type == USES_ITEM_LIST) {
         return new ResUsesItemListImpl(node);
+      }
+      else if (type == USES_SPEC) {
+        return new ResUsesSpecImpl(node);
       }
       else if (type == VAR_DECL_GROUP) {
         return new ResVarDeclGroupImpl(node);

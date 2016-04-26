@@ -1,10 +1,13 @@
 package edu.clemson.resolve.jetbrains;
 
 import com.intellij.openapi.util.IconLoader;
+import com.intellij.util.PlatformIcons;
 
 import javax.swing.*;
 
 public interface RESOLVEIcons {
+
+    Icon DIRECTORY = PlatformIcons.DIRECTORY_CLOSED_ICON;
 
     public static final Icon MODULE = IconLoader.getIcon("/edu/clemson/resolve/icons/module.png");
     public static final Icon TOOL_ICON = IconLoader.getIcon("/edu/clemson/resolve/icons/tool_icon.png");

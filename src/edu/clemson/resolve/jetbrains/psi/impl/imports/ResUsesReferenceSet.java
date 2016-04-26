@@ -13,6 +13,7 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.jetbrains.psi.ResModuleSpec;
+import edu.clemson.resolve.jetbrains.psi.ResUsesSpec;
 import edu.clemson.resolve.jetbrains.sdk.RESOLVESdkUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,11 +22,22 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 
-public class ResModuleReferenceSet extends FileReferenceSet {
+/** Represents a reference set to guide the completions
+ *  This code is adapted to our purposes from the intellij go language
+ *  plugin located here:
+ *  <p>
+ *  <a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin">https://github.com/go-lang-plugin-org/go-lang-idea-plugin/a>
+ */
+public class ResUsesReferenceSet extends FileReferenceSet {
 
-    public ResModuleReferenceSet(@NotNull ResModuleSpec moduleSpec) {
-        super(moduleSpec.getText(), moduleSpec, moduleSpec.getModuleSpecTextRange()
-                .getStartOffset(), null, true);
+    public ResUsesReferenceSet(@NotNull ResModuleSpec moduleSpec) {
+        super(moduleSpec.getText(), moduleSpec,
+                moduleSpec.getModuleSpecTextRange().getStartOffset(), null, true);
+    }
+
+    public ResUsesReferenceSet(@NotNull ResUsesSpec usesSpec) {
+        super(usesSpec.getPath(), usesSpec,
+                usesSpec.getPathTextRange().getStartOffset(), null, true);
     }
 
     @NotNull
@@ -51,10 +63,16 @@ public class ResModuleReferenceSet extends FileReferenceSet {
                 });
     }
 
+    @Nullable
+    @Override
+    public PsiFileSystemItem resolve() {
+        return isAbsolutePathReference() ? null : super.resolve();
+    }
+
     @NotNull
     @Override
     public FileReference createFileReference(
             TextRange range, int index, String text) {
-        return new ResModuleReference(this, range, index, text);
+        return new ResUsesReference(this, range, index, text);
     }
 }

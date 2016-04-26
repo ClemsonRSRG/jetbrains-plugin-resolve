@@ -8,11 +8,18 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import org.jetbrains.annotations.NotNull;
 
-public class QualifierInsertHandler extends BasicInsertHandler<LookupElement> {
-    private final String insertStr;
+/** Allows anything that is a single character into the editor.
+ *  This code is from the intellij go language plugin located here:
+ *  <p>
+ *  <a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin">https://github.com/go-lang-plugin-org/go-lang-idea-plugin/a>
+ */
+public class SingleCharInsertHandler
+        extends
+        BasicInsertHandler<LookupElement> {
+    private final char myChar;
 
-    public QualifierInsertHandler(String aStr, boolean pad) {
-        this.insertStr = pad ? " " + aStr + " " : aStr;
+    public SingleCharInsertHandler(char aChar) {
+        myChar = aChar;
     }
 
     @Override
@@ -23,14 +30,13 @@ public class QualifierInsertHandler extends BasicInsertHandler<LookupElement> {
         Document document = editor.getDocument();
         context.commitDocument();
         boolean staysAtChar = document.getTextLength()>tailOffset &&
-                String.valueOf(document.getCharsSequence().charAt(tailOffset))
-                        .equals(insertStr);
+                document.getCharsSequence().charAt(tailOffset)==myChar;
 
         context.setAddCompletionChar(false);
         if ( !staysAtChar ) {
-            document.insertString(tailOffset, insertStr);
+            document.insertString(tailOffset, String.valueOf(myChar));
         }
-        editor.getCaretModel().moveToOffset(tailOffset + insertStr.length());
+        editor.getCaretModel().moveToOffset(tailOffset + 1);
 
         AutoPopupController.getInstance(context.getProject())
                 .scheduleAutoPopup(editor);

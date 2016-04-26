@@ -27,12 +27,9 @@ public class RESOLVEKeywordCompletionProvider
             };
 
     private final int priority;
-    @Nullable
-    private final InsertHandler<LookupElement> insertHandler;
-    @Nullable
-    private final AutoCompletionPolicy completionPolicy;
-    @NotNull
-    private final String[] keywords;
+    @Nullable private final InsertHandler<LookupElement> insertHandler;
+    @Nullable private final AutoCompletionPolicy completionPolicy;
+    @NotNull private final String[] keywords;
 
     public RESOLVEKeywordCompletionProvider(int priority, String... keywords) {
         this(priority, null, null, keywords);
@@ -78,7 +75,7 @@ public class RESOLVEKeywordCompletionProvider
                         createTemplateBasedInsertHandler("resolve_lang_" + keyword));
         LookupElement result =
                 createKeywordLookupElement(keyword, priority, handler);
-        return completionPolicy != null ?
+        return completionPolicy!=null ?
                 completionPolicy.applyPolicy(result) : result;
     }
 
@@ -101,7 +98,7 @@ public class RESOLVEKeywordCompletionProvider
                 Template template = TemplateSettings.getInstance()
                         .getTemplateById(templateId);
                 Editor editor = context.getEditor();
-                if (template != null) {
+                if ( template!=null ) {
                     editor.getDocument().deleteString(context.getStartOffset(),
                             context.getTailOffset());
                     TemplateManager.getInstance(context.getProject())
@@ -110,8 +107,8 @@ public class RESOLVEKeywordCompletionProvider
                     final int currentOffset = editor.getCaretModel().getOffset();
                     final CharSequence documentText = editor.getDocument()
                             .getImmutableCharSequence();
-                    if (documentText.length() <= currentOffset ||
-                            documentText.charAt(currentOffset) != ' ') {
+                    if ( documentText.length()<=currentOffset ||
+                            documentText.charAt(currentOffset)!=' ' ) {
                         EditorModificationUtil.insertStringAtCaret(editor, " ");
                     } else {
                         EditorModificationUtil.moveCaretRelatively(editor, 1);

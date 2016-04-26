@@ -52,9 +52,9 @@ public abstract class ResAbstractModuleImpl
 
     @NotNull
     @Override
-    public List<ResUsesItem> getUsesItems() {
-        return getUsesItemList() != null ? getUsesItemList().getUsesItemList() :
-                ContainerUtil.<ResUsesItem>newArrayList();
+    public List<ResUsesSpec> getUsesSpecs() {
+        return getUsesItemList() != null ? getUsesItemList().getUsesSpecList() :
+                ContainerUtil.<ResUsesSpec>newArrayList();
     }
 
     @Nullable
