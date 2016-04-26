@@ -5,7 +5,7 @@ The content of the packages:
 -sdk
 consists entirely of code from the intellij 'go' plugin located here (this applies to all
 files in this package):
-<a href="https://github.com/antlr/intellij-plugin-v4">https://github.com/antlr/intellij-plugin-v4/a>
+https://github.com/go-lang-plugin-org/go-lang-idea-plugin
 
 With this being known:
 While assessing this as a potential solution for our package questions,
