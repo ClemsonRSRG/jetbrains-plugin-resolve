@@ -14,11 +14,11 @@ import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
+import edu.clemson.resolve.jetbrains.project.RESOLVEApplicationLibrariesService;
 import edu.clemson.resolve.jetbrains.project.RESOLVELibrariesService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -93,18 +93,20 @@ public class RESOLVESdkUtil {
                             RESOLVESdkService sdkService =
                                     RESOLVESdkService.getInstance(project);
                             result.addAll(getInnerRESOLVEPathSources(project, module));
-                            return Result.create(result, getSdkAndLibrariesCacheDependencies(project, module));
+                            return Result.create(result,
+                                    getSdkAndLibrariesCacheDependencies(project, module));
                         }
                     });
         }
-        return CachedValuesManager.getManager(project).getCachedValue(project, new CachedValueProvider<Collection<VirtualFile>>() {
-            @Nullable
-            @Override
-            public Result<Collection<VirtualFile>> compute() {
-                return Result.create(getInnerRESOLVEPathSources(project, null),
-                        getSdkAndLibrariesCacheDependencies(project, null));
-            }
-        });
+        return CachedValuesManager.getManager(project).getCachedValue(project,
+                new CachedValueProvider<Collection<VirtualFile>>() {
+                    @Nullable
+                    @Override
+                    public Result<Collection<VirtualFile>> compute() {
+                        return Result.create(getInnerRESOLVEPathSources(project, null),
+                                getSdkAndLibrariesCacheDependencies(project, null));
+                    }
+                });
     }
 
     @NotNull
@@ -119,6 +121,16 @@ public class RESOLVESdkUtil {
         return dependencies;
     }
 
+    /** Retrieves root directories from RESOLVEPATH env-variable.
+     *  This method doesn't consider user defined libraries,
+     *  for that case use {@link {@link this#getRESOLVEPathRoots(Project, Module)}
+     */
+    @NotNull
+    public static Collection<VirtualFile> getRESOLVEPathsRootsFromEnvironment() {
+        return RESOLVEEnvironmentRESOLVE_PATHModificationTracker
+                .getGoEnvironmentGoPathRoots();
+    }
+
     @NotNull
     private static List<VirtualFile> getInnerRESOLVEPathSources(
             @NotNull Project project, @Nullable Module module) {
@@ -131,8 +143,8 @@ public class RESOLVESdkUtil {
             @NotNull Project project, @Nullable Module module) {
         Collection<VirtualFile> roots = ContainerUtil.newArrayList();
         if ( RESOLVEApplicationLibrariesService.getInstance()
-                .isUseGoPathFromSystemEnvironment() ) {
-            roots.addAll(getGoPathsRootsFromEnvironment());
+                .isUsingRESOLVEPathFromSystemEnvironment() ) {
+            roots.addAll(getRESOLVEPathsRootsFromEnvironment());
         }
         roots.addAll(module!=null ?
                 RESOLVELibrariesService.getUserDefinedLibraries(module) :
@@ -222,16 +234,17 @@ public class RESOLVESdkUtil {
     private static class RetrieveSubDirectoryOrSelfFunction
             implements
             Function<VirtualFile, VirtualFile> {
-        @NotNull private final String mySubdirName;
+        @NotNull
+        private final String subdirName;
 
         public RetrieveSubDirectoryOrSelfFunction(@NotNull String subdirName) {
-            mySubdirName = subdirName;
+            this.subdirName = subdirName;
         }
 
         @Override
         public VirtualFile fun(VirtualFile file) {
-            return file==null || FileUtil.namesEqual(mySubdirName,
-                    file.getName()) ? file : file.findChild(mySubdirName);
+            return file==null || FileUtil.namesEqual(subdirName,
+                    file.getName()) ? file : file.findChild(subdirName);
         }
     }
 }

@@ -1,0 +1,13 @@
+
+Disclaimer:
+The content of the packages:
+-project
+-sdk
+consists of code from the intellij 'go' plugin located here (this applies to all
+files in this package):
+<a href="https://github.com/antlr/intellij-plugin-v4">https://github.com/antlr/intellij-plugin-v4/a>
+
+With this being known:
+While assessing this as a potential solution for our package questions,
+we're going to need to work to understand this code better if we're ultimately
+going to settle on a similar approach

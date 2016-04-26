@@ -25,17 +25,17 @@ public class RESOLVELibrariesService<T extends RESOLVELibrariesState>
 
     public static final Topic<LibrariesListener> LIBRARIES_TOPIC =
             new Topic<LibrariesListener>("libraries changes", LibrariesListener.class);
-    protected final T myState = createState();
+    protected final T state = createState();
 
     @NotNull
     @Override
     public T getState() {
-        return myState;
+        return state;
     }
 
     @Override
     public void loadState(T state) {
-        XmlSerializerUtil.copyBean(state, myState);
+        XmlSerializerUtil.copyBean(state, this.state);
     }
 
     @NotNull
@@ -88,8 +88,8 @@ public class RESOLVELibrariesService<T extends RESOLVELibrariesState>
     }
 
     public void setLibraryRootUrls(@NotNull Collection<String> libraryRootUrls) {
-        if ( !myState.getUrls().equals(libraryRootUrls) ) {
-            myState.setUrls(libraryRootUrls);
+        if ( !state.getUrls().equals(libraryRootUrls) ) {
+            state.setUrls(libraryRootUrls);
             incModificationCount();
             ApplicationManager.getApplication()
                     .getMessageBus()
@@ -100,7 +100,7 @@ public class RESOLVELibrariesService<T extends RESOLVELibrariesState>
 
     @NotNull
     public Collection<String> getLibraryRootUrls() {
-        return myState.getUrls();
+        return state.getUrls();
     }
 
     @NotNull
