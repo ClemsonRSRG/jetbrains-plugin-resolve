@@ -1,6 +1,5 @@
 package edu.clemson.resolve.jetbrains.template;
 
-import com.intellij.codeInsight.template.EverywhereContextType;
 import com.intellij.codeInsight.template.TemplateContextType;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.psi.PsiComment;
@@ -98,7 +97,7 @@ public abstract class RESOLVELiveTemplateContextType
 
         @Override
         protected boolean isInContext(@NotNull PsiElement element) {
-            return element instanceof ResMathDefinitionSignature;
+            return element instanceof ResMathDefnSig;
         }
     }
 

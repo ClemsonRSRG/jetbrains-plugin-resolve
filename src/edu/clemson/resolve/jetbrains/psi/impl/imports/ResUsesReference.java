@@ -1,21 +1,17 @@
 package edu.clemson.resolve.jetbrains.psi.impl.imports;
 
-import com.intellij.codeInsight.completion.CompletionUtil;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
-import com.intellij.psi.search.FilenameIndex;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.jetbrains.completion.RESOLVECompletionUtil;
-import edu.clemson.resolve.jetbrains.completion.RESOLVEScopeUtil;
+import edu.clemson.resolve.jetbrains.psi.ResFile;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 /** Represents a reference to some directory (or a specific resolve file).
@@ -31,11 +27,21 @@ public class ResUsesReference extends FileReference {
         super(fileReferenceSet, range, index, text);
     }
 
+    @Override
+    public PsiFileSystemItem resolve() {
+        final PsiFileSystemItem result = super.resolve();
+        if (result instanceof ResFile || result instanceof PsiDirectory) {
+            return result;
+        }
+        return null;
+    }
+
     @NotNull
     @Override
     protected ResolveResult[] innerResolve(boolean caseSensitive,
                                            @NotNull PsiFile file) {
         String referenceText = getText();
+
         Set<ResolveResult> result = ContainerUtil.newLinkedHashSet();
         Set<ResolveResult> innerResult = ContainerUtil.newLinkedHashSet();
         Collection<PsiFileSystemItem> ctxs = getContexts();
@@ -43,12 +49,13 @@ public class ResUsesReference extends FileReference {
             innerResolveInContext(referenceText, context, innerResult, caseSensitive);
             for (ResolveResult resolveResult : innerResult) {
                 PsiElement element = resolveResult.getElement();
-                if ( element instanceof PsiDirectory ) {
+                if ( element instanceof PsiDirectory || element instanceof ResFile) {
                     if ( isLast() ) {
                         return new ResolveResult[]{ resolveResult };
                     }
                     result.add(resolveResult);
                 }
+
             }
             innerResult.clear();
         }

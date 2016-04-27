@@ -4,16 +4,14 @@ import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.stubs.PsiFileStubImpl;
-import com.intellij.psi.stubs.StubElement;
-import com.intellij.psi.util.CachedValueProvider;
-import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiTreeUtil;
 import edu.clemson.resolve.jetbrains.RESOLVEFileType;
+import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.RESOLVELanguage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,11 +39,10 @@ public class ResFile extends PsiFileBase {
     }
 
     @NotNull
-    public List<ResMathDefinitionSignature> getMathDefinitionSignatures() {
+    public List<ResMathDefnSig> getMathDefnSignatures() {
         ResModuleDecl enclosedModule = getEnclosedModule();
-        return enclosedModule != null ?
-                enclosedModule.getMathDefinitionSignatures() :
-                new ArrayList<ResMathDefinitionSignature>();
+        return enclosedModule != null ? enclosedModule.getMathDefnSigs() :
+                new ArrayList<ResMathDefnSig>();
     }
 
     @NotNull
@@ -65,14 +62,8 @@ public class ResFile extends PsiFileBase {
     @NotNull
     public List<ResTypeParamDecl> getGenericTypeParams() {
         ResModuleDecl enclosedModule = getEnclosedModule();
-        List<ResTypeParamDecl> genericTypes = new ArrayList<ResTypeParamDecl>();
-        if (enclosedModule == null) return genericTypes;
-        ResModuleParameters params = enclosedModule.getModuleParameters();
-        if (params instanceof ResSpecModuleParameters) {
-            genericTypes.addAll(((ResSpecModuleParameters) params)
-                    .getTypeParamDeclList());
-        }
-        return genericTypes;
+        return (enclosedModule != null) ? enclosedModule.getGenericTypeParams() :
+                new ArrayList<ResTypeParamDecl>();
     }
 
     @NotNull
@@ -116,4 +107,14 @@ public class ResFile extends PsiFileBase {
         return enclosedModule != null ? enclosedModule.getOperationsWithImpls() :
                 new ArrayList<ResAnnotatableOperationLikeNode>();
     }*/
+
+    @Override
+    public Icon getIcon(int s) {
+        if (getEnclosedModule() == null) {
+            return RESOLVEIcons.FILE;
+        } else {
+            return getEnclosedModule().getIcon(0);
+        }
+    }
+
 }

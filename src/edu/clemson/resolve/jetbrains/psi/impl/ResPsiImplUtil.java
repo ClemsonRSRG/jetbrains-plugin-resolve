@@ -77,7 +77,7 @@ public class ResPsiImplUtil {
     }
 
     @Nullable
-    public static PsiDirectory resolve(@NotNull ResUsesString importString) {
+    public static PsiElement resolve(@NotNull ResUsesString importString) {
         PsiReference[] references = importString.getReferences();
         for (PsiReference reference : references) {
             if ( reference instanceof FileReferenceOwner ) {
@@ -85,8 +85,8 @@ public class ResPsiImplUtil {
                         ((FileReferenceOwner) reference).getLastFileReference();
                 PsiElement result = lastFileReference!=null ?
                         lastFileReference.resolve() : null;
-                return result instanceof PsiDirectory ?
-                        (PsiDirectory) result : null;
+
+                return (result instanceof PsiDirectory) || (result instanceof ResFile) ? result : null;
             }
         }
         return null;
@@ -153,6 +153,11 @@ public class ResPsiImplUtil {
         ResReferenceExp child =
                 PsiTreeUtil.getChildOfType(o, ResReferenceExp.class);
         return child;
+    }
+
+    @Nullable
+    public static PsiElement resolve(@NotNull ResTypeReferenceExp o) { // todo: replace with default method in GoReferenceExpressionBase
+        return o.getReference().resolve();
     }
 
     @NotNull

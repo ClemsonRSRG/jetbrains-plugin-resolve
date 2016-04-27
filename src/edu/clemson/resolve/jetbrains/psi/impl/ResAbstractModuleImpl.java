@@ -63,6 +63,17 @@ public abstract class ResAbstractModuleImpl
     }
 
     @NotNull
+    public List<ResTypeParamDecl> getGenericTypeParams() {
+        List<ResTypeParamDecl> genericTypes = new ArrayList<>();
+        ResModuleParameters params = getModuleParameters();
+        if (params instanceof ResSpecModuleParameters) {
+            genericTypes.addAll(((ResSpecModuleParameters) params)
+                    .getTypeParamDeclList());
+        }
+        return genericTypes;
+    }
+
+    @NotNull
     @Override
     public List<ResMathDefnDecl> getMathDefinitionDecls() {
         return CachedValuesManager.getCachedValue(this,
@@ -77,9 +88,9 @@ public abstract class ResAbstractModuleImpl
 
     @NotNull
     @Override
-    public List<ResMathDefinitionSignature> getMathDefinitionSignatures() {
-        List<ResMathDefinitionSignature> signatures =
-                new ArrayList<ResMathDefinitionSignature>();
+    public List<ResMathDefnSig> getMathDefnSigs() {
+        List<ResMathDefnSig> signatures =
+                new ArrayList<ResMathDefnSig>();
         for (ResMathDefnDecl def : getMathDefinitionDecls()) {
             signatures.addAll(def.getSignatures());
         }

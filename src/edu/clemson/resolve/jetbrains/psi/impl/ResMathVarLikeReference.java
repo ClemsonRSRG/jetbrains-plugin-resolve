@@ -6,8 +6,6 @@ import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.util.ArrayUtil;
-import com.intellij.util.ObjectUtils;
-import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.jetbrains.psi.*;
 import org.jetbrains.annotations.NotNull;
@@ -109,7 +107,7 @@ public class ResMathVarLikeReference
 
         if ( !processModuleLevelEntities(file, processor, state, localResolve) )
             return false;
-        if ( !ResReference.processExplicitlyNamedAndInheritedUsesRequests(file, processor, state) )
+        if ( !ResReference.processFilesInSpecifiedUsesDirectories(file, processor, state) )
             return false;
         if ( !processSuperModules(file, processor, state) ) return false;
         if ( !processBuiltin(processor, state, myElement) ) return false;

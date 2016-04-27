@@ -23,7 +23,7 @@ public interface ResModuleDecl extends ResNamedElement {
     public List<ResMathDefnDecl> getMathDefinitionDecls();
 
     @NotNull
-    public List<ResMathDefinitionSignature> getMathDefinitionSignatures();
+    public List<ResMathDefnSig> getMathDefnSigs();
 
     @NotNull
     public List<ResTypeLikeNodeDecl> getTypes();
@@ -33,6 +33,9 @@ public interface ResModuleDecl extends ResNamedElement {
 
     @Nullable
     public ResModuleParameters getModuleParameters();
+
+    @NotNull
+    public List<ResTypeParamDecl> getGenericTypeParams();
 
     @NotNull
     public List<ResOperationLikeNode> getOperationLikeThings();

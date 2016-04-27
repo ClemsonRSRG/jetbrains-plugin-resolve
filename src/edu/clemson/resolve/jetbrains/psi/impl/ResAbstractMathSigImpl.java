@@ -9,11 +9,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public abstract class ResAbstractMathSignatureImpl
+public abstract class ResAbstractMathSigImpl
         extends
-        ResNamedElementImpl implements ResMathDefinitionSignature {
+        ResNamedElementImpl implements ResMathDefnSig {
 
-    public ResAbstractMathSignatureImpl(@NotNull ASTNode node) {
+    public ResAbstractMathSigImpl(@NotNull ASTNode node) {
         super(node);
     }
 

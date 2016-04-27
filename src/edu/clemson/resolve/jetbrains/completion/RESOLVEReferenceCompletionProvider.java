@@ -70,7 +70,7 @@ public class RESOLVEReferenceCompletionProvider
             ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
                 @Override
                 protected boolean accept(@NotNull PsiElement e) {
-                    return e instanceof ResMathDefinitionSignature ||
+                    return e instanceof ResMathDefnSig ||
                             e instanceof ResMathVarDef ||
                             e instanceof ResParamDef ||
                             e instanceof ResTypeParamDecl ||
@@ -96,26 +96,21 @@ public class RESOLVEReferenceCompletionProvider
             @NotNull PsiElement o, @NotNull ResolveState state,
             boolean forTypes) {
         if (o instanceof ResNamedElement) {
-            if (o instanceof ResMathDefinitionSignature) {
-                String name = ((ResMathDefinitionSignature) o).getName();
+            if (o instanceof ResMathDefnSig) {
+                String name = ((ResMathDefnSig) o).getName();
                 if (name != null) {
                     return RESOLVECompletionUtil
                             .createDefinitionLookupElement(
-                                    (ResMathDefinitionSignature) o, name, null,
+                                    (ResMathDefnSig) o, name, null,
                                     RESOLVECompletionUtil.DEFINITION_PRIORITY);
                 }
             } else if (o instanceof ResTypeLikeNodeDecl || o instanceof ResTypeParamDecl) {
-                return RESOLVECompletionUtil
-                        .createTypeLookupElement((ResNamedElement) o);
+                return RESOLVECompletionUtil.createTypeLookupElement((ResNamedElement) o);
             } else if (o instanceof ResFacilityDecl) {
-                return RESOLVECompletionUtil
-                        .createFacilityLookupElement(((ResFacilityDecl) o));
-            }
-            else if (o instanceof ResModuleDecl) {
-                return RESOLVECompletionUtil
-                        .createModuleLookupElement(((ResModuleDecl) o));
-            }
-            else if (o instanceof ResOperationLikeNode) {
+                return RESOLVECompletionUtil.createFacilityLookupElement(((ResFacilityDecl) o));
+            } else if (o instanceof ResModuleDecl) {
+                return RESOLVECompletionUtil.createResModuleLookupElement((ResModuleDecl) o);
+            } else if (o instanceof ResOperationLikeNode) {
                 String name = ((ResOperationLikeNode) o).getName();
                 if (name != null) {
                     return RESOLVECompletionUtil
@@ -125,8 +120,7 @@ public class RESOLVEReferenceCompletionProvider
                 }
             } else {
                 //TODO: Apply type info to the lookup renderers for these 'var like' elements
-                return RESOLVECompletionUtil
-                        .createVariableLikeLookupElement((ResNamedElement) o);
+                return RESOLVECompletionUtil.createVariableLikeLookupElement((ResNamedElement) o);
             }
         }
         return null;

@@ -118,9 +118,9 @@ public class RESOLVECompletionUtil {
                 public void handleInsert(InsertionContext context,
                                          LookupElement item) {
                     PsiElement element = item.getPsiElement();
-                    if ( !(element instanceof ResMathDefinitionSignature) )
+                    if ( !(element instanceof ResMathDefnSig) )
                         return;
-                    ResMathDefinitionSignature signature = (ResMathDefinitionSignature) element;
+                    ResMathDefnSig signature = (ResMathDefnSig) element;
                     int paramsCount = signature.getParameters().size();
                     //we don't want empty parens for nullary function applications or infix (or outfix)
                     //TODO: Actually, we could define some nice insertion handlers for outfix defns.
@@ -140,9 +140,9 @@ public class RESOLVECompletionUtil {
                 public void renderElement(LookupElement element,
                                           LookupElementPresentation p) {
                     PsiElement o = element.getPsiElement();
-                    if ( !(o instanceof ResMathDefinitionSignature) ) return;
+                    if ( !(o instanceof ResMathDefnSig) ) return;
                     String rangeTypeText = "";
-                    ResMathDefinitionSignature signature = (ResMathDefinitionSignature) o;
+                    ResMathDefnSig signature = (ResMathDefnSig) o;
                     String typeText = "";
 
                     //Todo, move the following printing business logic into a method somewhere in ResPsiImplUtil
@@ -215,7 +215,7 @@ public class RESOLVECompletionUtil {
 
     @NotNull
     public static LookupElement createDefinitionLookupElement(
-            @NotNull ResMathDefinitionSignature signature,
+            @NotNull ResMathDefnSig signature,
             @NotNull String lookupString,
             @Nullable InsertHandler<LookupElement> h,
             double priority) {
@@ -251,18 +251,16 @@ public class RESOLVECompletionUtil {
     }
 
     @Nullable
-    public static LookupElement createModuleLookupElement(
-            @NotNull ResModuleDecl module) {
-        if ( module.getIdentifier() == null ) return null;
-        return createModuleLookupElement(module,
-                module.getIdentifier().getText());
+    public static LookupElement createResModuleLookupElement(@NotNull ResModuleDecl module) {
+        return createResModuleLookupElement(module, module.getName());
     }
 
     @Nullable
-    public static LookupElement createModuleLookupElement(
+    public static LookupElement createResModuleLookupElement(
             @NotNull ResModuleDecl module, String name) {
         return PrioritizedLookupElement.withPriority(
-                LookupElementBuilder.create(name)
+                LookupElementBuilder
+                        .create(name)
                         .withInsertHandler(Lazy.FACILITY_OR_MODULE_INSERT_HANDLER)
                         .withIcon(module.getIcon(0)), FACILITY_PRIORITY);
     }

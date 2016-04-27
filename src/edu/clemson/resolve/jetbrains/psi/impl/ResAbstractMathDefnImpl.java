@@ -3,7 +3,7 @@ package edu.clemson.resolve.jetbrains.psi.impl;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.util.PsiTreeUtil;
 import edu.clemson.resolve.jetbrains.psi.ResMathDefnDecl;
-import edu.clemson.resolve.jetbrains.psi.ResMathDefinitionSignature;
+import edu.clemson.resolve.jetbrains.psi.ResMathDefnSig;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -24,8 +24,8 @@ public abstract class ResAbstractMathDefnImpl
 
     @Override
     @NotNull
-    public List<ResMathDefinitionSignature> getSignatures() {
+    public List<ResMathDefnSig> getSignatures() {
         return PsiTreeUtil.getChildrenOfTypeAsList(
-                this, ResMathDefinitionSignature.class);
+                this, ResMathDefnSig.class);
     }
 }

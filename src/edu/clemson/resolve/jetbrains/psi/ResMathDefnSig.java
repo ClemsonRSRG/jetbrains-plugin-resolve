@@ -10,7 +10,7 @@ import java.util.List;
  * This holds the 'meat' of a definition including its name, 'return type'
  * (which in this case is just a {@link ResMathExp}), and any formal parameters.
  */
-public interface ResMathDefinitionSignature extends ResNamedElement {
+public interface ResMathDefnSig extends ResNamedElement {
 
     @NotNull
     public List<ResMathVarDeclGroup> getParameters();

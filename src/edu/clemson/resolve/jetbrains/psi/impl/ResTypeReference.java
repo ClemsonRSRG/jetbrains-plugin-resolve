@@ -80,16 +80,16 @@ public class ResTypeReference
                                                       @NotNull ResTypeReferenceExp qualifier,
                                                       @NotNull ResScopeProcessor processor,
                                                       @NotNull ResolveState state) {
-        //TODO: Ok dan, It's too late to deal with this now. But ResTypeReferenceExp *should*
-        //have a resolve method, but doesn't atm for some reason. Check it out again tomorrow .
-        PsiReference targetRef = qualifier.resolve();
-        PsiElement target = targetRef.resolve();
+        PsiElement target = qualifier.resolve();
         if (target == null || target == qualifier) return false;
         if (target instanceof ResFacilityDecl) {
             ResFile specFile = ((ResFacilityDecl) target).getSpecification();
             if (specFile != null) {
                 ResReference.processModuleLevelEntities(specFile, processor, state, false);
             }
+        }
+        else if (target instanceof ResModuleDecl) {
+            ResReference.processModuleLevelEntities((ResModuleDecl)target, processor, state, false);
         }
         return false;
     }
@@ -104,7 +104,9 @@ public class ResTypeReference
         //this processes any named elements we've found searching up the tree in the previous line
         if (!processNamedElements(processor, state, result, localResolve)) return false;
         if (!ResReference.processModuleLevelEntities(file, processor, state, localResolve)) return false;
-        if (!ResReference.processExplicitlyNamedAndInheritedUsesRequests(file, processor, state)) return false;
+
+        //if (!ResReference.processReferencedFiles(file, processor, state)) return false;
+        if (!ResReference.processFilesInSpecifiedUsesDirectories(file, processor, state)) return false;
 
         //TODO: What we really need to avoid finding both the models and reprs
         // is some flag, say, "stopAfterFirst" (I think...)
