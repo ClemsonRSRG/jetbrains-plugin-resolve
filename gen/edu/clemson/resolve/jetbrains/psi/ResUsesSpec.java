@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ResUsesSpec extends ResCompositeElement {
+public interface ResUsesSpec extends ResNamedElement {
 
   @NotNull
   ResUsesString getUsesString();
@@ -13,7 +13,15 @@ public interface ResUsesSpec extends ResCompositeElement {
   @Nullable
   PsiElement getIdentifier();
 
+  @Nullable
+  String getAlias();
+
+  boolean shouldGoDeeper();
+
   @NotNull
   String getPath();
+
+  @Nullable
+  String getName();
 
 }

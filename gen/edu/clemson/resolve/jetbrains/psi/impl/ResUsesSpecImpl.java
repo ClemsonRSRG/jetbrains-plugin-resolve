@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static edu.clemson.resolve.jetbrains.ResTypes.*;
 import edu.clemson.resolve.jetbrains.psi.*;
 
-public class ResUsesSpecImpl extends ResCompositeElementImpl implements ResUsesSpec {
+public class ResUsesSpecImpl extends ResNamedElementImpl implements ResUsesSpec {
 
   public ResUsesSpecImpl(ASTNode node) {
     super(node);
@@ -37,9 +37,23 @@ public class ResUsesSpecImpl extends ResCompositeElementImpl implements ResUsesS
     return findChildByType(IDENTIFIER);
   }
 
+  @Nullable
+  public String getAlias() {
+    return ResPsiImplUtil.getAlias(this);
+  }
+
+  public boolean shouldGoDeeper() {
+    return ResPsiImplUtil.shouldGoDeeper(this);
+  }
+
   @NotNull
   public String getPath() {
     return ResPsiImplUtil.getPath(this);
+  }
+
+  @Nullable
+  public String getName() {
+    return ResPsiImplUtil.getName(this);
   }
 
 }

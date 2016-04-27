@@ -340,7 +340,7 @@ public class ResVisitor extends PsiElementVisitor {
   }
 
   public void visitModuleSpec(@NotNull ResModuleSpec o) {
-    visitNamedElement(o);
+    visitCompositeElement(o);
   }
 
   public void visitMulInfixExp(@NotNull ResMulInfixExp o) {
@@ -473,7 +473,7 @@ public class ResVisitor extends PsiElementVisitor {
   }
 
   public void visitUsesSpec(@NotNull ResUsesSpec o) {
-    visitCompositeElement(o);
+    visitNamedElement(o);
   }
 
   public void visitUsesString(@NotNull ResUsesString o) {

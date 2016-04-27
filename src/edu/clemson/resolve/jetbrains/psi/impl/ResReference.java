@@ -264,6 +264,35 @@ public class ResReference
     static boolean processExplicitlyNamedAndInheritedUsesRequests(@NotNull ResFile file,
                                                                   @NotNull ResScopeProcessor processor,
                                                                   @NotNull ResolveState state) {
+        //for (Map.Entry<String, Collection<ResUsesSpec>> entry : file.getImportMap().entrySet()) {
+        for (ResUsesSpec o : file.getUsesSpecs()) {
+
+            ResUsesString importString = o.getUsesString();
+
+            if (o.getAlias() == null) {
+                PsiDirectory resolve = importString.resolve();
+                if ( resolve!=null ) {
+                    for (PsiFile f : resolve.getFiles()) {
+                        ResModuleDecl enclosedModule = null;
+                        if (f instanceof ResFile) {
+                            enclosedModule = ((ResFile) f).getEnclosedModule();
+                        }
+                        if (enclosedModule!=null &&
+                                !processor.execute(enclosedModule,
+                                        state.put(ACTUAL_NAME, enclosedModule.getName()))) {
+                            return false;
+                        }
+                    }
+                }
+                //if (resolve != null && !processor.execute(resolve, state.put(ACTUAL_NAME, o.getName()))) return false;
+            }
+            // todo: multi-resolve into appropriate package clauses
+            if (!processor.execute(o, state.put(ACTUAL_NAME, o.getName()))) return false;
+        }
+        //}
+        return true;
+
+
         //process specifications uses requests
         /*Set<ResUsesItem> usesItemsToSearch = new HashSet<ResUsesItem>();
 
@@ -286,7 +315,7 @@ public class ResReference
 
             processModuleLevelEntities((ResFile) resolvedModule, processor, state, false);
         }*/
-        return true;
+        //return true;
     }
 
     private boolean processVarSuperModules(@NotNull ResFile file,

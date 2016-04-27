@@ -162,24 +162,17 @@ public abstract class ResNamedElementImpl
     public Icon getIcon(int flags) {
         Icon icon = null;
         if (this instanceof ResPrecisModuleDecl) icon = RESOLVEIcons.PRECIS;
-        else if (this instanceof ResPrecisExtensionModuleDecl)
-            icon = RESOLVEIcons.PRECIS_EXT;
-        else if (this instanceof ResConceptModuleDecl)
-            icon = RESOLVEIcons.CONCEPT;
-        else if (this instanceof ResConceptExtensionModuleDecl)
-            icon = RESOLVEIcons.CONCEPT_EXT;
+        else if (this instanceof ResPrecisExtensionModuleDecl) icon = RESOLVEIcons.PRECIS_EXT;
+        else if (this instanceof ResConceptModuleDecl) icon = RESOLVEIcons.CONCEPT;
+        else if (this instanceof ResConceptExtensionModuleDecl) icon = RESOLVEIcons.CONCEPT_EXT;
         else if (this instanceof ResImplModuleDecl) icon = RESOLVEIcons.IMPL;
-        else if (this instanceof ResFacilityModuleDecl)
-            icon = RESOLVEIcons.FACILITY;
-        else if (this instanceof ResTypeModelDecl)
-            icon = RESOLVEIcons.TYPE_MODEL;
+        else if (this instanceof ResFacilityModuleDecl) icon = RESOLVEIcons.FACILITY;
+        else if (this instanceof ResTypeModelDecl) icon = RESOLVEIcons.TYPE_MODEL;
         else if (this instanceof ResTypeReprDecl) icon = RESOLVEIcons.TYPE_REPR;
         else if (this instanceof ResFacilityDecl) icon = RESOLVEIcons.FACILITY;
-        else if (this instanceof ResTypeParamDecl)
-            icon = RESOLVEIcons.GENERIC_TYPE;
+        else if (this instanceof ResTypeParamDecl) icon = RESOLVEIcons.GENERIC_TYPE;
         else if (this instanceof ResMathVarDef) icon = RESOLVEIcons.VARIABLE;
-        else if (this instanceof ResOperationDecl)
-            icon = RESOLVEIcons.FUNCTION_DECL;
+        else if (this instanceof ResOperationDecl) icon = RESOLVEIcons.FUNCTION_DECL;
         else if (this instanceof ResParamDef) icon = RESOLVEIcons.PARAMETER;
         //TODO: complete the icon list here as you go along
         if (icon != null) {

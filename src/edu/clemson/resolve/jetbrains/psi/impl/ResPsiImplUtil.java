@@ -67,6 +67,11 @@ public class ResPsiImplUtil {
         return null;
     }
 
+    public static boolean shouldGoDeeper(
+            @SuppressWarnings("UnusedParameters") ResUsesSpec o) {
+        return false;
+    }
+
     private static boolean isQuote(char q) {
         return q=='"';
     }

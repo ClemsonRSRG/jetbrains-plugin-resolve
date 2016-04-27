@@ -8,7 +8,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 
-public interface ResModuleSpec extends ResNamedElement {
+public interface ResModuleSpec extends ResCompositeElement {
 
   @NotNull
   PsiElement getIdentifier();

@@ -11,6 +11,7 @@ import static edu.clemson.resolve.jetbrains.ResTypes.*;
 import edu.clemson.resolve.jetbrains.psi.*;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiReference;
 
 public class ResUsesStringImpl extends ResCompositeElementImpl implements ResUsesString {
 
@@ -31,6 +32,11 @@ public class ResUsesStringImpl extends ResCompositeElementImpl implements ResUse
   @NotNull
   public PsiElement getString() {
     return findNotNullChildByType(STRING);
+  }
+
+  @NotNull
+  public PsiReference[] getReferences() {
+    return ResPsiImplUtil.getReferences(this);
   }
 
   @Nullable

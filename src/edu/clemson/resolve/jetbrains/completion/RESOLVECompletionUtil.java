@@ -32,7 +32,7 @@ public class RESOLVECompletionUtil {
 
     private static class Lazy {
         private static final SingleCharInsertHandler DIR_INSERT_HANDLER = new SingleCharInsertHandler('/');
-        private static final QualifierInsertHandler FACILITY_INSERT_HANDLER =
+        private static final QualifierInsertHandler FACILITY_OR_MODULE_INSERT_HANDLER =
                 new QualifierInsertHandler("::", true); //TODO: it'd be nice if there were a way for the user to set padding options..
     }
 
@@ -63,10 +63,10 @@ public class RESOLVECompletionUtil {
                     String text = ResPsiImplUtil.getText(type);
                     Icon icon = v instanceof ResMathVarDef ? RESOLVEIcons.VARIABLE :
                             v instanceof ResVarDef ? RESOLVEIcons.VARIABLE :
-                                    v instanceof ResExemplarDecl ? RESOLVEIcons.EXEMPLAR :
-                                            v instanceof ResParamDef ? RESOLVEIcons.PARAMETER :
-                                                    v instanceof ResTypeParamDecl ? RESOLVEIcons.GENERIC_TYPE :
-                                                            v instanceof ResFieldDef ? RESOLVEIcons.RECORD_FIELD : null;
+                            v instanceof ResExemplarDecl ? RESOLVEIcons.EXEMPLAR :
+                            v instanceof ResParamDef ? RESOLVEIcons.PARAMETER :
+                            v instanceof ResTypeParamDecl ? RESOLVEIcons.GENERIC_TYPE :
+                            v instanceof ResFieldDef ? RESOLVEIcons.RECORD_FIELD : null;
 
                     if ( v instanceof ResMathVarDef ) {
                         //Todo: Need to write a getResTypeInner method and put it into the psi util class;
@@ -251,11 +251,28 @@ public class RESOLVECompletionUtil {
     }
 
     @Nullable
+    public static LookupElement createModuleLookupElement(
+            @NotNull ResModuleDecl module) {
+        if ( module.getIdentifier() == null ) return null;
+        return createModuleLookupElement(module,
+                module.getIdentifier().getText());
+    }
+
+    @Nullable
+    public static LookupElement createModuleLookupElement(
+            @NotNull ResModuleDecl module, String name) {
+        return PrioritizedLookupElement.withPriority(
+                LookupElementBuilder.create(name)
+                        .withInsertHandler(Lazy.FACILITY_OR_MODULE_INSERT_HANDLER)
+                        .withIcon(module.getIcon(0)), FACILITY_PRIORITY);
+    }
+
+    @Nullable
     public static LookupElement createFacilityLookupElement(
             @NotNull ResFacilityDecl facility, @NotNull String name) {
         return PrioritizedLookupElement.withPriority(
                 LookupElementBuilder.create(name)
-                        .withInsertHandler(Lazy.FACILITY_INSERT_HANDLER)
+                        .withInsertHandler(Lazy.FACILITY_OR_MODULE_INSERT_HANDLER)
                         .withIcon(RESOLVEIcons.FACILITY), FACILITY_PRIORITY);
     }
 
