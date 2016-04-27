@@ -286,6 +286,9 @@ public class ResReference
                 for (ResModuleDecl accessibleModule : accessibleModules) {
                     if (!processor.execute(accessibleModule,
                             state.put(ACTUAL_NAME, accessibleModule.getName()))) return false;
+                    if (accessibleModule instanceof ResPrecisModuleDecl) {
+                        
+                    }
                 }
             }
         }
