@@ -37,7 +37,7 @@ public class RESOLVESdkUtil {
     @Nullable
     public static VirtualFile getSdkSrcDir(
             @NotNull final Project project, @Nullable final Module module) {
-        if ( module!=null ) {
+        if (module != null) {
             return CachedValuesManager.getManager(project).getCachedValue(module,
                     new CachedValueProvider<VirtualFile>() {
                         @Nullable
@@ -66,7 +66,7 @@ public class RESOLVESdkUtil {
         VirtualFile file = VirtualFileManager.getInstance()
                 .findFileByUrl(VfsUtilCore.pathToUrl(
                         FileUtil.join(sdkPath, srcPath)));
-        return file!=null && file.isDirectory() ? file : null;
+        return file != null && file.isDirectory() ? file : null;
     }
 
     @NotNull
@@ -82,7 +82,7 @@ public class RESOLVESdkUtil {
     @NotNull
     public static Collection<VirtualFile> getRESOLVEPathSources(
             @NotNull final Project project, @Nullable final Module module) {
-        if ( module!=null ) {
+        if (module != null) {
             return CachedValuesManager.getManager(project).getCachedValue(
                     module, new CachedValueProvider<Collection<VirtualFile>>() {
                         @Nullable
@@ -142,11 +142,11 @@ public class RESOLVESdkUtil {
     private static Collection<VirtualFile> getRESOLVEPathRoots(
             @NotNull Project project, @Nullable Module module) {
         Collection<VirtualFile> roots = ContainerUtil.newArrayList();
-        if ( RESOLVEApplicationLibrariesService.getInstance()
-                .isUsingRESOLVEPathFromSystemEnvironment() ) {
+        if (RESOLVEApplicationLibrariesService.getInstance()
+                .isUsingRESOLVEPathFromSystemEnvironment()) {
             roots.addAll(getRESOLVEPathsRootsFromEnvironment());
         }
-        roots.addAll(module!=null ?
+        roots.addAll(module != null ?
                 RESOLVELibrariesService.getUserDefinedLibraries(module) :
                 RESOLVELibrariesService.getUserDefinedLibraries(project));
         return roots;
@@ -157,20 +157,20 @@ public class RESOLVESdkUtil {
             @NotNull RESOLVESdkService sdkService, @Nullable Module module) {
         String sdkHomePath = sdkService.getSdkHomePath(module);
         String sdkVersionString = sdkService.getSdkVersion(module);
-        return sdkHomePath!=null && sdkVersionString!=null ?
+        return sdkHomePath != null && sdkVersionString != null ?
                 getSdkSrcDir(sdkHomePath, sdkVersionString) : null;
     }
 
     @Nullable
     public static VirtualFile suggestSdkDirectory() {
-        if ( SystemInfo.isWindows ) {
+        if (SystemInfo.isWindows) {
             return LocalFileSystem.getInstance()
                     .findFileByPath("C:\\resolve");
         }
-        if ( SystemInfo.isMac || SystemInfo.isLinux ) {
+        if (SystemInfo.isMac || SystemInfo.isLinux) {
             VirtualFile usrLocal = LocalFileSystem.getInstance()
                     .findFileByPath("/usr/local/resolve");
-            if ( usrLocal!=null ) return usrLocal;
+            if (usrLocal != null) return usrLocal;
         }
         return null;
     }
@@ -180,31 +180,31 @@ public class RESOLVESdkUtil {
         VirtualFile sdkRoot = VirtualFileManager.getInstance()
                 .findFileByUrl(VfsUtilCore.pathToUrl(sdkPath));
         String version = null;
-        if ( sdkRoot!=null ) {
+        if (sdkRoot != null) {
             String cachedVersion = sdkRoot.getUserData(RESOLVE_VERSION_DATA_KEY);
-            if ( cachedVersion!=null ) {
+            if (cachedVersion != null) {
                 return !cachedVersion.isEmpty() ? cachedVersion : null;
             }
             VirtualFile compilerDir = sdkRoot.findFileByRelativePath("jars");
-            if ( compilerDir==null || !compilerDir.isDirectory() ) {
+            if (compilerDir == null || !compilerDir.isDirectory()) {
                 RESOLVESdkService.LOG.debug("Cannot find compiler jar in resolve sdk home directory");
                 return null;
             }
             VirtualFile compilerCandidate = null;
 
             for (VirtualFile f : compilerDir.getChildren()) {
-                if ( f.getName().endsWith(".jar") ) {
+                if (f.getName().endsWith(".jar")) {
                     compilerCandidate = f;
                     break;
                 }
             }
-            if ( compilerCandidate==null ) {
+            if (compilerCandidate == null) {
                 version = null;
                 RESOLVESdkService.LOG.debug("Cannot find compiler jar in resolve sdk home directory");
             } else {
                 String fileName = compilerCandidate.getName();
                 version = parseRESOLVEVersion(fileName);
-                if ( version==null ) {
+                if (version == null) {
                     RESOLVESdkService.LOG.debug("Cannot retrieve go version from compiler jar name: " + fileName);
                 }
                 sdkRoot.putUserData(RESOLVE_VERSION_DATA_KEY, StringUtil.notNullize(version));
@@ -225,7 +225,7 @@ public class RESOLVESdkUtil {
     @Nullable
     public static String parseRESOLVEVersion(@NotNull String text) {
         Matcher matcher = RESOLVE_VERSION_PATTERN.matcher(text);
-        if ( matcher.find() ) {
+        if (matcher.find()) {
             return matcher.group(1);
         }
         return null;
@@ -237,13 +237,13 @@ public class RESOLVESdkUtil {
         @NotNull
         private final String subdirName;
 
-        public RetrieveSubDirectoryOrSelfFunction(@NotNull String subdirName) {
+        RetrieveSubDirectoryOrSelfFunction(@NotNull String subdirName) {
             this.subdirName = subdirName;
         }
 
         @Override
         public VirtualFile fun(VirtualFile file) {
-            return file==null || FileUtil.namesEqual(subdirName,
+            return file == null || FileUtil.namesEqual(subdirName,
                     file.getName()) ? file : file.findChild(subdirName);
         }
     }

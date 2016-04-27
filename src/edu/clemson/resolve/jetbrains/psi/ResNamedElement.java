@@ -17,10 +17,10 @@ import org.jetbrains.annotations.Nullable;
  * a local operation {@link ResBlock}, then chances are you want to
  * extend this.<p>
  * <p>
- * Q: OK, but then why doesn't {@link ResMathDefinitionDecl} extend this?<br>
+ * Q: OK, but then why doesn't {@link ResMathDefnDecl} extend this?<br>
  * A: That's a special case, made necessary by the ridiculous number of ways
  * our language has for introducing mathematical operators to scope; for a more
- * detailed explanation, refer to the doc in {@link ResMathDefinitionDecl}.<p>
+ * detailed explanation, refer to the doc in {@link ResMathDefnDecl}.<p>
  * <p>
  * Q: I see that this class extends {@link ResTypeOwner}, but the node I want
  * to extend {@code this} doesn't have a sensible {@link ResType}! Is this OK?<br>

@@ -64,12 +64,12 @@ public abstract class ResAbstractModuleImpl
 
     @NotNull
     @Override
-    public List<ResMathDefinitionDecl> getMathDefinitionDecls() {
+    public List<ResMathDefnDecl> getMathDefinitionDecls() {
         return CachedValuesManager.getCachedValue(this,
-                new CachedValueProvider<List<ResMathDefinitionDecl>>() {
+                new CachedValueProvider<List<ResMathDefnDecl>>() {
                     @Override
-                    public Result<List<ResMathDefinitionDecl>> compute() {
-                        return Result.create(calc(ResMathDefinitionDecl.class),
+                    public Result<List<ResMathDefnDecl>> compute() {
+                        return Result.create(calc(ResMathDefnDecl.class),
                                 ResAbstractModuleImpl.this);
                     }
                 });
@@ -80,7 +80,7 @@ public abstract class ResAbstractModuleImpl
     public List<ResMathDefinitionSignature> getMathDefinitionSignatures() {
         List<ResMathDefinitionSignature> signatures =
                 new ArrayList<ResMathDefinitionSignature>();
-        for (ResMathDefinitionDecl def : getMathDefinitionDecls()) {
+        for (ResMathDefnDecl def : getMathDefinitionDecls()) {
             signatures.addAll(def.getSignatures());
         }
         return signatures;

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
- * The signature of a mathematical definition ({@link ResMathDefinitionDecl}).
+ * The signature of a mathematical definition ({@link ResMathDefnDecl}).
  * This holds the 'meat' of a definition including its name, 'return type'
  * (which in this case is just a {@link ResMathExp}), and any formal parameters.
  */

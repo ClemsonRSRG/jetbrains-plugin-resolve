@@ -20,7 +20,7 @@ public interface ResModuleDecl extends ResNamedElement {
     public List<ResModuleSpec> getSuperModuleSpecList();
 
     @NotNull
-    public List<ResMathDefinitionDecl> getMathDefinitionDecls();
+    public List<ResMathDefnDecl> getMathDefinitionDecls();
 
     @NotNull
     public List<ResMathDefinitionSignature> getMathDefinitionSignatures();

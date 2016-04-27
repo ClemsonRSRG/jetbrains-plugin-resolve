@@ -2,24 +2,23 @@ package edu.clemson.resolve.jetbrains.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.util.PsiTreeUtil;
-import edu.clemson.resolve.jetbrains.psi.ResMathDefinitionDecl;
+import edu.clemson.resolve.jetbrains.psi.ResMathDefnDecl;
 import edu.clemson.resolve.jetbrains.psi.ResMathDefinitionSignature;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-/**
- * An abstract base class from which all RESOLVE math definition-like
- * constructs extend.
- * <p>
- * <p>See note in {@link ResMathDefinitionDecl} as to why we don't extend
- * {@link edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl}.</p>
+/** An abstract base class from which all RESOLVE math definition-like
+ *  constructs extend.
+ *  <p>
+ *  <p>See note in {@link ResMathDefnDecl} as to why we don't extend
+ *  {@link edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl}.</p>
  */
-public abstract class ResAbstractMathDefinitionImpl
+public abstract class ResAbstractMathDefnImpl
         extends
-        ResCompositeElementImpl implements ResMathDefinitionDecl {
+        ResCompositeElementImpl implements ResMathDefnDecl {
 
-    public ResAbstractMathDefinitionImpl(@NotNull ASTNode node) {
+    public ResAbstractMathDefnImpl(@NotNull ASTNode node) {
         super(node);
     }
 

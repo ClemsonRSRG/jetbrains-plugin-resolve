@@ -70,7 +70,7 @@ public class ResTypeReference
         if (!(file instanceof ResFile)) return false;
         ResolveState state = ResolveState.initial();
         ResTypeReferenceExp qualifier = myElement.getQualifier();
-        if (qualifier != null) {
+         if (qualifier != null) {
             return processQualifierExpression(((ResFile) file), qualifier, processor, state);
         }
         return processUnqualifiedResolve(((ResFile) file), processor, state, true);
@@ -80,7 +80,9 @@ public class ResTypeReference
                                                       @NotNull ResTypeReferenceExp qualifier,
                                                       @NotNull ResScopeProcessor processor,
                                                       @NotNull ResolveState state) {
-        PsiReference targetRef = qualifier.getReference();
+        //TODO: Ok dan, It's too late to deal with this now. But ResTypeReferenceExp *should*
+        //have a resolve method, but doesn't atm for some reason. Check it out again tomorrow .
+        PsiReference targetRef = qualifier.resolve();
         PsiElement target = targetRef.resolve();
         if (target == null || target == qualifier) return false;
         if (target instanceof ResFacilityDecl) {

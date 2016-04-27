@@ -181,7 +181,7 @@
         identifier              = 'regexp:\p{Alpha}\w*'
     ]
 
-    extends("Math.*(DefnDecl)")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractMathDefinitionImpl"
+    extends("Math.*(DefnDecl)")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractMathDefnImpl"
     extends("Math.*(Sig)")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractMathSignatureImpl"
     extends(".*ModuleDecl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractModuleImpl"
     extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|Procedure|OperationProcedure|Exemplar|Facility)Decl)|ModuleSpec|UsesSpec")="edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl"
@@ -190,7 +190,7 @@
     extends("Math((Minus|Cat|Range|Plus|Div|Mult|Custom)InfixApplyExp|SelectorExp)")=MathInfixApplyExp // this attributes can be placed directly after rule
     extends("Math.*(Exp)")=MathExp
 
-    implements("Math.*DefnDecl")="edu.clemson.resolve.jetbrains.psi.ResMathDefinitionDecl"
+    implements("Math.*DefnDecl")="edu.clemson.resolve.jetbrains.psi.ResMathDefnDecl"
     implements(".*ModuleDecl")="edu.clemson.resolve.jetbrains.psi.ResModuleDecl"
     implements("OperationDecl|OperationProcedureDecl")="edu.clemson.resolve.jetbrains.psi.ResOperationLikeNode"
     implements(".*ReferenceExp")="edu.clemson.resolve.jetbrains.psi.ResReferenceExpBase"
