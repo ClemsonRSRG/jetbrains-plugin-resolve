@@ -54,7 +54,6 @@ public interface ResTypes {
   IElementType MATH_BOOLEAN_INFIX_APPLY_EXP = new ResCompositeElementType("MATH_BOOLEAN_INFIX_APPLY_EXP");
   IElementType MATH_CART_PROD_EXP = new ResCompositeElementType("MATH_CART_PROD_EXP");
   IElementType MATH_CATEGORICAL_DEFN_DECL = new ResCompositeElementType("MATH_CATEGORICAL_DEFN_DECL");
-  IElementType MATH_CLASSIFICATION_THEOREM_DECL = new ResCompositeElementType("MATH_CLASSIFICATION_THEOREM_DECL");
   IElementType MATH_CUP_OUTFIX_APPLY_EXP = new ResCompositeElementType("MATH_CUP_OUTFIX_APPLY_EXP");
   IElementType MATH_DBL_BAR_OUTFIX_APPLY_EXP = new ResCompositeElementType("MATH_DBL_BAR_OUTFIX_APPLY_EXP");
   IElementType MATH_EQUALITY_INFIX_APPLY_EXP = new ResCompositeElementType("MATH_EQUALITY_INFIX_APPLY_EXP");
@@ -126,6 +125,7 @@ public interface ResTypes {
   IElementType UNARY_EXP = new ResCompositeElementType("UNARY_EXP");
   IElementType USES_ITEM_LIST = new ResCompositeElementType("USES_ITEM_LIST");
   IElementType USES_SPEC = new ResCompositeElementType("USES_SPEC");
+  IElementType USES_STRING = new ResCompositeElementType("USES_STRING");
   IElementType VAR_DECL_GROUP = new ResCompositeElementType("VAR_DECL_GROUP");
   IElementType VAR_DEF = new ResCompositeElementType("VAR_DEF");
   IElementType VAR_SPEC = new ResCompositeElementType("VAR_SPEC");
@@ -408,9 +408,6 @@ public interface ResTypes {
       else if (type == MATH_CATEGORICAL_DEFN_DECL) {
         return new ResMathCategoricalDefnDeclImpl(node);
       }
-      else if (type == MATH_CLASSIFICATION_THEOREM_DECL) {
-        return new ResMathClassificationTheoremDeclImpl(node);
-      }
       else if (type == MATH_CUP_OUTFIX_APPLY_EXP) {
         return new ResMathCupOutfixApplyExpImpl(node);
       }
@@ -623,6 +620,9 @@ public interface ResTypes {
       }
       else if (type == USES_SPEC) {
         return new ResUsesSpecImpl(node);
+      }
+      else if (type == USES_STRING) {
+        return new ResUsesStringImpl(node);
       }
       else if (type == VAR_DECL_GROUP) {
         return new ResVarDeclGroupImpl(node);

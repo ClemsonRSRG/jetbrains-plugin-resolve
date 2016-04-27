@@ -14,6 +14,7 @@ import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.jetbrains.psi.ResModuleSpec;
 import edu.clemson.resolve.jetbrains.psi.ResUsesSpec;
+import edu.clemson.resolve.jetbrains.psi.ResUsesString;
 import edu.clemson.resolve.jetbrains.sdk.RESOLVESdkUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,9 +36,9 @@ public class ResUsesReferenceSet extends FileReferenceSet {
                 moduleSpec.getModuleSpecTextRange().getStartOffset(), null, true);
     }
 
-    public ResUsesReferenceSet(@NotNull ResUsesSpec usesSpec) {
-        super(usesSpec.getPath(), usesSpec,
-                usesSpec.getPathTextRange().getStartOffset(), null, true);
+    public ResUsesReferenceSet(@NotNull ResUsesString usesStr) {
+        super(usesStr.getPath(), usesStr,
+                usesStr.getPathTextRange().getStartOffset(), null, true);
     }
 
     @NotNull

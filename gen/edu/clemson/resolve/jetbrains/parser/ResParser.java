@@ -155,9 +155,6 @@ public class ResParser implements PsiParser, LightPsiParser {
     else if (t == MATH_CATEGORICAL_DEFN_DECL) {
       r = MathCategoricalDefnDecl(b, 0);
     }
-    else if (t == MATH_CLASSIFICATION_THEOREM_DECL) {
-      r = MathClassificationTheoremDecl(b, 0);
-    }
     else if (t == MATH_CUP_OUTFIX_APPLY_EXP) {
       r = MathCupOutfixApplyExp(b, 0);
     }
@@ -370,6 +367,9 @@ public class ResParser implements PsiParser, LightPsiParser {
     }
     else if (t == USES_SPEC) {
       r = UsesSpec(b, 0);
+    }
+    else if (t == USES_STRING) {
+      r = UsesString(b, 0);
     }
     else if (t == VAR_DECL_GROUP) {
       r = VarDeclGroup(b, 0);
@@ -1837,31 +1837,6 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = p && consumeToken(b, SEMICOLON) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
-  }
-
-  /* ********************************************************** */
-  // ('Corollary'|'Theorem') identifier ':'
-  public static boolean MathClassificationTheoremDecl(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathClassificationTheoremDecl")) return false;
-    if (!nextTokenIs(b, "<math classification theorem decl>", COROLLARY, THEOREM)) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, MATH_CLASSIFICATION_THEOREM_DECL, "<math classification theorem decl>");
-    r = MathClassificationTheoremDecl_0(b, l + 1);
-    r = r && consumeToken(b, IDENTIFIER);
-    r = r && consumeToken(b, COLON);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // 'Corollary'|'Theorem'
-  private static boolean MathClassificationTheoremDecl_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathClassificationTheoremDecl_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COROLLARY);
-    if (!r) r = consumeToken(b, THEOREM);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */
@@ -3942,22 +3917,30 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // string
+  // [ identifier ] UsesString
   public static boolean UsesSpec(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "UsesSpec")) return false;
-    if (!nextTokenIs(b, STRING)) return false;
+    if (!nextTokenIs(b, "<uses spec>", IDENTIFIER, STRING)) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, STRING);
-    exit_section_(b, m, USES_SPEC, r);
+    Marker m = enter_section_(b, l, _NONE_, USES_SPEC, "<uses spec>");
+    r = UsesSpec_0(b, l + 1);
+    r = r && UsesString(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
+  }
+
+  // [ identifier ]
+  private static boolean UsesSpec_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UsesSpec_0")) return false;
+    consumeToken(b, IDENTIFIER);
+    return true;
   }
 
   /* ********************************************************** */
   // UsesSpec (',' UsesSpec)*
   static boolean UsesSpecs(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "UsesSpecs")) return false;
-    if (!nextTokenIs(b, STRING)) return false;
+    if (!nextTokenIs(b, "", IDENTIFIER, STRING)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
     r = UsesSpec(b, l + 1);
@@ -3987,6 +3970,18 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, COMMA);
     r = r && UsesSpec(b, l + 1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // string
+  public static boolean UsesString(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UsesString")) return false;
+    if (!nextTokenIs(b, STRING)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, STRING);
+    exit_section_(b, m, USES_STRING, r);
     return r;
   }
 

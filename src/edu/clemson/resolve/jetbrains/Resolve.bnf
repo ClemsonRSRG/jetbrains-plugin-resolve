@@ -258,8 +258,13 @@ UsesItemList ::= uses ( UsesSpec | '(' UsesSpecs? ')' ) ';' {
   pin(".*")=1
   //methods=[addUsesSpec]
 }
+
 private UsesSpecs ::= UsesSpec (',' UsesSpec)* {pin=1}
-UsesSpec ::= string {methods=[getReferences resolve getPath getPathTextRange]}
+
+UsesSpec ::= [ identifier ] UsesString {
+  methods=[getAlias getLocalPackageName shouldGoDeeper isForSideEffects isDot getPath getName]
+}
+UsesString ::= string {methods=[getReferences resolve getPath getPathTextRange]}
 
 ModuleSpec ::= identifier {pin=1 methods=[getReferences resolve getModuleSpecTextRange]}
 
@@ -489,7 +494,7 @@ StringLiteral ::= string | raw_string
 MathTheoremDecl ::= ('Corollary'|'Theorem') identifier ':'
 MathAssertionExp ';' {pin = 2}
 
-MathClassificationTheoremDecl ::= ('Corollary'|'Theorem') identifier ':'
+//MathClassificationTheoremDecl ::= ('Corollary'|'Theorem') identifier ':'
 
 private MathDefnSig ::=
             MathPrefixDefnSig

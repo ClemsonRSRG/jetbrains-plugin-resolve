@@ -100,12 +100,9 @@ public class ResTypeReference
         ResolveUtil.treeWalkUp(myElement, delegate);
         Collection<? extends ResNamedElement> result = delegate.getVariants();
         //this processes any named elements we've found searching up the tree in the previous line
-        if (!processNamedElements(processor, state, result, localResolve))
-            return false;
-        if (!ResReference.processModuleLevelEntities(file, processor, state, localResolve))
-            return false;
-        if (!ResReference.processExplicitlyNamedAndInheritedUsesRequests(file, processor, state))
-            return false;
+        if (!processNamedElements(processor, state, result, localResolve)) return false;
+        if (!ResReference.processModuleLevelEntities(file, processor, state, localResolve)) return false;
+        if (!ResReference.processExplicitlyNamedAndInheritedUsesRequests(file, processor, state)) return false;
 
         //TODO: What we really need to avoid finding both the models and reprs
         // is some flag, say, "stopAfterFirst" (I think...)
