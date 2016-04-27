@@ -21,7 +21,7 @@ public class ResTypeReference
         extends
         PsiPolyVariantReferenceBase<ResTypeReferenceExp> {
 
-    public ResTypeReference(@NotNull ResTypeReferenceExp o) {
+    ResTypeReference(@NotNull ResTypeReferenceExp o) {
         super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(),
                 o.getIdentifier().getTextLength()));
     }
