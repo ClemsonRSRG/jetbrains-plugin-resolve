@@ -38,7 +38,7 @@ public class RESOLVESdkType extends SdkType {
     @Override
     public String suggestHomePath() {
         VirtualFile suggestSdkDirectory = RESOLVESdkUtil.suggestSdkDirectory();
-        return suggestSdkDirectory != null ?
+        return suggestSdkDirectory!=null ?
                 suggestSdkDirectory.getPath() : null;
     }
 
@@ -48,7 +48,7 @@ public class RESOLVESdkType extends SdkType {
         //note that we don't explicitly validate the resolve compiler jar
         //exists here--no need, as this will return null if it doesn't
         // (the version is embedded in it)
-        if (getVersionString(sdkHomePath) == null) {
+        if ( getVersionString(sdkHomePath)==null ) {
             RESOLVESdkService.LOG.debug("Cannot retrieve version for sdk " +
                     "(or the compiler-jar): " + sdkHomePath);
             return false;
@@ -60,7 +60,7 @@ public class RESOLVESdkType extends SdkType {
     public String suggestSdkName(String currentSdkName,
                                  String sdkHome) {
         String version = getVersionString(sdkHome);
-        if (version == null) {
+        if ( version==null ) {
             return "Unknown RESOLVE version at " + sdkHome;
         }
         return "RESOLVE " + version;
@@ -101,15 +101,16 @@ public class RESOLVESdkType extends SdkType {
     @Override
     public void setupSdkPaths(@NotNull Sdk sdk) {
         String versionString = sdk.getVersionString();
-        if (versionString == null) {
+        if ( versionString==null ) {
             throw new RuntimeException("SDK version is not defined");
         }
         SdkModificator modificator = sdk.getSdkModificator();
         String path = sdk.getHomePath();
-        if (path == null) return;
+        if ( path==null ) return;
         modificator.setHomePath(path);
 
-        for (VirtualFile file : RESOLVESdkUtil.getSdkDirectoriesToAttach(path, versionString)) {
+        for (VirtualFile file : RESOLVESdkUtil
+                .getSdkDirectoriesToAttach(path, versionString)) {
             modificator.addRoot(file, OrderRootType.CLASSES);
             modificator.addRoot(file, OrderRootType.SOURCES);
         }

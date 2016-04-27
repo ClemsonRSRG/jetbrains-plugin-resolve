@@ -1,3 +1,19 @@
+/*
+ * Copyright 2013-2015 Sergey Ignatov, Alexander Zolotov, Florin Patan
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package edu.clemson.resolve.jetbrains.project;
 
 import com.intellij.openapi.application.ApplicationManager;
@@ -75,13 +91,15 @@ public class RESOLVELibrariesService<T extends RESOLVELibrariesState>
             @NotNull Project project, @Nullable Module module) {
         return module!=null
                 ? new ModificationTracker[]{ RESOLVEModuleLibrariesService
-                    .getInstance(module), RESOLVEProjectLibrariesService
-                    .getInstance(module.getProject()),
-                        RESOLVEApplicationLibrariesService.getInstance() }
-                : new ModificationTracker[]{ RESOLVEModuleLibrariesService
-                    .getInstance(project),
-                        RESOLVEApplicationLibrariesService.getInstance() };
+                .getInstance(module), RESOLVEProjectLibrariesService
+                .getInstance(module.getProject()),
+                RESOLVEApplicationLibrariesService.getInstance() }
+
+                : new ModificationTracker[]{ RESOLVEProjectLibrariesService
+                .getInstance(project),
+                RESOLVEApplicationLibrariesService.getInstance() };
     }
+
 
     public void setLibraryRootUrls(@NotNull String... libraryRootUrls) {
         setLibraryRootUrls(Arrays.asList(libraryRootUrls));
