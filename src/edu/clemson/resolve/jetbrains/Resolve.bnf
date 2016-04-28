@@ -261,7 +261,7 @@ UsesItemList ::= uses ( UsesSpec | '(' UsesSpecs? ')' ) ';' {
 
 private UsesSpecs ::= UsesSpec (',' UsesSpec)* {pin=1}
 
-UsesSpec ::= [ identifier ] UsesString {
+UsesSpec ::= [ identifier ] UsesString ('as' identifier) {
   methods=[getAlias getLocalPackageName shouldGoDeeper getPath getName]
 }
 UsesString ::= string {methods=[getReferences resolve getPath getPathTextRange]}

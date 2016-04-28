@@ -9,6 +9,8 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.jetbrains.completion.RESOLVECompletionUtil;
 import edu.clemson.resolve.jetbrains.psi.ResFile;
+import edu.clemson.resolve.jetbrains.psi.*;
+import edu.clemson.resolve.jetbrains.psi2.ResBlock;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -22,8 +24,7 @@ import java.util.Set;
  */
 public class ResUsesReference extends FileReference {
 
-    public ResUsesReference(@NotNull FileReferenceSet fileReferenceSet,
-                            TextRange range, int index, String text) {
+    public ResUsesReference(@NotNull FileReferenceSet fileReferenceSet, TextRange range, int index, String text) {
         super(fileReferenceSet, range, index, text);
     }
 
