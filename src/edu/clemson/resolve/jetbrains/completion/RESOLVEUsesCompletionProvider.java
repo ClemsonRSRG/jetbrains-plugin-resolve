@@ -50,15 +50,12 @@ public class RESOLVEUsesCompletionProvider
         result = result.withPrefixMatcher(result.getPrefixMatcher()
                 .cloneWithPrefix(newPrefix));
 
-        addCompletions(result, ModuleUtilCore
-                        .findModuleForPsiElement(parameters.getPosition()),
-                parameters.getOriginalFile(), true);
+        addCompletions(result, ModuleUtilCore.findModuleForPsiElement(
+                parameters.getPosition()), parameters.getOriginalFile(), true);
     }
 
-    public static void addCompletions(@NotNull CompletionResultSet result,
-                                      @Nullable Module module,
-                                      @Nullable PsiElement context,
-                                      boolean withLibraries) {
+    public static void addCompletions(@NotNull CompletionResultSet result, @Nullable Module module,
+                                      @Nullable PsiElement context, boolean withLibraries) {
         if (module != null) {
             GlobalSearchScope scope = withLibraries ?
                     RESOLVEScopeUtil.moduleScope(module) :

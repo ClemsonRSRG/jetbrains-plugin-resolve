@@ -153,6 +153,7 @@ ESCAPES = [abfnrtv]
 
 // Keywords
 
+"as"                                    { return AS; }
 "base"                                  { return BASE;}
 "by"                                    { return BY; }
 "Cart_Prod"                             { return CART_PROD; }

@@ -22,8 +22,7 @@ public class ResTypeReference
         PsiPolyVariantReferenceBase<ResTypeReferenceExp> {
 
     ResTypeReference(@NotNull ResTypeReferenceExp o) {
-        super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(),
-                o.getIdentifier().getTextLength()));
+        super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(), o.getIdentifier().getTextLength()));
     }
 
     private static final ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase> MY_RESOLVER =
@@ -120,8 +119,7 @@ public class ResTypeReference
     }
 
     @NotNull
-    private ResTypeProcessor createDelegate(
-            @NotNull ResScopeProcessor processor) {
+    private ResTypeProcessor createDelegate(@NotNull ResScopeProcessor processor) {
         return new ResTypeProcessor(myElement, processor.isCompletion());
     }
 

@@ -105,6 +105,7 @@
         PRECIS                  = 'Precis'
         BASE                    = 'base'
         HYPO                    = 'hypo'
+        AS                      = 'as'
         CONCEPT                 = 'Concept'
         EXTENSION               = 'Extension'
         EXTENDED_BY             = 'extended_by'
@@ -261,7 +262,7 @@ UsesItemList ::= uses ( UsesSpec | '(' UsesSpecs? ')' ) ';' {
 
 private UsesSpecs ::= UsesSpec (',' UsesSpec)* {pin=1}
 
-UsesSpec ::= [ identifier ] UsesString ('as' identifier) {
+UsesSpec ::= UsesString ('as' identifier)? {
   methods=[getAlias getLocalPackageName shouldGoDeeper getPath getName]
 }
 UsesString ::= string {methods=[getReferences resolve getPath getPathTextRange]}
