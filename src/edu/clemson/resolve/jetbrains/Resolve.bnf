@@ -266,6 +266,8 @@ UsesSpec ::= [ identifier ] UsesString ('as' identifier) {
 }
 UsesString ::= string {methods=[getReferences resolve getPath getPathTextRange]}
 
+//TODO: Thinking now three qualifiers..
+//i.e. something like this: [(Alias)? :: (ModuleName)]? :: Symbol)
 ModuleSpec ::= /*(identifier '::')?*/ identifier {pin=1 methods=[getReferences resolve /*getQualifier*/]}
 
 // Module blocks & items

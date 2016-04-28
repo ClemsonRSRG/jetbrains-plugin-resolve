@@ -10,7 +10,6 @@ import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.jetbrains.completion.RESOLVECompletionUtil;
 import edu.clemson.resolve.jetbrains.psi.ResFile;
 import edu.clemson.resolve.jetbrains.psi.*;
-import edu.clemson.resolve.jetbrains.psi2.ResBlock;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -50,9 +49,9 @@ public class ResUsesReference extends FileReference {
             innerResolveInContext(referenceText, context, innerResult, caseSensitive);
             for (ResolveResult resolveResult : innerResult) {
                 PsiElement element = resolveResult.getElement();
-                if ( element instanceof PsiDirectory || element instanceof ResFile) {
-                    if ( isLast() ) {
-                        return new ResolveResult[]{ resolveResult };
+                if (element instanceof PsiDirectory || element instanceof ResFile) {
+                    if (isLast()) {
+                        return new ResolveResult[]{resolveResult};
                     }
                     result.add(resolveResult);
                 }
@@ -68,7 +67,7 @@ public class ResUsesReference extends FileReference {
     protected Object createLookupItem(PsiElement candidate) {
         if (candidate instanceof PsiDirectory) {
             return RESOLVECompletionUtil
-                    .createDirectoryLookupElement((PsiDirectory)candidate);
+                    .createDirectoryLookupElement((PsiDirectory) candidate);
         }
         return super.createLookupItem(candidate);
     }
@@ -80,7 +79,7 @@ public class ResUsesReference extends FileReference {
         }
 
         if (element instanceof PsiDirectoryContainer) {
-            for (PsiDirectory directory : ((PsiDirectoryContainer)element).getDirectories()) {
+            for (PsiDirectory directory : ((PsiDirectoryContainer) element).getDirectories()) {
                 if (super.isReferenceTo(directory)) {
                     return true;
                 }
@@ -98,7 +97,7 @@ public class ResUsesReference extends FileReference {
                 for (ResolveResult resolveResult : firstReference.multiResolve(false)) {
                     PsiElement resolveResultElement = resolveResult.getElement();
                     if (resolveResultElement instanceof PsiFileSystemItem) {
-                        PsiFileSystemItem parentDirectory = ((PsiFileSystemItem)resolveResultElement).getParent();
+                        PsiFileSystemItem parentDirectory = ((PsiFileSystemItem) resolveResultElement).getParent();
                         if (parentDirectory != null && contexts.contains(parentDirectory)) {
                             return getElement();
                         }
