@@ -163,7 +163,7 @@ public class RESOLVESdkUtil {
     }
 
     @Nullable
-    public static VirtualFile suggestSdkDirectory() {
+    static VirtualFile suggestSdkDirectory() {
         if (SystemInfo.isWindows) {
             return LocalFileSystem.getInstance()
                     .findFileByPath("C:\\resolve");
@@ -177,7 +177,7 @@ public class RESOLVESdkUtil {
     }
 
     @Nullable
-    public static String retrieveRESOLVEVersion(@NotNull String sdkPath) {
+    static String retrieveRESOLVEVersion(@NotNull String sdkPath) {
         VirtualFile sdkRoot = VirtualFileManager.getInstance()
                 .findFileByUrl(VfsUtilCore.pathToUrl(sdkPath));
         String version = null;
@@ -207,7 +207,7 @@ public class RESOLVESdkUtil {
                 String fileName = compilerCandidate.getName();
                 version = parseRESOLVEVersion(fileName);
                 if (version == null) {
-                    RESOLVESdkService.LOG.debug("Cannot retrieve go version from compiler jar name: " + fileName);
+                    RESOLVESdkService.LOG.debug("Cannot retrieve RESOLVE version from compiler jar name: " + fileName);
                 }
                 sdkRoot.putUserData(RESOLVE_VERSION_DATA_KEY, StringUtil.notNullize(version));
             }
@@ -217,15 +217,15 @@ public class RESOLVESdkUtil {
     }
 
     @NotNull
-    public static Collection<VirtualFile> getSdkDirectoriesToAttach(
+    static Collection<VirtualFile> getSdkDirectoriesToAttach(
             @NotNull String sdkPath, @NotNull String versionString) {
-        // scr is enough at the moment, possible process binaries from pkg
+        // src is enough at the moment, possible process binaries from pkg
         return ContainerUtil.createMaybeSingletonList(
                 getSdkSrcDir(sdkPath, versionString));
     }
 
     @Nullable
-    public static String parseRESOLVEVersion(@NotNull String text) {
+    static String parseRESOLVEVersion(@NotNull String text) {
         Matcher matcher = RESOLVE_VERSION_PATTERN.matcher(text);
         if (matcher.find()) {
             return matcher.group(1);
