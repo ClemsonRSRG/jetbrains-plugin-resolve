@@ -23,8 +23,8 @@ public class RESOLVELibrariesService<T extends RESOLVELibrariesState>
         extends
         SimpleModificationTracker implements PersistentStateComponent<T> {
 
-    public static final Topic<LibrariesListener> LIBRARIES_TOPIC =
-            new Topic<LibrariesListener>("libraries changes", LibrariesListener.class);
+    static final Topic<LibrariesListener> LIBRARIES_TOPIC =
+            new Topic<>("libraries changes", LibrariesListener.class);
     protected final T state = createState();
 
     @NotNull
@@ -73,15 +73,15 @@ public class RESOLVELibrariesService<T extends RESOLVELibrariesState>
     @NotNull
     public static ModificationTracker[] getModificationTrackers(
             @NotNull Project project, @Nullable Module module) {
-        return module!=null
-                ? new ModificationTracker[]{ RESOLVEModuleLibrariesService
+        return module != null
+                ? new ModificationTracker[]{RESOLVEModuleLibrariesService
                 .getInstance(module), RESOLVEProjectLibrariesService
                 .getInstance(module.getProject()),
-                RESOLVEApplicationLibrariesService.getInstance() }
+                RESOLVEApplicationLibrariesService.getInstance()}
 
-                : new ModificationTracker[]{ RESOLVEProjectLibrariesService
+                : new ModificationTracker[]{RESOLVEProjectLibrariesService
                 .getInstance(project),
-                RESOLVEApplicationLibrariesService.getInstance() };
+                RESOLVEApplicationLibrariesService.getInstance()};
     }
 
 
@@ -90,7 +90,7 @@ public class RESOLVELibrariesService<T extends RESOLVELibrariesState>
     }
 
     public void setLibraryRootUrls(@NotNull Collection<String> libraryRootUrls) {
-        if ( !state.getUrls().equals(libraryRootUrls) ) {
+        if (!state.getUrls().equals(libraryRootUrls)) {
             state.setUrls(libraryRootUrls);
             incModificationCount();
             ApplicationManager.getApplication()

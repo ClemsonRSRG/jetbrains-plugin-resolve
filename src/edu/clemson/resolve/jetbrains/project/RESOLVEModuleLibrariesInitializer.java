@@ -22,7 +22,6 @@ import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationListener;
 import com.intellij.notification.NotificationType;
 import com.intellij.notification.Notifications;
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleComponent;
@@ -37,17 +36,13 @@ import com.intellij.openapi.roots.libraries.LibraryTablesRegistrar;
 import com.intellij.openapi.startup.StartupManager;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.vfs.*;
-import com.intellij.psi.PsiFileSystemItem;
-import com.intellij.psi.search.FilenameIndex;
 import com.intellij.util.Alarm;
-import com.intellij.util.ThreeState;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.messages.MessageBusConnection;
 import edu.clemson.resolve.jetbrains.RESOLVEConstants;
 import edu.clemson.resolve.jetbrains.sdk.RESOLVESdkService;
 import edu.clemson.resolve.jetbrains.sdk.RESOLVESdkUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.TestOnly;
 
 import javax.swing.event.HyperlinkEvent;
 import java.util.Collection;
@@ -66,7 +61,7 @@ public class RESOLVEModuleLibrariesInitializer implements ModuleComponent {
     private boolean myModuleInitialized;
 
     @NotNull
-    private final Set<VirtualFile> myLastHandledGoPathSourcesRoots =
+    private final Set<VirtualFile> myLastHandledRESOLVEPathSourcesRoots =
             ContainerUtil.newHashSet();
     @NotNull
     private final Set<VirtualFile> myLastHandledExclusions =
@@ -91,7 +86,7 @@ public class RESOLVEModuleLibrariesInitializer implements ModuleComponent {
 
     @Override
     public void moduleAdded() {
-        if ( !myModuleInitialized ) {
+        if (!myModuleInitialized) {
             myConnection.subscribe(ProjectTopics.PROJECT_ROOTS,
                     new ModuleRootAdapter() {
                         @Override
@@ -112,7 +107,7 @@ public class RESOLVEModuleLibrariesInitializer implements ModuleComponent {
             StartupManager.getInstance(project).runWhenProjectIsInitialized(new Runnable() {
                 @Override
                 public void run() {
-                    if ( !project.isDisposed() && !myModule.isDisposed() ) {
+                    if (!project.isDisposed() && !myModule.isDisposed()) {
                     }
                 }
             });
@@ -130,9 +125,10 @@ public class RESOLVEModuleLibrariesInitializer implements ModuleComponent {
     private void scheduleUpdate(int delay) {
         myAlarm.cancelAllRequests();
         UpdateRequest updateRequest = new UpdateRequest();
-        if ( isTestingMode ) {
+        if (isTestingMode) {
             ApplicationManager.getApplication().invokeLater(updateRequest);
-        } else {
+        }
+        else {
             myAlarm.addRequest(updateRequest, delay);
         }
     }
@@ -140,19 +136,20 @@ public class RESOLVEModuleLibrariesInitializer implements ModuleComponent {
     private void attachLibraries(@NotNull final Collection<VirtualFile> libraryRoots, final Set<VirtualFile> exclusions) {
         ApplicationManager.getApplication().assertIsDispatchThread();
 
-        if ( !libraryRoots.isEmpty() ) {
+        if (!libraryRoots.isEmpty()) {
             ApplicationManager.getApplication().runWriteAction(new Runnable() {
                 @Override
                 public void run() {
                     ModuleRootManager model = ModuleRootManager.getInstance(myModule);
                     LibraryOrderEntry goLibraryEntry = OrderEntryUtil.findLibraryOrderEntry(model, getLibraryName());
 
-                    if ( goLibraryEntry!=null && goLibraryEntry.isValid() ) {
+                    if (goLibraryEntry != null && goLibraryEntry.isValid()) {
                         Library library = goLibraryEntry.getLibrary();
-                        if ( library!=null && !((LibraryEx) library).isDisposed() ) {
+                        if (library != null && !((LibraryEx) library).isDisposed()) {
                             fillLibrary(library, libraryRoots, exclusions);
                         }
-                    } else {
+                    }
+                    else {
                         LibraryTable libraryTable = LibraryTablesRegistrar.getInstance().getLibraryTable(myModule.getProject());
                         Library library = libraryTable.createLibrary(getLibraryName());
                         fillLibrary(library, libraryRoots, exclusions);
@@ -161,7 +158,8 @@ public class RESOLVEModuleLibrariesInitializer implements ModuleComponent {
                 }
             });
             showNotification(myModule.getProject());
-        } else {
+        }
+        else {
             removeLibraryIfNeeded();
         }
     }
@@ -192,24 +190,26 @@ public class RESOLVEModuleLibrariesInitializer implements ModuleComponent {
         final ModifiableModelsProvider modelsProvider = ModifiableModelsProvider.SERVICE.getInstance();
         final ModifiableRootModel model = modelsProvider.getModuleModifiableModel(myModule);
         final LibraryOrderEntry goLibraryEntry = OrderEntryUtil.findLibraryOrderEntry(model, getLibraryName());
-        if ( goLibraryEntry!=null ) {
+        if (goLibraryEntry != null) {
             ApplicationManager.getApplication().runWriteAction(new Runnable() {
                 @Override
                 public void run() {
                     Library library = goLibraryEntry.getLibrary();
-                    if ( library!=null ) {
+                    if (library != null) {
                         LibraryTable table = library.getTable();
-                        if ( table!=null ) {
+                        if (table != null) {
                             table.removeLibrary(library);
                             model.removeOrderEntry(goLibraryEntry);
                             modelsProvider.commitModuleModifiableModel(model);
                         }
-                    } else {
+                    }
+                    else {
                         modelsProvider.disposeModuleModifiableModel(model);
                     }
                 }
             });
-        } else {
+        }
+        else {
             ApplicationManager.getApplication().runWriteAction(new Runnable() {
                 @Override
                 public void run() {
@@ -225,17 +225,17 @@ public class RESOLVEModuleLibrariesInitializer implements ModuleComponent {
         //noinspection SynchronizationOnLocalVariableOrMethodParameter
         synchronized (propertiesComponent) {
             shownAlready = propertiesComponent.getBoolean(RESOLVE_LIBRARIES_NOTIFICATION_HAD_BEEN_SHOWN, false);
-            if ( !shownAlready ) {
+            if (!shownAlready) {
                 propertiesComponent.setValue(RESOLVE_LIBRARIES_NOTIFICATION_HAD_BEEN_SHOWN, String.valueOf(true));
             }
         }
 
-        if ( !shownAlready ) {
+        if (!shownAlready) {
             NotificationListener.Adapter notificationListener = new NotificationListener.Adapter() {
                 @Override
                 protected void hyperlinkActivated(@NotNull Notification notification, @NotNull HyperlinkEvent event) {
                     //if ( event.getEventType()==HyperlinkEvent.EventType.ACTIVATED && "configure".equals(event.getDescription()) ) {
-                     //   GoLibrariesConfigurableProvider.showModulesConfigurable(project);
+                    //   GoLibrariesConfigurableProvider.showModulesConfigurable(project);
                     //}
                 }
             };
@@ -248,7 +248,7 @@ public class RESOLVEModuleLibrariesInitializer implements ModuleComponent {
     }
 
     private void showVendoringNotification() {
-        if ( !myModuleInitialized || myModule.isDisposed() ) {
+        if (!myModuleInitialized || myModule.isDisposed()) {
             return;
         }
         final Project project = myModule.getProject();
@@ -298,7 +298,7 @@ public class RESOLVEModuleLibrariesInitializer implements ModuleComponent {
         Disposer.dispose(myConnection);
         Disposer.dispose(myAlarm);
         VirtualFileManager.getInstance().removeVirtualFileListener(myFilesListener);
-        myLastHandledGoPathSourcesRoots.clear();
+        myLastHandledRESOLVEPathSourcesRoots.clear();
         myLastHandledExclusions.clear();
         LocalFileSystem.getInstance().removeWatchedRoots(myWatchedRequests);
         myWatchedRequests.clear();
@@ -324,33 +324,33 @@ public class RESOLVEModuleLibrariesInitializer implements ModuleComponent {
         @Override
         public void run() {
             final Project project = myModule.getProject();
-            if ( RESOLVESdkService.getInstance(project)
-                    .isRESOLVEModule(myModule) ) {
-                synchronized (myLastHandledGoPathSourcesRoots) {
+            if (RESOLVESdkService.getInstance(project)
+                    .isRESOLVEModule(myModule)) {
+                synchronized (myLastHandledRESOLVEPathSourcesRoots) {
                     final Collection<VirtualFile> goPathSourcesRoots =
                             RESOLVESdkUtil.getRESOLVEPathSources(project, myModule);
                     final Set<VirtualFile> excludeRoots =
                             ContainerUtil.newHashSet(ProjectRootManager
                                     .getInstance(project).getContentRoots());
                     ProgressIndicatorProvider.checkCanceled();
-                    if ( !myLastHandledGoPathSourcesRoots
+                    if (!myLastHandledRESOLVEPathSourcesRoots
                             .equals(goPathSourcesRoots) ||
-                            !myLastHandledExclusions.equals(excludeRoots) ) {
+                            !myLastHandledExclusions.equals(excludeRoots)) {
                         final Collection<VirtualFile> includeRoots =
                                 gatherIncludeRoots(goPathSourcesRoots, excludeRoots);
                         ApplicationManager.getApplication().invokeLater(new Runnable() {
                             @Override
                             public void run() {
-                                if ( !myModule.isDisposed() &&
+                                if (!myModule.isDisposed() &&
                                         RESOLVESdkService.getInstance(project)
-                                                .isRESOLVEModule(myModule) ) {
+                                                .isRESOLVEModule(myModule)) {
                                     attachLibraries(includeRoots, excludeRoots);
                                 }
                             }
                         });
 
-                        myLastHandledGoPathSourcesRoots.clear();
-                        myLastHandledGoPathSourcesRoots.addAll(goPathSourcesRoots);
+                        myLastHandledRESOLVEPathSourcesRoots.clear();
+                        myLastHandledRESOLVEPathSourcesRoots.addAll(goPathSourcesRoots);
 
                         myLastHandledExclusions.clear();
                         myLastHandledExclusions.addAll(excludeRoots);
@@ -362,16 +362,17 @@ public class RESOLVEModuleLibrariesInitializer implements ModuleComponent {
                                 .getInstance().addRootsToWatch(paths, true));
                     }
                 }
-            } else {
-                synchronized (myLastHandledGoPathSourcesRoots) {
+            }
+            else {
+                synchronized (myLastHandledRESOLVEPathSourcesRoots) {
                     LocalFileSystem.getInstance().removeWatchedRoots(myWatchedRequests);
-                    myLastHandledGoPathSourcesRoots.clear();
+                    myLastHandledRESOLVEPathSourcesRoots.clear();
                     myLastHandledExclusions.clear();
                     ApplicationManager.getApplication().invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            if ( !myModule.isDisposed() && RESOLVESdkService
-                                    .getInstance(project).isRESOLVEModule(myModule) ) {
+                            if (!myModule.isDisposed() && RESOLVESdkService
+                                    .getInstance(project).isRESOLVEModule(myModule)) {
                                 removeLibraryIfNeeded();
                             }
                         }
@@ -382,24 +383,25 @@ public class RESOLVEModuleLibrariesInitializer implements ModuleComponent {
     }
 
     @NotNull
-    private static Collection<VirtualFile> gatherIncludeRoots(Collection<VirtualFile> goPathSourcesRoots, Set<VirtualFile> excludeRoots) {
+    private static Collection<VirtualFile> gatherIncludeRoots(Collection<VirtualFile> goPathSourcesRoots,
+                                                              Set<VirtualFile> excludeRoots) {
         final Collection<VirtualFile> includeRoots = ContainerUtil.newHashSet();
         for (VirtualFile goPathSourcesDirectory : goPathSourcesRoots) {
             ProgressIndicatorProvider.checkCanceled();
             boolean excludedRootIsAncestor = false;
             for (VirtualFile excludeRoot : excludeRoots) {
                 ProgressIndicatorProvider.checkCanceled();
-                if ( VfsUtilCore.isAncestor(excludeRoot, goPathSourcesDirectory, false) ) {
+                if (VfsUtilCore.isAncestor(excludeRoot, goPathSourcesDirectory, false)) {
                     excludedRootIsAncestor = true;
                     break;
                 }
             }
-            if ( excludedRootIsAncestor ) {
+            if (excludedRootIsAncestor) {
                 continue;
             }
             for (VirtualFile file : goPathSourcesDirectory.getChildren()) {
                 ProgressIndicatorProvider.checkCanceled();
-                if ( file.isDirectory() && !excludeRoots.contains(file) ) {
+                if (file.isDirectory() && !excludeRoots.contains(file)) {
                     includeRoots.add(file);
                 }
             }

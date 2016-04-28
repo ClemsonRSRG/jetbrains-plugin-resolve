@@ -17,7 +17,7 @@ import org.jetbrains.annotations.TestOnly;
 
 public abstract class RESOLVESdkService extends SimpleModificationTracker {
 
-    public static final Logger LOG = Logger.getInstance(RESOLVESdkService.class);
+    static final Logger LOG = Logger.getInstance(RESOLVESdkService.class);
 
     @NotNull
     final Project project;
@@ -36,7 +36,7 @@ public abstract class RESOLVESdkService extends SimpleModificationTracker {
 
     //TODO TODO: This isn't right anymore
     @NotNull
-    public static String libraryRootToSdkPath(
+    static String libraryRootToSdkPath(
             @NotNull VirtualFile root) {
         return VfsUtilCore.urlToPath(StringUtil.trimEnd(
                 StringUtil.trimEnd(StringUtil.trimEnd(root.getUrl(),
@@ -54,17 +54,5 @@ public abstract class RESOLVESdkService extends SimpleModificationTracker {
     public boolean isRESOLVEModule(
             @Nullable Module module) {
         return module != null && !module.isDisposed();
-    }
-
-    @TestOnly
-    public static void setTestingSdkVersion(@Nullable String version,
-                                            @NotNull Disposable disposable) {
-        dummyTestSdkVersion = version;
-        Disposer.register(disposable, new Disposable() {
-            @Override
-            public void dispose() {
-                dummyTestSdkVersion = null;
-            }
-        });
     }
 }
