@@ -72,11 +72,12 @@ public class RESOLVESdkUtil {
     @NotNull
     public static LinkedHashSet<VirtualFile> getSourcesPathsToLookup(
             @NotNull Project project, @Nullable Module module) {
-        LinkedHashSet<VirtualFile> sdkSrcs = newLinkedHashSet();
-        Collection<VirtualFile> pathSrcs = getRESOLVEPathSources(project, module);
+        LinkedHashSet<VirtualFile> sdkAndPathSrcs = newLinkedHashSet();
+        ContainerUtil.addIfNotNull(sdkAndPathSrcs, getSdkSrcDir(project, module));
 
-        ContainerUtil.addIfNotNull(sdkSrcs, getSdkSrcDir(project, module));
-        return sdkSrcs;
+        Collection<VirtualFile> pathSrcs = getRESOLVEPathSources(project, module);
+        ContainerUtil.addAllNotNull(sdkAndPathSrcs, getRESOLVEPathSources(project, module));
+        return sdkAndPathSrcs;
     }
 
     @NotNull

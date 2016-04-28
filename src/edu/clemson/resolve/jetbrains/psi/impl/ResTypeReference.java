@@ -31,8 +31,7 @@ public class ResTypeReference
                 @NotNull
                 @Override
                 public ResolveResult[] resolve(
-                        @NotNull PsiPolyVariantReferenceBase psiPolyVariantReferenceBase,
-                        boolean incompleteCode) {
+                        @NotNull PsiPolyVariantReferenceBase psiPolyVariantReferenceBase, boolean incompleteCode) {
                     return ((ResTypeReference) psiPolyVariantReferenceBase).resolveInner();
                 }
             };
@@ -51,10 +50,8 @@ public class ResTypeReference
 
     @Override
     @NotNull
-    public ResolveResult[] multiResolve(
-            boolean incompleteCode) {
-        return myElement.isValid()
-                ? ResolveCache.getInstance(myElement.getProject())
+    public ResolveResult[] multiResolve(boolean incompleteCode) {
+        return myElement.isValid() ? ResolveCache.getInstance(myElement.getProject())
                 .resolveWithCaching(this, MY_RESOLVER, false, false)
                 : ResolveResult.EMPTY_ARRAY;
     }
