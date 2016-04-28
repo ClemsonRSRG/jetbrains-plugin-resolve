@@ -266,7 +266,7 @@ UsesSpec ::= [ identifier ] UsesString {
 }
 UsesString ::= string {methods=[getReferences resolve getPath getPathTextRange]}
 
-ModuleSpec ::= identifier {pin=1 methods=[getReferences resolve getModuleSpecTextRange]}
+ModuleSpec ::= /*(identifier '::')?*/ identifier {pin=1 methods=[getReferences resolve /*getQualifier*/]}
 
 // Module blocks & items
 

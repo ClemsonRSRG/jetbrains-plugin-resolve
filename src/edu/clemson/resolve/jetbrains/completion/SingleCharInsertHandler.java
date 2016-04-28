@@ -29,11 +29,11 @@ public class SingleCharInsertHandler
         int tailOffset = context.getTailOffset();
         Document document = editor.getDocument();
         context.commitDocument();
-        boolean staysAtChar = document.getTextLength()>tailOffset &&
-                document.getCharsSequence().charAt(tailOffset)==myChar;
+        boolean staysAtChar = document.getTextLength() > tailOffset &&
+                document.getCharsSequence().charAt(tailOffset) == myChar;
 
         context.setAddCompletionChar(false);
-        if ( !staysAtChar ) {
+        if (!staysAtChar) {
             document.insertString(tailOffset, String.valueOf(myChar));
         }
         editor.getCaretModel().moveToOffset(tailOffset + 1);

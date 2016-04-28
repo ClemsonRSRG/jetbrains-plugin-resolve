@@ -36,39 +36,38 @@ public class RESOLVECompletionUtil {
                 new QualifierInsertHandler("::", true); //TODO: it'd be nice if there were a way for the user to set padding options..
     }
 
-    public static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER =
+    private static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER =
             new InsertHandler<LookupElement>() {
                 @Override
                 public void handleInsert(InsertionContext context, LookupElement item) {
                     PsiElement element = item.getPsiElement();
-                    if ( !(element instanceof ResOperationLikeNode) ) return;
+                    if (!(element instanceof ResOperationLikeNode)) return;
                     ResOperationLikeNode elementAsOp = (ResOperationLikeNode) element;
                     int paramsCount = elementAsOp.getParamDeclList().size();
                     InsertHandler<LookupElement> handler =
-                            paramsCount==0 ? ParenthesesInsertHandler.NO_PARAMETERS :
+                            paramsCount == 0 ? ParenthesesInsertHandler.NO_PARAMETERS :
                                     ParenthesesInsertHandler.WITH_PARAMETERS;
                     handler.handleInsert(context, item);
                 }
             };
 
-    public static final LookupElementRenderer<LookupElement> VARIABLE_RENDERER =
+    private static final LookupElementRenderer<LookupElement> VARIABLE_RENDERER =
             new LookupElementRenderer<LookupElement>() {
                 @Override
-                public void renderElement(LookupElement element,
-                                          LookupElementPresentation p) {
+                public void renderElement(LookupElement element, LookupElementPresentation p) {
                     PsiElement o = element.getPsiElement();
-                    if ( !(o instanceof ResNamedElement) ) return;
+                    if (!(o instanceof ResNamedElement)) return;
                     ResNamedElement v = (ResNamedElement) o;
                     ResType type = v.getResType(null);
                     String text = ResPsiImplUtil.getText(type);
                     Icon icon = v instanceof ResMathVarDef ? RESOLVEIcons.VARIABLE :
-                            v instanceof ResVarDef ? RESOLVEIcons.VARIABLE :
-                            v instanceof ResExemplarDecl ? RESOLVEIcons.EXEMPLAR :
-                            v instanceof ResParamDef ? RESOLVEIcons.PARAMETER :
-                            v instanceof ResTypeParamDecl ? RESOLVEIcons.GENERIC_TYPE :
-                            v instanceof ResFieldDef ? RESOLVEIcons.RECORD_FIELD : null;
+                                v instanceof ResVarDef ? RESOLVEIcons.VARIABLE :
+                                v instanceof ResExemplarDecl ? RESOLVEIcons.EXEMPLAR :
+                                v instanceof ResParamDef ? RESOLVEIcons.PARAMETER :
+                                v instanceof ResTypeParamDecl ? RESOLVEIcons.GENERIC_TYPE :
+                                v instanceof ResFieldDef ? RESOLVEIcons.RECORD_FIELD : null;
 
-                    if ( v instanceof ResMathVarDef ) {
+                    if (v instanceof ResMathVarDef) {
                         //Todo: Need to write a getResTypeInner method and put it into the psi util class;
                         //should be called from ResMathVarDefImpl...
                         //typeText += v.get
@@ -81,13 +80,12 @@ public class RESOLVECompletionUtil {
                 }
             };
 
-    public static final LookupElementRenderer<LookupElement> FUNCTION_RENDERER =
+    private static final LookupElementRenderer<LookupElement> FUNCTION_RENDERER =
             new LookupElementRenderer<LookupElement>() {
                 @Override
-                public void renderElement(LookupElement element,
-                                          LookupElementPresentation p) {
+                public void renderElement(LookupElement element, LookupElementPresentation p) {
                     PsiElement o = element.getPsiElement();
-                    if ( !(o instanceof ResOperationLikeNode) ) return;
+                    if (!(o instanceof ResOperationLikeNode)) return;
                     ResOperationLikeNode oAsOp = (ResOperationLikeNode) o;
                     String typeText = "";
                     String paramText = "";
@@ -101,7 +99,7 @@ public class RESOLVECompletionUtil {
                             }, ", ") + ")";
 
                     ResType type = oAsOp.getType();
-                    if ( type!=null ) typeText = type.getText();
+                    if (type != null) typeText = type.getText();
 
                     p.setIcon(oAsOp.getIcon(0));
                     p.setTypeText(typeText);
@@ -112,20 +110,19 @@ public class RESOLVECompletionUtil {
             };
 
     //TODO: Insert handler for infix defn signatures; Whitespace on lhs and rhs of name
-    public static final InsertHandler<LookupElement> DEFINITION_INSERT_HANDLER =
+    private static final InsertHandler<LookupElement> DEFINITION_INSERT_HANDLER =
             new InsertHandler<LookupElement>() {
                 @Override
-                public void handleInsert(InsertionContext context,
-                                         LookupElement item) {
+                public void handleInsert(InsertionContext context, LookupElement item) {
                     PsiElement element = item.getPsiElement();
-                    if ( !(element instanceof ResMathDefnSig) )
+                    if (!(element instanceof ResMathDefnSig))
                         return;
                     ResMathDefnSig signature = (ResMathDefnSig) element;
                     int paramsCount = signature.getParameters().size();
                     //we don't want empty parens for nullary function applications or infix (or outfix)
                     //TODO: Actually, we could define some nice insertion handlers for outfix defns.
                     InsertHandler<LookupElement> handler =
-                            paramsCount==0 //||
+                            paramsCount == 0 //||
                                     //signature instanceof ResMathInfixDefinitionSignature ? //||
                                     //signature instanceof ResMathOutfixDefinitionSignature ?
                                     ? new BasicInsertHandler<LookupElement>() :
@@ -134,13 +131,12 @@ public class RESOLVECompletionUtil {
                 }
             };
 
-    public static final LookupElementRenderer<LookupElement> DEFINITION_RENDERER =
+    private static final LookupElementRenderer<LookupElement> DEFINITION_RENDERER =
             new LookupElementRenderer<LookupElement>() {
                 @Override
-                public void renderElement(LookupElement element,
-                                          LookupElementPresentation p) {
+                public void renderElement(LookupElement element, LookupElementPresentation p) {
                     PsiElement o = element.getPsiElement();
-                    if ( !(o instanceof ResMathDefnSig) ) return;
+                    if (!(o instanceof ResMathDefnSig)) return;
                     String rangeTypeText = "";
                     ResMathDefnSig signature = (ResMathDefnSig) o;
                     String typeText = "";
@@ -149,20 +145,21 @@ public class RESOLVECompletionUtil {
                     ResCompositeElement mathType = signature.getMathTypeExp();
                     boolean first = true;
                     for (ResMathVarDeclGroup grp : signature.getParameters()) {
-                        if ( grp.getMathExp()!=null ) {
+                        if (grp.getMathExp() != null) {
                             for (PsiElement e : grp.getMathVarDefList()) {
-                                if ( first ) {
+                                if (first) {
                                     first = false;
                                     typeText += grp.getMathExp().getText();
-                                } else {
+                                }
+                                else {
                                     typeText += " * " +
                                             grp.getMathExp().getText();
                                 }
                             }
                         }
                     }
-                    if ( mathType!=null ) rangeTypeText = mathType.getText();
-                    if ( !typeText.equals("") ) typeText += " -> ";
+                    if (mathType != null) rangeTypeText = mathType.getText();
+                    if (!typeText.equals("")) typeText += " -> ";
                     typeText += rangeTypeText;
                     p.setIcon(RESOLVEIcons.DEF);
                     p.setTypeText(rangeTypeText);
@@ -173,40 +170,37 @@ public class RESOLVECompletionUtil {
             };
 
     @NotNull
-    public static CamelHumpMatcher createPrefixMatcher(
-            @NotNull PrefixMatcher original) {
+    static CamelHumpMatcher createPrefixMatcher(@NotNull PrefixMatcher original) {
         return createPrefixMatcher(original.getPrefix());
     }
 
     @NotNull
-    public static CamelHumpMatcher createPrefixMatcher(
-            @NotNull String prefix) {
+    static CamelHumpMatcher createPrefixMatcher(@NotNull String prefix) {
         return new CamelHumpMatcher(prefix, false);
     }
 
     @NotNull
-    public static LookupElement createFunctionOrMethodLookupElement(
-            @NotNull ResOperationLikeNode f, @NotNull String lookupString,
-            @Nullable InsertHandler<LookupElement> h, double priority) {
+    static LookupElement createFunctionOrMethodLookupElement(@NotNull ResOperationLikeNode f,
+                                                             @NotNull String lookupString,
+                                                             @Nullable InsertHandler<LookupElement> h,
+                                                             double priority) {
         return PrioritizedLookupElement.withPriority(LookupElementBuilder
                 .createWithSmartPointer(lookupString, f)
                 .withRenderer(FUNCTION_RENDERER)
-                .withInsertHandler(h!=null ? h : FUNCTION_INSERT_HANDLER), priority);
+                .withInsertHandler(h != null ? h : FUNCTION_INSERT_HANDLER), priority);
     }
 
     @Nullable
-    public static LookupElement createVariableLikeLookupElement(
-            @NotNull ResNamedElement v) {
+    static LookupElement createVariableLikeLookupElement(@NotNull ResNamedElement v) {
         String name = v.getName();
-        if ( StringUtil.isEmpty(name) ) return null;
+        if (StringUtil.isEmpty(name)) return null;
         return createVariableLikeLookupElement(v, name, null, VAR_PRIORITY);
     }
 
     @NotNull
-    public static LookupElement createVariableLikeLookupElement(
-            @NotNull ResNamedElement v, @NotNull String lookupString,
-            @Nullable InsertHandler<LookupElement> insertHandler,
-            double priority) {
+    static LookupElement createVariableLikeLookupElement(@NotNull ResNamedElement v, @NotNull String lookupString,
+                                                         @Nullable InsertHandler<LookupElement> insertHandler,
+                                                         double priority) {
         return PrioritizedLookupElement.withPriority(LookupElementBuilder
                 .createWithSmartPointer(lookupString, v)
                 .withRenderer(VARIABLE_RENDERER)
@@ -214,29 +208,24 @@ public class RESOLVECompletionUtil {
     }
 
     @NotNull
-    public static LookupElement createDefinitionLookupElement(
-            @NotNull ResMathDefnSig signature,
-            @NotNull String lookupString,
-            @Nullable InsertHandler<LookupElement> h,
-            double priority) {
+    static LookupElement createDefinitionLookupElement(@NotNull ResMathDefnSig signature, @NotNull String lookupString,
+                                                       @Nullable InsertHandler<LookupElement> h, double priority) {
         return PrioritizedLookupElement.withPriority(LookupElementBuilder
-                        .createWithSmartPointer(lookupString, signature)
-                        .withRenderer(DEFINITION_RENDERER)
-                        .withInsertHandler(h!=null ? h : DEFINITION_INSERT_HANDLER),
-                priority);
+                .createWithSmartPointer(lookupString, signature)
+                .withRenderer(DEFINITION_RENDERER)
+                .withInsertHandler(h != null ? h : DEFINITION_INSERT_HANDLER), priority);
     }
 
     @NotNull
-    public static LookupElement createTypeLookupElement(
-            @NotNull ResNamedElement t) {
-        return createTypeLookupElement(t, StringUtil.notNullize(
-                t.getName()), null, TYPE_PRIORITY);
+    static LookupElement createTypeLookupElement(@NotNull ResNamedElement t) {
+        return createTypeLookupElement(t, StringUtil.notNullize(t.getName()), null, TYPE_PRIORITY);
     }
 
     @NotNull
-    public static LookupElement createTypeLookupElement(
-            @NotNull ResNamedElement t, @NotNull String lookupString,
-            @Nullable InsertHandler<LookupElement> handler, double priority) {
+    private static LookupElement createTypeLookupElement(@NotNull ResNamedElement t,
+                                                         @NotNull String lookupString,
+                                                         @Nullable InsertHandler<LookupElement> handler,
+                                                         double priority) {
         LookupElementBuilder builder =
                 LookupElementBuilder.createWithSmartPointer(lookupString, t)
                         .withInsertHandler(handler).withIcon(t.getIcon(0));
@@ -244,30 +233,25 @@ public class RESOLVECompletionUtil {
     }
 
     @Nullable
-    public static LookupElement createFacilityLookupElement(
-            @NotNull ResFacilityDecl facility) {
-        return createFacilityLookupElement(facility,
-                facility.getIdentifier().getText());
+    static LookupElement createFacilityLookupElement(@NotNull ResFacilityDecl facility) {
+        return createFacilityLookupElement(facility, facility.getIdentifier().getText());
     }
 
     @Nullable
-    public static LookupElement createResModuleLookupElement(@NotNull ResModuleDecl module) {
+    static LookupElement createResModuleLookupElement(@NotNull ResModuleDecl module) {
         return createResModuleLookupElement(module, module.getName());
     }
 
     @Nullable
-    public static LookupElement createResModuleLookupElement(
-            @NotNull ResModuleDecl module, String name) {
+    static LookupElement createResModuleLookupElement(@NotNull ResModuleDecl module, String name) {
         return PrioritizedLookupElement.withPriority(
-                LookupElementBuilder
-                        .create(name)
+                LookupElementBuilder.create(name)
                         .withInsertHandler(Lazy.FACILITY_OR_MODULE_INSERT_HANDLER)
                         .withIcon(module.getIcon(0)), FACILITY_PRIORITY);
     }
 
     @Nullable
-    public static LookupElement createFacilityLookupElement(
-            @NotNull ResFacilityDecl facility, @NotNull String name) {
+    static LookupElement createFacilityLookupElement(@NotNull ResFacilityDecl facility, @NotNull String name) {
         return PrioritizedLookupElement.withPriority(
                 LookupElementBuilder.create(name)
                         .withInsertHandler(Lazy.FACILITY_OR_MODULE_INSERT_HANDLER)
@@ -275,25 +259,20 @@ public class RESOLVECompletionUtil {
     }
 
     @Nullable
-    private static String calcTailTextForFields(
-            @NotNull ResNamedElement v) {
+    private static String calcTailTextForFields(@NotNull ResNamedElement v) {
         String name = null;
-        if ( v instanceof ResFieldDef ) {
-            ResTypeLikeNodeDecl spec =
-                    PsiTreeUtil.getParentOfType(v, ResTypeLikeNodeDecl.class);
-            name = spec!=null ? spec.getName() : null;
+        if (v instanceof ResFieldDef) {
+            ResTypeLikeNodeDecl spec = PsiTreeUtil.getParentOfType(v, ResTypeLikeNodeDecl.class);
+            name = spec != null ? spec.getName() : null;
         }
-        return StringUtil.isNotEmpty(name) ? " " +
-                UIUtil.rightArrow() + " " + name : null;
+        return StringUtil.isNotEmpty(name) ? " " + UIUtil.rightArrow() + " " + name : null;
     }
 
     @NotNull
-    public static LookupElementBuilder createDirectoryLookupElement(
-            @NotNull PsiDirectory dir) {
-        return LookupElementBuilder
-                .createWithSmartPointer(dir.getName(), dir)
+    public static LookupElementBuilder createDirectoryLookupElement(@NotNull PsiDirectory dir) {
+        int numofFiles = dir.getFiles().length;
+        return LookupElementBuilder.createWithSmartPointer(dir.getName(), dir)
                 .withIcon(RESOLVEIcons.DIRECTORY)
-                .withInsertHandler(dir.getFiles().length==0 ?
-                        Lazy.DIR_INSERT_HANDLER : null);
+                .withInsertHandler(Lazy.DIR_INSERT_HANDLER);
     }
 }
