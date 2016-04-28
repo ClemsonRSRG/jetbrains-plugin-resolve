@@ -16,16 +16,15 @@ public class RESOLVEEnvironmentRESOLVE_PATHModificationTracker {
 
     private final Set<String> pathsToTrack = ContainerUtil.newHashSet();
 
-    private final Collection<VirtualFile> goPathRoots =
-            ContainerUtil.newLinkedHashSet();
+    private final Collection<VirtualFile> resolvePathRoots = ContainerUtil.newLinkedHashSet();
 
     public RESOLVEEnvironmentRESOLVE_PATHModificationTracker() {
-        String goPath = RESOLVEEnvUtil.retrieveGoPathFromEnvironment();
-        if ( goPath!=null ) {
+        String resPath = RESOLVEEnvUtil.retrieveGoPathFromEnvironment();
+        if (resPath != null) {
             String home = SystemProperties.getUserHome();
-            for (String s : StringUtil.split(goPath, File.pathSeparator)) {
-                if ( s.contains("$HOME") ) {
-                    if ( home==null ) {
+            for (String s : StringUtil.split(resPath, File.pathSeparator)) {
+                if (s.contains("$HOME")) {
+                    if (home == null) {
                         continue;
                     }
                     s = s.replaceAll("\\$HOME", home);
@@ -58,7 +57,7 @@ public class RESOLVEEnvironmentRESOLVE_PATHModificationTracker {
                     }
 
                     private void handleEvent(VirtualFileEvent event) {
-                        if ( pathsToTrack.contains(event.getFile().getPath()) ) {
+                        if (pathsToTrack.contains(event.getFile().getPath())) {
                             recalculateFiles();
                         }
                     }
@@ -74,19 +73,17 @@ public class RESOLVEEnvironmentRESOLVE_PATHModificationTracker {
         updateRESOLVEPathRoots(result);
     }
 
-    private synchronized void updateRESOLVEPathRoots(
-            Collection<VirtualFile> newRoots) {
-        goPathRoots.clear();
-        goPathRoots.addAll(newRoots);
+    private synchronized void updateRESOLVEPathRoots(Collection<VirtualFile> newRoots) {
+        resolvePathRoots.clear();
+        resolvePathRoots.addAll(newRoots);
     }
 
     private synchronized Collection<VirtualFile> getRESOLVEPathRoots() {
-        return goPathRoots;
+        return resolvePathRoots;
     }
 
-    public static Collection<VirtualFile> getGoEnvironmentGoPathRoots() {
-        return ServiceManager.getService(
-                RESOLVEEnvironmentRESOLVE_PATHModificationTracker.class)
+    public static Collection<VirtualFile> getRESOLVEEnvironmentRESOLVE_PATHRoots() {
+        return ServiceManager.getService(RESOLVEEnvironmentRESOLVE_PATHModificationTracker.class)
                 .getRESOLVEPathRoots();
     }
 }

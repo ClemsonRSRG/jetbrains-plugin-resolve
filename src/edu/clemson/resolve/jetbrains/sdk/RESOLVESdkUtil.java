@@ -129,7 +129,7 @@ public class RESOLVESdkUtil {
     @NotNull
     public static Collection<VirtualFile> getRESOLVEPathsRootsFromEnvironment() {
         return RESOLVEEnvironmentRESOLVE_PATHModificationTracker
-                .getGoEnvironmentGoPathRoots();
+                .getRESOLVEEnvironmentRESOLVE_PATHRoots();
     }
 
     @NotNull
@@ -202,7 +202,8 @@ public class RESOLVESdkUtil {
             if (compilerCandidate == null) {
                 version = null;
                 RESOLVESdkService.LOG.debug("Cannot find compiler jar in resolve sdk home directory");
-            } else {
+            }
+            else {
                 String fileName = compilerCandidate.getName();
                 version = parseRESOLVEVersion(fileName);
                 if (version == null) {
