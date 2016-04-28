@@ -51,9 +51,9 @@ public class RESOLVEReferenceCompletionProvider
             fillVariantsByReference(ArrayUtil.getFirstElement(references), result);
         }*/
         else if (reference instanceof ResReference) {
-            ((ResReference) reference).processResolveVariants(
-                    new MyRESOLVEScopeProcessor(result, false));
-        } else if (reference instanceof ResTypeReference) {
+            ((ResReference) reference).processResolveVariants(new MyRESOLVEScopeProcessor(result, false));
+        }
+        else if (reference instanceof ResTypeReference) {
             PsiElement element = reference.getElement();
             ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
                 @Override
@@ -65,7 +65,8 @@ public class RESOLVEReferenceCompletionProvider
                 }
             };
             ((ResTypeReference) reference).processResolveVariants(aProcessor);
-        } else if (reference instanceof ResMathVarLikeReference) {
+        }
+        else if (reference instanceof ResMathVarLikeReference) {
             PsiElement element = reference.getElement();
             ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
                 @Override
@@ -104,13 +105,17 @@ public class RESOLVEReferenceCompletionProvider
                                     (ResMathDefnSig) o, name, null,
                                     RESOLVECompletionUtil.DEFINITION_PRIORITY);
                 }
-            } else if (o instanceof ResTypeLikeNodeDecl || o instanceof ResTypeParamDecl) {
+            }
+            else if (o instanceof ResTypeLikeNodeDecl || o instanceof ResTypeParamDecl) {
                 return RESOLVECompletionUtil.createTypeLookupElement((ResNamedElement) o);
-            } else if (o instanceof ResFacilityDecl) {
+            }
+            else if (o instanceof ResFacilityDecl) {
                 return RESOLVECompletionUtil.createFacilityLookupElement(((ResFacilityDecl) o));
-            } else if (o instanceof ResModuleDecl) {
+            }
+            else if (o instanceof ResModuleDecl) {
                 return RESOLVECompletionUtil.createResModuleLookupElement((ResModuleDecl) o);
-            } else if (o instanceof ResOperationLikeNode) {
+            }
+            else if (o instanceof ResOperationLikeNode) {
                 String name = ((ResOperationLikeNode) o).getName();
                 if (name != null) {
                     return RESOLVECompletionUtil
@@ -118,7 +123,8 @@ public class RESOLVEReferenceCompletionProvider
                                     (ResOperationLikeNode) o, name, null,
                                     RESOLVECompletionUtil.FUNCTION_PRIORITY);
                 }
-            } else {
+            }
+            else {
                 //TODO: Apply type info to the lookup renderers for these 'var like' elements
                 return RESOLVECompletionUtil.createVariableLikeLookupElement((ResNamedElement) o);
             }

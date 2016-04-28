@@ -284,9 +284,7 @@ public class ResReference
                     }
                 }
                 for (ResModuleDecl accessibleModule : accessibleModules) {
-                    if (!processor.execute(accessibleModule,
-                            state.put(ACTUAL_NAME, accessibleModule.getName()))) return false;
-
+                    if (!processor.execute(accessibleModule, state.put(ACTUAL_NAME, accessibleModule.getName()))) return false;
                     ResReference.processModuleLevelEntities(accessibleModule, processor, state, false);
                 }
             }
@@ -354,7 +352,7 @@ public class ResReference
         return processNamedElements(processor, state, delegate.getVariants(), localResolve);
     }
 
-    protected static boolean processParameterLikeThings(
+    static boolean processParameterLikeThings(
             @NotNull ResFile e,
             @NotNull ResScopeProcessorBase processor) {
         if (e.getEnclosedModule() != null) {
@@ -363,7 +361,7 @@ public class ResReference
         return true;
     }
 
-    protected static boolean processParameterLikeThings(
+    static boolean processParameterLikeThings(
             @NotNull ResCompositeElement e,
             @NotNull ResScopeProcessorBase processor) {
         ResMathDefnDecl def = PsiTreeUtil.getParentOfType(e, ResMathDefnDecl.class);
@@ -467,8 +465,7 @@ public class ResReference
                 processor.isCompletion(), true) {
             @Override
             protected boolean crossOff(@NotNull PsiElement e) {
-                if (e instanceof ResFieldDef) return true;
-                return super.crossOff(e); //&& !(e instanceof ResTypeSpec);
+                return e instanceof ResFieldDef || super.crossOff(e);
             }
         };
     }
