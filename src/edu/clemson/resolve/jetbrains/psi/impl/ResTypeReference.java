@@ -17,9 +17,7 @@ import static edu.clemson.resolve.jetbrains.psi.impl.ResReference.processSuperMo
 //we might just need to have to specify that we DONT want to search the
 //spec we're enhancing (and that should be easy since we already have a specialized
 //processor for types, or b.) somehow ignore type models when we'r
-public class ResTypeReference
-        extends
-        PsiPolyVariantReferenceBase<ResTypeReferenceExp> {
+public class ResTypeReference extends PsiPolyVariantReferenceBase<ResTypeReferenceExp> {
 
     ResTypeReference(@NotNull ResTypeReferenceExp o) {
         super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(), o.getIdentifier().getTextLength()));
@@ -29,15 +27,15 @@ public class ResTypeReference
             new ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase>() {
                 @NotNull
                 @Override
-                public ResolveResult[] resolve(
-                        @NotNull PsiPolyVariantReferenceBase psiPolyVariantReferenceBase, boolean incompleteCode) {
+                public ResolveResult[] resolve(@NotNull PsiPolyVariantReferenceBase psiPolyVariantReferenceBase,
+                                               boolean incompleteCode) {
                     return ((ResTypeReference) psiPolyVariantReferenceBase).resolveInner();
                 }
             };
 
     @NotNull
     private ResolveResult[] resolveInner() {
-        Collection<ResolveResult> result = new OrderedSet<ResolveResult>();
+        Collection<ResolveResult> result = new OrderedSet<>();
         processResolveVariants(ResReference.createResolveProcessor(result, myElement));
         return result.toArray(new ResolveResult[result.size()]);
     }
@@ -51,8 +49,7 @@ public class ResTypeReference
     @NotNull
     public ResolveResult[] multiResolve(boolean incompleteCode) {
         return myElement.isValid() ? ResolveCache.getInstance(myElement.getProject())
-                .resolveWithCaching(this, MY_RESOLVER, false, false)
-                : ResolveResult.EMPTY_ARRAY;
+                .resolveWithCaching(this, MY_RESOLVER, false, false) : ResolveResult.EMPTY_ARRAY;
     }
 
     @NotNull
@@ -66,7 +63,7 @@ public class ResTypeReference
         if (!(file instanceof ResFile)) return false;
         ResolveState state = ResolveState.initial();
         ResTypeReferenceExp qualifier = myElement.getQualifier();
-         if (qualifier != null) {
+        if (qualifier != null) {
             return processQualifierExpression(((ResFile) file), qualifier, processor, state);
         }
         return processUnqualifiedResolve(((ResFile) file), processor, state, true);
@@ -123,13 +120,10 @@ public class ResTypeReference
         return new ResTypeProcessor(myElement, processor.isCompletion());
     }
 
-    /**
-     * A processor for treewalking
-     */
-    protected static class ResTypeProcessor extends ResScopeProcessorBase {
+    /** A processor for treewalking */
+    private static class ResTypeProcessor extends ResScopeProcessorBase {
 
-        public ResTypeProcessor(@NotNull ResTypeReferenceExp origin,
-                                boolean completion) {
+        ResTypeProcessor(@NotNull ResTypeReferenceExp origin, boolean completion) {
             super(origin.getIdentifier(), origin, completion);
         }
 
