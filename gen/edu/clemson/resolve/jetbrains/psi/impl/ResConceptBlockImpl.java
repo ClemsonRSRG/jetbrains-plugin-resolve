@@ -51,7 +51,7 @@ public class ResConceptBlockImpl extends ResCompositeElementImpl implements ResC
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ResTypeModelDecl.class);
   }
 
-  public boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent, PsiElement place) {
+  public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state, PsiElement lastParent, @NotNull PsiElement place) {
     return ResPsiImplUtil.processDeclarations(this, processor, state, lastParent, place);
   }
 

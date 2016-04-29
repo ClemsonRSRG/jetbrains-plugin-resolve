@@ -8,15 +8,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-/** An abstract base class from which all RESOLVE math definition-like
- *  constructs extend.
+/** An abstract base class from which all RESOLVE math definition-like constructs extend.
  *  <p>
- *  <p>See note in {@link ResMathDefnDecl} as to why we don't extend
- *  {@link edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl}.</p>
+ *  See note in {@link ResMathDefnDecl} as to why we don't extend
+ *  {@link edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl}.
  */
-public abstract class ResAbstractMathDefnImpl
-        extends
-        ResCompositeElementImpl implements ResMathDefnDecl {
+public abstract class ResAbstractMathDefnImpl extends ResCompositeElementImpl implements ResMathDefnDecl {
 
     public ResAbstractMathDefnImpl(@NotNull ASTNode node) {
         super(node);
@@ -25,7 +22,6 @@ public abstract class ResAbstractMathDefnImpl
     @Override
     @NotNull
     public List<ResMathDefnSig> getSignatures() {
-        return PsiTreeUtil.getChildrenOfTypeAsList(
-                this, ResMathDefnSig.class);
+        return PsiTreeUtil.getChildrenOfTypeAsList(this, ResMathDefnSig.class);
     }
 }

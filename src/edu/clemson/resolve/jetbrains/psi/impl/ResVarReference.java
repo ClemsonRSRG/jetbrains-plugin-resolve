@@ -27,8 +27,7 @@ public class ResVarReference extends ResCachedReference<ResVarDef> {
     }
 
     @Override
-    public boolean processResolveVariants(
-            @NotNull final ResScopeProcessor processor) {
+    public boolean processResolveVariants(@NotNull final ResScopeProcessor processor) {
         ResVarProcessor p = processor instanceof ResVarProcessor
                 ? ((ResVarProcessor) processor)
                 : new ResVarProcessor(myElement, processor.isCompletion()) {
@@ -40,25 +39,25 @@ public class ResVarReference extends ResCachedReference<ResVarDef> {
         return false;
     }
 
-    public static class ResVarProcessor extends ResScopeProcessorBase {
+    static class ResVarProcessor extends ResScopeProcessorBase {
 
         @Nullable
         private final ResCompositeElement scope;
 
-        public ResVarProcessor(@NotNull PsiElement origin, boolean completion) {
+        ResVarProcessor(@NotNull PsiElement origin, boolean completion) {
             this(origin, origin, completion, false);
         }
 
-        public ResVarProcessor(@NotNull PsiElement requestedName,
-                               @NotNull PsiElement origin, boolean completion,
-                               boolean delegate) {
+        ResVarProcessor(@NotNull PsiElement requestedName,
+                        @NotNull PsiElement origin,
+                        boolean completion,
+                        boolean delegate) {
             super(requestedName, origin, completion);
             this.scope = getScope(origin);
         }
 
         @Nullable
-        public static ResCompositeElement getScope(
-                @Nullable PsiElement o) {
+        public static ResCompositeElement getScope(@Nullable PsiElement o) {
         /*ResWhileStatement whileStatement = PsiTreeUtil
                 .getParentOfType(o, ResWhileStatement.class);
         if (whileStatement != null) return whileStatement.getBlock();

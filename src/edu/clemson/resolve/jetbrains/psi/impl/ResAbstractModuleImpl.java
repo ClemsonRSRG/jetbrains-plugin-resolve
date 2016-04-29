@@ -130,8 +130,7 @@ public abstract class ResAbstractModuleImpl extends ResNamedElementImpl implemen
     }
 
     @NotNull
-    private <T extends ResCompositeElement> List<T> calc(
-            final Class<? extends T> type) {
+    private <T extends ResCompositeElement> List<T> calc(final Class<? extends T> type) {
         final List<T> result = ContainerUtil.newArrayList();
         processChildrenDummyAware(this.getBlock(), new Processor<PsiElement>() {
             @Override
@@ -152,7 +151,8 @@ public abstract class ResAbstractModuleImpl extends ResNamedElementImpl implemen
                      child != null; child = child.getNextSibling()) {
                     if (child instanceof GeneratedParserUtilBase.DummyBlock) {
                         if (!process(child)) return false;
-                    } else if (!processor.process(child)) return false;
+                    }
+                    else if (!processor.process(child)) return false;
                 }
                 return true;
             }

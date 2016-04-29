@@ -41,15 +41,13 @@ public class ResFile extends PsiFileBase {
     @NotNull
     public List<ResMathDefnSig> getMathDefnSignatures() {
         ResModuleDecl enclosedModule = getEnclosedModule();
-        return enclosedModule != null ? enclosedModule.getMathDefnSigs() :
-                new ArrayList<ResMathDefnSig>();
+        return enclosedModule != null ? enclosedModule.getMathDefnSigs() : new ArrayList<ResMathDefnSig>();
     }
 
     @NotNull
     public List<ResUsesSpecGroup> getUsesSpecGroups() {
         ResModuleDecl enclosedModule = getEnclosedModule();
-        return enclosedModule != null ? enclosedModule.getUsesSpecGroups() :
-                new ArrayList<ResUsesSpecGroup>();
+        return enclosedModule != null ? enclosedModule.getUsesSpecGroups() : new ArrayList<ResUsesSpecGroup>();
     }
 
    /* @NotNull
@@ -62,19 +60,17 @@ public class ResFile extends PsiFileBase {
     @NotNull
     public List<ResTypeParamDecl> getGenericTypeParams() {
         ResModuleDecl enclosedModule = getEnclosedModule();
-        return (enclosedModule != null) ? enclosedModule.getGenericTypeParams() :
-                new ArrayList<ResTypeParamDecl>();
+        return (enclosedModule != null) ? enclosedModule.getGenericTypeParams() : new ArrayList<ResTypeParamDecl>();
     }
 
     @NotNull
     public List<ResParamDecl> getConstantModuleParams() {
         ResModuleDecl enclosedModule = getEnclosedModule();
-        List<ResParamDecl> params = new ArrayList<ResParamDecl>();
+        List<ResParamDecl> params = new ArrayList<>();
         if (enclosedModule == null) return params;
         ResModuleParameters moduleParams = enclosedModule.getModuleParameters();
         if (moduleParams instanceof ResSpecModuleParameters) {
-            params.addAll(((ResSpecModuleParameters) params)
-                    .getParamDeclList());
+            params.addAll(((ResSpecModuleParameters) params).getParamDeclList());
         }
         return params;
     }
@@ -82,23 +78,19 @@ public class ResFile extends PsiFileBase {
     @NotNull
     public List<ResTypeLikeNodeDecl> getTypes() {
         ResModuleDecl enclosedModule = getEnclosedModule();
-        return enclosedModule != null ? enclosedModule.getTypes() :
-                new ArrayList<ResTypeLikeNodeDecl>();
+        return enclosedModule != null ? enclosedModule.getTypes() : new ArrayList<ResTypeLikeNodeDecl>();
     }
 
     @NotNull
     public List<ResFacilityDecl> getFacilities() {
         ResModuleDecl enclosedModule = getEnclosedModule();
-        return enclosedModule != null ? enclosedModule.getFacilities() :
-                new ArrayList<ResFacilityDecl>();
+        return enclosedModule != null ? enclosedModule.getFacilities() : new ArrayList<ResFacilityDecl>();
     }
 
     @NotNull
     public List<ResOperationLikeNode> getOperationLikeThings() {
         ResModuleDecl enclosedModule = getEnclosedModule();
-        return enclosedModule != null ?
-                enclosedModule.getOperationLikeThings() :
-                new ArrayList<ResOperationLikeNode>();
+        return enclosedModule != null ? enclosedModule.getOperationLikeThings() : new ArrayList<ResOperationLikeNode>();
     }
 
     /*@NotNull public List<ResAnnotatableOperationLikeNode> getOperationImpls() {

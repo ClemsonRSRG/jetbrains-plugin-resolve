@@ -16,8 +16,7 @@ import java.util.List;
 
 public abstract class ResScopeProcessorBase extends ResScopeProcessor {
     @NotNull
-    protected final OrderedSet<ResNamedElement> myResult =
-            new OrderedSet<ResNamedElement>();
+    protected final OrderedSet<ResNamedElement> myResult = new OrderedSet<>();
 
     @NotNull
     protected final PsiElement origin;
@@ -46,8 +45,7 @@ public abstract class ResScopeProcessorBase extends ResScopeProcessor {
 
         if (!(psiElement instanceof ResNamedElement)) return true;
         String name = ((ResNamedElement) psiElement).getName();
-        if (StringUtil.isEmpty(name) || !isCompletion &&
-                !requestedNameElement.textMatches(name)) return true;
+        if (StringUtil.isEmpty(name) || !isCompletion && !requestedNameElement.textMatches(name)) return true;
         if (crossOff(psiElement)) return true;
         if (psiElement.equals(origin)) return true;
         return add((ResNamedElement) psiElement) || isCompletion;

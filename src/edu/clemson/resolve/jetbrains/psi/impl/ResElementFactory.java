@@ -14,23 +14,21 @@ public class ResElementFactory {
     }
 
     @NotNull
-    private static ResFile createFileFromText(
-            @NotNull Project project, @NotNull String text) {
+    private static ResFile createFileFromText(@NotNull Project project, @NotNull String text) {
         return (ResFile) PsiFileFactory.getInstance(project)
                 .createFileFromText("a.resolve", RESOLVELanguage.INSTANCE, text);
     }
 
     @NotNull
-    public static PsiElement createIdentifierFromText(
-            @NotNull Project project, String text) {
-        ResFile file = createFileFromText(project,
-                "Precis " + text + ";end " + text + ";");
+    public static PsiElement createIdentifierFromText(@NotNull Project project, String text) {
+        ResFile file = createFileFromText(project, "Precis " + text + ";end " + text + ";");
         return file.getEnclosedModule().getIdentifier();
     }
 
+    //TODO: I don't want this to be navigatble.. Figure out how to accomplish this. (or at least make the module
+    //navigatable, but obfuscate the body)
     @NotNull
-    public static ResFile getHardCodedMathFile(
-            @NotNull Project project) {
+    public static ResFile getHardCodedMathFile(@NotNull Project project) {
         final String hardcoded =
                 "Precis HardCoded;\n " +
                         "Definition Cls : HypCls;\n" +

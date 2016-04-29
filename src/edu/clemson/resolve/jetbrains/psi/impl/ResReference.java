@@ -16,22 +16,18 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class ResReference
-        extends
-        PsiPolyVariantReferenceBase<ResReferenceExpBase> {
+public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBase> {
+
     public static final Key<SmartPsiElementPointer<ResReferenceExpBase>> CONTEXT = Key.create("CONTEXT");
     public static final Key<String> ACTUAL_NAME = Key.create("ACTUAL_NAME");
 
-    private static final ResolveCache
-            .PolyVariantResolver<PsiPolyVariantReferenceBase> MY_RESOLVER =
+    private static final ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase> MY_RESOLVER =
             new ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase>() {
                 @NotNull
                 @Override
-                public ResolveResult[] resolve(
-                        @NotNull PsiPolyVariantReferenceBase psiPolyVariantReferenceBase,
-                        boolean incompleteCode) {
-                    return ((ResReference) psiPolyVariantReferenceBase)
-                            .resolveInner();
+                public ResolveResult[] resolve(@NotNull PsiPolyVariantReferenceBase psiPolyVariantReferenceBase,
+                                               boolean incompleteCode) {
+                    return ((ResReference) psiPolyVariantReferenceBase).resolveInner();
                 }
             };
 
@@ -41,8 +37,7 @@ public class ResReference
     }
 
     public ResReference(@NotNull ResReferenceExpBase o) {
-        super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(),
-                o.getIdentifier().getTextLength()));
+        super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(), o.getIdentifier().getTextLength()));
     }
 
     @NotNull
@@ -61,12 +56,10 @@ public class ResReference
             public boolean execute(@NotNull PsiElement element,
                                    @NotNull ResolveState state) {
                 if (element.equals(o)) {
-                    return !result.add(
-                            new PsiElementResolveResult(element));
+                    return !result.add(new PsiElementResolveResult(element));
                 }
                 String name = ObjectUtils.chooseNotNull(state.get(ACTUAL_NAME),
-                        element instanceof PsiNamedElement ?
-                                ((PsiNamedElement) element).getName() : null);
+                        element instanceof PsiNamedElement ? ((PsiNamedElement) element).getName() : null);
                 if (name != null && o.getIdentifier().textMatches(name)) {
                     result.add(new PsiElementResolveResult(element));
                     return false;
@@ -80,8 +73,7 @@ public class ResReference
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
         if (!myElement.isValid()) return ResolveResult.EMPTY_ARRAY;
-        return ResolveCache.getInstance(myElement.getProject())
-                .resolveWithCaching(this, MY_RESOLVER, false, false);
+        return ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, MY_RESOLVER, false, false);
     }
 
     @NotNull
@@ -123,8 +115,7 @@ public class ResReference
         else if (target instanceof ResFile) {
             ResModuleDecl module = ((ResFile) target).getEnclosedModule();
             if (module != null) {
-                processModuleLevelEntities(
-                        (ResFile) target, processor, state, false);
+                processModuleLevelEntities((ResFile) target, processor, state, false);
             }
         }
         return true;
@@ -160,8 +151,7 @@ public class ResReference
         List<ResExp> list = parent.getExpList();
         if (list.size() > 1 && list.get(1).isEquivalentTo(another)) {
             ResType type = list.get(0).getResType(createContext());
-            if (type != null && !processResType(type, processor, state))
-                return false;
+            if (type != null && !processResType(type, processor, state)) return false;
         }
         return true;
     }
@@ -187,8 +177,7 @@ public class ResReference
         PsiElement resolve = reference != null ? reference.resolve() : null;
         if (resolve instanceof ResTypeOwner) {
             ResType type = ((ResTypeOwner) resolve).getResType(state);
-            if (type != null && !processResType(type, processor, state))
-                return false;
+            if (type != null && !processResType(type, processor, state)) return false;
         }
         return true;
     }
@@ -210,8 +199,7 @@ public class ResReference
                 if (!processNamedElements(processor, state, d.getFieldVarDeclGroup().getFieldDefList(), localResolve))
                     return false;
             }
-            if (!processCollectedRefs(type, structRefs, processor, state))
-                return false;
+            if (!processCollectedRefs(type, structRefs, processor, state)) return false;
         }
         return true;
     }
@@ -236,15 +224,16 @@ public class ResReference
                 .createSmartPsiElementPointer(myElement));
     }
 
-    private boolean processBlock(@NotNull ResScopeProcessor processor, @NotNull ResolveState state,
+    private boolean processBlock(@NotNull ResScopeProcessor processor,
+                                 @NotNull ResolveState state,
                                  boolean localResolve) {
         ResScopeProcessorBase delegate = createDelegate(processor);
         ResolveUtil.treeWalkUp(myElement, delegate);
-        return processNamedElements(processor, state, delegate.getVariants(),
-                localResolve);
+        return processNamedElements(processor, state, delegate.getVariants(), localResolve);
     }
 
-    private boolean processUsesRequests(@NotNull ResFile file, @NotNull ResScopeProcessor processor,
+    private boolean processUsesRequests(@NotNull ResFile file,
+                                        @NotNull ResScopeProcessor processor,
                                         @NotNull ResolveState state) {
         ResScopeProcessorBase delegate = createDelegate(processor);
         processFilesInSpecifiedUsesDirectories(file, delegate, state);
@@ -252,7 +241,8 @@ public class ResReference
         return processNamedElements(processor, state, delegate.getVariants(), false);
     }
 
-    static boolean processFilesInSpecifiedUsesDirectories(@NotNull ResFile file, @NotNull ResScopeProcessor processor,
+    static boolean processFilesInSpecifiedUsesDirectories(@NotNull ResFile file,
+                                                          @NotNull ResScopeProcessor processor,
                                                           @NotNull ResolveState state) {
         //for (Map.Entry<String, Collection<ResUsesSpec>> entry : file.getImportMap().entrySet()) {
        /* for (ResUsesSpec o : file.getUsesSpecGroups()) {
@@ -286,7 +276,8 @@ public class ResReference
         return true;
     }
 
-    private boolean processVarSuperModules(@NotNull ResFile file, @NotNull ResScopeProcessor processor,
+    private boolean processVarSuperModules(@NotNull ResFile file,
+                                           @NotNull ResScopeProcessor processor,
                                            @NotNull ResolveState state) {
         ResScopeProcessorBase delegate = createDelegate(processor);
         processSuperModules(file, processor, delegate, state);
@@ -315,14 +306,18 @@ public class ResReference
         return true;
     }
 
-    static boolean processModuleLevelEntities(@NotNull ResFile file, @NotNull ResScopeProcessor processor,
-                                              @NotNull ResolveState state, boolean localProcessing) {
+    static boolean processModuleLevelEntities(@NotNull ResFile file,
+                                              @NotNull ResScopeProcessor processor,
+                                              @NotNull ResolveState state,
+                                              boolean localProcessing) {
         if (file.getEnclosedModule() == null) return true;
         return processModuleLevelEntities(file.getEnclosedModule(), processor, state, localProcessing);
     }
 
-    static boolean processModuleLevelEntities(@NotNull ResModuleDecl module, @NotNull ResScopeProcessor processor,
-                                              @NotNull ResolveState state, boolean localProcessing) {
+    static boolean processModuleLevelEntities(@NotNull ResModuleDecl module,
+                                              @NotNull ResScopeProcessor processor,
+                                              @NotNull ResolveState state,
+                                              boolean localProcessing) {
         if (!processNamedElements(processor, state, module.getOperationLikeThings(), localProcessing)) return false;
         if (!processNamedElements(processor, state, module.getFacilities(), localProcessing)) return false;
         if (!processNamedElements(processor, state, module.getTypes(), localProcessing)) return false;
@@ -331,14 +326,16 @@ public class ResReference
         return true;
     }
 
-    private boolean processParameterLikeThings(@NotNull ResScopeProcessor processor, @NotNull ResolveState state,
+    private boolean processParameterLikeThings(@NotNull ResScopeProcessor processor,
+                                               @NotNull ResolveState state,
                                                boolean localResolve) {
         ResScopeProcessorBase delegate = createDelegate(processor);
         processParameterLikeThings(myElement, delegate);
         return processNamedElements(processor, state, delegate.getVariants(), localResolve);
     }
 
-    static boolean processParameterLikeThings(@NotNull ResFile e, @NotNull ResScopeProcessorBase processor) {
+    static boolean processParameterLikeThings(@NotNull ResFile e,
+                                              @NotNull ResScopeProcessorBase processor) {
         if (e.getEnclosedModule() != null) {
             processParameterLikeThings(e.getEnclosedModule(), processor);
         }

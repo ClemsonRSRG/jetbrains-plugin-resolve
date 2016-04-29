@@ -22,8 +22,7 @@ public class ResMathVarLikeReference
     private static final Key<SmartPsiElementPointer<ResMathReferenceExp>> CONTEXT = Key.create("CONTEXT");
 
     ResMathVarLikeReference(@NotNull ResMathReferenceExp o) {
-        super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(),
-                o.getIdentifier().getTextLength()));
+        super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(), o.getIdentifier().getTextLength()));
     }
 
     private static final ResolveCache
@@ -40,7 +39,7 @@ public class ResMathVarLikeReference
 
     @NotNull
     private ResolveResult[] resolveInner() {
-        Collection<ResolveResult> result = new OrderedSet<ResolveResult>();
+        Collection<ResolveResult> result = new OrderedSet<>();
         processResolveVariants(ResReference.createResolveProcessor(result, myElement));
         return result.toArray(new ResolveResult[result.size()]);
     }
@@ -54,8 +53,7 @@ public class ResMathVarLikeReference
     @Override
     public ResolveResult[] multiResolve(boolean b) {
         if (!myElement.isValid()) return ResolveResult.EMPTY_ARRAY;
-        return ResolveCache.getInstance(myElement.getProject())
-                .resolveWithCaching(this, MY_RESOLVER, false, false);
+        return ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, MY_RESOLVER, false, false);
     }
 
     @NotNull
@@ -145,8 +143,7 @@ public class ResMathVarLikeReference
                                           @NotNull ResScopeProcessor processor,
                                           @NotNull ResolveState state) {
         if (type instanceof ResMathReferenceExp) {
-            PsiElement resolvedType =
-                    ((ResMathReferenceExp) type).getReference().resolve();
+            PsiElement resolvedType = ((ResMathReferenceExp) type).getReference().resolve();
             if (resolvedType instanceof ResTypeModelDecl) {
                 ResTypeModelDecl asTypeModel = (ResTypeModelDecl) resolvedType;
                 if (asTypeModel.getMathExp() != null)
@@ -192,19 +189,14 @@ public class ResMathVarLikeReference
     }
 
     @NotNull
-    private ResMathVarLikeProcessor createDelegate(
-            @NotNull ResScopeProcessor processor) {
+    private ResMathVarLikeProcessor createDelegate(@NotNull ResScopeProcessor processor) {
         return new ResMathVarLikeProcessor(myElement, processor.isCompletion());
     }
 
-    private static class ResMathVarLikeProcessor
-            extends
-            ResScopeProcessorBase {
-        public Map<String, String> implicitlyBoundTypeParameters =
-                new HashMap<String, String>();
+    private static class ResMathVarLikeProcessor extends ResScopeProcessorBase {
+        public Map<String, String> implicitlyBoundTypeParameters = new HashMap<>();
 
-        ResMathVarLikeProcessor(@NotNull ResMathReferenceExp origin,
-                                boolean completion) {
+        ResMathVarLikeProcessor(@NotNull ResMathReferenceExp origin, boolean completion) {
             super(origin.getIdentifier(), origin, completion);
         }
 

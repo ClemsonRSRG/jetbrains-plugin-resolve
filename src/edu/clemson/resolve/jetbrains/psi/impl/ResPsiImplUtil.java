@@ -24,102 +24,102 @@ import org.jetbrains.annotations.Nullable;
  *  a .bnf with the {@code psiImplUtilClass} property to be usable by grammarkit.</p>
  */
 public class ResPsiImplUtil {
-/*
-    @NotNull
-    public static TextRange getModuleSpecTextRange(@NotNull ResModuleSpec moduleSpec) {
-        String text = moduleSpec.getText();
-        return !text.isEmpty() ? TextRange.create(0, text.length() - 1) :
-                TextRange.EMPTY_RANGE;
-    }
-
-    @NotNull
-    public static TextRange getPathTextRange(@NotNull ResUsesString usesString) {
-        String text = usesString.getText();
-        return !text.isEmpty() && isQuote(text.charAt(0)) ?
-                TextRange.create(1, text.length() - 1) : TextRange.EMPTY_RANGE;
-    }
-
-    @NotNull
-    public static String getPath(@NotNull ResUsesSpec usesSpec) {
-        return usesSpec.getUsesString().getPath();
-    }
-
-    @Nullable
-    public static String getName(@NotNull ResUsesSpec usesSpec) {
-        return getAlias(usesSpec);
-    }
-
-    @Nullable
-    public static String getAlias(@NotNull ResUsesSpec usesSpec) {
-        PsiElement identifier = usesSpec.getIdentifier();
-        if (identifier != null) {
-            return identifier.getText();
+    /*
+        @NotNull
+        public static TextRange getModuleSpecTextRange(@NotNull ResModuleSpec moduleSpec) {
+            String text = moduleSpec.getText();
+            return !text.isEmpty() ? TextRange.create(0, text.length() - 1) :
+                    TextRange.EMPTY_RANGE;
         }
-        return null;
-    }
 
-    public static boolean shouldGoDeeper(@SuppressWarnings("UnusedParameters") ResUsesSpec o) {
-        return false;
-    }
-
-    private static boolean isQuote(char q) {
-        return q == '"';
-    }
-
-    @Nullable
-    public static PsiElement resolve(@NotNull ResUsesString importString) {
-        PsiReference[] references = importString.getReferences();
-        for (PsiReference reference : references) {
-            if (reference instanceof FileReferenceOwner) {
-                PsiFileReference lastFileReference =
-                        ((FileReferenceOwner) reference).getLastFileReference();
-                PsiElement result = lastFileReference != null ?
-                        lastFileReference.resolve() : null;
-
-                return (result instanceof PsiDirectory) || (result instanceof ResFile) ? result : null;
-            }
+        @NotNull
+        public static TextRange getPathTextRange(@NotNull ResUsesString usesString) {
+            String text = usesString.getText();
+            return !text.isEmpty() && isQuote(text.charAt(0)) ?
+                    TextRange.create(1, text.length() - 1) : TextRange.EMPTY_RANGE;
         }
-        return null;
-    }
 
-    @NotNull
-    public static PsiReference[] getReferences(@NotNull ResUsesString o) {
-        if (o.getTextLength() < 2) return PsiReference.EMPTY_ARRAY;
-        return new ResUsesReferenceSet(o).getAllReferences();
-    }
-
-    @NotNull
-    public static String getPath(@NotNull ResUsesString o) {
-        return unquote(o.getText());
-    }
-
-    @NotNull
-    private static String unquote(@Nullable String s) {
-        if (StringUtil.isEmpty(s)) return "";
-        char quote = s.charAt(0);
-        int startOffset = isQuote(quote) ? 1 : 0;
-        int endOffset = s.length();
-        if (s.length() > 1) {
-            char lastChar = s.charAt(s.length() - 1);
-            if (isQuote(quote) && lastChar == quote) {
-                endOffset = s.length() - 1;
-            }
-            if (!isQuote(quote) && isQuote(lastChar)) {
-                endOffset = s.length() - 1;
-            }
+        @NotNull
+        public static String getPath(@NotNull ResUsesSpec usesSpec) {
+            return usesSpec.getUsesString().getPath();
         }
-        return s.substring(startOffset, endOffset);
-    }
 
-    @Nullable
-    public static ResFile getSpecification(ResFacilityDecl o) {
-        if (o.getModuleSpecList().isEmpty()) return null;
-        ResModuleSpec specification = o.getModuleSpecList().get(0);
-        PsiFile specFile = specification.resolve();
-        if (!(specFile instanceof ResFile)) return null;
-        return (ResFile) specFile;
-    }
-*/
+        @Nullable
+        public static String getName(@NotNull ResUsesSpec usesSpec) {
+            return getAlias(usesSpec);
+        }
+
+        @Nullable
+        public static String getAlias(@NotNull ResUsesSpec usesSpec) {
+            PsiElement identifier = usesSpec.getIdentifier();
+            if (identifier != null) {
+                return identifier.getText();
+            }
+            return null;
+        }
+
+        public static boolean shouldGoDeeper(@SuppressWarnings("UnusedParameters") ResUsesSpec o) {
+            return false;
+        }
+
+        private static boolean isQuote(char q) {
+            return q == '"';
+        }
+
+        @Nullable
+        public static PsiElement resolve(@NotNull ResUsesString importString) {
+            PsiReference[] references = importString.getReferences();
+            for (PsiReference reference : references) {
+                if (reference instanceof FileReferenceOwner) {
+                    PsiFileReference lastFileReference =
+                            ((FileReferenceOwner) reference).getLastFileReference();
+                    PsiElement result = lastFileReference != null ?
+                            lastFileReference.resolve() : null;
+
+                    return (result instanceof PsiDirectory) || (result instanceof ResFile) ? result : null;
+                }
+            }
+            return null;
+        }
+
+        @NotNull
+        public static PsiReference[] getReferences(@NotNull ResUsesString o) {
+            if (o.getTextLength() < 2) return PsiReference.EMPTY_ARRAY;
+            return new ResUsesReferenceSet(o).getAllReferences();
+        }
+
+        @NotNull
+        public static String getPath(@NotNull ResUsesString o) {
+            return unquote(o.getText());
+        }
+
+        @NotNull
+        private static String unquote(@Nullable String s) {
+            if (StringUtil.isEmpty(s)) return "";
+            char quote = s.charAt(0);
+            int startOffset = isQuote(quote) ? 1 : 0;
+            int endOffset = s.length();
+            if (s.length() > 1) {
+                char lastChar = s.charAt(s.length() - 1);
+                if (isQuote(quote) && lastChar == quote) {
+                    endOffset = s.length() - 1;
+                }
+                if (!isQuote(quote) && isQuote(lastChar)) {
+                    endOffset = s.length() - 1;
+                }
+            }
+            return s.substring(startOffset, endOffset);
+        }
+
+        @Nullable
+        public static ResFile getSpecification(ResFacilityDecl o) {
+            if (o.getModuleSpecList().isEmpty()) return null;
+            ResModuleSpec specification = o.getModuleSpecList().get(0);
+            PsiFile specFile = specification.resolve();
+            if (!(specFile instanceof ResFile)) return null;
+            return (ResFile) specFile;
+        }
+    */
     @NotNull
     public static PsiElement getIdentifier(ResMathReferenceExp o) {
         return PsiTreeUtil.getChildOfType(o, ResMathSymbolName.class);
@@ -166,13 +166,14 @@ public class ResPsiImplUtil {
     public static PsiReference getReference(@NotNull ResVarDef o) {
         return new ResVarReference(o);
     }
-/*
-    @NotNull
-    public static PsiReference[] getReferences(@NotNull ResModuleSpec o) {
-        if (o.getTextLength() == 0) return PsiReference.EMPTY_ARRAY;
-        return new ResUsesReferenceSet(o).getAllReferences();
-    }
-*/
+
+    /*
+        @NotNull
+        public static PsiReference[] getReferences(@NotNull ResModuleSpec o) {
+            if (o.getTextLength() == 0) return PsiReference.EMPTY_ARRAY;
+            return new ResUsesReferenceSet(o).getAllReferences();
+        }
+    */
     @NotNull
     public static String getText(@Nullable ResType o) {
         if (o == null) return "";

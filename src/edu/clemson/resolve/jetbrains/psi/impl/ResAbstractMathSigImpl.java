@@ -9,9 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public abstract class ResAbstractMathSigImpl
-        extends
-        ResNamedElementImpl implements ResMathDefnSig {
+public abstract class ResAbstractMathSigImpl extends ResNamedElementImpl implements ResMathDefnSig {
 
     public ResAbstractMathSigImpl(@NotNull ASTNode node) {
         super(node);
@@ -20,8 +18,7 @@ public abstract class ResAbstractMathSigImpl
     @NotNull
     @Override
     public List<ResMathVarDeclGroup> getParameters() {
-        return PsiTreeUtil.getChildrenOfTypeAsList(this,
-                ResMathVarDeclGroup.class);
+        return PsiTreeUtil.getChildrenOfTypeAsList(this, ResMathVarDeclGroup.class);
     }
 
     @Nullable
@@ -30,10 +27,9 @@ public abstract class ResAbstractMathSigImpl
         return findChildByClass(ResMathExp.class);
     }
 
-    /**
-     * This has to be {@code Nullable} at the moment; think about it: We have
-     * infix and outfix signatures, how would we create the |..| needed?
-     * In other words, it's tough doing completion for non-identifier like things
+    /** This has to be {@code Nullable} at the moment; think about it: We have
+     *  infix and outfix signatures, how would we create the |..| needed?
+     *  In other words, it's tough doing completion for non-identifier like things
      */
     @Nullable
     @Override
