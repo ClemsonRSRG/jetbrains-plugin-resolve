@@ -244,6 +244,9 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
     static boolean processFilesInSpecifiedUsesDirectories(@NotNull ResFile file,
                                                           @NotNull ResScopeProcessor processor,
                                                           @NotNull ResolveState state) {
+        List<ResUsesSpecGroup> groups = file.getUsesSpecGroups();
+        for (ResUsesSpecGroup usesGroup : groups) {
+        }
         //for (Map.Entry<String, Collection<ResUsesSpec>> entry : file.getImportMap().entrySet()) {
        /* for (ResUsesSpec o : file.getUsesSpecGroups()) {
             ResUsesString importString = o.getUsesString();

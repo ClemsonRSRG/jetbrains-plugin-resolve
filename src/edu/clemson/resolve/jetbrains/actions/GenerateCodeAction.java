@@ -33,8 +33,7 @@ import java.util.Set;
 import static edu.clemson.resolve.jetbrains.actions.RunRESOLVEOnLanguageFile.OUTPUT_MODULE_NAME;
 
 /**
- * Generate code from a RESOLVE language file;
- * adapted for use in our plugin from the antlr4 grammar plugin by
+ * Generate code from a RESOLVE language file; adapted for use in our plugin from the antlr4 grammar plugin by
  * Terence Parr.
  */
 public class GenerateCodeAction extends AnAction implements DumbAware {
@@ -53,11 +52,8 @@ public class GenerateCodeAction extends AnAction implements DumbAware {
             return;
         }
         Project project = e.getProject();
-        Module enclosingModule =
-                ModuleUtilCore.findModuleForFile(vfile, e.getProject());
-
-        if (!RESOLVESdkService.getInstance(e.getProject())
-                .isRESOLVEModule(enclosingModule)) {
+        Module enclosingModule = ModuleUtilCore.findModuleForFile(vfile, e.getProject());
+        if (!RESOLVESdkService.getInstance(e.getProject()).isRESOLVEModule(enclosingModule)) {
             e.getPresentation().setEnabled(false);
             return;
         }
@@ -67,8 +63,7 @@ public class GenerateCodeAction extends AnAction implements DumbAware {
     }
 
     public static VirtualFile getRESOLVEFileFromEvent(AnActionEvent e) {
-        VirtualFile[] files =
-                LangDataKeys.VIRTUAL_FILE_ARRAY.getData(e.getDataContext());
+        VirtualFile[] files = LangDataKeys.VIRTUAL_FILE_ARRAY.getData(e.getDataContext());
         if (files == null || files.length == 0) return null;
         VirtualFile vfile = files[0];
         if (vfile != null && vfile.getName().endsWith(".resolve")) {
