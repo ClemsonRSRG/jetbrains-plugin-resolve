@@ -124,7 +124,7 @@ public interface ResTypes {
   IElementType TYPE_REPR_DECL = new ResCompositeElementType("TYPE_REPR_DECL");
   IElementType UNARY_EXP = new ResCompositeElementType("UNARY_EXP");
   IElementType USES_LIST = new ResCompositeElementType("USES_LIST");
-  IElementType USES_SPEC_LIST = new ResCompositeElementType("USES_SPEC_LIST");
+  IElementType USES_SPEC_GROUP = new ResCompositeElementType("USES_SPEC_GROUP");
   IElementType VAR_DECL_GROUP = new ResCompositeElementType("VAR_DECL_GROUP");
   IElementType VAR_DEF = new ResCompositeElementType("VAR_DEF");
   IElementType VAR_SPEC = new ResCompositeElementType("VAR_SPEC");
@@ -224,7 +224,6 @@ public interface ResTypes {
   IElementType MINUS = new ResTokenType("-");
   IElementType MOD = new ResTokenType("%");
   IElementType MODELED = new ResTokenType("modeled");
-  IElementType MODULESPEC = new ResTokenType("ModuleSpec");
   IElementType MUL = new ResTokenType("*");
   IElementType NEG = new ResTokenType("⌐");
   IElementType NEQUALS = new ResTokenType("/=");
@@ -620,8 +619,8 @@ public interface ResTypes {
       else if (type == USES_LIST) {
         return new ResUsesListImpl(node);
       }
-      else if (type == USES_SPEC_LIST) {
-        return new ResUsesSpecListImpl(node);
+      else if (type == USES_SPEC_GROUP) {
+        return new ResUsesSpecGroupImpl(node);
       }
       else if (type == VAR_DECL_GROUP) {
         return new ResVarDeclGroupImpl(node);

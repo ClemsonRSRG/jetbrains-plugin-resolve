@@ -16,11 +16,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ResAbstractModuleImpl
-        extends
-        ResNamedElementImpl implements ResModuleDecl {
+public abstract class ResAbstractModuleImpl extends ResNamedElementImpl implements ResModuleDecl {
 
-    public ResAbstractModuleImpl(@NotNull ASTNode node) {
+    ResAbstractModuleImpl(@NotNull ASTNode node) {
         super(node);
     }
 
@@ -29,10 +27,10 @@ public abstract class ResAbstractModuleImpl
         return findNotNullChildByClass(ResBlock.class);
     }
 
-    @Nullable
-    public List<ResModuleSpec> getModuleSignatureSpecs() {
+    /*@Nullable
+    public List<ResModuleSpec> getModuleSignatureIdentifiers() {
         return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleSpec.class);
-    }
+    }*/
 
     @Nullable
     @Override
@@ -40,10 +38,10 @@ public abstract class ResAbstractModuleImpl
         return findChildByType(ResTypes.IDENTIFIER);
     }
 
-    @NotNull
+   /* @NotNull
     public List<ResModuleSpec> getSuperModuleSpecList() {
         return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleSpec.class);
-    }
+    }*/
 
     @Nullable
     public ResModuleParameters getModuleParameters() {
@@ -52,14 +50,14 @@ public abstract class ResAbstractModuleImpl
 
     @NotNull
     @Override
-    public List<ResUsesSpec> getUsesSpecs() {
-        return getUsesItemList() != null ? getUsesItemList().getUsesSpecList() :
-                ContainerUtil.<ResUsesSpec>newArrayList();
+    public List<ResUsesSpecGroup> getUsesSpecGroups() {
+        return getUsesList() != null ? getUsesList().getUsesSpecGroupList() :
+                ContainerUtil.<ResUsesSpecGroup>newArrayList();
     }
 
     @Nullable
-    public ResUsesItemList getUsesItemList() {
-        return PsiTreeUtil.findChildOfType(this, ResUsesItemList.class);
+    public ResUsesList getUsesList() {
+        return PsiTreeUtil.findChildOfType(this, ResUsesList.class);
     }
 
     @NotNull
@@ -67,8 +65,7 @@ public abstract class ResAbstractModuleImpl
         List<ResTypeParamDecl> genericTypes = new ArrayList<>();
         ResModuleParameters params = getModuleParameters();
         if (params instanceof ResSpecModuleParameters) {
-            genericTypes.addAll(((ResSpecModuleParameters) params)
-                    .getTypeParamDeclList());
+            genericTypes.addAll(((ResSpecModuleParameters) params).getTypeParamDeclList());
         }
         return genericTypes;
     }
@@ -89,8 +86,7 @@ public abstract class ResAbstractModuleImpl
     @NotNull
     @Override
     public List<ResMathDefnSig> getMathDefnSigs() {
-        List<ResMathDefnSig> signatures =
-                new ArrayList<ResMathDefnSig>();
+        List<ResMathDefnSig> signatures = new ArrayList<>();
         for (ResMathDefnDecl def : getMathDefinitionDecls()) {
             signatures.addAll(def.getSignatures());
         }

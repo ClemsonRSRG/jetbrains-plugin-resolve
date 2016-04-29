@@ -12,9 +12,7 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
-import edu.clemson.resolve.jetbrains.psi.ResModuleSpec;
-import edu.clemson.resolve.jetbrains.psi.ResUsesSpec;
-import edu.clemson.resolve.jetbrains.psi.ResUsesString;
+import edu.clemson.resolve.jetbrains.psi.ResModuleIdentifier;
 import edu.clemson.resolve.jetbrains.sdk.RESOLVESdkUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,16 +27,11 @@ import java.util.LinkedHashSet;
  *  <p>
  *  <a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin">https://github.com/go-lang-plugin-org/go-lang-idea-plugin/a>
  */
-public class ResUsesReferenceSet extends FileReferenceSet {
+public class ResModuleIdentifierReferenceSet extends FileReferenceSet {
 
-    public ResUsesReferenceSet(@NotNull ResModuleSpec moduleSpec) {
-        super(moduleSpec.getText(), moduleSpec,
-                moduleSpec.getModuleSpecTextRange().getStartOffset(), null, true);
-    }
-
-    public ResUsesReferenceSet(@NotNull ResUsesString usesStr) {
-        super(usesStr.getPath(), usesStr,
-                usesStr.getPathTextRange().getStartOffset(), null, true);
+    public ResModuleIdentifierReferenceSet(@NotNull ResModuleIdentifier moduleIdentifier) {
+        super(moduleIdentifier.getIdentifier().getText(), moduleIdentifier,
+                moduleIdentifier.getStartOffsetInParent(), null, true);
     }
 
     @NotNull
@@ -52,8 +45,7 @@ public class ResUsesReferenceSet extends FileReferenceSet {
         final PsiManager psiManager = file.getManager();
         Module module = ModuleUtilCore.findModuleForPsiElement(file);
         Project project = file.getProject();
-        LinkedHashSet<VirtualFile> sourceRoots =
-                RESOLVESdkUtil.getSourcesPathsToLookup(project, module);
+        LinkedHashSet<VirtualFile> sourceRoots = RESOLVESdkUtil.getSourcesPathsToLookup(project, module);
         return ContainerUtil.mapNotNull(sourceRoots,
                 new Function<VirtualFile, PsiFileSystemItem>() {
                     @Nullable
@@ -72,8 +64,7 @@ public class ResUsesReferenceSet extends FileReferenceSet {
 
     @NotNull
     @Override
-    public FileReference createFileReference(
-            TextRange range, int index, String text) {
+    public FileReference createFileReference(TextRange range, int index, String text) {
         return new ResUsesReference(this, range, index, text);
     }
 }

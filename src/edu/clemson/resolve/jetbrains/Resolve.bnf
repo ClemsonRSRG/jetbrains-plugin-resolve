@@ -217,7 +217,7 @@ ModuleDecl ::=
     | FacilityModuleDecl
 
 PrecisModuleDecl ::= 'Precis' identifier ';'
-UsesSection?
+UsesList?
 PrecisBlock
 'end' identifier ';' {pin(".*")=2}
 
@@ -227,44 +227,44 @@ PrecisBlock
 'end' identifier ';' {pin(".*")=2}
 
 ConceptModuleDecl ::= 'Concept' identifier SpecModuleParameters? ';'
-UsesSection?
+UsesList?
 RequiresClause?
 ConceptBlock
 'end' identifier ';' {pin(".*")=1}
 
 ConceptExtensionModuleDecl ::=
 'Concept' 'Extension' identifier SpecModuleParameters? 'for' ModuleIdentifier ';'
-UsesSection?
+UsesList?
 RequiresClause?
 ConceptBlock
 'end' identifier ';' {pin(".*")=2}
 
 ImplModuleDecl ::= 'Implementation' identifier ImplModuleParameters?
 'for' ModuleIdentifier ('of' ModuleIdentifier)? ';'
-UsesSection?
+UsesList?
 RequiresClause?
 ImplBlock
 'end' identifier ';' {pin(".*")=1}
 
 FacilityModuleDecl ::= 'Facility' identifier ';'
-UsesSection?
+UsesList?
 RequiresClause?
 FacilityBlock
 'end' identifier ';' {pin(".*")=1}
 
 // uses, imports
 
-UsesSection ::= 'uses' (UsesSpecs | '(' UsesSpecs+ ')' ';' )
+UsesList ::= 'uses' (UsesSpecGroup | '(' UsesSpecGroup+ ')' ';' )
 
-private UsesSpecs ::= UsesSpecList ('from' ModuleIdentifier)? ';' {pin=1}
+UsesSpecGroup ::= ModuleIdentList ('from' ModuleIdentifier)? ';' {pin=1} //TODO: use the getAlias method here
 
-UsesSpecList ::=  ModuleIdentifier (',' ModuleIdentifier)* {
-  methods=[getAlias getLocalPackageName shouldGoDeeper getPath getName]
-  recoverWhile=UsesSpecListRec
+private ModuleIdentList ::=  ModuleIdentifier (',' ModuleIdentifier)* {
+  /*methods=[getAlias getLocalPackageName shouldGoDeeper getPath getName]*/
+  recoverWhile=ModuleIdentListRec
 }
-private UsesSpecListRec ::= !(';'|')'|'from'|'end')
+private ModuleIdentListRec ::= !(';'|')'|'from'|'end')
 
-ModuleIdentifier ::= identifier {methods=[getReferences resolve getPath getPathTextRange]}
+ModuleIdentifier ::= identifier /*{methods=[getReferences resolve getPath getPathTextRange]}*/
 
 // Module blocks & items
 
@@ -382,7 +382,7 @@ VarDef ::= identifier {methods=[getResTypeInner getReference]}
 
 FacilityDecl ::= 'Facility' identifier 'is' ModuleIdentifier ModuleArgList?
 ('externally')? 'implemented' 'by' ModuleIdentifier ModuleArgList?
-ExtensionList? ';' {pin=2 methods=[getSpecification]}
+ExtensionList? ';' {pin=2 /*methods=[getSpecification]*/}
 
 private ExtensionList ::= (ExtensionPairing)* {recoverWhile=ExtensionListRec}
 private ExtensionListRec ::= !(';')

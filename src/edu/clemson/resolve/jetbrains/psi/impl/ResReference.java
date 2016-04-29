@@ -107,7 +107,7 @@ public class ResReference
         PsiReference reference = qualifier.getReference();
         PsiElement target = reference != null ? reference.resolve() : null;
         if (target == null || target == qualifier) return false;
-        if (target instanceof ResFacilityDecl) {
+        /*if (target instanceof ResFacilityDecl) {
             ResFacilityDecl facility = ((ResFacilityDecl) target);
             if (facility.getSpecification() != null) {
                 processModuleLevelEntities(facility.getSpecification(),
@@ -119,7 +119,7 @@ public class ResReference
                 if (spec == null) continue;
                 processModuleLevelEntities(spec, processor, state, false);
             }
-        }
+        }*/
         else if (target instanceof ResFile) {
             ResModuleDecl module = ((ResFile) target).getEnclosedModule();
             if (module != null) {
@@ -255,7 +255,7 @@ public class ResReference
     static boolean processFilesInSpecifiedUsesDirectories(@NotNull ResFile file, @NotNull ResScopeProcessor processor,
                                                           @NotNull ResolveState state) {
         //for (Map.Entry<String, Collection<ResUsesSpec>> entry : file.getImportMap().entrySet()) {
-        for (ResUsesSpec o : file.getUsesSpecs()) {
+       /* for (ResUsesSpec o : file.getUsesSpecGroups()) {
             ResUsesString importString = o.getUsesString();
             if (o.getAlias() == null) {
                 //ok, if i just give the thing the ResFile, it won't get added
@@ -281,7 +281,7 @@ public class ResReference
                     ResReference.processModuleLevelEntities(accessibleModule, processor, state, false);
                 }
             }
-        }
+        }*/
         //}
         return true;
     }
@@ -301,7 +301,7 @@ public class ResReference
                                                  @NotNull ResScopeProcessorBase delegate,
                                                  @NotNull ResolveState state) {
         int specIdx = 0;
-        for (ResModuleSpec spec : file.getSuperModuleSpecList()) {
+       /* for (ResModuleSpec spec : file.getSuperModuleModuleIdentifierList()) {
             PsiElement resolvedFile = spec.resolve();
             if (resolvedFile == null || !(resolvedFile instanceof ResFile))
                 continue;
@@ -311,7 +311,7 @@ public class ResReference
             processModuleLevelEntities(eleFile, processor, state, false);
             // processNamedElements(processor, state, delegate.getVariants(), false);
             specIdx++;
-        }
+        }*/
         return true;
     }
 

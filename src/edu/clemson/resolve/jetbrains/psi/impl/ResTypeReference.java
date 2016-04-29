@@ -78,7 +78,7 @@ public class ResTypeReference
                                                       @NotNull ResolveState state) {
         PsiElement target = qualifier.resolve();
         if (target == null || target == qualifier) return false;
-        if (target instanceof ResFacilityDecl) {
+        /*if (target instanceof ResFacilityDecl) {
             ResFile specFile = ((ResFacilityDecl) target).getSpecification();
             if (specFile != null) {
                 ResReference.processModuleLevelEntities(specFile, processor, state, false);
@@ -86,7 +86,7 @@ public class ResTypeReference
         }
         else if (target instanceof ResModuleDecl) {
             ResReference.processModuleLevelEntities((ResModuleDecl)target, processor, state, false);
-        }
+        }*/
         return false;
     }
 

@@ -18,33 +18,25 @@ import org.jetbrains.annotations.NotNull;
 
 import static edu.clemson.resolve.jetbrains.ResTypes.*;
 
-/**
- * The implementation of the RESOLVE language parser. Defines methods for
- * creating an instance of our lexer and parser via
- * {@link #createLexer(Project)} and {@link #createParser(Project)},
- * respectively.
+/** The implementation of the RESOLVE language parser. Defines methods for
+ *  creating an instance of our lexer and parser via
+ *  {@link #createLexer(Project)} and {@link #createParser(Project)},
+ *  respectively.
  *
- * @see LanguageParserDefinitions#forLanguage(Language)
+ *  @see LanguageParserDefinitions#forLanguage(Language)
  */
 public class RESOLVEParserDefinition implements ParserDefinition {
 
-    public static final IFileElementType FILE =
-            new IFileElementType(RESOLVELanguage.INSTANCE);
+    public static final IFileElementType FILE = new IFileElementType(RESOLVELanguage.INSTANCE);
 
-    public static final IElementType LINE_COMMENT =
-            new ResTokenType("RESOLVE_LINE_COMMENT");
-    public static final IElementType MULTILINE_COMMENT =
-            new ResTokenType("RESOLVE_MULTILINE_COMMENT");
+    public static final IElementType LINE_COMMENT = new ResTokenType("RESOLVE_LINE_COMMENT");
+    public static final IElementType MULTILINE_COMMENT = new ResTokenType("RESOLVE_MULTILINE_COMMENT");
 
-    public static final IElementType WS =
-            new ResTokenType("RESOLVE_WHITESPACE");
-    public static final IElementType NLS =
-            new ResTokenType("RESOLVE_WS_NEW_LINES");
+    public static final IElementType WS = new ResTokenType("RESOLVE_WHITESPACE");
+    public static final IElementType NLS = new ResTokenType("RESOLVE_WS_NEW_LINES");
     public static final TokenSet WHITESPACES = TokenSet.create(WS, NLS);
-    public static final TokenSet COMMENTS =
-            TokenSet.create(LINE_COMMENT, MULTILINE_COMMENT);
-    public static final TokenSet STRING_LITERALS =
-            TokenSet.create(STRING, RAW_STRING, CHAR);
+    public static final TokenSet COMMENTS = TokenSet.create(LINE_COMMENT, MULTILINE_COMMENT);
+    public static final TokenSet STRING_LITERALS = TokenSet.create(STRING, RAW_STRING, CHAR);
     public static final TokenSet NUMBERS = TokenSet.create(INT);
 
     public static final TokenSet KEYWORDS = TokenSet.create(
@@ -79,9 +71,8 @@ public class RESOLVEParserDefinition implements ParserDefinition {
         return new ResParser();
     }
 
-    /**
-     * What is the IFileElementType of the root parse tree node? It
-     * is called from {@link #createFile(FileViewProvider)} at least.
+    /** What is the IFileElementType of the root parse tree node? It
+     *  is called from {@link #createFile(FileViewProvider)} at least.
      */
     @NotNull
     @Override
@@ -89,10 +80,9 @@ public class RESOLVEParserDefinition implements ParserDefinition {
         return FILE;
     }
 
-    /**
-     * "Tokens of those types are automatically skipped by PsiBuilder." This
-     * apparently applies to this method, {@link #getCommentTokens()}, and
-     * {@link #getStringLiteralElements()}.
+    /** "Tokens of those types are automatically skipped by PsiBuilder." This
+     *  apparently applies to this method, {@link #getCommentTokens()}, and
+     *  {@link #getStringLiteralElements()}.
      */
     @NotNull
     @Override
@@ -112,14 +102,13 @@ public class RESOLVEParserDefinition implements ParserDefinition {
         return STRING_LITERALS;
     }
 
-    /**
-     * Convert from *internal* parse node (AST they call it) to final PSI node.
-     * This converts only internal rule nodes apparently, not leaf nodes.
-     * Leaves are just tokens I guess.
-     * <p>
-     * If you don't care to distinguish PSI nodes by type, it is sufficient
-     * to create a {@link ASTWrapperPsiElement} around the parse tree node
-     * ({@link ASTNode} in jetbrains speak).
+    /** Convert from *internal* parse node (AST they call it) to final PSI node.
+     *  This converts only internal rule nodes apparently, not leaf nodes.
+     *  Leaves are just tokens I guess.
+     *  <p>
+     *  If you don't care to distinguish PSI nodes by type, it is sufficient
+     *  to create a {@link ASTWrapperPsiElement} around the parse tree node
+     *  ({@link ASTNode} in jetbrains speak).
      */
     @NotNull
     @Override
@@ -127,18 +116,17 @@ public class RESOLVEParserDefinition implements ParserDefinition {
         return ResTypes.Factory.createElement(node);
     }
 
-    /**
-     * Create the root of your PSI tree (a {@link PsiFile}).
-     * <p>
-     * From IntelliJ IDEA Architectural Overview:
-     * "A PSI (Program Structure Interface) file is the root of a structure
-     * representing the contents of a file as a hierarchy of elements
-     * in a particular programming language."
-     * <p>
-     * Psi based File is to be distinguished from a
-     * {@link com.intellij.lang.FileASTNode}, which is a parse
-     * tree node that eventually becomes a {@link PsiFile}. From this, we can get
-     * it back via: {@link PsiFile#getNode}.
+    /** Create the root of your PSI tree (a {@link PsiFile}).
+     *  <p>
+     *  From IntelliJ IDEA Architectural Overview:
+     *  "A PSI (Program Structure Interface) file is the root of a structure
+     *  representing the contents of a file as a hierarchy of elements
+     *  in a particular programming language."
+     *  <p>
+     *  Psi based File is to be distinguished from a
+     *  {@link com.intellij.lang.FileASTNode}, which is a parse
+     *  tree node that eventually becomes a {@link PsiFile}. From this, we can get
+     *  it back via: {@link PsiFile#getNode}.
      */
     @Override
     public PsiFile createFile(FileViewProvider fileViewProvider) {
@@ -146,8 +134,7 @@ public class RESOLVEParserDefinition implements ParserDefinition {
     }
 
     @Override
-    public SpaceRequirements spaceExistanceTypeBetweenTokens(
-            ASTNode left, ASTNode right) {
+    public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) {
         return SpaceRequirements.MAY;
     }
 }

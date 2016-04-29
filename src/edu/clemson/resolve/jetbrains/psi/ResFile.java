@@ -46,18 +46,18 @@ public class ResFile extends PsiFileBase {
     }
 
     @NotNull
-    public List<ResUsesSpec> getUsesSpecs() {
+    public List<ResUsesSpecGroup> getUsesSpecGroups() {
         ResModuleDecl enclosedModule = getEnclosedModule();
-        return enclosedModule != null ? enclosedModule.getUsesSpecs() :
-                new ArrayList<ResUsesSpec>();
+        return enclosedModule != null ? enclosedModule.getUsesSpecGroups() :
+                new ArrayList<ResUsesSpecGroup>();
     }
 
-    @NotNull
-    public List<ResModuleSpec> getSuperModuleSpecList() {
+   /* @NotNull
+    public List<ResModuleIdentifier> getSuperModuleModuleIdentifierList() {
         ResModuleDecl enclosedModule = getEnclosedModule();
         return enclosedModule != null ? enclosedModule.getSuperModuleSpecList() :
-                new ArrayList<ResModuleSpec>();
-    }
+                new ArrayList<ResModuleIdentifier>();
+    }*/
 
     @NotNull
     public List<ResTypeParamDecl> getGenericTypeParams() {

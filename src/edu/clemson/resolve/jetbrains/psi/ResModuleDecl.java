@@ -14,10 +14,10 @@ public interface ResModuleDecl extends ResNamedElement {
     public ResBlock getBlock();
 
     @NotNull
-    public List<ResUsesSpec> getUsesSpecs();
+    public List<ResUsesSpecGroup> getUsesSpecGroups();
 
-    @NotNull
-    public List<ResModuleSpec> getSuperModuleSpecList();
+    //@NotNull
+   // public List<ResModuleSpec> getSuperModuleSpecList();
 
     @NotNull
     public List<ResMathDefnDecl> getMathDefinitionDecls();

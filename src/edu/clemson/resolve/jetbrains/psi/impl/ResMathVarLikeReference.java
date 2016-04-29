@@ -109,14 +109,14 @@ public class ResMathVarLikeReference
     private boolean processSuperModules(@NotNull ResFile file,
                                         @NotNull ResScopeProcessor processor,
                                         @NotNull ResolveState state) {
-        for (ResModuleSpec spec : file.getSuperModuleSpecList()) {
+        /*for (ResModuleSpec spec : file.getSuperModuleModuleIdentifierList()) {
             PsiElement resolvedFile = spec.resolve();
             if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
             ResModuleDecl resolvedModule = ((ResFile) resolvedFile).getEnclosedModule();
             if (resolvedModule == null) continue;
             if (!processModuleLevelEntities((ResFile) resolvedFile, processor, state, false)) return false;
             if (!processSuperModuleParams(resolvedModule, processor, state, true)) return false;
-        }
+        }*/
         return true;
     }
 

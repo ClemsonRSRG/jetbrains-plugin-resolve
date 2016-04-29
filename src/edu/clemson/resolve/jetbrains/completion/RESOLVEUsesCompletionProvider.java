@@ -17,7 +17,6 @@ import edu.clemson.resolve.jetbrains.RESOLVEFileType;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.psi.ResFile;
 import edu.clemson.resolve.jetbrains.psi.ResModuleDecl;
-import edu.clemson.resolve.jetbrains.psi.ResModuleSpec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,7 +36,7 @@ public class RESOLVEUsesCompletionProvider
             @NotNull CompletionParameters parameters,
             ProcessingContext context,
             @NotNull CompletionResultSet result) {
-        ResModuleSpec importString = PsiTreeUtil.getParentOfType(
+        /*ResModuleSpec importString = PsiTreeUtil.getParentOfType(
                 parameters.getPosition(), ResModuleSpec.class);
         if (importString == null) return;
         String path = importString.getText();
@@ -51,7 +50,7 @@ public class RESOLVEUsesCompletionProvider
                 .cloneWithPrefix(newPrefix));
 
         addCompletions(result, ModuleUtilCore.findModuleForPsiElement(
-                parameters.getPosition()), parameters.getOriginalFile(), true);
+                parameters.getPosition()), parameters.getOriginalFile(), true);*/
     }
 
     public static void addCompletions(@NotNull CompletionResultSet result, @Nullable Module module,

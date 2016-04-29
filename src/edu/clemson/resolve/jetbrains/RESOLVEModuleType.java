@@ -3,14 +3,12 @@ package edu.clemson.resolve.jetbrains;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.ProjectJdkForModuleStep;
 import com.intellij.ide.util.projectWizard.WizardContext;
-import com.intellij.openapi.module.JavaModuleType;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.module.ModuleTypeManager;
 import com.intellij.openapi.roots.ui.configuration.ModulesProvider;
 import edu.clemson.resolve.jetbrains.sdk.RESOLVESdkType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import sun.security.pkcs11.Secmod;
 
 import javax.swing.*;
 
@@ -58,10 +56,9 @@ public class RESOLVEModuleType extends ModuleType<RESOLVEModuleBuilder> {
     }
 
     @NotNull
-    public ModuleWizardStep[] createWizardSteps(
-            @NotNull WizardContext wizardContext,
-            @NotNull final RESOLVEModuleBuilder moduleBuilder,
-            @NotNull ModulesProvider modulesProvider) {
+    public ModuleWizardStep[] createWizardSteps(@NotNull WizardContext wizardContext,
+                                                @NotNull final RESOLVEModuleBuilder moduleBuilder,
+                                                @NotNull ModulesProvider modulesProvider) {
         return new ModuleWizardStep[]{
                 new ProjectJdkForModuleStep(wizardContext,
                         RESOLVESdkType.getInstance()) {

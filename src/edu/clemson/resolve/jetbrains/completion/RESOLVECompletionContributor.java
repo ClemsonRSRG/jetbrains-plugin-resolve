@@ -5,7 +5,6 @@ import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
 import edu.clemson.resolve.jetbrains.psi.ResMathSymbolName;
-import edu.clemson.resolve.jetbrains.psi.ResModuleSpec;
 import edu.clemson.resolve.jetbrains.psi.ResReferenceExpBase;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +15,7 @@ public class RESOLVECompletionContributor extends CompletionContributor {
     public RESOLVECompletionContributor() {
         extend(CompletionType.BASIC, referenceExp(), new RESOLVEReferenceCompletionProvider());
         extend(CompletionType.BASIC, mathReferenceExp(), new RESOLVEReferenceCompletionProvider());
-        extend(CompletionType.BASIC, possiblyQualifiedModuleNameReference(), new RESOLVEUsesCompletionProvider());
+        //extend(CompletionType.BASIC, possiblyQualifiedModuleNameReference(), new RESOLVEUsesCompletionProvider());
     }
 
     private static PsiElementPattern.Capture<PsiElement> referenceExp() {
@@ -28,9 +27,9 @@ public class RESOLVECompletionContributor extends CompletionContributor {
                 .withParent(ResReferenceExpBase.class));
     }
 
-    private static PsiElementPattern.Capture<PsiElement> possiblyQualifiedModuleNameReference() {
+    /*private static PsiElementPattern.Capture<PsiElement> possiblyQualifiedModuleNameReference() {
         return psiElement().withParent(psiElement(ResModuleSpec.class));
-    }
+    }*/
 
     // private static PsiElementPattern.Capture<PsiElement> resReference() {
     //     return psiElement().withParent(psiElement()
