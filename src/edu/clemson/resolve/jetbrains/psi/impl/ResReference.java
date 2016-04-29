@@ -11,6 +11,7 @@ import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.jetbrains.psi.*;
+import edu.clemson.resolve.semantics.ModuleIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -245,14 +246,30 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                                                           @NotNull ResScopeProcessor processor,
                                                           @NotNull ResolveState state) {
         List<ResUsesSpecGroup> groups = file.getUsesSpecGroups();
-        for (ResUsesSpecGroup usesGroup : groups) {
+        for (ResUsesSpecGroup group : groups) {
+            //we need to search the appropriate componentDir to find the module referenced by ResModuleIdentifier
+            //if from is not null, then it's safe to say the last ModuleIdentifier in the list is the one that
+            //identifies the directory/component we ultimately want to search
+            //PsiDirectory componentResolveDir = importString.resolve();
+            ResModuleIdentifier from = group.getFromModuleIdentifier();
+            if (from != null) {
+                PsiElement resolveDir = from.resolve();
+                //if the 'from' module identifier doesn't resolve back to a PSI directory (AND that directory
+                //isn't a root library component!) then skip to the next one, the user screwed up.
+                /*if (!(resolveDir instanceof PsiDirectory)) {
+                    from = null;
+                    continue;
+                }*/
+                int i;
+                i=0;
+            }
+            for (ResModuleIdentifier identifier : group.getModuleIdentifierList()) {
+            }
         }
         //for (Map.Entry<String, Collection<ResUsesSpec>> entry : file.getImportMap().entrySet()) {
        /* for (ResUsesSpec o : file.getUsesSpecGroups()) {
             ResUsesString importString = o.getUsesString();
             if (o.getAlias() == null) {
-                //ok, if i just give the thing the ResFile, it won't get added
-                // (as it doesn't extend ResNamedElement)
                 PsiElement resolve = importString.resolve();
                 Set<ResModuleDecl> accessibleModules = new LinkedHashSet<>();
 

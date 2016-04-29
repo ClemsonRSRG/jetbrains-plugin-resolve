@@ -30,8 +30,8 @@ import java.util.LinkedHashSet;
 public class ResModuleIdentifierReferenceSet extends FileReferenceSet {
 
     public ResModuleIdentifierReferenceSet(@NotNull ResModuleIdentifier moduleIdentifier) {
-        super(moduleIdentifier.getIdentifier().getText(), moduleIdentifier,
-                moduleIdentifier.getStartOffsetInParent(), null, true);
+        super(moduleIdentifier.getText(), moduleIdentifier,
+                moduleIdentifier.getTextRange().getStartOffset(), null, true);
     }
 
     @NotNull
@@ -65,6 +65,6 @@ public class ResModuleIdentifierReferenceSet extends FileReferenceSet {
     @NotNull
     @Override
     public FileReference createFileReference(TextRange range, int index, String text) {
-        return new ResUsesReference(this, range, index, text);
+        return new ResModuleIdentifierReference(this, range, index, text);
     }
 }

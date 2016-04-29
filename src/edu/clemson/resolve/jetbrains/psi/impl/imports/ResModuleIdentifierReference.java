@@ -21,9 +21,9 @@ import java.util.Set;
  *  <p>
  *  <a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin">https://github.com/go-lang-plugin-org/go-lang-idea-plugin/a>
  */
-public class ResUsesReference extends FileReference {
+public class ResModuleIdentifierReference extends FileReference {
 
-    public ResUsesReference(@NotNull FileReferenceSet fileReferenceSet, TextRange range, int index, String text) {
+    public ResModuleIdentifierReference(@NotNull FileReferenceSet fileReferenceSet, TextRange range, int index, String text) {
         super(fileReferenceSet, range, index, text);
     }
 
@@ -50,10 +50,12 @@ public class ResUsesReference extends FileReference {
             for (ResolveResult resolveResult : innerResult) {
                 PsiElement element = resolveResult.getElement();
                 if (element instanceof PsiDirectory || element instanceof ResFile) {
-                    if (isLast()) {
-                        return new ResolveResult[]{resolveResult};
-                    }
-                    result.add(resolveResult);
+                    return new ResolveResult[]{resolveResult};
+
+                    /** if (isLast()) {
+                         return new ResolveResult[]{resolveResult};
+                     }**/
+                    //result.add(resolveResult);
                 }
 
             }
@@ -66,8 +68,7 @@ public class ResUsesReference extends FileReference {
     @Override
     protected Object createLookupItem(PsiElement candidate) {
         if (candidate instanceof PsiDirectory) {
-            return RESOLVECompletionUtil
-                    .createDirectoryLookupElement((PsiDirectory) candidate);
+            return RESOLVECompletionUtil.createDirectoryLookupElement((PsiDirectory) candidate);
         }
         return super.createLookupItem(candidate);
     }

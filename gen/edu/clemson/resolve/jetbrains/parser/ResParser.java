@@ -3984,7 +3984,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ModuleIdentList ('from' ModuleIdentifier)? ';'
+  // ModuleIdentList ('from' ModuleIdentifier) ';'
   public static boolean UsesSpecGroup(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "UsesSpecGroup")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
@@ -3998,16 +3998,9 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // ('from' ModuleIdentifier)?
+  // 'from' ModuleIdentifier
   private static boolean UsesSpecGroup_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "UsesSpecGroup_1")) return false;
-    UsesSpecGroup_1_0(b, l + 1);
-    return true;
-  }
-
-  // 'from' ModuleIdentifier
-  private static boolean UsesSpecGroup_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "UsesSpecGroup_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, FROM);

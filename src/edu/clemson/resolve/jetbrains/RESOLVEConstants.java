@@ -1,6 +1,5 @@
 package edu.clemson.resolve.jetbrains;
 
-
 import com.intellij.notification.NotificationGroup;
 import org.jetbrains.annotations.NonNls;
 

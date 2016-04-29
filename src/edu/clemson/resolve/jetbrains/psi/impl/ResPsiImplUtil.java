@@ -2,7 +2,10 @@ package edu.clemson.resolve.jetbrains.psi.impl;
 
 import com.intellij.openapi.util.Computable;
 import com.intellij.openapi.util.RecursionManager;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceOwner;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileReference;
 import com.intellij.psi.impl.source.tree.LeafElement;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.CachedValueProvider;
@@ -12,6 +15,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.jetbrains.ResTypes;
 import edu.clemson.resolve.jetbrains.psi.*;
+import edu.clemson.resolve.jetbrains.psi.impl.imports.ResModuleIdentifierReferenceSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,7 +37,7 @@ public class ResPsiImplUtil {
         }
 
         @NotNull
-        public static TextRange getPathTextRange(@NotNull ResUsesString usesString) {
+        public static TextRange getTextRange(@NotNull ResUsesString usesString) {
             String text = usesString.getText();
             return !text.isEmpty() && isQuote(text.charAt(0)) ?
                     TextRange.create(1, text.length() - 1) : TextRange.EMPTY_RANGE;
@@ -64,53 +68,26 @@ public class ResPsiImplUtil {
 
         private static boolean isQuote(char q) {
             return q == '"';
-        }
+        }*/
 
-        @Nullable
-        public static PsiElement resolve(@NotNull ResUsesString importString) {
-            PsiReference[] references = importString.getReferences();
-            for (PsiReference reference : references) {
-                if (reference instanceof FileReferenceOwner) {
-                    PsiFileReference lastFileReference =
-                            ((FileReferenceOwner) reference).getLastFileReference();
-                    PsiElement result = lastFileReference != null ?
-                            lastFileReference.resolve() : null;
-
-                    return (result instanceof PsiDirectory) || (result instanceof ResFile) ? result : null;
-                }
+    @Nullable
+    public static PsiElement resolve(@NotNull ResModuleIdentifier identifierString) {
+        PsiReference[] references = identifierString.getReferences();
+        for (PsiReference reference : references) {
+            if (reference instanceof FileReferenceOwner) {
+                PsiFileReference lastFileReference = ((FileReferenceOwner) reference).getLastFileReference();
+                PsiElement result = lastFileReference != null ? lastFileReference.resolve() : null;
+                return (result instanceof PsiDirectory) || (result instanceof ResFile) ? result : null;
             }
-            return null;
         }
+        return null;
+    }
 
-        @NotNull
-        public static PsiReference[] getReferences(@NotNull ResUsesString o) {
-            if (o.getTextLength() < 2) return PsiReference.EMPTY_ARRAY;
-            return new ResUsesReferenceSet(o).getAllReferences();
-        }
-
-        @NotNull
-        public static String getPath(@NotNull ResUsesString o) {
-            return unquote(o.getText());
-        }
-
-        @NotNull
-        private static String unquote(@Nullable String s) {
-            if (StringUtil.isEmpty(s)) return "";
-            char quote = s.charAt(0);
-            int startOffset = isQuote(quote) ? 1 : 0;
-            int endOffset = s.length();
-            if (s.length() > 1) {
-                char lastChar = s.charAt(s.length() - 1);
-                if (isQuote(quote) && lastChar == quote) {
-                    endOffset = s.length() - 1;
-                }
-                if (!isQuote(quote) && isQuote(lastChar)) {
-                    endOffset = s.length() - 1;
-                }
-            }
-            return s.substring(startOffset, endOffset);
-        }
-
+    @NotNull
+    public static PsiReference[] getReferences(@NotNull ResModuleIdentifier o) {
+        return new ResModuleIdentifierReferenceSet(o).getAllReferences();
+    }
+    /*
         @Nullable
         public static ResFile getSpecification(ResFacilityDecl o) {
             if (o.getModuleSpecList().isEmpty()) return null;
@@ -120,6 +97,14 @@ public class ResPsiImplUtil {
             return (ResFile) specFile;
         }
     */
+
+    @Nullable
+    public static ResModuleIdentifier getFromModuleIdentifier(@NotNull ResUsesSpecGroup o) {
+        if (o.getFrom() == null) return null;
+        int last = o.getModuleIdentifierList().size() - 1;
+        return o.getModuleIdentifierList().get(last);
+    }
+
     @NotNull
     public static PsiElement getIdentifier(ResMathReferenceExp o) {
         return PsiTreeUtil.getChildOfType(o, ResMathSymbolName.class);
