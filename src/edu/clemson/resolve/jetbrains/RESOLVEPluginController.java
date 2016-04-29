@@ -22,10 +22,9 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-/**
- * This object is the controller for the RESOLVE plug-in. It receives
- * events and can send them on to its contained components; here the main
- * components being primarily the compiler's console output window.
+/** This object is the controller for the RESOLVE plug-in. It receives
+ *  events and can send them on to its contained components; here the main
+ *  components being primarily the compiler's console output window.
  */
 public class RESOLVEPluginController implements ProjectComponent {
 
@@ -44,11 +43,9 @@ public class RESOLVEPluginController implements ProjectComponent {
     }
 
     public static RESOLVEPluginController getInstance(@NotNull Project project) {
-        RESOLVEPluginController pc =
-                project.getComponent(RESOLVEPluginController.class);
+        RESOLVEPluginController pc = project.getComponent(RESOLVEPluginController.class);
         if (pc == null) {
-            LOG.error("getInstance: getComponent() for " +
-                    project.getName() + " returns null");
+            LOG.error("getInstance: getComponent() for project.getName() returns null");
         }
         return pc;
     }
