@@ -23,8 +23,7 @@ public class RESOLVEProjectGenerator implements DirectoryProjectGenerator {
 
     @Nullable
     @Override
-    public Object showGenerationSettings(
-            VirtualFile baseDir) throws ProcessCanceledException {
+    public Object showGenerationSettings(VirtualFile baseDir) throws ProcessCanceledException {
         return null;
     }
 
@@ -44,8 +43,7 @@ public class RESOLVEProjectGenerator implements DirectoryProjectGenerator {
 
     @NotNull
     @Override
-    public ValidationResult validate(
-            @NotNull String baseDirPath) {
+    public ValidationResult validate(@NotNull String baseDirPath) {
         return ValidationResult.OK;
     }
 }

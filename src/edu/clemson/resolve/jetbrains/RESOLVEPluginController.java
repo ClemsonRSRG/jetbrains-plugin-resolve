@@ -59,14 +59,12 @@ public class RESOLVEPluginController implements ProjectComponent {
 
     @Override
     public void projectOpened() {
-        IdeaPluginDescriptor plugin =
-                PluginManager.getPlugin(PluginId.getId(PLUGIN_ID));
+        IdeaPluginDescriptor plugin = PluginManager.getPlugin(PluginId.getId(PLUGIN_ID));
         String version = "unknown";
         if (plugin != null) {
             version = plugin.getVersion();
         }
-        LOG.info("RESOLVE Compiler Plugin version " + version + ", Java version " +
-                SystemInfo.JAVA_VERSION);
+        LOG.info("RESOLVE Compiler Plugin version " + version + ", Java version " + SystemInfo.JAVA_VERSION);
         // make sure the tool windows are created early
         createToolWindows();
         //installListeners();

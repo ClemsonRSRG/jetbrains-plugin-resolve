@@ -262,20 +262,7 @@ UsesSpecList ::=  ModuleIdentifier (',' ModuleIdentifier)* {
   methods=[getAlias getLocalPackageName shouldGoDeeper getPath getName]
   recoverWhile=UsesSpecListRec
 }
-private UsesSpecListRec ::= !(';'|')'|'from')
-/*
-ImportDeclaration ::= import ( ImportSpec | '(' ImportSpecs? ')' ) {
-  pin(".*")=1
-  methods=[addImportSpec]
-}
-private ImportSpecs ::= ImportSpec (semi ImportSpec)* semi? {pin=1}
-ImportSpec ::= [ '.' | identifier ] ImportString {
-  stubClass="com.goide.stubs.GoImportSpecStub"
-  methods=[getAlias getLocalPackageName shouldGoDeeper isForSideEffects isDot getPath getName isCImport]
-}
-ImportString ::= string | raw_string {methods=[getReferences resolve getPath getPathTextRange]}
-*/
-
+private UsesSpecListRec ::= !(';'|')'|'from'|'end')
 
 ModuleIdentifier ::= identifier {methods=[getReferences resolve getPath getPathTextRange]}
 
