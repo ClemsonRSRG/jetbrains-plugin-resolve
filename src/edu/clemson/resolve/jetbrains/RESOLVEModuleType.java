@@ -20,8 +20,7 @@ public class RESOLVEModuleType extends ModuleType<RESOLVEModuleBuilder> {
 
     @NotNull
     public static RESOLVEModuleType getInstance() {
-        return (RESOLVEModuleType) ModuleTypeManager.getInstance()
-                .findByID(RESOLVEConstants.MODULE_TYPE_ID);
+        return (RESOLVEModuleType) ModuleTypeManager.getInstance().findByID(RESOLVEConstants.MODULE_TYPE_ID);
     }
 
     @NotNull
@@ -39,8 +38,7 @@ public class RESOLVEModuleType extends ModuleType<RESOLVEModuleBuilder> {
     @NotNull
     @Override
     public String getDescription() {
-        return "RESOLVE modules are used for developing <b>RESOLVE</b> " +
-                "component based software.";
+        return "RESOLVE modules are used for developing <b>RESOLVE</b> component based software.";
     }
 
     @Nullable
@@ -60,8 +58,7 @@ public class RESOLVEModuleType extends ModuleType<RESOLVEModuleBuilder> {
                                                 @NotNull final RESOLVEModuleBuilder moduleBuilder,
                                                 @NotNull ModulesProvider modulesProvider) {
         return new ModuleWizardStep[]{
-                new ProjectJdkForModuleStep(wizardContext,
-                        RESOLVESdkType.getInstance()) {
+                new ProjectJdkForModuleStep(wizardContext, RESOLVESdkType.getInstance()) {
                     @Override
                     public void updateDataModel() {
                         super.updateDataModel();
