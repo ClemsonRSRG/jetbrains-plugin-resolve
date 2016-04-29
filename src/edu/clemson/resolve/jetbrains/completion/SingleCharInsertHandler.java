@@ -13,32 +13,28 @@ import org.jetbrains.annotations.NotNull;
  *  <p>
  *  <a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin">https://github.com/go-lang-plugin-org/go-lang-idea-plugin/a>
  */
-public class SingleCharInsertHandler
-        extends
-        BasicInsertHandler<LookupElement> {
-    private final char myChar;
+class SingleCharInsertHandler extends BasicInsertHandler<LookupElement> {
 
-    public SingleCharInsertHandler(char aChar) {
-        myChar = aChar;
+    private final char character;
+
+    SingleCharInsertHandler(char aChar) {
+        this.character = aChar;
     }
 
     @Override
-    public void handleInsert(@NotNull InsertionContext context,
-                             LookupElement item) {
+    public void handleInsert(@NotNull InsertionContext context, LookupElement item) {
         Editor editor = context.getEditor();
         int tailOffset = context.getTailOffset();
         Document document = editor.getDocument();
         context.commitDocument();
         boolean staysAtChar = document.getTextLength() > tailOffset &&
-                document.getCharsSequence().charAt(tailOffset) == myChar;
+                document.getCharsSequence().charAt(tailOffset) == character;
 
         context.setAddCompletionChar(false);
         if (!staysAtChar) {
-            document.insertString(tailOffset, String.valueOf(myChar));
+            document.insertString(tailOffset, String.valueOf(character));
         }
         editor.getCaretModel().moveToOffset(tailOffset + 1);
-
-        AutoPopupController.getInstance(context.getProject())
-                .scheduleAutoPopup(editor);
+        AutoPopupController.getInstance(context.getProject()).scheduleAutoPopup(editor);
     }
 }

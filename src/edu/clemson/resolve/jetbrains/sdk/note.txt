@@ -9,7 +9,7 @@ https://github.com/go-lang-plugin-org/go-lang-idea-plugin
 
 With this being known:
 While assessing this as a potential solution for our package questions,
-we're going to need to work to understand this code better if we're ultimately
+we're going to need to work to understand this code better (so we can adapt it when needed) if we're ultimately
 going to settle on a similar approach
 
 /*

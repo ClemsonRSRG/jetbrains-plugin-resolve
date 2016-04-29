@@ -19,15 +19,12 @@ import org.jetbrains.annotations.Nullable;
 
 import static edu.clemson.resolve.jetbrains.completion.RESOLVECompletionUtil.createPrefixMatcher;
 
-public class RESOLVEReferenceCompletionProvider
-        extends
-        CompletionProvider<CompletionParameters> {
+public class RESOLVEReferenceCompletionProvider extends CompletionProvider<CompletionParameters> {
 
     @Override
-    protected void addCompletions(
-            @NotNull CompletionParameters parameters,
-            ProcessingContext context,
-            @NotNull CompletionResultSet set) {
+    protected void addCompletions(@NotNull CompletionParameters parameters,
+                                  ProcessingContext context,
+                                  @NotNull CompletionResultSet set) {
         ResReferenceExpBase expression = PsiTreeUtil.getParentOfType(
                 parameters.getPosition(), ResReferenceExpBase.class);
         if (expression != null) {
@@ -93,9 +90,9 @@ public class RESOLVEReferenceCompletionProvider
     }
 
     @Nullable
-    private static LookupElement createLookupElement(
-            @NotNull PsiElement o, @NotNull ResolveState state,
-            boolean forTypes) {
+    private static LookupElement createLookupElement(@NotNull PsiElement o,
+                                                     @NotNull ResolveState state,
+                                                     boolean forTypes) {
         if (o instanceof ResNamedElement) {
             if (o instanceof ResMathDefnSig) {
                 String name = ((ResMathDefnSig) o).getName();
@@ -132,19 +129,18 @@ public class RESOLVEReferenceCompletionProvider
         return null;
     }
 
-    public static class MyRESOLVEScopeProcessor extends ResScopeProcessor {
+    private static class MyRESOLVEScopeProcessor extends ResScopeProcessor {
+
         private final CompletionResultSet result;
         private final boolean forTypes;
 
-        public MyRESOLVEScopeProcessor(@NotNull CompletionResultSet result,
-                                       boolean forTypes) {
+        MyRESOLVEScopeProcessor(@NotNull CompletionResultSet result, boolean forTypes) {
             this.result = result;
             this.forTypes = forTypes;
         }
 
         @Override
-        public boolean execute(@NotNull PsiElement o,
-                               @NotNull ResolveState state) {
+        public boolean execute(@NotNull PsiElement o, @NotNull ResolveState state) {
             if (accept(o)) {
                 addElement(o, state, forTypes, result);
             }
