@@ -23,13 +23,12 @@ import java.util.Set;
 
 //note that this code is lifted (almost) verbatim from the go intellij idea plugin here:
 //https://github.com/go-lang-plugin-org/go-lang-idea-plugin
-public class WrongModuleTypeNotificationProvider extends
+public class WrongModuleTypeNotificationProvider
+        extends
         EditorNotifications.Provider<EditorNotificationPanel> implements DumbAware {
 
-    private static final Key<EditorNotificationPanel> KEY =
-            Key.create("Wrong module type");
-    private static final String DONT_ASK_TO_CHANGE_MODULE_TYPE_KEY =
-            "do.not.ask.to.change.module.type";
+    private static final Key<EditorNotificationPanel> KEY = Key.create("Wrong module type");
+    private static final String DONT_ASK_TO_CHANGE_MODULE_TYPE_KEY = "do.not.ask.to.change.module.type";
 
     private final Project project;
 
@@ -44,26 +43,21 @@ public class WrongModuleTypeNotificationProvider extends
     }
 
     @Override
-    public EditorNotificationPanel createNotificationPanel(
-            @NotNull VirtualFile file, @NotNull FileEditor fileEditor) {
+    public EditorNotificationPanel createNotificationPanel(@NotNull VirtualFile file, @NotNull FileEditor fileEditor) {
         if (file.getFileType() != RESOLVEFileType.INSTANCE) return null;
         Module module = ModuleUtilCore.findModuleForFile(file, project);
-        return module == null || RESOLVESdkService.getInstance(project)
-                .isRESOLVEModule(module) || getIgnoredModules(project)
-                .contains(module.getName())
-                ? null
-                : createPanel(project, module);
+        return module == null ||
+                RESOLVESdkService.getInstance(project).isRESOLVEModule(module) ||
+                getIgnoredModules(project).contains(module.getName()) ? null : createPanel(project, module);
     }
 
     @NotNull
-    private static EditorNotificationPanel createPanel(
-            @NotNull final Project project,
-            @NotNull final Module module) {
+    private static EditorNotificationPanel createPanel(@NotNull final Project project,
+                                                       @NotNull final Module module) {
         EditorNotificationPanel panel = new EditorNotificationPanel();
         panel.setText("'" + module.getName() + "' is not a RESOLVE Module, " +
                 "therefore some code insight might not work here");
-        panel.createActionLabel("Change module type to RESOLVE and " +
-                "reload project", new Runnable() {
+        panel.createActionLabel("Change module type to RESOLVE and reload project", new Runnable() {
             @Override
             public void run() {
                 int message = Messages.showOkCancelDialog(project,
@@ -85,8 +79,7 @@ public class WrongModuleTypeNotificationProvider extends
             public void run() {
                 Set<String> ignoredModules = getIgnoredModules(project);
                 ignoredModules.add(module.getName());
-                PropertiesComponent.getInstance(project).setValue(
-                        DONT_ASK_TO_CHANGE_MODULE_TYPE_KEY,
+                PropertiesComponent.getInstance(project).setValue(DONT_ASK_TO_CHANGE_MODULE_TYPE_KEY,
                         StringUtil.join(ignoredModules, ","));
                 EditorNotifications.getInstance(project).updateAllNotifications();
             }
@@ -96,8 +89,7 @@ public class WrongModuleTypeNotificationProvider extends
 
     @NotNull
     private static Set<String> getIgnoredModules(@NotNull Project project) {
-        String value = PropertiesComponent.getInstance(project)
-                .getValue(DONT_ASK_TO_CHANGE_MODULE_TYPE_KEY, "");
+        String value = PropertiesComponent.getInstance(project).getValue(DONT_ASK_TO_CHANGE_MODULE_TYPE_KEY, "");
         return ContainerUtil.newLinkedHashSet(StringUtil.split(value, ","));
     }
 }
