@@ -266,8 +266,8 @@ public class ResParser implements PsiParser, LightPsiParser {
     else if (t == MODULE_ARG_LIST) {
       r = ModuleArgList(b, 0);
     }
-    else if (t == MODULE_SPEC) {
-      r = ModuleSpec(b, 0);
+    else if (t == MODULE_IDENTIFIER) {
+      r = ModuleIdentifier(b, 0);
     }
     else if (t == MUL_INFIX_EXP) {
       r = Exp(b, 0, 3);
@@ -362,14 +362,11 @@ public class ResParser implements PsiParser, LightPsiParser {
     else if (t == UNARY_EXP) {
       r = UnaryExp(b, 0);
     }
-    else if (t == USES_ITEM_LIST) {
-      r = UsesItemList(b, 0);
+    else if (t == USES_LIST) {
+      r = UsesList(b, 0);
     }
-    else if (t == USES_SPEC) {
-      r = UsesSpec(b, 0);
-    }
-    else if (t == USES_STRING) {
-      r = UsesString(b, 0);
+    else if (t == USES_SPEC_LIST) {
+      r = UsesSpecList(b, 0);
     }
     else if (t == VAR_DECL_GROUP) {
       r = VarDeclGroup(b, 0);
@@ -527,7 +524,7 @@ public class ResParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // 'Concept' 'Extension' identifier SpecModuleParameters? 'for' ModuleSpec ';'
-  // UsesItemList?
+  // UsesList?
   // RequiresClause?
   // ConceptBlock
   // 'end' identifier ';'
@@ -542,7 +539,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = r && report_error_(b, consumeToken(b, IDENTIFIER));
     r = p && report_error_(b, ConceptExtensionModuleDecl_3(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, FOR)) && r;
-    r = p && report_error_(b, ModuleSpec(b, l + 1)) && r;
+    r = p && report_error_(b, consumeToken(b, MODULESPEC)) && r;
     r = p && report_error_(b, consumeToken(b, SEMICOLON)) && r;
     r = p && report_error_(b, ConceptExtensionModuleDecl_7(b, l + 1)) && r;
     r = p && report_error_(b, ConceptExtensionModuleDecl_8(b, l + 1)) && r;
@@ -561,10 +558,10 @@ public class ResParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // UsesItemList?
+  // UsesList?
   private static boolean ConceptExtensionModuleDecl_7(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ConceptExtensionModuleDecl_7")) return false;
-    UsesItemList(b, l + 1);
+    UsesList(b, l + 1);
     return true;
   }
 
@@ -620,7 +617,7 @@ public class ResParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // 'Concept' identifier SpecModuleParameters? ';'
-  // UsesItemList?
+  // UsesList?
   // RequiresClause?
   // ConceptBlock
   // 'end' identifier ';'
@@ -651,10 +648,10 @@ public class ResParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // UsesItemList?
+  // UsesList?
   private static boolean ConceptModuleDecl_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ConceptModuleDecl_4")) return false;
-    UsesItemList(b, l + 1);
+    UsesList(b, l + 1);
     return true;
   }
 
@@ -952,12 +949,12 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, EXTENDED);
     p = r; // pin = 1
     r = r && report_error_(b, consumeToken(b, BY));
-    r = p && report_error_(b, ModuleSpec(b, l + 1)) && r;
+    r = p && report_error_(b, consumeToken(b, MODULESPEC)) && r;
     r = p && report_error_(b, ExtensionPairing_3(b, l + 1)) && r;
     r = p && report_error_(b, ExtensionPairing_4(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, IMPLEMENTED)) && r;
     r = p && report_error_(b, consumeToken(b, BY)) && r;
-    r = p && report_error_(b, ModuleSpec(b, l + 1)) && r;
+    r = p && report_error_(b, consumeToken(b, MODULESPEC)) && r;
     r = p && ExtensionPairing_8(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
@@ -1022,12 +1019,12 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = r && consumeToken(b, IDENTIFIER);
     p = r; // pin = 2
     r = r && report_error_(b, consumeToken(b, IS));
-    r = p && report_error_(b, ModuleSpec(b, l + 1)) && r;
+    r = p && report_error_(b, consumeToken(b, MODULESPEC)) && r;
     r = p && report_error_(b, FacilityDecl_4(b, l + 1)) && r;
     r = p && report_error_(b, FacilityDecl_5(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, IMPLEMENTED)) && r;
     r = p && report_error_(b, consumeToken(b, BY)) && r;
-    r = p && report_error_(b, ModuleSpec(b, l + 1)) && r;
+    r = p && report_error_(b, consumeToken(b, MODULESPEC)) && r;
     r = p && report_error_(b, FacilityDecl_9(b, l + 1)) && r;
     r = p && report_error_(b, FacilityDecl_10(b, l + 1)) && r;
     r = p && consumeToken(b, SEMICOLON) && r;
@@ -1117,7 +1114,7 @@ public class ResParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // 'Facility' identifier ';'
-  // UsesItemList?
+  // UsesList?
   // RequiresClause?
   // FacilityBlock
   // 'end' identifier ';'
@@ -1140,10 +1137,10 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // UsesItemList?
+  // UsesList?
   private static boolean FacilityModuleDecl_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FacilityModuleDecl_3")) return false;
-    UsesItemList(b, l + 1);
+    UsesList(b, l + 1);
     return true;
   }
 
@@ -1408,7 +1405,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   /* ********************************************************** */
   // 'Implementation' identifier ImplModuleParameters?
   // 'for' ModuleSpec ('of' ModuleSpec)? ';'
-  // UsesItemList?
+  // UsesList?
   // RequiresClause?
   // ImplBlock
   // 'end' identifier ';'
@@ -1422,7 +1419,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = r && report_error_(b, consumeToken(b, IDENTIFIER));
     r = p && report_error_(b, ImplModuleDecl_2(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, FOR)) && r;
-    r = p && report_error_(b, ModuleSpec(b, l + 1)) && r;
+    r = p && report_error_(b, consumeToken(b, MODULESPEC)) && r;
     r = p && report_error_(b, ImplModuleDecl_5(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, SEMICOLON)) && r;
     r = p && report_error_(b, ImplModuleDecl_7(b, l + 1)) && r;
@@ -1456,15 +1453,15 @@ public class ResParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_);
     r = consumeToken(b, OF);
     p = r; // pin = 1
-    r = r && ModuleSpec(b, l + 1);
+    r = r && consumeToken(b, MODULESPEC);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
-  // UsesItemList?
+  // UsesList?
   private static boolean ImplModuleDecl_7(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ImplModuleDecl_7")) return false;
-    UsesItemList(b, l + 1);
+    UsesList(b, l + 1);
     return true;
   }
 
@@ -2781,13 +2778,13 @@ public class ResParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // identifier
-  public static boolean ModuleSpec(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ModuleSpec")) return false;
+  public static boolean ModuleIdentifier(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ModuleIdentifier")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, IDENTIFIER);
-    exit_section_(b, m, MODULE_SPEC, r);
+    exit_section_(b, m, MODULE_IDENTIFIER, r);
     return r;
   }
 
@@ -3204,7 +3201,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     p = r; // pin = 2
     r = r && report_error_(b, consumeToken(b, IDENTIFIER));
     r = p && report_error_(b, consumeToken(b, FOR)) && r;
-    r = p && report_error_(b, ModuleSpec(b, l + 1)) && r;
+    r = p && report_error_(b, consumeToken(b, MODULESPEC)) && r;
     r = p && report_error_(b, PrecisExtensionModuleDecl_5(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, SEMICOLON)) && r;
     r = p && report_error_(b, PrecisBlock(b, l + 1)) && r;
@@ -3228,7 +3225,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, WITH);
-    r = r && ModuleSpec(b, l + 1);
+    r = r && consumeToken(b, MODULESPEC);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -3279,7 +3276,7 @@ public class ResParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // 'Precis' identifier ';'
-  // UsesItemList?
+  // UsesList?
   // PrecisBlock
   // 'end' identifier ';'
   public static boolean PrecisModuleDecl(PsiBuilder b, int l) {
@@ -3300,10 +3297,10 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // UsesItemList?
+  // UsesList?
   private static boolean PrecisModuleDecl_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PrecisModuleDecl_3")) return false;
-    UsesItemList(b, l + 1);
+    UsesList(b, l + 1);
     return true;
   }
 
@@ -3871,117 +3868,121 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // uses ( UsesSpec | '(' UsesSpecs? ')' ) ';'
-  public static boolean UsesItemList(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "UsesItemList")) return false;
+  // UsesSpecs
+  public static boolean UsesList(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UsesList")) return false;
     if (!nextTokenIs(b, USES)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, USES_ITEM_LIST, null);
-    r = consumeToken(b, USES);
-    p = r; // pin = 1
-    r = r && report_error_(b, UsesItemList_1(b, l + 1));
-    r = p && consumeToken(b, SEMICOLON) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  // UsesSpec | '(' UsesSpecs? ')'
-  private static boolean UsesItemList_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "UsesItemList_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = UsesSpec(b, l + 1);
-    if (!r) r = UsesItemList_1_1(b, l + 1);
-    exit_section_(b, m, null, r);
+    r = UsesSpecs(b, l + 1);
+    exit_section_(b, m, USES_LIST, r);
     return r;
   }
 
-  // '(' UsesSpecs? ')'
-  private static boolean UsesItemList_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "UsesItemList_1_1")) return false;
+  /* ********************************************************** */
+  // ModuleIdentifier (',' ModuleIdentifier)*
+  public static boolean UsesSpecList(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UsesSpecList")) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_);
-    r = consumeToken(b, LPAREN);
+    Marker m = enter_section_(b, l, _NONE_, USES_SPEC_LIST, "<uses spec list>");
+    r = ModuleIdentifier(b, l + 1);
     p = r; // pin = 1
-    r = r && report_error_(b, UsesItemList_1_1_1(b, l + 1));
-    r = p && consumeToken(b, RPAREN) && r;
-    exit_section_(b, l, m, r, p, null);
+    r = r && UsesSpecList_1(b, l + 1);
+    exit_section_(b, l, m, r, p, UsesSpecListRec_parser_);
     return r || p;
   }
 
-  // UsesSpecs?
-  private static boolean UsesItemList_1_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "UsesItemList_1_1_1")) return false;
-    UsesSpecs(b, l + 1);
-    return true;
-  }
-
-  /* ********************************************************** */
-  // [ identifier ] UsesString
-  public static boolean UsesSpec(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "UsesSpec")) return false;
-    if (!nextTokenIs(b, "<uses spec>", IDENTIFIER, STRING)) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, USES_SPEC, "<uses spec>");
-    r = UsesSpec_0(b, l + 1);
-    r = r && UsesString(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // [ identifier ]
-  private static boolean UsesSpec_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "UsesSpec_0")) return false;
-    consumeToken(b, IDENTIFIER);
-    return true;
-  }
-
-  /* ********************************************************** */
-  // UsesSpec (',' UsesSpec)*
-  static boolean UsesSpecs(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "UsesSpecs")) return false;
-    if (!nextTokenIs(b, "", IDENTIFIER, STRING)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_);
-    r = UsesSpec(b, l + 1);
-    p = r; // pin = 1
-    r = r && UsesSpecs_1(b, l + 1);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  // (',' UsesSpec)*
-  private static boolean UsesSpecs_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "UsesSpecs_1")) return false;
+  // (',' ModuleIdentifier)*
+  private static boolean UsesSpecList_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UsesSpecList_1")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!UsesSpecs_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "UsesSpecs_1", c)) break;
+      if (!UsesSpecList_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "UsesSpecList_1", c)) break;
       c = current_position_(b);
     }
     return true;
   }
 
-  // ',' UsesSpec
-  private static boolean UsesSpecs_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "UsesSpecs_1_0")) return false;
+  // ',' ModuleIdentifier
+  private static boolean UsesSpecList_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UsesSpecList_1_0")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = consumeToken(b, COMMA);
+    p = r; // pin = 1
+    r = r && ModuleIdentifier(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
+  // !(';')
+  static boolean UsesSpecListRec(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UsesSpecListRec")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NOT_);
+    r = !UsesSpecListRec_0(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // (';')
+  private static boolean UsesSpecListRec_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UsesSpecListRec_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
-    r = r && UsesSpec(b, l + 1);
+    r = consumeToken(b, SEMICOLON);
     exit_section_(b, m, null, r);
     return r;
   }
 
   /* ********************************************************** */
-  // string
-  public static boolean UsesString(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "UsesString")) return false;
-    if (!nextTokenIs(b, STRING)) return false;
+  // ('uses' UsesSpecList ('from' ModuleIdentifier)? ';')+
+  static boolean UsesSpecs(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UsesSpecs")) return false;
+    if (!nextTokenIs(b, USES)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, STRING);
-    exit_section_(b, m, USES_STRING, r);
+    r = UsesSpecs_0(b, l + 1);
+    int c = current_position_(b);
+    while (r) {
+      if (!UsesSpecs_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "UsesSpecs", c)) break;
+      c = current_position_(b);
+    }
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // 'uses' UsesSpecList ('from' ModuleIdentifier)? ';'
+  private static boolean UsesSpecs_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UsesSpecs_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, USES);
+    r = r && UsesSpecList(b, l + 1);
+    r = r && UsesSpecs_0_2(b, l + 1);
+    r = r && consumeToken(b, SEMICOLON);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ('from' ModuleIdentifier)?
+  private static boolean UsesSpecs_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UsesSpecs_0_2")) return false;
+    UsesSpecs_0_2_0(b, l + 1);
+    return true;
+  }
+
+  // 'from' ModuleIdentifier
+  private static boolean UsesSpecs_0_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UsesSpecs_0_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, FROM);
+    r = r && ModuleIdentifier(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -4806,6 +4807,11 @@ public class ResParser implements PsiParser, LightPsiParser {
   final static Parser StatementRecover_parser_ = new Parser() {
     public boolean parse(PsiBuilder b, int l) {
       return StatementRecover(b, l + 1);
+    }
+  };
+  final static Parser UsesSpecListRec_parser_ = new Parser() {
+    public boolean parse(PsiBuilder b, int l) {
+      return UsesSpecListRec(b, l + 1);
     }
   };
 }

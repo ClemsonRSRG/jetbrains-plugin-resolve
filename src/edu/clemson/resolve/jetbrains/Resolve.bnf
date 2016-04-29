@@ -120,6 +120,7 @@
         EXTENSION               = 'Extension'
         END                     = 'end'
         ELSE                    = 'else'
+        FROM                    = 'from'
         USES                    = 'uses'
         IS                      = 'is'
         IF                      = 'if'
@@ -216,60 +217,67 @@ ModuleDecl ::=
     | FacilityModuleDecl
 
 PrecisModuleDecl ::= 'Precis' identifier ';'
-UsesItemList?
+UsesSection?
 PrecisBlock
 'end' identifier ';' {pin(".*")=2}
 
 PrecisExtensionModuleDecl ::= 'Precis' 'Extension' identifier 'for'
-ModuleSpec ('with' ModuleSpec)? ';'
+ModuleIdentifier ('with' ModuleIdentifier)? ';'
 PrecisBlock
 'end' identifier ';' {pin(".*")=2}
 
 ConceptModuleDecl ::= 'Concept' identifier SpecModuleParameters? ';'
-UsesItemList?
+UsesSection?
 RequiresClause?
 ConceptBlock
 'end' identifier ';' {pin(".*")=1}
 
 ConceptExtensionModuleDecl ::=
-'Concept' 'Extension' identifier SpecModuleParameters? 'for' ModuleSpec ';'
-UsesItemList?
+'Concept' 'Extension' identifier SpecModuleParameters? 'for' ModuleIdentifier ';'
+UsesSection?
 RequiresClause?
 ConceptBlock
 'end' identifier ';' {pin(".*")=2}
 
 ImplModuleDecl ::= 'Implementation' identifier ImplModuleParameters?
-'for' ModuleSpec ('of' ModuleSpec)? ';'
-UsesItemList?
+'for' ModuleIdentifier ('of' ModuleIdentifier)? ';'
+UsesSection?
 RequiresClause?
 ImplBlock
 'end' identifier ';' {pin(".*")=1}
 
 FacilityModuleDecl ::= 'Facility' identifier ';'
-UsesItemList?
+UsesSection?
 RequiresClause?
 FacilityBlock
 'end' identifier ';' {pin(".*")=1}
 
 // uses, imports
 
-// uses, imports
+UsesSection ::= 'uses' (UsesSpecs | '(' UsesSpecs+ ')' ';' )
 
-UsesItemList ::= uses ( UsesSpec | '(' UsesSpecs? ')' ) ';' {
-  pin(".*")=1
-  //methods=[addUsesSpec]
-}
+private UsesSpecs ::= UsesSpecList ('from' ModuleIdentifier)? ';' {pin=1}
 
-private UsesSpecs ::= UsesSpec (',' UsesSpec)* {pin=1}
-
-UsesSpec ::= UsesString ('as' identifier)? {
+UsesSpecList ::=  ModuleIdentifier (',' ModuleIdentifier)* {
   methods=[getAlias getLocalPackageName shouldGoDeeper getPath getName]
+  recoverWhile=UsesSpecListRec
 }
-UsesString ::= string {methods=[getReferences resolve getPath getPathTextRange]}
+private UsesSpecListRec ::= !(';'|')'|'from')
+/*
+ImportDeclaration ::= import ( ImportSpec | '(' ImportSpecs? ')' ) {
+  pin(".*")=1
+  methods=[addImportSpec]
+}
+private ImportSpecs ::= ImportSpec (semi ImportSpec)* semi? {pin=1}
+ImportSpec ::= [ '.' | identifier ] ImportString {
+  stubClass="com.goide.stubs.GoImportSpecStub"
+  methods=[getAlias getLocalPackageName shouldGoDeeper isForSideEffects isDot getPath getName isCImport]
+}
+ImportString ::= string | raw_string {methods=[getReferences resolve getPath getPathTextRange]}
+*/
 
-//TODO: Thinking now three qualifiers..
-//i.e. something like this: [(Alias)? :: (ModuleName)]? :: Symbol)
-ModuleSpec ::= /*(identifier '::')?*/ identifier {pin=1 methods=[getReferences resolve /*getQualifier*/]}
+
+ModuleIdentifier ::= identifier {methods=[getReferences resolve getPath getPathTextRange]}
 
 // Module blocks & items
 
@@ -385,15 +393,15 @@ VarDef ::= identifier {methods=[getResTypeInner getReference]}
 
 // facility decls
 
-FacilityDecl ::= 'Facility' identifier 'is' ModuleSpec ModuleArgList?
-('externally')? 'implemented' 'by' ModuleSpec ModuleArgList?
+FacilityDecl ::= 'Facility' identifier 'is' ModuleIdentifier ModuleArgList?
+('externally')? 'implemented' 'by' ModuleIdentifier ModuleArgList?
 ExtensionList? ';' {pin=2 methods=[getSpecification]}
 
 private ExtensionList ::= (ExtensionPairing)* {recoverWhile=ExtensionListRec}
 private ExtensionListRec ::= !(';')
 
-ExtensionPairing ::= 'extended' 'by' ModuleSpec ModuleArgList? ('externally')?
-'implemented' 'by' ModuleSpec ModuleArgList? {pin=1}
+ExtensionPairing ::= 'extended' 'by' ModuleIdentifier ModuleArgList? ('externally')?
+'implemented' 'by' ModuleIdentifier ModuleArgList? {pin=1}
 // operations
 
 ModuleArgList ::= '(' ExpArgumentList ')' {pin=1}

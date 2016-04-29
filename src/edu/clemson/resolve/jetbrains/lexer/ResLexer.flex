@@ -184,6 +184,7 @@ ESCAPES = [abfnrtv]
 "Forall"                                { return FORALL; }
 "∀"                                     { return FORALL; }
 "for"                                   { return FOR; }
+"from"                                  { return FROM; }
 "hypo"                                  { return HYPO; }
 "if"                                    { return IF; }
 "iff"                                   { return IFF; }
