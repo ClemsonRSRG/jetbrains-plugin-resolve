@@ -1,10 +1,14 @@
 package edu.clemson.resolve.jetbrains.psi.impl.imports;
 
+import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Condition;
+import com.intellij.openapi.util.Conditions;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileSystemItem;
 import com.intellij.psi.PsiManager;
@@ -12,6 +16,8 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
+import edu.clemson.resolve.jetbrains.RESOLVEFileType;
+import edu.clemson.resolve.jetbrains.psi.ResFile;
 import edu.clemson.resolve.jetbrains.psi.ResModuleIdentifier;
 import edu.clemson.resolve.jetbrains.sdk.RESOLVESdkUtil;
 import org.jetbrains.annotations.NotNull;
@@ -21,6 +27,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 
+import static com.intellij.util.containers.ContainerUtil.newLinkedHashSet;
+
 /** Represents a reference set to guide the completions
  *  This code is adapted to our purposes from the intellij go language
  *  plugin located here:
@@ -29,11 +37,20 @@ import java.util.LinkedHashSet;
  */
 public class ResModuleIdentifierReferenceSet extends FileReferenceSet {
 
+    public static final Condition<PsiFileSystemItem> RES_FILE_FILTER = new Condition<PsiFileSystemItem>() {
+        @Override
+        public boolean value(final PsiFileSystemItem item) {
+            return item instanceof ResFile;
+        }
+    };
+
     public ResModuleIdentifierReferenceSet(@NotNull ResModuleIdentifier moduleIdentifier) {
         super(moduleIdentifier.getText(), moduleIdentifier,
-                moduleIdentifier.getModuleIdentiferTextRange().getStartOffset(), null, true);
+                moduleIdentifier.getModuleIdentiferTextRange().getStartOffset(), null, true, true,
+                new FileType[]{RESOLVEFileType.INSTANCE});
     }
 
+    //OK, here we need to only add the current projects context along with the 'usr/local/resolve/src (STD)' sources.
     @NotNull
     @Override
     public Collection<PsiFileSystemItem> computeDefaultContexts() {
@@ -45,7 +62,23 @@ public class ResModuleIdentifierReferenceSet extends FileReferenceSet {
         final PsiManager psiManager = file.getManager();
         Module module = ModuleUtilCore.findModuleForPsiElement(file);
         Project project = file.getProject();
-        LinkedHashSet<VirtualFile> sourceRoots = RESOLVESdkUtil.getSourcesPathsToLookup(project, module);
+
+        //this will get top level files for *both* the STD and RESOLVEPATH srcs
+        //LinkedHashSet<VirtualFile> sourceRoots = RESOLVESdkUtil.getSourcesPathsToLookup(project, module);
+
+        //but only add std stuff for now..
+        LinkedHashSet<VirtualFile> sourceRoots = newLinkedHashSet();
+        //this adds the std libs /usr/local/resolve/std
+
+        VirtualFile rootSdkDir = RESOLVESdkUtil.getSdkSrcDir(project, module);
+        ContainerUtil.addIfNotNull(sourceRoots, rootSdkDir);
+
+        //add all contexts (subdirectories) we wanna search
+        if (rootSdkDir != null && rootSdkDir.isDirectory()) {
+            for (VirtualFile v : rootSdkDir.getChildren()) {
+                if (v.isDirectory()) sourceRoots.add(v);
+            }
+        }
         return ContainerUtil.mapNotNull(sourceRoots,
                 new Function<VirtualFile, PsiFileSystemItem>() {
                     @Nullable
@@ -54,6 +87,11 @@ public class ResModuleIdentifierReferenceSet extends FileReferenceSet {
                         return psiManager.findDirectory(file);
                     }
                 });
+    }
+
+    @Override
+    protected Condition<PsiFileSystemItem> getReferenceCompletionFilter() {
+        return RES_FILE_FILTER;
     }
 
     @Nullable
@@ -65,6 +103,7 @@ public class ResModuleIdentifierReferenceSet extends FileReferenceSet {
     @NotNull
     @Override
     public FileReference createFileReference(TextRange range, int index, String text) {
-        return new ResModuleIdentifierReference(this, range, index, text);
+        //TODO TODO: Keep an eye on the bit below where I tack on the ext. Doesn't seem particularly kosher.
+        return new ResModuleIdentifierReference(this, range, index, text + "." + RESOLVEFileType.INSTANCE.getDefaultExtension());
     }
 }

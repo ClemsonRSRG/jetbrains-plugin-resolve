@@ -27,9 +27,9 @@ import java.util.LinkedHashSet;
  *  <p>
  *  <a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin">https://github.com/go-lang-plugin-org/go-lang-idea-plugin/a>
  */
-public class ResComponentLibraryReferenceSet extends FileReferenceSet {
+public class ResFromComponentLibraryReferenceSet extends FileReferenceSet {
 
-    public ResComponentLibraryReferenceSet(@NotNull ResModuleIdentifier moduleIdentifier) {
+    public ResFromComponentLibraryReferenceSet(@NotNull ResModuleIdentifier moduleIdentifier) {
         super(moduleIdentifier.getText(), moduleIdentifier,
                 moduleIdentifier.getModuleIdentiferTextRange().getStartOffset(), null, true);
     }

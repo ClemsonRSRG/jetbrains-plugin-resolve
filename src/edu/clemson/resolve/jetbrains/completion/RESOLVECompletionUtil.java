@@ -275,4 +275,9 @@ public class RESOLVECompletionUtil {
                 .withIcon(RESOLVEIcons.DIRECTORY)
                 .withInsertHandler(Lazy.DIR_INSERT_HANDLER);
     }
+    @NotNull
+    public static LookupElementBuilder createResolveFileLookupElement(@NotNull ResFile resolveFile) {
+        return LookupElementBuilder.create(resolveFile.getVirtualFile().getNameWithoutExtension())
+                .withIcon(resolveFile.getIcon(0));
+    }
 }

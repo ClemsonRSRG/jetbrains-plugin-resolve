@@ -35,8 +35,7 @@ public class RESOLVESdkUtil {
     }
 
     @Nullable
-    public static VirtualFile getSdkSrcDir(
-            @NotNull final Project project, @Nullable final Module module) {
+    public static VirtualFile getSdkSrcDir(@NotNull final Project project, @Nullable final Module module) {
         if (module != null) {
             return CachedValuesManager.getManager(project).getCachedValue(module,
                     new CachedValueProvider<VirtualFile>() {
@@ -70,8 +69,8 @@ public class RESOLVESdkUtil {
     }
 
     @NotNull
-    public static LinkedHashSet<VirtualFile> getSourcesPathsToLookup(
-            @NotNull Project project, @Nullable Module module) {
+    public static LinkedHashSet<VirtualFile> getSourcesPathsToLookup(@NotNull Project project,
+                                                                     @Nullable Module module) {
         LinkedHashSet<VirtualFile> sdkAndPathSrcs = newLinkedHashSet();
         ContainerUtil.addIfNotNull(sdkAndPathSrcs, getSdkSrcDir(project, module));
 
@@ -81,8 +80,8 @@ public class RESOLVESdkUtil {
     }
 
     @NotNull
-    public static Collection<VirtualFile> getRESOLVEPathSources(
-            @NotNull final Project project, @Nullable final Module module) {
+    public static Collection<VirtualFile> getRESOLVEPathSources(@NotNull final Project project,
+                                                                @Nullable final Module module) {
         if (module != null) {
             return CachedValuesManager.getManager(project).getCachedValue(
                     module, new CachedValueProvider<Collection<VirtualFile>>() {
@@ -111,14 +110,11 @@ public class RESOLVESdkUtil {
     }
 
     @NotNull
-    private static Collection<Object> getSdkAndLibrariesCacheDependencies(
-            @NotNull Project project,
-            @Nullable Module module) {
+    private static Collection<Object> getSdkAndLibrariesCacheDependencies(@NotNull Project project,
+                                                                          @Nullable Module module) {
         Collection<Object> dependencies = ContainerUtil.newArrayList(
-                (Object[]) RESOLVELibrariesService
-                        .getModificationTrackers(project, module));
-        ContainerUtil.addAllNotNull(dependencies,
-                RESOLVESdkService.getInstance(project));
+                (Object[]) RESOLVELibrariesService.getModificationTrackers(project, module));
+        ContainerUtil.addAllNotNull(dependencies, RESOLVESdkService.getInstance(project));
         return dependencies;
     }
 
@@ -133,15 +129,13 @@ public class RESOLVESdkUtil {
     }
 
     @NotNull
-    private static List<VirtualFile> getInnerRESOLVEPathSources(
-            @NotNull Project project, @Nullable Module module) {
+    private static List<VirtualFile> getInnerRESOLVEPathSources(@NotNull Project project, @Nullable Module module) {
         return ContainerUtil.mapNotNull(getRESOLVEPathRoots(project, module),
                 new RetrieveSubDirectoryOrSelfFunction("src"));
     }
 
     @NotNull
-    private static Collection<VirtualFile> getRESOLVEPathRoots(
-            @NotNull Project project, @Nullable Module module) {
+    private static Collection<VirtualFile> getRESOLVEPathRoots(@NotNull Project project, @Nullable Module module) {
         Collection<VirtualFile> roots = ContainerUtil.newArrayList();
         if (RESOLVEApplicationLibrariesService.getInstance()
                 .isUsingRESOLVEPathFromSystemEnvironment()) {
@@ -154,12 +148,10 @@ public class RESOLVESdkUtil {
     }
 
     @Nullable
-    private static VirtualFile getInnerSdkSrcDir(
-            @NotNull RESOLVESdkService sdkService, @Nullable Module module) {
+    private static VirtualFile getInnerSdkSrcDir(@NotNull RESOLVESdkService sdkService, @Nullable Module module) {
         String sdkHomePath = sdkService.getSdkHomePath(module);
         String sdkVersionString = sdkService.getSdkVersion(module);
-        return sdkHomePath != null && sdkVersionString != null ?
-                getSdkSrcDir(sdkHomePath, sdkVersionString) : null;
+        return sdkHomePath != null && sdkVersionString != null ? getSdkSrcDir(sdkHomePath, sdkVersionString) : null;
     }
 
     @Nullable
@@ -178,8 +170,7 @@ public class RESOLVESdkUtil {
 
     @Nullable
     static String retrieveRESOLVEVersion(@NotNull String sdkPath) {
-        VirtualFile sdkRoot = VirtualFileManager.getInstance()
-                .findFileByUrl(VfsUtilCore.pathToUrl(sdkPath));
+        VirtualFile sdkRoot = VirtualFileManager.getInstance().findFileByUrl(VfsUtilCore.pathToUrl(sdkPath));
         String version = null;
         if (sdkRoot != null) {
             String cachedVersion = sdkRoot.getUserData(RESOLVE_VERSION_DATA_KEY);
@@ -217,11 +208,9 @@ public class RESOLVESdkUtil {
     }
 
     @NotNull
-    static Collection<VirtualFile> getSdkDirectoriesToAttach(
-            @NotNull String sdkPath, @NotNull String versionString) {
+    static Collection<VirtualFile> getSdkDirectoriesToAttach(@NotNull String sdkPath, @NotNull String versionString) {
         // src is enough at the moment, possible process binaries from pkg
-        return ContainerUtil.createMaybeSingletonList(
-                getSdkSrcDir(sdkPath, versionString));
+        return ContainerUtil.createMaybeSingletonList(getSdkSrcDir(sdkPath, versionString));
     }
 
     @Nullable
@@ -233,9 +222,7 @@ public class RESOLVESdkUtil {
         return null;
     }
 
-    private static class RetrieveSubDirectoryOrSelfFunction
-            implements
-            Function<VirtualFile, VirtualFile> {
+    private static class RetrieveSubDirectoryOrSelfFunction implements Function<VirtualFile, VirtualFile> {
         @NotNull
         private final String subdirName;
 

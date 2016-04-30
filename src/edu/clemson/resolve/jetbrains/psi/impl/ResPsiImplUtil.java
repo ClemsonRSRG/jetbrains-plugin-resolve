@@ -30,11 +30,9 @@ import org.jetbrains.annotations.Nullable;
 public class ResPsiImplUtil {
 
     @NotNull
-    public static TextRange getModuleIdentiferTextRange(
-            @NotNull ResModuleIdentifier moduleSpec) {
+    public static TextRange getModuleIdentiferTextRange( @NotNull ResModuleIdentifier moduleSpec) {
         String text = moduleSpec.getText();
-        return !text.isEmpty() ? TextRange.create(0, text.length() - 1) :
-                TextRange.EMPTY_RANGE;
+        return !text.isEmpty() ? TextRange.create(0, text.length() - 1) : TextRange.EMPTY_RANGE;
     }
     /*
         @NotNull
@@ -94,6 +92,7 @@ public class ResPsiImplUtil {
     @NotNull
     public static PsiReference[] getReferences(@NotNull ResModuleIdentifier o) {
         if (o.getTextLength() < 1) return PsiReference.EMPTY_ARRAY;
+        //O.k. if there is a from clause, we want to add
         return new ResModuleIdentifierReferenceSet(o).getAllReferences();
     }
     /*
