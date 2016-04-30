@@ -27,14 +27,14 @@ public class ResModuleIdentifierReference extends FileReference {
         super(fileReferenceSet, range, index, text);
     }
 
-    /*@Override
+    @Override
     public PsiFileSystemItem resolve() {
         final PsiFileSystemItem result = super.resolve();
         if (result instanceof ResFile || result instanceof PsiDirectory) {
             return result;
         }
         return null;
-    }*/
+    }
 
     @NotNull
     @Override
@@ -50,14 +50,11 @@ public class ResModuleIdentifierReference extends FileReference {
             for (ResolveResult resolveResult : innerResult) {
                 PsiElement element = resolveResult.getElement();
                 if (element instanceof PsiDirectory || element instanceof ResFile) {
-                    return new ResolveResult[]{resolveResult};
-
-                    /** if (isLast()) {
+                    if (isLast()) {
                          return new ResolveResult[]{resolveResult};
-                     }**/
-                    //result.add(resolveResult);
+                    }
+                    result.add(resolveResult);
                 }
-
             }
             innerResult.clear();
         }
