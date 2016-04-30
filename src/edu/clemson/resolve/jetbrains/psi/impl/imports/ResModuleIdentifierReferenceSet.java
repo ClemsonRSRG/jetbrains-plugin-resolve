@@ -13,6 +13,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileSystemItem;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceCompletionImpl;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
@@ -29,15 +30,29 @@ import java.util.LinkedHashSet;
 
 import static com.intellij.util.containers.ContainerUtil.newLinkedHashSet;
 
-/** Represents a reference set to guide the completions
- *  This code is adapted to our purposes from the intellij go language
- *  plugin located here:
+/** Represents a collection of file references along with some number of underlying default file searching
+ *  contexts (folders, directories, etc).
  *  <p>
- *  <a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin">https://github.com/go-lang-plugin-org/go-lang-idea-plugin/a>
+ *  This is a companion class
+ *  to {@link ResModuleIdentifierReference}; so don't be fooled by the seeming lack of connection between the two. The
+ *  main thing I do here is implement {@link #getDefaultContexts()} which ultimately influences which folders
+ *  (contexts) are searched through by the {@link ResModuleIdentifierReference#innerResolve(boolean, PsiFile)} method.
+ *
+ *  @author dtwelch
  */
 public class ResModuleIdentifierReferenceSet extends FileReferenceSet {
 
-    public static final Condition<PsiFileSystemItem> RES_FILE_FILTER = new Condition<PsiFileSystemItem>() {
+    /** Apparently overriding {@link ResModuleIdentifierReference#createLookupItem(com.intellij.psi.PsiElement)} isn't
+     *  enough to keep things like {@link PsiDirectory} and other {@link PsiFile}s from getting included in completions
+     *  carried out by {@link FileReferenceCompletionImpl#getFileReferenceCompletionVariants(FileReference)} happening
+     *  in the background.
+     *  <p>
+     *  Turns out you need to override {@link #getReferenceCompletionFilter()} return this {@link Condition} instance.
+     *  How exactly clients
+     *  (e.g., me) were supposed to figure this out without any sort of documentation whatsoever is beyond me; seems
+     *  that the {@link FileReference} stuff overall is pretty light on documentation. oh well.
+     */
+    private static final Condition<PsiFileSystemItem> RES_FILE_FILTER = new Condition<PsiFileSystemItem>() {
         @Override
         public boolean value(final PsiFileSystemItem item) {
             return item instanceof ResFile;
@@ -46,8 +61,7 @@ public class ResModuleIdentifierReferenceSet extends FileReferenceSet {
 
     public ResModuleIdentifierReferenceSet(@NotNull ResModuleIdentifier moduleIdentifier) {
         super(moduleIdentifier.getText(), moduleIdentifier,
-                moduleIdentifier.getModuleIdentiferTextRange().getStartOffset(), null, true, true,
-                new FileType[]{RESOLVEFileType.INSTANCE});
+                moduleIdentifier.getModuleIdentiferTextRange().getStartOffset(), null, true);
     }
 
     //OK, here we need to only add the current projects context along with the 'usr/local/resolve/src (STD)' sources.

@@ -64,15 +64,15 @@ public class ResModuleIdentifierReference extends FileReference {
         //TODO: Ok, getContexts() needs to return only the Std context... (and the context representing the current proj)
         for (PsiFileSystemItem context : ctxs) {
 
-            if (!(context instanceof PsiDirectory)) continue;
+            //if (!(context instanceof PsiDirectory)) continue;
             //first resolve the top level context
-            innerResolveInContext(referenceText, context, innerResult, caseSensitive);
-            PsiDirectory[] ctxSubdirectories = ((PsiDirectory) context).getSubdirectories();
+            //innerResolveInContext(referenceText, context, innerResult, caseSensitive);
+            //PsiDirectory[] ctxSubdirectories = ((PsiDirectory) context).getSubdirectories();
 
-            for (PsiDirectory subctx : ctxSubdirectories) {
+            //for (PsiDirectory subctx : ctxSubdirectories) {
                 //now resolve into each subdirectory we find (this is going to be as deep as we search)
-                innerResolveInContext(referenceText, subctx, innerResult, caseSensitive);
-            }
+                innerResolveInContext(referenceText, context, innerResult, caseSensitive);
+           // }
 
             for (ResolveResult resolveResult : innerResult) {
                 PsiElement element = resolveResult.getElement();
@@ -128,11 +128,4 @@ public class ResModuleIdentifierReference extends FileReference {
         }
         return super.bindToElement(element, absolute);
     }*/
-
-    @Nullable
-    private PsiDirectory getDirectory() {
-        PsiElement originalElement = CompletionUtil.getOriginalElement(getElement());
-        PsiFile file = originalElement != null ? originalElement.getContainingFile() : getElement().getContainingFile();
-        return file.getParent();
-    }
 }

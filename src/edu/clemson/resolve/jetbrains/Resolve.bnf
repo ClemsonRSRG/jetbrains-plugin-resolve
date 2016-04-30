@@ -262,13 +262,14 @@ UsesSpecGroup ::= ModuleIdentList ('from' ModuleIdentifier)? ';' {
     pin=1 methods=[getFromModuleIdentifier /*TODO: getAlias()*/]
 }
 
-private ModuleIdentList ::=  ModuleIdentifier (',' ModuleIdentifier)* {
-  /*methods=[getAlias getLocalPackageName shouldGoDeeper getPath getName]*/
+private ModuleIdentList ::=  ModuleIdentifier (',' ModuleLibraryIdentifier)* {
+  methods=[getAlias getLocalPackageName shouldGoDeeper getPath getName]
   recoverWhile=ModuleIdentListRec
 }
 private ModuleIdentListRec ::= !(';'|')'|'from'|'end')
 
 ModuleIdentifier ::= identifier {methods=[getReferences getModuleIdentiferTextRange resolve]}
+ModuleLibraryIdentifier ::= identifier {methods=[getReferences getModuleLibraryIdentiferTextRange resolve]}
 
 // Module blocks & items
 
