@@ -28,6 +28,14 @@ import org.jetbrains.annotations.Nullable;
  *  a .bnf with the {@code psiImplUtilClass} property to be usable by grammarkit.</p>
  */
 public class ResPsiImplUtil {
+
+    @NotNull
+    public static TextRange getModuleIdentiferTextRange(
+            @NotNull ResModuleIdentifier moduleSpec) {
+        String text = moduleSpec.getText();
+        return !text.isEmpty() ? TextRange.create(0, text.length() - 1) :
+                TextRange.EMPTY_RANGE;
+    }
     /*
         @NotNull
         public static TextRange getModuleSpecTextRange(@NotNull ResModuleSpec moduleSpec) {
@@ -85,6 +93,7 @@ public class ResPsiImplUtil {
 
     @NotNull
     public static PsiReference[] getReferences(@NotNull ResModuleIdentifier o) {
+        if (o.getTextLength() < 1) return PsiReference.EMPTY_ARRAY;
         return new ResModuleIdentifierReferenceSet(o).getAllReferences();
     }
     /*
@@ -100,9 +109,10 @@ public class ResPsiImplUtil {
 
     @Nullable
     public static ResModuleIdentifier getFromModuleIdentifier(@NotNull ResUsesSpecGroup o) {
-        if (o.getFrom() == null) return null;
-        int last = o.getModuleIdentifierList().size() - 1;
-        return o.getModuleIdentifierList().get(last);
+        //if (o.getFrom() == null) return null;
+        //int last = o.getModuleIdentifierList().size() - 1;
+       // return o.getModuleIdentifierList().get(last);
+        return null;
     }
 
     @NotNull

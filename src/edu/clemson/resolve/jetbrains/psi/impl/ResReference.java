@@ -237,7 +237,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                                         @NotNull ResScopeProcessor processor,
                                         @NotNull ResolveState state) {
         ResScopeProcessorBase delegate = createDelegate(processor);
-        processFilesInSpecifiedUsesDirectories(file, delegate, state);
+        //processFilesInSpecifiedUsesDirectories(file, delegate, state);
         //TODO: Need another for "processPlainReferencedFiles(..)"?
         return processNamedElements(processor, state, delegate.getVariants(), false);
     }
@@ -263,8 +263,8 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                 int i;
                 i=0;
             }
-            for (ResModuleIdentifier identifier : group.getModuleIdentifierList()) {
-            }
+            //for (ResModuleIdentifier identifier : group.getModuleIdentifierList()) {
+            //}
         }
         //for (Map.Entry<String, Collection<ResUsesSpec>> entry : file.getImportMap().entrySet()) {
        /* for (ResUsesSpec o : file.getUsesSpecGroups()) {

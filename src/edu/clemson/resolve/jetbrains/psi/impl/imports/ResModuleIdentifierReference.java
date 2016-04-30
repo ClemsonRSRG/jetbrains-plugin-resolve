@@ -27,14 +27,14 @@ public class ResModuleIdentifierReference extends FileReference {
         super(fileReferenceSet, range, index, text);
     }
 
-    @Override
+    /*@Override
     public PsiFileSystemItem resolve() {
         final PsiFileSystemItem result = super.resolve();
         if (result instanceof ResFile || result instanceof PsiDirectory) {
             return result;
         }
         return null;
-    }
+    }*/
 
     @NotNull
     @Override

@@ -31,7 +31,7 @@ public class ResModuleIdentifierReferenceSet extends FileReferenceSet {
 
     public ResModuleIdentifierReferenceSet(@NotNull ResModuleIdentifier moduleIdentifier) {
         super(moduleIdentifier.getText(), moduleIdentifier,
-                moduleIdentifier.getTextRange().getStartOffset(), null, true);
+                moduleIdentifier.getModuleIdentiferTextRange().getStartOffset(), null, true);
     }
 
     @NotNull
