@@ -6,6 +6,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileSystemItem;
 import com.intellij.psi.PsiManager;
@@ -40,18 +41,20 @@ public class ResModuleLibraryReferenceSet extends FileReferenceSet {
         Module module = ModuleUtilCore.findModuleForPsiElement(file);
         Project project = file.getProject();
 
-        //this will get top level files for *both* the STD and RESOLVEPATH srcs
-        LinkedHashSet<VirtualFile> sourceRoots = RESOLVESdkUtil.getSourcesPathsToLookup(project, module);
+        //gets the root of the resolve path directory, now all subdirs of this represent "from-importable" libraries.
+        Collection<VirtualFile> pathLibrarySrcs = RESOLVESdkUtil.getRESOLVEPathSources(project, module);
 
         //now I add them + their one level deep interior files into a fresh set
-        LinkedHashSet<VirtualFile> rootsPlusDirsOneDeep = new LinkedHashSet<>(sourceRoots);
-        for (VirtualFile u : sourceRoots) {
+        //technically we don't need to add the base resolvework/src/ dir..
+        LinkedHashSet<VirtualFile> pathPlusProjectRoots= new LinkedHashSet<>(pathLibrarySrcs);
+
+        for (VirtualFile u : pathPlusProjectRoots) {
             for (VirtualFile v : u.getChildren()) {
-                if (v.isDirectory()) rootsPlusDirsOneDeep.add(v);
+                if (v.isDirectory()) pathPlusProjectRoots.add(v);
             }
         }
         //all this does is transform each VirtualFile (which better be directory--see above loop) into PsiDirectory
-        return ContainerUtil.mapNotNull(rootsPlusDirsOneDeep, psiManager::findDirectory);
+        return ContainerUtil.mapNotNull(pathPlusProjectRoots, psiManager::findDirectory);
     }
 
     @Override

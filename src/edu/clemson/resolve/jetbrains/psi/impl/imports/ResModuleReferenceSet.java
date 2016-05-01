@@ -6,10 +6,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiFileSystemItem;
-import com.intellij.psi.PsiManager;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceCompletionImpl;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
@@ -17,6 +14,8 @@ import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.jetbrains.RESOLVEFileType;
 import edu.clemson.resolve.jetbrains.psi.ResFile;
 import edu.clemson.resolve.jetbrains.psi.ResModuleIdentifier;
+import edu.clemson.resolve.jetbrains.psi.ResModuleLibraryIdentifier;
+import edu.clemson.resolve.jetbrains.psi.ResUsesSpecGroup;
 import edu.clemson.resolve.jetbrains.sdk.RESOLVESdkUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -68,13 +67,16 @@ public class ResModuleReferenceSet extends FileReferenceSet {
         Module module = ModuleUtilCore.findModuleForPsiElement(file);
         Project project = file.getProject();
 
-        //this will get top level files for *both* the STD and RESOLVEPATH srcs
-        //LinkedHashSet<VirtualFile> sourceRoots = RESOLVESdkUtil.getSourcesPathsToLookup(project, module);
 
-        //but only add std stuff for now..
+        PsiElement e = getElement();
+        if (e.getParent() instanceof ResUsesSpecGroup) {
+            ResUsesSpecGroup groupParent = (ResUsesSpecGroup) e.getParent();
+            ResModuleLibraryIdentifier desiredLib = groupParent.getFromModuleLibraryIdentifier();
+            int i;
+            i=0;
+        }
+
         LinkedHashSet<VirtualFile> sourceRoots = newLinkedHashSet();
-        //this adds the std libs /usr/local/resolve/std
-
         VirtualFile rootSdkDir = RESOLVESdkUtil.getSdkSrcDir(project, module);
         ContainerUtil.addIfNotNull(sourceRoots, rootSdkDir);
 
