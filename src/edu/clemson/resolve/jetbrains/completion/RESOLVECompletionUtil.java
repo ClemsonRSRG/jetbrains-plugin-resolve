@@ -269,11 +269,9 @@ public class RESOLVECompletionUtil {
     }
 
     @NotNull
-    public static LookupElementBuilder createDirectoryLookupElement(@NotNull PsiDirectory dir) {
-        int numofFiles = dir.getFiles().length;
-        return LookupElementBuilder.createWithSmartPointer(dir.getName(), dir)
-                .withIcon(RESOLVEIcons.DIRECTORY)
-                .withInsertHandler(Lazy.DIR_INSERT_HANDLER);
+    public static LookupElementBuilder createDirectoryLookupElement(@NotNull PsiDirectory directory) {
+        return LookupElementBuilder.createWithSmartPointer(directory.getName(), directory)
+                .withIcon(RESOLVEIcons.DIRECTORY);
     }
     @NotNull
     public static LookupElementBuilder createResolveFileLookupElement(@NotNull ResFile resolveFile) {

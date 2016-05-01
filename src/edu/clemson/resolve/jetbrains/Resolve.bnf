@@ -187,7 +187,7 @@
     extends("Math.*(Sig)")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractMathSigImpl"
     extends(".*ModuleDecl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractModuleImpl"
 
-    extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|Procedure|OperationProcedure|Exemplar|Facility)Decl)|ModuleSpec|ModuleIdentifier")="edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl"
+    extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|Procedure|OperationProcedure|Exemplar|Facility)Decl)|ModuleSpec|ModuleIdentifier|ModuleLibraryIdentifier")="edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl"
     extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractTypeLikeNodeImpl"
     extends("OrInfixExp|SelectorExp")=InfixExp
     extends("Math((Minus|Cat|Range|Plus|Div|Mult|Custom)InfixApplyExp|SelectorExp)")=MathInfixApplyExp // this attributes can be placed directly after rule
@@ -198,7 +198,7 @@
     implements("OperationDecl|OperationProcedureDecl")="edu.clemson.resolve.jetbrains.psi.ResOperationLikeNode"
     implements(".*ReferenceExp")="edu.clemson.resolve.jetbrains.psi.ResReferenceExpBase"
     implements("(Spec|Impl)ModuleParameters")="edu.clemson.resolve.jetbrains.psi.ResModuleParameters"
-    implements(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Exemplar|Facility)Decl|ModuleIdentifier)")="edu.clemson.resolve.jetbrains.psi.ResNamedElement"
+    implements(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Exemplar|Facility)Decl|ModuleIdentifier|ModuleLibraryIdentifier)")="edu.clemson.resolve.jetbrains.psi.ResNamedElement"
 
     implements("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.jetbrains.psi.ResTypeLikeNodeDecl"
     implements(".*Block")="edu.clemson.resolve.jetbrains.psi.ResBlock"
@@ -258,15 +258,12 @@ FacilityBlock
 
 UsesList ::= 'uses' (UsesSpecGroup | '(' UsesSpecGroup+ ')' ';' )
 
-UsesSpecGroup ::=  ModuleIdentList ('from' ModuleLibraryIdentifier ('as' identifier)? )?';' {
-    pin=1 methods=[getFromModuleIdentifier /*TODO: getAlias()*/]
+UsesSpecGroup ::= ModuleIdentList ('from' ModuleLibraryIdentifier
+            /*'as' alias clause goes here here eventually*/ )? ';' {
+    pin=1 methods=[getFromModuleLibraryIdentifier /*TODO: getAlias()*/]
 }
 
-private ModuleIdentList ::=  ModuleIdentifier (',' ModuleIdentifier)* {
-  methods=[getAlias getLocalPackageName shouldGoDeeper getPath getName]
-  recoverWhile=ModuleIdentListRec
-}
-
+private ModuleIdentList ::=  ModuleIdentifier (',' ModuleIdentifier)* {recoverWhile=ModuleIdentListRec }
 private ModuleIdentListRec ::= !(';'|')'|'from'|'end')
 
 ModuleIdentifier ::= identifier {methods=[getReferences getModuleIdentiferTextRange resolve]}

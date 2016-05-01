@@ -12,10 +12,13 @@ import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.containers.Predicate;
 import edu.clemson.resolve.jetbrains.ResTypes;
 import edu.clemson.resolve.jetbrains.psi.*;
-import edu.clemson.resolve.jetbrains.psi.impl.imports.ResModuleIdentifierReferenceSet;
+import edu.clemson.resolve.jetbrains.psi.impl.imports.ResModuleReferenceSet;
+import edu.clemson.resolve.jetbrains.psi.impl.imports.ResModuleLibraryReferenceSet;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,9 +33,20 @@ import org.jetbrains.annotations.Nullable;
 public class ResPsiImplUtil {
 
     @NotNull
-    public static TextRange getModuleIdentiferTextRange(@NotNull ResModuleIdentifier moduleSpec) {
-        String text = moduleSpec.getText();
+    public static TextRange getModuleIdentiferTextRange(@NotNull ResModuleIdentifier moduleIdentifier) {
+        String text = moduleIdentifier.getText();
         return !text.isEmpty() ? TextRange.create(0, text.length() - 1) : TextRange.EMPTY_RANGE;
+    }
+
+    @NotNull
+    public static TextRange getModuleLibraryIdentiferTextRange(@NotNull ResModuleLibraryIdentifier libraryIdentifier) {
+        String text = libraryIdentifier.getText();
+        return !text.isEmpty() ? TextRange.create(0, text.length() - 1) : TextRange.EMPTY_RANGE;
+    }
+
+    @Nullable
+    public static ResModuleLibraryIdentifier getFromModuleLibraryIdentifier(@NotNull ResUsesSpecGroup o) {
+        return o.getModuleLibraryIdentifier();
     }
     /*
         @NotNull
@@ -77,13 +91,23 @@ public class ResPsiImplUtil {
         }*/
 
     @Nullable
-    public static PsiElement resolve(@NotNull ResModuleIdentifier identifierString) {
-        PsiReference[] references = identifierString.getReferences();
+    public static PsiElement resolve(@NotNull ResModuleIdentifier moduleIdentifier) {
+        return resolveModuleOrLibraryIdentifier(moduleIdentifier.getReferences(), e -> e instanceof ResFile);
+    }
+
+    @Nullable
+    public static PsiElement resolve(@NotNull ResModuleLibraryIdentifier libraryIdentifier) {
+        return resolveModuleOrLibraryIdentifier(libraryIdentifier.getReferences(), e -> e instanceof PsiDirectory);
+    }
+
+    @Nullable
+    private static PsiElement resolveModuleOrLibraryIdentifier(@NotNull PsiReference[] references,
+                                                               @NotNull Predicate<PsiElement> p) {
         for (PsiReference reference : references) {
             if (reference instanceof FileReferenceOwner) {
                 PsiFileReference lastFileReference = ((FileReferenceOwner) reference).getLastFileReference();
                 PsiElement result = lastFileReference != null ? lastFileReference.resolve() : null;
-                return (result instanceof PsiDirectory) || (result instanceof ResFile) ? result : null;
+                return p.apply(result) ? result : null;
             }
         }
         return null;
@@ -92,8 +116,13 @@ public class ResPsiImplUtil {
     @NotNull
     public static PsiReference[] getReferences(@NotNull ResModuleIdentifier o) {
         if (o.getTextLength() < 1) return PsiReference.EMPTY_ARRAY;
-        //O.k. if there is a from clause, we want to add
-        return new ResModuleIdentifierReferenceSet(o).getAllReferences();
+        return new ResModuleReferenceSet(o).getAllReferences();
+    }
+
+    @NotNull
+    public static PsiReference[] getReferences(@NotNull ResModuleLibraryIdentifier o) {
+        if (o.getTextLength() < 1) return PsiReference.EMPTY_ARRAY;
+        return new ResModuleLibraryReferenceSet(o).getAllReferences();
     }
     /*
         @Nullable
@@ -105,14 +134,6 @@ public class ResPsiImplUtil {
             return (ResFile) specFile;
         }
     */
-
-    @Nullable
-    public static ResModuleIdentifier getFromModuleIdentifier(@NotNull ResUsesSpecGroup o) {
-        //if (o.getFrom() == null) return null;
-        //int last = o.getModuleIdentifierList().size() - 1;
-        // return o.getModuleIdentifierList().get(last);
-        return null;
-    }
 
     @NotNull
     public static PsiElement getIdentifier(ResMathReferenceExp o) {

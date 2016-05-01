@@ -269,6 +269,9 @@ public class ResParser implements PsiParser, LightPsiParser {
     else if (t == MODULE_IDENTIFIER) {
       r = ModuleIdentifier(b, 0);
     }
+    else if (t == MODULE_LIBRARY_IDENTIFIER) {
+      r = ModuleLibraryIdentifier(b, 0);
+    }
     else if (t == MUL_INFIX_EXP) {
       r = Exp(b, 0, 3);
     }
@@ -2850,6 +2853,18 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // identifier
+  public static boolean ModuleLibraryIdentifier(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ModuleLibraryIdentifier")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, MODULE_LIBRARY_IDENTIFIER, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // TypeReferenceExp QualifiedTypeReferenceExp?
   static boolean NamedType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NamedType")) return false;
@@ -3984,7 +3999,8 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ModuleIdentList ('from' ModuleIdentifier)? ';'
+  // ModuleIdentList ('from' ModuleLibraryIdentifier
+  //             /*'as' alias clause goes here here eventually*/ )? ';'
   public static boolean UsesSpecGroup(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "UsesSpecGroup")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
@@ -3998,20 +4014,21 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // ('from' ModuleIdentifier)?
+  // ('from' ModuleLibraryIdentifier
+  //             /*'as' alias clause goes here here eventually*/ )?
   private static boolean UsesSpecGroup_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "UsesSpecGroup_1")) return false;
     UsesSpecGroup_1_0(b, l + 1);
     return true;
   }
 
-  // 'from' ModuleIdentifier
+  // 'from' ModuleLibraryIdentifier
   private static boolean UsesSpecGroup_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "UsesSpecGroup_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, FROM);
-    r = r && ModuleIdentifier(b, l + 1);
+    r = r && ModuleLibraryIdentifier(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }

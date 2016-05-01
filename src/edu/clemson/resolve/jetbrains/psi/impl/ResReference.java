@@ -251,18 +251,18 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
             //if from is not null, then it's safe to say the last ModuleIdentifier in the list is the one that
             //identifies the directory/component we ultimately want to search
             //PsiDirectory componentResolveDir = importString.resolve();
-            ResModuleIdentifier from = group.getFromModuleIdentifier();
-            if (from != null) {
-                PsiElement resolveDir = from.resolve();
+            //ResModuleIdentifier from = group.getFromModuleIdentifier();
+           // if (from != null) {
+           //     PsiElement resolveDir = from.resolve();
                 //if the 'from' module identifier doesn't resolve back to a PSI directory (AND that directory
                 //isn't a root library component!) then skip to the next one, the user screwed up.
                 /*if (!(resolveDir instanceof PsiDirectory)) {
                     from = null;
                     continue;
                 }*/
-                int i;
-                i=0;
-            }
+           //     int i;
+            //    i=0;
+           // }
             //for (ResModuleIdentifier identifier : group.getModuleIdentifierList()) {
             //}
         }
