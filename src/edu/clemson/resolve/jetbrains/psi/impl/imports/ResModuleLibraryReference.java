@@ -46,4 +46,7 @@ class ResModuleLibraryReference extends FileReference {
         }
         return super.createLookupItem(candidate);
     }
+
+    //TODO: IsReferenceTo  needs to eventually get implemented for fileReference renaming to work
+    //(I think BindsTo()? sp? needs to as well.
 }
