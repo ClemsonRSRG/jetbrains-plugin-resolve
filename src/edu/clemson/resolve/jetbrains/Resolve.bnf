@@ -258,14 +258,15 @@ FacilityBlock
 
 UsesList ::= 'uses' (UsesSpecGroup | '(' UsesSpecGroup+ ')' ';' )
 
-UsesSpecGroup ::= ModuleIdentList ('from' ModuleIdentifier)? ';' {
+UsesSpecGroup ::=  ModuleIdentList ('from' ModuleLibraryIdentifier ('as' identifier)? )?';' {
     pin=1 methods=[getFromModuleIdentifier /*TODO: getAlias()*/]
 }
 
-private ModuleIdentList ::=  ModuleIdentifier (',' ModuleLibraryIdentifier)* {
+private ModuleIdentList ::=  ModuleIdentifier (',' ModuleIdentifier)* {
   methods=[getAlias getLocalPackageName shouldGoDeeper getPath getName]
   recoverWhile=ModuleIdentListRec
 }
+
 private ModuleIdentListRec ::= !(';'|')'|'from'|'end')
 
 ModuleIdentifier ::= identifier {methods=[getReferences getModuleIdentiferTextRange resolve]}

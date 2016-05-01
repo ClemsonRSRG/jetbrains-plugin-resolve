@@ -1,11 +1,9 @@
 package edu.clemson.resolve.jetbrains.psi.impl.imports;
 
-import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.Conditions;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
@@ -15,7 +13,6 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceCompletionImpl;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
-import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.jetbrains.RESOLVEFileType;
 import edu.clemson.resolve.jetbrains.psi.ResFile;
@@ -35,7 +32,7 @@ import static com.intellij.util.containers.ContainerUtil.newLinkedHashSet;
  *  <p>
  *  This is a companion class
  *  to {@link ResModuleIdentifierReference}; so don't be fooled by the seeming lack of connection between the two. The
- *  main thing I do here is implement {@link #getDefaultContexts()} which ultimately influences which folders
+ *  main thing I do here is implement {@link #getDefaultContexts()}, which ultimately influences which folders
  *  (contexts) are searched through by the {@link ResModuleIdentifierReference#innerResolve(boolean, PsiFile)} method.
  *
  *  @author dtwelch
@@ -52,12 +49,7 @@ public class ResModuleIdentifierReferenceSet extends FileReferenceSet {
      *  (e.g., me) were supposed to figure this out without any sort of documentation whatsoever is beyond me; seems
      *  that the {@link FileReference} stuff overall is pretty light on documentation. oh well.
      */
-    private static final Condition<PsiFileSystemItem> RES_FILE_FILTER = new Condition<PsiFileSystemItem>() {
-        @Override
-        public boolean value(final PsiFileSystemItem item) {
-            return item instanceof ResFile;
-        }
-    };
+    private static final Condition<PsiFileSystemItem> RES_FILE_FILTER = item -> item instanceof ResFile;
 
     public ResModuleIdentifierReferenceSet(@NotNull ResModuleIdentifier moduleIdentifier) {
         super(moduleIdentifier.getText(), moduleIdentifier,
@@ -93,14 +85,7 @@ public class ResModuleIdentifierReferenceSet extends FileReferenceSet {
                 if (v.isDirectory()) sourceRoots.add(v);
             }
         }
-        return ContainerUtil.mapNotNull(sourceRoots,
-                new Function<VirtualFile, PsiFileSystemItem>() {
-                    @Nullable
-                    @Override
-                    public PsiFileSystemItem fun(VirtualFile file) {
-                        return psiManager.findDirectory(file);
-                    }
-                });
+        return ContainerUtil.mapNotNull(sourceRoots, psiManager::findDirectory);
     }
 
     @Override
@@ -118,6 +103,7 @@ public class ResModuleIdentifierReferenceSet extends FileReferenceSet {
     @Override
     public FileReference createFileReference(TextRange range, int index, String text) {
         //TODO TODO: Keep an eye on the bit below where I tack on the ext. Doesn't seem particularly kosher.
+        //where that gets added otherwise is anyone's guess..
         return new ResModuleIdentifierReference(this, range, index, text + "." + RESOLVEFileType.INSTANCE.getDefaultExtension());
     }
 }
