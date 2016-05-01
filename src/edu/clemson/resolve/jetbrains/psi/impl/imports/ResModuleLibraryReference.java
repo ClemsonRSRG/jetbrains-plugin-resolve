@@ -15,19 +15,10 @@ import java.util.Set;
  *
  *  @author dtwelch
  */
-public class ResModuleLibraryReference extends FileReference {
+class ResModuleLibraryReference extends FileReference {
 
-    public ResModuleLibraryReference(@NotNull FileReferenceSet fileReferenceSet, TextRange range,
-                                     int index, String text) {
+    ResModuleLibraryReference(@NotNull FileReferenceSet fileReferenceSet, TextRange range, int index, String text) {
         super(fileReferenceSet, range, index, text);
-    }
-
-    @Override
-    protected Object createLookupItem(PsiElement candidate) {
-        if (candidate instanceof PsiDirectory) {
-            return RESOLVECompletionUtil.createDirectoryLookupElement((PsiDirectory)candidate);
-        }
-        return super.createLookupItem(candidate);
     }
 
     @NotNull
@@ -46,5 +37,13 @@ public class ResModuleLibraryReference extends FileReference {
             }
         }
         return result.isEmpty() ? ResolveResult.EMPTY_ARRAY : result.toArray(new ResolveResult[result.size()]);
+    }
+
+    @Override
+    protected Object createLookupItem(PsiElement candidate) {
+        if (candidate instanceof PsiDirectory) {
+            return RESOLVECompletionUtil.createDirectoryLookupElement((PsiDirectory)candidate);
+        }
+        return super.createLookupItem(candidate);
     }
 }
