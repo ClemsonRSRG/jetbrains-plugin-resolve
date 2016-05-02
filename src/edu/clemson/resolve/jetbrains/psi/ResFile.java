@@ -103,7 +103,8 @@ public class ResFile extends PsiFileBase {
     public Icon getIcon(int s) {
         if (getEnclosedModule() == null) {
             return RESOLVEIcons.FILE;
-        } else {
+        }
+        else {
             return getEnclosedModule().getIcon(0);
         }
     }

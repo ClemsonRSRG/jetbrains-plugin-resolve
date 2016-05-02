@@ -81,7 +81,7 @@ public class ResTypeReference extends PsiPolyVariantReferenceBase<ResTypeReferen
         }
         else if (target instanceof ResFile) {
             int i;
-            i=0;
+            i = 0;
             //ResReference.processModuleLevelEntities((ResModuleDecl)target, processor, state, false);
         }
         return false;
@@ -120,7 +120,9 @@ public class ResTypeReference extends PsiPolyVariantReferenceBase<ResTypeReferen
         return new ResTypeProcessor(myElement, processor.isCompletion());
     }
 
-    /** A processor for treewalking */
+    /**
+     * A processor for treewalking
+     */
     private static class ResTypeProcessor extends ResScopeProcessorBase {
 
         ResTypeProcessor(@NotNull ResTypeReferenceExp origin, boolean completion) {

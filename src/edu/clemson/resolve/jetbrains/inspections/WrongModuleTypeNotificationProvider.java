@@ -21,8 +21,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-//note that this code is lifted (almost) verbatim from the go intellij idea plugin here:
-//https://github.com/go-lang-plugin-org/go-lang-idea-plugin
 public class WrongModuleTypeNotificationProvider
         extends
         EditorNotifications.Provider<EditorNotificationPanel> implements DumbAware {

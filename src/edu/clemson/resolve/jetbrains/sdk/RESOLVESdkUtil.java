@@ -118,9 +118,10 @@ public class RESOLVESdkUtil {
         return dependencies;
     }
 
-    /** Retrieves root directories from RESOLVEPATH env-variable.
-     *  This method doesn't consider user defined libraries,
-     *  for that case use {@link {@link this#getRESOLVEPathRoots(Project, Module)}
+    /**
+     * Retrieves root directories from RESOLVEPATH env-variable.
+     * This method doesn't consider user defined libraries,
+     * for that case use {@link {@link this#getRESOLVEPathRoots(Project, Module)}
      */
     @NotNull
     public static Collection<VirtualFile> getRESOLVEPathsRootsFromEnvironment() {

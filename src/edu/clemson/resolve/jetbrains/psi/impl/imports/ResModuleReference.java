@@ -26,13 +26,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-/** Represents a reference to some directory (or specific {@link PsiFile} file) introduced via a uses clause or
- *  super module (Impl X for Y).
- *  <p>
- *  This is distinguished from an {@link ResReferenceExp} that reference modules in either:
- *  <ul><li>a facility decl</li>
- *      <li>a type (as a qualifier, etc)</li>
- *  </ul></p>
+/**
+ * Represents a reference to some directory (or specific {@link PsiFile} file) introduced via a uses clause or
+ * super module (Impl X for Y).
+ * <p>
+ * This is distinguished from an {@link ResReferenceExp} that reference modules in either:
+ * <ul><li>a facility decl</li>
+ * <li>a type (as a qualifier, etc)</li>
+ * </ul></p>
  */
 public class ResModuleReference extends FileReference {
 

@@ -10,8 +10,9 @@ import edu.clemson.resolve.jetbrains.psi.ResModuleDecl;
 
 import javax.swing.*;
 
-/** Dynamically updates (patches) icons for {@link PsiFile} instances based on
- *  the {@link ResModuleDecl} declared within.
+/**
+ * Dynamically updates (patches) icons for {@link PsiFile} instances based on
+ * the {@link ResModuleDecl} declared within.
  */
 public class RESOLVEFileIconPatcher implements FileIconPatcher {
 

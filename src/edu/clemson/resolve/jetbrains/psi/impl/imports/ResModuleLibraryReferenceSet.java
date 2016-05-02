@@ -46,7 +46,7 @@ public class ResModuleLibraryReferenceSet extends FileReferenceSet {
 
         //now I add them + their one level deep interior files into a fresh set
         //technically we don't need to add the base resolvework/src/ dir..
-        LinkedHashSet<VirtualFile> pathPlusProjectRoots= new LinkedHashSet<>(pathLibrarySrcs);
+        LinkedHashSet<VirtualFile> pathPlusProjectRoots = new LinkedHashSet<>(pathLibrarySrcs);
 
         for (VirtualFile u : pathPlusProjectRoots) {
             for (VirtualFile v : u.getChildren()) {

@@ -13,39 +13,39 @@ import org.jetbrains.annotations.NotNull;
 
 public class RESOLVEQuoteHandler extends SimpleTokenSetQuoteHandler implements JavaLikeQuoteHandler {
 
-  private static final TokenSet SINGLE_LINE_LITERALS = TokenSet.create(ResTypes.STRING);
+    private static final TokenSet SINGLE_LINE_LITERALS = TokenSet.create(ResTypes.STRING);
 
-  public RESOLVEQuoteHandler() {
-    super(ResTypes.STRING, ResTypes.RAW_STRING, ResTypes.CHAR, TokenType.BAD_CHARACTER);
-  }
+    public RESOLVEQuoteHandler() {
+        super(ResTypes.STRING, ResTypes.RAW_STRING, ResTypes.CHAR, TokenType.BAD_CHARACTER);
+    }
 
-  @Override
-  public boolean hasNonClosedLiteral(Editor editor, HighlighterIterator iterator, int offset) {
-    return true;
-  }
+    @Override
+    public boolean hasNonClosedLiteral(Editor editor, HighlighterIterator iterator, int offset) {
+        return true;
+    }
 
-  @Override
-  public TokenSet getConcatenatableStringTokenTypes() {
-    return SINGLE_LINE_LITERALS;
-  }
+    @Override
+    public TokenSet getConcatenatableStringTokenTypes() {
+        return SINGLE_LINE_LITERALS;
+    }
 
-  @Override
-  public String getStringConcatenationOperatorRepresentation() {
-    return "+";
-  }
+    @Override
+    public String getStringConcatenationOperatorRepresentation() {
+        return "+";
+    }
 
-  @Override
-  public TokenSet getStringTokenTypes() {
-    return SINGLE_LINE_LITERALS;
-  }
+    @Override
+    public TokenSet getStringTokenTypes() {
+        return SINGLE_LINE_LITERALS;
+    }
 
-  @Override
-  public boolean isAppropriateElementTypeForLiteral(@NotNull IElementType tokenType) {
-    return true;
-  }
+    @Override
+    public boolean isAppropriateElementTypeForLiteral(@NotNull IElementType tokenType) {
+        return true;
+    }
 
-  @Override
-  public boolean needParenthesesAroundConcatenation(PsiElement element) {
-    return false;
-  }
+    @Override
+    public boolean needParenthesesAroundConcatenation(PsiElement element) {
+        return false;
+    }
 }

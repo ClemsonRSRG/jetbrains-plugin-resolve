@@ -248,9 +248,9 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
     }
 
     public static boolean processUsesAndReferencedModules(@NotNull ResFile file,
-                                                           @NotNull ResScopeProcessor processor,
-                                                           @NotNull ResolveState state,
-                                                           boolean forModuleNameRefs) {
+                                                          @NotNull ResScopeProcessor processor,
+                                                          @NotNull ResolveState state,
+                                                          boolean forModuleNameRefs) {
         List<ResUsesSpecGroup> groups = file.getUsesSpecGroups();
         for (ResUsesSpecGroup group : groups) {
             for (ResModuleIdentifierSpec o : group.getModuleIdentifierSpecList()) {
@@ -344,11 +344,15 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                                               @NotNull ResolveState state,
                                               boolean localProcessing,
                                               boolean fromFacility) {
-        if (!processNamedElements(processor, state, module.getOperationLikeThings(), localProcessing, fromFacility)) return false;
-        if (!processNamedElements(processor, state, module.getFacilities(), localProcessing, fromFacility)) return false;
+        if (!processNamedElements(processor, state, module.getOperationLikeThings(), localProcessing, fromFacility))
+            return false;
+        if (!processNamedElements(processor, state, module.getFacilities(), localProcessing, fromFacility))
+            return false;
         if (!processNamedElements(processor, state, module.getTypes(), localProcessing, fromFacility)) return false;
-        if (!processNamedElements(processor, state, module.getGenericTypeParams(), localProcessing, fromFacility)) return false;
-        if (!processNamedElements(processor, state, module.getMathDefnSigs(), localProcessing, fromFacility)) return false;
+        if (!processNamedElements(processor, state, module.getGenericTypeParams(), localProcessing, fromFacility))
+            return false;
+        if (!processNamedElements(processor, state, module.getMathDefnSigs(), localProcessing, fromFacility))
+            return false;
         return true;
     }
 

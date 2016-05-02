@@ -10,10 +10,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-/** Represents a reference to some top level library directory. This is distinct from {@link ResModuleReference}, which
- *  is otherwise used to reference some {@link edu.clemson.resolve.jetbrains.psi.ResFile}.
+/**
+ * Represents a reference to some top level library directory. This is distinct from {@link ResModuleReference}, which
+ * is otherwise used to reference some {@link edu.clemson.resolve.jetbrains.psi.ResFile}.
  *
- *  @author dtwelch
+ * @author dtwelch
  */
 class ResModuleLibraryReference extends FileReference {
 
@@ -42,7 +43,7 @@ class ResModuleLibraryReference extends FileReference {
     @Override
     protected Object createLookupItem(PsiElement candidate) {
         if (candidate instanceof PsiDirectory) {
-            return RESOLVECompletionUtil.createDirectoryLookupElement((PsiDirectory)candidate);
+            return RESOLVECompletionUtil.createDirectoryLookupElement((PsiDirectory) candidate);
         }
         return super.createLookupItem(candidate);
     }

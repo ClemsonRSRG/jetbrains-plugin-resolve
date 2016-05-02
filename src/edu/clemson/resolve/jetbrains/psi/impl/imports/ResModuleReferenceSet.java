@@ -26,26 +26,28 @@ import java.util.LinkedHashSet;
 
 import static com.intellij.util.containers.ContainerUtil.newLinkedHashSet;
 
-/** Represents a collection of file references along with some number of underlying default file searching
- *  contexts (folders, directories, etc).
- *  <p>
- *  This is a companion class
- *  to {@link ResModuleReference}; so don't be fooled by the seeming lack of connection between the two. The
- *  main thing I do here is implement {@link #getDefaultContexts()}, which ultimately influences which folders
- *  (contexts) are searched through by the {@link ResModuleReference#innerResolve(boolean, PsiFile)} method.
+/**
+ * Represents a collection of file references along with some number of underlying default file searching
+ * contexts (folders, directories, etc).
+ * <p>
+ * This is a companion class
+ * to {@link ResModuleReference}; so don't be fooled by the seeming lack of connection between the two. The
+ * main thing I do here is implement {@link #getDefaultContexts()}, which ultimately influences which folders
+ * (contexts) are searched through by the {@link ResModuleReference#innerResolve(boolean, PsiFile)} method.
  *
- *  @author dtwelch
+ * @author dtwelch
  */
 public class ResModuleReferenceSet extends FileReferenceSet {
 
-    /** Apparently overriding {@link ResModuleReference#createLookupItem(com.intellij.psi.PsiElement)} isn't
-     *  enough to keep things like {@link PsiDirectory} and other {@link PsiFile}s from getting included in completions
-     *  carried out by {@link FileReferenceCompletionImpl#getFileReferenceCompletionVariants(FileReference)} happening
-     *  in the background.
-     *  <p>
-     *  Turns out you need to override {@link #getReferenceCompletionFilter()}, returning the {@link Condition}
-     *  instance declared below. How exactly clients (e.g., me) were supposed to figure this out without any sort of
-     *  documentation whatsoever is beyond me.
+    /**
+     * Apparently overriding {@link ResModuleReference#createLookupItem(com.intellij.psi.PsiElement)} isn't
+     * enough to keep things like {@link PsiDirectory} and other {@link PsiFile}s from getting included in completions
+     * carried out by {@link FileReferenceCompletionImpl#getFileReferenceCompletionVariants(FileReference)} happening
+     * in the background.
+     * <p>
+     * Turns out you need to override {@link #getReferenceCompletionFilter()}, returning the {@link Condition}
+     * instance declared below. How exactly clients (e.g., me) were supposed to figure this out without any sort of
+     * documentation whatsoever is beyond me.
      */
     private static final Condition<PsiFileSystemItem> RES_FILE_FILTER = e -> e instanceof ResFile;
 

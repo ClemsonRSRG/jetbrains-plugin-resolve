@@ -7,8 +7,9 @@ import edu.clemson.resolve.jetbrains.psi.ResCompositeElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/** Some general purpose utility methods for crawling up and down {@link PsiElement}s mainly for symbol resolving
- *  purposes.
+/**
+ * Some general purpose utility methods for crawling up and down {@link PsiElement}s mainly for symbol resolving
+ * purposes.
  */
 final class ResolveUtil {
 

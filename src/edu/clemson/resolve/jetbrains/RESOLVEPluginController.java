@@ -22,9 +22,10 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-/** This object is the controller for the RESOLVE plug-in. It receives
- *  events and can send them on to its contained components; here the main
- *  components being primarily the compiler's console output window.
+/**
+ * This object is the controller for the RESOLVE plug-in. It receives
+ * events and can send them on to its contained components; here the main
+ * components being primarily the compiler's console output window.
  */
 public class RESOLVEPluginController implements ProjectComponent {
 

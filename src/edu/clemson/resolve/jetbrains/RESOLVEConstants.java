@@ -13,7 +13,8 @@ public class RESOLVEConstants {
     public static final NotificationGroup RESOLVE_NOTIFICATION_GROUP = NotificationGroup.balloonGroup("RESOLVE plugin notifications");
     public static final String RESOLVE_LIBRARIES_SERVICE_NAME = "RESOLVELibraries";
     public static final String RESOLVE_LIBRARIES_CONFIG_FILE = "resolveLibraries.xml";
-    @NonNls public static final String RESOLVE = "RESOLVE";
+    @NonNls
+    public static final String RESOLVE = "RESOLVE";
 
     private RESOLVEConstants() {
     }
