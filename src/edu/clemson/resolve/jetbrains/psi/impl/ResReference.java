@@ -102,7 +102,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         if (target instanceof ResFacilityDecl) {
             ResFacilityDecl facility = ((ResFacilityDecl) target);
             ResFile resolvedSpec = facility.resolveSpecification();
-            if (resolvedSpec != null) processModuleLevelEntities(resolvedSpec, processor, state, false);
+            if (resolvedSpec != null) processModuleLevelEntities(resolvedSpec, processor, state, false, true);
 
            /* for (ResExtensionPairing p : facility.getExtensionPairingList()) {
                 if (p.getModuleSpecList().isEmpty()) continue;
@@ -112,8 +112,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
             }*/
         }
         else if (target instanceof ResFile) {
-
-            processModuleLevelEntities((ResFile) target, processor, state, false);
+            processModuleLevelEntities((ResFile) target, processor, state, false, false);
         }
         return true;
     }
@@ -259,11 +258,39 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
             for (ResModuleIdentifierSpec o : group.getModuleIdentifierSpecList()) {
                 PsiElement resFile = o.resolve();
                 if (resFile == null || !(resFile instanceof ResFile)) continue;
+                if (!isSearchableUsesModule((ResFile) resFile)) continue;
+
                 if (!processor.execute(resFile, state.put(ACTUAL_NAME, o.getIdentifier().getText()))) return false;
-                if (!forModuleNameRefs) processModuleLevelEntities((ResFile) resFile, processor, state, false);
+                if (!forModuleNameRefs) {
+                    if (((ResFile) resFile).getEnclosedModule() instanceof ResConceptModuleDecl)
+                    processModuleLevelEntities((ResFile) resFile, processor, state, false, false);
+                }
             }
         }
         return true;
+    }
+
+    //TODO: Going to want to do some filtering here in the case where a uses clause initiates the processing
+    // ... in which case if the module is a concept, only return the set of math
+    //{defns}, if its facility -- then search {opproc decls} U {type reprs} U {math defns}.
+    private static boolean processModuleLevelEntitiesFromUsesClause(@NotNull ResModuleDecl module,
+                                                                    @NotNull ResScopeProcessor processor,
+                                                                    @NotNull ResolveState state,
+                                                                    boolean localProcessing) {
+        if (!processNamedElements(processor, state, module.getOperationLikeThings(), false)) return false;
+        if (!processNamedElements(processor, state, module.getFacilities(), false)) return false;
+        if (!processNamedElements(processor, state, module.getTypes(), false)) return false;
+        if (!processNamedElements(processor, state, module.getGenericTypeParams(), false)) return false;
+        if (!processNamedElements(processor, state, module.getMathDefnSigs(), localProcessing)) return false;
+        return true;
+    }
+
+    private static boolean isSearchableUsesModule(@NotNull ResFile e) {
+        if (e.getEnclosedModule() == null) return true; //its ok if we're null
+        ResModuleDecl m = e.getEnclosedModule();
+        return m instanceof ResFacilityModuleDecl ||
+                m instanceof ResPrecisModuleDecl ||
+                m instanceof ResConceptModuleDecl;
     }
 
     private boolean processVarSuperModules(@NotNull ResFile file,
@@ -300,14 +327,26 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                                               @NotNull ResScopeProcessor processor,
                                               @NotNull ResolveState state,
                                               boolean localProcessing) {
-        if (file.getEnclosedModule() == null) return true;
-        return processModuleLevelEntities(file.getEnclosedModule(), processor, state, localProcessing);
+        return processModuleLevelEntities(file, processor, state, localProcessing, false);
     }
 
+    static boolean processModuleLevelEntities(@NotNull ResFile file,
+                                              @NotNull ResScopeProcessor processor,
+                                              @NotNull ResolveState state,
+                                              boolean localProcessing,
+                                              boolean fromFacilities) {
+        if (file.getEnclosedModule() == null) return true;
+        return processModuleLevelEntities(file.getEnclosedModule(), processor, state, localProcessing, fromFacilities);
+    }
+
+    //TODO: Going to want to do some filtering here in the case where a uses clause initiates the processing
+    // ... in which case if the module is a concept, only return the set of math
+    //{defns}, if its facility -- then search {opproc decls} U {type reprs} U {math defns}.
     static boolean processModuleLevelEntities(@NotNull ResModuleDecl module,
                                               @NotNull ResScopeProcessor processor,
                                               @NotNull ResolveState state,
-                                              boolean localProcessing) {
+                                              boolean localProcessing,
+                                              boolean fromFacilities) {
         if (!processNamedElements(processor, state, module.getOperationLikeThings(), localProcessing)) return false;
         if (!processNamedElements(processor, state, module.getFacilities(), localProcessing)) return false;
         if (!processNamedElements(processor, state, module.getTypes(), localProcessing)) return false;
@@ -413,11 +452,11 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
     static boolean processNamedElements(@NotNull PsiScopeProcessor processor,
                                         @NotNull ResolveState state,
                                         @NotNull Collection<? extends ResNamedElement> elements,
-                                        boolean localResolve, boolean checkContainingFile) {
-
+                                        boolean localResolve,
+                                        boolean facilityResolve) {
         for (ResNamedElement definition : elements) {
             //if (!definition.isValid() || checkContainingFile && !allowed(definition.getContainingFile(), contextFile)) continue;
-            if ((localResolve || definition.isPublic()) &&
+            if ((localResolve || definition.isUsesClauseVisible() || facilityResolve) &&
                     !processor.execute(definition, state)) return false;
         }
         return true;

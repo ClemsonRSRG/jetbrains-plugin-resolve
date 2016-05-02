@@ -35,7 +35,7 @@ public abstract class ResNamedElementImpl
         return getIdentifier();
     }
 
-    public boolean isPublic() {
+    public boolean isUsesClauseVisible() {
         return true;
     }
 
@@ -166,7 +166,7 @@ public abstract class ResNamedElementImpl
             if ((flags & Iconable.ICON_FLAG_VISIBILITY) != 0) {
                 RowIcon rowIcon =
                         ElementBase.createLayeredIcon(this, icon, flags);
-                rowIcon.setIcon(isPublic() ? PlatformIcons.PUBLIC_ICON :
+                rowIcon.setIcon(isUsesClauseVisible() ? PlatformIcons.PUBLIC_ICON :
                         PlatformIcons.PRIVATE_ICON, 1);
                 return rowIcon;
             }

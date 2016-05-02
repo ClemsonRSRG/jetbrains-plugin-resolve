@@ -29,7 +29,7 @@ public interface ResNamedElement
         extends
         ResTypeOwner, ResMathMetaTypeExpOwner, ResCompositeElement, PsiNameIdentifierOwner, NavigationItem {
 
-    public boolean isPublic();
+    public boolean isUsesClauseVisible();
 
     @Nullable
     public PsiElement getIdentifier();

@@ -181,7 +181,7 @@ public class ResMathVarLikeReference
                                          @NotNull Collection<? extends ResNamedElement> elements,
                                          boolean localResolve) {
         for (ResNamedElement e : elements) {
-            if ((e.isPublic() || localResolve) && !processor.execute(e, state)) {
+            if ((e.isUsesClauseVisible() || localResolve) && !processor.execute(e, state)) {
                 return false;
             }
         }
