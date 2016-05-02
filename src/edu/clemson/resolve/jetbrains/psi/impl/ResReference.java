@@ -99,24 +99,21 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         PsiReference reference = qualifier.getReference();
         PsiElement target = reference != null ? reference.resolve() : null;
         if (target == null || target == qualifier) return false;
-        /*if (target instanceof ResFacilityDecl) {
+        if (target instanceof ResFacilityDecl) {
             ResFacilityDecl facility = ((ResFacilityDecl) target);
-            if (facility.getSpecification() != null) {
-                processModuleLevelEntities(facility.getSpecification(),
-                        processor, state, false);
-            }
-            for (ResExtensionPairing p : facility.getExtensionPairingList()) {
+            ResFile resolvedSpec = facility.resolveSpecification();
+            if (resolvedSpec != null) processModuleLevelEntities(resolvedSpec, processor, state, false);
+
+           /* for (ResExtensionPairing p : facility.getExtensionPairingList()) {
                 if (p.getModuleSpecList().isEmpty()) continue;
                 ResFile spec = (ResFile) p.getModuleSpecList().get(0).resolve();
                 if (spec == null) continue;
                 processModuleLevelEntities(spec, processor, state, false);
-            }
-        }*/
+            }*/
+        }
         else if (target instanceof ResFile) {
-            ResModuleDecl module = ((ResFile) target).getEnclosedModule();
-            if (module != null) {
-                processModuleLevelEntities((ResFile) target, processor, state, false);
-            }
+
+            processModuleLevelEntities((ResFile) target, processor, state, false);
         }
         return true;
     }
@@ -127,10 +124,8 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                                               boolean localResolve) {
 
         PsiElement parent = myElement.getParent();
-        if (myElement instanceof ResReferenceExp &&
-                ((ResReferenceExp) myElement).expectedToReferenceImportedModuleOrModuleAlias()) {
-            // if (!processUsesRequests(file, processor, state)) return false;
-            if (processUsesAndReferencedModules(file, processor, state)) return false;
+        if (myElement instanceof ResReferenceExp && ((ResReferenceExp) myElement).shouldReferenceModule()) {
+            if (processUsesAndReferencedModules(file, processor, state, true)) return false;
             return true;
         }
         if (parent instanceof ResSelectorExp) {
@@ -146,7 +141,8 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         if (!processBlock(processor, state, true)) return false;
         if (!processParameterLikeThings(processor, state, true)) return false;
         if (!processModuleLevelEntities(file, processor, state, true)) return false;
-        if (!processUsesRequests(file, processor, state)) return false;
+        //if (!processUsesRequests(file, processor, state)) return false;
+        if (!processUsesAndReferencedModules(file, processor, state)) return false;
         if (!processVarSuperModules(file, processor, state)) return false;
         return true;
     }
@@ -239,14 +235,14 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         return processNamedElements(processor, state, delegate.getVariants(), localResolve);
     }
 
-    private boolean processUsesRequests(@NotNull ResFile file,
+    /*private boolean processUsesRequests(@NotNull ResFile file,
                                         @NotNull ResScopeProcessor processor,
                                         @NotNull ResolveState state) {
         ResScopeProcessorBase delegate = createDelegate(processor);
         processUsesAndReferencedModules(file, delegate, state);
         //TODO: Need another for "processPlainReferencedFiles(..)"?
         return processNamedElements(processor, state, delegate.getVariants(), false);
-    }
+    }*/
 
     static boolean processUsesAndReferencedModules(@NotNull ResFile file,
                                                    @NotNull ResScopeProcessor processor,
@@ -264,8 +260,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                 PsiElement resFile = o.resolve();
                 if (resFile == null || !(resFile instanceof ResFile)) continue;
                 if (!processor.execute(resFile, state.put(ACTUAL_NAME, o.getIdentifier().getText()))) return false;
-                if (forModuleNameRefs) continue;
-                processModuleLevelEntities((ResFile) resFile, processor, state, false);
+                if (!forModuleNameRefs) processModuleLevelEntities((ResFile) resFile, processor, state, false);
             }
         }
         return true;

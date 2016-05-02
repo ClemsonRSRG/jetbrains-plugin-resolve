@@ -263,17 +263,11 @@ UsesSpecGroup ::= ModuleIdentSpecList ('from' ModuleLibraryIdentifierSpec
             /*'as' alias clause goes here here eventually*/ )? ';' {
     pin=1 methods=[getFromModuleLibraryIdentifier /*TODO: getAlias()*/]
 }
-
 private ModuleIdentSpecList ::=  ModuleIdentifierSpec (',' ModuleIdentifierSpec)* {recoverWhile=ModuleIdentSpecListRec }
 private ModuleIdentSpecListRec ::= !(';'|')'|'from'|'end')
 
 ModuleIdentifierSpec ::= identifier {methods=[getReferences getModuleIdentiferTextRange resolve]}
 ModuleLibraryIdentifierSpec ::= identifier {methods=[getReferences getModuleLibraryIdentiferTextRange resolve]}
-
-//its expression like because
-//private ModuleNameRef ::= ModuleReferenceExpression QualifiedModuleReferenceExpression?
-//ModuleReferenceExpression ::= identifier { methods=[getReference getQualifier resolve] }
-//left QualifiedModuleReferenceExpression ::= '::' identifier {elementType=ModuleReferenceExpression}
 
 // Module blocks & items
 
@@ -390,15 +384,14 @@ VarDef ::= identifier {methods=[getResTypeInner getReference]}
 // facility decls
 
 FacilityDecl ::= 'Facility' identifier 'is' NameExp ModuleArgList?
-('externally')? 'implemented' 'by' ModuleIdentifierSpec ModuleArgList?
-ExtensionList? ';' {pin=2 /*methods=[getSpecification]*/}
+('externally')? 'implemented' 'by' NameExp ModuleArgList?
+ExtensionList? ';' {pin=2 methods=[resolveSpecification]}
 
 private ExtensionList ::= (ExtensionPairing)* {recoverWhile=ExtensionListRec}
 private ExtensionListRec ::= !(';')
 
-ExtensionPairing ::= 'extended' 'by' ModuleIdentifierSpec ModuleArgList? ('externally')?
-'implemented' 'by' ModuleIdentifierSpec ModuleArgList? {pin=1}
-// operations
+ExtensionPairing ::= 'extended' 'by' NameExp ModuleArgList? ('externally')?
+'implemented' 'by' NameExp ModuleArgList? {pin=1}
 
 ModuleArgList ::= '(' ExpArgumentList ')' {pin=1}
 

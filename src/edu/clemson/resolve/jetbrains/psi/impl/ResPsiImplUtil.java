@@ -49,56 +49,24 @@ public class ResPsiImplUtil {
     public static ResModuleLibraryIdentifierSpec getFromModuleLibraryIdentifier(@NotNull ResUsesSpecGroup o) {
         return o.getModuleLibraryIdentifierSpec();
     }
-    /*
-        @NotNull
-        public static TextRange getModuleSpecTextRange(@NotNull ResModuleSpec moduleSpec) {
-            String text = moduleSpec.getText();
-            return !text.isEmpty() ? TextRange.create(0, text.length() - 1) :
-                    TextRange.EMPTY_RANGE;
-        }
 
-        @NotNull
-        public static TextRange getTextRange(@NotNull ResUsesString usesString) {
-            String text = usesString.getText();
-            return !text.isEmpty() && isQuote(text.charAt(0)) ?
-                    TextRange.create(1, text.length() - 1) : TextRange.EMPTY_RANGE;
-        }
-
-        @NotNull
-        public static String getPath(@NotNull ResUsesSpec usesSpec) {
-            return usesSpec.getUsesString().getPath();
-        }
-
-        @Nullable
-        public static String getName(@NotNull ResUsesSpec usesSpec) {
-            return getAlias(usesSpec);
-        }
-
-        @Nullable
-        public static String getAlias(@NotNull ResUsesSpec usesSpec) {
-            PsiElement identifier = usesSpec.getIdentifier();
-            if (identifier != null) {
-                return identifier.getText();
-            }
-            return null;
-        }
-
-        public static boolean shouldGoDeeper(@SuppressWarnings("UnusedParameters") ResUsesSpec o) {
-            return false;
-        }
-
-        private static boolean isQuote(char q) {
-            return q == '"';
-        }*/
-
-    @Nullable
-    public static PsiElement resolve(@NotNull ResModuleIdentifierSpec moduleIdentifier) {
-        return resolveModuleOrLibraryIdentifier(moduleIdentifier.getReferences(), e -> e instanceof ResFile);
-    }
-
-    @Nullable
-    public static PsiElement resolve(@NotNull ResModuleLibraryIdentifierSpec libraryIdentifier) {
-        return resolveModuleOrLibraryIdentifier(libraryIdentifier.getReferences(), e -> e instanceof PsiDirectory);
+    /**
+     * Note that we don't extend {@link PsiPolyVariantReference} for module references (like we do for
+     * {@link ResTypeReference}, and {@link ResReference}), instead we simply represent them in the PSI as a
+     * {@link ResReferenceExp}.
+     * <p>
+     * And since {@link ResReference} is the reference type/resolver for all reference exps, we just need a method to
+     * indicate situations where we only expect to resolve to other modules. Accordingly, the only place I can see
+     * where we actually use ordinary PSI reference exps to reference a <em>module</em> is within facility decl nodes --
+     * so this should really only be needed in
+     * {@link ResReference#processUsesAndReferencedModules(ResFile, ResScopeProcessor, ResolveState)}.</p>
+     *
+     * @param o an arbitrary reference expression.
+     * @return whether or not {@code o} should resolve back to some {@link PsiFile} containing a module.
+     */
+    public static boolean shouldReferenceModule(ResReferenceExp o) {
+        return PsiTreeUtil.getParentOfType(o, ResFacilityDecl.class) != null &&
+                PsiTreeUtil.getParentOfType(o, ResModuleArgList.class) == null;
     }
 
     @Nullable
@@ -126,16 +94,6 @@ public class ResPsiImplUtil {
         return new ResModuleLibraryReferenceSet(o).getAllReferences();
     }
 
-    /*  @Nullable
-        public static ResFile getSpecification(ResFacilityDecl o) {
-            if (o.getModuleSpecList().isEmpty()) return null;
-            ResModuleSpec specification = o.getModuleSpecList().get(0);
-            PsiFile specFile = specification.resolve();
-            if (!(specFile instanceof ResFile)) return null;
-            return (ResFile) specFile;
-        }
-    */
-
     @NotNull
     public static PsiElement getIdentifier(ResMathReferenceExp o) {
         return PsiTreeUtil.getChildOfType(o, ResMathSymbolName.class);
@@ -156,26 +114,6 @@ public class ResPsiImplUtil {
         return PsiTreeUtil.getChildOfType(o, ResReferenceExp.class);
     }
 
-    /** Note that we don't extend {@link PsiPolyVariantReference} for module references (like we do for
-     *  {@link ResTypeReference}, and {@link ResReference}), instead we simply represent them in the Psi as an
-     *  {@link ResReferenceExp}.
-     *  <p>
-     *  And since {@link ResReference} is the reference type/resolver for all reference exps, we need a method to
-     *  indicate situations where we only expect to resolve to other modules. Accordingly, the only place I can see
-     *  where  we actually use ordinary Psi reference exps to reference a <em>module</em> is within
-     *  {@link ResFacilityDecl}s. Initially I thought they would come up in module headers as well (such as:
-     *  "Realiz X for Y;") but it turns out those are actually ordinary {@link ResModuleReference}s.</p>
-     *
-     * @param o an arbitrary reference expression
-     * @return whether or not this
-     */
-    public static boolean shouldReferenceModule(ResReferenceExp o) {
-        //only facilities for now + becareful not to flag nameExps appearing in the arg list..
-        boolean result = PsiTreeUtil.getParentOfType(o, ResFacilityDecl.class) != null &&
-                PsiTreeUtil.getParentOfType(o, ResModuleArgList.class) == null;
-        return result;
-    }
-
     //TODO: replace with default method in ResReferenceExpBase
     @Nullable
     public static PsiElement resolve(@NotNull ResReferenceExp o) {
@@ -185,6 +123,16 @@ public class ResPsiImplUtil {
     @Nullable
     public static PsiElement resolve(@NotNull ResTypeReferenceExp o) { // todo: replace with default method in GoReferenceExpressionBase
         return o.getReference().resolve();
+    }
+
+    @Nullable
+    public static PsiElement resolve(@NotNull ResModuleIdentifierSpec moduleIdentifier) {
+        return resolveModuleOrLibraryIdentifier(moduleIdentifier.getReferences(), e -> e instanceof ResFile);
+    }
+
+    @Nullable
+    public static PsiElement resolve(@NotNull ResModuleLibraryIdentifierSpec libraryIdentifier) {
+        return resolveModuleOrLibraryIdentifier(libraryIdentifier.getReferences(), e -> e instanceof PsiDirectory);
     }
 
     @NotNull
@@ -207,13 +155,6 @@ public class ResPsiImplUtil {
         return new ResVarReference(o);
     }
 
-    /*
-        @NotNull
-        public static PsiReference[] getReferences(@NotNull ResModuleSpec o) {
-            if (o.getTextLength() == 0) return PsiReference.EMPTY_ARRAY;
-            return new ResUsesReferenceSet(o).getAllReferences();
-        }
-    */
     @NotNull
     public static String getText(@Nullable ResType o) {
         if (o == null) return "";
@@ -313,6 +254,15 @@ public class ResPsiImplUtil {
         return ResCompositeElementImpl.processDeclarationsDefault(
                 o, processor, state, lastParent, place);
     }
+
+    @Nullable
+    public static ResFile resolveSpecification(ResFacilityDecl o) {
+        if (o.getReferenceExpList().isEmpty()) return null;
+        ResReferenceExp specification = o.getReferenceExpList().get(0);
+        PsiElement result = specification.resolve();
+        return result instanceof ResFile ? (ResFile) result : null;
+    }
+
 
     public static boolean prevDot(@Nullable PsiElement parent) {
         PsiElement prev = parent == null ? null : PsiTreeUtil.prevVisibleLeaf(parent);

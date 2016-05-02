@@ -942,8 +942,8 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // 'extended' 'by' ModuleIdentifierSpec ModuleArgList? ('externally')?
-  // 'implemented' 'by' ModuleIdentifierSpec ModuleArgList?
+  // 'extended' 'by' NameExp ModuleArgList? ('externally')?
+  // 'implemented' 'by' NameExp ModuleArgList?
   public static boolean ExtensionPairing(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExtensionPairing")) return false;
     if (!nextTokenIs(b, EXTENDED)) return false;
@@ -952,12 +952,12 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, EXTENDED);
     p = r; // pin = 1
     r = r && report_error_(b, consumeToken(b, BY));
-    r = p && report_error_(b, ModuleIdentifierSpec(b, l + 1)) && r;
+    r = p && report_error_(b, NameExp(b, l + 1)) && r;
     r = p && report_error_(b, ExtensionPairing_3(b, l + 1)) && r;
     r = p && report_error_(b, ExtensionPairing_4(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, IMPLEMENTED)) && r;
     r = p && report_error_(b, consumeToken(b, BY)) && r;
-    r = p && report_error_(b, ModuleIdentifierSpec(b, l + 1)) && r;
+    r = p && report_error_(b, NameExp(b, l + 1)) && r;
     r = p && ExtensionPairing_8(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
@@ -1011,7 +1011,7 @@ public class ResParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // 'Facility' identifier 'is' NameExp ModuleArgList?
-  // ('externally')? 'implemented' 'by' ModuleIdentifierSpec ModuleArgList?
+  // ('externally')? 'implemented' 'by' NameExp ModuleArgList?
   // ExtensionList? ';'
   public static boolean FacilityDecl(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FacilityDecl")) return false;
@@ -1027,7 +1027,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = p && report_error_(b, FacilityDecl_5(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, IMPLEMENTED)) && r;
     r = p && report_error_(b, consumeToken(b, BY)) && r;
-    r = p && report_error_(b, ModuleIdentifierSpec(b, l + 1)) && r;
+    r = p && report_error_(b, NameExp(b, l + 1)) && r;
     r = p && report_error_(b, FacilityDecl_9(b, l + 1)) && r;
     r = p && report_error_(b, FacilityDecl_10(b, l + 1)) && r;
     r = p && consumeToken(b, SEMICOLON) && r;

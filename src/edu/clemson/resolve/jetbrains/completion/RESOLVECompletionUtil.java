@@ -272,9 +272,20 @@ public class RESOLVECompletionUtil {
         return LookupElementBuilder.createWithSmartPointer(directory.getName(), directory)
                 .withIcon(RESOLVEIcons.DIRECTORY);
     }
+
     @NotNull
     public static LookupElementBuilder createResolveFileLookupElement(@NotNull ResFile resolveFile) {
-        return LookupElementBuilder.create(resolveFile.getVirtualFile().getNameWithoutExtension())
+        return createResolveFileLookupElement(resolveFile, false);
+    }
+
+    @NotNull
+    public static LookupElementBuilder createResolveFileLookupElement(@NotNull ResFile resolveFile, boolean forTypes) {
+        LookupElementBuilder result = LookupElementBuilder.create(resolveFile.getVirtualFile()
+                .getNameWithoutExtension())
                 .withIcon(resolveFile.getIcon(0));
+        if (forTypes) {
+            result = result.withInsertHandler(Lazy.FACILITY_OR_MODULE_INSERT_HANDLER);
+        }
+        return result;
     }
 }

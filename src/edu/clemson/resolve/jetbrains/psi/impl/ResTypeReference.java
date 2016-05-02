@@ -76,10 +76,8 @@ public class ResTypeReference extends PsiPolyVariantReferenceBase<ResTypeReferen
         PsiElement target = qualifier.resolve();
         if (target == null || target == qualifier) return false;
         if (target instanceof ResFacilityDecl) {
-            /*ResFile specFile = ((ResFacilityDecl) target).getSpecification();
-            if (specFile != null) {
-                ResReference.processModuleLevelEntities(specFile, processor, state, false);
-            }*/
+            ResFile specFile = ((ResFacilityDecl) target).resolveSpecification();
+            if (specFile != null) ResReference.processModuleLevelEntities(specFile, processor, state, false);
         }
         else if (target instanceof ResFile) {
             int i;
@@ -105,7 +103,7 @@ public class ResTypeReference extends PsiPolyVariantReferenceBase<ResTypeReferen
 
         //TODO: What we really need to avoid finding both the models and reprs
         // is some flag, say, "stopAfterFirst" (I think...)
-        if (!processTypeSuperModules(file, processor, state)) return false;
+        //if (!processTypeSuperModules(file, processor, state)) return false;
         return true;
     }
 

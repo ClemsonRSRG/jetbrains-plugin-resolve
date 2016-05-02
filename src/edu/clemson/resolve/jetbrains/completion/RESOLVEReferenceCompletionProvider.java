@@ -59,7 +59,7 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
                     return e instanceof ResTypeLikeNodeDecl ||
                             e instanceof ResFacilityDecl ||
                             e instanceof ResTypeParamDecl ||
-                            e instanceof ResModuleDecl;
+                            e instanceof ResFile;
                 }
             };
             ((ResTypeReference) reference).processResolveVariants(aProcessor);
@@ -127,13 +127,14 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
                 return RESOLVECompletionUtil.createVariableLikeLookupElement((ResNamedElement) o);
             }
         }
-        /** Ok, here's the deal: If you look in {@link ResModuleReference#createLookupItem(PsiElement)} you'll see
-         *  handling of whats below there as well.. well this one is here for {@link ResReference}s and
-         *  {@link ResTypeReference}s (for instance, modules/psiFiles) can be referenced in a type qualifier or in
-         *  a facility decl, etc.
+        /**
+         * If you look in {@link ResModuleReference#createLookupItem(PsiElement)} you'll see
+         * handling of whats below there as well.. this one is here for {@link ResReference}s and
+         * {@link ResTypeReference}s (for instance, modules/psiFiles) can be referenced in a type qualifier or in
+         * a facility decl, etc.
          */
         else if (o instanceof ResFile) {
-            return RESOLVECompletionUtil.createResolveFileLookupElement((ResFile) o);
+            return RESOLVECompletionUtil.createResolveFileLookupElement((ResFile) o, forTypes);
         }
         return null;
     }
