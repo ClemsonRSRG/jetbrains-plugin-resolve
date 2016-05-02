@@ -26,11 +26,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-/** Represents a reference to some directory (or a specific {@link PsiFile} file).
- *  This code is adapted to our purposes from the intellij go language
- *  plugin located here:
+/** Represents a reference to some directory (or specific {@link PsiFile} file) introduced via a uses clause or
+ *  super module (Impl X for Y).
  *  <p>
- *  <a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin">https://github.com/go-lang-plugin-org/go-lang-idea-plugin/a>
+ *  This is distinguished from an {@link ResReferenceExp} that reference modules in either:
+ *  <ul><li>a facility decl</li>
+ *      <li>a type (as a qualifier, etc)</li>
+ *  </ul></p>
  */
 public class ResModuleReference extends FileReference {
 
@@ -52,27 +54,16 @@ public class ResModuleReference extends FileReference {
 
     @NotNull
     @Override
-    protected ResolveResult[] innerResolve(boolean caseSensitive,
-                                           @NotNull PsiFile file) {
+    protected ResolveResult[] innerResolve(boolean caseSensitive, @NotNull PsiFile file) {
         //there's got to be a real way of searching for extensioned filetypes... geez
         String referenceText = getText();
 
         Set<ResolveResult> result = ContainerUtil.newLinkedHashSet();
         Set<ResolveResult> innerResult = ContainerUtil.newLinkedHashSet();
         Collection<PsiFileSystemItem> ctxs = getContexts();
-        //TODO: Ok, getContexts() needs to return only the Std context... (and the context representing the current proj)
+
         for (PsiFileSystemItem context : ctxs) {
-
-            //if (!(context instanceof PsiDirectory)) continue;
-            //first resolve the top level context
-            //innerResolveInContext(referenceText, context, innerResult, caseSensitive);
-            //PsiDirectory[] ctxSubdirectories = ((PsiDirectory) context).getSubdirectories();
-
-            //for (PsiDirectory subctx : ctxSubdirectories) {
-                //now resolve into each subdirectory we find (this is going to be as deep as we search)
-                innerResolveInContext(referenceText, context, innerResult, caseSensitive);
-           // }
-
+            innerResolveInContext(referenceText, context, innerResult, caseSensitive);
             for (ResolveResult resolveResult : innerResult) {
                 PsiElement element = resolveResult.getElement();
                 if (element instanceof ResFile) {
@@ -80,8 +71,7 @@ public class ResModuleReference extends FileReference {
                 }
             }
         }
-        return result.isEmpty() ? ResolveResult.EMPTY_ARRAY :
-                result.toArray(new ResolveResult[result.size()]);
+        return result.isEmpty() ? ResolveResult.EMPTY_ARRAY : result.toArray(new ResolveResult[result.size()]);
     }
 
     @Override

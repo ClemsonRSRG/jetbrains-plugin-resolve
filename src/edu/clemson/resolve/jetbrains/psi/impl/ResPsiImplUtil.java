@@ -17,6 +17,7 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.Predicate;
 import edu.clemson.resolve.jetbrains.ResTypes;
 import edu.clemson.resolve.jetbrains.psi.*;
+import edu.clemson.resolve.jetbrains.psi.impl.imports.ResModuleReference;
 import edu.clemson.resolve.jetbrains.psi.impl.imports.ResModuleReferenceSet;
 import edu.clemson.resolve.jetbrains.psi.impl.imports.ResModuleLibraryReferenceSet;
 import org.jetbrains.annotations.NotNull;
@@ -125,9 +126,7 @@ public class ResPsiImplUtil {
         return new ResModuleLibraryReferenceSet(o).getAllReferences();
     }
 
-
-    /*
-        @Nullable
+    /*  @Nullable
         public static ResFile getSpecification(ResFacilityDecl o) {
             if (o.getModuleSpecList().isEmpty()) return null;
             ResModuleSpec specification = o.getModuleSpecList().get(0);
@@ -157,6 +156,19 @@ public class ResPsiImplUtil {
         return PsiTreeUtil.getChildOfType(o, ResReferenceExp.class);
     }
 
+    /** Note that we don't extend {@link PsiPolyVariantReference} for module references (like we do for
+     *  {@link ResTypeReference}, and {@link ResReference}), instead we simply represent them in the Psi as an
+     *  {@link ResReferenceExp}.
+     *  <p>
+     *  And since {@link ResReference} is the reference type/resolver for all reference exps, we need a method to
+     *  indicate situations where we only expect to resolve to other modules. Accordingly, the only place I can see
+     *  where  we actually use ordinary Psi reference exps to reference a <em>module</em> is within
+     *  {@link ResFacilityDecl}s. Initially I thought they would come up in module headers as well (such as:
+     *  "Realiz X for Y;") but it turns out those are actually ordinary {@link ResModuleReference}s.</p>
+     *
+     * @param o an arbitrary reference expression
+     * @return whether or not this
+     */
     public static boolean shouldReferenceModule(ResReferenceExp o) {
         //only facilities for now + becareful not to flag nameExps appearing in the arg list..
         boolean result = PsiTreeUtil.getParentOfType(o, ResFacilityDecl.class) != null &&
