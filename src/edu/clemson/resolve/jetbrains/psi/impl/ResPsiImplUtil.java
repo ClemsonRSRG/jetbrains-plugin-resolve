@@ -157,7 +157,7 @@ public class ResPsiImplUtil {
         return PsiTreeUtil.getChildOfType(o, ResReferenceExp.class);
     }
 
-    public static boolean expectedToReferenceImportedModuleOrModuleAlias(ResReferenceExp o) {
+    public static boolean shouldReferenceModule(ResReferenceExp o) {
         //only facilities for now + becareful not to flag nameExps appearing in the arg list..
         boolean result = PsiTreeUtil.getParentOfType(o, ResFacilityDecl.class) != null &&
                 PsiTreeUtil.getParentOfType(o, ResModuleArgList.class) == null;

@@ -490,7 +490,7 @@ private ExpListRecover ::= !('%'|'+'|'-'|'('|')'|','|'*'|'<'|'<='|'>'|'>='|'end'
 
 NameExp ::= ReferenceExp QualifiedReferenceExp? {elementType=ReferenceExp}
 left QualifiedReferenceExp ::= '::' identifier {elementType=ReferenceExp}
-ReferenceExp ::= identifier { methods=[getReference getQualifier expectedToReferenceImportedModuleOrModuleAlias] extends=Exp}
+ReferenceExp ::= identifier { methods=[getReference getQualifier resolve shouldReferenceModule] extends=Exp}
 
 LiteralExp ::= int|StringLiteral|BooleanLiteral {extends=Exp}
 BooleanLiteral ::= true | false
