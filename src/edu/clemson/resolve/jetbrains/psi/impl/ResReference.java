@@ -11,7 +11,6 @@ import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.jetbrains.psi.*;
-import edu.clemson.resolve.semantics.ModuleIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,8 +18,8 @@ import java.util.*;
 
 public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBase> {
 
-    public static final Key<SmartPsiElementPointer<ResReferenceExpBase>> CONTEXT = Key.create("CONTEXT");
-    public static final Key<String> ACTUAL_NAME = Key.create("ACTUAL_NAME");
+    private static final Key<SmartPsiElementPointer<ResReferenceExpBase>> CONTEXT = Key.create("CONTEXT");
+    private static final Key<String> ACTUAL_NAME = Key.create("ACTUAL_NAME");
 
     private static final ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase> MY_RESOLVER =
             new ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase>() {
@@ -37,7 +36,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         return myElement.getIdentifier();
     }
 
-    public ResReference(@NotNull ResReferenceExpBase o) {
+    ResReference(@NotNull ResReferenceExpBase o) {
         super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(), o.getIdentifier().getTextLength()));
     }
 
@@ -126,7 +125,14 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                                               @NotNull ResScopeProcessor processor,
                                               @NotNull ResolveState state,
                                               boolean localResolve) {
+
         PsiElement parent = myElement.getParent();
+        if (myElement instanceof ResReferenceExp &&
+                ((ResReferenceExp) myElement).expectedToReferenceImportedModuleOrModuleAlias()) {
+            // if (!processUsesRequests(file, processor, state)) return false;
+            if (processUsesAndReferencedModules(file, processor, state)) return false;
+            return true;
+        }
         if (parent instanceof ResSelectorExp) {
             boolean result = processSelector((ResSelectorExp) parent, processor, state, myElement);
             if (processor.isCompletion()) return result;
@@ -237,62 +243,31 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                                         @NotNull ResScopeProcessor processor,
                                         @NotNull ResolveState state) {
         ResScopeProcessorBase delegate = createDelegate(processor);
-        //processFilesInSpecifiedUsesDirectories(file, delegate, state);
+        processUsesAndReferencedModules(file, delegate, state);
         //TODO: Need another for "processPlainReferencedFiles(..)"?
         return processNamedElements(processor, state, delegate.getVariants(), false);
     }
 
-    static boolean processFilesInSpecifiedUsesDirectories(@NotNull ResFile file,
-                                                          @NotNull ResScopeProcessor processor,
-                                                          @NotNull ResolveState state) {
+    static boolean processUsesAndReferencedModules(@NotNull ResFile file,
+                                                   @NotNull ResScopeProcessor processor,
+                                                   @NotNull ResolveState state) {
+        return processUsesAndReferencedModules(file, processor, state, false);
+    }
+
+    private static boolean processUsesAndReferencedModules(@NotNull ResFile file,
+                                                           @NotNull ResScopeProcessor processor,
+                                                           @NotNull ResolveState state,
+                                                           boolean forModuleNameRefs) {
         List<ResUsesSpecGroup> groups = file.getUsesSpecGroups();
         for (ResUsesSpecGroup group : groups) {
-            //we need to search the appropriate componentDir to find the module referenced by ResModuleIdentifier
-            //if from is not null, then it's safe to say the last ModuleIdentifier in the list is the one that
-            //identifies the directory/component we ultimately want to search
-            //PsiDirectory componentResolveDir = importString.resolve();
-            //ResModuleIdentifier from = group.getFromModuleIdentifier();
-           // if (from != null) {
-           //     PsiElement resolveDir = from.resolve();
-                //if the 'from' module identifier doesn't resolve back to a PSI directory (AND that directory
-                //isn't a root library component!) then skip to the next one, the user screwed up.
-                /*if (!(resolveDir instanceof PsiDirectory)) {
-                    from = null;
-                    continue;
-                }*/
-           //     int i;
-            //    i=0;
-           // }
-            //for (ResModuleIdentifier identifier : group.getModuleIdentifierList()) {
-            //}
-        }
-        //for (Map.Entry<String, Collection<ResUsesSpec>> entry : file.getImportMap().entrySet()) {
-       /* for (ResUsesSpec o : file.getUsesSpecGroups()) {
-            ResUsesString importString = o.getUsesString();
-            if (o.getAlias() == null) {
-                PsiElement resolve = importString.resolve();
-                Set<ResModuleDecl> accessibleModules = new LinkedHashSet<>();
-
-                if (resolve != null) {
-                    if (resolve instanceof PsiDirectory) {
-                        for (PsiFile f : ((PsiDirectory) resolve).getFiles()) {
-                            if (f instanceof ResFile) {
-                                ContainerUtil.addIfNotNull(((ResFile) f).getEnclosedModule(), accessibleModules);
-                            }
-                        }
-                    }
-                    else if (resolve instanceof ResFile) {
-                        ContainerUtil.addIfNotNull(((ResFile) resolve).getEnclosedModule(), accessibleModules);
-                    }
-                }
-                for (ResModuleDecl accessibleModule : accessibleModules) {
-                    if (!processor.execute(accessibleModule, state.put(ACTUAL_NAME, accessibleModule.getName())))
-                        return false;
-                    ResReference.processModuleLevelEntities(accessibleModule, processor, state, false);
-                }
+            for (ResModuleIdentifierSpec o : group.getModuleIdentifierSpecList()) {
+                PsiElement resFile = o.resolve();
+                if (resFile == null || !(resFile instanceof ResFile)) continue;
+                if (!processor.execute(resFile, state.put(ACTUAL_NAME, o.getIdentifier().getText()))) return false;
+                if (forModuleNameRefs) continue;
+                processModuleLevelEntities((ResFile) resFile, processor, state, false);
             }
-        }*/
-        //}
+        }
         return true;
     }
 

@@ -13,8 +13,8 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.jetbrains.RESOLVEFileType;
 import edu.clemson.resolve.jetbrains.psi.ResFile;
-import edu.clemson.resolve.jetbrains.psi.ResModuleIdentifier;
-import edu.clemson.resolve.jetbrains.psi.ResModuleLibraryIdentifier;
+import edu.clemson.resolve.jetbrains.psi.ResModuleIdentifierSpec;
+import edu.clemson.resolve.jetbrains.psi.ResModuleLibraryIdentifierSpec;
 import edu.clemson.resolve.jetbrains.psi.ResUsesSpecGroup;
 import edu.clemson.resolve.jetbrains.sdk.RESOLVESdkUtil;
 import org.jetbrains.annotations.NotNull;
@@ -49,7 +49,7 @@ public class ResModuleReferenceSet extends FileReferenceSet {
      */
     private static final Condition<PsiFileSystemItem> RES_FILE_FILTER = e -> e instanceof ResFile;
 
-    public ResModuleReferenceSet(@NotNull ResModuleIdentifier moduleIdentifier) {
+    public ResModuleReferenceSet(@NotNull ResModuleIdentifierSpec moduleIdentifier) {
         super(moduleIdentifier.getText(), moduleIdentifier,
                 moduleIdentifier.getModuleIdentiferTextRange().getStartOffset(), null, true);
     }
@@ -68,22 +68,29 @@ public class ResModuleReferenceSet extends FileReferenceSet {
         Project project = file.getProject();
 
 
-        PsiElement e = getElement();
-        if (e.getParent() instanceof ResUsesSpecGroup) {
-            ResUsesSpecGroup groupParent = (ResUsesSpecGroup) e.getParent();
-            ResModuleLibraryIdentifier desiredLib = groupParent.getFromModuleLibraryIdentifier();
-            int i;
-            i=0;
-        }
-
         LinkedHashSet<VirtualFile> sourceRoots = newLinkedHashSet();
-        VirtualFile rootSdkDir = RESOLVESdkUtil.getSdkSrcDir(project, module);
-        ContainerUtil.addIfNotNull(sourceRoots, rootSdkDir);
 
-        //add all contexts (subdirectories) we wanna search
-        if (rootSdkDir != null && rootSdkDir.isDirectory()) {
-            for (VirtualFile v : rootSdkDir.getChildren()) {
-                if (v.isDirectory()) sourceRoots.add(v);
+        PsiElement e = getElement();
+        //handle the 'from' clause..
+        if (e.getParent() instanceof ResUsesSpecGroup &&
+                ((ResUsesSpecGroup) e.getParent()).getFromModuleLibraryIdentifier() != null) {
+            ResModuleLibraryIdentifierSpec desiredLib =
+                    ((ResUsesSpecGroup) e.getParent()).getFromModuleLibraryIdentifier();
+            if (desiredLib != null) {
+                PsiElement ele = desiredLib.resolve();
+                if (ele != null && ele instanceof PsiDirectory) {
+                    sourceRoots.add(((PsiDirectory) ele).getVirtualFile());
+                }
+            }
+        }
+        else {
+            VirtualFile rootSdkDir = RESOLVESdkUtil.getSdkSrcDir(project, module);
+            ContainerUtil.addIfNotNull(sourceRoots, rootSdkDir);
+            //add all contexts (subdirectories) we wanna search
+            if (rootSdkDir != null && rootSdkDir.isDirectory()) {
+                for (VirtualFile v : rootSdkDir.getChildren()) {
+                    if (v.isDirectory()) sourceRoots.add(v);
+                }
             }
         }
         return ContainerUtil.mapNotNull(sourceRoots, psiManager::findDirectory);

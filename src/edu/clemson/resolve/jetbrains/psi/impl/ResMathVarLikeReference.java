@@ -98,7 +98,7 @@ public class ResMathVarLikeReference
         ResReference.processParameterLikeThings(myElement, delegate);
         if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
         if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
-        if (!ResReference.processFilesInSpecifiedUsesDirectories(file, processor, state)) return false;
+        if (!ResReference.processUsesAndReferencedModules(file, processor, state)) return false;
         if (!processSuperModules(file, processor, state)) return false;
         if (!processBuiltin(processor, state, myElement)) return false;
         return true;

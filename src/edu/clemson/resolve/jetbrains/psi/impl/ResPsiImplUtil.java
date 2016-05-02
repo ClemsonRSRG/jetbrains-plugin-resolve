@@ -33,20 +33,20 @@ import org.jetbrains.annotations.Nullable;
 public class ResPsiImplUtil {
 
     @NotNull
-    public static TextRange getModuleIdentiferTextRange(@NotNull ResModuleIdentifier moduleIdentifier) {
+    public static TextRange getModuleIdentiferTextRange(@NotNull ResModuleIdentifierSpec moduleIdentifier) {
         String text = moduleIdentifier.getText();
         return !text.isEmpty() ? TextRange.create(0, text.length() - 1) : TextRange.EMPTY_RANGE;
     }
 
     @NotNull
-    public static TextRange getModuleLibraryIdentiferTextRange(@NotNull ResModuleLibraryIdentifier libraryIdentifier) {
+    public static TextRange getModuleLibraryIdentiferTextRange(@NotNull ResModuleLibraryIdentifierSpec libraryIdentifier) {
         String text = libraryIdentifier.getText();
         return !text.isEmpty() ? TextRange.create(0, text.length() - 1) : TextRange.EMPTY_RANGE;
     }
 
     @Nullable
-    public static ResModuleLibraryIdentifier getFromModuleLibraryIdentifier(@NotNull ResUsesSpecGroup o) {
-        return o.getModuleLibraryIdentifier();
+    public static ResModuleLibraryIdentifierSpec getFromModuleLibraryIdentifier(@NotNull ResUsesSpecGroup o) {
+        return o.getModuleLibraryIdentifierSpec();
     }
     /*
         @NotNull
@@ -91,12 +91,12 @@ public class ResPsiImplUtil {
         }*/
 
     @Nullable
-    public static PsiElement resolve(@NotNull ResModuleIdentifier moduleIdentifier) {
+    public static PsiElement resolve(@NotNull ResModuleIdentifierSpec moduleIdentifier) {
         return resolveModuleOrLibraryIdentifier(moduleIdentifier.getReferences(), e -> e instanceof ResFile);
     }
 
     @Nullable
-    public static PsiElement resolve(@NotNull ResModuleLibraryIdentifier libraryIdentifier) {
+    public static PsiElement resolve(@NotNull ResModuleLibraryIdentifierSpec libraryIdentifier) {
         return resolveModuleOrLibraryIdentifier(libraryIdentifier.getReferences(), e -> e instanceof PsiDirectory);
     }
 
@@ -114,16 +114,18 @@ public class ResPsiImplUtil {
     }
 
     @NotNull
-    public static PsiReference[] getReferences(@NotNull ResModuleIdentifier o) {
+    public static PsiReference[] getReferences(@NotNull ResModuleIdentifierSpec o) {
         if (o.getTextLength() < 1) return PsiReference.EMPTY_ARRAY;
         return new ResModuleReferenceSet(o).getAllReferences();
     }
 
     @NotNull
-    public static PsiReference[] getReferences(@NotNull ResModuleLibraryIdentifier o) {
+    public static PsiReference[] getReferences(@NotNull ResModuleLibraryIdentifierSpec o) {
         if (o.getTextLength() < 1) return PsiReference.EMPTY_ARRAY;
         return new ResModuleLibraryReferenceSet(o).getAllReferences();
     }
+
+
     /*
         @Nullable
         public static ResFile getSpecification(ResFacilityDecl o) {
@@ -153,6 +155,19 @@ public class ResPsiImplUtil {
     @Nullable
     public static ResReferenceExp getQualifier(@NotNull ResReferenceExp o) {
         return PsiTreeUtil.getChildOfType(o, ResReferenceExp.class);
+    }
+
+    public static boolean expectedToReferenceImportedModuleOrModuleAlias(ResReferenceExp o) {
+        //only facilities for now + becareful not to flag nameExps appearing in the arg list..
+        boolean result = PsiTreeUtil.getParentOfType(o, ResFacilityDecl.class) != null &&
+                PsiTreeUtil.getParentOfType(o, ResModuleArgList.class) == null;
+        return result;
+    }
+
+    //TODO: replace with default method in ResReferenceExpBase
+    @Nullable
+    public static PsiElement resolve(@NotNull ResReferenceExp o) {
+        return o.getReference().resolve();
     }
 
     @Nullable

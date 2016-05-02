@@ -14,6 +14,7 @@ import edu.clemson.resolve.jetbrains.psi.impl.ResMathVarLikeReference;
 import edu.clemson.resolve.jetbrains.psi.impl.ResReference;
 import edu.clemson.resolve.jetbrains.psi.impl.ResScopeProcessor;
 import edu.clemson.resolve.jetbrains.psi.impl.ResTypeReference;
+import edu.clemson.resolve.jetbrains.psi.impl.imports.ResModuleReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -125,6 +126,14 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
                 //TODO: Apply type info to the lookup renderers for these 'var like' elements
                 return RESOLVECompletionUtil.createVariableLikeLookupElement((ResNamedElement) o);
             }
+        }
+        /** Ok, here's the deal: If you look in {@link ResModuleReference#createLookupItem(PsiElement)} you'll see
+         *  handling of whats below there as well.. well this one is here for {@link ResReference}s and
+         *  {@link ResTypeReference}s (for instance, modules/psiFiles) can be referenced in a type qualifier or in
+         *  a facility decl, etc.
+         */
+        else if (o instanceof ResFile) {
+            return RESOLVECompletionUtil.createResolveFileLookupElement((ResFile) o);
         }
         return null;
     }

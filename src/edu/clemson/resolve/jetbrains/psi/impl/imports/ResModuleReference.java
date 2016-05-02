@@ -32,7 +32,7 @@ import java.util.Set;
  *  <p>
  *  <a href="https://github.com/go-lang-plugin-org/go-lang-idea-plugin">https://github.com/go-lang-plugin-org/go-lang-idea-plugin/a>
  */
-class ResModuleReference extends FileReference {
+public class ResModuleReference extends FileReference {
 
     ResModuleReference(@NotNull FileReferenceSet fileReferenceSet, TextRange range, int index, String text) {
         super(fileReferenceSet, range, index, text);

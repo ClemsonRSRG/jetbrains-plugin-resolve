@@ -224,7 +224,7 @@ PrecisBlock
 'end' identifier ';' {pin(".*")=2}
 
 PrecisExtensionModuleDecl ::= 'Precis' 'Extension' identifier 'for'
-ModuleIdentifier ('with' ModuleIdentifier)? ';'
+ModuleIdentifierSpec ('with' ModuleIdentifierSpec)? ';'
 PrecisBlock
 'end' identifier ';' {pin(".*")=2}
 
@@ -235,14 +235,15 @@ ConceptBlock
 'end' identifier ';' {pin(".*")=1}
 
 ConceptExtensionModuleDecl ::=
-'Concept' 'Extension' identifier SpecModuleParameters? 'for' ModuleIdentifier ';'
+'Concept' 'Extension' identifier SpecModuleParameters? 'for' ModuleIdentifierSpec ';'
 UsesList?
 RequiresClause?
 ConceptBlock
 'end' identifier ';' {pin(".*")=2}
 
 ImplModuleDecl ::= 'Implementation' identifier ImplModuleParameters?
-'for' ModuleIdentifier ('of' ModuleIdentifier)? ';'
+'for' ModuleIdentifierSpec ('of' ModuleIdentifierSpec)? ';' //These should be ModuleIdentifierSpecs not NameExps since
+//they essentially function as 'implicit imports'
 UsesList?
 RequiresClause?
 ImplBlock
@@ -258,16 +259,21 @@ FacilityBlock
 
 UsesList ::= 'uses' (UsesSpecGroup | '(' UsesSpecGroup+ ')' ';' )
 
-UsesSpecGroup ::= ModuleIdentList ('from' ModuleLibraryIdentifier
+UsesSpecGroup ::= ModuleIdentSpecList ('from' ModuleLibraryIdentifierSpec
             /*'as' alias clause goes here here eventually*/ )? ';' {
     pin=1 methods=[getFromModuleLibraryIdentifier /*TODO: getAlias()*/]
 }
 
-private ModuleIdentList ::=  ModuleIdentifier (',' ModuleIdentifier)* {recoverWhile=ModuleIdentListRec }
-private ModuleIdentListRec ::= !(';'|')'|'from'|'end')
+private ModuleIdentSpecList ::=  ModuleIdentifierSpec (',' ModuleIdentifierSpec)* {recoverWhile=ModuleIdentSpecListRec }
+private ModuleIdentSpecListRec ::= !(';'|')'|'from'|'end')
 
-ModuleIdentifier ::= identifier {methods=[getReferences getModuleIdentiferTextRange resolve]}
-ModuleLibraryIdentifier ::= identifier {methods=[getReferences getModuleLibraryIdentiferTextRange resolve]}
+ModuleIdentifierSpec ::= identifier {methods=[getReferences getModuleIdentiferTextRange resolve]}
+ModuleLibraryIdentifierSpec ::= identifier {methods=[getReferences getModuleLibraryIdentiferTextRange resolve]}
+
+//its expression like because
+//private ModuleNameRef ::= ModuleReferenceExpression QualifiedModuleReferenceExpression?
+//ModuleReferenceExpression ::= identifier { methods=[getReference getQualifier resolve] }
+//left QualifiedModuleReferenceExpression ::= '::' identifier {elementType=ModuleReferenceExpression}
 
 // Module blocks & items
 
@@ -383,15 +389,15 @@ VarDef ::= identifier {methods=[getResTypeInner getReference]}
 
 // facility decls
 
-FacilityDecl ::= 'Facility' identifier 'is' ModuleIdentifier ModuleArgList?
-('externally')? 'implemented' 'by' ModuleIdentifier ModuleArgList?
+FacilityDecl ::= 'Facility' identifier 'is' NameExp ModuleArgList?
+('externally')? 'implemented' 'by' ModuleIdentifierSpec ModuleArgList?
 ExtensionList? ';' {pin=2 /*methods=[getSpecification]*/}
 
 private ExtensionList ::= (ExtensionPairing)* {recoverWhile=ExtensionListRec}
 private ExtensionListRec ::= !(';')
 
-ExtensionPairing ::= 'extended' 'by' ModuleIdentifier ModuleArgList? ('externally')?
-'implemented' 'by' ModuleIdentifier ModuleArgList? {pin=1}
+ExtensionPairing ::= 'extended' 'by' ModuleIdentifierSpec ModuleArgList? ('externally')?
+'implemented' 'by' ModuleIdentifierSpec ModuleArgList? {pin=1}
 // operations
 
 ModuleArgList ::= '(' ExpArgumentList ')' {pin=1}
@@ -484,7 +490,7 @@ private ExpListRecover ::= !('%'|'+'|'-'|'('|')'|','|'*'|'<'|'<='|'>'|'>='|'end'
 
 NameExp ::= ReferenceExp QualifiedReferenceExp? {elementType=ReferenceExp}
 left QualifiedReferenceExp ::= '::' identifier {elementType=ReferenceExp}
-ReferenceExp ::= identifier { methods=[getReference getQualifier] extends=Exp}
+ReferenceExp ::= identifier { methods=[getReference getQualifier expectedToReferenceImportedModuleOrModuleAlias] extends=Exp}
 
 LiteralExp ::= int|StringLiteral|BooleanLiteral {extends=Exp}
 BooleanLiteral ::= true | false

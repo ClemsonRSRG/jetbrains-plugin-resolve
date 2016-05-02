@@ -15,7 +15,7 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.jetbrains.psi.ResFile;
-import edu.clemson.resolve.jetbrains.psi.ResModuleLibraryIdentifier;
+import edu.clemson.resolve.jetbrains.psi.ResModuleLibraryIdentifierSpec;
 import edu.clemson.resolve.jetbrains.sdk.RESOLVESdkUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,7 +26,7 @@ import java.util.LinkedHashSet;
 
 public class ResModuleLibraryReferenceSet extends FileReferenceSet {
 
-    public ResModuleLibraryReferenceSet(@NotNull ResModuleLibraryIdentifier libraryIdentifier) {
+    public ResModuleLibraryReferenceSet(@NotNull ResModuleLibraryIdentifierSpec libraryIdentifier) {
         super(libraryIdentifier.getText(), libraryIdentifier,
                 libraryIdentifier.getModuleLibraryIdentiferTextRange().getStartOffset(), null, true);
     }
