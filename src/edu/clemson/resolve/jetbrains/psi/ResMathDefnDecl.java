@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface ResMathDefnDecl extends ResCompositeElement {
 
-    /** Returns a list of {@link ResMathDefnSig}s introduced by this declaration. Note that this is going to be
+    /** Returns a list of {@link ResMathDefnSig}s introduced by this declaration. Note that this is going to be a
      *  singleton except in the case of {@link ResMathCategoricalDefnDecl}s, in which there could be an arbitrary
      *  number of signatures introduced.
      *

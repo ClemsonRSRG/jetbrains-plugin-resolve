@@ -77,7 +77,7 @@ public class ResTypeReference extends PsiPolyVariantReferenceBase<ResTypeReferen
         if (target == null || target == qualifier) return false;
         if (target instanceof ResFacilityDecl) {
             ResFile specFile = ((ResFacilityDecl) target).resolveSpecification();
-            if (specFile != null) ResReference.processModuleLevelEntities(specFile, processor, state, false);
+            if (specFile != null) ResReference.processModuleLevelEntities(specFile, processor, state, false, true);
         }
         else if (target instanceof ResFile) {
             int i;

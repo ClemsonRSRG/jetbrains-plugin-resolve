@@ -262,7 +262,6 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
 
                 if (!processor.execute(resFile, state.put(ACTUAL_NAME, o.getIdentifier().getText()))) return false;
                 if (!forModuleNameRefs) {
-                    if (((ResFile) resFile).getEnclosedModule() instanceof ResConceptModuleDecl)
                     processModuleLevelEntities((ResFile) resFile, processor, state, false, false);
                 }
             }
@@ -346,12 +345,12 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                                               @NotNull ResScopeProcessor processor,
                                               @NotNull ResolveState state,
                                               boolean localProcessing,
-                                              boolean fromFacilities) {
-        if (!processNamedElements(processor, state, module.getOperationLikeThings(), localProcessing)) return false;
-        if (!processNamedElements(processor, state, module.getFacilities(), localProcessing)) return false;
-        if (!processNamedElements(processor, state, module.getTypes(), localProcessing)) return false;
-        if (!processNamedElements(processor, state, module.getGenericTypeParams(), localProcessing)) return false;
-        if (!processNamedElements(processor, state, module.getMathDefnSigs(), localProcessing)) return false;
+                                              boolean fromFacility) {
+        if (!processNamedElements(processor, state, module.getOperationLikeThings(), localProcessing, fromFacility)) return false;
+        if (!processNamedElements(processor, state, module.getFacilities(), localProcessing, fromFacility)) return false;
+        if (!processNamedElements(processor, state, module.getTypes(), localProcessing, fromFacility)) return false;
+        if (!processNamedElements(processor, state, module.getGenericTypeParams(), localProcessing, fromFacility)) return false;
+        if (!processNamedElements(processor, state, module.getMathDefnSigs(), localProcessing, fromFacility)) return false;
         return true;
     }
 
