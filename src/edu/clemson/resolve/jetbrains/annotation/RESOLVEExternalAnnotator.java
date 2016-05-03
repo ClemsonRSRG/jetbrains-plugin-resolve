@@ -15,6 +15,7 @@ import edu.clemson.resolve.compiler.RESOLVEMessage;
 import edu.clemson.resolve.jetbrains.actions.RunRESOLVEOnLanguageFile;
 import org.antlr.v4.Tool;
 import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.tool.*;
 import org.antlr.v4.tool.ast.GrammarAST;
@@ -34,12 +35,9 @@ import java.util.*;
  * <p>
  * <a href="https://github.com/antlr/intellij-plugin-v4">https://github.com/antlr/intellij-plugin-v4/a>
  */
-public class RESOLVEExternalAnnotator
-        extends
-        ExternalAnnotator<PsiFile, List<RESOLVEExternalAnnotator.Issue>> {
+public class RESOLVEExternalAnnotator extends ExternalAnnotator<PsiFile, List<RESOLVEExternalAnnotator.Issue>> {
 
-    public static final Logger LOG =
-            Logger.getInstance("RESOLVEExternalAnnotator");
+    public static final Logger LOG = Logger.getInstance("RESOLVEExternalAnnotator");
 
     public static class Issue {
         String annotation;
@@ -51,20 +49,16 @@ public class RESOLVEExternalAnnotator
         }
     }
 
-    /**
-     * Called first; return file
-     */
+    /** Called first; return file */
     @Override
     @Nullable
-    public PsiFile collectInformation(
-            @NotNull PsiFile file) {
+    public PsiFile collectInformation(@NotNull PsiFile file) {
         return file;
     }
 
     @Override
     @Nullable
-    public List<RESOLVEExternalAnnotator.Issue> doAnnotate(
-            final PsiFile file) {
+    public List<RESOLVEExternalAnnotator.Issue> doAnnotate(final PsiFile file) {
         String grammarFileName = file.getVirtualFile().getPath();
         LOG.info("doAnnotate " + grammarFileName);
         String fileContents = file.getText();
@@ -75,8 +69,7 @@ public class RESOLVEExternalAnnotator
         List<String> args = RunRESOLVEOnLanguageFile.getRESOLVEArgsAsList(argMap);
         String fileName = file.getName();
         args.add(0, fileName);
-        final RESOLVECompiler resolve =
-                new RESOLVECompiler(args.toArray(new String[args.size()]));
+        final RESOLVECompiler resolve = new RESOLVECompiler(args.toArray(new String[args.size()]));
 
         //if lib isn't specified, best we can do is run it on the containing folder
         //for that particular file..
@@ -119,19 +112,16 @@ public class RESOLVEExternalAnnotator
         return listener.issues;
     }
 
-    /**
-     * Called 3rd
-     */
+    /** Called 3rd */
     @Override
     public void apply(@NotNull PsiFile file,
-                      List<RESOLVEExternalAnnotator.Issue> issues,
+                      @NotNull List<RESOLVEExternalAnnotator.Issue> issues,
                       @NotNull AnnotationHolder holder) {
-        for (int i = 0; i < issues.size(); i++) {
-            Issue issue = issues.get(i);
+        for (Issue issue : issues) {
             for (int j = 0; j < issue.offendingTokens.size(); j++) {
                 Token t = issue.offendingTokens.get(j);
-                if (t instanceof org.antlr.v4.runtime.CommonToken) {
-                    org.antlr.v4.runtime.CommonToken ct = (org.antlr.v4.runtime.CommonToken) t;
+                if (t instanceof CommonToken) {
+                    CommonToken ct = (CommonToken) t;
                     int startIndex = ct.getStartIndex();
                     int stopIndex = ct.getStopIndex();
                     TextRange range = new TextRange(startIndex, stopIndex + 1);

@@ -36,8 +36,7 @@ public abstract class RESOLVESdkService extends SimpleModificationTracker {
 
     //TODO TODO: This isn't right anymore
     @NotNull
-    static String libraryRootToSdkPath(
-            @NotNull VirtualFile root) {
+    static String libraryRootToSdkPath(@NotNull VirtualFile root) {
         return VfsUtilCore.urlToPath(StringUtil.trimEnd(
                 StringUtil.trimEnd(StringUtil.trimEnd(root.getUrl(),
                         "src/pkg"), "src"), "/"));
@@ -51,8 +50,7 @@ public abstract class RESOLVESdkService extends SimpleModificationTracker {
     public abstract void chooseAndSetSdk(@Nullable Module module);
 
     @Contract("null -> false")
-    public boolean isRESOLVEModule(
-            @Nullable Module module) {
+    public boolean isRESOLVEModule(@Nullable Module module) {
         return module != null && !module.isDisposed();
     }
 }

@@ -90,11 +90,9 @@ public class RESOLVESdkUtil {
                         public Result<Collection<VirtualFile>> compute() {
                             Collection<VirtualFile> result = newLinkedHashSet();
                             Project project = module.getProject();
-                            RESOLVESdkService sdkService =
-                                    RESOLVESdkService.getInstance(project);
+                            RESOLVESdkService sdkService = RESOLVESdkService.getInstance(project);
                             result.addAll(getInnerRESOLVEPathSources(project, module));
-                            return Result.create(result,
-                                    getSdkAndLibrariesCacheDependencies(project, module));
+                            return Result.create(result, getSdkAndLibrariesCacheDependencies(project, module));
                         }
                     });
         }
@@ -119,14 +117,12 @@ public class RESOLVESdkUtil {
     }
 
     /**
-     * Retrieves root directories from RESOLVEPATH env-variable.
-     * This method doesn't consider user defined libraries,
+     * Retrieves root directories from RESOLVEPATH env-variable. This method doesn't consider user defined libraries,
      * for that case use {@link {@link this#getRESOLVEPathRoots(Project, Module)}
      */
     @NotNull
     public static Collection<VirtualFile> getRESOLVEPathsRootsFromEnvironment() {
-        return RESOLVEEnvironmentRESOLVE_PATHModificationTracker
-                .getRESOLVEEnvironmentRESOLVE_PATHRoots();
+        return RESOLVEEnvironmentRESOLVE_PATHModificationTracker.getRESOLVEEnvironmentRESOLVE_PATHRoots();
     }
 
     @NotNull
@@ -138,8 +134,7 @@ public class RESOLVESdkUtil {
     @NotNull
     private static Collection<VirtualFile> getRESOLVEPathRoots(@NotNull Project project, @Nullable Module module) {
         Collection<VirtualFile> roots = ContainerUtil.newArrayList();
-        if (RESOLVEApplicationLibrariesService.getInstance()
-                .isUsingRESOLVEPathFromSystemEnvironment()) {
+        if (RESOLVEApplicationLibrariesService.getInstance().isUsingRESOLVEPathFromSystemEnvironment()) {
             roots.addAll(getRESOLVEPathsRootsFromEnvironment());
         }
         roots.addAll(module != null ?
@@ -158,12 +153,10 @@ public class RESOLVESdkUtil {
     @Nullable
     static VirtualFile suggestSdkDirectory() {
         if (SystemInfo.isWindows) {
-            return LocalFileSystem.getInstance()
-                    .findFileByPath("C:\\resolve");
+            return LocalFileSystem.getInstance().findFileByPath("C:\\resolve");
         }
         if (SystemInfo.isMac || SystemInfo.isLinux) {
-            VirtualFile usrLocal = LocalFileSystem.getInstance()
-                    .findFileByPath("/usr/local/resolve");
+            VirtualFile usrLocal = LocalFileSystem.getInstance().findFileByPath("/usr/local/resolve");
             if (usrLocal != null) return usrLocal;
         }
         return null;
@@ -233,8 +226,7 @@ public class RESOLVESdkUtil {
 
         @Override
         public VirtualFile fun(VirtualFile file) {
-            return file == null || FileUtil.namesEqual(subdirName,
-                    file.getName()) ? file : file.findChild(subdirName);
+            return file == null || FileUtil.namesEqual(subdirName, file.getName()) ? file : file.findChild(subdirName);
         }
     }
 }

@@ -38,8 +38,7 @@ public class RESOLVESdkType extends SdkType {
     @Override
     public String suggestHomePath() {
         VirtualFile suggestSdkDirectory = RESOLVESdkUtil.suggestSdkDirectory();
-        return suggestSdkDirectory != null ?
-                suggestSdkDirectory.getPath() : null;
+        return suggestSdkDirectory != null ? suggestSdkDirectory.getPath() : null;
     }
 
     @Override
@@ -49,8 +48,7 @@ public class RESOLVESdkType extends SdkType {
         //exists here--no need, as this will return null if it doesn't
         // (the version is embedded in it)
         if (getVersionString(sdkHomePath) == null) {
-            RESOLVESdkService.LOG.debug("Cannot retrieve version for sdk " +
-                    "(or the compiler-jar): " + sdkHomePath);
+            RESOLVESdkService.LOG.debug("Cannot retrieve version for sdk (or the compiler-jar): " + sdkHomePath);
             return false;
         }
         return true;
@@ -79,9 +77,8 @@ public class RESOLVESdkType extends SdkType {
 
     @Nullable
     @Override
-    public AdditionalDataConfigurable createAdditionalDataConfigurable(
-            @NotNull SdkModel sdkModel,
-            @NotNull SdkModificator sdkModificator) {
+    public AdditionalDataConfigurable createAdditionalDataConfigurable(@NotNull SdkModel sdkModel,
+                                                                       @NotNull SdkModificator sdkModificator) {
         return null;
     }
 
@@ -106,8 +103,7 @@ public class RESOLVESdkType extends SdkType {
         if (path == null) return;
         modificator.setHomePath(path);
 
-        for (VirtualFile file : RESOLVESdkUtil
-                .getSdkDirectoriesToAttach(path, versionString)) {
+        for (VirtualFile file : RESOLVESdkUtil.getSdkDirectoriesToAttach(path, versionString)) {
             modificator.addRoot(file, OrderRootType.CLASSES);
             modificator.addRoot(file, OrderRootType.SOURCES);
         }
