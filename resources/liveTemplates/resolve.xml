@@ -2,12 +2,52 @@
 
 <templateSet group="RESOLVE">
 
+    <!-- MODULE TEMPLATES -->
+
     <template description='Concept module declaration' name='Concept' toReformat='true' toShortenFQNames='true'
-              value='Concept foo;&#10;	"$END$"&#10;end foo;'>
+              value='Concept $NAME$;&#10;    $END$&#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
         <context>
             <option name='RESOLVE_FILE' value='true'/>
         </context>
     </template>
+
+    <template description='Facility module declaration' name='Facility' toReformat='true' toShortenFQNames='true'
+              value='Facility $NAME$;&#10;    $END$&#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <context>
+            <option name='RESOLVE_FILE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Précis module declaration' name='Precis' toReformat='true' toShortenFQNames='true'
+              value='Precis $NAME$;&#10;    $END$&#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <context>
+            <option name='RESOLVE_FILE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Concept implementation module declaration' name='Concept Implementation' toReformat='true' toShortenFQNames='true'
+              value='Implementation $NAME$ for $CONCEPT$;&#10;    $END$&#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;concept&quot;' expression='' name='CONCEPT'/>
+        <context>
+            <option name='RESOLVE_FILE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Concept extension implementation module declaration' name='Implementation' toReformat='true' toShortenFQNames='true'
+              value='Implementation $NAME$ for $EXTENSION$ of $CONCEPT$;&#10;    $END$&#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;extension&quot;' expression='' name='EXTENSION'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;concept&quot;' expression='' name='CONCEPT'/>
+        <context>
+            <option name='RESOLVE_FILE' value='true'/>
+        </context>
+    </template>
+
+    <!-- MATH SYMBOL TEMPLATES -->
 
     <template description='∃' name='Exists' toReformat='true' toShortenFQNames='true'
               value='∃ $END$'>
@@ -119,7 +159,8 @@
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
         </context>
-    </template>λ
+    </template>
+    λ
 
     <template description='λ' name='lambda' toReformat='true' toShortenFQNames='true'
               value='λ'>
@@ -155,8 +196,7 @@
         </context>
     </template>
 
-    <template description='outfix ||..||' name='dblbar' toReformat='true' toShortenFQNames='true'
-              value='||$END$||'>
+    <template description='outfix ||..||' name='dblbar' toReformat='true' toShortenFQNames='true' value='||$END$||'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
             <option name='RESOLVE_MATH_DEF' value='true'/>

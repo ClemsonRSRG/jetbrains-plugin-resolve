@@ -59,7 +59,10 @@ public abstract class RESOLVELiveTemplateContextType extends TemplateContextType
 
         @Override
         protected boolean isInContext(@NotNull PsiElement element) {
-            return element.getParent() instanceof ResFile;
+            return element.getParent() instanceof ResFile && !(element instanceof ResModuleDecl);
+            //if the second condition is true, it means that a module has already
+            //been inserted into the document, and we shouldn't suggest another -- say, when the user is typing
+            //in the name.
         }
     }
 

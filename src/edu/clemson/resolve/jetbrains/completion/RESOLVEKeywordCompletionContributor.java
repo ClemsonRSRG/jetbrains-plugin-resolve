@@ -13,18 +13,16 @@ import edu.clemson.resolve.jetbrains.psi.*;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 //TODO: requires and ensures keyword completions would certainly be nice..
-public class RESOLVEKeywordCompletionContributor
-        extends
-        CompletionContributor implements DumbAware {
+public class RESOLVEKeywordCompletionContributor extends CompletionContributor implements DumbAware {
 
     public RESOLVEKeywordCompletionContributor() {
 
-        extend(CompletionType.BASIC, modulePattern(),
+       /* extend(CompletionType.BASIC, modulePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
                         "Concept", "ConceptExt", "Facility", "Precis",
                         "PrecisExt", "Implementation"));
-
+*/
         extend(CompletionType.BASIC, usesPattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "uses"));
