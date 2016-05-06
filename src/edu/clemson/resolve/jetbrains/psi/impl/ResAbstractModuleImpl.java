@@ -88,7 +88,8 @@ public abstract class ResAbstractModuleImpl extends ResNamedElementImpl implemen
     public List<ResMathDefnSig> getMathDefnSigs() {
         List<ResMathDefnSig> signatures = new ArrayList<>();
         for (ResMathDefnDecl def : getMathDefinitionDecls()) {
-            signatures.addAll(def.getSignatures());
+            List<ResMathDefnSig> sigs = def.getSignatures();
+            signatures.addAll(sigs);
         }
         return signatures;
     }

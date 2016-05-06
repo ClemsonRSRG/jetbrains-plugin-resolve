@@ -151,20 +151,21 @@ public class RESOLVECompletionUtil {
                                     typeText += grp.getMathExp().getText();
                                 }
                                 else {
-                                    typeText += " * " +
+                                    typeText += " ⨯ " +
                                             grp.getMathExp().getText();
                                 }
                             }
                         }
                     }
                     if (mathType != null) rangeTypeText = mathType.getText();
-                    if (!typeText.equals("")) typeText += " -> ";
+                    if (!typeText.equals("")) typeText += " ⟶ ";
                     typeText += rangeTypeText;
                     p.setIcon(RESOLVEIcons.DEF);
                     p.setTypeText(rangeTypeText);
                     p.setTypeGrayed(true);
                     // p.setTailText(calcTailText(f), true);
-                    p.setItemText(element.getLookupString() + " : " + typeText);
+                    String correctColon = typeText.equals("Cls") ? " ː " : " : ";
+                    p.setItemText(element.getLookupString() + correctColon + typeText);
                 }
             };
 
