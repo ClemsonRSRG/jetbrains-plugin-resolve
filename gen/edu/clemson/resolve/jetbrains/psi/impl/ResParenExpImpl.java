@@ -16,8 +16,12 @@ public class ResParenExpImpl extends ResExpImpl implements ResParenExp {
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitParenExp(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitParenExp(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

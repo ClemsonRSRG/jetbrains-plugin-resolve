@@ -16,8 +16,12 @@ public class ResRecordVarDeclGroupImpl extends ResCompositeElementImpl implement
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitRecordVarDeclGroup(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitRecordVarDeclGroup(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

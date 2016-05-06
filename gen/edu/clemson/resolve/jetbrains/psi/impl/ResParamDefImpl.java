@@ -16,8 +16,12 @@ public class ResParamDefImpl extends ResNamedElementImpl implements ResParamDef 
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitParamDef(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitParamDef(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

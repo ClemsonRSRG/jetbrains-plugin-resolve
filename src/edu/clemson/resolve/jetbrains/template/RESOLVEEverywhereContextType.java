@@ -7,9 +7,7 @@ import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import edu.clemson.resolve.jetbrains.ResTypes;
 import org.jetbrains.annotations.NotNull;
 
-public class RESOLVEEverywhereContextType
-        extends
-        RESOLVELiveTemplateContextType {
+public class RESOLVEEverywhereContextType extends RESOLVELiveTemplateContextType {
 
     protected RESOLVEEverywhereContextType() {
         super("RESOLVE", "RESOLVE", EverywhereContextType.class);

@@ -23,11 +23,11 @@
 
     <depends>com.intellij.modules.lang</depends>
     <depends optional="true" config-file="java-deps.xml">com.intellij.modules.java</depends>
-   <!-- <module-components>
+    <module-components>
         <component>
-            <implementation-class>com.goide.project.GoModuleLibrariesInitializer</implementation-class>
+            <implementation-class>edu.clemson.resolve.jetbrains.project.RESOLVEModuleLibrariesInitializer</implementation-class>
         </component>
-    </module-components>-->
+    </module-components>
 
     <extensions defaultExtensionNs="com.intellij">
         <fileIconPatcher implementation="edu.clemson.resolve.jetbrains.RESOLVEFileIconPatcher"/>
@@ -35,6 +35,7 @@
 
         <lang.parserDefinition language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.RESOLVEParserDefinition"/>
         <lang.braceMatcher language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.editor.RESOLVEBraceMatcher"/>
+        <quoteHandler fileType="RESOLVE" className="edu.clemson.resolve.jetbrains.editor.RESOLVEQuoteHandler"/>
 
         <!-- project -->
         <defaultLiveTemplatesProvider implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplatesProvider"/>
@@ -43,7 +44,13 @@
         <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEMathRefContextType"/>
         <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEMathDefContextType"/>
 
+        <applicationService serviceImplementation="edu.clemson.resolve.jetbrains.project.RESOLVEApplicationLibrariesService"/>
+        <projectService serviceImplementation="edu.clemson.resolve.jetbrains.project.RESOLVEProjectLibrariesService"/>
+        <moduleService serviceImplementation="edu.clemson.resolve.jetbrains.project.RESOLVEModuleLibrariesService"/>
+
         <!-- sdk -->
+        <applicationService serviceImplementation="edu.clemson.resolve.jetbrains.sdk.RESOLVEEnvironmentRESOLVE_PATHModificationTracker"/>
+
         <sdkType implementation="edu.clemson.resolve.jetbrains.sdk.RESOLVESdkType"/>
         <projectService serviceInterface="edu.clemson.resolve.jetbrains.sdk.RESOLVESdkService" serviceImplementation="edu.clemson.resolve.jetbrains.sdk.RESOLVESmallSdkService"
                         overrides="false"/>

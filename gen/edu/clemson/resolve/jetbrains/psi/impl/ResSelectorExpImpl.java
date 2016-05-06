@@ -16,8 +16,12 @@ public class ResSelectorExpImpl extends ResExpImpl implements ResSelectorExp {
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitSelectorExp(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitSelectorExp(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

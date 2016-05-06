@@ -11,7 +11,7 @@ public interface ResExtensionPairing extends ResCompositeElement {
   List<ResModuleArgList> getModuleArgListList();
 
   @NotNull
-  List<ResModuleSpec> getModuleSpecList();
+  List<ResReferenceExp> getReferenceExpList();
 
   @NotNull
   PsiElement getExtended();

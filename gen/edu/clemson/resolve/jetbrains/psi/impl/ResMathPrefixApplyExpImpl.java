@@ -16,8 +16,12 @@ public class ResMathPrefixApplyExpImpl extends ResMathExpImpl implements ResMath
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitMathPrefixApplyExp(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitMathPrefixApplyExp(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

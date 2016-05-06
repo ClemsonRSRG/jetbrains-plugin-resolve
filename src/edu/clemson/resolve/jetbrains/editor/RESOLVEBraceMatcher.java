@@ -24,8 +24,7 @@ public class RESOLVEBraceMatcher implements PairedBraceMatcher {
     }
 
     @Override
-    public boolean isPairedBracesAllowedBeforeType(
-            @NotNull IElementType lbraceType, @Nullable IElementType type) {
+    public boolean isPairedBracesAllowedBeforeType(@NotNull IElementType lbraceType, @Nullable IElementType type) {
         return RESOLVEParserDefinition.COMMENTS.contains(type)
                 || RESOLVEParserDefinition.WHITESPACES.contains(type)
                 || type == ResTypes.SEMICOLON
@@ -37,8 +36,7 @@ public class RESOLVEBraceMatcher implements PairedBraceMatcher {
     }
 
     @Override
-    public int getCodeConstructStart(PsiFile file,
-                                     int openingBraceOffset) {
+    public int getCodeConstructStart(PsiFile file, int openingBraceOffset) {
         return openingBraceOffset;
     }
 }

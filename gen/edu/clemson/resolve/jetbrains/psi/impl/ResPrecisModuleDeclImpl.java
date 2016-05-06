@@ -16,8 +16,12 @@ public class ResPrecisModuleDeclImpl extends ResAbstractModuleImpl implements Re
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitPrecisModuleDecl(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitPrecisModuleDecl(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 
@@ -29,8 +33,8 @@ public class ResPrecisModuleDeclImpl extends ResAbstractModuleImpl implements Re
 
   @Override
   @Nullable
-  public ResUsesItemList getUsesItemList() {
-    return findChildByClass(ResUsesItemList.class);
+  public ResUsesList getUsesList() {
+    return findChildByClass(ResUsesList.class);
   }
 
   @Override

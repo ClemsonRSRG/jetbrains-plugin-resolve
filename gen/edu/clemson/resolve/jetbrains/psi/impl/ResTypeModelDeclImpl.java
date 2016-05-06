@@ -16,8 +16,12 @@ public class ResTypeModelDeclImpl extends ResAbstractTypeLikeNodeImpl implements
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitTypeModelDecl(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitTypeModelDecl(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

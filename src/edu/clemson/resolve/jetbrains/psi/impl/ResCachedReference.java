@@ -10,9 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 //TODO: Implement isReferenceTo() and handleElementRename() to get
 //refactoring, etc working.
-public abstract class ResCachedReference<T extends PsiElement>
-        extends
-        PsiReferenceBase<T> {
+public abstract class ResCachedReference<T extends PsiElement> extends PsiReferenceBase<T> {
 
     protected ResCachedReference(@NotNull T element) {
         super(element, TextRange.from(0, element.getTextLength()));
@@ -29,8 +27,7 @@ public abstract class ResCachedReference<T extends PsiElement>
     @Nullable
     protected abstract PsiElement resolveInner();
 
-    public abstract boolean processResolveVariants(
-            @NotNull ResScopeProcessor processor);
+    public abstract boolean processResolveVariants(@NotNull ResScopeProcessor processor);
 
     @Nullable
     @Override

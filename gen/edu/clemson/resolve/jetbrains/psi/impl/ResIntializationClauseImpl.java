@@ -16,8 +16,12 @@ public class ResIntializationClauseImpl extends ResCompositeElementImpl implemen
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitIntializationClause(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitIntializationClause(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

@@ -16,8 +16,12 @@ public class ResInfixExpImpl extends ResCompositeElementImpl implements ResInfix
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitInfixExp(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitInfixExp(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

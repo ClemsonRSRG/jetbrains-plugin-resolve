@@ -14,13 +14,13 @@ public interface ResImplModuleDecl extends ResModuleDecl {
   ResImplModuleParameters getImplModuleParameters();
 
   @NotNull
-  List<ResModuleSpec> getModuleSpecList();
+  List<ResModuleIdentifierSpec> getModuleIdentifierSpecList();
 
   @Nullable
   ResRequiresClause getRequiresClause();
 
   @Nullable
-  ResUsesItemList getUsesItemList();
+  ResUsesList getUsesList();
 
   @Nullable
   PsiElement getEnd();

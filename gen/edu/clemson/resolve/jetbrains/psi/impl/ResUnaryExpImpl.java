@@ -16,8 +16,12 @@ public class ResUnaryExpImpl extends ResExpImpl implements ResUnaryExp {
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitUnaryExp(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitUnaryExp(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

@@ -16,8 +16,12 @@ public class ResConceptExtensionModuleDeclImpl extends ResAbstractModuleImpl imp
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitConceptExtensionModuleDecl(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitConceptExtensionModuleDecl(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 
@@ -29,8 +33,8 @@ public class ResConceptExtensionModuleDeclImpl extends ResAbstractModuleImpl imp
 
   @Override
   @Nullable
-  public ResModuleSpec getModuleSpec() {
-    return findChildByClass(ResModuleSpec.class);
+  public ResModuleIdentifierSpec getModuleIdentifierSpec() {
+    return findChildByClass(ResModuleIdentifierSpec.class);
   }
 
   @Override
@@ -47,8 +51,8 @@ public class ResConceptExtensionModuleDeclImpl extends ResAbstractModuleImpl imp
 
   @Override
   @Nullable
-  public ResUsesItemList getUsesItemList() {
-    return findChildByClass(ResUsesItemList.class);
+  public ResUsesList getUsesList() {
+    return findChildByClass(ResUsesList.class);
   }
 
   @Override

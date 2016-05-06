@@ -16,8 +16,12 @@ public class ResMathSetExpImpl extends ResMathExpImpl implements ResMathSetExp {
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitMathSetExp(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitMathSetExp(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

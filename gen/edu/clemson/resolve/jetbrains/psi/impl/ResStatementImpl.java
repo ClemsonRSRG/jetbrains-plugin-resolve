@@ -16,8 +16,12 @@ public class ResStatementImpl extends ResCompositeElementImpl implements ResStat
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitStatement(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitStatement(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

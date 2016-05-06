@@ -16,8 +16,12 @@ public class ResTypeImplInitImpl extends ResCompositeElementImpl implements ResT
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitTypeImplInit(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitTypeImplInit(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

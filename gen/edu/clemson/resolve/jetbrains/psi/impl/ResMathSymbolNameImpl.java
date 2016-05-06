@@ -16,8 +16,12 @@ public class ResMathSymbolNameImpl extends ResCompositeElementImpl implements Re
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitMathSymbolName(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitMathSymbolName(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 
@@ -89,14 +93,14 @@ public class ResMathSymbolNameImpl extends ResCompositeElementImpl implements Re
 
   @Override
   @Nullable
-  public PsiElement getNeg() {
-    return findChildByType(NEG);
+  public PsiElement getNot() {
+    return findChildByType(NOT);
   }
 
   @Override
   @Nullable
-  public PsiElement getNot() {
-    return findChildByType(NOT);
+  public PsiElement getNot1() {
+    return findChildByType(NOT1);
   }
 
   @Override

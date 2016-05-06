@@ -16,8 +16,12 @@ public class ResMathPrefixGeneralizedCeilApplyExpImpl extends ResMathExpImpl imp
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitMathPrefixGeneralizedCeilApplyExp(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitMathPrefixGeneralizedCeilApplyExp(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

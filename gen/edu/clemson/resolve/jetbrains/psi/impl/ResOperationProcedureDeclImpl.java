@@ -16,8 +16,12 @@ public class ResOperationProcedureDeclImpl extends ResNamedElementImpl implement
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitOperationProcedureDecl(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitOperationProcedureDecl(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

@@ -16,8 +16,12 @@ public class ResMathBooleanInfixApplyExpImpl extends ResMathExpImpl implements R
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitMathBooleanInfixApplyExp(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitMathBooleanInfixApplyExp(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 
@@ -31,6 +35,12 @@ public class ResMathBooleanInfixApplyExpImpl extends ResMathExpImpl implements R
   @Nullable
   public PsiElement getAnd() {
     return findChildByType(AND);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getAnd1() {
+    return findChildByType(AND1);
   }
 
   @Override
@@ -49,6 +59,12 @@ public class ResMathBooleanInfixApplyExpImpl extends ResMathExpImpl implements R
   @Nullable
   public PsiElement getOr() {
     return findChildByType(OR);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getOr1() {
+    return findChildByType(OR1);
   }
 
 }

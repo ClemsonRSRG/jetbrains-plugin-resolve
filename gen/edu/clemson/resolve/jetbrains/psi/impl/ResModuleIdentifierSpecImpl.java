@@ -10,17 +10,20 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static edu.clemson.resolve.jetbrains.ResTypes.*;
 import edu.clemson.resolve.jetbrains.psi.*;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 
-public class ResModuleSpecImpl extends ResNamedElementImpl implements ResModuleSpec {
+public class ResModuleIdentifierSpecImpl extends ResCompositeElementImpl implements ResModuleIdentifierSpec {
 
-  public ResModuleSpecImpl(ASTNode node) {
+  public ResModuleIdentifierSpecImpl(ASTNode node) {
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitModuleIdentifierSpec(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitModuleSpec(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 
@@ -35,14 +38,14 @@ public class ResModuleSpecImpl extends ResNamedElementImpl implements ResModuleS
     return ResPsiImplUtil.getReferences(this);
   }
 
-  @Nullable
-  public PsiFile resolve() {
-    return ResPsiImplUtil.resolve(this);
+  @NotNull
+  public TextRange getModuleIdentiferTextRange() {
+    return ResPsiImplUtil.getModuleIdentiferTextRange(this);
   }
 
-  @NotNull
-  public TextRange getModuleSpecTextRange() {
-    return ResPsiImplUtil.getModuleSpecTextRange(this);
+  @Nullable
+  public PsiElement resolve() {
+    return ResPsiImplUtil.resolve(this);
   }
 
 }

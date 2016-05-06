@@ -10,21 +10,37 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static edu.clemson.resolve.jetbrains.ResTypes.*;
 import edu.clemson.resolve.jetbrains.psi.*;
 
-public class ResUsesItemListImpl extends ResCompositeElementImpl implements ResUsesItemList {
+public class ResUsesListImpl extends ResCompositeElementImpl implements ResUsesList {
 
-  public ResUsesItemListImpl(ASTNode node) {
+  public ResUsesListImpl(ASTNode node) {
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitUsesList(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitUsesItemList(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 
   @Override
   @NotNull
-  public List<ResUsesItem> getUsesItemList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResUsesItem.class);
+  public List<ResUsesSpecGroup> getUsesSpecGroupList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResUsesSpecGroup.class);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getLparen() {
+    return findChildByType(LPAREN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRparen() {
+    return findChildByType(RPAREN);
   }
 
   @Override

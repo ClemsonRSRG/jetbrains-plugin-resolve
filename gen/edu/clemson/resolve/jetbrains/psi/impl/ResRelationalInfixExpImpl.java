@@ -16,8 +16,12 @@ public class ResRelationalInfixExpImpl extends ResExpImpl implements ResRelation
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitRelationalInfixExp(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitRelationalInfixExp(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

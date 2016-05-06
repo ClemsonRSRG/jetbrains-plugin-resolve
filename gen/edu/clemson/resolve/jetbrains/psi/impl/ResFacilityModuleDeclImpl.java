@@ -16,8 +16,12 @@ public class ResFacilityModuleDeclImpl extends ResAbstractModuleImpl implements 
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitFacilityModuleDecl(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitFacilityModuleDecl(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 
@@ -35,8 +39,8 @@ public class ResFacilityModuleDeclImpl extends ResAbstractModuleImpl implements 
 
   @Override
   @Nullable
-  public ResUsesItemList getUsesItemList() {
-    return findChildByClass(ResUsesItemList.class);
+  public ResUsesList getUsesList() {
+    return findChildByClass(ResUsesList.class);
   }
 
   @Override

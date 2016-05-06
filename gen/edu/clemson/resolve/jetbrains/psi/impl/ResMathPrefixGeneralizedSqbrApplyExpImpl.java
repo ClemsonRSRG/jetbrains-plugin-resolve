@@ -16,8 +16,12 @@ public class ResMathPrefixGeneralizedSqbrApplyExpImpl extends ResMathExpImpl imp
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitMathPrefixGeneralizedSqbrApplyExp(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitMathPrefixGeneralizedSqbrApplyExp(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

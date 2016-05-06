@@ -101,10 +101,13 @@ ESCAPES = [abfnrtv]
 "≼"                                     { return PRECCURLYEQ; }
 "="                                     { return EQUALS; }
 "/="                                    { return NEQUALS; }
-"≠"                                     { return NEQUALS1; }
+"≠"                                     { return NEQUALS; }
 
 "and"                                   { return AND; }
+"∧"                                     { return AND; }
+
 "or"                                    { return OR; }
+"∨"                                     { return OR; }
 "not"                                   { return NOT; }
 "⌐"                                     { return NOT; }
 "o"                                     { return CAT; }
@@ -153,6 +156,7 @@ ESCAPES = [abfnrtv]
 
 // Keywords
 
+"as"                                    { return AS; }
 "base"                                  { return BASE;}
 "by"                                    { return BY; }
 "Cart_Prod"                             { return CART_PROD; }
@@ -183,6 +187,7 @@ ESCAPES = [abfnrtv]
 "Forall"                                { return FORALL; }
 "∀"                                     { return FORALL; }
 "for"                                   { return FOR; }
+"from"                                  { return FROM; }
 "hypo"                                  { return HYPO; }
 "if"                                    { return IF; }
 "iff"                                   { return IFF; }

@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ResMathStandardDefnDecl extends ResMathDefinitionDecl {
+public interface ResMathStandardDefnDecl extends ResMathDefnDecl {
 
   @Nullable
   ResMathExp getMathExp();

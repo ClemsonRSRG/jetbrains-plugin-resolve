@@ -16,8 +16,12 @@ public class ResFieldDefImpl extends ResNamedElementImpl implements ResFieldDef 
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitFieldDef(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitFieldDef(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

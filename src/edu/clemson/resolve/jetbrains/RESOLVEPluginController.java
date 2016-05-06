@@ -44,11 +44,9 @@ public class RESOLVEPluginController implements ProjectComponent {
     }
 
     public static RESOLVEPluginController getInstance(@NotNull Project project) {
-        RESOLVEPluginController pc =
-                project.getComponent(RESOLVEPluginController.class);
+        RESOLVEPluginController pc = project.getComponent(RESOLVEPluginController.class);
         if (pc == null) {
-            LOG.error("getInstance: getComponent() for " +
-                    project.getName() + " returns null");
+            LOG.error("getInstance: getComponent() for project.getName() returns null");
         }
         return pc;
     }
@@ -59,14 +57,12 @@ public class RESOLVEPluginController implements ProjectComponent {
 
     @Override
     public void projectOpened() {
-        IdeaPluginDescriptor plugin =
-                PluginManager.getPlugin(PluginId.getId(PLUGIN_ID));
+        IdeaPluginDescriptor plugin = PluginManager.getPlugin(PluginId.getId(PLUGIN_ID));
         String version = "unknown";
         if (plugin != null) {
             version = plugin.getVersion();
         }
-        LOG.info("RESOLVE Compiler Plugin version " + version + ", Java version " +
-                SystemInfo.JAVA_VERSION);
+        LOG.info("RESOLVE Compiler Plugin version " + version + ", Java version " + SystemInfo.JAVA_VERSION);
         // make sure the tool windows are created early
         createToolWindows();
         //installListeners();

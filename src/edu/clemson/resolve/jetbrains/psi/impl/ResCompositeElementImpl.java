@@ -10,9 +10,7 @@ import edu.clemson.resolve.jetbrains.psi.ResCompositeElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class ResCompositeElementImpl
-        extends
-        ASTWrapperPsiElement implements ResCompositeElement {
+public class ResCompositeElementImpl extends ASTWrapperPsiElement implements ResCompositeElement {
 
     public ResCompositeElementImpl(@NotNull ASTNode node) {
         super(node);
@@ -24,20 +22,18 @@ public class ResCompositeElementImpl
     }
 
     @Override
-    public boolean processDeclarations(
-            @NotNull PsiScopeProcessor processor,
-            @NotNull ResolveState state,
-            @Nullable PsiElement lastParent,
-            @NotNull PsiElement place) {
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
+                                       @NotNull ResolveState state,
+                                       @Nullable PsiElement lastParent,
+                                       @NotNull PsiElement place) {
         return processDeclarationsDefault(this, processor, state, lastParent, place);
     }
 
-    public static boolean processDeclarationsDefault(
-            @NotNull ResCompositeElement o,
-            @NotNull PsiScopeProcessor processor,
-            @NotNull ResolveState state,
-            @Nullable PsiElement lastParent,
-            @NotNull PsiElement place) {
+    public static boolean processDeclarationsDefault(@NotNull ResCompositeElement o,
+                                                     @NotNull PsiScopeProcessor processor,
+                                                     @NotNull ResolveState state,
+                                                     @Nullable PsiElement lastParent,
+                                                     @NotNull PsiElement place) {
         if (!o.shouldGoDeeper()) return processor.execute(o, state);
         if (!processor.execute(o, state)) return false;
 

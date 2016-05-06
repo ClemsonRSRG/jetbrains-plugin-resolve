@@ -16,8 +16,12 @@ public class ResEnsuresClauseImpl extends ResCompositeElementImpl implements Res
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitEnsuresClause(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitEnsuresClause(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

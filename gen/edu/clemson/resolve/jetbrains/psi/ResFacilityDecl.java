@@ -14,7 +14,7 @@ public interface ResFacilityDecl extends ResNamedElement {
   List<ResModuleArgList> getModuleArgListList();
 
   @NotNull
-  List<ResModuleSpec> getModuleSpecList();
+  List<ResReferenceExp> getReferenceExpList();
 
   @Nullable
   PsiElement getBy();
@@ -38,6 +38,6 @@ public interface ResFacilityDecl extends ResNamedElement {
   PsiElement getIdentifier();
 
   @Nullable
-  ResFile getSpecification();
+  ResFile resolveSpecification();
 
 }

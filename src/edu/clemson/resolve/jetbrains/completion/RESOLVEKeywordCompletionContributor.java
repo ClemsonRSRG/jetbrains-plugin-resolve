@@ -9,23 +9,20 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
 import edu.clemson.resolve.jetbrains.ResTypes;
 import edu.clemson.resolve.jetbrains.psi.*;
-import org.jetbrains.annotations.Nullable;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 //TODO: requires and ensures keyword completions would certainly be nice..
-public class RESOLVEKeywordCompletionContributor
-        extends
-        CompletionContributor implements DumbAware {
+public class RESOLVEKeywordCompletionContributor extends CompletionContributor implements DumbAware {
 
     public RESOLVEKeywordCompletionContributor() {
 
-        extend(CompletionType.BASIC, modulePattern(),
+       /* extend(CompletionType.BASIC, modulePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
                         "Concept", "ConceptExt", "Facility", "Precis",
                         "PrecisExt", "Implementation"));
-
+*/
         extend(CompletionType.BASIC, usesPattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "uses"));
@@ -162,9 +159,9 @@ public class RESOLVEKeywordCompletionContributor
     private static Capture<PsiElement> usesPattern() {
         return onKeywordStartWithParent(psiElement(ResBlock.class)
                 .withParent(ResModuleDecl.class)
-                .andOr(psiElement().isFirstAcceptedChild(psiElement()),
+                .andOr(psiElement().isFirstAcceptedChild(psiElement())));/*,
                         psiElement().afterSibling(psiElement(ResModuleSpec.class)),
-                        psiElement().afterSibling(psiElement(ResModuleParameters.class))));
+                        psiElement().afterSibling(psiElement(ResModuleParameters.class))));*/
     }
 
     private static <T extends ResCompositeElement> Capture<PsiElement> keywordAfterSiblings(

@@ -1,6 +1,5 @@
 package edu.clemson.resolve.jetbrains.template;
 
-import com.intellij.codeInsight.template.EverywhereContextType;
 import com.intellij.codeInsight.template.TemplateContextType;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
 import com.intellij.psi.PsiComment;
@@ -17,9 +16,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class RESOLVELiveTemplateContextType
-        extends
-        TemplateContextType {
+public abstract class RESOLVELiveTemplateContextType extends TemplateContextType {
 
     protected RESOLVELiveTemplateContextType(@NotNull @NonNls String id,
                                              @NotNull String presentableName,
@@ -36,15 +33,13 @@ public abstract class RESOLVELiveTemplateContextType
     }
 
     @Nullable
-    private static PsiElement getFirstCompositeElement(
-            @Nullable PsiElement at) {
+    private static PsiElement getFirstCompositeElement(@Nullable PsiElement at) {
         if (at instanceof PsiComment || at instanceof LeafPsiElement &&
                 ((LeafPsiElement) at).getElementType() == ResTypes.STRING) {
             return at;
         }
         PsiElement result = at;
-        while (result != null && (result instanceof PsiWhiteSpace ||
-                result.getChildren().length == 0)) {
+        while (result != null && (result instanceof PsiWhiteSpace || result.getChildren().length == 0)) {
             result = result.getParent();
         }
         return result;
@@ -56,49 +51,42 @@ public abstract class RESOLVELiveTemplateContextType
         return new RESOLVESyntaxHighlighter();
     }
 
-    public static class RESOLVEFileContextType
-            extends
-            RESOLVELiveTemplateContextType {
+    public static class RESOLVEFileContextType extends RESOLVELiveTemplateContextType {
 
         protected RESOLVEFileContextType() {
-            super("RESOLVE_FILE", "RESOLVE file",
-                    RESOLVEEverywhereContextType.class);
+            super("RESOLVE_FILE", "RESOLVE file", RESOLVEEverywhereContextType.class);
         }
 
         @Override
         protected boolean isInContext(@NotNull PsiElement element) {
-            return element.getParent() instanceof ResFile;
+            return element.getParent() instanceof ResFile && !(element instanceof ResModuleDecl);
+            //if the second condition is true, it means that a module has already
+            //been inserted into the document, and we shouldn't suggest another -- say, when the user is typing
+            //in the name.
         }
     }
 
-    public static class RESOLVEMathRefContextType
-            extends
-            RESOLVELiveTemplateContextType {
+    public static class RESOLVEMathRefContextType extends RESOLVELiveTemplateContextType {
 
         protected RESOLVEMathRefContextType() {
-            super("RESOLVE_MATH_REF", "math reference",
-                    RESOLVEEverywhereContextType.class);
+            super("RESOLVE_MATH_REF", "math reference", RESOLVEEverywhereContextType.class);
         }
 
         @Override
         protected boolean isInContext(@NotNull PsiElement element) {
-            return element instanceof ResMathReferenceExp ||
-                    (element instanceof ResMathIdentInfixApplyExp); //for infix math exprs mostly
+            return element instanceof ResMathReferenceExp || (element instanceof ResMathIdentInfixApplyExp); //for infix math exprs mostly
         }
     }
 
-    public static class RESOLVEMathDefContextType
-            extends
-            RESOLVELiveTemplateContextType {
+    public static class RESOLVEMathDefContextType extends RESOLVELiveTemplateContextType {
 
         protected RESOLVEMathDefContextType() {
-            super("RESOLVE_MATH_DEF", "math definition",
-                    RESOLVEEverywhereContextType.class);
+            super("RESOLVE_MATH_DEF", "math definition", RESOLVEEverywhereContextType.class);
         }
 
         @Override
         protected boolean isInContext(@NotNull PsiElement element) {
-            return element instanceof ResMathDefinitionSignature;
+            return element instanceof ResMathDefnSig;
         }
     }
 

@@ -5,10 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 
-public interface ResModuleSpec extends ResNamedElement {
+public interface ResModuleLibraryIdentifierSpec extends ResCompositeElement {
 
   @NotNull
   PsiElement getIdentifier();
@@ -16,10 +15,10 @@ public interface ResModuleSpec extends ResNamedElement {
   @NotNull
   PsiReference[] getReferences();
 
-  @Nullable
-  PsiFile resolve();
-
   @NotNull
-  TextRange getModuleSpecTextRange();
+  TextRange getModuleLibraryIdentiferTextRange();
+
+  @Nullable
+  PsiElement resolve();
 
 }

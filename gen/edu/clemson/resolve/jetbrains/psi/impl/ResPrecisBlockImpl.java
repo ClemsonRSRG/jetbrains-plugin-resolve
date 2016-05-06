@@ -18,8 +18,12 @@ public class ResPrecisBlockImpl extends ResCompositeElementImpl implements ResPr
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitPrecisBlock(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitPrecisBlock(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

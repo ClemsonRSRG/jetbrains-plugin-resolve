@@ -16,8 +16,12 @@ public class ResStringLiteralImpl extends ResCompositeElementImpl implements Res
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitStringLiteral(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitStringLiteral(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

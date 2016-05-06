@@ -18,8 +18,12 @@ public class ResFacilityBlockImpl extends ResCompositeElementImpl implements Res
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitFacilityBlock(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitFacilityBlock(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

@@ -16,8 +16,12 @@ public class ResAssignStatementImpl extends ResStatementImpl implements ResAssig
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitAssignStatement(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitAssignStatement(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

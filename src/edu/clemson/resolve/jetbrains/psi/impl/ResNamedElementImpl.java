@@ -35,8 +35,15 @@ public abstract class ResNamedElementImpl
         return getIdentifier();
     }
 
-    public boolean isPublic() {
-        return true;
+    /**
+     * Returns {@code true} if {@code this} named element should be visible from a uses clause.
+     *
+     * @return whether or not this element should be visible from a uses clause.
+     */
+    public boolean isUsesClauseVisible() {
+        return (!(this instanceof ResOperationDecl) &&
+                !(this instanceof ResTypeModelDecl) &&
+                !(this instanceof ResParamDef));
     }
 
     @Nullable
@@ -48,12 +55,10 @@ public abstract class ResNamedElementImpl
 
     @NotNull
     @Override
-    public PsiElement setName(
-            @NonNls @NotNull String newName) throws IncorrectOperationException {
+    public PsiElement setName(@NonNls @NotNull String newName) throws IncorrectOperationException {
         PsiElement identifier = getIdentifier();
         if (identifier != null) {
-            identifier.replace(ResElementFactory
-                    .createIdentifierFromText(getProject(), newName));
+            identifier.replace(ResElementFactory.createIdentifierFromText(getProject(), newName));
         }
         return this;
     }
@@ -61,24 +66,20 @@ public abstract class ResNamedElementImpl
     @Override
     public int getTextOffset() {
         PsiElement identifier = getIdentifier();
-        return identifier != null ? identifier.getTextOffset()
-                : super.getTextOffset();
+        return identifier != null ? identifier.getTextOffset() : super.getTextOffset();
     }
 
     @Override
-    public boolean processDeclarations(
-            @NotNull PsiScopeProcessor processor,
-            @NotNull ResolveState state,
-            PsiElement lastParent,
-            @NotNull PsiElement place) {
-        return ResCompositeElementImpl.processDeclarationsDefault(
-                this, processor, state, lastParent, place);
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
+                                       @NotNull ResolveState state,
+                                       PsiElement lastParent,
+                                       @NotNull PsiElement place) {
+        return ResCompositeElementImpl.processDeclarationsDefault(this, processor, state, lastParent, place);
     }
 
     @Nullable
     @Override
-    public ResType getResType(
-            @Nullable ResolveState context) {
+    public ResType getResType(@Nullable ResolveState context) {
         if (context != null) return getResTypeInner(context);
         return CachedValuesManager.getCachedValue(this,
                 new CachedValueProvider<ResType>() {
@@ -93,8 +94,7 @@ public abstract class ResNamedElementImpl
 
     @Nullable
     @Override
-    public ResMathExp getResMathMetaTypeExp(
-            @Nullable ResolveState context) {
+    public ResMathExp getResMathMetaTypeExp(@Nullable ResolveState context) {
         if (context != null) return getResMathMetaTypeExpInner(context);
         return CachedValuesManager.getCachedValue(this,
                 new CachedValueProvider<ResMathExp>() {
@@ -108,8 +108,7 @@ public abstract class ResNamedElementImpl
     }
 
     @Nullable
-    protected ResType getResTypeInner(
-            @Nullable ResolveState context) {
+    protected ResType getResTypeInner(@Nullable ResolveState context) {
         return findSiblingType();
     }
 
@@ -120,8 +119,7 @@ public abstract class ResNamedElementImpl
     }
 
     @Nullable
-    protected ResMathExp getResMathMetaTypeExpInner(
-            @Nullable ResolveState context) {
+    protected ResMathExp getResMathMetaTypeExpInner(@Nullable ResolveState context) {
         ResMathExp nextExp = findSiblingMathMetaType();
         return nextExp;
     }
@@ -140,18 +138,15 @@ public abstract class ResNamedElementImpl
     @Nullable
     @Override
     public ResMathExp findSiblingMathMetaType() {
-        ResMathExp purelyMathTypeExp =
-                PsiTreeUtil.getNextSiblingOfType(this, ResMathExp.class);
+        ResMathExp purelyMathTypeExp = PsiTreeUtil.getNextSiblingOfType(this, ResMathExp.class);
         if (purelyMathTypeExp != null) return purelyMathTypeExp;
 
         //ok, maybe we're dealing with a programmatic type or something...
         ResType progType = findSiblingType();
         if (progType != null && progType.getTypeReferenceExp() != null) {
-            PsiElement resolvedProgramType = progType.getTypeReferenceExp()
-                    .getReference().resolve();
+            PsiElement resolvedProgramType = progType.getTypeReferenceExp().getReference().resolve();
             if (resolvedProgramType instanceof ResTypeLikeNodeDecl) {
-                return ((ResTypeLikeNodeDecl) resolvedProgramType)
-                        .getMathMetaTypeExp();
+                return ((ResTypeLikeNodeDecl) resolvedProgramType).getMathMetaTypeExp();
             }
         }
         return null;
@@ -162,31 +157,25 @@ public abstract class ResNamedElementImpl
     public Icon getIcon(int flags) {
         Icon icon = null;
         if (this instanceof ResPrecisModuleDecl) icon = RESOLVEIcons.PRECIS;
-        else if (this instanceof ResPrecisExtensionModuleDecl)
-            icon = RESOLVEIcons.PRECIS_EXT;
-        else if (this instanceof ResConceptModuleDecl)
-            icon = RESOLVEIcons.CONCEPT;
-        else if (this instanceof ResConceptExtensionModuleDecl)
-            icon = RESOLVEIcons.CONCEPT_EXT;
+        else if (this instanceof ResPrecisExtensionModuleDecl) icon = RESOLVEIcons.PRECIS_EXT;
+        else if (this instanceof ResConceptModuleDecl) icon = RESOLVEIcons.CONCEPT;
+        else if (this instanceof ResConceptExtensionModuleDecl) icon = RESOLVEIcons.CONCEPT_EXT;
         else if (this instanceof ResImplModuleDecl) icon = RESOLVEIcons.IMPL;
-        else if (this instanceof ResFacilityModuleDecl)
-            icon = RESOLVEIcons.FACILITY;
-        else if (this instanceof ResTypeModelDecl)
-            icon = RESOLVEIcons.TYPE_MODEL;
+        else if (this instanceof ResFacilityModuleDecl) icon = RESOLVEIcons.FACILITY;
+        else if (this instanceof ResTypeModelDecl) icon = RESOLVEIcons.TYPE_MODEL;
         else if (this instanceof ResTypeReprDecl) icon = RESOLVEIcons.TYPE_REPR;
         else if (this instanceof ResFacilityDecl) icon = RESOLVEIcons.FACILITY;
-        else if (this instanceof ResTypeParamDecl)
-            icon = RESOLVEIcons.GENERIC_TYPE;
+        else if (this instanceof ResTypeParamDecl) icon = RESOLVEIcons.GENERIC_TYPE;
         else if (this instanceof ResMathVarDef) icon = RESOLVEIcons.VARIABLE;
-        else if (this instanceof ResOperationDecl)
-            icon = RESOLVEIcons.FUNCTION_DECL;
+        else if (this instanceof ResOperationDecl) icon = RESOLVEIcons.FUNCTION_DECL;
+        else if (this instanceof ResOperationProcedureDecl) icon = RESOLVEIcons.FUNCTION_IMPL;
         else if (this instanceof ResParamDef) icon = RESOLVEIcons.PARAMETER;
         //TODO: complete the icon list here as you go along
         if (icon != null) {
             if ((flags & Iconable.ICON_FLAG_VISIBILITY) != 0) {
                 RowIcon rowIcon =
                         ElementBase.createLayeredIcon(this, icon, flags);
-                rowIcon.setIcon(isPublic() ? PlatformIcons.PUBLIC_ICON :
+                rowIcon.setIcon(isUsesClauseVisible() ? PlatformIcons.PUBLIC_ICON :
                         PlatformIcons.PRIVATE_ICON, 1);
                 return rowIcon;
             }

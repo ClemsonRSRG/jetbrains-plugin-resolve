@@ -16,8 +16,12 @@ public class ResImplModuleDeclImpl extends ResAbstractModuleImpl implements ResI
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitImplModuleDecl(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitImplModuleDecl(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 
@@ -35,8 +39,8 @@ public class ResImplModuleDeclImpl extends ResAbstractModuleImpl implements ResI
 
   @Override
   @NotNull
-  public List<ResModuleSpec> getModuleSpecList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleSpec.class);
+  public List<ResModuleIdentifierSpec> getModuleIdentifierSpecList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleIdentifierSpec.class);
   }
 
   @Override
@@ -47,8 +51,8 @@ public class ResImplModuleDeclImpl extends ResAbstractModuleImpl implements ResI
 
   @Override
   @Nullable
-  public ResUsesItemList getUsesItemList() {
-    return findChildByClass(ResUsesItemList.class);
+  public ResUsesList getUsesList() {
+    return findChildByClass(ResUsesList.class);
   }
 
   @Override

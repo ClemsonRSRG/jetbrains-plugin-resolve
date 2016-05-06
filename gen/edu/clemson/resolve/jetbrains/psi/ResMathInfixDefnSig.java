@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ResMathInfixDefnSig extends ResCompositeElement {
+public interface ResMathInfixDefnSig extends ResMathDefnSig {
 
   @Nullable
   ResMathExp getMathExp();

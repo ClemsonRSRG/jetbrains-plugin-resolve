@@ -17,4 +17,9 @@ public interface ResReferenceExp extends ResExp, ResReferenceExpBase {
   @Nullable
   ResReferenceExp getQualifier();
 
+  @Nullable
+  PsiElement resolve();
+
+  boolean shouldReferenceModule();
+
 }

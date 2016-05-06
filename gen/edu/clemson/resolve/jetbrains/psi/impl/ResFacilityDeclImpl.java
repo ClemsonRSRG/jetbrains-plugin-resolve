@@ -16,8 +16,12 @@ public class ResFacilityDeclImpl extends ResNamedElementImpl implements ResFacil
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitFacilityDecl(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitFacilityDecl(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 
@@ -35,8 +39,8 @@ public class ResFacilityDeclImpl extends ResNamedElementImpl implements ResFacil
 
   @Override
   @NotNull
-  public List<ResModuleSpec> getModuleSpecList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleSpec.class);
+  public List<ResReferenceExp> getReferenceExpList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResReferenceExp.class);
   }
 
   @Override
@@ -82,8 +86,8 @@ public class ResFacilityDeclImpl extends ResNamedElementImpl implements ResFacil
   }
 
   @Nullable
-  public ResFile getSpecification() {
-    return ResPsiImplUtil.getSpecification(this);
+  public ResFile resolveSpecification() {
+    return ResPsiImplUtil.resolveSpecification(this);
   }
 
 }

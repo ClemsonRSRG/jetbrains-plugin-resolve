@@ -16,8 +16,12 @@ public class ResModuleArgListImpl extends ResCompositeElementImpl implements Res
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitModuleArgList(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitModuleArgList(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

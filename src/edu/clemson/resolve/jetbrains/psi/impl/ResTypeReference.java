@@ -17,29 +17,25 @@ import static edu.clemson.resolve.jetbrains.psi.impl.ResReference.processSuperMo
 //we might just need to have to specify that we DONT want to search the
 //spec we're enhancing (and that should be easy since we already have a specialized
 //processor for types, or b.) somehow ignore type models when we'r
-public class ResTypeReference
-        extends
-        PsiPolyVariantReferenceBase<ResTypeReferenceExp> {
+public class ResTypeReference extends PsiPolyVariantReferenceBase<ResTypeReferenceExp> {
 
-    public ResTypeReference(@NotNull ResTypeReferenceExp o) {
-        super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(),
-                o.getIdentifier().getTextLength()));
+    ResTypeReference(@NotNull ResTypeReferenceExp o) {
+        super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(), o.getIdentifier().getTextLength()));
     }
 
     private static final ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase> MY_RESOLVER =
             new ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase>() {
                 @NotNull
                 @Override
-                public ResolveResult[] resolve(
-                        @NotNull PsiPolyVariantReferenceBase psiPolyVariantReferenceBase,
-                        boolean incompleteCode) {
+                public ResolveResult[] resolve(@NotNull PsiPolyVariantReferenceBase psiPolyVariantReferenceBase,
+                                               boolean incompleteCode) {
                     return ((ResTypeReference) psiPolyVariantReferenceBase).resolveInner();
                 }
             };
 
     @NotNull
     private ResolveResult[] resolveInner() {
-        Collection<ResolveResult> result = new OrderedSet<ResolveResult>();
+        Collection<ResolveResult> result = new OrderedSet<>();
         processResolveVariants(ResReference.createResolveProcessor(result, myElement));
         return result.toArray(new ResolveResult[result.size()]);
     }
@@ -51,12 +47,9 @@ public class ResTypeReference
 
     @Override
     @NotNull
-    public ResolveResult[] multiResolve(
-            boolean incompleteCode) {
-        return myElement.isValid()
-                ? ResolveCache.getInstance(myElement.getProject())
-                .resolveWithCaching(this, MY_RESOLVER, false, false)
-                : ResolveResult.EMPTY_ARRAY;
+    public ResolveResult[] multiResolve(boolean incompleteCode) {
+        return myElement.isValid() ? ResolveCache.getInstance(myElement.getProject())
+                .resolveWithCaching(this, MY_RESOLVER, false, false) : ResolveResult.EMPTY_ARRAY;
     }
 
     @NotNull
@@ -80,14 +73,16 @@ public class ResTypeReference
                                                       @NotNull ResTypeReferenceExp qualifier,
                                                       @NotNull ResScopeProcessor processor,
                                                       @NotNull ResolveState state) {
-        PsiReference targetRef = qualifier.getReference();
-        PsiElement target = targetRef.resolve();
+        PsiElement target = qualifier.resolve();
         if (target == null || target == qualifier) return false;
         if (target instanceof ResFacilityDecl) {
-            ResFile specFile = ((ResFacilityDecl) target).getSpecification();
-            if (specFile != null) {
-                ResReference.processModuleLevelEntities(specFile, processor, state, false);
-            }
+            ResFile specFile = ((ResFacilityDecl) target).resolveSpecification();
+            if (specFile != null) ResReference.processModuleLevelEntities(specFile, processor, state, false, true);
+        }
+        else if (target instanceof ResFile) {
+            int i;
+            i = 0;
+            //ResReference.processModuleLevelEntities((ResModuleDecl)target, processor, state, false);
         }
         return false;
     }
@@ -100,16 +95,15 @@ public class ResTypeReference
         ResolveUtil.treeWalkUp(myElement, delegate);
         Collection<? extends ResNamedElement> result = delegate.getVariants();
         //this processes any named elements we've found searching up the tree in the previous line
-        if (!processNamedElements(processor, state, result, localResolve))
-            return false;
-        if (!ResReference.processModuleLevelEntities(file, processor, state, localResolve))
-            return false;
-        if (!ResReference.processExplicitlyNamedAndInheritedUsesRequests(file, processor, state))
-            return false;
+        if (!processNamedElements(processor, state, result, localResolve)) return false;
+        if (!ResReference.processModuleLevelEntities(file, processor, state, localResolve)) return false;
+
+        //if (!ResReference.processReferencedFiles(file, processor, state)) return false;
+        if (!ResReference.processUsesAndReferencedModules(file, processor, state)) return false;
 
         //TODO: What we really need to avoid finding both the models and reprs
         // is some flag, say, "stopAfterFirst" (I think...)
-        if (!processTypeSuperModules(file, processor, state)) return false;
+        //if (!processTypeSuperModules(file, processor, state)) return false;
         return true;
     }
 
@@ -122,18 +116,16 @@ public class ResTypeReference
     }
 
     @NotNull
-    private ResTypeProcessor createDelegate(
-            @NotNull ResScopeProcessor processor) {
+    private ResTypeProcessor createDelegate(@NotNull ResScopeProcessor processor) {
         return new ResTypeProcessor(myElement, processor.isCompletion());
     }
 
     /**
      * A processor for treewalking
      */
-    protected static class ResTypeProcessor extends ResScopeProcessorBase {
+    private static class ResTypeProcessor extends ResScopeProcessorBase {
 
-        public ResTypeProcessor(@NotNull ResTypeReferenceExp origin,
-                                boolean completion) {
+        ResTypeProcessor(@NotNull ResTypeReferenceExp origin, boolean completion) {
             super(origin.getIdentifier(), origin, completion);
         }
 

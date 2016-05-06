@@ -16,8 +16,12 @@ public class ResVarSpecImpl extends ResCompositeElementImpl implements ResVarSpe
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitVarSpec(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitVarSpec(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

@@ -16,8 +16,12 @@ public class ResChangingClauseImpl extends ResCompositeElementImpl implements Re
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitChangingClause(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitChangingClause(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

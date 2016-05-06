@@ -11,7 +11,7 @@ public interface ResConceptExtensionModuleDecl extends ResModuleDecl {
   ResConceptBlock getConceptBlock();
 
   @Nullable
-  ResModuleSpec getModuleSpec();
+  ResModuleIdentifierSpec getModuleIdentifierSpec();
 
   @Nullable
   ResRequiresClause getRequiresClause();
@@ -20,7 +20,7 @@ public interface ResConceptExtensionModuleDecl extends ResModuleDecl {
   ResSpecModuleParameters getSpecModuleParameters();
 
   @Nullable
-  ResUsesItemList getUsesItemList();
+  ResUsesList getUsesList();
 
   @NotNull
   PsiElement getConcept();

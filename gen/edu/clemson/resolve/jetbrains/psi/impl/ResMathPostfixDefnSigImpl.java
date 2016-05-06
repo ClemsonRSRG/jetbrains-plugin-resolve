@@ -10,14 +10,18 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static edu.clemson.resolve.jetbrains.ResTypes.*;
 import edu.clemson.resolve.jetbrains.psi.*;
 
-public class ResMathPostfixDefnSigImpl extends ResAbstractMathSignatureImpl implements ResMathPostfixDefnSig {
+public class ResMathPostfixDefnSigImpl extends ResAbstractMathSigImpl implements ResMathPostfixDefnSig {
 
   public ResMathPostfixDefnSigImpl(ASTNode node) {
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitMathPostfixDefnSig(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitMathPostfixDefnSig(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

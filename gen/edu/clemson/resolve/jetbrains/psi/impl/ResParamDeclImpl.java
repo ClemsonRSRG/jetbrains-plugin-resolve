@@ -16,8 +16,12 @@ public class ResParamDeclImpl extends ResCompositeElementImpl implements ResPara
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitParamDecl(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitParamDecl(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

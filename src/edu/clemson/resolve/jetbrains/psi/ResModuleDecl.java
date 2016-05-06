@@ -14,16 +14,16 @@ public interface ResModuleDecl extends ResNamedElement {
     public ResBlock getBlock();
 
     @NotNull
-    public List<ResUsesItem> getUsesItems();
+    public List<ResUsesSpecGroup> getUsesSpecGroups();
+
+    //@NotNull
+    // public List<ResModuleSpec> getSuperModuleSpecList();
 
     @NotNull
-    public List<ResModuleSpec> getSuperModuleSpecList();
+    public List<ResMathDefnDecl> getMathDefinitionDecls();
 
     @NotNull
-    public List<ResMathDefinitionDecl> getMathDefinitionDecls();
-
-    @NotNull
-    public List<ResMathDefinitionSignature> getMathDefinitionSignatures();
+    public List<ResMathDefnSig> getMathDefnSigs();
 
     @NotNull
     public List<ResTypeLikeNodeDecl> getTypes();
@@ -33,6 +33,9 @@ public interface ResModuleDecl extends ResNamedElement {
 
     @Nullable
     public ResModuleParameters getModuleParameters();
+
+    @NotNull
+    public List<ResTypeParamDecl> getGenericTypeParams();
 
     @NotNull
     public List<ResOperationLikeNode> getOperationLikeThings();

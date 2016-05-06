@@ -11,7 +11,7 @@ public interface ResPrecisModuleDecl extends ResModuleDecl {
   ResPrecisBlock getPrecisBlock();
 
   @Nullable
-  ResUsesItemList getUsesItemList();
+  ResUsesList getUsesList();
 
   @Nullable
   PsiElement getEnd();

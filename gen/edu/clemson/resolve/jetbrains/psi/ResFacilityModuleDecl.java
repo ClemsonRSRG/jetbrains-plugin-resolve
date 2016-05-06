@@ -14,7 +14,7 @@ public interface ResFacilityModuleDecl extends ResModuleDecl {
   ResRequiresClause getRequiresClause();
 
   @Nullable
-  ResUsesItemList getUsesItemList();
+  ResUsesList getUsesList();
 
   @Nullable
   PsiElement getEnd();

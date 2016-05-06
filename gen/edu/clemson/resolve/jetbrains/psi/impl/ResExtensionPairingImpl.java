@@ -16,8 +16,12 @@ public class ResExtensionPairingImpl extends ResCompositeElementImpl implements 
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitExtensionPairing(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitExtensionPairing(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 
@@ -29,8 +33,8 @@ public class ResExtensionPairingImpl extends ResCompositeElementImpl implements 
 
   @Override
   @NotNull
-  public List<ResModuleSpec> getModuleSpecList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleSpec.class);
+  public List<ResReferenceExp> getReferenceExpList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResReferenceExp.class);
   }
 
   @Override

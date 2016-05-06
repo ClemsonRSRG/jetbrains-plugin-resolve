@@ -54,7 +54,6 @@ public interface ResTypes {
   IElementType MATH_BOOLEAN_INFIX_APPLY_EXP = new ResCompositeElementType("MATH_BOOLEAN_INFIX_APPLY_EXP");
   IElementType MATH_CART_PROD_EXP = new ResCompositeElementType("MATH_CART_PROD_EXP");
   IElementType MATH_CATEGORICAL_DEFN_DECL = new ResCompositeElementType("MATH_CATEGORICAL_DEFN_DECL");
-  IElementType MATH_CLASSIFICATION_THEOREM_DECL = new ResCompositeElementType("MATH_CLASSIFICATION_THEOREM_DECL");
   IElementType MATH_CUP_OUTFIX_APPLY_EXP = new ResCompositeElementType("MATH_CUP_OUTFIX_APPLY_EXP");
   IElementType MATH_DBL_BAR_OUTFIX_APPLY_EXP = new ResCompositeElementType("MATH_DBL_BAR_OUTFIX_APPLY_EXP");
   IElementType MATH_EQUALITY_INFIX_APPLY_EXP = new ResCompositeElementType("MATH_EQUALITY_INFIX_APPLY_EXP");
@@ -92,7 +91,8 @@ public interface ResTypes {
   IElementType MATH_VAR_DECL_GROUP = new ResCompositeElementType("MATH_VAR_DECL_GROUP");
   IElementType MATH_VAR_DEF = new ResCompositeElementType("MATH_VAR_DEF");
   IElementType MODULE_ARG_LIST = new ResCompositeElementType("MODULE_ARG_LIST");
-  IElementType MODULE_SPEC = new ResCompositeElementType("MODULE_SPEC");
+  IElementType MODULE_IDENTIFIER_SPEC = new ResCompositeElementType("MODULE_IDENTIFIER_SPEC");
+  IElementType MODULE_LIBRARY_IDENTIFIER_SPEC = new ResCompositeElementType("MODULE_LIBRARY_IDENTIFIER_SPEC");
   IElementType MUL_INFIX_EXP = new ResCompositeElementType("MUL_INFIX_EXP");
   IElementType OPERATION_DECL = new ResCompositeElementType("OPERATION_DECL");
   IElementType OPERATION_PROCEDURE_DECL = new ResCompositeElementType("OPERATION_PROCEDURE_DECL");
@@ -124,8 +124,8 @@ public interface ResTypes {
   IElementType TYPE_REFERENCE_EXP = new ResCompositeElementType("TYPE_REFERENCE_EXP");
   IElementType TYPE_REPR_DECL = new ResCompositeElementType("TYPE_REPR_DECL");
   IElementType UNARY_EXP = new ResCompositeElementType("UNARY_EXP");
-  IElementType USES_ITEM = new ResCompositeElementType("USES_ITEM");
-  IElementType USES_ITEM_LIST = new ResCompositeElementType("USES_ITEM_LIST");
+  IElementType USES_LIST = new ResCompositeElementType("USES_LIST");
+  IElementType USES_SPEC_GROUP = new ResCompositeElementType("USES_SPEC_GROUP");
   IElementType VAR_DECL_GROUP = new ResCompositeElementType("VAR_DECL_GROUP");
   IElementType VAR_DEF = new ResCompositeElementType("VAR_DEF");
   IElementType VAR_SPEC = new ResCompositeElementType("VAR_SPEC");
@@ -133,6 +133,8 @@ public interface ResTypes {
 
   IElementType ALTERS = new ResTokenType("alters");
   IElementType AND = new ResTokenType("and");
+  IElementType AND1 = new ResTokenType("∧");
+  IElementType AS = new ResTokenType("as");
   IElementType AT = new ResTokenType("@");
   IElementType BAR = new ResTokenType("|");
   IElementType BASE = new ResTokenType("base");
@@ -182,6 +184,7 @@ public interface ResTypes {
   IElementType FOR = new ResTokenType("for");
   IElementType FORALL = new ResTokenType("Forall");
   IElementType FORALL1 = new ResTokenType("∀");
+  IElementType FROM = new ResTokenType("from");
   IElementType GREATER = new ResTokenType(">");
   IElementType GREATER_OR_EQUAL = new ResTokenType(">=");
   IElementType GREATER_OR_EQUAL1 = new ResTokenType("≥");
@@ -220,17 +223,19 @@ public interface ResTypes {
   IElementType LESS_OR_EQUAL_U = new ResTokenType("≤ᵤ");
   IElementType LPAREN = new ResTokenType("(");
   IElementType MAINTAINING = new ResTokenType("maintaining");
+  IElementType MATHBOOLEANOP_1_5_0 = new ResTokenType("MathBooleanOp_1_5_0");
   IElementType MINUS = new ResTokenType("-");
   IElementType MOD = new ResTokenType("%");
   IElementType MODELED = new ResTokenType("modeled");
   IElementType MUL = new ResTokenType("*");
-  IElementType NEG = new ResTokenType("⌐");
   IElementType NEQUALS = new ResTokenType("/=");
   IElementType NEQUALS1 = new ResTokenType("≠");
   IElementType NOT = new ResTokenType("not");
+  IElementType NOT1 = new ResTokenType("⌐");
   IElementType OF = new ResTokenType("of");
   IElementType OPERATION = new ResTokenType("Operation");
   IElementType OR = new ResTokenType("or");
+  IElementType OR1 = new ResTokenType("∨");
   IElementType OTHERWISE = new ResTokenType("otherwise");
   IElementType PARAM_TYPE = new ResTokenType("type");
   IElementType PLUS = new ResTokenType("+");
@@ -408,9 +413,6 @@ public interface ResTypes {
       else if (type == MATH_CATEGORICAL_DEFN_DECL) {
         return new ResMathCategoricalDefnDeclImpl(node);
       }
-      else if (type == MATH_CLASSIFICATION_THEOREM_DECL) {
-        return new ResMathClassificationTheoremDeclImpl(node);
-      }
       else if (type == MATH_CUP_OUTFIX_APPLY_EXP) {
         return new ResMathCupOutfixApplyExpImpl(node);
       }
@@ -522,8 +524,11 @@ public interface ResTypes {
       else if (type == MODULE_ARG_LIST) {
         return new ResModuleArgListImpl(node);
       }
-      else if (type == MODULE_SPEC) {
-        return new ResModuleSpecImpl(node);
+      else if (type == MODULE_IDENTIFIER_SPEC) {
+        return new ResModuleIdentifierSpecImpl(node);
+      }
+      else if (type == MODULE_LIBRARY_IDENTIFIER_SPEC) {
+        return new ResModuleLibraryIdentifierSpecImpl(node);
       }
       else if (type == MUL_INFIX_EXP) {
         return new ResMulInfixExpImpl(node);
@@ -618,11 +623,11 @@ public interface ResTypes {
       else if (type == UNARY_EXP) {
         return new ResUnaryExpImpl(node);
       }
-      else if (type == USES_ITEM) {
-        return new ResUsesItemImpl(node);
+      else if (type == USES_LIST) {
+        return new ResUsesListImpl(node);
       }
-      else if (type == USES_ITEM_LIST) {
-        return new ResUsesItemListImpl(node);
+      else if (type == USES_SPEC_GROUP) {
+        return new ResUsesSpecGroupImpl(node);
       }
       else if (type == VAR_DECL_GROUP) {
         return new ResVarDeclGroupImpl(node);

@@ -16,8 +16,12 @@ public class ResArgumentListImpl extends ResCompositeElementImpl implements ResA
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitArgumentList(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitArgumentList(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

@@ -18,8 +18,12 @@ public class ResConceptBlockImpl extends ResCompositeElementImpl implements ResC
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitConceptBlock(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitConceptBlock(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

@@ -16,8 +16,12 @@ public class ResCorrespondenceClauseImpl extends ResCompositeElementImpl impleme
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitCorrespondenceClause(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitCorrespondenceClause(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

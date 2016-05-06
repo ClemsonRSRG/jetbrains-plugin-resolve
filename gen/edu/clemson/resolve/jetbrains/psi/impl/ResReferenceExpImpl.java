@@ -16,8 +16,12 @@ public class ResReferenceExpImpl extends ResExpImpl implements ResReferenceExp {
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitReferenceExp(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitReferenceExp(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 
@@ -35,6 +39,15 @@ public class ResReferenceExpImpl extends ResExpImpl implements ResReferenceExp {
   @Nullable
   public ResReferenceExp getQualifier() {
     return ResPsiImplUtil.getQualifier(this);
+  }
+
+  @Nullable
+  public PsiElement resolve() {
+    return ResPsiImplUtil.resolve(this);
+  }
+
+  public boolean shouldReferenceModule() {
+    return ResPsiImplUtil.shouldReferenceModule(this);
   }
 
 }

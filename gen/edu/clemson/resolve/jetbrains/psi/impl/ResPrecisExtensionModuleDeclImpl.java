@@ -16,15 +16,19 @@ public class ResPrecisExtensionModuleDeclImpl extends ResAbstractModuleImpl impl
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitPrecisExtensionModuleDecl(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitPrecisExtensionModuleDecl(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 
   @Override
   @NotNull
-  public List<ResModuleSpec> getModuleSpecList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleSpec.class);
+  public List<ResModuleIdentifierSpec> getModuleIdentifierSpecList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleIdentifierSpec.class);
   }
 
   @Override

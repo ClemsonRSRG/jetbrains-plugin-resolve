@@ -5,18 +5,21 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ResMathClassificationTheoremDecl extends ResCompositeElement {
+public interface ResUsesList extends ResCompositeElement {
 
   @NotNull
-  PsiElement getColon();
+  List<ResUsesSpecGroup> getUsesSpecGroupList();
 
   @Nullable
-  PsiElement getCorollary();
+  PsiElement getLparen();
 
   @Nullable
-  PsiElement getTheorem();
+  PsiElement getRparen();
+
+  @Nullable
+  PsiElement getSemicolon();
 
   @NotNull
-  PsiElement getIdentifier();
+  PsiElement getUses();
 
 }

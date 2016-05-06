@@ -16,8 +16,12 @@ public class ResSpecModuleParametersImpl extends ResCompositeElementImpl impleme
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitSpecModuleParameters(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitSpecModuleParameters(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

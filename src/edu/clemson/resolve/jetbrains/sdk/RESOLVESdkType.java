@@ -38,8 +38,7 @@ public class RESOLVESdkType extends SdkType {
     @Override
     public String suggestHomePath() {
         VirtualFile suggestSdkDirectory = RESOLVESdkUtil.suggestSdkDirectory();
-        return suggestSdkDirectory != null ?
-                suggestSdkDirectory.getPath() : null;
+        return suggestSdkDirectory != null ? suggestSdkDirectory.getPath() : null;
     }
 
     @Override
@@ -49,16 +48,14 @@ public class RESOLVESdkType extends SdkType {
         //exists here--no need, as this will return null if it doesn't
         // (the version is embedded in it)
         if (getVersionString(sdkHomePath) == null) {
-            RESOLVESdkService.LOG.debug("Cannot retrieve version for sdk " +
-                    "(or the compiler-jar): " + sdkHomePath);
+            RESOLVESdkService.LOG.debug("Cannot retrieve version for sdk (or the compiler-jar): " + sdkHomePath);
             return false;
         }
         return true;
     }
 
     @Override
-    public String suggestSdkName(String currentSdkName,
-                                 String sdkHome) {
+    public String suggestSdkName(String currentSdkName, String sdkHome) {
         String version = getVersionString(sdkHome);
         if (version == null) {
             return "Unknown RESOLVE version at " + sdkHome;
@@ -80,16 +77,13 @@ public class RESOLVESdkType extends SdkType {
 
     @Nullable
     @Override
-    public AdditionalDataConfigurable createAdditionalDataConfigurable(
-            @NotNull SdkModel sdkModel,
-            @NotNull SdkModificator sdkModificator) {
+    public AdditionalDataConfigurable createAdditionalDataConfigurable(@NotNull SdkModel sdkModel,
+                                                                       @NotNull SdkModificator sdkModificator) {
         return null;
     }
 
     @Override
-    public void saveAdditionalData(
-            @NotNull SdkAdditionalData additionalData,
-            @NotNull Element additional) {
+    public void saveAdditionalData(@NotNull SdkAdditionalData additionalData, @NotNull Element additional) {
     }
 
     @NotNull

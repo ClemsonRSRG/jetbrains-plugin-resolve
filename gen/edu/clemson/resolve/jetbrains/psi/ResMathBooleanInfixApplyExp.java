@@ -14,6 +14,9 @@ public interface ResMathBooleanInfixApplyExp extends ResMathExp {
   PsiElement getAnd();
 
   @Nullable
+  PsiElement getAnd1();
+
+  @Nullable
   PsiElement getColoncolon();
 
   @Nullable
@@ -21,5 +24,8 @@ public interface ResMathBooleanInfixApplyExp extends ResMathExp {
 
   @Nullable
   PsiElement getOr();
+
+  @Nullable
+  PsiElement getOr1();
 
 }

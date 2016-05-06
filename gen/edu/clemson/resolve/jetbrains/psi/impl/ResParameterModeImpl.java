@@ -16,8 +16,12 @@ public class ResParameterModeImpl extends ResCompositeElementImpl implements Res
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitParameterMode(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitParameterMode(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

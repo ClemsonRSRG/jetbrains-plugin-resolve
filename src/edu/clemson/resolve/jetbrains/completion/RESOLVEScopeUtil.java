@@ -10,32 +10,26 @@ import com.intellij.psi.search.GlobalSearchScope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class RESOLVEScopeUtil {
+class RESOLVEScopeUtil {
 
     @NotNull
-    public static GlobalSearchScope moduleScopeWithoutLibraries(
-            @NotNull Module module) {
+    public static GlobalSearchScope moduleScopeWithoutLibraries(@NotNull Module module) {
         return GlobalSearchScope.moduleWithDependenciesScope(module)
                 .uniteWith(module.getModuleContentWithDependenciesScope());
     }
 
     @NotNull
-    public static GlobalSearchScope moduleScope(
-            @NotNull PsiElement element) {
-        return moduleScope(element.getProject(), ModuleUtilCore
-                .findModuleForPsiElement(element));
+    public static GlobalSearchScope moduleScope(@NotNull PsiElement element) {
+        return moduleScope(element.getProject(), ModuleUtilCore.findModuleForPsiElement(element));
     }
 
     @NotNull
-    public static GlobalSearchScope moduleScope(
-            @NotNull Project project, @Nullable Module module) {
-        return module != null ? moduleScope(module) :
-                GlobalSearchScope.projectScope(project);
+    public static GlobalSearchScope moduleScope(@NotNull Project project, @Nullable Module module) {
+        return module != null ? moduleScope(module) : GlobalSearchScope.projectScope(project);
     }
 
     @NotNull
-    public static GlobalSearchScope moduleScope(
-            @NotNull Module module) {
+    public static GlobalSearchScope moduleScope(@NotNull Module module) {
         return GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module)
                 .uniteWith(module.getModuleContentWithDependenciesScope());
     }

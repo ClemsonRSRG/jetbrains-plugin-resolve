@@ -16,8 +16,12 @@ public class ResWhileStatementImpl extends ResStatementImpl implements ResWhileS
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitWhileStatement(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitWhileStatement(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

@@ -17,4 +17,7 @@ public interface ResTypeReferenceExp extends ResReferenceExpBase {
   @Nullable
   ResTypeReferenceExp getQualifier();
 
+  @Nullable
+  PsiElement resolve();
+
 }

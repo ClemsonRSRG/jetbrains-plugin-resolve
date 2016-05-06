@@ -16,8 +16,12 @@ public class ResTypeParamDeclImpl extends ResNamedElementImpl implements ResType
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitTypeParamDecl(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitTypeParamDecl(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

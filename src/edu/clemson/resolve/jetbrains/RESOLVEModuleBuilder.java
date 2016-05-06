@@ -16,15 +16,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class RESOLVEModuleBuilder
-        extends
-        JavaModuleBuilder
-        implements SourcePathsBuilder, ModuleBuilderListener {
+public class RESOLVEModuleBuilder extends JavaModuleBuilder implements SourcePathsBuilder, ModuleBuilderListener {
 
     @Override
-    public void setupRootModel(
-            ModifiableRootModel modifiableRootModel)
-            throws ConfigurationException {
+    public void setupRootModel(ModifiableRootModel modifiableRootModel) throws ConfigurationException {
         addListener(this);
         super.setupRootModel(modifiableRootModel);
     }
@@ -47,7 +42,6 @@ public class RESOLVEModuleBuilder
 
     @Override
     public void moduleCreated(@NotNull Module module) {
-        CompilerWorkspaceConfiguration.getInstance(module.getProject())
-                .CLEAR_OUTPUT_DIRECTORY = false;
+        CompilerWorkspaceConfiguration.getInstance(module.getProject()).CLEAR_OUTPUT_DIRECTORY = false;
     }
 }

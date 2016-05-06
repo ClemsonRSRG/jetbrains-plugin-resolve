@@ -16,8 +16,12 @@ public class ResVarDeclGroupImpl extends ResCompositeElementImpl implements ResV
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitVarDeclGroup(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitVarDeclGroup(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 

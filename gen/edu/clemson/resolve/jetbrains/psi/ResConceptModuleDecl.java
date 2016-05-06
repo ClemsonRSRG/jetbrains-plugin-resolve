@@ -17,7 +17,7 @@ public interface ResConceptModuleDecl extends ResModuleDecl {
   ResSpecModuleParameters getSpecModuleParameters();
 
   @Nullable
-  ResUsesItemList getUsesItemList();
+  ResUsesList getUsesList();
 
   @NotNull
   PsiElement getConcept();

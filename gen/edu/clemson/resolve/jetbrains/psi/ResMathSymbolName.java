@@ -41,10 +41,10 @@ public interface ResMathSymbolName extends ResCompositeElement {
   PsiElement getMul();
 
   @Nullable
-  PsiElement getNeg();
+  PsiElement getNot();
 
   @Nullable
-  PsiElement getNot();
+  PsiElement getNot1();
 
   @Nullable
   PsiElement getPlus();

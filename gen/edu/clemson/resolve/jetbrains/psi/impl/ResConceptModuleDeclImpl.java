@@ -16,8 +16,12 @@ public class ResConceptModuleDeclImpl extends ResAbstractModuleImpl implements R
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitConceptModuleDecl(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitConceptModuleDecl(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 
@@ -41,8 +45,8 @@ public class ResConceptModuleDeclImpl extends ResAbstractModuleImpl implements R
 
   @Override
   @Nullable
-  public ResUsesItemList getUsesItemList() {
-    return findChildByClass(ResUsesItemList.class);
+  public ResUsesList getUsesList() {
+    return findChildByClass(ResUsesList.class);
   }
 
   @Override

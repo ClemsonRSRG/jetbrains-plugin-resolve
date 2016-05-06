@@ -11,8 +11,7 @@ public class RESOLVESyntaxHighlighterFactory extends SyntaxHighlighterFactory {
 
     @NotNull
     @Override
-    public SyntaxHighlighter getSyntaxHighlighter(
-            @Nullable Project project, @Nullable VirtualFile virtualFile) {
+    public SyntaxHighlighter getSyntaxHighlighter(@Nullable Project project, @Nullable VirtualFile virtualFile) {
         return new RESOLVESyntaxHighlighter();
     }
 }

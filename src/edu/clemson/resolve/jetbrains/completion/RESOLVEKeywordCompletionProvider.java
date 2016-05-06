@@ -14,15 +14,12 @@ import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class RESOLVEKeywordCompletionProvider
-        extends
-        CompletionProvider<CompletionParameters> {
+public class RESOLVEKeywordCompletionProvider extends CompletionProvider<CompletionParameters> {
 
     public static final InsertHandler<LookupElement> EMPTY_INSERT_HANDLER =
             new InsertHandler<LookupElement>() {
                 @Override
-                public void handleInsert(InsertionContext context,
-                                         LookupElement element) {
+                public void handleInsert(InsertionContext context, LookupElement element) {
                 }
             };
 
@@ -61,18 +58,16 @@ public class RESOLVEKeywordCompletionProvider
     }
 
     @Override
-    protected void addCompletions(
-            @NotNull CompletionParameters parameters,
-            ProcessingContext context,
-            @NotNull CompletionResultSet result) {
+    protected void addCompletions(@NotNull CompletionParameters parameters,
+                                  ProcessingContext context,
+                                  @NotNull CompletionResultSet result) {
         for (String keyword : keywords) {
             result.addElement(createKeywordLookupElement(keyword));
         }
     }
 
     @NotNull
-    private LookupElement createKeywordLookupElement(
-            @NotNull final String keyword) {
+    private LookupElement createKeywordLookupElement(@NotNull final String keyword) {
         final InsertHandler<LookupElement> handler =
                 ObjectUtils.chooseNotNull(this.insertHandler,
                         createTemplateBasedInsertHandler("resolve_lang_" + keyword));
@@ -82,38 +77,32 @@ public class RESOLVEKeywordCompletionProvider
                 completionPolicy.applyPolicy(result) : result;
     }
 
-    public static LookupElement createKeywordLookupElement(
-            @NotNull final String keyword, int priority,
-            @Nullable InsertHandler<LookupElement> insertHandler) {
+    public static LookupElement createKeywordLookupElement(@NotNull final String keyword,
+                                                           int priority,
+                                                           @Nullable InsertHandler<LookupElement> insertHandler) {
         LookupElementBuilder builder = LookupElementBuilder.create(keyword)
                 .withBoldness(true).withInsertHandler(insertHandler);
         return PrioritizedLookupElement.withPriority(builder, priority);
     }
 
     @Nullable
-    public static InsertHandler<LookupElement>
-    createTemplateBasedInsertHandler(
-            @NotNull final String templateId) {
+    public static InsertHandler<LookupElement> createTemplateBasedInsertHandler(@NotNull final String templateId) {
         return new InsertHandler<LookupElement>() {
             @Override
-            public void handleInsert(@NotNull InsertionContext context,
-                                     LookupElement item) {
-                Template template = TemplateSettings.getInstance()
-                        .getTemplateById(templateId);
+            public void handleInsert(@NotNull InsertionContext context, LookupElement item) {
+                Template template = TemplateSettings.getInstance().getTemplateById(templateId);
                 Editor editor = context.getEditor();
                 if (template != null) {
-                    editor.getDocument().deleteString(context.getStartOffset(),
-                            context.getTailOffset());
-                    TemplateManager.getInstance(context.getProject())
-                            .startTemplate(editor, template);
-                } else {
+                    editor.getDocument().deleteString(context.getStartOffset(), context.getTailOffset());
+                    TemplateManager.getInstance(context.getProject()).startTemplate(editor, template);
+                }
+                else {
                     final int currentOffset = editor.getCaretModel().getOffset();
-                    final CharSequence documentText = editor.getDocument()
-                            .getImmutableCharSequence();
-                    if (documentText.length() <= currentOffset ||
-                            documentText.charAt(currentOffset) != ' ') {
+                    final CharSequence documentText = editor.getDocument().getImmutableCharSequence();
+                    if (documentText.length() <= currentOffset || documentText.charAt(currentOffset) != ' ') {
                         EditorModificationUtil.insertStringAtCaret(editor, " ");
-                    } else {
+                    }
+                    else {
                         EditorModificationUtil.moveCaretRelatively(editor, 1);
                     }
                 }

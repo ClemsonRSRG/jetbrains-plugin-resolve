@@ -6,7 +6,7 @@ import com.intellij.psi.ResolveState;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.jetbrains.psi.ResMathCartProdExp;
-import edu.clemson.resolve.jetbrains.psi.ResMathDefinitionDecl;
+import edu.clemson.resolve.jetbrains.psi.ResMathDefnDecl;
 import edu.clemson.resolve.jetbrains.psi.ResNamedElement;
 import edu.clemson.resolve.jetbrains.psi.ResOperationLikeNode;
 import org.jetbrains.annotations.NotNull;
@@ -16,8 +16,7 @@ import java.util.List;
 
 public abstract class ResScopeProcessorBase extends ResScopeProcessor {
     @NotNull
-    protected final OrderedSet<ResNamedElement> myResult =
-            new OrderedSet<ResNamedElement>();
+    protected final OrderedSet<ResNamedElement> myResult = new OrderedSet<>();
 
     @NotNull
     protected final PsiElement origin;
@@ -40,14 +39,13 @@ public abstract class ResScopeProcessorBase extends ResScopeProcessor {
     @Override
     public boolean execute(@NotNull PsiElement psiElement,
                            @NotNull ResolveState resolveState) {
-        if (psiElement instanceof ResMathDefinitionDecl) return false;
+        if (psiElement instanceof ResMathDefnDecl) return false;
         if (psiElement instanceof ResOperationLikeNode) return false;
         if (psiElement instanceof ResMathCartProdExp) return false;
 
         if (!(psiElement instanceof ResNamedElement)) return true;
         String name = ((ResNamedElement) psiElement).getName();
-        if (StringUtil.isEmpty(name) || !isCompletion &&
-                !requestedNameElement.textMatches(name)) return true;
+        if (StringUtil.isEmpty(name) || !isCompletion && !requestedNameElement.textMatches(name)) return true;
         if (crossOff(psiElement)) return true;
         if (psiElement.equals(origin)) return true;
         return add((ResNamedElement) psiElement) || isCompletion;

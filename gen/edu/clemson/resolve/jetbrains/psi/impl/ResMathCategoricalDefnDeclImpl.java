@@ -10,14 +10,18 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static edu.clemson.resolve.jetbrains.ResTypes.*;
 import edu.clemson.resolve.jetbrains.psi.*;
 
-public class ResMathCategoricalDefnDeclImpl extends ResAbstractMathDefinitionImpl implements ResMathCategoricalDefnDecl {
+public class ResMathCategoricalDefnDeclImpl extends ResAbstractMathDefnImpl implements ResMathCategoricalDefnDecl {
 
   public ResMathCategoricalDefnDeclImpl(ASTNode node) {
     super(node);
   }
 
+  public void accept(@NotNull ResVisitor visitor) {
+    visitor.visitMathCategoricalDefnDecl(this);
+  }
+
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof ResVisitor) ((ResVisitor)visitor).visitMathCategoricalDefnDecl(this);
+    if (visitor instanceof ResVisitor) accept((ResVisitor)visitor);
     else super.accept(visitor);
   }
 
