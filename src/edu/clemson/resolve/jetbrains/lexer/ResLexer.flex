@@ -101,10 +101,13 @@ ESCAPES = [abfnrtv]
 "≼"                                     { return PRECCURLYEQ; }
 "="                                     { return EQUALS; }
 "/="                                    { return NEQUALS; }
-"≠"                                     { return NEQUALS1; }
+"≠"                                     { return NEQUALS; }
 
 "and"                                   { return AND; }
+"∧"                                     { return AND; }
+
 "or"                                    { return OR; }
+"∨"                                     { return OR; }
 "not"                                   { return NOT; }
 "⌐"                                     { return NOT; }
 "o"                                     { return CAT; }

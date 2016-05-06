@@ -41,9 +41,14 @@
         NEQUALS1                = '≠'
 
         AND                     = 'and'
+        AND1                    = '∧'
+
         OR                      = 'or'
+        OR1                     = '∨'
+
         NOT                     = 'not'
-        NEG                     = '⌐'
+        NOT1                    = '⌐'
+
         CAT                     = 'o'
         CAT1                    = '∘'
         HTIMES                  = 'ᴴ⨯'
@@ -404,9 +409,13 @@ RequiresClause? EnsuresClause? {pin=2}
 OperationProcedureDecl ::=
 'Operation' identifier OperationLikeParameters (':' Type)? ';'
 RequiresClause? EnsuresClause?
-('Recursive')? 'Procedure'
-OpBlock
+OpProcBody
 'end' CloseIdentifier ';' {pin=2}
+
+private OpProcBody ::=
+('Recursive')? 'Procedure'
+OpBlock {pin=2}
+
 
 ProcedureDecl ::=
 ('Recursive')? 'Procedure' identifier OperationLikeParameters (':' Type)? ';'
@@ -626,7 +635,7 @@ private MathRelationalOp ::= (MathReferenceExp '::')? ('<'|'>'|'<='|'≤'|'≤�
 private MathEqualityOp ::= (MathReferenceExp '::')? ('='|'/='|'≠')
 private MathSetContainmentOp ::= (MathReferenceExp '::')? ('is_in'|'is_not_in'|'∈'|'∉');
 private MathImpliesOp ::= (MathReferenceExp '::')? ('implies')
-private MathBooleanOp ::= (MathReferenceExp '::')? ('iff'|'and'|'or')
+private MathBooleanOp ::= (MathReferenceExp '::')? ('and'|'or'|'∧'|'∨'|'iff'|)
 
 private MathPrimeExp ::=
           MathSymbolExp
@@ -672,5 +681,3 @@ fake MathInfixApplyExp ::= MathExp+ {
 }
 
 private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
-
-

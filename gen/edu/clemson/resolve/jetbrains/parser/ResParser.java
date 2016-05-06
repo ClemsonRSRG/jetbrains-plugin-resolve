@@ -1779,7 +1779,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (MathReferenceExp '::')? ('iff'|'and'|'or')
+  // (MathReferenceExp '::')? ('and'|'or'|'∧'|'∨'|'iff'|)
   static boolean MathBooleanOp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathBooleanOp")) return false;
     boolean r;
@@ -1808,14 +1808,17 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // 'iff'|'and'|'or'
+  // 'and'|'or'|'∧'|'∨'|'iff'|
   private static boolean MathBooleanOp_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathBooleanOp_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, IFF);
-    if (!r) r = consumeToken(b, AND);
+    r = consumeToken(b, AND);
     if (!r) r = consumeToken(b, OR);
+    if (!r) r = consumeToken(b, AND1);
+    if (!r) r = consumeToken(b, OR1);
+    if (!r) r = consumeToken(b, IFF);
+    if (!r) r = consumeToken(b, MATHBOOLEANOP_1_5_0);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -2596,7 +2599,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, GREATER_OR_EQUAL);
     if (!r) r = consumeToken(b, GREATER_OR_EQUAL1);
     if (!r) r = consumeToken(b, NOT);
-    if (!r) r = consumeToken(b, NEG);
+    if (!r) r = consumeToken(b, NOT1);
     if (!r) r = consumeToken(b, PRECCURLYEQ);
     if (!r) r = consumeToken(b, VROD);
     if (!r) r = consumeToken(b, UNION_PLUS);
@@ -2954,6 +2957,39 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // ('Recursive')? 'Procedure'
+  // OpBlock
+  static boolean OpProcBody(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "OpProcBody")) return false;
+    if (!nextTokenIs(b, "", PROCEDURE, RECURSIVE)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = OpProcBody_0(b, l + 1);
+    r = r && consumeToken(b, PROCEDURE);
+    p = r; // pin = 2
+    r = r && OpBlock(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // ('Recursive')?
+  private static boolean OpProcBody_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "OpProcBody_0")) return false;
+    OpProcBody_0_0(b, l + 1);
+    return true;
+  }
+
+  // ('Recursive')
+  private static boolean OpProcBody_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "OpProcBody_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, RECURSIVE);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // 'Operation' identifier OperationLikeParameters (':' Type)? ';'
   // RequiresClause? EnsuresClause?
   public static boolean OperationDecl(PsiBuilder b, int l) {
@@ -3030,8 +3066,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   /* ********************************************************** */
   // 'Operation' identifier OperationLikeParameters (':' Type)? ';'
   // RequiresClause? EnsuresClause?
-  // ('Recursive')? 'Procedure'
-  // OpBlock
+  // OpProcBody
   // 'end' CloseIdentifier ';'
   public static boolean OperationProcedureDecl(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "OperationProcedureDecl")) return false;
@@ -3046,9 +3081,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = p && report_error_(b, consumeToken(b, SEMICOLON)) && r;
     r = p && report_error_(b, OperationProcedureDecl_5(b, l + 1)) && r;
     r = p && report_error_(b, OperationProcedureDecl_6(b, l + 1)) && r;
-    r = p && report_error_(b, OperationProcedureDecl_7(b, l + 1)) && r;
-    r = p && report_error_(b, consumeToken(b, PROCEDURE)) && r;
-    r = p && report_error_(b, OpBlock(b, l + 1)) && r;
+    r = p && report_error_(b, OpProcBody(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, END)) && r;
     r = p && report_error_(b, CloseIdentifier(b, l + 1)) && r;
     r = p && consumeToken(b, SEMICOLON) && r;
@@ -3086,23 +3119,6 @@ public class ResParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "OperationProcedureDecl_6")) return false;
     EnsuresClause(b, l + 1);
     return true;
-  }
-
-  // ('Recursive')?
-  private static boolean OperationProcedureDecl_7(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "OperationProcedureDecl_7")) return false;
-    OperationProcedureDecl_7_0(b, l + 1);
-    return true;
-  }
-
-  // ('Recursive')
-  private static boolean OperationProcedureDecl_7_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "OperationProcedureDecl_7_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, RECURSIVE);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */

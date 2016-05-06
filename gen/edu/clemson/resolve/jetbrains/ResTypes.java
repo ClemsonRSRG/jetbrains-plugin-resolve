@@ -133,6 +133,7 @@ public interface ResTypes {
 
   IElementType ALTERS = new ResTokenType("alters");
   IElementType AND = new ResTokenType("and");
+  IElementType AND1 = new ResTokenType("∧");
   IElementType AS = new ResTokenType("as");
   IElementType AT = new ResTokenType("@");
   IElementType BAR = new ResTokenType("|");
@@ -222,17 +223,19 @@ public interface ResTypes {
   IElementType LESS_OR_EQUAL_U = new ResTokenType("≤ᵤ");
   IElementType LPAREN = new ResTokenType("(");
   IElementType MAINTAINING = new ResTokenType("maintaining");
+  IElementType MATHBOOLEANOP_1_5_0 = new ResTokenType("MathBooleanOp_1_5_0");
   IElementType MINUS = new ResTokenType("-");
   IElementType MOD = new ResTokenType("%");
   IElementType MODELED = new ResTokenType("modeled");
   IElementType MUL = new ResTokenType("*");
-  IElementType NEG = new ResTokenType("⌐");
   IElementType NEQUALS = new ResTokenType("/=");
   IElementType NEQUALS1 = new ResTokenType("≠");
   IElementType NOT = new ResTokenType("not");
+  IElementType NOT1 = new ResTokenType("⌐");
   IElementType OF = new ResTokenType("of");
   IElementType OPERATION = new ResTokenType("Operation");
   IElementType OR = new ResTokenType("or");
+  IElementType OR1 = new ResTokenType("∨");
   IElementType OTHERWISE = new ResTokenType("otherwise");
   IElementType PARAM_TYPE = new ResTokenType("type");
   IElementType PLUS = new ResTokenType("+");

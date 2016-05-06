@@ -51,16 +51,14 @@ by the IDE.
 ##### Mathematical glyphs (unicode support)
 
 A long standing design objective in RESOLVE is in making sure specifications and their underlying mathematics actually
-look like math -- with the expectation that they'll be familiar and easily recognizable to 'by-trade' mathematicians
-(not just 'cs-pseudo-mathematicians'). This effort however has been seriously hobbled by the extremely limited range of
-ascii characters.
+look like math---with the expectation that this will make them familiar and easily usable to 'by-trade' mathematicians.
+This effort however continues to be hampered by the extremely limited range of ascii characters. Though specifically
+, perhaps the main practical barrier to their inclusion remains the complicated, unintuitive key combinations one must
+use to insert such symbols.
 
-extensible 
-In the context of RESOLVE, specifications and their appearance
-One especially useful wmof this feature in RESOLVE is encoding non- noticeable
-The incorporation of a feature referred to as *live templates* makes the incorporation of user defined mathematical
-glyphs easier than learning (and remembering) arbitrary unicode key-combinations. Rather, to insert a particular symbol,
-users
+Thus in the interim, until a more universally accepted method for including them is found, we leverage the power of
+live templates to make insertion of such operators a feasible endeavor.
+
 
 ##### Language constructs
 
@@ -81,8 +79,6 @@ placed over the appropriates tokens on the internal IntelliJ Psi tree
 
 ##### Code generation
 *TODO
-
-#### Limited reference completion
 
 #### Standard and user extensible library support
 

@@ -160,7 +160,13 @@
             <option name='RESOLVE_MATH_REF' value='true'/>
         </context>
     </template>
-    λ
+
+    <template description='≠' name='neq' toReformat='true' toShortenFQNames='true'
+              value='≠'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
 
     <template description='λ' name='lambda' toReformat='true' toShortenFQNames='true'
               value='λ'>
@@ -179,6 +185,20 @@
 
     <template description='⌐' name='neg' toReformat='true' toShortenFQNames='true'
               value='⌐'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='∧' name='and' toReformat='true' toShortenFQNames='true'
+              value='∧'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='∨' name='or' toReformat='true' toShortenFQNames='true'
+              value='∨'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
         </context>
