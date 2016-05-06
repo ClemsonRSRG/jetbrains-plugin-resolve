@@ -226,9 +226,8 @@ public class RESOLVECompletionUtil {
                                                          @NotNull String lookupString,
                                                          @Nullable InsertHandler<LookupElement> handler,
                                                          double priority) {
-        LookupElementBuilder builder =
-                LookupElementBuilder.createWithSmartPointer(lookupString, t)
-                        .withInsertHandler(handler).withIcon(t.getIcon(0));
+        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(lookupString, t)
+                .withInsertHandler(handler).withIcon(t.getIcon(0));
         return PrioritizedLookupElement.withPriority(builder, priority);
     }
 
