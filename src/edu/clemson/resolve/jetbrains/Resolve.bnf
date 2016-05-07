@@ -412,11 +412,7 @@ OperationProcedureDecl ::=
 RequiresClause? EnsuresClause?
 OpProcBody
 'end' CloseIdentifier ';' {pin=2}
-
-private OpProcBody ::=
-('Recursive')? 'Procedure'
-OpBlock {pin=2}
-
+private OpProcBody ::= ('Recursive')? 'Procedure' OpBlock {pin=2}
 
 ProcedureDecl ::=
 ('Recursive')? 'Procedure' identifier OperationLikeParameters (':' Type)? ';'

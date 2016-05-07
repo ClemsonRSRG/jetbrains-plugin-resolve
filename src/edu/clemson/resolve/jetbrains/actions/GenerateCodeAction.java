@@ -36,47 +36,15 @@ import static edu.clemson.resolve.jetbrains.actions.RunRESOLVEOnLanguageFile.OUT
  * Generate code from a RESOLVE language file; adapted for use in our plugin from the antlr4 grammar plugin by
  * Terence Parr.
  */
-public class GenerateCodeAction extends AnAction implements DumbAware {
+public class GenerateCodeAction extends RESOLVEAction {
 
-    public static final Logger LOG = Logger.getInstance("RESOLVE GenerateAction");
-
-    @Override
-    public void update(AnActionEvent e) {
-        selectedFileIsRESOLVEFile(e);
-    }
-
-    public static void selectedFileIsRESOLVEFile(AnActionEvent e) {
-        VirtualFile vfile = getRESOLVEFileFromEvent(e);
-        if (vfile == null || e.getProject() == null) {
-            e.getPresentation().setEnabled(false);
-            return;
-        }
-        Project project = e.getProject();
-        Module enclosingModule = ModuleUtilCore.findModuleForFile(vfile, e.getProject());
-        if (!RESOLVESdkService.getInstance(e.getProject()).isRESOLVEModule(enclosingModule)) {
-            e.getPresentation().setEnabled(false);
-            return;
-        }
-        // only enable action if we're looking at RESOLVE file in a RESOLVE module
-        e.getPresentation().setEnabled(true);
-        e.getPresentation().setVisible(true);
-    }
-
-    public static VirtualFile getRESOLVEFileFromEvent(AnActionEvent e) {
-        VirtualFile[] files = LangDataKeys.VIRTUAL_FILE_ARRAY.getData(e.getDataContext());
-        if (files == null || files.length == 0) return null;
-        VirtualFile vfile = files[0];
-        if (vfile != null && vfile.getName().endsWith(".resolve")) {
-            return vfile;
-        }
-        return null;
-    }
+    private static final Logger LOG = Logger.getInstance("RESOLVEGenerateCodeAction");
 
     @Override
     public void actionPerformed(final AnActionEvent e) {
         Project project = e.getData(PlatformDataKeys.PROJECT);
         if (project == null) {
-            LOG.error("actionPerformed no project for " + e);
+            LOG.error("actionPerformed (genCode): no project for " + e);
             return; // whoa!
         }
         VirtualFile resolveFile = getRESOLVEFileFromEvent(e);
@@ -86,16 +54,7 @@ public class GenerateCodeAction extends AnAction implements DumbAware {
         boolean canBeCancelled = true;
 
         // commit changes to PSI and file system
-        PsiDocumentManager psiMgr = PsiDocumentManager.getInstance(project);
-        FileDocumentManager docMgr = FileDocumentManager.getInstance();
-        Document doc = docMgr.getDocument(resolveFile);
-        if (doc == null) return;
-
-        boolean unsaved = !psiMgr.isCommitted(doc) || docMgr.isDocumentUnsaved(doc);
-        if (unsaved) {
-            psiMgr.commitDocument(doc);
-            docMgr.saveDocument(doc);
-        }
+        commitDoc(project, resolveFile);
 
         boolean forceGeneration = true; // from action, they really mean it
         RunRESOLVEOnLanguageFile gen =
