@@ -1,15 +1,21 @@
 package edu.clemson.resolve.jetbrains.actions;
 
+import com.intellij.codeInsight.daemon.LineMarkerProvider;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.markup.MarkupModel;
 import com.intellij.openapi.editor.markup.TextAttributes;
+import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class GenerateVCsAction extends RESOLVEAction {
 
@@ -31,6 +37,7 @@ public class GenerateVCsAction extends RESOLVEAction {
     //classes of interest:
     //TextAttributes
     //MarkupModel <-- probably the most likely candidate for a place to start.
+    //LineMarkerProvider
     @Override
     public void actionPerformed(AnActionEvent e) {
         Project project = e.getData(PlatformDataKeys.PROJECT);
@@ -43,9 +50,27 @@ public class GenerateVCsAction extends RESOLVEAction {
         if (resolveFile == null) return;
         String title = "RESOLVE VC Generation";
         boolean canBeCancelled = true;
-        
-        commitDoc(project, resolveFile);
 
+        commitDoc(project, resolveFile);
+        Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+        if (editor == null) return;
+
+        boolean forceGeneration = true; // from action, they really mean it
+        RunRESOLVEOnLanguageFile gen =
+                new RunRESOLVEOnLanguageFile(resolveFile,
+                        project,
+                        title,
+                        canBeCancelled,
+                        forceGeneration);
+
+        Map<String, String> argMap = new LinkedHashMap<>();
+        argMap.put("-lib", RunRESOLVEOnLanguageFile.getContentRoot(project, resolveFile).getPath());
+        argMap.put("-vcs", "");
+        gen.addArgs(argMap);
+        MarkupModel markup = editor.getMarkupModel();
+
+        int i;
+        i=0;
     }
 
 

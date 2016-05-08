@@ -16,6 +16,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import edu.clemson.resolve.RESOLVECompiler;
 import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
 import edu.clemson.resolve.misc.Utils;
+import edu.clemson.resolve.vcgen.model.VCOutputFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.stringtemplate.v4.misc.Misc;
@@ -29,6 +30,8 @@ import java.util.*;
 public class RunRESOLVEOnLanguageFile extends Task.Modal {
 
     public static final Logger LOG = Logger.getInstance("RunRESOLVEOnLanguageFile");
+
+    //TODO: Generalize this.
     public static final String OUTPUT_MODULE_NAME = "gen";
     public static final String OUTPUT_DIR_NAME = "src";
     public static final String groupDisplayId = "RESOLVE Code Generation";
@@ -38,6 +41,7 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
     public String outputDir;
     public boolean forceGeneration;
     private final List<String> args = new ArrayList<>();
+    private VCOutputFile vcOutput = null;
 
     public RunRESOLVEOnLanguageFile(VirtualFile targetFile,
                                     @Nullable final Project project,
@@ -50,6 +54,10 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
         this.forceGeneration = forceGeneration;
         String fullyQualifiedInputFileName = targetFile.getCanonicalPath();
         this.args.add(fullyQualifiedInputFileName);
+    }
+
+    public VCOutputFile getVCOutput() {
+        return vcOutput;
     }
 
     @Override
@@ -73,17 +81,11 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
         // String sourcePath = ConfigRESOLVEPerLanguageFile.getParentDir(vfile);
 
         LOG.info("args: " + Utils.join(args, " "));
-        RESOLVECompiler compiler =
-                new RESOLVECompiler(args.toArray(new String[args.size()]));
-        ConsoleView console =
-                RESOLVEPluginController.getInstance(project).getConsole();
-        String timeStamp =
-                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-                        .format(Calendar.getInstance()
-                                .getTime());
+        RESOLVECompiler compiler = new RESOLVECompiler(args.toArray(new String[args.size()]));
+        ConsoleView console = RESOLVEPluginController.getInstance(project).getConsole();
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
-        console.print(timeStamp + ": resolve " + Utils.join(args, " ") + "\n",
-                ConsoleViewContentType.SYSTEM_OUTPUT);
+        console.print(timeStamp + ": resolve " + Utils.join(args, " ") + "\n", ConsoleViewContentType.SYSTEM_OUTPUT);
 
         compiler.removeListeners();
         RunRESOLVEListener listener = new RunRESOLVEListener(compiler, console);
@@ -97,16 +99,17 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
             e.printStackTrace(pw);
             String msg = sw.toString();
             Notification notification =
-                    new Notification(groupDisplayId,
-                            "can't generate code for " + vfile.getName(),
+                    new Notification(groupDisplayId, "failed to execute " + vfile.getName(),
                             e.toString(),
                             NotificationType.INFORMATION);
             Notifications.Bus.notify(notification, project);
-            console.print(timeStamp + ": resolve " + msg + "\n",
-                    ConsoleViewContentType.SYSTEM_OUTPUT);
+            console.print(timeStamp + ": resolve " + msg + "\n", ConsoleViewContentType.SYSTEM_OUTPUT);
             listener.hasOutput = true; // show console below
         }
 
+        if (compiler.commandlineTargets.size() == 1) {
+            vcOutput = compiler.commandlineTargets.get(0).getVCOutput();
+        }
         if (listener.hasOutput) {
             RESOLVEPluginController.showConsoleWindow(project);
         }
@@ -117,7 +120,7 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
     }
 
     public static List<String> getRESOLVEArgsAsList(Map<String, String> argMap) {
-        List<String> args = new ArrayList<String>();
+        List<String> args = new ArrayList<>();
         for (String option : argMap.keySet()) {
             args.add(option);
             String value = argMap.get(option);
@@ -136,9 +139,13 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
     }
 
     public static VirtualFile getContentRoot(Project project, VirtualFile vfile) {
-        VirtualFile root =
-                ProjectRootManager.getInstance(project)
-                        .getFileIndex().getContentRootForFile(vfile);
+        VirtualFile root = ProjectRootManager.getInstance(project).getFileIndex().getContentRootForFile(vfile);
+        if (root != null) return root;
+        return vfile.getParent();
+    }
+
+    public static VirtualFile getContentGenRoot(Project project, VirtualFile vfile) {
+        VirtualFile root = ProjectRootManager.getInstance(project).getFileIndex().getContentRootForFile(vfile);
         if (root != null) return root;
         return vfile.getParent();
     }

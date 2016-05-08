@@ -42,7 +42,7 @@ public class GenerateCodeAction extends RESOLVEAction {
 
     @Override
     public void actionPerformed(final AnActionEvent e) {
-        Project project = e.getData(PlatformDataKeys.PROJECT);
+        Project project = getEventProject(e);
         if (project == null) {
             LOG.error("actionPerformed (genCode): no project for " + e);
             return; // whoa!
@@ -63,8 +63,7 @@ public class GenerateCodeAction extends RESOLVEAction {
                         title,
                         canBeCancelled,
                         forceGeneration);
-        gen.outputDir = gen.outputDir
-                + getFilePathWithoutBase(project, resolveFile.getParent());
+        gen.outputDir = gen.outputDir + getFilePathWithoutBase(project, resolveFile.getParent());
 
         Map<String, String> argMap = new LinkedHashMap<>();
         argMap.put("-lib", RunRESOLVEOnLanguageFile.getContentRoot(project, resolveFile).getPath());
@@ -90,8 +89,7 @@ public class GenerateCodeAction extends RESOLVEAction {
     //Bunch of methods for piecing together paths to gen, etc
 
     public String getOutputDir(Project project, VirtualFile vfile) {
-        String result = RunRESOLVEOnLanguageFile.getOutputDir(project, vfile) +
-                getFilePathWithoutBase(project, vfile);
+        String result = RunRESOLVEOnLanguageFile.getOutputDir(project, vfile) + getFilePathWithoutBase(project, vfile);
         return result.substring(0, result.indexOf('.')) + File.separator;
     }
 
