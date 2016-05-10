@@ -1,6 +1,5 @@
 package edu.clemson.resolve.jetbrains;
 
-import com.intellij.application.options.colors.PreviewPanel;
 import com.intellij.execution.filters.TextConsoleBuilder;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.ui.ConsoleView;
@@ -12,16 +11,16 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.SystemInfo;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import edu.clemson.resolve.jetbrains.verifier.VerifierSidePanel;
-import edu.clemson.resolve.jetbrains.verifier.VerifierVCSectionPanel;
+import edu.clemson.resolve.jetbrains.verifier.VCSectionPanel;
+import javafx.scene.control.Button;
+import javafx.scene.control.TitledPane;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -81,7 +80,9 @@ public class RESOLVEPluginController implements ProjectComponent {
 
     public void setVCsFromFAKEVCGenAction() {
         LOG.info("setVCsFromFAKEVCGenAction: " + project.getName());
-        verifierPanel.addSection(new VerifierVCSectionPanel(verifierPanel, "foo",
+        verifierPanel.addVCSection(new VCSectionPanel(verifierPanel, "foo",
+                getInner1(), RESOLVEIcons.DEF));
+        verifierPanel.addVCSection(new VCSectionPanel(verifierPanel, "moo",
                 getInner1(), RESOLVEIcons.DEF));
         /*PreviewState previewState = getPreviewState(grammarFile);
         previewState.startRuleName = startRuleName;
@@ -109,7 +110,7 @@ public class RESOLVEPluginController implements ProjectComponent {
         LOG.info("createToolWindows " + project.getName());
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
 
-        verifierPanel = new VerifierSidePanel(project);
+        verifierPanel = new VerifierSidePanel(project, true);
 
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content content = contentFactory.createContent(verifierPanel, "", false);

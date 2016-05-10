@@ -2,7 +2,6 @@ package edu.clemson.resolve.jetbrains.verifier;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.ui.components.JBList;
 
 import java.awt.*;
 
@@ -11,28 +10,25 @@ import javax.swing.*;
 /** holds the various expandable vc buttons containing the givens and goals */
 public class VerifierSidePanel extends JPanel {
 
-    public enum SideBarMode { TOP_LEVEL, INNER_LEVEL; }
-
     public static final Logger LOG = Logger.getInstance("RESOLVE VerifierPanel");
 
     /** box layout to contain side bar sections arranged vertically */
     private BoxLayout boxLayout = new BoxLayout(this, BoxLayout.Y_AXIS);
-    private VerifierVCSectionPanel currentSection = null;
+    private VCSectionPanel currentSection = null;
+    boolean animate = false;
 
-    public VerifierSidePanel(Project project) {
+    public VerifierSidePanel(Project project, boolean animate) {
         this.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        this.animate = animate;
         setLayout(boxLayout);
-        setPreferredSize(new Dimension(100, getPreferredSize().height));
 
-
-
+        setPreferredSize(new Dimension(getPreferredSize().width, getPreferredSize().height));
         revalidate();
-
     }
 
-    public void addSection(VerifierVCSectionPanel newSection, boolean collapse) {
+    public void addVCSection(VCSectionPanel newSection, boolean collapsed) {
         add(newSection);
-        if (collapse) {
+        if (collapsed) {
             newSection.collapse(false);
         }
         else {
@@ -40,15 +36,45 @@ public class VerifierSidePanel extends JPanel {
         }
     }
 
-    public void addSection(VerifierVCSectionPanel e) {
-        addSection(e, true);
+    public void addVCSection(VCSectionPanel e) {
+        addVCSection(e, true);
     }
 
-    public VerifierVCSectionPanel getCurrentSection() {
+    public VCSectionPanel getCurrentSection() {
         return currentSection;
     }
 
-    public void setCurrentSection(VerifierVCSectionPanel section) {
+    public void setCurrentSection(VCSectionPanel section) {
         currentSection = section;
     }
+
+    public static class VerifierSidePanelAnimation extends Animation {
+
+        private VCSectionPanel vcPanel;
+
+        public VerifierSidePanelAnimation(VCSectionPanel vcPanel, int durationMs) {
+            super(durationMs);
+            this.vcPanel = vcPanel;
+        }
+
+        @Override
+        public void starting () {
+            vcPanel.contentPane.setVisible(true);
+        }
+
+        @Override
+        protected void render(int value) {
+            vcPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, value));
+            vcPanel.contentPane.setVisible(true);
+            vcPanel.revalidate();
+        }
+
+        @Override
+        public void stopped () {
+            vcPanel.contentPane.setVisible(true);
+            vcPanel.revalidate();
+            //sideBarSection.printDimensions();
+        }
+    }
+
 }
