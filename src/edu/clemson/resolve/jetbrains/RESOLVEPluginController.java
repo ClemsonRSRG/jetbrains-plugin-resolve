@@ -12,11 +12,14 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.SystemInfo;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
+import edu.clemson.resolve.jetbrains.verifier.VerifierSidePanel;
+import edu.clemson.resolve.jetbrains.verifier.VerifierVCSectionPanel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,11 +36,17 @@ public class RESOLVEPluginController implements ProjectComponent {
     public static final Logger LOG = Logger.getInstance("RESOLVEPluginController");
 
     public static final String CONSOLE_WINDOW_ID = "RESOLVE Output";
+    public static final String VERIFIER_WINDOW_ID = "RESOLVE Verifier";
+
     public boolean projectIsClosed = false;
 
     public Project project;
+
     public ConsoleView console;
     public ToolWindow consoleWindow;
+
+    public ToolWindow verifierSideWindow;
+    public VerifierSidePanel verifierPanel;
 
     public RESOLVEPluginController(@NotNull Project project) {
         this.project = project;
@@ -65,24 +74,59 @@ public class RESOLVEPluginController implements ProjectComponent {
         LOG.info("RESOLVE Compiler Plugin version " + version + ", Java version " + SystemInfo.JAVA_VERSION);
         // make sure the tool windows are created early
         createToolWindows();
+        setVCsFromFAKEVCGenAction();
+
         //installListeners();
+    }
+
+    public void setVCsFromFAKEVCGenAction() {
+        LOG.info("setVCsFromFAKEVCGenAction: " + project.getName());
+        verifierPanel.addSection(new VerifierVCSectionPanel(verifierPanel, "foo",
+                getInner1(), RESOLVEIcons.DEF));
+        /*PreviewState previewState = getPreviewState(grammarFile);
+        previewState.startRuleName = startRuleName;
+        if ( previewPanel!=null ) {
+            previewPanel.getInputPanel().setStartRuleName(grammarFile, startRuleName); // notify the view
+            previewPanel.updateParseTreeFromDoc(grammarFile);
+        }
+        else {
+            LOG.error("setStartRuleNameEvent called before preview panel created");
+        }*/
+    }
+
+    private static JComponent getInner1() {
+        DefaultListModel<String> model = new DefaultListModel<String>();
+        model.add(0, "Bill Gates");
+        model.add(1, "Steven Spielberg");
+
+        JList<String> list = new JList<String>();
+
+        list.setModel(model);
+        return list;
     }
 
     public void createToolWindows() {
         LOG.info("createToolWindows " + project.getName());
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
+
+        verifierPanel = new VerifierSidePanel(project);
+
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+        Content content = contentFactory.createContent(verifierPanel, "", false);
+
+        verifierSideWindow = toolWindowManager.registerToolWindow(VERIFIER_WINDOW_ID, true, ToolWindowAnchor.RIGHT);
+        verifierSideWindow.getContentManager().addContent(content);
+        verifierSideWindow.setIcon(RESOLVEIcons.TOOL_ICON);
 
         TextConsoleBuilderFactory factory = TextConsoleBuilderFactory.getInstance();
         TextConsoleBuilder consoleBuilder = factory.createBuilder(project);
-        this.console = consoleBuilder.getConsole();
+        console = consoleBuilder.getConsole();
 
         JComponent consoleComponent = console.getComponent();
-        Content content = contentFactory.createContent(consoleComponent, "", false);
+        content = contentFactory.createContent(consoleComponent, "", false);
 
         consoleWindow = toolWindowManager.registerToolWindow(CONSOLE_WINDOW_ID, true, ToolWindowAnchor.BOTTOM);
         consoleWindow.getContentManager().addContent(content);
-
         consoleWindow.setIcon(RESOLVEIcons.TOOL_ICON);
     }
 

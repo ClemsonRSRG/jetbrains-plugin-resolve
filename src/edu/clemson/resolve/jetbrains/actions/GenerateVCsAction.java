@@ -13,6 +13,7 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import edu.clemson.resolve.vcgen.model.VCOutputFile;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -31,6 +32,12 @@ public class GenerateVCsAction extends RESOLVEAction {
     //          navigational features?, etc
     // o Have a meta-language for crafting assertive code blocks and reduce them in real time showing the steps
     // o Have where users can browse/peruse the rules? hmm.
+    // o Here's another interesting idea:
+    //      make VCGeneration parameterizable (configurable!)
+    //          --have option for generating parsimonious vcs
+    //          --have option for generating non-parsimonious vcs
+    // o Show HOW rules are applied -- and what happens when the parsimonious step tosses out gives. You can use one of the
+    //      interesting set visualization techniques discussed in 804 (consult Levine about this)
 
     //for now though, lets just try to do what the web interface does..
 
@@ -38,6 +45,9 @@ public class GenerateVCsAction extends RESOLVEAction {
     //TextAttributes
     //MarkupModel <-- probably the most likely candidate for a place to start.
     //LineMarkerProvider
+
+    //PluginController (antlr v4 + Psi viewer -- this one could be useful since clicking the psi node in the editor
+    //manipulates the PsiViewer panel..
     @Override
     public void actionPerformed(AnActionEvent e) {
         Project project = e.getData(PlatformDataKeys.PROJECT);
@@ -67,11 +77,16 @@ public class GenerateVCsAction extends RESOLVEAction {
         argMap.put("-lib", RunRESOLVEOnLanguageFile.getContentRoot(project, resolveFile).getPath());
         argMap.put("-vcs", "");
         gen.addArgs(argMap);
-        MarkupModel markup = editor.getMarkupModel();
-
+        if (!editor.isDisposed()) {
+            MarkupModel markup = editor.getMarkupModel();
+            processResult(gen.getVCOutput());
+        }
         int i;
         i=0;
     }
 
+    private void processResult(VCOutputFile vcs) {
+
+    }
 
 }

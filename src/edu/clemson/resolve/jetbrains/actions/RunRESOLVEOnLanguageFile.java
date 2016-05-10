@@ -106,7 +106,8 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
             console.print(timeStamp + ": resolve " + msg + "\n", ConsoleViewContentType.SYSTEM_OUTPUT);
             listener.hasOutput = true; // show console below
         }
-
+        //Todo: Eventually make it a list (or map) and allow vcs to come back for any target file (in case this class
+        //is ever used to compile multiple resolve files at once (not sure when, but you never know).
         if (compiler.commandlineTargets.size() == 1) {
             vcOutput = compiler.commandlineTargets.get(0).getVCOutput();
         }
