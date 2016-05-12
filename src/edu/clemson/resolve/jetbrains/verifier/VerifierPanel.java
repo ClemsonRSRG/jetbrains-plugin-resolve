@@ -4,20 +4,23 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.*;
 
 /** holds the various expandable vc buttons containing the givens and goals */
-public class VerifierSidePanel extends JPanel {
+public class VerifierPanel extends JPanel {
 
     public static final Logger LOG = Logger.getInstance("RESOLVE VerifierPanel");
 
     /** box layout to contain side bar sections arranged vertically */
     private BoxLayout boxLayout = new BoxLayout(this, BoxLayout.Y_AXIS);
     private VCSectionPanel currentSection = null;
+    private final List<VCSectionPanel> sections = new ArrayList<>();
     boolean animate = false;
 
-    public VerifierSidePanel(Project project, boolean animate) {
+    public VerifierPanel(Project project, boolean animate) {
         this.setCursor(new Cursor(Cursor.HAND_CURSOR));
         this.animate = animate;
         setLayout(boxLayout);
@@ -33,6 +36,12 @@ public class VerifierSidePanel extends JPanel {
         }
         else {
             setCurrentSection(newSection);
+        }
+    }
+
+    public void removeAll() {
+        for (VCSectionPanel section : sections) {
+            this.remove(section);
         }
     }
 

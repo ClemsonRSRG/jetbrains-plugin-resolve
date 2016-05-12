@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
  * A class that provides animation for some graphical element, simply extend and implement the required
  * methods.
  * <p>
- * This class was written by Oliver Watkins, found
+ * This class was adapted from the Animation class written originally by Oliver Watkins, found
  * <a href="https://github.com/oliverwatkins/swing_library/blob/master/src/main/java/com/gg/slider/Animation.java">here</a>
  * </p>
  */

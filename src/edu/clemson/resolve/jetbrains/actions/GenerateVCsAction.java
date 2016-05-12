@@ -10,12 +10,17 @@ import com.intellij.openapi.editor.markup.MarkupModel;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
+import edu.clemson.resolve.jetbrains.verifier.VerifierPanel;
+import edu.clemson.resolve.vcgen.VC;
 import edu.clemson.resolve.vcgen.model.VCOutputFile;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GenerateVCsAction extends RESOLVEAction {
@@ -77,12 +82,33 @@ public class GenerateVCsAction extends RESOLVEAction {
         argMap.put("-lib", RunRESOLVEOnLanguageFile.getContentRoot(project, resolveFile).getPath());
         argMap.put("-vcs", "");
         gen.addArgs(argMap);
+        ProgressManager.getInstance().run(gen); //, "Generating", canBeCancelled, e.getData(PlatformDataKeys.PROJECT));
+
         if (!editor.isDisposed()) {
             MarkupModel markup = editor.getMarkupModel();
             processResult(gen.getVCOutput());
+
+            RESOLVEPluginController controller = RESOLVEPluginController.getInstance(project);
+
+            //TODO, if we do runProverAction(), instead of passing 'null' for this Runnable object that's
+            //expected, we'll pass a process for proving the vcs. For now though, since we're just showing
+            controller.getVerifierWindow().show(null);
+            VerifierPanel verifierPanel = controller.getVerifierPanel();
+            //if no vcs currently generated and the user is looking at the panel, maybe put a message in gray
+            //which says something to the effect of "no vcs generated..press cmd+shift+v, etc"
+            //controller.getVerifierPanel().addVCSection();
+            //controller.getVerifierPanel().addVCSection();
+            VCOutputFile x = gen.getVCOutput();
+            List<VC> vcs = x.getFinalVCs();
+            int i;
+            i=0;
+            //ISSUES (create a list for murali -- this is with regards to the workshop)
+            //1.
+            //2.
+            //3.
+            //4.
+
         }
-        int i;
-        i=0;
     }
 
     private void processResult(VCOutputFile vcs) {

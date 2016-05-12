@@ -16,18 +16,15 @@ import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
-import edu.clemson.resolve.jetbrains.verifier.VerifierSidePanel;
+import edu.clemson.resolve.jetbrains.verifier.VerifierPanel;
 import edu.clemson.resolve.jetbrains.verifier.VCSectionPanel;
-import javafx.scene.control.Button;
-import javafx.scene.control.TitledPane;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
 /**
- * This object is the controller for the RESOLVE plug-in. It receives
- * events and can send them on to its contained components; here the main
- * components being primarily the compiler's console output window.
+ * This object is the controller for the RESOLVE plug-in. It receives events and can send them on to its contained
+ * components; here the main components being primarily the compiler's console output window.
  */
 public class RESOLVEPluginController implements ProjectComponent {
 
@@ -44,8 +41,8 @@ public class RESOLVEPluginController implements ProjectComponent {
     public ConsoleView console;
     public ToolWindow consoleWindow;
 
-    public ToolWindow verifierSideWindow;
-    public VerifierSidePanel verifierPanel;
+    public ToolWindow verifierWindow;
+    public VerifierPanel verifierPanel;
 
     public RESOLVEPluginController(@NotNull Project project) {
         this.project = project;
@@ -73,8 +70,6 @@ public class RESOLVEPluginController implements ProjectComponent {
         LOG.info("RESOLVE Compiler Plugin version " + version + ", Java version " + SystemInfo.JAVA_VERSION);
         // make sure the tool windows are created early
         createToolWindows();
-        setVCsFromFAKEVCGenAction();
-
         //installListeners();
     }
 
@@ -110,14 +105,14 @@ public class RESOLVEPluginController implements ProjectComponent {
         LOG.info("createToolWindows " + project.getName());
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
 
-        verifierPanel = new VerifierSidePanel(project, true);
+        verifierPanel = new VerifierPanel(project, true);
 
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content content = contentFactory.createContent(verifierPanel, "", false);
 
-        verifierSideWindow = toolWindowManager.registerToolWindow(VERIFIER_WINDOW_ID, true, ToolWindowAnchor.RIGHT);
-        verifierSideWindow.getContentManager().addContent(content);
-        verifierSideWindow.setIcon(RESOLVEIcons.TOOL_ICON);
+        verifierWindow = toolWindowManager.registerToolWindow(VERIFIER_WINDOW_ID, true, ToolWindowAnchor.RIGHT);
+        verifierWindow.getContentManager().addContent(content);
+        verifierWindow.setIcon(RESOLVEIcons.TOOL_ICON);
 
         TextConsoleBuilderFactory factory = TextConsoleBuilderFactory.getInstance();
         TextConsoleBuilder consoleBuilder = factory.createBuilder(project);
@@ -148,6 +143,14 @@ public class RESOLVEPluginController implements ProjectComponent {
 
     public ToolWindow getConsoleWindow() {
         return consoleWindow;
+    }
+
+    public ToolWindow getVerifierWindow() {
+        return verifierWindow;
+    }
+
+    public VerifierPanel getVerifierPanel() {
+        return verifierPanel;
     }
 
     public static void showConsoleWindow(final Project project) {

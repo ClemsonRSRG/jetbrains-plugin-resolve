@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-/** Represents an expandable verification condition in the {@link VerifierSidePanel}. */
+/** Represents an expandable verification condition in the {@link VerifierPanel}. */
 public class VCSectionPanel extends JPanel {
 
     public int minComponentHeight = 40;
@@ -17,7 +17,7 @@ public class VCSectionPanel extends JPanel {
 
     public JComponent titlePanel;
 
-    private VerifierSidePanel sideBarOwner;
+    private VerifierPanel sideBarOwner;
 
     public JComponent contentPane; //sidebar section's content
 
@@ -25,14 +25,14 @@ public class VCSectionPanel extends JPanel {
 
     private int calculatedHeight;
 
-    public VCSectionPanel(@NotNull VerifierSidePanel owner,
+    public VCSectionPanel(@NotNull VerifierPanel owner,
                           @NotNull String text,
                           @NotNull JComponent component,
                           @NotNull Icon icon) {
         this(owner, new JLabel(text), component, icon);
     }
 
-    public VCSectionPanel(@NotNull VerifierSidePanel owner,
+    public VCSectionPanel(@NotNull VerifierPanel owner,
                           @NotNull JComponent titleComponent,
                           @NotNull JComponent component,
                           @NotNull Icon icon) {
@@ -91,15 +91,14 @@ public class VCSectionPanel extends JPanel {
         //arrowPanel.updateUI();
 
         calculatedHeight = -1;
-
         //todo: This will need to get adjusted.
         calculatedHeight = sideBarOwner.getSize().height;
 
         System.out.println("sidebarSection.contentPane.getHeight() " + contentPane.getHeight());
 
         if (this.sideBarOwner.animate) {
-            VerifierSidePanel.VerifierSidePanelAnimation anim =
-                    new VerifierSidePanel.VerifierSidePanelAnimation(this, 200); // ANIMATION BIT
+            VerifierPanel.VerifierSidePanelAnimation anim =
+                    new VerifierPanel.VerifierSidePanelAnimation(this, 200); // ANIMATION BIT
 
             anim.setStartValue(minComponentHeight);
             anim.setEndValue(calculatedHeight);
@@ -122,8 +121,8 @@ public class VCSectionPanel extends JPanel {
         // arrowPanel.updateUI();
 
         if (animate && this.sideBarOwner.animate) {
-            VerifierSidePanel.VerifierSidePanelAnimation anim =
-                    new VerifierSidePanel.VerifierSidePanelAnimation(this, 200); // ANIMATION BIT
+            VerifierPanel.VerifierSidePanelAnimation anim =
+                    new VerifierPanel.VerifierSidePanelAnimation(this, 200); // ANIMATION BIT
             anim.setStartValue(calculatedHeight);
             anim.setEndValue(minComponentHeight);
             anim.start();
