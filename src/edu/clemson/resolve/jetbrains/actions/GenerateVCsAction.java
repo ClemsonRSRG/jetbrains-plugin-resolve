@@ -6,22 +6,27 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.markup.MarkupModel;
-import com.intellij.openapi.editor.markup.TextAttributes;
+import com.intellij.openapi.editor.event.DocumentEvent;
+import com.intellij.openapi.editor.event.DocumentListener;
+import com.intellij.openapi.editor.markup.*;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
 import edu.clemson.resolve.jetbrains.verifier.VerifierPanel;
 import edu.clemson.resolve.vcgen.VC;
 import edu.clemson.resolve.vcgen.model.VCOutputFile;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.misc.Pair;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import javax.swing.*;
+import java.util.*;
 
 public class GenerateVCsAction extends RESOLVEAction {
 
@@ -69,7 +74,16 @@ public class GenerateVCsAction extends RESOLVEAction {
         commitDoc(project, resolveFile);
         Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
         if (editor == null) return;
+        editor.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void beforeDocumentChange(DocumentEvent event) {
 
+            }
+            @Override
+            public void documentChanged(DocumentEvent event) {
+               // editor.getMarkupModel().
+            }
+        });
         boolean forceGeneration = true; // from action, they really mean it
         RunRESOLVEOnLanguageFile gen =
                 new RunRESOLVEOnLanguageFile(resolveFile,
@@ -99,15 +113,47 @@ public class GenerateVCsAction extends RESOLVEAction {
             //controller.getVerifierPanel().addVCSection();
             //controller.getVerifierPanel().addVCSection();
             VCOutputFile x = gen.getVCOutput();
+
             List<VC> vcs = x.getFinalVCs();
-            int i;
-            i=0;
+
+            markup.removeAllHighlighters();
+
+            for (VC vc : vcs) {
+                for (VC.VCInfo info : vc.getVCInfo()) {
+                    Token location = info.location;
+                    String explanation = info.explanation;
+                    RangeHighlighter highlighter =
+                            markup.addLineHighlighter(location.getLine() - 1, HighlighterLayer.ELEMENT_UNDER_CARET, null);
+                    highlighter.setGutterIconRenderer(new GutterIconRenderer() {
+                        @NotNull
+                        @Override
+                        public Icon getIcon() {
+                            return RESOLVEIcons.VC;
+                        }
+
+                        @Override
+                        @Nullable
+                        public String getTooltipText() {
+                            return explanation;
+                        }
+
+                        @Override
+                        public boolean equals(Object obj) {
+                            return false;
+                        }
+
+                        @Override
+                        public int hashCode() {
+                            return 0;
+                        }
+                    });
+                }
+            }
             //ISSUES (create a list for murali -- this is with regards to the workshop)
             //1.
             //2.
             //3.
             //4.
-
         }
     }
 

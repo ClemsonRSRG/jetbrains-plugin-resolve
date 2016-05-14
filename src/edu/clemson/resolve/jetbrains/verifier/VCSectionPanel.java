@@ -145,11 +145,9 @@ public class VCSectionPanel extends JPanel {
 
     public void printDimensions() {
         System.out.println("-- DIMENSIONS -- ");
-
         System.out.println("sideBar height                     " + this.sideBarOwner.getSize().height);
-
-        System.out.println("sideBarSection height              " + getSize().height);
-        System.out.println("sideBarSection titlePanel height   " + titlePanel.getSize().height);
-        System.out.println("sideBarSection.contentPane height  " + contentPane.getSize().height);
+        System.out.println("VCSectionPanel height              " + getSize().height);
+        System.out.println("VCSectionPanel titlePanel height   " + titlePanel.getSize().height);
+        System.out.println("VCSectionPanel.contentPane height  " + contentPane.getSize().height);
     }
 }

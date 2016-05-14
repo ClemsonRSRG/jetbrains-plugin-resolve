@@ -7,17 +7,19 @@ import javax.swing.*;
 
 public interface RESOLVEIcons {
 
-    Icon DIRECTORY = PlatformIcons.DIRECTORY_CLOSED_ICON;
+    public static final Icon DIRECTORY = PlatformIcons.DIRECTORY_CLOSED_ICON;
 
-    Icon MODULE = IconLoader.getIcon("/edu/clemson/resolve/icons/module.png");
-    Icon TOOL_ICON = IconLoader.getIcon("/edu/clemson/resolve/icons/tool_icon.png");
+    public static final Icon MODULE = IconLoader.getIcon("/edu/clemson/resolve/icons/module.png");
+    public static final Icon TOOL_ICON = IconLoader.getIcon("/edu/clemson/resolve/icons/tool_icon.png");
 
-    Icon FILE = IconLoader.getIcon("/edu/clemson/resolve/icons/file.png");
-    Icon FACILITY = IconLoader.getIcon("/edu/clemson/resolve/icons/facility.png");
+    public static final Icon VC = IconLoader.getIcon("/edu/clemson/resolve/icons/vc.png");
 
-    Icon CONCEPT = IconLoader.getIcon("/edu/clemson/resolve/icons/concept.png");
-    Icon IMPL = IconLoader.getIcon("/edu/clemson/resolve/icons/implementation.png");
-    Icon CONCEPT_EXT = IconLoader.getIcon("/edu/clemson/resolve/icons/concept_extension.png");
+    public static final Icon FILE = IconLoader.getIcon("/edu/clemson/resolve/icons/file.png");
+    public static final Icon FACILITY = IconLoader.getIcon("/edu/clemson/resolve/icons/facility.png");
+
+    public static final Icon CONCEPT = IconLoader.getIcon("/edu/clemson/resolve/icons/concept.png");
+    public static final Icon IMPL = IconLoader.getIcon("/edu/clemson/resolve/icons/implementation.png");
+    public static final Icon CONCEPT_EXT = IconLoader.getIcon("/edu/clemson/resolve/icons/concept_extension.png");
 
     public static final Icon PRECIS = IconLoader.getIcon("/edu/clemson/resolve/icons/precis.png");
     public static final Icon PRECIS_EXT = IconLoader.getIcon("/edu/clemson/resolve/icons/precis_extension.png");
@@ -34,5 +36,4 @@ public interface RESOLVEIcons {
 
     public static final Icon FUNCTION_DECL = IconLoader.getIcon("/edu/clemson/resolve/icons/function.png");
     public static final Icon FUNCTION_IMPL = IconLoader.getIcon("/edu/clemson/resolve/icons/function_impl.png");
-
 }
