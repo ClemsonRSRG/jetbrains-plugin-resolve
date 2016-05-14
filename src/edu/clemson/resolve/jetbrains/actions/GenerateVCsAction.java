@@ -2,10 +2,7 @@ package edu.clemson.resolve.jetbrains.actions;
 
 import com.intellij.codeInsight.daemon.LineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationUtil;
-import com.intellij.openapi.actionSystem.ActionGroup;
-import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.event.DocumentEvent;
@@ -109,78 +106,69 @@ public class GenerateVCsAction extends RESOLVEAction {
 
             //TODO, if we do runProverAction(), instead of passing 'null' for this Runnable object that's
             //expected, we'll pass a process for proving the vcs. For now though, since we're just showing
-
-            //if no vcs currently generated and the user is looking at the panel, maybe put a message in gray
-            //which says something to the effect of "no vcs generated..press cmd+shift+v, etc"
-            //controller.getVerifierPanel().addVCSection();
-            //controller.getVerifierPanel().addVCSection();
-            VCOutputFile x = gen.getVCOutput();
-
-            List<VC> vcs = x.getFinalVCs();
-
+            //look at the logika plugin (in the lower right hand corner of the ide)
+            //and see how they do that processing
             markup.removeAllHighlighters();
 
-
-            for (VC vc : vcs) {
-                for (VC.VCInfo info : vc.getVCInfo()) {
-                    Token location = info.location;
-                    String explanation = info.explanation;
-
-                    RangeHighlighter highlighter =
-                            markup.addLineHighlighter(location.getLine() - 1, HighlighterLayer.ELEMENT_UNDER_CARET, null);
-                    highlighter.setGutterIconRenderer(new GutterIconRenderer() {
-                        @NotNull
+            VCOutputFile vcOutput = gen.getVCOutput();
+            Map<Integer, List<VC>> byLine = vcOutput.getVCsGroupedByLineNumber();
+            for (Map.Entry<Integer, List<VC>> vcsByLine : vcOutput.getVCsGroupedByLineNumber().entrySet()) {
+                List<AnAction> actionsPerVC = new ArrayList<>();
+                //create clickable actions for each vc
+                for (VC vc : vcsByLine.getValue()) {
+                    actionsPerVC.add(new AnAction("VC " + vc.getName() + ": " + vc.getConsequentInfo().explanation) {
                         @Override
-                        public Icon getIcon() {
-                            return RESOLVEIcons.VC;
-                        }
-
-                        @Override
-                        @Nullable
-                        public String getTooltipText() {
-                            return explanation;
-                        }
-
-                        @Override
-                        public boolean equals(Object obj) {
-                            return false;
-                        }
-
-                        @Override
-                        public int hashCode() {
-                            return 0;
-                        }
-
-                        @Override
-                        public boolean isNavigateAction() {
-                            return true;
-                        }
-
-                        @Nullable
-                        public ActionGroup getPopupMenuActions() {
-                            SimpleActionGroup g = new SimpleActionGroup();
-                            g.add(new AnAction("VC " + vc.getName() + ": " + info.explanation) {
-                                @Override
-                                public void actionPerformed(AnActionEvent e) {
-                                    controller.getVerifierWindow().show(null);
-                                    VerifierPanel verifierPanel = controller.getVerifierPanel();
-                                }
-                            });
-                            return g;
-                        }
-
-                        @Nullable
-                        public AnAction getClickAction() {
-                            return null;
+                        public void actionPerformed(AnActionEvent e) {
+                            controller.getVerifierWindow().show(null);
+                            VerifierPanel verifierPanel = controller.getVerifierPanel();
                         }
 
                     });
                 }
+                RangeHighlighter highlighter =
+                        markup.addLineHighlighter(vcsByLine.getKey(), HighlighterLayer.ELEMENT_UNDER_CARET, null);
+                highlighter.setGutterIconRenderer(new GutterIconRenderer() {
+                    @NotNull
+                    @Override
+                    public Icon getIcon() {
+                        return RESOLVEIcons.VC;
+                    }
+
+                    @Override
+                    public boolean equals(Object obj) {
+                        return false;
+                    }
+
+                    @Override
+                    public int hashCode() {
+                        return 0;
+                    }
+
+                    @Override
+                    public boolean isNavigateAction() {
+                        return true;
+                    }
+
+                    @Nullable
+                    public ActionGroup getPopupMenuActions() {
+                        //TODO: Find a nicer looking actiongroup to use.
+                        DefaultActionGroup g = new DefaultActionGroup();
+                        g.addAll(actionsPerVC);
+                        return g;
+                    }
+
+                    @Nullable
+                    public AnAction getClickAction() {
+                        return null;
+                    }
+
+                });
+                actionsPerVC.clear();
             }
 
             //ISSUES (create a list for murali -- this is with regards to the workshop)
-            //1.
-            //2.
+            //1. IDE UNICODE
+            //2. Specifying namespaces
             //3.
             //4.
         }
