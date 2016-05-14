@@ -112,7 +112,7 @@ public class RESOLVEPluginController implements ProjectComponent {
 
         verifierWindow = toolWindowManager.registerToolWindow(VERIFIER_WINDOW_ID, true, ToolWindowAnchor.RIGHT);
         verifierWindow.getContentManager().addContent(content);
-        verifierWindow.setIcon(RESOLVEIcons.TOOL_ICON);
+        //verifierWindow.setIcon(RESOLVEIcons.TOOL_ICON);
 
         TextConsoleBuilderFactory factory = TextConsoleBuilderFactory.getInstance();
         TextConsoleBuilder consoleBuilder = factory.createBuilder(project);

@@ -1,6 +1,8 @@
 package edu.clemson.resolve.jetbrains.actions;
 
 import com.intellij.codeInsight.daemon.LineMarkerProvider;
+import com.intellij.codeInsight.navigation.NavigationUtil;
+import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
@@ -15,6 +17,7 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.tools.SimpleActionGroup;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
 import edu.clemson.resolve.jetbrains.verifier.VerifierPanel;
@@ -106,8 +109,7 @@ public class GenerateVCsAction extends RESOLVEAction {
 
             //TODO, if we do runProverAction(), instead of passing 'null' for this Runnable object that's
             //expected, we'll pass a process for proving the vcs. For now though, since we're just showing
-            controller.getVerifierWindow().show(null);
-            VerifierPanel verifierPanel = controller.getVerifierPanel();
+
             //if no vcs currently generated and the user is looking at the panel, maybe put a message in gray
             //which says something to the effect of "no vcs generated..press cmd+shift+v, etc"
             //controller.getVerifierPanel().addVCSection();
@@ -118,10 +120,12 @@ public class GenerateVCsAction extends RESOLVEAction {
 
             markup.removeAllHighlighters();
 
+
             for (VC vc : vcs) {
                 for (VC.VCInfo info : vc.getVCInfo()) {
                     Token location = info.location;
                     String explanation = info.explanation;
+
                     RangeHighlighter highlighter =
                             markup.addLineHighlighter(location.getLine() - 1, HighlighterLayer.ELEMENT_UNDER_CARET, null);
                     highlighter.setGutterIconRenderer(new GutterIconRenderer() {
@@ -146,9 +150,34 @@ public class GenerateVCsAction extends RESOLVEAction {
                         public int hashCode() {
                             return 0;
                         }
+
+                        @Override
+                        public boolean isNavigateAction() {
+                            return true;
+                        }
+
+                        @Nullable
+                        public ActionGroup getPopupMenuActions() {
+                            SimpleActionGroup g = new SimpleActionGroup();
+                            g.add(new AnAction("VC " + vc.getName() + ": " + info.explanation) {
+                                @Override
+                                public void actionPerformed(AnActionEvent e) {
+                                    controller.getVerifierWindow().show(null);
+                                    VerifierPanel verifierPanel = controller.getVerifierPanel();
+                                }
+                            });
+                            return g;
+                        }
+
+                        @Nullable
+                        public AnAction getClickAction() {
+                            return null;
+                        }
+
                     });
                 }
             }
+
             //ISSUES (create a list for murali -- this is with regards to the workshop)
             //1.
             //2.
