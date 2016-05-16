@@ -47,17 +47,14 @@ public class RESOLVEApplicationLibrariesService extends
         }
     }
 
-    static class RESOLVEApplicationLibrariesState
-            extends
-            RESOLVELibrariesState {
+    static class RESOLVEApplicationLibrariesState extends RESOLVELibrariesState {
         private boolean useRESOLVEPathFromSystemEnvironment = true;
 
         boolean isUsingRESOLVEPathFromSystemEnvironment() {
             return useRESOLVEPathFromSystemEnvironment;
         }
 
-        void setUsingRESOLVEPathFromSystemEnvironment(
-                boolean useResPathFromSysEnv) {
+        void setUsingRESOLVEPathFromSystemEnvironment(boolean useResPathFromSysEnv) {
             useRESOLVEPathFromSystemEnvironment = useResPathFromSysEnv;
         }
     }
