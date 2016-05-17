@@ -69,7 +69,6 @@ public class ResModuleReferenceSet extends FileReferenceSet {
         Module module = ModuleUtilCore.findModuleForPsiElement(file);
         Project project = file.getProject();
 
-
         LinkedHashSet<VirtualFile> sourceRoots = newLinkedHashSet();
 
         PsiElement e = getElement();
@@ -91,6 +90,14 @@ public class ResModuleReferenceSet extends FileReferenceSet {
             //add all contexts (subdirectories) we wanna search
             if (rootSdkDir != null && rootSdkDir.isDirectory()) {
                 for (VirtualFile v : rootSdkDir.getChildren()) {
+                    if (v.isDirectory()) sourceRoots.add(v);
+                }
+            }
+
+            //now do the current project...
+            if (module != null) {
+                VirtualFile[] x = module.getProject().getBaseDir().getChildren();
+                for (VirtualFile v : module.getProject().getBaseDir().getChildren()) {
                     if (v.isDirectory()) sourceRoots.add(v);
                 }
             }

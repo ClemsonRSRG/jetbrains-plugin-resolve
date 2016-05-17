@@ -12,9 +12,13 @@ import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.util.SystemInfo;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.util.EnvironmentUtil;
 import edu.clemson.resolve.RESOLVECompiler;
 import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
+import edu.clemson.resolve.jetbrains.sdk.RESOLVESdkService;
 import edu.clemson.resolve.misc.Utils;
 import edu.clemson.resolve.vcgen.model.VCOutputFile;
 import org.jetbrains.annotations.NotNull;
@@ -63,6 +67,7 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
     @Override
     public void run(@NotNull ProgressIndicator indicator) {
         indicator.setIndeterminate(true);
+
         if (forceGeneration) {
             resolve(targetFile);
         }

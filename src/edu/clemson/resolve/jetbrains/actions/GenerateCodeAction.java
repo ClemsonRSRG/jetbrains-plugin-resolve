@@ -20,6 +20,7 @@ import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
+import com.intellij.util.EnvironmentUtil;
 import edu.clemson.resolve.jetbrains.sdk.RESOLVESdkService;
 import edu.clemson.resolve.misc.Utils;
 import org.jetbrains.jps.model.library.JpsLibrary;

@@ -11,8 +11,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Set;
 
 /**
- * Represents a reference to some top level library directory. This is distinct from {@link ResModuleReference}, which
- * is otherwise used to reference some {@link edu.clemson.resolve.jetbrains.psi.ResFile}.
+ * Represents a reference to some library directory. This is distinct from {@link ResModuleReference}, which
+ * is otherwise used to reference a specific {@link edu.clemson.resolve.jetbrains.psi.ResFile}.
  *
  * @author dtwelch
  */
