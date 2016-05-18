@@ -97,6 +97,7 @@ public class ResModuleReferenceSet extends FileReferenceSet {
             //now do the current project...
             if (module != null) {
                 VirtualFile[] x = module.getProject().getBaseDir().getChildren();
+                sourceRoots.add(module.getProject().getBaseDir());
                 for (VirtualFile v : module.getProject().getBaseDir().getChildren()) {
                     if (v.isDirectory()) sourceRoots.add(v);
                 }
