@@ -273,7 +273,8 @@ private ModuleIdentSpecList ::=  ModuleIdentifierSpec (',' ModuleIdentifierSpec)
 private ModuleIdentSpecListRec ::= !(';'|')'|'from'|'end')
 
 ModuleIdentifierSpec ::= identifier {methods=[getReferences getModuleIdentiferTextRange resolve]}
-ModuleLibraryIdentifierSpec ::= identifier {methods=[getReferences getModuleLibraryIdentiferTextRange resolve]}
+
+ModuleLibraryIdentifierSpec ::= identifier /*('.' identifier)**/ {methods=[getReferences getModuleLibraryIdentiferTextRange resolve]}
 
 // Module blocks & items
 
