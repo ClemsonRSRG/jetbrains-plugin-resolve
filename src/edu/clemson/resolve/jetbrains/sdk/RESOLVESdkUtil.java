@@ -153,10 +153,10 @@ public class RESOLVESdkUtil {
     @Nullable
     static VirtualFile suggestSdkDirectory() {
         if (SystemInfo.isWindows) {
-            return LocalFileSystem.getInstance().findFileByPath("C:\\resolve");
+            return LocalFileSystem.getInstance().findFileByPath("C:\\resolve-lite");
         }
         if (SystemInfo.isMac || SystemInfo.isLinux) {
-            VirtualFile usrLocal = LocalFileSystem.getInstance().findFileByPath("/usr/local/resolve");
+            VirtualFile usrLocal = LocalFileSystem.getInstance().findFileByPath("/usr/local/resolve-lite");
             if (usrLocal != null) return usrLocal;
         }
         return null;

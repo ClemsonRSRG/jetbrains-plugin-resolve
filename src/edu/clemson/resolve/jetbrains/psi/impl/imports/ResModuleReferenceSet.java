@@ -5,7 +5,10 @@ import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileSystem;
+import com.intellij.openapi.vfs.VirtualFileVisitor;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceCompletionImpl;
@@ -86,9 +89,17 @@ public class ResModuleReferenceSet extends FileReferenceSet {
         }
         else {
             VirtualFile rootSdkDir = RESOLVESdkUtil.getSdkSrcDir(project, module);
-            ContainerUtil.addIfNotNull(sourceRoots, rootSdkDir);
+           // ContainerUtil.addIfNotNull(sourceRoots, rootSdkDir);
             //add all contexts (subdirectories) we wanna search
-            if (rootSdkDir != null && rootSdkDir.isDirectory()) {
+            //these need to recursively add all subdirectories...
+
+            if (rootSdkDir != null) addContexts(sourceRoots, rootSdkDir);
+            //now do the curr proj.
+            if (module != null) addContexts(sourceRoots, module.getProject().getBaseDir());
+
+            int i;
+            i=0;
+        /*    if (rootSdkDir != null && rootSdkDir.isDirectory()) {
                 for (VirtualFile v : rootSdkDir.getChildren()) {
                     if (v.isDirectory()) sourceRoots.add(v);
                 }
@@ -101,9 +112,28 @@ public class ResModuleReferenceSet extends FileReferenceSet {
                 for (VirtualFile v : module.getProject().getBaseDir().getChildren()) {
                     if (v.isDirectory()) sourceRoots.add(v);
                 }
-            }
+            }*/
         }
+
         return ContainerUtil.mapNotNull(sourceRoots, psiManager::findDirectory);
+    }
+
+    /**
+     * Adds all subdirectories of {@code dirToSearchRecursively} to {@code sourceRoots}.
+     *
+     * @param sourceRoots an accumulator set that collects all subdirectories of {@code dirToSearchRecursively}.
+     * @param dirToSearchRecursively
+     */
+    private void addContexts(LinkedHashSet<VirtualFile> sourceRoots, VirtualFile dirToSearchRecursively) {
+        if (!dirToSearchRecursively.isDirectory()) return;
+        if (dirToSearchRecursively.getName().startsWith(".")) return; //don't care about intellij IDEA private folders
+        VfsUtilCore.visitChildrenRecursively(dirToSearchRecursively, new VirtualFileVisitor() {
+            @Override
+            public boolean visitFile(@NotNull VirtualFile file) {
+                if (file.isDirectory()) sourceRoots.add(file);
+                return super.visitFile(file);
+            }
+        });
     }
 
     @Override
