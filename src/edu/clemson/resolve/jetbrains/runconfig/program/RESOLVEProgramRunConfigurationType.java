@@ -26,7 +26,7 @@ public class RESOLVEProgramRunConfigurationType extends ConfigurationTypeBase {
             public void configureBeforeRunTaskDefaults(Key<? extends BeforeRunTask> providerID, BeforeRunTask task) {
                 super.configureBeforeRunTaskDefaults(providerID, task);
                 if (providerID == CompileStepBeforeRun.ID) {
-                    task.setEnabled(false);
+               //     task.setEnabled(false);
                 }
             }
         });
