@@ -1,30 +1,25 @@
-package edu.clemson.resolve.jetbrains.runconfig.file;
+package edu.clemson.resolve.jetbrains.runconfig.program;
 
 import com.intellij.compiler.options.CompileStepBeforeRun;
 import com.intellij.execution.BeforeRunTask;
 import com.intellij.execution.configurations.*;
+import com.intellij.openapi.extensions.Extensions;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
-import com.intellij.psi.search.FileTypeIndex;
-import com.intellij.psi.search.GlobalSearchScope;
 import edu.clemson.resolve.jetbrains.RESOLVEConstants;
-import edu.clemson.resolve.jetbrains.RESOLVEFileType;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-
-import javax.swing.*;
 
 public class RESOLVEProgramRunConfigurationType extends ConfigurationTypeBase {
 
     public RESOLVEProgramRunConfigurationType() {
-        super("RESOLVERunConfiguration", "RESOLVE Single Program", "RESOLVE single program configuration",
+        super("RESOLVERunConfiguration", "RESOLVE Single Program", "RESOLVE single program run configuration",
                 RESOLVEIcons.PROGRAM_RUN);
         addFactory(new ConfigurationFactory(this) {
             @Override
             @NotNull
             public RunConfiguration createTemplateConfiguration(@NotNull Project project) {
-                return new RESOLVEProgramRunConfiguration(project, RESOLVEConstants.RESOLVE, getInstance());
+                return new RESOLVEProgramRunConfiguration(RESOLVEConstants.RESOLVE, project, getInstance());
             }
 
             @Override
@@ -35,5 +30,10 @@ public class RESOLVEProgramRunConfigurationType extends ConfigurationTypeBase {
                 }
             }
         });
+    }
+
+    @NotNull
+    public static RESOLVEProgramRunConfigurationType getInstance() {
+        return Extensions.findExtension(CONFIGURATION_TYPE_EP, RESOLVEProgramRunConfigurationType.class);
     }
 }

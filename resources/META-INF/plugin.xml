@@ -69,8 +69,9 @@
         <externalAnnotator language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.annotation.RESOLVEExternalAnnotator"/>
 
 
-        <configurationType
-                implementation="edu.clemson.resolve.jetbrains.runconfig.file.RESOLVEProgramRunConfigurationType"/>
+        <!-- run single file -->
+        <configurationType implementation="edu.clemson.resolve.jetbrains.runconfig.program.RESOLVEProgramRunConfigurationType"/>
+        <runConfigurationProducer implementation="edu.clemson.resolve.jetbrains.runconfig.program.RESOLVEProgramRunConfigurationProducer"/>
 
     </extensions>
 
