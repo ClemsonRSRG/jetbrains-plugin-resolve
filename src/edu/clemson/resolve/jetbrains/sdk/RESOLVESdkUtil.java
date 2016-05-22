@@ -1,7 +1,9 @@
 package edu.clemson.resolve.jetbrains.sdk;
 
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
@@ -20,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -141,6 +144,18 @@ public class RESOLVESdkUtil {
                 RESOLVELibrariesService.getUserDefinedLibraries(module) :
                 RESOLVELibrariesService.getUserDefinedLibraries(project));
         return roots;
+    }
+
+    @NotNull
+    public static Collection<Module> getRESOLVEModules(@NotNull Project project) {
+        if (project.isDefault()) return Collections.emptyList();
+        final RESOLVESdkService sdkService = RESOLVESdkService.getInstance(project);
+        return ContainerUtil.filter(ModuleManager.getInstance(project).getModules(), new Condition<Module>() {
+            @Override
+            public boolean value(Module module) {
+                return sdkService.isRESOLVEModule(module);
+            }
+        });
     }
 
     @Nullable

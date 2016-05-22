@@ -68,9 +68,10 @@ public class GenerateCodeAction extends RESOLVEAction {
 
         Map<String, String> argMap = new LinkedHashMap<>();
         argMap.put("-lib", RunRESOLVEOnLanguageFile.getContentRoot(project, resolveFile).getPath());
-        argMap.put("-package", buildPackage(project, resolveFile));
-        argMap.put("-o", getOutputDir(project, resolveFile));
-        argMap.put("-genCode", "Java");
+
+        //argMap.put("-package", buildPackage(project, resolveFile));
+        argMap.put("-o", RunRESOLVEOnLanguageFile.getOutputDir(project, resolveFile));
+        argMap.put("-genfake", "");
         gen.addArgs(argMap);
         ProgressManager.getInstance().run(gen); //, "Generating", canBeCancelled, e.getData(PlatformDataKeys.PROJECT));
 
@@ -88,11 +89,6 @@ public class GenerateCodeAction extends RESOLVEAction {
     }
 
     //Bunch of methods for piecing together paths to gen, etc
-
-    public String getOutputDir(Project project, VirtualFile vfile) {
-        String result = RunRESOLVEOnLanguageFile.getOutputDir(project, vfile) + getFilePathWithoutBase(project, vfile);
-        return result.substring(0, result.indexOf('.')) + File.separator;
-    }
 
     private String getFilePathWithoutBase(Project project, VirtualFile vfile) {
         String basePath = RunRESOLVEOnLanguageFile.getContentRoot(project, vfile).getPath();

@@ -2567,7 +2567,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   /* ********************************************************** */
   // identifier|
   // ('o'|'true'|'false'|int|'+'|'-'|'*'|'/'|'>'|'≤'|
-  //  '<'|'<='|'>='|'≥'|'not'|'⌐'|'≼'|'ϒ'|'∪₊'|'≤ᵤ')
+  //  '<'|'<='|'>='|'≥'|'not'|'⌐'|'≼'|'ϒ'|'∪₊'|'≤ᵤ'|'⨩')
   public static boolean MathSymbolName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathSymbolName")) return false;
     boolean r;
@@ -2579,7 +2579,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   // 'o'|'true'|'false'|int|'+'|'-'|'*'|'/'|'>'|'≤'|
-  //  '<'|'<='|'>='|'≥'|'not'|'⌐'|'≼'|'ϒ'|'∪₊'|'≤ᵤ'
+  //  '<'|'<='|'>='|'≥'|'not'|'⌐'|'≼'|'ϒ'|'∪₊'|'≤ᵤ'|'⨩'
   private static boolean MathSymbolName_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathSymbolName_1")) return false;
     boolean r;
@@ -2604,6 +2604,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, VROD);
     if (!r) r = consumeToken(b, UNION_PLUS);
     if (!r) r = consumeToken(b, LESS_OR_EQUAL_U);
+    if (!r) r = consumeToken(b, UMINUS);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -2957,8 +2958,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ('Recursive')? 'Procedure'
-  // OpBlock
+  // ('Recursive')? 'Procedure' OpBlock
   static boolean OpProcBody(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "OpProcBody")) return false;
     if (!nextTokenIs(b, "", PROCEDURE, RECURSIVE)) return false;

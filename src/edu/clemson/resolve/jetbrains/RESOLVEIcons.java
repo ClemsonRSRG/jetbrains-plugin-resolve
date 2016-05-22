@@ -1,7 +1,10 @@
 package edu.clemson.resolve.jetbrains;
 
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.util.IconLoader;
+import com.intellij.ui.LayeredIcon;
 import com.intellij.util.PlatformIcons;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
@@ -15,6 +18,8 @@ public interface RESOLVEIcons {
     public static final Icon VC = IconLoader.getIcon("/edu/clemson/resolve/icons/vc.png");
 
     public static final Icon FILE = IconLoader.getIcon("/edu/clemson/resolve/icons/file.png");
+    public static final Icon PROGRAM_RUN = Helper.createIconWithShift(TOOL_ICON, AllIcons.Nodes.RunnableMark);
+
     public static final Icon FACILITY = IconLoader.getIcon("/edu/clemson/resolve/icons/facility.png");
 
     public static final Icon CONCEPT = IconLoader.getIcon("/edu/clemson/resolve/icons/concept.png");
@@ -36,4 +41,25 @@ public interface RESOLVEIcons {
 
     public static final Icon FUNCTION_DECL = IconLoader.getIcon("/edu/clemson/resolve/icons/function.png");
     public static final Icon FUNCTION_IMPL = IconLoader.getIcon("/edu/clemson/resolve/icons/function_impl.png");
+
+    /**
+     * Places a small icon (mark) in the lower right hand corner of the {@code base} icon.
+     * Used from go lang plugin.
+     */
+    class Helper {
+        private Helper() {}
+
+        @NotNull
+        public static LayeredIcon createIconWithShift(@NotNull final Icon base, Icon mark) {
+            LayeredIcon icon = new LayeredIcon(2) {
+                @Override
+                public int getIconHeight() {
+                    return base.getIconHeight();
+                }
+            };
+            icon.setIcon(base, 0);
+            icon.setIcon(mark, 1, 0, base.getIconWidth() / 2);
+            return icon;
+        }
+    }
 }

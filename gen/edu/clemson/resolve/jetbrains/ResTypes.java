@@ -267,6 +267,7 @@ public interface ResTypes {
   IElementType TIMES = new ResTokenType("⨯");
   IElementType TRIPLE_DOT = new ResTokenType("...");
   IElementType TRUE = new ResTokenType("true");
+  IElementType UMINUS = new ResTokenType("⨩");
   IElementType UNION = new ResTokenType("union");
   IElementType UNION1 = new ResTokenType("∪");
   IElementType UNION_PLUS = new ResTokenType("∪₊");

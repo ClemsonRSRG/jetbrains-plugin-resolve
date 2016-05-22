@@ -48,6 +48,7 @@
 
         NOT                     = 'not'
         NOT1                    = '⌐'
+        UMINUS                  = '⨩'
 
         CAT                     = 'o'
         CAT1                    = '∘'
@@ -532,7 +533,7 @@ MathPostfixDefnSig ::=
 
 MathSymbolName ::= identifier|
 ('o'|'true'|'false'|int|'+'|'-'|'*'|'/'|'>'|'≤'|
- '<'|'<='|'>='|'≥'|'not'|'⌐'|'≼'|'ϒ'|'∪₊'|'≤ᵤ')
+ '<'|'<='|'>='|'≥'|'not'|'⌐'|'≼'|'ϒ'|'∪₊'|'≤ᵤ'|'⨩')
 
 private MathDefinitionParams ::= '(' MathDefnParamList ')' { pin=1}
 private ParamListRec ::= !(')'|';')

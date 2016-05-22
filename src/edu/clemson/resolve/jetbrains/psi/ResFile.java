@@ -5,6 +5,7 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
+import edu.clemson.resolve.jetbrains.RESOLVEConstants;
 import edu.clemson.resolve.jetbrains.RESOLVEFileType;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.RESOLVELanguage;
@@ -98,6 +99,18 @@ public class ResFile extends PsiFileBase {
         return enclosedModule != null ? enclosedModule.getOperationsWithImpls() :
                 new ArrayList<ResAnnotatableOperationLikeNode>();
     }*/
+
+    public boolean hasMainOperationWithBody() { // todo create a map for faster search
+        List<ResOperationLikeNode> operations = getOperationLikeThings();
+        if (!(getEnclosedModule() instanceof ResFacilityModuleDecl)) return false;
+        for (ResOperationLikeNode o : operations) {
+            if (o instanceof ResOperationProcedureDecl &&
+                    o.getName() != null && o.getName().equalsIgnoreCase("main")) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     public Icon getIcon(int s) {

@@ -114,7 +114,6 @@ public class ResModuleReferenceSet extends FileReferenceSet {
                 }
             }*/
         }
-
         return ContainerUtil.mapNotNull(sourceRoots, psiManager::findDirectory);
     }
 

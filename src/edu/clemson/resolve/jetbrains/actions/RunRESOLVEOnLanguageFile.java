@@ -37,7 +37,6 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
 
     //TODO: Generalize this.
     public static final String OUTPUT_MODULE_NAME = "gen";
-    public static final String OUTPUT_DIR_NAME = "src";
     public static final String groupDisplayId = "RESOLVE Code Generation";
 
     public VirtualFile targetFile;
@@ -139,9 +138,7 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
 
     public static String getOutputDir(Project project, VirtualFile vfile) {
         VirtualFile contentRoot = getContentRoot(project, vfile);
-        return contentRoot.getPath() + File.separator +
-                OUTPUT_MODULE_NAME + File.separator +
-                RunRESOLVEOnLanguageFile.OUTPUT_DIR_NAME;
+        return contentRoot.getPath() + File.separator + OUTPUT_MODULE_NAME + File.separator;
     }
 
     public static VirtualFile getContentRoot(Project project, VirtualFile vfile) {

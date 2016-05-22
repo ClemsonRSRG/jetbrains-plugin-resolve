@@ -102,6 +102,7 @@ ESCAPES = [abfnrtv]
 "="                                     { return EQUALS; }
 "/="                                    { return NEQUALS; }
 "≠"                                     { return NEQUALS; }
+"⨩"                                     { return UMINUS; }
 
 "and"                                   { return AND; }
 "∧"                                     { return AND; }

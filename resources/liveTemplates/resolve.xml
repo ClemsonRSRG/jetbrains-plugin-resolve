@@ -183,6 +183,14 @@
         </context>
     </template>
 
+    <template description='⨩' name='uminus' toReformat='true' toShortenFQNames='true'
+              value='⨩'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
     <template description='⌐' name='neg' toReformat='true' toShortenFQNames='true'
               value='⌐'>
         <context>

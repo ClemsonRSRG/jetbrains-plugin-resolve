@@ -126,7 +126,7 @@ public class GenerateVCsAction extends RESOLVEAction {
                     });
                 }
                 RangeHighlighter highlighter =
-                        markup.addLineHighlighter(vcsByLine.getKey(), HighlighterLayer.ELEMENT_UNDER_CARET, null);
+                        markup.addLineHighlighter(vcsByLine.getKey() - 1, HighlighterLayer.ELEMENT_UNDER_CARET, null);
                 highlighter.setGutterIconRenderer(new GutterIconRenderer() {
                     @NotNull
                     @Override
@@ -165,12 +165,6 @@ public class GenerateVCsAction extends RESOLVEAction {
                 });
                 actionsPerVC.clear();
             }
-
-            //ISSUES (create a list for murali -- this is with regards to the workshop)
-            //1. IDE UNICODE
-            //2. Specifying namespaces
-            //3.
-            //4.
         }
     }
 
