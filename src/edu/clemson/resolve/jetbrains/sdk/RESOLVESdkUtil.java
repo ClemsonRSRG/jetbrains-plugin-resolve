@@ -21,6 +21,7 @@ import edu.clemson.resolve.jetbrains.project.RESOLVELibrariesService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -220,6 +221,12 @@ public class RESOLVESdkUtil {
     static Collection<VirtualFile> getSdkDirectoriesToAttach(@NotNull String sdkPath, @NotNull String versionString) {
         // src is enough at the moment, possible process binaries from pkg
         return ContainerUtil.createMaybeSingletonList(getSdkSrcDir(sdkPath, versionString));
+    }
+
+    @NotNull
+    public static String retrieveRESOLVEPath(@NotNull Project project, @Nullable Module module) {
+        return StringUtil.join(ContainerUtil.map(getRESOLVEPathRoots(project, module),
+                VirtualFile::getPath), File.pathSeparator);
     }
 
     @Nullable
