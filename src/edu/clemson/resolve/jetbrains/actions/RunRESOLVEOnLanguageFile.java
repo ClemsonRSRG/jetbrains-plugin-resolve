@@ -39,7 +39,7 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
     public static final String OUTPUT_MODULE_NAME = "gen";
     public static final String groupDisplayId = "RESOLVE Code Generation";
 
-    public VirtualFile targetFile;
+    public String targetFilePath;
     public Project project;
     public String outputDir;
     public boolean forceGeneration;
@@ -48,15 +48,26 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
 
     public RunRESOLVEOnLanguageFile(VirtualFile targetFile,
                                     @Nullable final Project project,
+                                    @NotNull final String title) {
+        this(targetFile.getPath(), project, title);
+    }
+
+    public RunRESOLVEOnLanguageFile(String targetFile,
+                                    @Nullable final Project project,
+                                    @NotNull final String title) {
+        this(targetFile, project, title, false, true);
+    }
+
+    public RunRESOLVEOnLanguageFile(String targetFilePath,
+                                    @Nullable final Project project,
                                     @NotNull final String title,
                                     final boolean canBeCancelled,
                                     boolean forceGeneration) {
         super(project, title, canBeCancelled);
-        this.targetFile = targetFile;
+        this.targetFilePath = targetFilePath;
         this.project = project;
         this.forceGeneration = forceGeneration;
-        String fullyQualifiedInputFileName = targetFile.getCanonicalPath();
-        this.args.add(fullyQualifiedInputFileName);
+        this.args.add(targetFilePath);
     }
 
     public VCOutputFile getVCOutput() {
@@ -68,7 +79,7 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
         indicator.setIndeterminate(true);
 
         if (forceGeneration) {
-            resolve(targetFile);
+            resolve(targetFilePath);
         }
     }
 
@@ -78,9 +89,9 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
      * Run RESOLVE on file according to preferences in intellij for this file.
      * Writes set of generated files or empty set if error.
      */
-    public void resolve(VirtualFile vfile) {
-        if (vfile == null) return;
-        LOG.info("resolve(\"" + vfile.getPath() + "\")");
+    public void resolve(String targetFilePath) {
+        if (targetFilePath == null) return;
+        LOG.info("resolve(\"" + targetFilePath + "\")");
 
         // String sourcePath = ConfigRESOLVEPerLanguageFile.getParentDir(vfile);
 
@@ -103,7 +114,7 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
             e.printStackTrace(pw);
             String msg = sw.toString();
             Notification notification =
-                    new Notification(groupDisplayId, "failed to execute " + vfile.getName(),
+                    new Notification(groupDisplayId, "failed to execute " + targetFilePath,
                             e.toString(),
                             NotificationType.INFORMATION);
             Notifications.Bus.notify(notification, project);

@@ -34,6 +34,9 @@ public abstract class RESOLVESdkService extends SimpleModificationTracker {
     @Nullable
     public abstract String getSdkHomePath(@Nullable Module module);
 
+    @Nullable
+    public abstract String getSdkCompilerJarPath(@Nullable Module module);
+
     //TODO TODO: This isn't right anymore
     @NotNull
     static String libraryRootToSdkPath(@NotNull VirtualFile root) {

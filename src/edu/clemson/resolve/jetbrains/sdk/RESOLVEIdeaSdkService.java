@@ -9,6 +9,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.roots.*;
 import com.intellij.openapi.roots.ui.configuration.ProjectSettingsService;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.ObjectUtils;
@@ -38,8 +39,35 @@ public class RESOLVEIdeaSdkService extends RESOLVESdkService {
                     @Override
                     public Result<String> compute() {
                         Sdk sdk = getRESOLVESdk(module);
-                        return Result.create(sdk != null ? sdk.getHomePath() : null,
-                                RESOLVEIdeaSdkService.this);
+                        return Result.create(sdk != null ? sdk.getHomePath() : null, RESOLVEIdeaSdkService.this);
+                    }
+                });
+    }
+
+    @Override
+    public String getSdkCompilerJarPath(@Nullable final Module module) {
+        ComponentManager holder = ObjectUtils.notNull(module, project);
+        return CachedValuesManager.getManager(project).getCachedValue(holder,
+                new CachedValueProvider<String>() {
+                    @Nullable
+                    @Override
+                    public Result<String> compute() {
+                        Sdk sdk = getRESOLVESdk(module);
+                        if (sdk != null) { //TODO: Ugly..
+                            VirtualFile homeDir = sdk.getHomeDirectory();
+                            if (homeDir != null) {
+                                for (VirtualFile vfile : homeDir.getChildren()) {
+                                    if (vfile.getName().equals("compiler") && vfile.isDirectory()) {
+                                        for (VirtualFile f : vfile.getChildren()) {
+                                            if (f.getName().endsWith(".jar")) {
+                                                return Result.create(f.getPath(), RESOLVEIdeaSdkService.this);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        return Result.create(null, RESOLVEIdeaSdkService.this);
                     }
                 });
     }
@@ -67,8 +95,7 @@ public class RESOLVEIdeaSdkService extends RESOLVESdkService {
 
     @Override
     public void chooseAndSetSdk(@Nullable final Module module) {
-        Sdk projectSdk = ProjectSettingsService.getInstance(project)
-                .chooseAndSetSdk();
+        Sdk projectSdk = ProjectSettingsService.getInstance(project).chooseAndSetSdk();
         if (projectSdk == null && module != null) {
             ApplicationManager.getApplication().runWriteAction(new Runnable() {
                 @Override
@@ -83,8 +110,7 @@ public class RESOLVEIdeaSdkService extends RESOLVESdkService {
 
     @Override
     public boolean isRESOLVEModule(@Nullable Module module) {
-        return super.isRESOLVEModule(module) &&
-                ModuleUtil.getModuleType(module) == RESOLVEModuleType.getInstance();
+        return super.isRESOLVEModule(module) && ModuleUtil.getModuleType(module) == RESOLVEModuleType.getInstance();
     }
 
     private Sdk getRESOLVESdk(@Nullable Module module) {

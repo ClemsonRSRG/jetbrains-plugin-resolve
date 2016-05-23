@@ -30,14 +30,14 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class RESOLVEProgramRunningState extends CommandLineState {
 
-    @NotNull protected final RESOLVEProgramRunConfiguration configuration;
+    @NotNull
+    protected final RESOLVEProgramRunConfiguration configuration;
+    @NotNull
+    protected final Module module;
 
     public RESOLVEProgramRunningState(@NotNull ExecutionEnvironment env,
                                       @NotNull Module module,
@@ -51,9 +51,6 @@ public class RESOLVEProgramRunningState extends CommandLineState {
     }
 
     @NotNull
-    protected final Module module;
-
-    @NotNull
     public RESOLVEProgramRunConfiguration getConfiguration() {
         return configuration;
     }
@@ -65,58 +62,79 @@ public class RESOLVEProgramRunningState extends CommandLineState {
 
         final Project project = configuration.getProject();
         String filePath = configuration.getFilePath();
-        VirtualFile resolveFile = project.getBaseDir().findChild(configuration.getFilePath());
-        int i;
-        i=0;
-       /* RunRESOLVEOnLanguageFile gen =
-                new RunRESOLVEOnLanguageFile(resolveFile,
-                        project,
-                        title,
-                        canBeCancelled,
-                        forceGeneration);
-        gen.outputDir = gen.outputDir + getFilePathWithoutBase(project, resolveFile.getParent());
+        String outputPath = project.getBasePath() + "/out";
+        String classPath = RESOLVESdkService.getInstance(project).getSdkCompilerJarPath(module) + ":" + outputPath;
+        String className = getClassName(filePath);
 
-        Map<String, String> argMap = new LinkedHashMap<>();
-        argMap.put("-lib", RunRESOLVEOnLanguageFile.getContentRoot(project, resolveFile).getPath());
+        //Cross compile from RESOLVE to java
+        generateAndWriteJava(project, filePath, outputPath);
 
-        //argMap.put("-package", buildPackage(project, resolveFile));
-        argMap.put("-o", RunRESOLVEOnLanguageFile.getOutputDir(project, resolveFile));
-        argMap.put("-genfake", "");
-        gen.addArgs(argMap);
-        ProgressManager.getInstance().run(gen); //, "Generating",*/
-        /*final ProjectRootManager projectRootManager = ProjectRootManager.getInstance(project);
-
-        final VirtualFile[] sourceRoots = projectRootManager.getContentSourceRoots();
-
-
-        final String sourcePath = getSourcePath(sourceRoots);
-        final String fregeClassPath = getClassPathSource();
-        if (fregeClassPath == null) {
-            return echo("Could not find frege in classpath");
-        }*/
-        String x = RESOLVESdkService.getInstance(project).getSdkHomePath(module);
- /*       final String projectOutPath = project.getBasePath() + "/out";
-        final String effectiveClassPath = fregeClassPath + ":" + projectOutPath;
-
-     //Cross compile from frege to java
-        ProcessHandler fregec = compile(sourcePath, ".fr", "Could not compile with fregec",
-                file -> fregeCompile(sourcePath, projectOutPath, file));
-        if (fregec != null) return fregec;
-
-     //Compile Java to bytecode
-
-        ProcessHandler javac = compile(projectOutPath, ".java", "Could not compile with javac", file ->
-                com.sun.tools.javac.Main.compile(new String[]{"-cp", effectiveClassPath, "-d", projectOutPath, file}) == 0
-        );
+        //Compile Java to bytecode and store in /out/ directory
+        ProcessHandler javac = compileGeneratedJava(classPath, outputPath);
         if (javac != null) return javac;
-    //Execute bytecode
-     */
+
+        //Execute bytecode
         final KillableColoredProcessHandler processHandler = new KillableColoredProcessHandler(new GeneralCommandLine(
                 "java",
-                "-cp", "",
-                configuration.getFilePath()
+                "-cp", classPath,
+                className
         ));
         processHandler.setShouldDestroyProcessRecursively(true);
         return processHandler;
     }
+
+    @NotNull public String getClassName(@NotNull String filePath) {
+        String result = filePath.substring(filePath.lastIndexOf('/'));
+        return result.substring(0, result.indexOf('.'));
+    }
+
+    public void generateAndWriteJava(Project project, String filePath, String outputPath) {
+        RunRESOLVEOnLanguageFile g = new RunRESOLVEOnLanguageFile(configuration.getFilePath(), project, "gencode");
+        g.outputDir = outputPath;
+        Map<String, String> argMap = new LinkedHashMap<>();
+        argMap.put("-lib", configuration.getWorkingDirectory());
+        argMap.put("-o", outputPath);
+        argMap.put("-genfake", "");
+        g.addArgs(argMap);
+        File outputDir = new File(outputPath);
+        if (!outputDir.exists()) {
+            outputDir.mkdirs();
+        }
+        ProgressManager.getInstance().run(g);
+    }
+
+    public ProcessHandler compileGeneratedJava(String effectiveClassPath, String outputPath) throws ExecutionException {
+        List<String> fileNames = new ArrayList<>();
+        File outFile = new File(outputPath);
+
+        if (!outFile.exists()) {
+            outFile.mkdirs();
+        }
+        final File[] fileList = outFile.listFiles();
+        if (fileList == null || fileList.length == 0) {
+            return echo("Filelist could not be compiled");
+        }
+
+        for (File file : fileList) {
+            if (file.getAbsolutePath().endsWith(".java"))
+                fileNames.add(file.getAbsolutePath());
+        }
+        for (String file : fileNames) {
+            boolean status = com.sun.tools.javac.Main.compile(
+                    new String[]{"-cp", effectiveClassPath, "-d", outputPath, file}) == 0;
+            if (!status) {
+                return echo("compilation failed");
+            }
+        }
+        return null;
+    }
+
+    @NotNull
+    private KillableColoredProcessHandler echo(String message) throws ExecutionException {
+        return new KillableColoredProcessHandler(new GeneralCommandLine(
+                "echo",
+                message
+        ));
+    }
+
 }

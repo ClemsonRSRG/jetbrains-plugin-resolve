@@ -57,13 +57,7 @@ public class GenerateCodeAction extends RESOLVEAction {
         // commit changes to PSI and file system
         commitDoc(project, resolveFile);
 
-        boolean forceGeneration = true; // from action, they really mean it
-        RunRESOLVEOnLanguageFile gen =
-                new RunRESOLVEOnLanguageFile(resolveFile,
-                        project,
-                        title,
-                        canBeCancelled,
-                        forceGeneration);
+        RunRESOLVEOnLanguageFile gen = new RunRESOLVEOnLanguageFile(resolveFile.getPath(), project, title, true, true);
         gen.outputDir = gen.outputDir + getFilePathWithoutBase(project, resolveFile.getParent());
 
         Map<String, String> argMap = new LinkedHashMap<>();

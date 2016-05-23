@@ -88,9 +88,7 @@ public class GenerateVCsAction extends RESOLVEAction {
         RunRESOLVEOnLanguageFile gen =
                 new RunRESOLVEOnLanguageFile(resolveFile,
                         project,
-                        title,
-                        canBeCancelled,
-                        forceGeneration);
+                        title);
 
         Map<String, String> argMap = new LinkedHashMap<>();
         argMap.put("-lib", RunRESOLVEOnLanguageFile.getContentRoot(project, resolveFile).getPath());

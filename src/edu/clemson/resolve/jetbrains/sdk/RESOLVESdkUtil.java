@@ -189,7 +189,7 @@ public class RESOLVESdkUtil {
             }
             VirtualFile compilerDir = sdkRoot.findFileByRelativePath("compiler");
             if (compilerDir == null || !compilerDir.isDirectory()) {
-                RESOLVESdkService.LOG.debug("Cannot find compiler jar in resolve sdk home directory");
+                RESOLVESdkService.LOG.debug("Cannot find compiler jar in RESOLVE Sdk home directory");
                 return null;
             }
             VirtualFile compilerCandidate = null;

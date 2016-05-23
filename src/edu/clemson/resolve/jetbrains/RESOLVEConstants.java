@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NonNls;
 public class RESOLVEConstants {
 
     public static final String RESOLVE_PATH = "RESOLVEPATH";
+    public static final String RESOLVE_ROOT = "RESOLVEROOT";
 
     public static final String MODULE_TYPE_ID = "RESOLVE_MODULE";
     public static final String SDK_TYPE_ID = "RESOLVE SDK";

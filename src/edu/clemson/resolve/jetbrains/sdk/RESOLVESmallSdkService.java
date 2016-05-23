@@ -56,8 +56,13 @@ public class RESOLVESmallSdkService extends RESOLVESdkService {
 
     @Nullable
     @Override
-    public String getSdkVersion(
-            @Nullable final Module module) {
+    public String getSdkCompilerJarPath(@Nullable Module module) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public String getSdkVersion(@Nullable final Module module) {
         String parentVersion = super.getSdkVersion(module);
         if (parentVersion != null) {
             return parentVersion;
