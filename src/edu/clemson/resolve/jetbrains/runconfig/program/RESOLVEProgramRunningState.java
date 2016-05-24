@@ -62,7 +62,7 @@ public class RESOLVEProgramRunningState extends CommandLineState {
 
         final Project project = configuration.getProject();
         String filePath = configuration.getFilePath();
-        String outputPath = project.getBasePath() + "/out";
+        String outputPath = project.getBasePath() + File.separator + "out";
         String classPath = RESOLVESdkService.getInstance(project).getSdkCompilerJarPath(module) + ":" + outputPath;
         String className = getClassName(filePath);
 
@@ -84,7 +84,7 @@ public class RESOLVEProgramRunningState extends CommandLineState {
     }
 
     @NotNull public String getClassName(@NotNull String filePath) {
-        String result = filePath.substring(filePath.lastIndexOf('/'));
+        String result = filePath.substring(filePath.lastIndexOf(File.separator) + 1);
         return result.substring(0, result.indexOf('.'));
     }
 
@@ -96,10 +96,6 @@ public class RESOLVEProgramRunningState extends CommandLineState {
         argMap.put("-o", outputPath);
         argMap.put("-genfake", "");
         g.addArgs(argMap);
-        File outputDir = new File(outputPath);
-        if (!outputDir.exists()) {
-            outputDir.mkdirs();
-        }
         ProgressManager.getInstance().run(g);
     }
 
