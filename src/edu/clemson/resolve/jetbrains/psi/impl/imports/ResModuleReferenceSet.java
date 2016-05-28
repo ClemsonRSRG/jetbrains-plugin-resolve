@@ -89,30 +89,9 @@ public class ResModuleReferenceSet extends FileReferenceSet {
         }
         else {
             VirtualFile rootSdkDir = RESOLVESdkUtil.getSdkSrcDir(project, module);
-           // ContainerUtil.addIfNotNull(sourceRoots, rootSdkDir);
-            //add all contexts (subdirectories) we wanna search
-            //these need to recursively add all subdirectories...
-
             if (rootSdkDir != null) addContexts(sourceRoots, rootSdkDir);
             //now do the curr proj.
-            if (module != null) addContexts(sourceRoots, module.getProject().getBaseDir());
-
-            int i;
-            i=0;
-        /*    if (rootSdkDir != null && rootSdkDir.isDirectory()) {
-                for (VirtualFile v : rootSdkDir.getChildren()) {
-                    if (v.isDirectory()) sourceRoots.add(v);
-                }
-            }
-
-            //now do the current project...
-            if (module != null) {
-                VirtualFile[] x = module.getProject().getBaseDir().getChildren();
-                sourceRoots.add(module.getProject().getBaseDir());
-                for (VirtualFile v : module.getProject().getBaseDir().getChildren()) {
-                    if (v.isDirectory()) sourceRoots.add(v);
-                }
-            }*/
+            if (module != null) addContexts(sourceRoots, module.getModuleFile());
         }
         return ContainerUtil.mapNotNull(sourceRoots, psiManager::findDirectory);
     }

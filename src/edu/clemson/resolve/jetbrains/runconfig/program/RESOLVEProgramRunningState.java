@@ -12,6 +12,7 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.*;
 import com.intellij.openapi.roots.libraries.Library;
+import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -64,13 +65,13 @@ public class RESOLVEProgramRunningState extends CommandLineState {
         String filePath = configuration.getFilePath();
         String outputPath = project.getBasePath() + File.separator + "out";
         String classPath = RESOLVESdkService.getInstance(project).getSdkCompilerJarPath(module) + ":" + outputPath;
-        String className = getClassName(filePath);
+        String className = getClassName(project, filePath);
 
         //Cross compile from RESOLVE to java
         generateAndWriteJava(project, filePath, outputPath);
 
         //Compile Java to bytecode and store in /out/ directory
-        ProcessHandler javac = compileGeneratedJava(classPath, outputPath);
+        ProcessHandler javac = compileGeneratedJava(classPath, outputPath, filePath);
         if (javac != null) return javac;
 
         //Execute bytecode
@@ -83,26 +84,46 @@ public class RESOLVEProgramRunningState extends CommandLineState {
         return processHandler;
     }
 
-    @NotNull public String getClassName(@NotNull String filePath) {
-        String result = filePath.substring(filePath.lastIndexOf(File.separator) + 1);
-        return result.substring(0, result.indexOf('.'));
+    @NotNull public String getOutputPathForFile(@NotNull Project project,
+                                             @NotNull String baseOutputPath,
+                                             @NotNull String filePath) {
+        String path = getRelativePath(project, filePath);
+        return baseOutputPath + File.separator + path;
+    }
+
+    @NotNull public String getClassName(@NotNull Project project, @NotNull String filePath) {
+        String result = getRelativePath(project, filePath);
+        result = result.substring(0, result.lastIndexOf('.'));
+        result = project.getName() + File.separator + result;
+
+        return result.replaceAll(File.separator, ".");
+    }
+
+    private String getRelativePath(@NotNull Project project, @NotNull String filePath) {
+        String basePath = filePath;
+        //can't think of why this would be null, but intellij is telling me it could be..
+        if (project.getBasePath() != null) basePath = project.getBasePath();
+        return FileUtil.getRelativePath(basePath, filePath, File.separatorChar);
     }
 
     public void generateAndWriteJava(Project project, String filePath, String outputPath) {
         RunRESOLVEOnLanguageFile g = new RunRESOLVEOnLanguageFile(configuration.getFilePath(), project, "gencode");
         g.outputDir = outputPath;
         Map<String, String> argMap = new LinkedHashMap<>();
-        argMap.put("-lib", configuration.getWorkingDirectory());
+        argMap.put("-lib", project.getBasePath());
         argMap.put("-o", outputPath);
-        argMap.put("-genfake", "");
+        argMap.put("-genCode", "Java");
         g.addArgs(argMap);
         ProgressManager.getInstance().run(g);
     }
 
-    public ProcessHandler compileGeneratedJava(String effectiveClassPath, String outputPath) throws ExecutionException {
+    public ProcessHandler compileGeneratedJava(Project project, String effectiveClassPath, String outputPath, String filePath)
+            throws ExecutionException {
         List<String> fileNames = new ArrayList<>();
         File outFile = new File(outputPath);
+        String newOutputPath = getOutputPathForFile(project, outputPath, filePath);
 
+        //TODO: I think the compiler does this automatically in generateAndWriteJava(..). check this.
         if (!outFile.exists()) {
             outFile.mkdirs();
         }
@@ -117,7 +138,7 @@ public class RESOLVEProgramRunningState extends CommandLineState {
         }
         for (String file : fileNames) {
             boolean status = com.sun.tools.javac.Main.compile(
-                    new String[]{"-cp", effectiveClassPath, "-d", outputPath, file}) == 0;
+                    new String[]{"-cp", effectiveClassPath, "-d", inFileDir.getPath(), file}) == 0;
             if (!status) {
                 return echo("compilation failed");
             }
