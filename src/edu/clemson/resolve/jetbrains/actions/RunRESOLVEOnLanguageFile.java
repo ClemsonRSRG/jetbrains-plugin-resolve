@@ -31,7 +31,7 @@ import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class RunRESOLVEOnLanguageFile extends Task.Modal {
+public class RunRESOLVEOnLanguageFile extends Task.WithResult<Boolean, Exception> {
 
     public static final Logger LOG = Logger.getInstance("RunRESOLVEOnLanguageFile");
 
@@ -75,12 +75,8 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
     }
 
     @Override
-    public void run(@NotNull ProgressIndicator indicator) {
-        indicator.setIndeterminate(true);
-
-        if (forceGeneration) {
-            resolve(targetFilePath);
-        }
+    protected Boolean compute(@NotNull ProgressIndicator indicator) throws Exception {
+        return resolve(targetFilePath);
     }
 
     //See "ImplementMethodsFix" in the intellij sources
@@ -89,8 +85,8 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
      * Run RESOLVE on file according to preferences in intellij for this file.
      * Writes set of generated files or empty set if error.
      */
-    public void resolve(String targetFilePath) {
-        if (targetFilePath == null) return;
+    public Boolean resolve(String targetFilePath) {
+        if (targetFilePath == null) return false;
         LOG.info("resolve(\"" + targetFilePath + "\")");
 
         // String sourcePath = ConfigRESOLVEPerLanguageFile.getParentDir(vfile);
@@ -98,6 +94,8 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
         LOG.info("args: " + Utils.join(args, " "));
         RESOLVECompiler compiler = new RESOLVECompiler(args.toArray(new String[args.size()]));
         ConsoleView console = RESOLVEPluginController.getInstance(project).getConsole();
+        RESOLVEPluginController.getInstance(project).console.clear(); //clear it for the current run
+
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
 
         console.print(timeStamp + ": resolve " + Utils.join(args, " ") + "\n", ConsoleViewContentType.SYSTEM_OUTPUT);
@@ -129,6 +127,7 @@ public class RunRESOLVEOnLanguageFile extends Task.Modal {
         if (listener.hasOutput) {
             RESOLVEPluginController.showConsoleWindow(project);
         }
+        return compiler.errMgr.getErrorCount() == 0;
     }
 
     public void addArgs(Map<String, String> argMap) {

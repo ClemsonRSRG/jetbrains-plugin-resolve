@@ -91,7 +91,11 @@ public class RESOLVEProgramRunningState extends CommandLineState {
         argMap.put("-o", outputPath);
         argMap.put("-genCode", "Java");
         g.addArgs(argMap);
-        ProgressManager.getInstance().run(g);
+        try {
+            ProgressManager.getInstance().run(g);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public ProcessHandler compileGeneratedJava(Project project, String effectiveClassPath, String outputPath, String filePath)

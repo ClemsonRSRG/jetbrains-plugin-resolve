@@ -85,9 +85,13 @@ public class GenerateVCsAction extends RESOLVEAction {
         argMap.put("-lib", RunRESOLVEOnLanguageFile.getContentRoot(project, resolveFile).getPath());
         argMap.put("-vcs", "");
         gen.addArgs(argMap);
-        ProgressManager.getInstance().run(gen); //, "Generating", canBeCancelled, e.getData(PlatformDataKeys.PROJECT));
+        boolean successful = false;
+        try {
+            successful = ProgressManager.getInstance().run(gen); //, "Generating", canBeCancelled, e.getData(PlatformDataKeys.PROJECT));
+        } catch (Exception e1) {
+        }
 
-        if (!editor.isDisposed()) {
+        if (successful && !editor.isDisposed()) {
             MarkupModel markup = editor.getMarkupModel();
             processResult(gen.getVCOutput());
 
@@ -98,6 +102,7 @@ public class GenerateVCsAction extends RESOLVEAction {
             //look at the logika plugin (in the lower right hand corner of the ide)
             //and see how they do that processing
             markup.removeAllHighlighters();
+
 
             VCOutputFile vcOutput = gen.getVCOutput();
             Map<Integer, List<VC>> byLine = vcOutput.getVCsGroupedByLineNumber();
@@ -168,7 +173,6 @@ public class GenerateVCsAction extends RESOLVEAction {
                     for (RangeHighlighter h : vcRelatedHighlighters) {
                         markup.removeHighlighter(h);
                     }
-                    //markup.removeHighlighter();
                 }
             });
         }

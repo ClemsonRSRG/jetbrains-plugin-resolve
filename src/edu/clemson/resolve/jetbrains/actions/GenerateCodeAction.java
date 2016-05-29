@@ -67,7 +67,11 @@ public class GenerateCodeAction extends RESOLVEAction {
         argMap.put("-o", RunRESOLVEOnLanguageFile.getOutputDir(project, resolveFile));
         argMap.put("-genfake", "");
         gen.addArgs(argMap);
-        ProgressManager.getInstance().run(gen); //, "Generating", canBeCancelled, e.getData(PlatformDataKeys.PROJECT));
+        try {
+            ProgressManager.getInstance().run(gen); //, "Generating", canBeCancelled, e.getData(PlatformDataKeys.PROJECT));
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
 
         // refresh from disk to see new files
         Set<File> generatedFiles = new HashSet<>();
