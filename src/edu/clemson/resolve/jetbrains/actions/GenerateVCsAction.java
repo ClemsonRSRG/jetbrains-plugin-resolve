@@ -74,16 +74,7 @@ public class GenerateVCsAction extends RESOLVEAction {
         commitDoc(project, resolveFile);
         Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
         if (editor == null) return;
-        editor.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void beforeDocumentChange(DocumentEvent event) {
 
-            }
-            @Override
-            public void documentChanged(DocumentEvent event) {
-               // editor.getMarkupModel().
-            }
-        });
         boolean forceGeneration = true; // from action, they really mean it
         RunRESOLVEOnLanguageFile gen =
                 new RunRESOLVEOnLanguageFile(resolveFile,
@@ -110,6 +101,8 @@ public class GenerateVCsAction extends RESOLVEAction {
 
             VCOutputFile vcOutput = gen.getVCOutput();
             Map<Integer, List<VC>> byLine = vcOutput.getVCsGroupedByLineNumber();
+            List<RangeHighlighter> vcRelatedHighlighters = new ArrayList<>();
+
             for (Map.Entry<Integer, List<VC>> vcsByLine : vcOutput.getVCsGroupedByLineNumber().entrySet()) {
                 List<AnAction> actionsPerVC = new ArrayList<>();
                 //create clickable actions for each vc
@@ -161,8 +154,23 @@ public class GenerateVCsAction extends RESOLVEAction {
                     }
 
                 });
+                vcRelatedHighlighters.add(highlighter);
                 //actionsPerVC.clear();
             }
+
+            editor.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void beforeDocumentChange(DocumentEvent event) {
+
+                }
+                @Override
+                public void documentChanged(DocumentEvent event) {
+                    for (RangeHighlighter h : vcRelatedHighlighters) {
+                        markup.removeHighlighter(h);
+                    }
+                    //markup.removeHighlighter();
+                }
+            });
         }
     }
 
