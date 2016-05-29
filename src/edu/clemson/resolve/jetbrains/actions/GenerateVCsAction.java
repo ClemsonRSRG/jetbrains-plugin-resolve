@@ -161,7 +161,7 @@ public class GenerateVCsAction extends RESOLVEAction {
                     }
 
                 });
-                actionsPerVC.clear();
+                //actionsPerVC.clear();
             }
         }
     }

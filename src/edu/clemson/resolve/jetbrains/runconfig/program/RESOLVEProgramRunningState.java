@@ -71,25 +71,16 @@ public class RESOLVEProgramRunningState extends CommandLineState {
     @NotNull public File getOuputDirForFile(@NotNull Project project,
                                             @NotNull String baseOutputPath,
                                             @NotNull String filePath) {
-        String path = getRelativePath(project, filePath);
-        //unbelievable.
+        String path = FileUtil.getRelativePath(project.getBasePath(), filePath, File.separatorChar);
         path = baseOutputPath + File.separator + project.getName() + File.separator + path;
         return new File(path.substring(0, path.lastIndexOf("."))).getParentFile();
     }
 
     @NotNull public String getClassName(@NotNull Project project, @NotNull String filePath) {
-        String result = getRelativePath(project, filePath);
+        String result = FileUtil.getRelativePath(project.getBasePath(), filePath, File.separatorChar);
         result = result.substring(0, result.lastIndexOf('.'));
         result = project.getName() + File.separator + result;
-
         return result.replaceAll(File.separator, ".");
-    }
-
-    private String getRelativePath(@NotNull Project project, @NotNull String filePath) {
-        String basePath = filePath;
-        //can't think of why this would be null, but intellij is telling me it could be..
-        if (project.getBasePath() != null) basePath = project.getBasePath();
-        return FileUtil.getRelativePath(basePath, filePath, File.separatorChar);
     }
 
     public void generateAndWriteJava(Project project, String filePath, String outputPath) {
@@ -106,13 +97,8 @@ public class RESOLVEProgramRunningState extends CommandLineState {
     public ProcessHandler compileGeneratedJava(Project project, String effectiveClassPath, String outputPath, String filePath)
             throws ExecutionException {
         List<String> fileNames = new ArrayList<>();
-        File outFile = new File(outputPath);
+        File baseOutFile = new File(outputPath);
         File newOutputDir = getOuputDirForFile(project, outputPath, filePath);
-
-        //TODO: I think the compiler does this automatically in generateAndWriteJava(..). check this.
-        //if (!outFile.exists()) {
-        //    outFile.mkdirs();
-        //}
         final File[] fileList = newOutputDir.listFiles();
         if (fileList == null || fileList.length == 0) {
             return echo("Filelist could not be compiled");
@@ -124,7 +110,7 @@ public class RESOLVEProgramRunningState extends CommandLineState {
         }
         for (String file : fileNames) {
             boolean status = com.sun.tools.javac.Main.compile(
-                    new String[]{"-cp", effectiveClassPath, "-d", outFile.getPath(), file}) == 0;
+                    new String[]{"-cp", effectiveClassPath, "-d", baseOutFile.getPath(), file}) == 0;
             if (!status) {
                 return echo("compilation failed");
             }
