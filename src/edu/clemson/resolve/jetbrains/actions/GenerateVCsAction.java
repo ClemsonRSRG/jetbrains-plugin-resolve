@@ -103,7 +103,6 @@ public class GenerateVCsAction extends RESOLVEAction {
             //and see how they do that processing
             markup.removeAllHighlighters();
 
-
             VCOutputFile vcOutput = gen.getVCOutput();
             Map<Integer, List<VC>> byLine = vcOutput.getVCsGroupedByLineNumber();
             List<RangeHighlighter> vcRelatedHighlighters = new ArrayList<>();

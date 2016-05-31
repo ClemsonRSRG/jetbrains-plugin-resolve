@@ -10,6 +10,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.io.FileUtil;
+import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
 import edu.clemson.resolve.jetbrains.actions.RunRESOLVEOnLanguageFile;
 import edu.clemson.resolve.jetbrains.sdk.RESOLVESdkService;
 import org.jetbrains.annotations.NotNull;
@@ -52,7 +53,15 @@ public class RESOLVEProgramRunningState extends CommandLineState {
         String className = getClassName(project, filePath);
 
         //Cross compile from RESOLVE to java
-        generateAndWriteJava(project, filePath, outputPath);
+        boolean successfullyGeneratedJava = generateAndWriteJava(project, filePath, outputPath);
+
+        if (!successfullyGeneratedJava) {
+            ProcessHandler p = new KillableColoredProcessHandler(new GeneralCommandLine());
+
+            //hmm, not sure about the line below..
+            RESOLVEPluginController.getInstance(project).console.attachToProcess(p);
+            return p;
+        }
 
         //Compile Java to bytecode and store in /out/ directory
         ProcessHandler javac = compileGeneratedJava(project, classPath, outputPath, filePath);
@@ -83,7 +92,7 @@ public class RESOLVEProgramRunningState extends CommandLineState {
         return result.replaceAll(File.separator, ".");
     }
 
-    public void generateAndWriteJava(Project project, String filePath, String outputPath) {
+    public boolean generateAndWriteJava(Project project, String filePath, String outputPath) {
         RunRESOLVEOnLanguageFile g = new RunRESOLVEOnLanguageFile(configuration.getFilePath(), project, "gencode");
         g.outputDir = outputPath;
         Map<String, String> argMap = new LinkedHashMap<>();
@@ -91,11 +100,13 @@ public class RESOLVEProgramRunningState extends CommandLineState {
         argMap.put("-o", outputPath);
         argMap.put("-genCode", "Java");
         g.addArgs(argMap);
+        boolean success = false;
         try {
-            ProgressManager.getInstance().run(g);
+            success = ProgressManager.getInstance().run(g);
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return success;
     }
 
     public ProcessHandler compileGeneratedJava(Project project, String effectiveClassPath, String outputPath, String filePath)
