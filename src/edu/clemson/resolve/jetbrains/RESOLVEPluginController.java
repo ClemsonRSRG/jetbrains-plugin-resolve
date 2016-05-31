@@ -73,23 +73,6 @@ public class RESOLVEPluginController implements ProjectComponent {
         //installListeners();
     }
 
-    public void setVCsFromFAKEVCGenAction() {
-        LOG.info("setVCsFromFAKEVCGenAction: " + project.getName());
-        verifierPanel.addVCSection(new VCSectionPanel(verifierPanel, "foo",
-                getInner1(), RESOLVEIcons.DEF));
-        verifierPanel.addVCSection(new VCSectionPanel(verifierPanel, "moo",
-                getInner1(), RESOLVEIcons.DEF));
-        /*PreviewState previewState = getPreviewState(grammarFile);
-        previewState.startRuleName = startRuleName;
-        if ( previewPanel!=null ) {
-            previewPanel.getInputPanel().setStartRuleName(grammarFile, startRuleName); // notify the view
-            previewPanel.updateParseTreeFromDoc(grammarFile);
-        }
-        else {
-            LOG.error("setStartRuleNameEvent called before preview panel created");
-        }*/
-    }
-
     private static JComponent getInner1() {
         DefaultListModel<String> model = new DefaultListModel<String>();
         model.add(0, "Bill Gates");
@@ -105,7 +88,7 @@ public class RESOLVEPluginController implements ProjectComponent {
         LOG.info("createToolWindows " + project.getName());
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
 
-        verifierPanel = new VerifierPanel(project, true);
+        verifierPanel = new VerifierPanel(project);
 
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content content = contentFactory.createContent(verifierPanel, "", false);

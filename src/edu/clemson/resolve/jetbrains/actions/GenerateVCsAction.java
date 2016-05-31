@@ -1,5 +1,6 @@
 package edu.clemson.resolve.jetbrains.actions;
 
+import com.intellij.application.options.colors.PreviewPanel;
 import com.intellij.codeInsight.daemon.LineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.openapi.actionSystem.*;
@@ -17,6 +18,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.tools.SimpleActionGroup;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
+import edu.clemson.resolve.jetbrains.verifier.VCDisplayForm;
 import edu.clemson.resolve.jetbrains.verifier.VerifierPanel;
 import edu.clemson.resolve.vcgen.VC;
 import edu.clemson.resolve.vcgen.model.VCOutputFile;
@@ -116,10 +118,13 @@ public class GenerateVCsAction extends RESOLVEAction {
                         public void actionPerformed(AnActionEvent e) {
                             controller.getVerifierWindow().show(null);
                             VerifierPanel verifierPanel = controller.getVerifierPanel();
+                            VCDisplayForm vcdf = new VCDisplayForm();
+                            verifierPanel.add(vcdf);
                         }
 
                     });
                 }
+
                 RangeHighlighter highlighter =
                         markup.addLineHighlighter(vcsByLine.getKey() - 1, HighlighterLayer.ELEMENT_UNDER_CARET, null);
                 highlighter.setGutterIconRenderer(new GutterIconRenderer() {
