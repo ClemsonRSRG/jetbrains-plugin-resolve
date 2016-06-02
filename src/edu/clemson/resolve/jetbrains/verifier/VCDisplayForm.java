@@ -7,5 +7,8 @@ import javax.swing.*;
  */
 public class VCDisplayForm {
 
-    private JTextArea givensAndGoalsText;
+    private JPanel panel1;
+    private JTextArea goalTextBox;
+    private JLabel description;
+    private JTextArea textArea1;
 }

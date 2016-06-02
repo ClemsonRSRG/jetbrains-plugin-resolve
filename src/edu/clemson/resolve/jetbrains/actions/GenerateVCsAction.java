@@ -119,7 +119,7 @@ public class GenerateVCsAction extends RESOLVEAction {
                             controller.getVerifierWindow().show(null);
                             VerifierPanel verifierPanel = controller.getVerifierPanel();
                             VCDisplayForm vcdf = new VCDisplayForm();
-                            verifierPanel.add(vcdf);
+                            //verifierPanel.add(vcdf);
                         }
 
                     });
@@ -170,7 +170,6 @@ public class GenerateVCsAction extends RESOLVEAction {
             editor.getDocument().addDocumentListener(new DocumentListener() {
                 @Override
                 public void beforeDocumentChange(DocumentEvent event) {
-
                 }
                 @Override
                 public void documentChanged(DocumentEvent event) {
