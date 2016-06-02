@@ -1,4 +1,4 @@
-package edu.clemson.resolve.jetbrains.verifier;
+package edu.clemson.resolve.jetbrains.verifier2;
 
 import javax.swing.*;
 
@@ -10,6 +10,4 @@ public class VerificationConditionPanel {
     private JLabel vcNumberLabel;
     private JPanel titlePanel;
     private JLabel vcDescriptionLabel;
-    private JTextArea goalText;
-    private JTextArea textArea1;
 }
