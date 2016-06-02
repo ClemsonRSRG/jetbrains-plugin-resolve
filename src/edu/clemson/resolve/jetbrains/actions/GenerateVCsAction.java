@@ -1,29 +1,21 @@
 package edu.clemson.resolve.jetbrains.actions;
 
-import com.intellij.application.options.colors.PreviewPanel;
-import com.intellij.codeInsight.daemon.LineMarkerProvider;
-import com.intellij.codeInsight.navigation.NavigationUtil;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.editor.markup.*;
-import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.tools.SimpleActionGroup;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
-import edu.clemson.resolve.jetbrains.verifier.VCDisplayForm;
+import edu.clemson.resolve.jetbrains.verifier.VerificationConditionPanel;
 import edu.clemson.resolve.jetbrains.verifier.VerifierPanel;
 import edu.clemson.resolve.vcgen.VC;
 import edu.clemson.resolve.vcgen.model.VCOutputFile;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.misc.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -118,7 +110,12 @@ public class GenerateVCsAction extends RESOLVEAction {
                         public void actionPerformed(AnActionEvent e) {
                             controller.getVerifierWindow().show(null);
                             VerifierPanel verifierPanel = controller.getVerifierPanel();
-                            VCDisplayForm vcdf = new VCDisplayForm();
+
+                            VerificationConditionPanel vcp = new VerificationConditionPanel();
+                            //fill in info on the current vc.
+                            vcp.setVCDescription(vc.getConsequentInfo().explanation);
+                            verifierPanel.addVerificationConditionPanel(vcp);
+
                             //verifierPanel.add(vcdf);
                         }
 

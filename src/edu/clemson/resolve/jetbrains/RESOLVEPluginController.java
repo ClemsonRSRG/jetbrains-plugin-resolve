@@ -17,7 +17,6 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import edu.clemson.resolve.jetbrains.verifier.VerifierPanel;
-import edu.clemson.resolve.jetbrains.verifier.VCSectionPanel;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -51,7 +50,7 @@ public class RESOLVEPluginController implements ProjectComponent {
     public static RESOLVEPluginController getInstance(@NotNull Project project) {
         RESOLVEPluginController pc = project.getComponent(RESOLVEPluginController.class);
         if (pc == null) {
-            LOG.error("getInstance: getComponent() for project.getName() returns null");
+            LOG.error("getInstance: getOuterMostComponent() for project.getName() returns null");
         }
         return pc;
     }
@@ -71,17 +70,6 @@ public class RESOLVEPluginController implements ProjectComponent {
         // make sure the tool windows are created early
         createToolWindows();
         //installListeners();
-    }
-
-    private static JComponent getInner1() {
-        DefaultListModel<String> model = new DefaultListModel<String>();
-        model.add(0, "Bill Gates");
-        model.add(1, "Steven Spielberg");
-
-        JList<String> list = new JList<String>();
-
-        list.setModel(model);
-        return list;
     }
 
     public void createToolWindows() {
