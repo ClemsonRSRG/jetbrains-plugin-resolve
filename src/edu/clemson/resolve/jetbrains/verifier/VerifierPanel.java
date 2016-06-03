@@ -104,20 +104,17 @@ public class VerifierPanel extends JPanel {
             baseComponent.add(Box.createVerticalGlue());
             */
 
-
-
             //WORK 2 below:
 
             JPanel pane0 = new JPanel();
+            
+
             JPanel pane1 = new JPanel();
 
-            JComponent component = new JPanel();
-            Dimension size = new Dimension(200,100);
-            component.setMaximumSize(size);
-            component.setPreferredSize(size);
-            component.setMinimumSize(size);
-            component.setOpaque(true);
-            component.setBackground(JBColor.WHITE);
+            //for the goal box
+            JComponent goalComponent = new JPanel();
+            goalComponent.setOpaque(true);
+            goalComponent.setBackground(JBColor.WHITE);
 
             TitledBorder goalBorder = new TitledBorder(new LineBorder(JBColor.LIGHT_GRAY, 1, true),
                     "Goal:",
@@ -126,22 +123,35 @@ public class VerifierPanel extends JPanel {
             goalBorder.setTitleFont(createFont(true, 14));
             goalBorder.setTitleColor(JBColor.BLACK);
 
-            component.setBorder(goalBorder);
+            goalComponent.setBorder(goalBorder);
 
-            JLabel label = new JLabel("This is a JLabel");
+            //for the givens box
+            JComponent givensComponent = new JPanel();
+            givensComponent.setOpaque(true);
+            givensComponent.setBackground(JBColor.WHITE);
+
+            TitledBorder givenBorder = new TitledBorder(new LineBorder(JBColor.LIGHT_GRAY, 1, true),
+                    "Givens:",
+                    TitledBorder.LEFT,
+                    TitledBorder.DEFAULT_POSITION);
+            givenBorder.setTitleFont(createFont(true, 14));
+            givenBorder.setTitleColor(JBColor.BLACK);
+            givensComponent.setBorder(givenBorder);
+
+
+            JPanel titlePanel = new JPanel();
+            titlePanel.setOpaque(true);
+            titlePanel.setBackground(JBColor.WHITE);
+            // its an x axis to add stuff left to right
+            titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.X_AXIS));
+            // create and add a label to the temp panel
+            JLabel label = new JLabel("Requires clause of Push()");
             label.setFont(createFont(true, 12));
             label.setIcon(RESOLVEIcons.VC_PANEL);
-            label.setHorizontalAlignment(JLabel.LEFT);
-            label.setLayout(new BoxLayout(label, BoxLayout.X_AXIS));
-            label.add(Box.createHorizontalGlue());
+            titlePanel.add(label);
+            // use our stretchy glue to fill the space to the right of the label
+            titlePanel.add(Box.createHorizontalGlue());
 
-            String title;
-            //if (doItRight) {
-            //    title = "Matched";
-                //label.setAlignmentX(LEFT_ALIGNMENT);
-           // } else {
-                title = "Mismatched";
-            //}
 
             pane0.setBorder(new LineBorder(JBColor.LIGHT_GRAY, 1, true));
             pane0.setLayout(new BorderLayout());
@@ -149,68 +159,29 @@ public class VerifierPanel extends JPanel {
             pane0.setBackground(JBColor.WHITE);
 
             pane1.setBorder(new EmptyBorder(4, 4, 4, 4));
-            pane1.setLayout(new BorderLayout());
+            pane1.setLayout(new BoxLayout(pane1, BoxLayout.Y_AXIS));
             pane1.setOpaque(true);
             pane1.setBackground(JBColor.WHITE);
 
-            pane1.add(label, BorderLayout.PAGE_START);
-            pane1.add(component);
+            pane1.add(titlePanel);
+            pane1.add(Box.createRigidArea(new Dimension(0, 10)));
+            pane1.add(goalComponent);
+            pane1.add(givensComponent);
 
             pane0.add(pane1);
 
             baseComponent = pane0;
-
-
-
-            //Work3 below
-  /*          JPanel innerPanel = new JPanel();
-            innerPanel.setBorder(new LineBorder(JBColor.LIGHT_GRAY, 1, true));
-            innerPanel.setOpaque(true);
-            innerPanel.setBackground(JBColor.WHITE);
-
-            // give it a Y axis to stuff is added top to bottom
-            innerPanel.setLayout(new BoxLayout(innerPanel, BoxLayout.Y_AXIS));
-
-            // this is a temp panel ill used to add the labels
-            JPanel tPanel = new JPanel();
-            tPanel.setOpaque(true);
-            tPanel.setBackground(JBColor.WHITE);
-            // its an x axis to add stuff left to right
-            tPanel.setLayout(new BoxLayout(tPanel, BoxLayout.X_AXIS));
-
-            // create and add a label to the temp panel
-            JLabel label = new JLabel("Requires clause of Increment");
-            label.setFont(createFont(true, 12));
-            label.setIcon(RESOLVEIcons.VC_PANEL);
-            tPanel.add(label);
-            // use our stretchy glue to fill the space to the right of the label
-            tPanel.add(Box.createHorizontalGlue());
-
-
-            innerPanel.add(tPanel);
-
-            JComponent component = new JPanel();
-
-            component.setOpaque(true);
-            component.setBackground(JBColor.WHITE);
-
-            TitledBorder goalBorder = new TitledBorder(new LineBorder(JBColor.LIGHT_GRAY, 1, true),
-                    "Goal:",
+        }
+        /*
+        private TitledBorder createBorder(String label) {
+            TitledBorder result = new TitledBorder(new LineBorder(JBColor.LIGHT_GRAY, 1, true),
+                    label,
                     TitledBorder.LEFT,
                     TitledBorder.DEFAULT_POSITION);
-            goalBorder.setTitleFont(createFont(true, 14));
-            goalBorder.setTitleColor(JBColor.BLACK);
-
-            component.setBorder(goalBorder);
-
-
-
-            // add the temp panel to the inner panel
-            innerPanel.add(tPanel);
-            innerPanel.add(component);
-
-            baseComponent = innerPanel;*/
-        }
+            result.setTitleFont(createFont(true, 14));
+            result.setTitleColor(JBColor.BLACK);
+            return result;
+        }*/
 
         private Font createFont(boolean bold, int size) {
             int style = bold ? Font.BOLD : Font.PLAIN;
