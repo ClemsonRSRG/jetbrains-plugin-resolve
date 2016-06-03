@@ -1,23 +1,28 @@
 package edu.clemson.resolve.jetbrains.verifier;
 
-import com.intellij.application.options.colors.PreviewPanel;
+import com.intellij.openapi.actionSystem.IdeActions;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.editor.colors.EditorFontType;
+import com.intellij.openapi.fileEditor.impl.EditorEmptyTextPainter;
+import com.intellij.openapi.keymap.KeymapUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Splitter;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBLabel;
-import com.intellij.ui.components.JBLayeredPane;
 import com.intellij.util.ui.JBFont;
 import com.intellij.util.ui.UIUtil;
+import com.sun.istack.internal.NotNull;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
-import edu.clemson.resolve.jetbrains.highlighting.RESOLVEColorsAndFontsPage;
-import org.jdesktop.swingx.border.DropShadowBorder;
+import edu.clemson.resolve.jetbrains.actions.GenerateVCsAction;
+import edu.clemson.resolve.proving.Antecedent;
+import edu.clemson.resolve.proving.Consequent;
+import edu.clemson.resolve.proving.absyn.PExp;
+import edu.clemson.resolve.vcgen.VC;
 
 import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 import javax.swing.*;
-import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -29,7 +34,6 @@ public class VerifierPanel extends JPanel {
     private VCPanelMock vcPanel;
     private final Project project;
 
-
     public VerifierPanel(Project project) {
         this.project = project;
         //revalidate();
@@ -39,42 +43,63 @@ public class VerifierPanel extends JPanel {
     private void createBaseGUI() {
         this.setLayout(new BorderLayout());
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
+        JLabel emptyLabel = new JBLabel("<html>Right click the editor and <br>" +
+                "select \'Generate Verification Conditions\'</html>");
+        this.add(emptyLabel, BorderLayout.CENTER);
 
-        this.vcPanel = new VCPanelMock();
-        /*Splitter splitPane = new Splitter();
-        splitPane.setFirstComponent(vcp.getOuterMostComponent());
-        this.vcPanel = vcp;
+        String xx = KeymapUtil.getFirstKeyboardShortcutText("resolve.GenVCs");
+        int i;
+        i=0;
+        /*
+        Splitter splitPane = new Splitter(true);
+        splitPane.setFirstComponent(new VCPanelMock().getComponent());
+        splitPane.setSecondComponent(new AssertiveCodeBrowserMock().getComponent());
         this.add(splitPane);
-        revalidate();*/
+        */
 
-        this.add(vcPanel.getComponent());
-        //this.add(new VerificationConditionPanel().getOuterMostComponent());
-        //this.getLayout().
-        //this.vcPanel = getVerificationConditionPanel();
-        //splitPane.setFirstComponent(vcPanel.getOuterMostComponent());
+        //OLD
+        //this.add(vcPanel.getComponent());
 
     }
 
-    //
-    public void addVerificationConditionPanel(VerificationConditionPanel vcp) {
-
-
+    public void addVerificationConditionPanel(VCPanelMock vcp) {
         /*Splitter splitPane = new Splitter();
         splitPane.setFirstComponent(vcp.getOuterMostComponent());
         this.vcPanel = vcp;
         this.add(splitPane);
         revalidate();*/
        // this.v
-        this.add(vcp.getOuterMostComponent(), BorderLayout.NORTH);
+        this.add(vcp.getComponent(), BorderLayout.NORTH);
         revalidate();
     }
 
     public static class VCPanelMock {
 
-        //we use a layered one because we'll have one layer for the goal, one for the givens...
-        JPanel baseComponent;
+        private JPanel baseComponent;
+        private final String explanation, goal, givens;
 
-        public VCPanelMock() {
+        public VCPanelMock(VC vc) {
+            this.explanation = vc.getConsequentInfo().explanation;
+            this.goal = vc.getConsequent().toString();
+
+            int i = 1;
+            boolean first = true;
+            StringBuilder sb = new StringBuilder();
+            for (PExp e : vc.getAntecedent()) {
+                if (first) {
+                    sb.append(i).append(".").append(e.toString());
+                    first = false;
+                }
+                else {
+                    sb.append("\n");
+                    sb.append(i).append(".").append(e.toString());
+                }
+                i++;
+            }
+            this.givens = sb.toString();
+        }
+
+        private void createGUI() {
             //WORK 2 below:
 
             JPanel pane0 = new JPanel();
@@ -107,20 +132,18 @@ public class VerifierPanel extends JPanel {
             givenBorder.setTitleColor(JBColor.BLACK);
             givensComponent.setBorder(givenBorder);
 
-
             JPanel titlePanel = new JPanel();
             titlePanel.setOpaque(true);
             titlePanel.setBackground(JBColor.WHITE);
             // its an x axis to add stuff left to right
             titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.X_AXIS));
             // create and add a label to the temp panel
-            JLabel label = new JLabel("Requires clause of Push()");
+            JLabel label = new JLabel();
             label.setFont(createFont(true, 12));
             label.setIcon(RESOLVEIcons.VC_PANEL);
             titlePanel.add(label);
             // use our stretchy glue to fill the space to the right of the label
             titlePanel.add(Box.createHorizontalGlue());
-
 
             pane0.setBorder(new LineBorder(JBColor.LIGHT_GRAY, 1, true));
             pane0.setLayout(new BorderLayout());
@@ -136,9 +159,9 @@ public class VerifierPanel extends JPanel {
             pane1.add(Box.createRigidArea(new Dimension(0, 10)));
             pane1.add(goalComponent);
             pane1.add(givensComponent);
+            pane1.add(Box.createRigidArea(new Dimension(0, 30)));
 
             pane0.add(pane1);
-
             baseComponent = pane0;
         }
         /*
@@ -155,6 +178,20 @@ public class VerifierPanel extends JPanel {
         private Font createFont(boolean bold, int size) {
             int style = bold ? Font.BOLD : Font.PLAIN;
             return JBFont.create(new Font(UIUtil.getMenuFont().getName(), style, size));
+        }
+        public JComponent getComponent() {
+            return baseComponent;
+        }
+    }
+
+    public static class AssertiveCodeBrowserMock {
+        private final JPanel baseComponent;
+
+        public AssertiveCodeBrowserMock() {
+            baseComponent = new JPanel();
+            baseComponent.setOpaque(true);
+            baseComponent.setBackground(JBColor.WHITE);
+            baseComponent.setBorder(new LineBorder(JBColor.LIGHT_GRAY, 1, true));
         }
 
         public JComponent getComponent() {

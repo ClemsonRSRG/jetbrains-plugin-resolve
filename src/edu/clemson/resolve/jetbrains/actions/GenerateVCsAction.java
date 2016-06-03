@@ -12,7 +12,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
-import edu.clemson.resolve.jetbrains.verifier.VerificationConditionPanel;
 import edu.clemson.resolve.jetbrains.verifier.VerifierPanel;
 import edu.clemson.resolve.vcgen.VC;
 import edu.clemson.resolve.vcgen.model.VCOutputFile;
@@ -111,10 +110,12 @@ public class GenerateVCsAction extends RESOLVEAction {
                             controller.getVerifierWindow().show(null);
                             VerifierPanel verifierPanel = controller.getVerifierPanel();
 
-                            VerificationConditionPanel vcp = new VerificationConditionPanel();
+                            VerifierPanel.VCPanelMock x = new VerifierPanel.VCPanelMock(vc);
+
+                            //VerificationConditionPanel vcp = new VerificationConditionPanel();
                             //fill in info on the current vc.
-                            vcp.setVCDescription(vc.getConsequentInfo().explanation);
-                            verifierPanel.addVerificationConditionPanel(vcp);
+                            //vcp.setVCDescription(vc.getConsequentInfo().explanation);
+                            //verifierPanel.addVerificationConditionPanel(vcp);
 
                             //verifierPanel.add(vcdf);
                         }
