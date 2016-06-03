@@ -4,6 +4,7 @@ import com.intellij.application.options.colors.PreviewPanel;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.colors.EditorFontType;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Splitter;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBLayeredPane;
@@ -25,7 +26,7 @@ import javax.swing.border.TitledBorder;
 public class VerifierPanel extends JPanel {
 
     public static final Logger LOG = Logger.getInstance("RESOLVE VerifierPanel");
-    private VerificationConditionPanel vcPanel;
+    private VCPanelMock vcPanel;
     private final Project project;
 
 
@@ -39,7 +40,14 @@ public class VerifierPanel extends JPanel {
         this.setLayout(new BorderLayout());
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-        this.add(new VCPanelMock().getComponent());
+        this.vcPanel = new VCPanelMock();
+        /*Splitter splitPane = new Splitter();
+        splitPane.setFirstComponent(vcp.getOuterMostComponent());
+        this.vcPanel = vcp;
+        this.add(splitPane);
+        revalidate();*/
+
+        this.add(vcPanel.getComponent());
         //this.add(new VerificationConditionPanel().getOuterMostComponent());
         //this.getLayout().
         //this.vcPanel = getVerificationConditionPanel();
@@ -49,6 +57,7 @@ public class VerifierPanel extends JPanel {
 
     //
     public void addVerificationConditionPanel(VerificationConditionPanel vcp) {
+
 
         /*Splitter splitPane = new Splitter();
         splitPane.setFirstComponent(vcp.getOuterMostComponent());
@@ -66,49 +75,9 @@ public class VerifierPanel extends JPanel {
         JPanel baseComponent;
 
         public VCPanelMock() {
-            //WORK 1 below
-            /*
-            baseComponent = new JPanel();
-            baseComponent.setLayout(new BoxLayout(baseComponent, BoxLayout.Y_AXIS));
-            baseComponent.setOpaque(true);
-            baseComponent.setBackground(JBColor.WHITE);
-            baseComponent.setBorder(new LineBorder(JBColor.LIGHT_GRAY, 1, true));
-
-            JLabel vcPanelLabel = new JBLabel("Requires clause of Increment");
-            vcPanelLabel.setFont(createFont(true, 12));
-            vcPanelLabel.setIcon(RESOLVEIcons.VC_PANEL);
-            vcPanelLabel.setHorizontalAlignment(JLabel.LEFT);
-
-            baseComponent.add(vcPanelLabel, BorderLayout.PAGE_START);
-
-            JComponent goalComponent = new JPanel();
-            Dimension size = new Dimension(150,100);
-            goalComponent.setMaximumSize(size);
-            goalComponent.setPreferredSize(size);
-            goalComponent.setMinimumSize(size);
-
-            //goal
-            JTextArea goalTextArea = new JTextArea(1, 20);
-            goalTextArea.setEditable(false);
-            TitledBorder goalBorder = BorderFactory.createTitledBorder(
-                    new LineBorder(JBColor.LIGHT_GRAY, 1, true), "Goal:");
-            goalBorder.setTitleFont(createFont(true, 14));
-            goalTextArea.setBorder(goalBorder);
-            goalTextArea.setAlignmentX(Component.CENTER_ALIGNMENT);
-            goalTextArea.setPreferredSize(new Dimension(4, 5));
-
-            //givens
-            //TODO
-
-            baseComponent.add(goalTextArea);
-            baseComponent.add(Box.createVerticalGlue());
-            */
-
             //WORK 2 below:
 
             JPanel pane0 = new JPanel();
-            
-
             JPanel pane1 = new JPanel();
 
             //for the goal box
