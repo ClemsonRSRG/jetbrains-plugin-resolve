@@ -16,6 +16,7 @@ public interface RESOLVEIcons {
     public static final Icon TOOL_ICON = IconLoader.getIcon("/edu/clemson/resolve/icons/tool_icon.png");
 
     public static final Icon VC = IconLoader.getIcon("/edu/clemson/resolve/icons/vc.png");
+    public static final Icon VC_PANEL = IconLoader.getIcon("/edu/clemson/resolve/icons/vc@2x.png");
 
     public static final Icon FILE = IconLoader.getIcon("/edu/clemson/resolve/icons/file.png");
     public static final Icon PROGRAM_RUN = Helper.createIconWithShift(TOOL_ICON, AllIcons.Nodes.RunnableMark);

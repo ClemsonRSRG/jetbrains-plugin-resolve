@@ -13,6 +13,7 @@ public class VerificationConditionPanel {
     private JLabel vcNumberLabel;
     private JPanel titlePanel;
     private JLabel vcDescription;
+    private JTextArea textArea1;
     public VerifierPanel verifierPanel;
 
     public VerificationConditionPanel() {
