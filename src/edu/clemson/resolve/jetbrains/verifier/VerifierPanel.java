@@ -124,8 +124,15 @@ public class VerifierPanel extends JPanel {
 
             //for the goal box
             JComponent goalComponent = new JPanel();
+            goalComponent.setLayout(new BoxLayout(goalComponent, BoxLayout.Y_AXIS));
             goalComponent.setOpaque(true);
             goalComponent.setBackground(JBColor.WHITE);
+            SimpleVerificationEditorPreview x = new SimpleVerificationEditorPreview("Max_Length = 0");
+
+            JComponent xx = (JComponent)x.getPanel();
+            xx.setBorder(new EmptyBorder(5, 5, 5, 5));
+            xx.setBackground(JBColor.WHITE);
+            goalComponent.add(xx, CENTER_ALIGNMENT);
 
             TitledBorder goalBorder = new TitledBorder(new LineBorder(JBColor.LIGHT_GRAY, 1, true),
                     "Goal:",
