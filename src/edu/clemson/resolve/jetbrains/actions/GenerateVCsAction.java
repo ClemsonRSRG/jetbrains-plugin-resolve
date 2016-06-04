@@ -106,7 +106,7 @@ public class GenerateVCsAction extends RESOLVEAction {
                 List<AnAction> actionsPerVC = new ArrayList<>();
                 //create clickable actions for each vc
                 for (VC vc : vcsByLine.getValue()) {
-                    actionsPerVC.add(new AnAction("VC " + vc.getNumber()+ ": " + vc.getConsequentInfo().explanation) {
+                    actionsPerVC.add(new AnAction("VC " + vc.getNumber()+ ": " + vc.getExplanation()) {
                         @Override
                         public void actionPerformed(AnActionEvent e) {
                             controller.getVerifierWindow().show(null);

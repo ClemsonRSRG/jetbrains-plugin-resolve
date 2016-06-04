@@ -1,9 +1,12 @@
 package edu.clemson.resolve.jetbrains.verifier;
 
+import com.intellij.codeInsight.preview.ColorPreviewComponent;
+import com.intellij.ide.highlighter.JavaHighlightingColors;
 import com.intellij.openapi.actionSystem.IdeActions;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileEditor.impl.EditorEmptyTextPainter;
 import com.intellij.openapi.keymap.KeymapUtil;
+import com.intellij.openapi.preview.PreviewPanelProvider;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Splitter;
 import com.intellij.ui.JBColor;
@@ -88,7 +91,7 @@ public class VerifierPanel extends JPanel {
         private final int vcNumber;
 
         public VCPanelMock(VC vc) {
-            this.explanation = "test";
+            this.explanation = vc.getExplanation();
             this.goal = "test";
             this.givens = "1. test1<br>2. test2";
             this.vcNumber = vc.getNumber();
@@ -152,7 +155,13 @@ public class VerifierPanel extends JPanel {
             // its an x axis to add stuff left to right
             titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.X_AXIS));
             // create and add a label to the temp panel
-            JLabel label = new JLabel(this.explanation);
+            String numAndExplanation =
+                    "<html>" +
+                        "<font color='#4A4F51'>" +
+                            "#" + vcNumber + " | "  + explanation +
+                        "</font>" +
+                    "</html>";
+            JLabel label = new JLabel(numAndExplanation);
             label.setFont(createFont(true, 12));
             label.setIcon(RESOLVEIcons.VC_PANEL);
             titlePanel.add(label);
