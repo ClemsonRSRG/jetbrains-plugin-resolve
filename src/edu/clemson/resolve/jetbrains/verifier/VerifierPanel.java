@@ -8,6 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Splitter;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBLabel;
+import com.intellij.ui.components.JBPanel;
 import com.intellij.util.ui.JBFont;
 import com.intellij.util.ui.UIUtil;
 import com.sun.istack.internal.NotNull;
@@ -41,15 +42,26 @@ public class VerifierPanel extends JPanel {
     }
 
     private void createBaseGUI() {
-        this.setLayout(new BorderLayout());
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
-        JLabel emptyLabel = new JBLabel("<html>Right click the editor and <br>" +
-                "select \'Generate Verification Conditions\'</html>");
-        this.add(emptyLabel, BorderLayout.CENTER);
-
-        String xx = KeymapUtil.getFirstKeyboardShortcutText("resolve.GenVCs");
-        int i;
-        i=0;
+        String vcShortcut = KeymapUtil.getFirstKeyboardShortcutText("resolve.GenVCs");
+        JLabel emptyLabel = new JBLabel(
+                "<html>" +
+                "<div style='text-align: center;'>" +
+                "<font color='#7E7C7B'>" +
+                "<b>No Verification Conditions (VCs)<br>generated</b>" +
+                "<br><br>" +
+                "Right-click an open editor and select<br>" +
+                "\"RESOLVE Generate VCs\"" +
+                "<br><br>" +
+                "shortcut: <span style=\"color: #7CB5FA\">" + vcShortcut + "</span>" +
+                "</font>" +
+                "</html>", JLabel.CENTER);
+        emptyLabel.setFont(createFont(false, 12));
+        JPanel dummypanel = new JBPanel();
+        dummypanel.setOpaque(false);
+        this.add(Box.createRigidArea(new Dimension(0, 50)));
+        this.add(emptyLabel);
         /*
         Splitter splitPane = new Splitter(true);
         splitPane.setFirstComponent(new VCPanelMock().getComponent());
@@ -102,8 +114,8 @@ public class VerifierPanel extends JPanel {
         private void createGUI() {
             //WORK 2 below:
 
-            JPanel pane0 = new JPanel();
-            JPanel pane1 = new JPanel();
+            JPanel pane0 = new JBPanel();
+            JPanel pane1 = new JBPanel();
 
             //for the goal box
             JComponent goalComponent = new JPanel();
@@ -120,7 +132,7 @@ public class VerifierPanel extends JPanel {
             goalComponent.setBorder(goalBorder);
 
             //for the givens box
-            JComponent givensComponent = new JPanel();
+            JComponent givensComponent = new JBPanel();
             givensComponent.setOpaque(true);
             givensComponent.setBackground(JBColor.WHITE);
 
@@ -132,7 +144,7 @@ public class VerifierPanel extends JPanel {
             givenBorder.setTitleColor(JBColor.BLACK);
             givensComponent.setBorder(givenBorder);
 
-            JPanel titlePanel = new JPanel();
+            JPanel titlePanel = new JBPanel();
             titlePanel.setOpaque(true);
             titlePanel.setBackground(JBColor.WHITE);
             // its an x axis to add stuff left to right
@@ -164,21 +176,7 @@ public class VerifierPanel extends JPanel {
             pane0.add(pane1);
             baseComponent = pane0;
         }
-        /*
-        private TitledBorder createBorder(String label) {
-            TitledBorder result = new TitledBorder(new LineBorder(JBColor.LIGHT_GRAY, 1, true),
-                    label,
-                    TitledBorder.LEFT,
-                    TitledBorder.DEFAULT_POSITION);
-            result.setTitleFont(createFont(true, 14));
-            result.setTitleColor(JBColor.BLACK);
-            return result;
-        }*/
 
-        private Font createFont(boolean bold, int size) {
-            int style = bold ? Font.BOLD : Font.PLAIN;
-            return JBFont.create(new Font(UIUtil.getMenuFont().getName(), style, size));
-        }
         public JComponent getComponent() {
             return baseComponent;
         }
@@ -197,5 +195,20 @@ public class VerifierPanel extends JPanel {
         public JComponent getComponent() {
             return baseComponent;
         }
+    }
+    /*
+    private static TitledBorder createBorder(String label) {
+        TitledBorder result = new TitledBorder(new LineBorder(JBColor.LIGHT_GRAY, 1, true),
+                label,
+                TitledBorder.LEFT,
+                TitledBorder.DEFAULT_POSITION);
+        result.setTitleFont(createFont(true, 14));
+        result.setTitleColor(JBColor.BLACK);
+        return result;
+    }
+    */
+    private static Font createFont(boolean bold, int size) {
+        int style = bold ? Font.BOLD : Font.PLAIN;
+        return JBFont.create(new Font(UIUtil.getMenuFont().getName(), style, size));
     }
 }
