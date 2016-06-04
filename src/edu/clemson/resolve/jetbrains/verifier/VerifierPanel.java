@@ -49,12 +49,14 @@ public class VerifierPanel extends JPanel {
                 "<html>" +
                 "<div style='text-align: center;'>" +
                 "<font color='#7E7C7B'>" +
-                "<b>No Verification Conditions (VCs)<br>generated</b>" +
+                "<b>No Verification Condition (VC)<br>Selected</b>" +
                 "<br><br>" +
                 "Right-click an open editor and select<br>" +
                 "\"RESOLVE Generate VCs\"" +
+                "<br>" +
+                "(shortcut: <span style=\"color: #7CB5FA\">" + vcShortcut + "</span>)" +
                 "<br><br>" +
-                "shortcut: <span style=\"color: #7CB5FA\">" + vcShortcut + "</span>" +
+                "Then left-click one of the VC icons<br>in the gutter to view" +
                 "</font>" +
                 "</html>", JLabel.CENTER);
         emptyLabel.setFont(createFont(false, 12));
@@ -62,26 +64,20 @@ public class VerifierPanel extends JPanel {
         dummypanel.setOpaque(false);
         this.add(Box.createRigidArea(new Dimension(0, 50)));
         this.add(emptyLabel);
-        /*
-        Splitter splitPane = new Splitter(true);
-        splitPane.setFirstComponent(new VCPanelMock().getComponent());
-        splitPane.setSecondComponent(new AssertiveCodeBrowserMock().getComponent());
-        this.add(splitPane);
-        */
-
-        //OLD
-        //this.add(vcPanel.getComponent());
-
     }
 
-    public void addVerificationConditionPanel(VCPanelMock vcp) {
-        /*Splitter splitPane = new Splitter();
-        splitPane.setFirstComponent(vcp.getOuterMostComponent());
-        this.vcPanel = vcp;
+    public void revertToBaseGUI() {
+        this.removeAll();
+        createBaseGUI();
+        revalidate();
+    }
+
+    public void addVcPanel(VCPanelMock vcp) {
+        this.removeAll();   // clear any old stuff first
+        Splitter splitPane = new Splitter(true);
+        splitPane.setFirstComponent(vcp.getComponent());
+        splitPane.setSecondComponent(new AssertiveCodeBrowserMock().getComponent());
         this.add(splitPane);
-        revalidate();*/
-       // this.v
-        this.add(vcp.getComponent(), BorderLayout.NORTH);
         revalidate();
     }
 
@@ -89,12 +85,18 @@ public class VerifierPanel extends JPanel {
 
         private JPanel baseComponent;
         private final String explanation, goal, givens;
+        private final int vcNumber;
 
         public VCPanelMock(VC vc) {
-            this.explanation = vc.getConsequentInfo().explanation;
-            this.goal = vc.getConsequent().toString();
+            this.explanation = "test";
+            this.goal = "test";
+            this.givens = "1. test1<br>2. test2";
+            this.vcNumber = vc.getNumber();
+            this.baseComponent = createGUI();
+            //this.explanation = vc.getConsequentInfo().explanation;
+            //this.goal = vc.getConsequent().toString();
 
-            int i = 1;
+           /* int i = 1;
             boolean first = true;
             StringBuilder sb = new StringBuilder();
             for (PExp e : vc.getAntecedent()) {
@@ -108,10 +110,10 @@ public class VerifierPanel extends JPanel {
                 }
                 i++;
             }
-            this.givens = sb.toString();
+            this.givens = sb.toString();*/
         }
 
-        private void createGUI() {
+        private JPanel createGUI() {
             //WORK 2 below:
 
             JPanel pane0 = new JBPanel();
@@ -150,7 +152,7 @@ public class VerifierPanel extends JPanel {
             // its an x axis to add stuff left to right
             titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.X_AXIS));
             // create and add a label to the temp panel
-            JLabel label = new JLabel();
+            JLabel label = new JLabel(this.explanation);
             label.setFont(createFont(true, 12));
             label.setIcon(RESOLVEIcons.VC_PANEL);
             titlePanel.add(label);
@@ -174,7 +176,7 @@ public class VerifierPanel extends JPanel {
             pane1.add(Box.createRigidArea(new Dimension(0, 30)));
 
             pane0.add(pane1);
-            baseComponent = pane0;
+            return pane0;
         }
 
         public JComponent getComponent() {

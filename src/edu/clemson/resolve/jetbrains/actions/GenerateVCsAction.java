@@ -97,6 +97,8 @@ public class GenerateVCsAction extends RESOLVEAction {
             markup.removeAllHighlighters();
 
             VCOutputFile vcOutput = gen.getVCOutput();
+
+            //A mapping from [line number] -> [vc_1, .., vc_j]
             Map<Integer, List<VC>> byLine = vcOutput.getVCsGroupedByLineNumber();
             List<RangeHighlighter> vcRelatedHighlighters = new ArrayList<>();
 
@@ -104,18 +106,18 @@ public class GenerateVCsAction extends RESOLVEAction {
                 List<AnAction> actionsPerVC = new ArrayList<>();
                 //create clickable actions for each vc
                 for (VC vc : vcsByLine.getValue()) {
-                    actionsPerVC.add(new AnAction("VC " + vc.getName() + ": " + vc.getConsequentInfo().explanation) {
+                    actionsPerVC.add(new AnAction("VC " + vc.getNumber()+ ": " + vc.getConsequentInfo().explanation) {
                         @Override
                         public void actionPerformed(AnActionEvent e) {
                             controller.getVerifierWindow().show(null);
                             VerifierPanel verifierPanel = controller.getVerifierPanel();
 
-                            VerifierPanel.VCPanelMock x = new VerifierPanel.VCPanelMock(vc);
-
+                            VerifierPanel.VCPanelMock vcPanel = new VerifierPanel.VCPanelMock(vc);
+                            verifierPanel.addVcPanel(vcPanel);
                             //VerificationConditionPanel vcp = new VerificationConditionPanel();
                             //fill in info on the current vc.
                             //vcp.setVCDescription(vc.getConsequentInfo().explanation);
-                            //verifierPanel.addVerificationConditionPanel(vcp);
+                            //verifierPanel.addVcPanel(vcp);
 
                             //verifierPanel.add(vcdf);
                         }
@@ -171,9 +173,13 @@ public class GenerateVCsAction extends RESOLVEAction {
                 }
                 @Override
                 public void documentChanged(DocumentEvent event) {
+                    //remove all highlighters
                     for (RangeHighlighter h : vcRelatedHighlighters) {
                         markup.removeHighlighter(h);
                     }
+                    VerifierPanel verifierPanel = controller.getVerifierPanel();
+                    controller.getVerifierWindow().hide(null);
+                    verifierPanel.revertToBaseGUI();
                 }
             });
         }
