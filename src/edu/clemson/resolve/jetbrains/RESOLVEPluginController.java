@@ -16,10 +16,12 @@ import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
+import edu.clemson.resolve.jetbrains.verifier.SimpleVerificationEditorPreview;
 import edu.clemson.resolve.jetbrains.verifier.VerifierPanel;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import java.util.List;
 
 /**
  * This object is the controller for the RESOLVE plug-in. It receives events and can send them on to its contained
@@ -104,6 +106,11 @@ public class RESOLVEPluginController implements ProjectComponent {
         //uninstallListeners();
 
         console.dispose();
+        List<SimpleVerificationEditorPreview> editors = verifierPanel.getActivePreviewEditors();
+        for (SimpleVerificationEditorPreview e : editors) {
+            e.disposeUIResources();
+        }
+
         consoleWindow = null;
         project = null;
     }

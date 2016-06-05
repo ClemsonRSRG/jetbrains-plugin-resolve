@@ -2,6 +2,7 @@ package edu.clemson.resolve.jetbrains.verifier;
 
 import com.intellij.codeInsight.preview.ColorPreviewComponent;
 import com.intellij.ide.highlighter.JavaHighlightingColors;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.IdeActions;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.fileEditor.impl.EditorEmptyTextPainter;
@@ -35,13 +36,21 @@ import javax.swing.border.TitledBorder;
 public class VerifierPanel extends JPanel {
 
     public static final Logger LOG = Logger.getInstance("RESOLVE VerifierPanel");
-    private VCPanelMock vcPanel;
+    private VCPanelMock activeVcPanel;
     private final Project project;
 
     public VerifierPanel(Project project) {
         this.project = project;
         //revalidate();
         createBaseGUI();
+    }
+
+    public List<SimpleVerificationEditorPreview> getActivePreviewEditors() {
+        List<SimpleVerificationEditorPreview> result = new ArrayList<>();
+        if (activeVcPanel != null && activeVcPanel.goalPreview != null) {
+            result.add(activeVcPanel.goalPreview);
+        }
+        return result;
     }
 
     private void createBaseGUI() {
@@ -70,12 +79,21 @@ public class VerifierPanel extends JPanel {
     }
 
     public void revertToBaseGUI() {
+        if (activeVcPanel != null && activeVcPanel.goalPreview != null) {
+            activeVcPanel.goalPreview.disposeUIResources();
+        }
         this.removeAll();
+        this.activeVcPanel = null;
         createBaseGUI();
         revalidate();
     }
 
-    public void addVcPanel(VCPanelMock vcp) {
+    public void setActiveVcPanel(VCPanelMock vcp) {
+        if (this.activeVcPanel != null && activeVcPanel.goalPreview != null) {
+            //before we set the new one, let's try to remember to dispose of the existing one correctly
+            activeVcPanel.goalPreview.disposeUIResources();
+        }
+        this.activeVcPanel = vcp;
         this.removeAll();   // clear any old stuff first
         Splitter splitPane = new Splitter(true);
         splitPane.setFirstComponent(vcp.getComponent());
@@ -84,7 +102,8 @@ public class VerifierPanel extends JPanel {
         revalidate();
     }
 
-    public static class VCPanelMock {
+    public static class VCPanelMock  {
+        private SimpleVerificationEditorPreview goalPreview = null;
 
         private JPanel baseComponent;
         private final String explanation, goal, givens;
@@ -127,17 +146,20 @@ public class VerifierPanel extends JPanel {
             goalComponent.setLayout(new BoxLayout(goalComponent, BoxLayout.Y_AXIS));
             goalComponent.setOpaque(true);
             goalComponent.setBackground(JBColor.WHITE);
-            SimpleVerificationEditorPreview x = new SimpleVerificationEditorPreview("Max_Length = 0");
+            goalPreview = new SimpleVerificationEditorPreview("Max_Length = 0");
 
-            JComponent xx = (JComponent)x.getPanel();
+            JComponent xx = (JComponent)goalPreview.getPanel();
+            xx.setPreferredSize(new Dimension(10,4));
             xx.setBorder(new EmptyBorder(5, 5, 5, 5));
             xx.setBackground(JBColor.WHITE);
-            goalComponent.add(xx, CENTER_ALIGNMENT);
 
+            goalComponent.add(xx, CENTER_ALIGNMENT);
+            goalComponent.setPreferredSize(goalComponent.getPreferredSize());
             TitledBorder goalBorder = new TitledBorder(new LineBorder(JBColor.LIGHT_GRAY, 1, true),
                     "Goal:",
                     TitledBorder.LEFT,
                     TitledBorder.DEFAULT_POSITION);
+
             goalBorder.setTitleFont(createFont(true, 14));
             goalBorder.setTitleColor(JBColor.BLACK);
 

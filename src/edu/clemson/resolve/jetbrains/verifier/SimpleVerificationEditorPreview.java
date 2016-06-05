@@ -1,10 +1,8 @@
 package edu.clemson.resolve.jetbrains.verifier;
 
-import com.intellij.application.options.colors.ColorAndFontSettingsListener;
-import com.intellij.application.options.colors.FontEditorPreview;
-import com.intellij.application.options.colors.PreviewPanel;
-import com.intellij.application.options.colors.SimpleEditorPreview;
+import com.intellij.application.options.colors.*;
 import com.intellij.ide.highlighter.HighlighterFactory;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.editor.EditorSettings;
@@ -14,6 +12,8 @@ import com.intellij.openapi.editor.colors.EditorColorsScheme;
 import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.editor.highlighter.EditorHighlighter;
 import com.intellij.openapi.fileTypes.SyntaxHighlighter;
+import com.intellij.openapi.util.Disposer;
+import com.intellij.ui.EditorTextField;
 import com.intellij.ui.Gray;
 import com.intellij.ui.JBColor;
 import com.intellij.util.NotNullProducer;
@@ -23,6 +23,7 @@ import edu.clemson.resolve.jetbrains.highlighting.RESOLVESyntaxHighlightingColor
 import org.intellij.images.options.OptionsManager;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class SimpleVerificationEditorPreview implements PreviewPanel {
@@ -30,6 +31,8 @@ public class SimpleVerificationEditorPreview implements PreviewPanel {
     //Here are some classes worth keeping in mind:
     // -FontEditorPreview as well as NewColorAndFontPanel and SimpleEditorPreview
     private final EditorEx editor;
+
+    @NotNull private final Disposable myDisposable = Disposer.newDisposable();
 
     public SimpleVerificationEditorPreview(String verificationText) {
         this.editor = createPreviewEditor(verificationText);
@@ -42,6 +45,10 @@ public class SimpleVerificationEditorPreview implements PreviewPanel {
         Document editorDocument = editorFactory.createDocument(content);
 
         EditorEx editor = (EditorEx) editorFactory.createViewer(editorDocument);
+        //editor.setBorder(new EmptyBorder(10, 10, 10, 10)); //TODO: this line seems to work, but doesn't seem like
+        //"the right way" to add some margins to our editor. Keep it in mind though in case no other soln turns up.
+
+
         EditorColorsScheme colorScheme = EditorColorsManager.getInstance().getGlobalScheme();
         editor.setBackgroundColor(Gray._237);   //TODO: Change this to a JBColor
         editor.setColorsScheme(colorScheme);

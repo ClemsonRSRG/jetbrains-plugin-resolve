@@ -109,17 +109,12 @@ public class GenerateVCsAction extends RESOLVEAction {
                     actionsPerVC.add(new AnAction("VC " + vc.getNumber()+ ": " + vc.getExplanation()) {
                         @Override
                         public void actionPerformed(AnActionEvent e) {
-                            controller.getVerifierWindow().show(null);
+                            controller.getVerifierWindow().show(null);  //open the tool(verifier)window
                             VerifierPanel verifierPanel = controller.getVerifierPanel();
 
-                            VerifierPanel.VCPanelMock vcPanel = new VerifierPanel.VCPanelMock(vc);
-                            verifierPanel.addVcPanel(vcPanel);
-                            //VerificationConditionPanel vcp = new VerificationConditionPanel();
-                            //fill in info on the current vc.
-                            //vcp.setVCDescription(vc.getConsequentInfo().explanation);
-                            //verifierPanel.addVcPanel(vcp);
-
-                            //verifierPanel.add(vcdf);
+                            //I performed an action, let's remember to clean up after ourselves before we go and update
+                            //the vc panel
+                            verifierPanel.setActiveVcPanel(new VerifierPanel.VCPanelMock(vc));
                         }
 
                     });
