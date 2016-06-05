@@ -114,7 +114,7 @@ public class GenerateVCsAction extends RESOLVEAction {
 
                             //I performed an action, let's remember to clean up after ourselves before we go and update
                             //the vc panel
-                            verifierPanel.setActiveVcPanel(new VerifierPanel.VCPanelMock(vc));
+                            verifierPanel.setActiveVcPanel(new VerifierPanel.VCPanelMock(project, vc));
                         }
 
                     });

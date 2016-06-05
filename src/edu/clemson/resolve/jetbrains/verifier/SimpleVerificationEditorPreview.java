@@ -26,10 +26,12 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+//TODO: Seems like {@link TextEditorField} is the "right" way to do this.
+@Deprecated
 public class SimpleVerificationEditorPreview implements PreviewPanel {
 
     //Here are some classes worth keeping in mind:
-    // -FontEditorPreview as well as NewColorAndFontPanel and SimpleEditorPreview
+    // -FontEditorPreview as well as NewColorAndFontPanel and SimpleEditorPreview AND TextEditorField (most importantly, the others will lead to workarounds and hacks)
     private final EditorEx editor;
 
     @NotNull private final Disposable myDisposable = Disposer.newDisposable();
@@ -47,7 +49,7 @@ public class SimpleVerificationEditorPreview implements PreviewPanel {
         EditorEx editor = (EditorEx) editorFactory.createViewer(editorDocument);
         //editor.setBorder(new EmptyBorder(10, 10, 10, 10)); //TODO: this line seems to work, but doesn't seem like
         //"the right way" to add some margins to our editor. Keep it in mind though in case no other soln turns up.
-
+        editor.setBorder(null);
 
         EditorColorsScheme colorScheme = EditorColorsManager.getInstance().getGlobalScheme();
         editor.setBackgroundColor(Gray._237);   //TODO: Change this to a JBColor

@@ -5,17 +5,26 @@ import com.intellij.ide.highlighter.JavaHighlightingColors;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.IdeActions;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.EditorFactory;
+import com.intellij.openapi.editor.colors.EditorColorsManager;
+import com.intellij.openapi.editor.colors.EditorColorsScheme;
+import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.fileEditor.impl.EditorEmptyTextPainter;
 import com.intellij.openapi.keymap.KeymapUtil;
 import com.intellij.openapi.preview.PreviewPanelProvider;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Splitter;
+import com.intellij.ui.EditorTextField;
+import com.intellij.ui.Gray;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.util.ui.JBFont;
 import com.intellij.util.ui.UIUtil;
 import com.sun.istack.internal.NotNull;
+import edu.clemson.resolve.jetbrains.RESOLVEFileType;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.actions.GenerateVCsAction;
 import edu.clemson.resolve.proving.Antecedent;
@@ -45,8 +54,8 @@ public class VerifierPanel extends JPanel {
         createBaseGUI();
     }
 
-    public List<SimpleVerificationEditorPreview> getActivePreviewEditors() {
-        List<SimpleVerificationEditorPreview> result = new ArrayList<>();
+    public List<VerificationEditorPreview> getActivePreviewEditors() {
+        List<VerificationEditorPreview> result = new ArrayList<>();
         if (activeVcPanel != null && activeVcPanel.goalPreview != null) {
             result.add(activeVcPanel.goalPreview);
         }
@@ -71,7 +80,7 @@ public class VerifierPanel extends JPanel {
                 "Then left-click one of the VC icons<br>in the gutter to view" +
                 "</font>" +
                 "</html>", JLabel.CENTER);
-        emptyLabel.setFont(createFont(false, 12));
+        emptyLabel.setFont(createFont(12));
         JPanel dummypanel = new JBPanel();
         dummypanel.setOpaque(false);
         this.add(Box.createRigidArea(new Dimension(0, 50)));
@@ -80,7 +89,9 @@ public class VerifierPanel extends JPanel {
 
     public void revertToBaseGUI() {
         if (activeVcPanel != null && activeVcPanel.goalPreview != null) {
-            activeVcPanel.goalPreview.disposeUIResources();
+            //we're going back to the default screen, so if there were active editors (before say the user messed
+            //with the doc) remove em' here.
+            //activeVcPanel.goalPreview.removeNotify();
         }
         this.removeAll();
         this.activeVcPanel = null;
@@ -91,7 +102,8 @@ public class VerifierPanel extends JPanel {
     public void setActiveVcPanel(VCPanelMock vcp) {
         if (this.activeVcPanel != null && activeVcPanel.goalPreview != null) {
             //before we set the new one, let's try to remember to dispose of the existing one correctly
-            activeVcPanel.goalPreview.disposeUIResources();
+            //activeVcPanel.goalPreview.disposeUIResources();
+            //activeVcPanel.goalPreview.removeNotify();
         }
         this.activeVcPanel = vcp;
         this.removeAll();   // clear any old stuff first
@@ -103,13 +115,16 @@ public class VerifierPanel extends JPanel {
     }
 
     public static class VCPanelMock  {
-        private SimpleVerificationEditorPreview goalPreview = null;
+        private VerificationEditorPreview goalPreview = null;
 
         private JPanel baseComponent;
         private final String explanation, goal, givens;
         private final int vcNumber;
+        private final Project project;
 
-        public VCPanelMock(VC vc) {
+        public VCPanelMock(Project project, VC vc) {
+            this.project = project;
+
             this.explanation = vc.getExplanation();
             this.goal = "test";
             this.givens = "1. test1<br>2. test2";
@@ -146,21 +161,36 @@ public class VerifierPanel extends JPanel {
             goalComponent.setLayout(new BoxLayout(goalComponent, BoxLayout.Y_AXIS));
             goalComponent.setOpaque(true);
             goalComponent.setBackground(JBColor.WHITE);
-            goalPreview = new SimpleVerificationEditorPreview("Max_Length = 0");
+            goalPreview = new VerificationEditorPreview(project, "Max_Length = 0");
+            goalPreview.setOneLineMode(false);
+            //goalPreview.addNotify();
+            //v1.setBorder(new EmptyBorder(10, 10, 10 , 10));
+            //v1.getEditor().getContentComponent().setBorder(new EmptyBorder(5, 5, 5,5 ));
 
-            JComponent xx = (JComponent)goalPreview.getPanel();
-            xx.setPreferredSize(new Dimension(10,4));
-            xx.setBorder(new EmptyBorder(5, 5, 5, 5));
-            xx.setBackground(JBColor.WHITE);
-
-            goalComponent.add(xx, CENTER_ALIGNMENT);
+            /*
+            EditorTextField tf = new EditorTextField(editorDocument, project, RESOLVEFileType.INSTANCE, true);
+            tf.setBorder(new EmptyBorder(3,3,3,3));
+            tf.setOneLineMode(false);
+            tf.setFileType(RESOLVEFileType.INSTANCE);
+            tf.setBackground(Gray._237);
+            tf.setFontInheritedFromLAF(true);
+            tf.addNotify();
+            if (tf.getEditor() != null) {
+                tf.getEditor().setBorder(null);
+            }*/
             goalComponent.setPreferredSize(goalComponent.getPreferredSize());
+            goalComponent.add(goalPreview, CENTER_ALIGNMENT);
+
             TitledBorder goalBorder = new TitledBorder(new LineBorder(JBColor.LIGHT_GRAY, 1, true),
-                    "Goal:",
+                    "<html>" +
+                    "<font color='#515151' size='5'>" +
+                    "<b>Goal:</b>" +
+                    "</font>" +
+                    "</html>",
                     TitledBorder.LEFT,
                     TitledBorder.DEFAULT_POSITION);
 
-            goalBorder.setTitleFont(createFont(true, 14));
+            goalBorder.setTitleFont(createFont(14));
             goalBorder.setTitleColor(JBColor.BLACK);
 
             goalComponent.setBorder(goalBorder);
@@ -171,11 +201,13 @@ public class VerifierPanel extends JPanel {
             givensComponent.setBackground(JBColor.WHITE);
 
             TitledBorder givenBorder = new TitledBorder(new LineBorder(JBColor.LIGHT_GRAY, 1, true),
-                    "Givens:",
+                    "<html>" +
+                    "<font color='#515151' size=\"12\">" +
+                    "<b>Givens:</b>" +
+                    "</font>" +
+                    "</html>",
                     TitledBorder.LEFT,
                     TitledBorder.DEFAULT_POSITION);
-            givenBorder.setTitleFont(createFont(true, 14));
-            givenBorder.setTitleColor(JBColor.BLACK);
             givensComponent.setBorder(givenBorder);
 
             JPanel titlePanel = new JBPanel();
@@ -187,11 +219,10 @@ public class VerifierPanel extends JPanel {
             String numAndExplanation =
                     "<html>" +
                         "<font color='#4A4F51'>" +
-                            "#" + vcNumber + " | "  + explanation +
+                            "<b>#" + vcNumber + " |</b> "  + explanation +
                         "</font>" +
                     "</html>";
             JLabel label = new JLabel(numAndExplanation);
-            label.setFont(createFont(true, 12));
             label.setIcon(RESOLVEIcons.VC_PANEL);
             titlePanel.add(label);
             // use our stretchy glue to fill the space to the right of the label
@@ -211,7 +242,7 @@ public class VerifierPanel extends JPanel {
             pane1.add(Box.createRigidArea(new Dimension(0, 10)));
             pane1.add(goalComponent);
             pane1.add(givensComponent);
-            pane1.add(Box.createRigidArea(new Dimension(0, 30)));
+            pane1.add(Box.createRigidArea(new Dimension(0, 20)));
 
             pane0.add(pane1);
             return pane0;
@@ -247,8 +278,7 @@ public class VerifierPanel extends JPanel {
         return result;
     }
     */
-    private static Font createFont(boolean bold, int size) {
-        int style = bold ? Font.BOLD : Font.PLAIN;
-        return JBFont.create(new Font(UIUtil.getMenuFont().getName(), style, size));
+    private static Font createFont(int size) {
+        return JBFont.create(new Font(UIUtil.getMenuFont().getName(), Font.PLAIN, size));
     }
 }
