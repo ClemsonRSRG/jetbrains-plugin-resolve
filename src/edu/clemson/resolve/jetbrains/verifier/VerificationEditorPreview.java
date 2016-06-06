@@ -23,7 +23,7 @@ public class VerificationEditorPreview extends EditorTextField {
     public VerificationEditorPreview(Project project, String content) {
         super(EditorFactory.getInstance().createDocument(content), project, RESOLVEFileType.INSTANCE, true);
         setBackground(Gray._237);    //Figure out a way to make this work with changes to LAF
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         setOneLineMode(false);
     }
 

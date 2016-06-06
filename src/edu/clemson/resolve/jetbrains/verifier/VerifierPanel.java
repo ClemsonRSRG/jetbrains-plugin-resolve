@@ -148,14 +148,10 @@ public class VerifierPanel extends JPanel {
             goalComponent.setLayout(new BoxLayout(goalComponent, BoxLayout.Y_AXIS));
             goalComponent.setOpaque(true);
             goalComponent.setBackground(JBColor.WHITE);
-            goalPreview = new VerificationEditorPreview(project, goal + "\n1=1");
+            goalPreview = new VerificationEditorPreview(project, goal);
             goalPreview.addNotify();
-            int y1 = goalPreview.getEditor().getLineHeight();
 
-            //goalPreview.setPreferredSize(new Dimension(50, 10));
-
-            Dimension goalPreviewMaxSize = goalPreview.getPreferredSize();
-            goalPreview.setMaximumSize(new Dimension(Integer.MAX_VALUE, goalPreviewMaxSize.height));
+            goalPreview.setMaximumSize(new Dimension(Integer.MAX_VALUE, goalPreview.getPreferredSize().height));
             //goalPreview.setMinimumSize();
 
             //goalPreview.setMaximumSize(goalPreview.getPreferredSize());  //TODO: This line is a good lead
@@ -193,12 +189,14 @@ public class VerifierPanel extends JPanel {
             givensComponent.setBackground(JBColor.WHITE);
             givensPreview = new VerificationEditorPreview(project, createStringGivensListing());
             givensPreview.addNotify();
-            int y2 =  givensPreview.getEditor().getLineHeight();
 
-            givensPreview.setPreferredSize(givensPreview.getPreferredSize());
+            givensPreview.setMaximumSize(new Dimension(Integer.MAX_VALUE, givensPreview.getPreferredSize().height));
+
+
+           // givensPreview.setPreferredSize(givensPreview.getPreferredSize());
             givensComponent.add(givensPreview, CENTER_ALIGNMENT);
-            givensComponent.setPreferredSize(goalPreview.getPreferredSize());
-            givensComponent.setPreferredSize(givensComponent.getPreferredSize());
+           // givensComponent.setPreferredSize(goalPreview.getPreferredSize());
+           // givensComponent.setPreferredSize(givensComponent.getPreferredSize());
 
             TitledBorder givenBorder = new TitledBorder(new LineBorder(JBColor.LIGHT_GRAY, 1, true),
                     "<html>" +
@@ -240,8 +238,9 @@ public class VerifierPanel extends JPanel {
             pane1.add(titlePanel);
             pane1.add(Box.createRigidArea(new Dimension(0, 10)));
             pane1.add(goalComponent);
-            pane1.add(givensComponent);
             pane1.add(Box.createRigidArea(new Dimension(0, 20)));
+            pane1.add(givensComponent);
+            pane1.add(Box.createRigidArea(new Dimension(0, 10)));
 
             pane0.add(pane1);
             return pane0;
@@ -250,8 +249,15 @@ public class VerifierPanel extends JPanel {
         private String createStringGivensListing() {
             String formattedGivens = "";
             char count = 'a';
+            boolean first = true;
             for (String given : antecedentParts) {
-                formattedGivens += count + ". " + given + "\n";
+                if (first) {
+                    formattedGivens += count + ".)  " + given;
+                    first = false;
+                }
+                else {
+                    formattedGivens += "\n" + count + ".)  " + given;
+                }
                 count++;
             }
             return formattedGivens;
