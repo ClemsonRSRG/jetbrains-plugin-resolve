@@ -122,7 +122,6 @@ public class VerifierPanel extends JPanel {
 
         private final String explanation, goal;
         private final int vcNumber;
-
         private final List<String> antecedentParts = new ArrayList<>();
 
         public VCPanelMock(Project project, VC vc) {
@@ -139,7 +138,6 @@ public class VerifierPanel extends JPanel {
 
         private JPanel createGUI() {
             //WORK 2 below:
-
             JPanel pane0 = new JBPanel();
             JPanel pane1 = new JBPanel();
 
@@ -153,18 +151,15 @@ public class VerifierPanel extends JPanel {
 
             goalPreview.setMaximumSize(new Dimension(Integer.MAX_VALUE, goalPreview.getPreferredSize().height));
             //goalPreview.setMinimumSize();
-
             //goalPreview.setMaximumSize(goalPreview.getPreferredSize());  //TODO: This line is a good lead
 
-
-           // goalComponent.setPreferredSize(goalPreview.getPreferredSize());
+            //goalComponent.setPreferredSize(goalPreview.getPreferredSize());
             //goalComponent.setPreferredSize(goalComponent.getPreferredSize());
 
-
             //TODO: this seems like its going in the right direction
-         //   goalPreview.setPreferredSize(goalPreview.getPreferredSize());
-         //   goalComponent.setPreferredSize(new Dimension(50, 4));
-         //   goalComponent.setPreferredSize(goalComponent.getPreferredSize());
+            //goalPreview.setPreferredSize(goalPreview.getPreferredSize());
+            //goalComponent.setPreferredSize(new Dimension(50, 4));
+            //goalComponent.setPreferredSize(goalComponent.getPreferredSize());
 
             goalComponent.add(goalPreview, CENTER_ALIGNMENT);
 
@@ -193,10 +188,10 @@ public class VerifierPanel extends JPanel {
             givensPreview.setMaximumSize(new Dimension(Integer.MAX_VALUE, givensPreview.getPreferredSize().height));
 
 
-           // givensPreview.setPreferredSize(givensPreview.getPreferredSize());
+            //givensPreview.setPreferredSize(givensPreview.getPreferredSize());
             givensComponent.add(givensPreview, CENTER_ALIGNMENT);
-           // givensComponent.setPreferredSize(goalPreview.getPreferredSize());
-           // givensComponent.setPreferredSize(givensComponent.getPreferredSize());
+            //givensComponent.setPreferredSize(goalPreview.getPreferredSize());
+            //givensComponent.setPreferredSize(givensComponent.getPreferredSize());
 
             TitledBorder givenBorder = new TitledBorder(new LineBorder(JBColor.LIGHT_GRAY, 1, true),
                     "<html>" +
@@ -262,7 +257,6 @@ public class VerifierPanel extends JPanel {
             }
             return formattedGivens;
         }
-
         public JComponent getComponent() {
             return baseComponent;
         }
