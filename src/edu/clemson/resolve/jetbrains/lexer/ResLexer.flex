@@ -154,6 +154,7 @@ ESCAPES = [abfnrtv]
 "~"			                            { return TILDE; }
 "|"                                     { return BAR; }
 "||"                                    { return DBL_BAR; }
+"?"                                     { return QV; }
 
 // Keywords
 

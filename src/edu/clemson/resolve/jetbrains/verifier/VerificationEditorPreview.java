@@ -7,6 +7,7 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.EditorTextField;
 import com.intellij.ui.Gray;
+import com.intellij.ui.JBColor;
 import edu.clemson.resolve.jetbrains.RESOLVEFileType;
 
 import javax.swing.*;
@@ -23,6 +24,7 @@ public class VerificationEditorPreview extends EditorTextField {
         super(EditorFactory.getInstance().createDocument(content), project, RESOLVEFileType.INSTANCE, true);
         setBackground(Gray._237);    //Figure out a way to make this work with changes to LAF
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        setOneLineMode(false);
     }
 
     @Override

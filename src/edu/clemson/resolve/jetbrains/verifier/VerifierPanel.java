@@ -115,39 +115,26 @@ public class VerifierPanel extends JPanel {
     }
 
     public static class VCPanelMock  {
-        private VerificationEditorPreview goalPreview = null;
+        private VerificationEditorPreview goalPreview, givensPreview = null;
 
         private JPanel baseComponent;
-        private final String explanation, goal, givens;
-        private final int vcNumber;
         private final Project project;
+
+        private final String explanation, goal;
+        private final int vcNumber;
+
+        private final List<String> antecedentParts = new ArrayList<>();
 
         public VCPanelMock(Project project, VC vc) {
             this.project = project;
 
             this.explanation = vc.getExplanation();
-            this.goal = "test";
-            this.givens = "1. test1<br>2. test2";
+            this.goal = vc.getConsequent().toString();
+            for (PExp e : vc.getAntecedent()) {
+                antecedentParts.add(e.toString());
+            }
             this.vcNumber = vc.getNumber();
             this.baseComponent = createGUI();
-            //this.explanation = vc.getConsequentInfo().explanation;
-            //this.goal = vc.getConsequent().toString();
-
-           /* int i = 1;
-            boolean first = true;
-            StringBuilder sb = new StringBuilder();
-            for (PExp e : vc.getAntecedent()) {
-                if (first) {
-                    sb.append(i).append(".").append(e.toString());
-                    first = false;
-                }
-                else {
-                    sb.append("\n");
-                    sb.append(i).append(".").append(e.toString());
-                }
-                i++;
-            }
-            this.givens = sb.toString();*/
         }
 
         private JPanel createGUI() {
@@ -161,29 +148,33 @@ public class VerifierPanel extends JPanel {
             goalComponent.setLayout(new BoxLayout(goalComponent, BoxLayout.Y_AXIS));
             goalComponent.setOpaque(true);
             goalComponent.setBackground(JBColor.WHITE);
-            goalPreview = new VerificationEditorPreview(project, "Max_Length = 0");
-            goalPreview.setOneLineMode(false);
-            //goalPreview.addNotify();
-            //v1.setBorder(new EmptyBorder(10, 10, 10 , 10));
-            //v1.getEditor().getContentComponent().setBorder(new EmptyBorder(5, 5, 5,5 ));
+            goalPreview = new VerificationEditorPreview(project, goal + "\n1=1");
+            goalPreview.addNotify();
+            int y1 = goalPreview.getEditor().getLineHeight();
 
-            /*
-            EditorTextField tf = new EditorTextField(editorDocument, project, RESOLVEFileType.INSTANCE, true);
-            tf.setBorder(new EmptyBorder(3,3,3,3));
-            tf.setOneLineMode(false);
-            tf.setFileType(RESOLVEFileType.INSTANCE);
-            tf.setBackground(Gray._237);
-            tf.setFontInheritedFromLAF(true);
-            tf.addNotify();
-            if (tf.getEditor() != null) {
-                tf.getEditor().setBorder(null);
-            }*/
-            goalComponent.setPreferredSize(goalComponent.getPreferredSize());
+            //goalPreview.setPreferredSize(new Dimension(50, 10));
+
+            Dimension goalPreviewMaxSize = goalPreview.getPreferredSize();
+            goalPreview.setMaximumSize(new Dimension(Integer.MAX_VALUE, goalPreviewMaxSize.height));
+            //goalPreview.setMinimumSize();
+
+            //goalPreview.setMaximumSize(goalPreview.getPreferredSize());  //TODO: This line is a good lead
+
+
+           // goalComponent.setPreferredSize(goalPreview.getPreferredSize());
+            //goalComponent.setPreferredSize(goalComponent.getPreferredSize());
+
+
+            //TODO: this seems like its going in the right direction
+         //   goalPreview.setPreferredSize(goalPreview.getPreferredSize());
+         //   goalComponent.setPreferredSize(new Dimension(50, 4));
+         //   goalComponent.setPreferredSize(goalComponent.getPreferredSize());
+
             goalComponent.add(goalPreview, CENTER_ALIGNMENT);
 
             TitledBorder goalBorder = new TitledBorder(new LineBorder(JBColor.LIGHT_GRAY, 1, true),
                     "<html>" +
-                    "<font color='#515151' size='5'>" +
+                    "<font color='#515151' size='4'>" +
                     "<b>Goal:</b>" +
                     "</font>" +
                     "</html>",
@@ -197,12 +188,21 @@ public class VerifierPanel extends JPanel {
 
             //for the givens box
             JComponent givensComponent = new JBPanel();
+            givensComponent.setLayout(new BoxLayout(givensComponent, BoxLayout.Y_AXIS));
             givensComponent.setOpaque(true);
             givensComponent.setBackground(JBColor.WHITE);
+            givensPreview = new VerificationEditorPreview(project, createStringGivensListing());
+            givensPreview.addNotify();
+            int y2 =  givensPreview.getEditor().getLineHeight();
+
+            givensPreview.setPreferredSize(givensPreview.getPreferredSize());
+            givensComponent.add(givensPreview, CENTER_ALIGNMENT);
+            givensComponent.setPreferredSize(goalPreview.getPreferredSize());
+            givensComponent.setPreferredSize(givensComponent.getPreferredSize());
 
             TitledBorder givenBorder = new TitledBorder(new LineBorder(JBColor.LIGHT_GRAY, 1, true),
                     "<html>" +
-                    "<font color='#515151' size=\"12\">" +
+                    "<font color='#515151' size='4'>" +
                     "<b>Givens:</b>" +
                     "</font>" +
                     "</html>",
@@ -213,7 +213,6 @@ public class VerifierPanel extends JPanel {
             JPanel titlePanel = new JBPanel();
             titlePanel.setOpaque(true);
             titlePanel.setBackground(JBColor.WHITE);
-            // its an x axis to add stuff left to right
             titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.X_AXIS));
             // create and add a label to the temp panel
             String numAndExplanation =
@@ -246,6 +245,16 @@ public class VerifierPanel extends JPanel {
 
             pane0.add(pane1);
             return pane0;
+        }
+
+        private String createStringGivensListing() {
+            String formattedGivens = "";
+            char count = 'a';
+            for (String given : antecedentParts) {
+                formattedGivens += count + ". " + given + "\n";
+                count++;
+            }
+            return formattedGivens;
         }
 
         public JComponent getComponent() {

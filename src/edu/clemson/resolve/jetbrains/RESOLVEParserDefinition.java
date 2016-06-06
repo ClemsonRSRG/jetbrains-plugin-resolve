@@ -47,7 +47,7 @@ public class RESOLVEParserDefinition implements ParserDefinition {
     //TODO: Builtin unicode ops need adding here.
     public static final TokenSet OPERATORS = TokenSet.create(AT, EQUALS, NEQUALS, AND, OR, NOT, CAT, LESS_OR_EQUAL,
             LESS, GREATER_OR_EQUAL, GREATER, MOD, MUL, QUOTIENT, PLUS, MINUS, COLON_EQUALS, COLON_EQUALS_COLON, RARROW,
-            TILDE, UNION, INTERSECT, IS_IN, IS_NOT_IN, BAR, DBL_BAR, IFF, IMPLIES, TRUE, FALSE);
+            TILDE, UNION, INTERSECT, IS_IN, IS_NOT_IN, BAR, DBL_BAR, IFF, IMPLIES, TRUE, FALSE, QV);
     public static final TokenSet PARAMETER_MODES = TokenSet.create(ALTERS,
             UPDATES, CLEARS, RESTORES, PRESERVES, REPLACES, EVALUATES);
 

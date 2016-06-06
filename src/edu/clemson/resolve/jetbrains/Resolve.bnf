@@ -90,6 +90,7 @@
         QUOTIENT                = '/'
         PLUS                    = '+'
         MINUS                   = '-'
+        QV                      = '?'
 
         COLON_EQUALS            = ':='
         COLON_EQUALS_COLON      = ':=:'

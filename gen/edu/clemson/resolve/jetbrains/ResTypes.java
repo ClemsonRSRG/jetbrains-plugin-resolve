@@ -245,6 +245,7 @@ public interface ResTypes {
   IElementType PROCEDURE = new ResTokenType("Procedure");
   IElementType PROG_IF = new ResTokenType("If");
   IElementType QUOTIENT = new ResTokenType("/");
+  IElementType QV = new ResTokenType("?");
   IElementType RANGLE = new ResTokenType("⟩");
   IElementType RARROW = new ResTokenType("->");
   IElementType RARROW1 = new ResTokenType("⟶");
