@@ -245,6 +245,7 @@ public interface ResTypes {
   IElementType PROCEDURE = new ResTokenType("Procedure");
   IElementType PROG_IF = new ResTokenType("If");
   IElementType QUOTIENT = new ResTokenType("/");
+  IElementType QV = new ResTokenType("?");
   IElementType RANGLE = new ResTokenType("⟩");
   IElementType RARROW = new ResTokenType("->");
   IElementType RARROW1 = new ResTokenType("⟶");
@@ -267,6 +268,7 @@ public interface ResTypes {
   IElementType TIMES = new ResTokenType("⨯");
   IElementType TRIPLE_DOT = new ResTokenType("...");
   IElementType TRUE = new ResTokenType("true");
+  IElementType UMINUS = new ResTokenType("⨩");
   IElementType UNION = new ResTokenType("union");
   IElementType UNION1 = new ResTokenType("∪");
   IElementType UNION_PLUS = new ResTokenType("∪₊");

@@ -25,8 +25,7 @@ public class RESOLVEApplicationLibrariesService extends
     }
 
     public static RESOLVEApplicationLibrariesService getInstance() {
-        return ServiceManager.getService(
-                RESOLVEApplicationLibrariesService.class);
+        return ServiceManager.getService(RESOLVEApplicationLibrariesService.class);
     }
 
     public boolean isUsingRESOLVEPathFromSystemEnvironment() {
@@ -36,8 +35,7 @@ public class RESOLVEApplicationLibrariesService extends
     public void setUsingRESOLVEPathFromSystemEnvironment(boolean useRESPATHfromEnv) {
         if (state.isUsingRESOLVEPathFromSystemEnvironment() != useRESPATHfromEnv) {
             state.setUsingRESOLVEPathFromSystemEnvironment(useRESPATHfromEnv);
-            if (!RESOLVESdkUtil.getRESOLVEPathsRootsFromEnvironment()
-                    .isEmpty()) {
+            if (!RESOLVESdkUtil.getRESOLVEPathsRootsFromEnvironment().isEmpty()) {
                 incModificationCount();
                 ApplicationManager.getApplication()
                         .getMessageBus()
@@ -47,17 +45,14 @@ public class RESOLVEApplicationLibrariesService extends
         }
     }
 
-    static class RESOLVEApplicationLibrariesState
-            extends
-            RESOLVELibrariesState {
+    static class RESOLVEApplicationLibrariesState extends RESOLVELibrariesState {
         private boolean useRESOLVEPathFromSystemEnvironment = true;
 
         boolean isUsingRESOLVEPathFromSystemEnvironment() {
             return useRESOLVEPathFromSystemEnvironment;
         }
 
-        void setUsingRESOLVEPathFromSystemEnvironment(
-                boolean useResPathFromSysEnv) {
+        void setUsingRESOLVEPathFromSystemEnvironment(boolean useResPathFromSysEnv) {
             useRESOLVEPathFromSystemEnvironment = useResPathFromSysEnv;
         }
     }

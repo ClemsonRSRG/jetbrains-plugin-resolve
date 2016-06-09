@@ -32,35 +32,37 @@ public class RESOLVESmallSdkService extends RESOLVESdkService {
                     @Nullable
                     @Override
                     public Result<String> compute() {
-                        return Result.create(ApplicationManager.getApplication()
-                                .runReadAction(new Computable<String>() {
-                                    @Nullable
-                                    @Override
-                                    public String compute() {
-                                        LibraryTable table = LibraryTablesRegistrar.getInstance().
-                                                getLibraryTable(project);
-                                        for (Library library : table.getLibraries()) {
-                                            String libraryName = library.getName();
-                                            if (libraryName != null &&
-                                                    libraryName.startsWith(LIBRARY_NAME)) {
-                                                for (VirtualFile root : library.getFiles(OrderRootType.CLASSES)) {
-                                                    if (isRESOLVESdkLibRoot(root)) {
-                                                        return libraryRootToSdkPath(root);
-                                                    }
-                                                }
+                        return Result.create(ApplicationManager.getApplication().runReadAction(new Computable<String>() {
+                            @Nullable
+                            @Override
+                            public String compute() {
+                                LibraryTable table = LibraryTablesRegistrar.getInstance().getLibraryTable(project);
+                                for (Library library : table.getLibraries()) {
+                                    String libraryName = library.getName();
+                                    if (libraryName != null && libraryName.startsWith(LIBRARY_NAME)) {
+                                        for (VirtualFile root : library.getFiles(OrderRootType.CLASSES)) {
+                                            if (isRESOLVESdkLibRoot(root)) {
+                                                return libraryRootToSdkPath(root);
                                             }
                                         }
-                                        return null;
                                     }
-                                }), RESOLVESmallSdkService.this);
+                                }
+                                return null;
+                            }
+                        }), RESOLVESmallSdkService.this);
                     }
                 });
     }
 
     @Nullable
     @Override
-    public String getSdkVersion(
-            @Nullable final Module module) {
+    public String getSdkCompilerJarPath(@Nullable Module module) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public String getSdkVersion(@Nullable final Module module) {
         String parentVersion = super.getSdkVersion(module);
         if (parentVersion != null) {
             return parentVersion;

@@ -1,6 +1,5 @@
 package edu.clemson.resolve.jetbrains;
 
-import com.intellij.application.options.colors.PreviewPanel;
 import com.intellij.execution.filters.TextConsoleBuilder;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.ui.ConsoleView;
@@ -17,15 +16,17 @@ import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
+import edu.clemson.resolve.jetbrains.verifier.SimpleVerificationEditorPreview;
+import edu.clemson.resolve.jetbrains.verifier.VerificationEditorPreview;
+import edu.clemson.resolve.jetbrains.verifier.VerifierPanel;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.util.List;
 
 /**
- * This object is the controller for the RESOLVE plug-in. It receives
- * events and can send them on to its contained components; here the main
- * components being primarily the compiler's console output window.
+ * This object is the controller for the RESOLVE plug-in. It receives events and can send them on to its contained
+ * components; here the main components being primarily the compiler's console output window.
  */
 public class RESOLVEPluginController implements ProjectComponent {
 
@@ -33,11 +34,17 @@ public class RESOLVEPluginController implements ProjectComponent {
     public static final Logger LOG = Logger.getInstance("RESOLVEPluginController");
 
     public static final String CONSOLE_WINDOW_ID = "RESOLVE Output";
+    public static final String VERIFIER_WINDOW_ID = "RESOLVE Verifier";
+
     public boolean projectIsClosed = false;
 
     public Project project;
+
     public ConsoleView console;
     public ToolWindow consoleWindow;
+
+    public ToolWindow verifierWindow;
+    public VerifierPanel verifierPanel;
 
     public RESOLVEPluginController(@NotNull Project project) {
         this.project = project;
@@ -46,7 +53,7 @@ public class RESOLVEPluginController implements ProjectComponent {
     public static RESOLVEPluginController getInstance(@NotNull Project project) {
         RESOLVEPluginController pc = project.getComponent(RESOLVEPluginController.class);
         if (pc == null) {
-            LOG.error("getInstance: getComponent() for project.getName() returns null");
+            LOG.error("getInstance: getOuterMostComponent() for project.getName() returns null");
         }
         return pc;
     }
@@ -71,18 +78,25 @@ public class RESOLVEPluginController implements ProjectComponent {
     public void createToolWindows() {
         LOG.info("createToolWindows " + project.getName());
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
+
+        verifierPanel = new VerifierPanel(project);
+
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+        Content content = contentFactory.createContent(verifierPanel, "", false);
+
+        verifierWindow = toolWindowManager.registerToolWindow(VERIFIER_WINDOW_ID, true, ToolWindowAnchor.RIGHT);
+        verifierWindow.getContentManager().addContent(content);
+        verifierWindow.setIcon(RESOLVEIcons.TOOL_ICON);
 
         TextConsoleBuilderFactory factory = TextConsoleBuilderFactory.getInstance();
         TextConsoleBuilder consoleBuilder = factory.createBuilder(project);
-        this.console = consoleBuilder.getConsole();
+        console = consoleBuilder.getConsole();
 
         JComponent consoleComponent = console.getComponent();
-        Content content = contentFactory.createContent(consoleComponent, "", false);
+        content = contentFactory.createContent(consoleComponent, "", false);
 
         consoleWindow = toolWindowManager.registerToolWindow(CONSOLE_WINDOW_ID, true, ToolWindowAnchor.BOTTOM);
         consoleWindow.getContentManager().addContent(content);
-
         consoleWindow.setIcon(RESOLVEIcons.TOOL_ICON);
     }
 
@@ -93,6 +107,13 @@ public class RESOLVEPluginController implements ProjectComponent {
         //uninstallListeners();
 
         console.dispose();
+        List<VerificationEditorPreview> lingeringEditors = verifierPanel.getActivePreviewEditors();
+        //Really, due to the way we create (and destory vcPanel's on calls to setXXX) I think there should only
+        //every really be one activePreview to destroy -- if the user sudddenly decides to close IntelliJ.
+        for (VerificationEditorPreview e : lingeringEditors) {
+            //e.removeNotify();
+        }
+
         consoleWindow = null;
         project = null;
     }
@@ -103,6 +124,14 @@ public class RESOLVEPluginController implements ProjectComponent {
 
     public ToolWindow getConsoleWindow() {
         return consoleWindow;
+    }
+
+    public ToolWindow getVerifierWindow() {
+        return verifierWindow;
+    }
+
+    public VerifierPanel getVerifierPanel() {
+        return verifierPanel;
     }
 
     public static void showConsoleWindow(final Project project) {

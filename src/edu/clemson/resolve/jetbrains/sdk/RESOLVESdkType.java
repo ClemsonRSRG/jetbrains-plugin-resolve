@@ -1,15 +1,23 @@
 package edu.clemson.resolve.jetbrains.sdk;
 
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.*;
 import com.intellij.openapi.roots.OrderRootType;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.jetbrains.RESOLVEConstants;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
+import edu.clemson.resolve.jetbrains.project.RESOLVEApplicationLibrariesService;
+import edu.clemson.resolve.jetbrains.project.RESOLVELibrariesService;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.io.File;
+import java.util.Collection;
 
 public class RESOLVESdkType extends SdkType {
 

@@ -1,7 +1,9 @@
 package edu.clemson.resolve.jetbrains.sdk;
 
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.io.FileUtil;
@@ -19,7 +21,9 @@ import edu.clemson.resolve.jetbrains.project.RESOLVELibrariesService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -143,6 +147,18 @@ public class RESOLVESdkUtil {
         return roots;
     }
 
+    @NotNull
+    public static Collection<Module> getRESOLVEModules(@NotNull Project project) {
+        if (project.isDefault()) return Collections.emptyList();
+        final RESOLVESdkService sdkService = RESOLVESdkService.getInstance(project);
+        return ContainerUtil.filter(ModuleManager.getInstance(project).getModules(), new Condition<Module>() {
+            @Override
+            public boolean value(Module module) {
+                return sdkService.isRESOLVEModule(module);
+            }
+        });
+    }
+
     @Nullable
     private static VirtualFile getInnerSdkSrcDir(@NotNull RESOLVESdkService sdkService, @Nullable Module module) {
         String sdkHomePath = sdkService.getSdkHomePath(module);
@@ -153,10 +169,10 @@ public class RESOLVESdkUtil {
     @Nullable
     static VirtualFile suggestSdkDirectory() {
         if (SystemInfo.isWindows) {
-            return LocalFileSystem.getInstance().findFileByPath("C:\\resolve");
+            return LocalFileSystem.getInstance().findFileByPath("C:\\resolve-lite");
         }
         if (SystemInfo.isMac || SystemInfo.isLinux) {
-            VirtualFile usrLocal = LocalFileSystem.getInstance().findFileByPath("/usr/local/resolve");
+            VirtualFile usrLocal = LocalFileSystem.getInstance().findFileByPath("/usr/local/resolve-lite");
             if (usrLocal != null) return usrLocal;
         }
         return null;
@@ -171,9 +187,9 @@ public class RESOLVESdkUtil {
             if (cachedVersion != null) {
                 return !cachedVersion.isEmpty() ? cachedVersion : null;
             }
-            VirtualFile compilerDir = sdkRoot.findFileByRelativePath("jars");
+            VirtualFile compilerDir = sdkRoot.findFileByRelativePath("compiler");
             if (compilerDir == null || !compilerDir.isDirectory()) {
-                RESOLVESdkService.LOG.debug("Cannot find compiler jar in resolve sdk home directory");
+                RESOLVESdkService.LOG.debug("Cannot find compiler jar in RESOLVE Sdk home directory");
                 return null;
             }
             VirtualFile compilerCandidate = null;
@@ -205,6 +221,12 @@ public class RESOLVESdkUtil {
     static Collection<VirtualFile> getSdkDirectoriesToAttach(@NotNull String sdkPath, @NotNull String versionString) {
         // src is enough at the moment, possible process binaries from pkg
         return ContainerUtil.createMaybeSingletonList(getSdkSrcDir(sdkPath, versionString));
+    }
+
+    @NotNull
+    public static String retrieveRESOLVEPath(@NotNull Project project, @Nullable Module module) {
+        return StringUtil.join(ContainerUtil.map(getRESOLVEPathRoots(project, module),
+                VirtualFile::getPath), File.pathSeparator);
     }
 
     @Nullable

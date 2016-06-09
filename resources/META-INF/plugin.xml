@@ -67,6 +67,12 @@
         <lang.psiStructureViewFactory language="RESOLVE"
                                       implementationClass="edu.clemson.resolve.jetbrains.editor.RESOLVEStructureViewFactory"/>
         <externalAnnotator language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.annotation.RESOLVEExternalAnnotator"/>
+
+
+        <!-- run single file -->
+        <configurationType implementation="edu.clemson.resolve.jetbrains.runconfig.program.RESOLVEProgramRunConfigurationType"/>
+        <runConfigurationProducer implementation="edu.clemson.resolve.jetbrains.runconfig.program.RESOLVEProgramRunConfigurationProducer"/>
+
     </extensions>
 
     <application-components>
@@ -80,9 +86,13 @@
     </project-components>
 
     <actions>
-        <action id="resolve.Generate" class="edu.clemson.resolve.jetbrains.actions.GenerateCodeAction"
-                text="RESOLVE Generate Code">
-            <keyboard-shortcut keymap="$default" first-keystroke="control shift G"/>
+       <!-- <action id="resolve.NewRESOLVEFile" class="edu.clemson.resolve.jetbrains.actions.RESOLVECreateFileAction"
+                text="RESOLVE File" description="Create new RESOLVE file">
+            <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
+        </action>-->
+        <action id="resolve.GenVCs" class="edu.clemson.resolve.jetbrains.actions.GenerateVCsAction"
+                text="RESOLVE Generate VCs">
+            <keyboard-shortcut keymap="$default" first-keystroke="control shift H"/>
             <add-to-group group-id="ToolsMenu" anchor="before" relative-to-action="com.intellij.tools.ExternalToolsGroup"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>

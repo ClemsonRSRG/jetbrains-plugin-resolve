@@ -13,7 +13,6 @@ public class RESOLVEEnvUtil {
         if (ApplicationManager.getApplication().isUnitTestMode()) return null;
 
         String path = EnvironmentUtil.getValue(RESOLVEConstants.RESOLVE_PATH);
-        return path != null ? path : PathMacros.getInstance()
-                .getValue(RESOLVEConstants.RESOLVE_PATH);
+        return path != null ? path : PathMacros.getInstance().getValue(RESOLVEConstants.RESOLVE_PATH);
     }
 }

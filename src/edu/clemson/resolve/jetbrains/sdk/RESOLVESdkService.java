@@ -34,6 +34,9 @@ public abstract class RESOLVESdkService extends SimpleModificationTracker {
     @Nullable
     public abstract String getSdkHomePath(@Nullable Module module);
 
+    @Nullable
+    public abstract String getSdkCompilerJarPath(@Nullable Module module);
+
     //TODO TODO: This isn't right anymore
     @NotNull
     static String libraryRootToSdkPath(@NotNull VirtualFile root) {
@@ -49,6 +52,9 @@ public abstract class RESOLVESdkService extends SimpleModificationTracker {
 
     public abstract void chooseAndSetSdk(@Nullable Module module);
 
+    /**
+     * Use this method in order to check whether the method is appropriate for providing RESOLVE-specific code insight
+     */
     @Contract("null -> false")
     public boolean isRESOLVEModule(@Nullable Module module) {
         return module != null && !module.isDisposed();

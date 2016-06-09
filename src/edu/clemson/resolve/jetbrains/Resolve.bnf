@@ -48,6 +48,7 @@
 
         NOT                     = 'not'
         NOT1                    = '⌐'
+        UMINUS                  = '⨩'
 
         CAT                     = 'o'
         CAT1                    = '∘'
@@ -89,6 +90,7 @@
         QUOTIENT                = '/'
         PLUS                    = '+'
         MINUS                   = '-'
+        QV                      = '?'
 
         COLON_EQUALS            = ':='
         COLON_EQUALS_COLON      = ':=:'
@@ -273,7 +275,8 @@ private ModuleIdentSpecList ::=  ModuleIdentifierSpec (',' ModuleIdentifierSpec)
 private ModuleIdentSpecListRec ::= !(';'|')'|'from'|'end')
 
 ModuleIdentifierSpec ::= identifier {methods=[getReferences getModuleIdentiferTextRange resolve]}
-ModuleLibraryIdentifierSpec ::= identifier {methods=[getReferences getModuleLibraryIdentiferTextRange resolve]}
+
+ModuleLibraryIdentifierSpec ::= identifier /*('.' identifier)**/ {methods=[getReferences getModuleLibraryIdentiferTextRange resolve]}
 
 // Module blocks & items
 
@@ -412,11 +415,7 @@ OperationProcedureDecl ::=
 RequiresClause? EnsuresClause?
 OpProcBody
 'end' CloseIdentifier ';' {pin=2}
-
-private OpProcBody ::=
-('Recursive')? 'Procedure'
-OpBlock {pin=2}
-
+private OpProcBody ::= ('Recursive')? 'Procedure' OpBlock {pin=2}
 
 ProcedureDecl ::=
 ('Recursive')? 'Procedure' identifier OperationLikeParameters (':' Type)? ';'
@@ -535,7 +534,7 @@ MathPostfixDefnSig ::=
 
 MathSymbolName ::= identifier|
 ('o'|'true'|'false'|int|'+'|'-'|'*'|'/'|'>'|'≤'|
- '<'|'<='|'>='|'≥'|'not'|'⌐'|'≼'|'ϒ'|'∪₊'|'≤ᵤ')
+ '<'|'<='|'>='|'≥'|'not'|'⌐'|'≼'|'ϒ'|'∪₊'|'≤ᵤ'|'⨩')
 
 private MathDefinitionParams ::= '(' MathDefnParamList ')' { pin=1}
 private ParamListRec ::= !(')'|';')

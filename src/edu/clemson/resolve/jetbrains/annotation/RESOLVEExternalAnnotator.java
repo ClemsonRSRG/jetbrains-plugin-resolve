@@ -1,18 +1,27 @@
 package edu.clemson.resolve.jetbrains.annotation;
 
+import com.intellij.execution.util.EnvironmentVariable;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.ExternalAnnotator;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.util.io.FileSystemUtil;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
 import com.intellij.psi.PsiFile;
+import com.intellij.util.EnvironmentUtil;
 import edu.clemson.resolve.RESOLVECompiler;
 import edu.clemson.resolve.compiler.AnnotatedModule;
 import edu.clemson.resolve.compiler.CompilerMessage;
 import edu.clemson.resolve.compiler.LanguageSemanticsMessage;
 import edu.clemson.resolve.compiler.RESOLVEMessage;
 import edu.clemson.resolve.jetbrains.actions.RunRESOLVEOnLanguageFile;
+import edu.clemson.resolve.jetbrains.sdk.RESOLVESdkService;
 import org.antlr.v4.Tool;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonToken;
@@ -63,9 +72,8 @@ public class RESOLVEExternalAnnotator extends ExternalAnnotator<PsiFile, List<RE
         LOG.info("doAnnotate " + grammarFileName);
         String fileContents = file.getText();
         Map<String, String> argMap = new LinkedHashMap<>();
-        argMap.put("-lib", RunRESOLVEOnLanguageFile
-                .getContentRoot(file.getProject(), file.getVirtualFile())
-                .getPath());
+
+        argMap.put("-lib", RunRESOLVEOnLanguageFile.getContentRoot(file.getProject(), file.getVirtualFile()).getPath());
         List<String> args = RunRESOLVEOnLanguageFile.getRESOLVEArgsAsList(argMap);
         String fileName = file.getName();
         args.add(0, fileName);

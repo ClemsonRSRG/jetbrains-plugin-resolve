@@ -28,7 +28,7 @@
         </context>
     </template>
 
-    <template description='Concept implementation module declaration' name='Concept Implementation' toReformat='true' toShortenFQNames='true'
+    <template description='Concept implementation' name='Implementation' toReformat='true' toShortenFQNames='true'
               value='Implementation $NAME$ for $CONCEPT$;&#10;    $END$&#10;end $NAME$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
         <variable alwaysStopAt='true' defaultValue='&quot;concept&quot;' expression='' name='CONCEPT'/>
@@ -37,7 +37,7 @@
         </context>
     </template>
 
-    <template description='Concept extension implementation module declaration' name='Implementation' toReformat='true' toShortenFQNames='true'
+    <template description='Concept extension implementation' name='Implementation (concept ext)' toReformat='true' toShortenFQNames='true'
               value='Implementation $NAME$ for $EXTENSION$ of $CONCEPT$;&#10;    $END$&#10;end $NAME$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
         <variable alwaysStopAt='true' defaultValue='&quot;extension&quot;' expression='' name='EXTENSION'/>
@@ -177,6 +177,14 @@
 
     <template description='≤ᵤ' name='lequ' toReformat='true' toShortenFQNames='true'
               value='≤ᵤ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⨩' name='uminus' toReformat='true' toShortenFQNames='true'
+              value='⨩'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
             <option name='RESOLVE_MATH_DEF' value='true'/>

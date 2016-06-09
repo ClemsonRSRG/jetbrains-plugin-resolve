@@ -159,9 +159,9 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
     private static Capture<PsiElement> usesPattern() {
         return onKeywordStartWithParent(psiElement(ResBlock.class)
                 .withParent(ResModuleDecl.class)
-                .andOr(psiElement().isFirstAcceptedChild(psiElement())));/*,
-                        psiElement().afterSibling(psiElement(ResModuleSpec.class)),
-                        psiElement().afterSibling(psiElement(ResModuleParameters.class))));*/
+                .andOr(psiElement().isFirstAcceptedChild(psiElement()),
+                        psiElement().afterSibling(psiElement(ResModuleIdentifierSpec.class)),
+                        psiElement().afterSibling(psiElement(ResModuleParameters.class))));
     }
 
     private static <T extends ResCompositeElement> Capture<PsiElement> keywordAfterSiblings(
