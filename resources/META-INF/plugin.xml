@@ -5,16 +5,10 @@
     <vendor email="dtw.welch@gmail.com" url="https://github.com/Welchd1/jetbrains-plugin-resolve">RESOLVE Project</vendor>
 
     <description><![CDATA[
-        <p>
-        This plugin is designed to provide Intellij support for the RESOLVE
-        specification and programming language. Currently supported features
-        inclue: syntax highlighting, limited completion for keywords & refs,
-        goto-declaration, and symbol usage search.
+        Provides support for the RESOLVE specification and programming language.
     ]]></description>
 
     <change-notes><![CDATA[
-        Add change notes here.<br>
-        <em>most HTML tags may be used</em>
         ]]>
     </change-notes>
 
@@ -48,13 +42,22 @@
         <projectService serviceImplementation="edu.clemson.resolve.jetbrains.project.RESOLVEProjectLibrariesService"/>
         <moduleService serviceImplementation="edu.clemson.resolve.jetbrains.project.RESOLVEModuleLibrariesService"/>
 
-        <!-- sdk -->
-        <applicationService serviceImplementation="edu.clemson.resolve.jetbrains.sdk.RESOLVEEnvironmentRESOLVE_PATHModificationTracker"/>
+        <!-- formatter -->
+            <!-- **format exts go here** -->
 
+        <!-- sdk -->
         <sdkType implementation="edu.clemson.resolve.jetbrains.sdk.RESOLVESdkType"/>
+        <applicationService serviceImplementation="edu.clemson.resolve.jetbrains.sdk.RESOLVEEnvironmentRESOLVE_PATHModificationTracker"/>
         <projectService serviceInterface="edu.clemson.resolve.jetbrains.sdk.RESOLVESdkService" serviceImplementation="edu.clemson.resolve.jetbrains.sdk.RESOLVESmallSdkService"
                         overrides="false"/>
         <library.presentationProvider implementation="edu.clemson.resolve.jetbrains.sdk.RESOLVESdkLibraryPresentationProvider"/>
+        <!--<editorNotificationProvider implementation="edu.clemson.resolve.jetbrains.inspections.WrongSdkConfigurationNotificationProvider"/>-->
+        <!--<editorNotificationProvider implementation="edu.clemson.resolve.jetbrains.inspections.RESOLVEFileIgnoredByBuildToolNotificationProvider"/>-->
+        <!--<stepsBeforeRunProvider implementation="edu.clemson.resolve.jetbrains.runconfig.before.RESOLVEBeforeRunTaskProvider"/>-->
+
+        <!-- run single file (prog) -->
+        <configurationType implementation="edu.clemson.resolve.jetbrains.runconfig.program.RESOLVEProgramRunConfigurationType"/>
+        <runConfigurationProducer implementation="edu.clemson.resolve.jetbrains.runconfig.program.RESOLVEProgramRunConfigurationProducer"/>
 
         <directoryProjectGenerator implementation="edu.clemson.resolve.jetbrains.RESOLVEProjectGenerator"/> <!-- for small IDEs-->
 
@@ -68,11 +71,8 @@
                                       implementationClass="edu.clemson.resolve.jetbrains.editor.RESOLVEStructureViewFactory"/>
         <externalAnnotator language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.annotation.RESOLVEExternalAnnotator"/>
 
-
-        <!-- run single file -->
-        <configurationType implementation="edu.clemson.resolve.jetbrains.runconfig.program.RESOLVEProgramRunConfigurationType"/>
-        <runConfigurationProducer implementation="edu.clemson.resolve.jetbrains.runconfig.program.RESOLVEProgramRunConfigurationProducer"/>
-
+        <!-- color schemes -->
+        <!--<bundledColorScheme path="colorscheme/GithubStyle - dtwelch"/>-->
     </extensions>
 
     <application-components>
@@ -86,10 +86,10 @@
     </project-components>
 
     <actions>
-       <!-- <action id="resolve.NewRESOLVEFile" class="edu.clemson.resolve.jetbrains.actions.RESOLVECreateFileAction"
-                text="RESOLVE File" description="Create new RESOLVE file">
+        <action id="resolve.NewRESOLVEFile" class="edu.clemson.resolve.jetbrains.actions.RESOLVECreateFileAction"
+                text="RESOLVE File" description="Create a new RESOLVE file">
             <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
-        </action>-->
+        </action>
         <action id="resolve.GenVCs" class="edu.clemson.resolve.jetbrains.actions.GenerateVCsAction"
                 text="RESOLVE Generate VCs">
             <keyboard-shortcut keymap="$default" first-keystroke="control shift H"/>

@@ -21,11 +21,10 @@ import java.util.Map;
 public class RESOLVECreateFileAction extends CreateFileFromTemplateAction implements DumbAware {
 
     public static final String FILE_TEMPLATE = "RESOLVE File";
-
-    private static final String NEW_RESOLVE_FILE = "New RESOLVE File";
+    public static final String NEW_RESOLVE_FILE = "New RESOLVE File";
 
     public RESOLVECreateFileAction() {
-        super(NEW_RESOLVE_FILE, "", RESOLVEIcons.MODULE);
+        super(NEW_RESOLVE_FILE, "", RESOLVEIcons.FILE);
     }
 
     @Override
