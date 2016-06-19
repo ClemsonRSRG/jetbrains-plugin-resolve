@@ -57,7 +57,6 @@ public class RESOLVEProgramRunningState extends CommandLineState {
 
         if (!successfullyGeneratedJava) {
             ProcessHandler p = new KillableColoredProcessHandler(new GeneralCommandLine());
-
             //hmm, not sure about the line below..
             RESOLVEPluginController.getInstance(project).console.attachToProcess(p);
             return p;
@@ -65,7 +64,9 @@ public class RESOLVEProgramRunningState extends CommandLineState {
 
         //Compile Java to bytecode and store in /out/ directory
         ProcessHandler javac = compileGeneratedJava(project, classPath, outputPath, filePath);
-        if (javac != null) return javac;
+        if (javac != null) {
+            return javac;
+        }
 
         //Execute bytecode
         final KillableColoredProcessHandler processHandler = new KillableColoredProcessHandler(new GeneralCommandLine(
@@ -116,29 +117,28 @@ public class RESOLVEProgramRunningState extends CommandLineState {
         File newOutputDir = getOuputDirForFile(project, outputPath, filePath);
         final File[] fileList = newOutputDir.listFiles();
         if (fileList == null || fileList.length == 0) {
-            return echo("Filelist could not be compiled");
+            return new KillableColoredProcessHandler(new GeneralCommandLine(
+                    "echo",
+                    "filelist could not be compiled, make sure .java files are being written to out/ directory"
+            ));
         }
 
         for (File file : fileList) {
-            if (file.getAbsolutePath().endsWith(".java"))
+            if (file.getAbsolutePath().endsWith(".java")) {
                 fileNames.add(file.getAbsolutePath());
+            }
         }
         for (String file : fileNames) {
-            boolean status = com.sun.tools.javac.Main.compile(
-                    new String[]{"-cp", effectiveClassPath, "-d", baseOutFile.getPath(), file}) == 0;
-            if (!status) {
-                return echo("compilation failed");
+            KillableColoredProcessHandler kcp = new KillableColoredProcessHandler(
+                    new GeneralCommandLine("javac", "-cp", effectiveClassPath, "-d", baseOutFile.getPath(), file));
+            try {
+                if (kcp.getProcess().waitFor() > 0) {
+                    return kcp;
+                }
+            } catch (InterruptedException e) {
+                return null;
             }
         }
         return null;
     }
-
-    @NotNull
-    private KillableColoredProcessHandler echo(String message) throws ExecutionException {
-        return new KillableColoredProcessHandler(new GeneralCommandLine(
-                "echo",
-                message
-        ));
-    }
-
 }

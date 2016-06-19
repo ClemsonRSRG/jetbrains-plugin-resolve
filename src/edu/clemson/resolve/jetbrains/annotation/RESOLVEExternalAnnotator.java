@@ -86,7 +86,7 @@ public class RESOLVEExternalAnnotator extends ExternalAnnotator<PsiFile, List<RE
             ApplicationManager.getApplication().runReadAction(new Runnable() {
                 @Override
                 public void run() {
-                    resolve.workingDirectory = file.getVirtualFile().getParent().getCanonicalPath();
+                    resolve.libDirectory = file.getVirtualFile().getParent().getCanonicalPath();
                 }
             });
         }
