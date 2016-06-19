@@ -58,6 +58,7 @@
         <!-- run single file (prog) -->
         <configurationType implementation="edu.clemson.resolve.jetbrains.runconfig.program.RESOLVEProgramRunConfigurationType"/>
         <runConfigurationProducer implementation="edu.clemson.resolve.jetbrains.runconfig.program.RESOLVEProgramRunConfigurationProducer"/>
+        <programRunner id="resolveRunner" implementation="edu.clemson.resolve.jetbrains.runconfig.RESOLVERunner"/>
 
         <directoryProjectGenerator implementation="edu.clemson.resolve.jetbrains.RESOLVEProjectGenerator"/> <!-- for small IDEs-->
 

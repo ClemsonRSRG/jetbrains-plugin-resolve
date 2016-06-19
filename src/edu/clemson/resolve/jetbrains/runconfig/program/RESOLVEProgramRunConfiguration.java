@@ -36,7 +36,7 @@ import java.util.Collection;
 
 public class RESOLVEProgramRunConfiguration extends ModuleBasedConfiguration<RESOLVEModuleBasedConfiguration>
         implements
-        RunConfigurationWithSuppressedDefaultDebugAction {
+        RunConfigurationWithSuppressedDefaultDebugAction, RunConfigurationWithSuppressedDefaultRunAction {
 
     private static final String FILE_PATH_ATTRIBUTE_NAME = "filePath";
     private static final String WORKING_DIRECTORY_NAME = "working_directory";

@@ -17,8 +17,8 @@ public class RESOLVEProgramRunConfigurationProducer
         extends
         RunConfigurationProducer<RESOLVEProgramRunConfiguration> implements Cloneable {
 
-    protected RESOLVEProgramRunConfigurationProducer(@NotNull ConfigurationType configurationType) {
-        super(configurationType);
+    protected RESOLVEProgramRunConfigurationProducer() {
+        super(RESOLVEProgramRunConfigurationType.getInstance());
     }
 
     @Override
