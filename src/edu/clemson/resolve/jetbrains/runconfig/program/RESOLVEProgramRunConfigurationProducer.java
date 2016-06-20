@@ -40,7 +40,7 @@ public class RESOLVEProgramRunConfigurationProducer
 
     @NotNull
     protected String getConfigurationName(@NotNull PsiFile file) {
-        return "RESOLVE run " + file.getName();
+        return "RESOLVE " + file.getName();
     }
 
     @Override

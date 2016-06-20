@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public class RESOLVEProgramRunConfigurationType extends ConfigurationTypeBase {
 
     public RESOLVEProgramRunConfigurationType() {
-        super("RESOLVERunConfiguration", "RESOLVE Single Program", "RESOLVE single program run configuration",
+        super("RESOLVERunConfiguration", "RESOLVE Program", "RESOLVE program run configuration",
                 RESOLVEIcons.PROGRAM_RUN);
         addFactory(new ConfigurationFactory(this) {
             @Override

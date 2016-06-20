@@ -44,15 +44,13 @@ public class RESOLVEProgramRunningState extends CommandLineState {
     @NotNull
     @Override
     protected ProcessHandler startProcess() throws ExecutionException {
-        System.out.println("StartProcess");
-
         final Project project = configuration.getProject();
         String filePath = configuration.getFilePath();
         String outputPath = project.getBasePath() + File.separator + "out";
         String classPath = RESOLVESdkService.getInstance(project).getSdkCompilerJarPath(module) + ":" + outputPath;
         String className = getClassName(project, filePath);
 
-        //Cross compile from RESOLVE to java
+        //cross compile from RESOLVE to java
         boolean successfullyGeneratedJava = generateAndWriteJava(project, filePath, outputPath);
 
         if (!successfullyGeneratedJava) {
