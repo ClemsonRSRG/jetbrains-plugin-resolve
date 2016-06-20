@@ -265,19 +265,25 @@ FacilityBlock
 
 // uses, imports
 
-UsesList ::= 'uses' (UsesSpecGroup | '(' UsesSpecGroup+ ')' ';' )
+UsesList ::= 'uses' (UsesSpecs | '(' UsesSpecs ')') ';'  {pin(".*")=1}
+private UsesSpecs ::= ModuleIdentifierSpec (',' ModuleIdentifierSpec)* {pin(".*")=1}
 
-UsesSpecGroup ::= ModuleIdentSpecList ('from' ModuleLibraryIdentifierSpec
-            /*'as' alias clause goes here here eventually*/ )? ';' {
-    pin=1 methods=[getFromModuleLibraryIdentifier /*TODO: getAlias()*/]
+ModuleIdentifierSpec ::= identifier [FromClause] {pin=1 methods=[getReferences getModuleIdentiferTextRange resolve]}
+
+private FromClause ::= 'from' ModuleLibraryIdentifierSpec {pin=1}
+ModuleLibraryIdentifierSpec ::= identifier ('.' identifier)* {pin(".*")=1 methods=[getReferences getModuleLibraryIdentiferTextRange resolve] }
+
+/*
+UsesSpec ::= ModuleIdentifierSpec FromClause? {
+    pin=1 methods=[getFromModuleLibraryIdentifier ]
 }
-private ModuleIdentSpecList ::=  ModuleIdentifierSpec (',' ModuleIdentifierSpec)* {recoverWhile=ModuleIdentSpecListRec }
-private ModuleIdentSpecListRec ::= !(';'|')'|'from'|'end')
+private FromClause ::= 'from' ModuleLibraryIdentifierSpec?
+private UsesSpecList ::=  (UsesSpec (',' UsesSpec)* | '(' UsesSpec (',' UsesSpec)* ')'){recoverWhile=ModuleIdentSpecListRec}
+private ModuleIdentSpecListRec ::= !(';')
 
-ModuleIdentifierSpec ::= identifier {methods=[getReferences getModuleIdentiferTextRange resolve]}
-
-ModuleLibraryIdentifierSpec ::= identifier /*('.' identifier)**/ {methods=[getReferences getModuleLibraryIdentiferTextRange resolve]}
-
+ModuleIdentifierSpec ::= identifier {pin=1 methods=[getReferences getModuleIdentiferTextRange resolve]}
+ModuleLibraryIdentifierSpec ::= identifier ('.' identifier)* {methods=[getReferences getModuleLibraryIdentiferTextRange resolve]}
+*/
 // Module blocks & items
 
 PrecisBlock ::= PrecisItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
