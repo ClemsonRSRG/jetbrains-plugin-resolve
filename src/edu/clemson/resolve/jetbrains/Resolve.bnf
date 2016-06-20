@@ -268,9 +268,12 @@ FacilityBlock
 UsesList ::= 'uses' (UsesSpecs | '(' UsesSpecs ')') ';'  {pin(".*")=1}
 private UsesSpecs ::= ModuleIdentifierSpec (',' ModuleIdentifierSpec)* {pin(".*")=1}
 
-ModuleIdentifierSpec ::= identifier [FromClause] {pin=1 methods=[getReferences getModuleIdentiferTextRange resolve]}
+ModuleIdentifierSpec ::= ModuleIdentifier [FromClause] [asClause] {pin=1}
+ModuleIdentifier ::= identifier {pin=1 methods=[getReferences getModuleIdentiferTextRange resolve]}
 
 private FromClause ::= 'from' ModuleLibraryIdentifierSpec {pin=1}
+private asClause ::= 'as' identifier {pin=1}
+
 ModuleLibraryIdentifierSpec ::= identifier ('.' identifier)* {pin(".*")=1 methods=[getReferences getModuleLibraryIdentiferTextRange resolve] }
 
 /*
