@@ -8,6 +8,7 @@ import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.jetbrains.completion.RESOLVECompletionUtil;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -28,14 +29,19 @@ class ResModuleLibraryReference extends FileReference {
         String referenceText = getText();
         Set<ResolveResult> result = ContainerUtil.newLinkedHashSet();
         Set<ResolveResult> innerResult = ContainerUtil.newLinkedHashSet();
+        Collection<PsiFileSystemItem> ctxs = getContexts();
         for (PsiFileSystemItem context : getContexts()) {
             innerResolveInContext(referenceText, context, innerResult, caseSensitive);
             for (ResolveResult resolveResult : innerResult) {
                 PsiElement element = resolveResult.getElement();
                 if (element instanceof PsiDirectory) {
+                    if (isLast()) { //TODO: hmm..
+                        return new ResolveResult[]{resolveResult};
+                    }
                     result.add(resolveResult);
                 }
             }
+            innerResult.clear();
         }
         return result.isEmpty() ? ResolveResult.EMPTY_ARRAY : result.toArray(new ResolveResult[result.size()]);
     }

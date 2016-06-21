@@ -8,7 +8,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.jetbrains.RESOLVELanguage;
 import edu.clemson.resolve.jetbrains.psi.ResFile;
-import edu.clemson.resolve.jetbrains.psi.ResUsesSpecGroup;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

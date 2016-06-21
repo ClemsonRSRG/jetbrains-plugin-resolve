@@ -15,7 +15,7 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.jetbrains.psi.ResFile;
-import edu.clemson.resolve.jetbrains.psi.ResModuleLibraryIdentifierSpec;
+import edu.clemson.resolve.jetbrains.psi.ResModuleLibraryIdentifier;
 import edu.clemson.resolve.jetbrains.sdk.RESOLVESdkUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,7 +26,7 @@ import java.util.LinkedHashSet;
 
 public class ResModuleLibraryReferenceSet extends FileReferenceSet {
 
-    public ResModuleLibraryReferenceSet(@NotNull ResModuleLibraryIdentifierSpec libraryIdentifier) {
+    public ResModuleLibraryReferenceSet(@NotNull ResModuleLibraryIdentifier libraryIdentifier) {
         super(libraryIdentifier.getText(), libraryIdentifier,
                 libraryIdentifier.getModuleLibraryIdentiferTextRange().getStartOffset(), null, true);
     }
@@ -35,26 +35,22 @@ public class ResModuleLibraryReferenceSet extends FileReferenceSet {
     @Override
     public Collection<PsiFileSystemItem> computeDefaultContexts() {
         PsiFile file = getContainingFile();
-        if (file == null || !file.isValid() || isAbsolutePathReference()) return Collections.emptyList();
+        if (file == null || !file.isValid() || isAbsolutePathReference()) {
+            return Collections.emptyList();
+        }
 
         final PsiManager psiManager = file.getManager();
         Module module = ModuleUtilCore.findModuleForPsiElement(file);
         Project project = file.getProject();
-
-        //gets the root of the resolve path directory, now all subdirs of this represent "from-importable" libraries.
-        Collection<VirtualFile> pathLibrarySrcs = RESOLVESdkUtil.getRESOLVEPathSources(project, module);
-
-        //now I add them + their one level deep interior files into a fresh set
-        //technically we don't need to add the base resolvework/src/ dir..
-        LinkedHashSet<VirtualFile> pathPlusProjectRoots = new LinkedHashSet<>(pathLibrarySrcs);
-
-        for (VirtualFile u : pathPlusProjectRoots) {
-            for (VirtualFile v : u.getChildren()) {
-                if (v.isDirectory()) pathPlusProjectRoots.add(v);
-            }
-        }
+        LinkedHashSet<VirtualFile> sourceRoots = RESOLVESdkUtil.getSourcesPathsToLookup(project, module);
         //all this does is transform each VirtualFile (which better be directory--see above loop) into PsiDirectory
-        return ContainerUtil.mapNotNull(pathPlusProjectRoots, psiManager::findDirectory);
+        return ContainerUtil.mapNotNull(sourceRoots, psiManager::findDirectory);
+    }
+
+    @Nullable
+    @Override
+    public PsiFileSystemItem resolve() {
+        return super.resolve();
     }
 
     @Override
@@ -62,15 +58,9 @@ public class ResModuleLibraryReferenceSet extends FileReferenceSet {
         return DIRECTORY_FILTER;
     }
 
-    @Nullable
     @Override
-    public PsiFileSystemItem resolve() {
-        return isAbsolutePathReference() ? null : super.resolve();
+    public boolean absoluteUrlNeedsStartSlash() {
+        return false;
     }
 
-    @NotNull
-    @Override
-    public FileReference createFileReference(TextRange range, int index, String text) {
-        return new ResModuleLibraryReference(this, range, index, text);
-    }
 }

@@ -91,8 +91,9 @@ public interface ResTypes {
   IElementType MATH_VAR_DECL_GROUP = new ResCompositeElementType("MATH_VAR_DECL_GROUP");
   IElementType MATH_VAR_DEF = new ResCompositeElementType("MATH_VAR_DEF");
   IElementType MODULE_ARG_LIST = new ResCompositeElementType("MODULE_ARG_LIST");
+  IElementType MODULE_IDENTIFIER = new ResCompositeElementType("MODULE_IDENTIFIER");
   IElementType MODULE_IDENTIFIER_SPEC = new ResCompositeElementType("MODULE_IDENTIFIER_SPEC");
-  IElementType MODULE_LIBRARY_IDENTIFIER_SPEC = new ResCompositeElementType("MODULE_LIBRARY_IDENTIFIER_SPEC");
+  IElementType MODULE_LIBRARY_IDENTIFIER = new ResCompositeElementType("MODULE_LIBRARY_IDENTIFIER");
   IElementType MUL_INFIX_EXP = new ResCompositeElementType("MUL_INFIX_EXP");
   IElementType OPERATION_DECL = new ResCompositeElementType("OPERATION_DECL");
   IElementType OPERATION_PROCEDURE_DECL = new ResCompositeElementType("OPERATION_PROCEDURE_DECL");
@@ -125,7 +126,6 @@ public interface ResTypes {
   IElementType TYPE_REPR_DECL = new ResCompositeElementType("TYPE_REPR_DECL");
   IElementType UNARY_EXP = new ResCompositeElementType("UNARY_EXP");
   IElementType USES_LIST = new ResCompositeElementType("USES_LIST");
-  IElementType USES_SPEC_GROUP = new ResCompositeElementType("USES_SPEC_GROUP");
   IElementType VAR_DECL_GROUP = new ResCompositeElementType("VAR_DECL_GROUP");
   IElementType VAR_DEF = new ResCompositeElementType("VAR_DEF");
   IElementType VAR_SPEC = new ResCompositeElementType("VAR_SPEC");
@@ -526,11 +526,14 @@ public interface ResTypes {
       else if (type == MODULE_ARG_LIST) {
         return new ResModuleArgListImpl(node);
       }
+      else if (type == MODULE_IDENTIFIER) {
+        return new ResModuleIdentifierImpl(node);
+      }
       else if (type == MODULE_IDENTIFIER_SPEC) {
         return new ResModuleIdentifierSpecImpl(node);
       }
-      else if (type == MODULE_LIBRARY_IDENTIFIER_SPEC) {
-        return new ResModuleLibraryIdentifierSpecImpl(node);
+      else if (type == MODULE_LIBRARY_IDENTIFIER) {
+        return new ResModuleLibraryIdentifierImpl(node);
       }
       else if (type == MUL_INFIX_EXP) {
         return new ResMulInfixExpImpl(node);
@@ -627,9 +630,6 @@ public interface ResTypes {
       }
       else if (type == USES_LIST) {
         return new ResUsesListImpl(node);
-      }
-      else if (type == USES_SPEC_GROUP) {
-        return new ResUsesSpecGroupImpl(node);
       }
       else if (type == VAR_DECL_GROUP) {
         return new ResVarDeclGroupImpl(node);

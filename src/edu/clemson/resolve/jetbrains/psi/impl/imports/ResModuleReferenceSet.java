@@ -16,13 +16,12 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.jetbrains.RESOLVEFileType;
 import edu.clemson.resolve.jetbrains.psi.ResFile;
-import edu.clemson.resolve.jetbrains.psi.ResModuleIdentifierSpec;
-import edu.clemson.resolve.jetbrains.psi.ResModuleLibraryIdentifierSpec;
-import edu.clemson.resolve.jetbrains.psi.ResUsesSpecGroup;
+import edu.clemson.resolve.jetbrains.psi.ResModuleIdentifier;
 import edu.clemson.resolve.jetbrains.sdk.RESOLVESdkUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -54,7 +53,7 @@ public class ResModuleReferenceSet extends FileReferenceSet {
      */
     private static final Condition<PsiFileSystemItem> RES_FILE_FILTER = e -> e instanceof ResFile;
 
-    public ResModuleReferenceSet(@NotNull ResModuleIdentifierSpec moduleIdentifier) {
+    public ResModuleReferenceSet(@NotNull ResModuleIdentifier moduleIdentifier) {
         super(moduleIdentifier.getText(), moduleIdentifier,
                 moduleIdentifier.getModuleIdentiferTextRange().getStartOffset(), null, true);
     }
@@ -64,7 +63,7 @@ public class ResModuleReferenceSet extends FileReferenceSet {
     @Override
     public Collection<PsiFileSystemItem> computeDefaultContexts() {
         PsiFile file = getContainingFile();
-        if (file == null || !file.isValid() || isAbsolutePathReference()) {
+    /*    if (file == null || !file.isValid() || isAbsolutePathReference()) {
             return Collections.emptyList();
         }
 
@@ -93,7 +92,8 @@ public class ResModuleReferenceSet extends FileReferenceSet {
             //now do the curr proj.
             if (module != null) addContexts(sourceRoots, module.getModuleFile());
         }
-        return ContainerUtil.mapNotNull(sourceRoots, psiManager::findDirectory);
+        return ContainerUtil.mapNotNull(sourceRoots, psiManager::findDirectory);*/
+        return new ArrayList<>();
     }
 
     /**

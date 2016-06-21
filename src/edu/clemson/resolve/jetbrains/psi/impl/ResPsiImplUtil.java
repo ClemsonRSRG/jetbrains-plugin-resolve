@@ -35,21 +35,21 @@ import org.jetbrains.annotations.Nullable;
 public class ResPsiImplUtil {
 
     @NotNull
-    public static TextRange getModuleIdentiferTextRange(@NotNull ResModuleIdentifierSpec moduleIdentifier) {
+    public static TextRange getModuleIdentiferTextRange(@NotNull ResModuleIdentifier moduleIdentifier) {
         String text = moduleIdentifier.getText();
         return !text.isEmpty() ? TextRange.create(0, text.length() - 1) : TextRange.EMPTY_RANGE;
     }
 
     @NotNull
-    public static TextRange getModuleLibraryIdentiferTextRange(@NotNull ResModuleLibraryIdentifierSpec libraryIdentifier) {
+    public static TextRange getModuleLibraryIdentiferTextRange(@NotNull ResModuleLibraryIdentifier libraryIdentifier) {
         String text = libraryIdentifier.getText();
         return !text.isEmpty() ? TextRange.create(0, text.length() - 1) : TextRange.EMPTY_RANGE;
     }
 
-    @Nullable
-    public static ResModuleLibraryIdentifierSpec getFromModuleLibraryIdentifier(@NotNull ResUsesSpecGroup o) {
-        return o.getModuleLibraryIdentifierSpec();
-    }
+   // @Nullable
+   // public static ResModuleLibraryIdentifierSpec getFromModuleLibraryIdentifier(@NotNull ResUsesSpecGroup o) {
+   //     return o.getModuleLibraryIdentifierSpec();
+   // }
 
     /**
      * Note that we don't extend {@link PsiPolyVariantReference} for module references (like we do for
@@ -85,14 +85,14 @@ public class ResPsiImplUtil {
     }
 
     @NotNull
-    public static PsiReference[] getReferences(@NotNull ResModuleIdentifierSpec o) {
+    public static PsiReference[] getReferences(@NotNull ResModuleIdentifier o) {
         if (o.getTextLength() < 1) return PsiReference.EMPTY_ARRAY;
         return new ResModuleReferenceSet(o).getAllReferences();
     }
 
     @NotNull
-    public static PsiReference[] getReferences(@NotNull ResModuleLibraryIdentifierSpec o) {
-        if (o.getTextLength() < 1) return PsiReference.EMPTY_ARRAY;
+    public static PsiReference[] getReferences(@NotNull ResModuleLibraryIdentifier o) {
+        if (o.getTextLength() < 2) return PsiReference.EMPTY_ARRAY;
         return new ResModuleLibraryReferenceSet(o).getAllReferences();
     }
 
@@ -128,12 +128,12 @@ public class ResPsiImplUtil {
     }
 
     @Nullable
-    public static PsiElement resolve(@NotNull ResModuleIdentifierSpec moduleIdentifier) {
+    public static PsiElement resolve(@NotNull ResModuleIdentifier moduleIdentifier) {
         return resolveModuleOrLibraryIdentifier(moduleIdentifier.getReferences(), e -> e instanceof ResFile);
     }
 
     @Nullable
-    public static PsiElement resolve(@NotNull ResModuleLibraryIdentifierSpec libraryIdentifier) {
+    public static PsiElement resolve(@NotNull ResModuleLibraryIdentifier libraryIdentifier) {
         return resolveModuleOrLibraryIdentifier(libraryIdentifier.getReferences(), e -> e instanceof PsiDirectory);
     }
 

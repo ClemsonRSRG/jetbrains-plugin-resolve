@@ -251,7 +251,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                                                           @NotNull ResScopeProcessor processor,
                                                           @NotNull ResolveState state,
                                                           boolean forModuleNameRefs) {
-        List<ResUsesSpecGroup> groups = file.getUsesSpecGroups();
+        /*List<ResUsesSpecGroup> groups = file.getUsesSpecGroups();
         for (ResUsesSpecGroup group : groups) {
             for (ResModuleIdentifierSpec o : group.getModuleIdentifierSpecList()) {
                 PsiElement resolvedFile = o.resolve();
@@ -263,7 +263,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                     processModuleLevelEntities((ResFile) resolvedFile, processor, state, false, false);
                 }
             }
-        }
+        }*/
         return true;
     }
 

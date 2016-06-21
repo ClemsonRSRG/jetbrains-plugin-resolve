@@ -50,9 +50,9 @@ public abstract class ResAbstractModuleImpl extends ResNamedElementImpl implemen
 
     @NotNull
     @Override
-    public List<ResUsesSpecGroup> getUsesSpecGroups() {
-        return getUsesList() != null ? getUsesList().getUsesSpecGroupList() :
-                ContainerUtil.<ResUsesSpecGroup>newArrayList();
+    public List<ResModuleIdentifierSpec> getModuleIdentifierSpecs() {
+        return getUsesList() != null ? getUsesList().getModuleIdentifierSpecList() :
+                ContainerUtil.<ResModuleIdentifierSpec>newArrayList();
     }
 
     @Nullable
