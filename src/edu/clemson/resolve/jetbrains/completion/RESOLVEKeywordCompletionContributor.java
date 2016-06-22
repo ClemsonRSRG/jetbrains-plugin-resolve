@@ -13,6 +13,14 @@ import edu.clemson.resolve.jetbrains.psi.*;
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
 //TODO: requires and ensures keyword completions would certainly be nice..
+
+//NOTE: do a completion here (builtin) if its template can be referenced in one name. For example, Type Family is
+//two names -- and you can't just use "Type" since there are technically type families and type representations and
+//the IDs for the builtin "resolveHidden.xml" templates get all mixed up. So in general, the rule goes to put the
+//bigger, scoped templates into "resolve.xml" (making them user configurable via the live templates dialog in settings)
+//vs those that appear here which are intended to be simple, one liners, requires, ensures, etc. Patterns for these
+//are inherently a little trickier. This is why this class is called KeywordCompletion.. TypeFamily isn't technically
+//a valid keyword, whereas "requires", "ensures", etc are.
 public class RESOLVEKeywordCompletionContributor extends CompletionContributor implements DumbAware {
 
     public RESOLVEKeywordCompletionContributor() {
@@ -20,25 +28,23 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
         extend(CompletionType.BASIC, usesPattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "uses"));
-/*
-        extend(CompletionType.BASIC, facilityModulePattern(),
-                new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                        "OperationProcedure", "TypeRepresentation",
-                        "FacilityDeclaration", "Definition", "Implicit"));
 
-        extend(CompletionType.BASIC, precisModulePattern(),
+        extend(CompletionType.BASIC, modulePattern(ResFacilityModuleDecl.class, ResFacilityBlock.class),
+                new RESOLVEKeywordCompletionProvider(
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Definition", "Implicit"));
+
+        extend(CompletionType.BASIC, modulePattern(ResPrecisModuleDecl.class, ResPrecisBlock.class),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
                         "Implicit", "Definition", "Theorem", "Corollary",
                         "Inductive", "Categorical"));
 
-        extend(CompletionType.BASIC, precisExtModulePattern(),
+        extend(CompletionType.BASIC, modulePattern(ResPrecisExtensionModuleDecl.class, ResPrecisBlock.class),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
                         "Implicit", "Definition", "Theorem", "Corollary",
                         "Inductive"));
-
+/*
         extend(CompletionType.BASIC, modulePattern(ResImplModuleDecl.class, ResImplBlock.class),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
