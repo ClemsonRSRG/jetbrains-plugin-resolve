@@ -47,10 +47,10 @@ public class ResModuleLibraryReferenceSet extends FileReferenceSet {
         return ContainerUtil.mapNotNull(sourceRoots, psiManager::findDirectory);
     }
 
-    @Nullable
+    @NotNull
     @Override
-    public PsiFileSystemItem resolve() {
-        return super.resolve();
+    public FileReference createFileReference(TextRange range, int index, String text) {
+        return new ResModuleLibraryReference(this, range, index, text);
     }
 
     @Override
@@ -59,8 +59,9 @@ public class ResModuleLibraryReferenceSet extends FileReferenceSet {
     }
 
     @Override
-    public boolean absoluteUrlNeedsStartSlash() {
-        return false;
+    public String getSeparatorString() {
+        return ".";
     }
+
 
 }
