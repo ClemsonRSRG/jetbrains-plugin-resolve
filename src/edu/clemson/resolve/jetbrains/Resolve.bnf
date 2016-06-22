@@ -269,7 +269,7 @@ FacilityBlock
 UsesList ::= 'uses' (UsesSpecs | '(' UsesSpecs ')') ';'  {pin(".*")=1}
 private UsesSpecs ::= ModuleIdentifierSpec (',' ModuleIdentifierSpec)* {pin(".*")=1}
 
-ModuleIdentifierSpec ::= ModuleIdentifier [FromClause] [asClause] {pin=1 /*methods=[getAlias getFrom]*/}
+ModuleIdentifierSpec ::= ModuleIdentifier [FromClause] [asClause] {pin=1 methods=[getFromLibraryIdentifier getAlias]}
 
 private FromClause ::= 'from' ModuleLibraryIdentifier {pin=1}
 private asClause ::= 'as' identifier {pin=1}

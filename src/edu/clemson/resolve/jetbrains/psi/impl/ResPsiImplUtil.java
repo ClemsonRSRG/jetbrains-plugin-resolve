@@ -34,6 +34,17 @@ import org.jetbrains.annotations.Nullable;
  */
 public class ResPsiImplUtil {
 
+    @Nullable
+    public static ResModuleLibraryIdentifier getFromLibraryIdentifier(
+            @NotNull ResModuleIdentifierSpec moduleIdentifierSpec) {
+        return moduleIdentifierSpec.getModuleLibraryIdentifier();
+    }
+
+    @Nullable
+    public static PsiElement getAlias(@NotNull ResModuleIdentifierSpec moduleIdentifierSpec) {
+        return moduleIdentifierSpec.getIdentifier();
+    }
+
     @NotNull
     public static TextRange getModuleIdentiferTextRange(@NotNull ResModuleIdentifier moduleIdentifier) {
         String text = moduleIdentifier.getText();

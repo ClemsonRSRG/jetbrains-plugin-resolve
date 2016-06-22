@@ -17,6 +17,8 @@ import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.jetbrains.RESOLVEFileType;
 import edu.clemson.resolve.jetbrains.psi.ResFile;
 import edu.clemson.resolve.jetbrains.psi.ResModuleIdentifier;
+import edu.clemson.resolve.jetbrains.psi.ResModuleIdentifierSpec;
+import edu.clemson.resolve.jetbrains.psi.ResModuleLibraryIdentifier;
 import edu.clemson.resolve.jetbrains.sdk.RESOLVESdkUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -63,7 +65,7 @@ public class ResModuleReferenceSet extends FileReferenceSet {
     @Override
     public Collection<PsiFileSystemItem> computeDefaultContexts() {
         PsiFile file = getContainingFile();
-    /*    if (file == null || !file.isValid() || isAbsolutePathReference()) {
+        if (file == null || !file.isValid() || isAbsolutePathReference()) {
             return Collections.emptyList();
         }
 
@@ -75,10 +77,10 @@ public class ResModuleReferenceSet extends FileReferenceSet {
 
         PsiElement e = getElement();
         //handle the 'from' clause..
-        if (e.getParent() instanceof ResUsesSpecGroup &&
-                ((ResUsesSpecGroup) e.getParent()).getFromModuleLibraryIdentifier() != null) {
-            ResModuleLibraryIdentifierSpec desiredLib =
-                    ((ResUsesSpecGroup) e.getParent()).getFromModuleLibraryIdentifier();
+        if (e.getParent() instanceof ResModuleIdentifierSpec &&
+                ((ResModuleIdentifierSpec) e.getParent()).getFromLibraryIdentifier() != null) {
+            ResModuleLibraryIdentifier desiredLib =
+                    ((ResModuleIdentifierSpec) e.getParent()).getModuleLibraryIdentifier();
             if (desiredLib != null) {
                 PsiElement ele = desiredLib.resolve();
                 if (ele != null && ele instanceof PsiDirectory) {
@@ -92,8 +94,7 @@ public class ResModuleReferenceSet extends FileReferenceSet {
             //now do the curr proj.
             if (module != null) addContexts(sourceRoots, module.getModuleFile());
         }
-        return ContainerUtil.mapNotNull(sourceRoots, psiManager::findDirectory);*/
-        return new ArrayList<>();
+        return ContainerUtil.mapNotNull(sourceRoots, psiManager::findDirectory);
     }
 
     /**

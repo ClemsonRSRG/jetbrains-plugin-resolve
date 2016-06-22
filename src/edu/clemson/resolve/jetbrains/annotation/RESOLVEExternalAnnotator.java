@@ -99,8 +99,7 @@ public class RESOLVEExternalAnnotator extends ExternalAnnotator<PsiFile, List<RE
             VirtualFile vfile = file.getVirtualFile();
             in.name = vfile.getPath();
             AnnotatedModule ast = resolve.parseModule(in);
-            //TODO: Here's the problem the hasErrors should be called hasSyntaxErrors...
-            if (ast == null || ast.hasErrors) return Collections.emptyList();
+            if (ast == null || ast.hasParseErrors) return Collections.emptyList();
             resolve.processCommandLineTargets(ast);
           /*
             Map<String, GrammarAST> unusedRules = getUnusedParserRules(g);
