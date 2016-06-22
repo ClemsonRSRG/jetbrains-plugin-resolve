@@ -43,6 +43,7 @@
 
         <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEFacilityModuleContextType"/>
         <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEConceptModuleContextType"/>
+        <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEConceptExtModuleContextType"/>
         <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEImplModuleContextType"/>
 
         <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEMathRefContextType"/>

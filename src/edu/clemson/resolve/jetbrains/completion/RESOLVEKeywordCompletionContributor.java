@@ -42,24 +42,19 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
                         "Implicit", "Definition", "Theorem", "Corollary", "Inductive"));
-/*
+
         extend(CompletionType.BASIC, modulePattern(ResImplModuleDecl.class, ResImplBlock.class),
                 new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                        "OperationProcedure", "TypeRepresentation",
-                        "FacilityDeclaration", "Procedure", "Definition"));
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Definition"));
 
         extend(CompletionType.BASIC, modulePattern(ResConceptModuleDecl.class, ResConceptBlock.class),
                 new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "TypeFamily",
-                        "OperationDeclaration", "Definition", "Implicit",
-                        "constraints"));
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Definition", "Implicit", "constraints"));
 
         extend(CompletionType.BASIC, modulePattern(ResConceptExtensionModuleDecl.class, ResConceptBlock.class),
                 new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "TypeFamily",
-                        "OperationDeclaration", "Definition"));
-*/
+                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Definition", "Implicit"));
+
         extend(CompletionType.BASIC, parameterModePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
