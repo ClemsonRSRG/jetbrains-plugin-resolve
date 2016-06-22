@@ -26,40 +26,32 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
     public RESOLVEKeywordCompletionContributor() {
 
         extend(CompletionType.BASIC, usesPattern(),
-                new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "uses"));
+                new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "uses"));
 
         extend(CompletionType.BASIC, modulePattern(ResFacilityModuleDecl.class, ResFacilityBlock.class),
-                new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Definition", "Implicit"));
+                new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "Definition", "Implicit"));
 
         extend(CompletionType.BASIC, modulePattern(ResPrecisModuleDecl.class, ResPrecisBlock.class),
-                new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY,
+                new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY,
                         "Implicit", "Definition", "Theorem", "Corollary", "Inductive", "Categorical"));
 
         extend(CompletionType.BASIC, modulePattern(ResPrecisExtensionModuleDecl.class, ResPrecisBlock.class),
-                new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY,
+                new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY,
                         "Implicit", "Definition", "Theorem", "Corollary", "Inductive"));
 
         extend(CompletionType.BASIC, modulePattern(ResImplModuleDecl.class, ResImplBlock.class),
-                new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Definition"));
+                new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "Definition"));
 
         extend(CompletionType.BASIC, modulePattern(ResConceptModuleDecl.class, ResConceptBlock.class),
-                new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Definition", "Implicit", "constraints"));
+                new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY,
+                        "Definition", "Implicit", "constraints"));
 
         extend(CompletionType.BASIC, modulePattern(ResConceptExtensionModuleDecl.class, ResConceptBlock.class),
-                new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Definition", "Implicit"));
+                new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "Definition", "Implicit"));
 
         extend(CompletionType.BASIC, parameterModePattern(),
-                new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                        "evaluates", "updates", "alters", "clears",
-                        "preserves", "restores", "replaces"));
+                new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY,
+                        "evaluates", "updates", "alters", "clears", "preserves", "restores", "replaces"));
 
         extend(CompletionType.BASIC, recordTypePattern(),
                 new RESOLVEKeywordCompletionProvider(
@@ -210,47 +202,14 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
     }
 
     private static Capture<PsiElement> parameterModePattern() {
-        return psiElement(ResTypes.IDENTIFIER)
-                .withParent(ResParameterMode.class);
-    }
-/*
-    private static Capture<PsiElement> precisModulePattern() {
-        return topLevelModulePattern(ResPrecisModuleDecl.class,
-                ResPrecisBlock.class);
+        return psiElement(ResTypes.IDENTIFIER).withParent(ResParameterMode.class);
     }
 
-    private static Capture<PsiElement> precisExtModulePattern() {
-        return topLevelModulePattern(ResPrecisExtensionModuleDecl.class,
-                ResPrecisBlock.class);
-    }
-
-    private static Capture<PsiElement> facilityModulePattern() {
-        return topLevelModulePattern(ResFacilityModuleDecl.class,
-                ResFacilityBlock.class);
-    }
-
-    private static Capture<PsiElement> conceptModulePattern() {
-        return topLevelModulePattern(ResConceptModuleDecl.class,
-                ResConceptBlock.class);
-    }
-
-    private static Capture<PsiElement> conceptExtModulePattern() {
-        return topLevelModulePattern(ResConceptExtensionModuleDecl.class,
-                ResConceptBlock.class);
-    }
-
-    private static Capture<PsiElement> implementationModulePattern() {
-        return topLevelModulePattern(ResImplModuleDecl.class,
-                ResImplBlock.class);
-    }*/
-
-    private static Capture<PsiElement> onKeywordStartWithParent(
-            Class<? extends PsiElement> parentClass) {
+    private static Capture<PsiElement> onKeywordStartWithParent(Class<? extends PsiElement> parentClass) {
         return onKeywordStartWithParent(psiElement(parentClass));
     }
 
-    private static Capture<PsiElement> onKeywordStartWithParent(
-            Capture<? extends PsiElement> parentPattern) {
+    private static Capture<PsiElement> onKeywordStartWithParent(Capture<? extends PsiElement> parentPattern) {
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(PsiErrorElement.class)
                         .withParent(parentPattern));
