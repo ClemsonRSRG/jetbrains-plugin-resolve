@@ -36,13 +36,19 @@
         <projectService serviceImplementation="edu.clemson.resolve.jetbrains.project.RESOLVEExcludedPathsSettings"/>
         <applicationService serviceImplementation="edu.clemson.resolve.jetbrains.project.RESOLVECodeInsightSettings"/>-->
 
+        <!-- live template & contexts -->
         <defaultLiveTemplatesProvider implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplatesProvider"/>
         <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVEEverywhereContextType"/>
         <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEFileContextType"/>
+
+        <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEFacilityModuleContextType"/>
+        <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEConceptModuleContextType"/>
+        <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEImplModuleContextType"/>
+
         <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEMathRefContextType"/>
         <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEMathDefContextType"/>
-        <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEFacilityModuleContextType"/>
 
+        <!-- misc -->
         <lang.parserDefinition language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.RESOLVEParserDefinition"/>
         <fileTypeFactory implementation="edu.clemson.resolve.jetbrains.RESOLVEFileTypeFactory"/>
         <lang.syntaxHighlighterFactory key="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.highlighting.RESOLVESyntaxHighlighterFactory"/>

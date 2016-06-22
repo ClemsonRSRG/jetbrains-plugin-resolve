@@ -51,6 +51,8 @@ public abstract class RESOLVELiveTemplateContextType extends TemplateContextType
         return new RESOLVESyntaxHighlighter();
     }
 
+    // FILE
+
     public static class RESOLVEFileContextType extends RESOLVELiveTemplateContextType {
 
         protected RESOLVEFileContextType() {
@@ -66,8 +68,9 @@ public abstract class RESOLVELiveTemplateContextType extends TemplateContextType
         }
     }
 
-    public static class RESOLVEFacilityModuleContextType extends RESOLVELiveTemplateContextType {
+    // MODULES
 
+    public static class RESOLVEFacilityModuleContextType extends RESOLVELiveTemplateContextType {
         protected RESOLVEFacilityModuleContextType() {
             super("RESOLVE_FACILITY_MODULE", "RESOLVE Facility module", RESOLVEEverywhereContextType.class);
         }
@@ -78,8 +81,42 @@ public abstract class RESOLVELiveTemplateContextType extends TemplateContextType
         }
     }
 
-    public static class RESOLVEMathRefContextType extends RESOLVELiveTemplateContextType {
+    public static class RESOLVEConceptModuleContextType extends RESOLVELiveTemplateContextType {
+        protected RESOLVEConceptModuleContextType() {
+            super("RESOLVE_CONCEPT_MODULE", "RESOLVE Facility module", RESOLVEEverywhereContextType.class);
+        }
 
+        @Override
+        protected boolean isInContext(@NotNull PsiElement element) {
+            return element.getParent().getParent() instanceof ResConceptModuleDecl;
+        }
+    }
+
+    public static class RESOLVEConceptExtModuleContextType extends RESOLVELiveTemplateContextType {
+        protected RESOLVEConceptExtModuleContextType() {
+            super("RESOLVE_CONCEPT_EXT_MODULE", "RESOLVE extension module", RESOLVEEverywhereContextType.class);
+        }
+
+        @Override
+        protected boolean isInContext(@NotNull PsiElement element) {
+            return element.getParent().getParent() instanceof ResConceptExtensionModuleDecl;
+        }
+    }
+
+    public static class RESOLVEImplModuleContextType extends RESOLVELiveTemplateContextType {
+        protected RESOLVEImplModuleContextType() {
+            super("RESOLVE_IMPL_MODULE", "RESOLVE concept (+ ext) implementation module", RESOLVEEverywhereContextType.class);
+        }
+
+        @Override
+        protected boolean isInContext(@NotNull PsiElement element) {
+            return element.getParent().getParent() instanceof ResImplModuleDecl;
+        }
+    }
+
+    // MATH CTXs
+
+    public static class RESOLVEMathRefContextType extends RESOLVELiveTemplateContextType {
         protected RESOLVEMathRefContextType() {
             super("RESOLVE_MATH_REF", "math reference", RESOLVEEverywhereContextType.class);
         }

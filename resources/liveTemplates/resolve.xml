@@ -4,14 +4,6 @@
 
     <!-- MODULE TEMPLATES -->
 
-    <template description='Concept module declaration' name='Concept' toReformat='true' toShortenFQNames='true'
-              value='Concept $NAME$;&#10;    $END$&#10;end $NAME$;'>
-        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
-        <context>
-            <option name='RESOLVE_FILE' value='true'/>
-        </context>
-    </template>
-
     <template description='Facility module declaration' name='Facility' toReformat='true' toShortenFQNames='true'
               value='Facility $NAME$;&#10;    $END$&#10;end $NAME$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
@@ -28,7 +20,33 @@
         </context>
     </template>
 
-    <template description='Concept implementation' name='Implementation' toReformat='true' toShortenFQNames='true'
+    <template description='Précis extension module declaration' name='Precis ext' toReformat='true' toShortenFQNames='true'
+              value='Precis Extension $NAME$ for $PRECIS$;&#10;    $END$&#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;précis&quot;' expression='' name='PRECIS'/>
+        <context>
+            <option name='RESOLVE_FILE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Concept module declaration' name='Concept' toReformat='true' toShortenFQNames='true'
+              value='Concept $NAME$;&#10;    $END$&#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <context>
+            <option name='RESOLVE_FILE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Concept extension module declaration' name='Concept (ext)' toReformat='true' toShortenFQNames='true'
+              value='Concept Extension $NAME$ for $CONCEPT$;&#10;    $END$&#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;concept&quot;' expression='' name='CONCEPT'/>
+        <context>
+            <option name='RESOLVE_FILE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Concept implementation declaration' name='Implementation' toReformat='true' toShortenFQNames='true'
               value='Implementation $NAME$ for $CONCEPT$;&#10;    $END$&#10;end $NAME$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
         <variable alwaysStopAt='true' defaultValue='&quot;concept&quot;' expression='' name='CONCEPT'/>
@@ -37,7 +55,7 @@
         </context>
     </template>
 
-    <template description='Concept extension implementation' name='Implementation (concept ext)' toReformat='true' toShortenFQNames='true'
+    <template description='Concept extension implementation declaration' name='Implementation (concept ext)' toReformat='true' toShortenFQNames='true'
               value='Implementation $NAME$ for $EXTENSION$ of $CONCEPT$;&#10;    $END$&#10;end $NAME$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
         <variable alwaysStopAt='true' defaultValue='&quot;extension&quot;' expression='' name='EXTENSION'/>
@@ -47,7 +65,7 @@
         </context>
     </template>
 
-    <!-- SCOPED TEMPLATES -->
+    <!-- SOME TOP LEVEL MODULE CONSTRUCTS -->
 
     <template description='Operation procedure declaration' name='Operation with body' toReformat='true' toShortenFQNames='true'
               value='Operation $NAME$ ($PARAMS$);&#10;    Procedure&#10;    $END$&#10;end $NAME$;'>
@@ -55,6 +73,7 @@
         <variable alwaysStopAt='true' defaultValue='&quot;&quot;' expression='' name='PARAMS'/>
         <context>
             <option name='RESOLVE_FACILITY_MODULE' value='true'/>
+            <option name='RESOLVE_IMPL_MODULE' value='true'/>
         </context>
     </template>
 
@@ -63,16 +82,39 @@
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
         <context>
             <option name='RESOLVE_FACILITY_MODULE' value='true'/>
+            <option name='RESOLVE_IMPL_MODULE' value='true'/>
         </context>
     </template>
 
-    <template description='Facility declaration' name='Facility (factory) declaration' toReformat='true' toShortenFQNames='true'
+    <template description='Facility declaration' name='Facility (factory)' toReformat='true' toShortenFQNames='true'
               value='Facility $NAME$ is $CONCEPT$&#10;    implemented by $IMPL$;&#10;$END$'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
         <variable alwaysStopAt='true' defaultValue='&quot;concept&quot;' expression='' name='CONCEPT'/>
         <variable alwaysStopAt='true' defaultValue='&quot;impl&quot;' expression='' name='IMPL'/>
         <context>
             <option name='RESOLVE_FACILITY_MODULE' value='true'/>
+            <option name='RESOLVE_IMPL_MODULE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Type family declaration' name='Type family' toReformat='true' toShortenFQNames='true'
+              value='Type family $NAME$ is modeled by $MATHTYPE$;&#10;    exemplar $EXEMPLAR$;&#10;$END$'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;mathtype&quot;' expression='' name='MATHTYPE'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;e&quot;' expression='' name='EXEMPLAR'/>
+        <context>
+            <option name='RESOLVE_CONCEPT_MODULE' value='true'/>
+            <option name='RESOLVE_CONCEPT_EXT_MODULE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Procedure (operation implementation) declaration' name='Procedure' toReformat='true' toShortenFQNames='true'
+              value='Procedure $NAME$ ($PARAMS$)$TYPE$;&#10;    $END$&#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;&quot;' expression='' name='PARAMS'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;&quot;' expression='' name='TYPE'/>
+        <context>
+            <option name='RESOLVE_IMPL_MODULE' value='true'/>
         </context>
     </template>
 
