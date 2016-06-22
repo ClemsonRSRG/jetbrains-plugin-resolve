@@ -66,6 +66,18 @@ public abstract class RESOLVELiveTemplateContextType extends TemplateContextType
         }
     }
 
+    public static class RESOLVEFacilityModuleContextType extends RESOLVELiveTemplateContextType {
+
+        protected RESOLVEFacilityModuleContextType() {
+            super("RESOLVE_FACILITY_MODULE", "RESOLVE Facility module", RESOLVEEverywhereContextType.class);
+        }
+
+        @Override
+        protected boolean isInContext(@NotNull PsiElement element) {
+            return element.getParent().getParent() instanceof ResFacilityModuleDecl;
+        }
+    }
+
     public static class RESOLVEMathRefContextType extends RESOLVELiveTemplateContextType {
 
         protected RESOLVEMathRefContextType() {

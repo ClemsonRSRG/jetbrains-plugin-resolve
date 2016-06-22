@@ -47,6 +47,35 @@
         </context>
     </template>
 
+    <!-- SCOPED TEMPLATES -->
+
+    <template description='Operation procedure declaration' name='Operation with body' toReformat='true' toShortenFQNames='true'
+              value='Operation $NAME$ ($PARAMS$);&#10;    Procedure&#10;    $END$&#10;end $NAME$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;&quot;' expression='' name='PARAMS'/>
+        <context>
+            <option name='RESOLVE_FACILITY_MODULE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Type representation declaration' name='Type representation' toReformat='true' toShortenFQNames='true'
+              value='Type $NAME$ = $END$;'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <context>
+            <option name='RESOLVE_FACILITY_MODULE' value='true'/>
+        </context>
+    </template>
+
+    <template description='Facility declaration' name='Facility (factory) declaration' toReformat='true' toShortenFQNames='true'
+              value='Facility $NAME$ is $CONCEPT$&#10;    implemented by $IMPL$;&#10;$END$'>
+        <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;concept&quot;' expression='' name='CONCEPT'/>
+        <variable alwaysStopAt='true' defaultValue='&quot;impl&quot;' expression='' name='IMPL'/>
+        <context>
+            <option name='RESOLVE_FACILITY_MODULE' value='true'/>
+        </context>
+    </template>
+
     <!-- MATH SYMBOL TEMPLATES -->
 
     <template description='∃' name='Exists' toReformat='true' toShortenFQNames='true'

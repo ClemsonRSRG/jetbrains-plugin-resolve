@@ -17,16 +17,10 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
 
     public RESOLVEKeywordCompletionContributor() {
 
-       /* extend(CompletionType.BASIC, modulePattern(),
-                new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                        "Concept", "ConceptExt", "Facility", "Precis",
-                        "PrecisExt", "Implementation"));
-*/
         extend(CompletionType.BASIC, usesPattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "uses"));
-
+/*
         extend(CompletionType.BASIC, facilityModulePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
@@ -45,23 +39,23 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
                         "Implicit", "Definition", "Theorem", "Corollary",
                         "Inductive"));
 
-        extend(CompletionType.BASIC, implementationModulePattern(),
+        extend(CompletionType.BASIC, modulePattern(ResImplModuleDecl.class, ResImplBlock.class),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
                         "OperationProcedure", "TypeRepresentation",
                         "FacilityDeclaration", "Procedure", "Definition"));
 
-        extend(CompletionType.BASIC, conceptModulePattern(),
+        extend(CompletionType.BASIC, modulePattern(ResConceptModuleDecl.class, ResConceptBlock.class),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "TypeFamily",
                         "OperationDeclaration", "Definition", "Implicit",
                         "constraints"));
 
-        extend(CompletionType.BASIC, conceptExtModulePattern(),
+        extend(CompletionType.BASIC, modulePattern(ResConceptExtensionModuleDecl.class, ResConceptBlock.class),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "TypeFamily",
                         "OperationDeclaration", "Definition"));
-
+*/
         extend(CompletionType.BASIC, parameterModePattern(),
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY,
@@ -156,6 +150,10 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
         return onKeywordStartWithParent(ResFile.class);
     }
 
+    //if the parent is some ResBlock, whose parent in turn is a module decl then its ok to suggest a uses.
+    //however: when the module is a concept impl or concept ext impl (meaning it ends with 'for' <moduleIdent>
+    //the first accepted child will be that particular moduleIdent.. so the extra conditions allow this pattern
+    //to accept uses clauses after moduleIdents that are part of the overall module header + module param lists.
     private static Capture<PsiElement> usesPattern() {
         return onKeywordStartWithParent(psiElement(ResBlock.class)
                 .withParent(ResModuleDecl.class)
@@ -216,7 +214,7 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(ResParameterMode.class);
     }
-
+/*
     private static Capture<PsiElement> precisModulePattern() {
         return topLevelModulePattern(ResPrecisModuleDecl.class,
                 ResPrecisBlock.class);
@@ -245,7 +243,7 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
     private static Capture<PsiElement> implementationModulePattern() {
         return topLevelModulePattern(ResImplModuleDecl.class,
                 ResImplBlock.class);
-    }
+    }*/
 
     private static Capture<PsiElement> onKeywordStartWithParent(
             Class<? extends PsiElement> parentClass) {
@@ -259,9 +257,8 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
                         .withParent(parentPattern));
     }
 
-    private static Capture<PsiElement> topLevelModulePattern(
-            Class<? extends ResModuleDecl> moduleType,
-            Class<? extends ResBlock> blockType) {
+    private static Capture<PsiElement> modulePattern(Class<? extends ResModuleDecl> moduleType,
+                                                     Class<? extends ResBlock> blockType) {
         return onKeywordStartWithParent(psiElement(blockType)
                 .withParent(moduleType));
     }
