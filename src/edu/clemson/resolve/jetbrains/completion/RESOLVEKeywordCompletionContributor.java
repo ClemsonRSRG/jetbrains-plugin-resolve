@@ -158,7 +158,7 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
         return onKeywordStartWithParent(psiElement(ResBlock.class)
                 .withParent(ResModuleDecl.class)
                 .andOr(psiElement().isFirstAcceptedChild(psiElement()),
-                        psiElement().afterSibling(psiElement(ResModuleIdentifierSpec.class)),
+                        psiElement().afterSibling(psiElement(ResModuleIdentifier.class)),
                         psiElement().afterSibling(psiElement(ResModuleParameters.class))));
     }
 

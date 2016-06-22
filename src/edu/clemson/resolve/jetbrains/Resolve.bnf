@@ -243,7 +243,7 @@ ConceptBlock
 'end' identifier ';' {pin(".*")=1}
 
 ConceptExtensionModuleDecl ::=
-'Concept' 'Extension' identifier SpecModuleParameters? 'for' ModuleIdentifierSpec ';'
+'Concept' 'Extension' identifier SpecModuleParameters? 'for' ModuleIdentifier ';'
 UsesList?
 RequiresClause?
 ConceptBlock
@@ -251,7 +251,7 @@ ConceptBlock
 
 //TODO: These need to just be ModuleIdentifier
 ImplModuleDecl ::= 'Implementation' identifier ImplModuleParameters?
-'for' ModuleIdentifierSpec ('of' ModuleIdentifierSpec)? ';' //These should be ModuleIdentifierSpecs not NameExps since
+'for' ModuleIdentifier ('of' ModuleIdentifier)? ';' //These should be ModuleIdentifierSpecs not NameExps since
 //they essentially function as 'implicit imports'
 UsesList?
 RequiresClause?

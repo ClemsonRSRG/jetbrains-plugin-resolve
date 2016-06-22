@@ -526,7 +526,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // 'Concept' 'Extension' identifier SpecModuleParameters? 'for' ModuleIdentifierSpec ';'
+  // 'Concept' 'Extension' identifier SpecModuleParameters? 'for' ModuleIdentifier ';'
   // UsesList?
   // RequiresClause?
   // ConceptBlock
@@ -542,7 +542,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = r && report_error_(b, consumeToken(b, IDENTIFIER));
     r = p && report_error_(b, ConceptExtensionModuleDecl_3(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, FOR)) && r;
-    r = p && report_error_(b, ModuleIdentifierSpec(b, l + 1)) && r;
+    r = p && report_error_(b, ModuleIdentifier(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, SEMICOLON)) && r;
     r = p && report_error_(b, ConceptExtensionModuleDecl_7(b, l + 1)) && r;
     r = p && report_error_(b, ConceptExtensionModuleDecl_8(b, l + 1)) && r;
@@ -1421,7 +1421,7 @@ public class ResParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // 'Implementation' identifier ImplModuleParameters?
-  // 'for' ModuleIdentifierSpec ('of' ModuleIdentifierSpec)? ';' //These should be ModuleIdentifierSpecs not NameExps since
+  // 'for' ModuleIdentifier ('of' ModuleIdentifier)? ';' //These should be ModuleIdentifierSpecs not NameExps since
   // //they essentially function as 'implicit imports'
   // UsesList?
   // RequiresClause?
@@ -1437,7 +1437,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = r && report_error_(b, consumeToken(b, IDENTIFIER));
     r = p && report_error_(b, ImplModuleDecl_2(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, FOR)) && r;
-    r = p && report_error_(b, ModuleIdentifierSpec(b, l + 1)) && r;
+    r = p && report_error_(b, ModuleIdentifier(b, l + 1)) && r;
     r = p && report_error_(b, ImplModuleDecl_5(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, SEMICOLON)) && r;
     r = p && report_error_(b, ImplModuleDecl_7(b, l + 1)) && r;
@@ -1457,21 +1457,21 @@ public class ResParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // ('of' ModuleIdentifierSpec)?
+  // ('of' ModuleIdentifier)?
   private static boolean ImplModuleDecl_5(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ImplModuleDecl_5")) return false;
     ImplModuleDecl_5_0(b, l + 1);
     return true;
   }
 
-  // 'of' ModuleIdentifierSpec
+  // 'of' ModuleIdentifier
   private static boolean ImplModuleDecl_5_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ImplModuleDecl_5_0")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
     r = consumeToken(b, OF);
     p = r; // pin = 1
-    r = r && ModuleIdentifierSpec(b, l + 1);
+    r = r && ModuleIdentifier(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
