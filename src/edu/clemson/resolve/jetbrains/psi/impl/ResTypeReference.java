@@ -99,7 +99,7 @@ public class ResTypeReference extends PsiPolyVariantReferenceBase<ResTypeReferen
         if (!ResReference.processModuleLevelEntities(file, processor, state, localResolve)) return false;
 
         //if (!ResReference.processReferencedFiles(file, processor, state)) return false;
-        if (!ResReference.processUsesAndReferencedModules(file, processor, state)) return false;
+        if (!ResReference.processUsesImports(file, processor, state)) return false;
 
         //TODO: What we really need to avoid finding both the models and reprs
         // is some flag, say, "stopAfterFirst" (I think...)

@@ -39,9 +39,8 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
         }
     }
 
-    private static void fillVariantsByReference(
-            @Nullable PsiReference reference,
-            @NotNull CompletionResultSet result) {
+    private static void fillVariantsByReference(@Nullable PsiReference reference,
+                                                @NotNull CompletionResultSet result) {
         if (reference == null) return;
         /*if (reference instanceof PsiMultiReference) {
             PsiReference[] references = ((PsiMultiReference)reference).getReferences();

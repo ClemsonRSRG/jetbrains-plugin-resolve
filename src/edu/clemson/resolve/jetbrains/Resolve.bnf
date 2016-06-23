@@ -194,7 +194,7 @@
     extends("Math.*(Sig)")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractMathSigImpl"
     extends(".*ModuleDecl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractModuleImpl"
 
-    extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|Procedure|OperationProcedure|Exemplar|Facility)Decl)|ModuleSpec|ModuleIdentifier")="edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl"
+    extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|Procedure|OperationProcedure|Exemplar|Facility)Decl)|ModuleIdentifierSpec")="edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl"
     extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractTypeLikeNodeImpl"
     extends("OrInfixExp|SelectorExp")=InfixExp
     extends("Math((Minus|Cat|Range|Plus|Div|Mult|Custom)InfixApplyExp|SelectorExp)")=MathInfixApplyExp // this attributes can be placed directly after rule
@@ -206,7 +206,7 @@
     implements("OperationDecl|OperationProcedureDecl")="edu.clemson.resolve.jetbrains.psi.ResOperationLikeNode"
     implements(".*ReferenceExp")="edu.clemson.resolve.jetbrains.psi.ResReferenceExpBase"
     implements("(Spec|Impl)ModuleParameters")="edu.clemson.resolve.jetbrains.psi.ResModuleParameters"
-    implements(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Exemplar|Facility)Decl|ModuleIdentifier)")="edu.clemson.resolve.jetbrains.psi.ResNamedElement"
+    implements(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Exemplar|Facility)Decl|ModuleIdentifierSpec)")="edu.clemson.resolve.jetbrains.psi.ResNamedElement"
 
     implements("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.jetbrains.psi.ResTypeLikeNodeDecl"
     implements(".*Block")="edu.clemson.resolve.jetbrains.psi.ResBlock"
@@ -251,7 +251,7 @@ ConceptBlock
 
 //TODO: These need to just be ModuleIdentifier
 ImplModuleDecl ::= 'Implementation' identifier ImplModuleParameters?
-'for' ModuleIdentifier ('of' ModuleIdentifier)? ';' //These should be ModuleIdentifierSpecs not NameExps since
+'for' identifier ('of' identifier)? ';' //These should be ModuleIdentifierSpecs not NameExps since
 //they essentially function as 'implicit imports'
 UsesList?
 RequiresClause?
@@ -269,7 +269,7 @@ FacilityBlock
 UsesList ::= 'uses' (UsesSpecs | '(' UsesSpecs ')') ';'  {pin(".*")=1}
 private UsesSpecs ::= ModuleIdentifierSpec (',' ModuleIdentifierSpec)* {pin(".*")=1}
 
-ModuleIdentifierSpec ::= ModuleIdentifier [FromClause] [asClause] {pin=1 methods=[getFromLibraryIdentifier getAlias]}
+ModuleIdentifierSpec ::= ModuleIdentifier [FromClause] [asClause] {pin=1 methods=[getFromLibraryIdentifier getAlias getName]}
 
 private FromClause ::= 'from' ModuleLibraryIdentifier {pin=1}
 private asClause ::= 'as' identifier {pin=1}
@@ -277,17 +277,6 @@ private asClause ::= 'as' identifier {pin=1}
 ModuleIdentifier ::= identifier {pin=1 methods=[getReferences getModuleIdentiferTextRange resolve]}
 ModuleLibraryIdentifier ::= identifier ('.' identifier)* {pin(".*")=1 methods=[getReferences getModuleLibraryIdentiferTextRange resolve] }
 
-/*
-UsesSpec ::= ModuleIdentifierSpec FromClause? {
-    pin=1 methods=[getFromModuleLibraryIdentifier ]
-}
-private FromClause ::= 'from' ModuleLibraryIdentifierSpec?
-private UsesSpecList ::=  (UsesSpec (',' UsesSpec)* | '(' UsesSpec (',' UsesSpec)* ')'){recoverWhile=ModuleIdentSpecListRec}
-private ModuleIdentSpecListRec ::= !(';')
-
-ModuleIdentifierSpec ::= identifier {pin=1 methods=[getReferences getModuleIdentiferTextRange resolve]}
-ModuleLibraryIdentifierSpec ::= identifier ('.' identifier)* {methods=[getReferences getModuleLibraryIdentiferTextRange resolve]}
-*/
 // Module blocks & items
 
 PrecisBlock ::= PrecisItem* {methods=[processDeclarations] recoverWhile=ItemsRecover}
@@ -402,8 +391,8 @@ VarDef ::= identifier {methods=[getResTypeInner getReference]}
 
 // facility decls
 
-FacilityDecl ::= 'Facility' identifier 'is' NameExp ModuleArgList?
-('externally')? 'implemented' 'by' NameExp ModuleArgList?
+FacilityDecl ::= 'Facility' identifier 'is' ReferenceExp ModuleArgList?
+('externally')? 'implemented' 'by' ReferenceExp ModuleArgList?
 ExtensionList? ';' {pin=2 methods=[resolveSpecification]}
 
 private ExtensionList ::= (ExtensionPairing)* {recoverWhile=ExtensionListRec}
@@ -500,6 +489,7 @@ private ExpArgumentList ::= ExpWithRecover (',' ExpWithRecover)* {pin(".*")=1}
 private ExpWithRecover ::= Exp {recoverWhile=ExpListRecover}
 private ExpListRecover ::= !('%'|'+'|'-'|'('|')'|','|'*'|'<'|'<='|'>'|'>='|'end'|'Operation'|'Type'|'Facility'|';')
 
+//version of a normal name exp, only this one is guaranteed to be unqualified..
 NameExp ::= ReferenceExp QualifiedReferenceExp? {elementType=ReferenceExp}
 left QualifiedReferenceExp ::= '::' identifier {elementType=ReferenceExp}
 ReferenceExp ::= identifier { methods=[getReference getQualifier resolve shouldReferenceModule] extends=Exp}

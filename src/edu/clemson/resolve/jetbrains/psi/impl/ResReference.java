@@ -123,10 +123,6 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                                               boolean localResolve) {
 
         PsiElement parent = myElement.getParent();
-        if (myElement instanceof ResReferenceExp && ((ResReferenceExp) myElement).shouldReferenceModule()) {
-            if (processUsesAndReferencedModules(file, processor, state, true)) return false;
-            return true;
-        }
         if (parent instanceof ResSelectorExp) {
             boolean result = processSelector((ResSelectorExp) parent, processor, state, myElement);
             if (processor.isCompletion()) return result;
@@ -140,7 +136,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         if (!processBlock(processor, state, true)) return false;
         if (!processParameterLikeThings(processor, state, true)) return false;
         if (!processModuleLevelEntities(file, processor, state, true)) return false;
-        if (!processUsesAndReferencedModules(file, processor, state)) return false;
+        if (!processUsesImports(file, processor, state)) return false;
         if (!processSuperModules(file, processor, state)) return false;
         return true;
     }
@@ -237,33 +233,28 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                                         @NotNull ResScopeProcessor processor,
                                         @NotNull ResolveState state) {
         //ResScopeProcessorBase delegate = createDelegate(processor);
-        //processUsesAndReferencedModules(file, delegate, state);
+        //processUsesImports(file, delegate, state);
         //return processNamedElements(processor, state, delegate.getVariants(), false);
     }*/
 
-    static boolean processUsesAndReferencedModules(@NotNull ResFile file,
-                                                   @NotNull ResScopeProcessor processor,
-                                                   @NotNull ResolveState state) {
-        return processUsesAndReferencedModules(file, processor, state, false);
+    static boolean processUsesImports(@NotNull ResFile file,
+                                      @NotNull ResScopeProcessor processor,
+                                      @NotNull ResolveState state) {
+        return processUsesImports(file, processor, state, false);
     }
 
-    public static boolean processUsesAndReferencedModules(@NotNull ResFile file,
-                                                          @NotNull ResScopeProcessor processor,
-                                                          @NotNull ResolveState state,
-                                                          boolean forModuleNameRefs) {
-        /*List<ResUsesSpecGroup> groups = file.getUsesSpecGroups();
-        for (ResUsesSpecGroup group : groups) {
-            for (ResModuleIdentifierSpec o : group.getModuleIdentifierSpecList()) {
-                PsiElement resolvedFile = o.resolve();
-                if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
-                if (!isSearchableUsesModule((ResFile) resolvedFile)) continue;
+    public static boolean processUsesImports(@NotNull ResFile file,
+                                             @NotNull ResScopeProcessor processor,
+                                             @NotNull ResolveState state,
+                                             boolean forModuleNameRefs) {
+        List<ResModuleIdentifierSpec> usesItems = file.getModuleIdentifierSpecs();
+        for (ResModuleIdentifierSpec o : usesItems) {
+            PsiElement resolvedFile = o.getModuleIdentifier().resolve();
+            String t = o.getModuleIdentifier().getText();
+            if (!processor.execute(o, state.put(ACTUAL_NAME, o.getModuleIdentifier().getText()))) return false;
+            //maybe ref'ing something INSIDE the module?
 
-                if (!processor.execute(resolvedFile, state.put(ACTUAL_NAME, o.getIdentifier().getText()))) return false;
-                if (!forModuleNameRefs) {
-                    processModuleLevelEntities((ResFile) resolvedFile, processor, state, false, false);
-                }
-            }
-        }*/
+        }
         return true;
     }
 

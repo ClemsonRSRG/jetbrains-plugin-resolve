@@ -3,13 +3,13 @@ package edu.clemson.resolve.jetbrains.psi.impl.imports;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.vfs.VfsUtilCore;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileSystem;
-import com.intellij.openapi.vfs.VirtualFileVisitor;
+import com.intellij.openapi.util.io.FileSystemUtil;
+import com.intellij.openapi.vfs.*;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.file.impl.FileManager;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceCompletionImpl;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
@@ -92,7 +92,7 @@ public class ResModuleReferenceSet extends FileReferenceSet {
             VirtualFile rootSdkDir = RESOLVESdkUtil.getSdkSrcDir(project, module);
             if (rootSdkDir != null) addContexts(sourceRoots, rootSdkDir);
             //now do the curr proj.
-            if (module != null) addContexts(sourceRoots, module.getModuleFile());
+            if (module != null) addContexts(sourceRoots, project.getBaseDir());
         }
         return ContainerUtil.mapNotNull(sourceRoots, psiManager::findDirectory);
     }

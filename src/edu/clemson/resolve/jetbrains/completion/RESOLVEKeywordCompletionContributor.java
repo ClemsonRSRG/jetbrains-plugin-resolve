@@ -54,32 +54,25 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
                         "evaluates", "updates", "alters", "clears", "preserves", "restores", "replaces"));
 
         extend(CompletionType.BASIC, recordTypePattern(),
-                new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Record"));
+                new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "Record"));
 
         extend(CompletionType.BASIC, typeParamPattern(),
-                new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "type"));
+                new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "type"));
 
         extend(CompletionType.BASIC, definitionParameterPattern(),
-                new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Definition"));
+                new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "Definition"));
 
         extend(CompletionType.BASIC, operationParamPattern(),
-                new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "OperationDeclaration"));
+                new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "OperationDeclaration"));
 
         extend(CompletionType.BASIC, statementPattern(),
-                new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "While", "If"));
+                new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "While", "If"));
 
         extend(CompletionType.BASIC, elseStatementPattern(),
-                new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "else"));
+                new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "else"));
 
         extend(CompletionType.BASIC, variablePattern(),
-                new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "Var"));
+                new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "Var"));
 
         /*extend(CompletionType.BASIC, mathQuantifierKeywords(),
                 new RESOLVEKeywordCompletionProvider(

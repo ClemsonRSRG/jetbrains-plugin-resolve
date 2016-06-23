@@ -12,12 +12,10 @@ import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.Predicate;
 import edu.clemson.resolve.jetbrains.ResTypes;
 import edu.clemson.resolve.jetbrains.psi.*;
-import edu.clemson.resolve.jetbrains.psi.impl.imports.ResModuleReference;
 import edu.clemson.resolve.jetbrains.psi.impl.imports.ResModuleReferenceSet;
 import edu.clemson.resolve.jetbrains.psi.impl.imports.ResModuleLibraryReferenceSet;
 import org.jetbrains.annotations.NotNull;
@@ -71,7 +69,7 @@ public class ResPsiImplUtil {
      * indicate situations where we only expect to resolve to other modules. Accordingly, the only place I can see
      * where we actually use ordinary PSI reference exps to reference a <em>module</em> is within facility decl nodes --
      * so this should really only be needed in
-     * {@link ResReference#processUsesAndReferencedModules(ResFile, ResScopeProcessor, ResolveState)}.</p>
+     * {@link ResReference#processUsesImports(ResFile, ResScopeProcessor, ResolveState)}.</p>
      *
      * @param o an arbitrary reference expression.
      *
@@ -93,6 +91,12 @@ public class ResPsiImplUtil {
             }
         }
         return null;
+    }
+
+    @NotNull
+    public static String getName(@NotNull ResModuleIdentifierSpec moduleIdentifierSpec) {
+        return moduleIdentifierSpec.getAlias() != null ? moduleIdentifierSpec.getAlias().getText() :
+                moduleIdentifierSpec.getModuleIdentifier().getText();
     }
 
     @NotNull
