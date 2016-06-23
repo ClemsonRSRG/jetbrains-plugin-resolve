@@ -394,8 +394,8 @@ VarDef ::= identifier {methods=[getResTypeInner getReference]}
 
 // facility decls
 
-FacilityDecl ::= 'Facility' identifier 'is' ReferenceExp ModuleArgList?
-('externally')? 'implemented' 'by' ReferenceExp ModuleArgList?
+FacilityDecl ::= 'Facility' identifier 'is' NameExp ModuleArgList?
+('externally')? 'implemented' 'by' NameExp ModuleArgList?
 ExtensionList? ';' {pin=2 methods=[resolveSpecification]}
 
 private ExtensionList ::= (ExtensionPairing)* {recoverWhile=ExtensionListRec}

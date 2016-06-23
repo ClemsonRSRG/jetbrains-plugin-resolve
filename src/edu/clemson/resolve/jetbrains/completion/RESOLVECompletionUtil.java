@@ -28,7 +28,7 @@ public class RESOLVECompletionUtil {
     public static final int FACILITY_PRIORITY = 5;
     public static final int DEFINITION_PRIORITY = 10;
     public static final int TYPE_PRIORITY = 20;
-    public static final int KEYWORD_PRIORITY = 9;
+    public static final int KEYWORD_PRIORITY = 40;
 
     private static class Lazy {
         private static final SingleCharInsertHandler FACILITY_OR_MODULE_INSERT_HANDLER = new SingleCharInsertHandler('.');

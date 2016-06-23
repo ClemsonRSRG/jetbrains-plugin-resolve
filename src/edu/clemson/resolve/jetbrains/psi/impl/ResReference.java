@@ -53,8 +53,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                                                     @NotNull final ResReferenceExpBase o) {
         return new ResScopeProcessor() {
             @Override
-            public boolean execute(@NotNull PsiElement element,
-                                   @NotNull ResolveState state) {
+            public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
                 if (element.equals(o)) {
                     return !result.add(new PsiElementResolveResult(element));
                 }
@@ -229,14 +228,6 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         return processNamedElements(processor, state, delegate.getVariants(), localResolve);
     }
 
-    /*private boolean processUsesRequests(@NotNull ResFile file,
-                                        @NotNull ResScopeProcessor processor,
-                                        @NotNull ResolveState state) {
-        //ResScopeProcessorBase delegate = createDelegate(processor);
-        //processUsesImports(file, delegate, state);
-        //return processNamedElements(processor, state, delegate.getVariants(), false);
-    }*/
-
     static boolean processUsesImports(@NotNull ResFile file,
                                       @NotNull ResScopeProcessor processor,
                                       @NotNull ResolveState state) {
@@ -260,21 +251,6 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                 }
             }
         }
-        return true;
-    }
-
-    //TODO: Going to want to do some filtering here in the case where a uses clause initiates the processing
-    // ... in which case if the module is a concept, only return the set of math
-    //{defns}, if its facility -- then search {opproc decls} U {type reprs} U {math defns}.
-    private static boolean processModuleLevelEntitiesFromUsesClause(@NotNull ResModuleDecl module,
-                                                                    @NotNull ResScopeProcessor processor,
-                                                                    @NotNull ResolveState state,
-                                                                    boolean localProcessing) {
-        if (!processNamedElements(processor, state, module.getOperationLikeThings(), false)) return false;
-        if (!processNamedElements(processor, state, module.getFacilities(), false)) return false;
-        if (!processNamedElements(processor, state, module.getTypes(), false)) return false;
-        if (!processNamedElements(processor, state, module.getGenericTypeParams(), false)) return false;
-        if (!processNamedElements(processor, state, module.getMathDefnSigs(), localProcessing)) return false;
         return true;
     }
 

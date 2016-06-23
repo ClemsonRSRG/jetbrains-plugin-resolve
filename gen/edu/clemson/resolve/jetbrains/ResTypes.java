@@ -201,6 +201,7 @@ public interface ResTypes {
   IElementType IND_BASE = new ResTokenType("(i.)");
   IElementType IND_HYPO = new ResTokenType("(ii.)");
   IElementType INITIALIZATION = new ResTokenType("initialization");
+  IElementType INLINEMODULEIDENTIFIER = new ResTokenType("InlineModuleIdentifier");
   IElementType INT = new ResTokenType("int");
   IElementType INTERSECT = new ResTokenType("intersect");
   IElementType INTERSECT1 = new ResTokenType("∩");

@@ -1010,7 +1010,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // 'Facility' identifier 'is' ReferenceExp ModuleArgList?
+  // 'Facility' identifier 'is' InlineModuleIdentifier ModuleArgList?
   // ('externally')? 'implemented' 'by' ReferenceExp ModuleArgList?
   // ExtensionList? ';'
   public static boolean FacilityDecl(PsiBuilder b, int l) {
@@ -1022,7 +1022,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = r && consumeToken(b, IDENTIFIER);
     p = r; // pin = 2
     r = r && report_error_(b, consumeToken(b, IS));
-    r = p && report_error_(b, ReferenceExp(b, l + 1)) && r;
+    r = p && report_error_(b, consumeToken(b, INLINEMODULEIDENTIFIER)) && r;
     r = p && report_error_(b, FacilityDecl_4(b, l + 1)) && r;
     r = p && report_error_(b, FacilityDecl_5(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, IMPLEMENTED)) && r;
@@ -1127,10 +1127,10 @@ public class ResParser implements PsiParser, LightPsiParser {
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, FACILITY_MODULE_DECL, null);
     r = consumeToken(b, FACILITY);
-    p = r; // pin = 1
-    r = r && report_error_(b, consumeToken(b, IDENTIFIER));
-    r = p && report_error_(b, consumeToken(b, SEMICOLON)) && r;
-    r = p && report_error_(b, FacilityModuleDecl_3(b, l + 1)) && r;
+    r = r && consumeToken(b, IDENTIFIER);
+    r = r && consumeToken(b, SEMICOLON);
+    p = r; // pin = 3
+    r = r && report_error_(b, FacilityModuleDecl_3(b, l + 1));
     r = p && report_error_(b, FacilityModuleDecl_4(b, l + 1)) && r;
     r = p && report_error_(b, FacilityBlock(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, END)) && r;

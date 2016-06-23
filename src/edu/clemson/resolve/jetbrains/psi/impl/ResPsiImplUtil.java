@@ -33,8 +33,7 @@ import org.jetbrains.annotations.Nullable;
 public class ResPsiImplUtil {
 
     @Nullable
-    public static ResModuleLibraryIdentifier getFromLibraryIdentifier(
-            @NotNull ResModuleIdentifierSpec moduleIdentifierSpec) {
+    public static ResModuleLibraryIdentifier getFromLibraryIdentifier(@NotNull ResModuleIdentifierSpec moduleIdentifierSpec) {
         return moduleIdentifierSpec.getModuleLibraryIdentifier();
     }
 
@@ -55,10 +54,11 @@ public class ResPsiImplUtil {
         return !text.isEmpty() ? TextRange.create(0, text.length() - 1) : TextRange.EMPTY_RANGE;
     }
 
-   // @Nullable
-   // public static ResModuleLibraryIdentifierSpec getFromModuleLibraryIdentifier(@NotNull ResUsesSpecGroup o) {
-   //     return o.getModuleLibraryIdentifierSpec();
-   // }
+    @NotNull
+    public static TextRange getModuleInlineIdentiferTextRange(@NotNull ResModuleInlineIdentifier libraryIdentifier) {
+        String text = libraryIdentifier.getText();
+        return !text.isEmpty() ? TextRange.create(0, text.length() - 1) : TextRange.EMPTY_RANGE;
+    }
 
     /**
      * Note that we don't extend {@link PsiPolyVariantReference} for module references (like we do for
@@ -107,7 +107,7 @@ public class ResPsiImplUtil {
 
     @NotNull
     public static PsiReference[] getReferences(@NotNull ResModuleLibraryIdentifier o) {
-        if (o.getTextLength() < 2) return PsiReference.EMPTY_ARRAY;
+        if (o.getTextLength() < 1) return PsiReference.EMPTY_ARRAY;
         return new ResModuleLibraryReference.ResModuleLibraryReferenceSet(o).getAllReferences();
     }
 
@@ -150,6 +150,11 @@ public class ResPsiImplUtil {
     @Nullable
     public static PsiElement resolve(@NotNull ResModuleLibraryIdentifier libraryIdentifier) {
         return resolveModuleOrLibraryIdentifier(libraryIdentifier.getReferences(), e -> e instanceof PsiDirectory);
+    }
+
+    @Nullable
+    public static PsiElement resolve(@NotNull ResModuleInlineIdentifier moduleInlineIdentifier) {
+        return resolveModuleOrLibraryIdentifier(moduleInlineIdentifier.getReferences(), e -> e instanceof ResFile);
     }
 
     @NotNull
@@ -275,10 +280,10 @@ public class ResPsiImplUtil {
 
     @Nullable
     public static ResFile resolveSpecification(ResFacilityDecl o) {
-        if (o.getReferenceExpList().isEmpty()) return null;
-        ResReferenceExp specification = o.getReferenceExpList().get(0);
-        PsiElement result = specification.resolve();
-        return result instanceof ResFile ? (ResFile) result : null;
+        //if (o.getReferenceExpList().isEmpty()) return null;
+        //ResReferenceExp specification = o.getReferenceExpList().get(0);
+        //PsiElement result = specification.resolve();
+        return null; //result instanceof ResFile ? (ResFile) result : null;
     }
 
 
