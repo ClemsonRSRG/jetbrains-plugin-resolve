@@ -16,8 +16,8 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.Predicate;
 import edu.clemson.resolve.jetbrains.ResTypes;
 import edu.clemson.resolve.jetbrains.psi.*;
-import edu.clemson.resolve.jetbrains.psi.impl.imports.ResModuleReferenceSet;
-import edu.clemson.resolve.jetbrains.psi.impl.imports.ResModuleLibraryReferenceSet;
+import edu.clemson.resolve.jetbrains.psi.impl.imports.ResModuleLibraryReference;
+import edu.clemson.resolve.jetbrains.psi.impl.imports.ResModuleReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -102,13 +102,13 @@ public class ResPsiImplUtil {
     @NotNull
     public static PsiReference[] getReferences(@NotNull ResModuleIdentifier o) {
         if (o.getTextLength() < 1) return PsiReference.EMPTY_ARRAY;
-        return new ResModuleReferenceSet(o).getAllReferences();
+        return new ResModuleReference.ResModuleReferenceSet(o).getAllReferences();
     }
 
     @NotNull
     public static PsiReference[] getReferences(@NotNull ResModuleLibraryIdentifier o) {
         if (o.getTextLength() < 2) return PsiReference.EMPTY_ARRAY;
-        return new ResModuleLibraryReferenceSet(o).getAllReferences();
+        return new ResModuleLibraryReference.ResModuleLibraryReferenceSet(o).getAllReferences();
     }
 
     @NotNull

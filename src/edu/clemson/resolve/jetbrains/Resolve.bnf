@@ -225,6 +225,7 @@ ModuleDecl ::=
     | ConceptModuleDecl
     | ImplModuleDecl
     | FacilityModuleDecl
+    //| ShortFacilityModuleDecl
 
 PrecisModuleDecl ::= 'Precis' identifier ';'
 UsesList?
@@ -262,7 +263,9 @@ FacilityModuleDecl ::= 'Facility' identifier ';'
 UsesList?
 RequiresClause?
 FacilityBlock
-'end' identifier ';' {pin(".*")=1}
+'end' identifier ';' {pin(".*")=3}
+
+//ShortFacilityModuleDecl ::= FacilityDecl {pin(".*")=1}
 
 // uses, imports
 
@@ -324,7 +327,7 @@ private FacilityItemRecover ::= !('Facility'|'Definition'|'Operation'|'Type'|'en
 Type ::= RecordType | NamedType
 private NamedType ::= TypeReferenceExp QualifiedTypeReferenceExp?
 TypeReferenceExp ::= identifier { methods=[getReference getQualifier resolve] }
-left QualifiedTypeReferenceExp ::= '::' identifier {elementType=TypeReferenceExp}
+left QualifiedTypeReferenceExp ::= '.' identifier {elementType=TypeReferenceExp}
 RecordType ::= 'Record' RecordVarDeclGroup* 'end' {pin=1 extends=Type}
 
 TypeModelDecl ::= 'Type' 'family' identifier TypeModelPortion ';'
@@ -491,7 +494,7 @@ private ExpListRecover ::= !('%'|'+'|'-'|'('|')'|','|'*'|'<'|'<='|'>'|'>='|'end'
 
 //version of a normal name exp, only this one is guaranteed to be unqualified..
 NameExp ::= ReferenceExp QualifiedReferenceExp? {elementType=ReferenceExp}
-left QualifiedReferenceExp ::= '::' identifier {elementType=ReferenceExp}
+left QualifiedReferenceExp ::= '.' identifier {elementType=ReferenceExp}
 ReferenceExp ::= identifier { methods=[getReference getQualifier resolve shouldReferenceModule] extends=Exp}
 
 LiteralExp ::= int|StringLiteral|BooleanLiteral {extends=Exp}
@@ -654,7 +657,7 @@ MathCartProdExp ::= 'Cart_Prod' ResMathCartVarGroup+  'end' {pin=1}
 private ResMathCartVarGroup ::= MathVarDeclGroup ';' {pin=1}
 
 MathSymbolExp ::=  MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}
-left MathQualifiedReferenceExp ::= '::' MathSymbolName {elementType=MathReferenceExp}
+left MathQualifiedReferenceExp ::= '.' MathSymbolName {elementType=MathReferenceExp}
 MathReferenceExp ::= MathSymbolName {methods=[getReference getQualifier getIdentifier] extends=MathExp}
 
 MathBarOutfixApplyExp ::= '|' MathExp '|'

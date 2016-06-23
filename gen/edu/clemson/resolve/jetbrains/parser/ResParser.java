@@ -2327,13 +2327,13 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '::' MathSymbolName
+  // '.' MathSymbolName
   public static boolean MathQualifiedReferenceExp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathQualifiedReferenceExp")) return false;
-    if (!nextTokenIs(b, COLONCOLON)) return false;
+    if (!nextTokenIs(b, DOT)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _LEFT_, MATH_REFERENCE_EXP, null);
-    r = consumeToken(b, COLONCOLON);
+    r = consumeToken(b, DOT);
     r = r && MathSymbolName(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
@@ -3465,26 +3465,26 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '::' identifier
+  // '.' identifier
   public static boolean QualifiedReferenceExp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "QualifiedReferenceExp")) return false;
-    if (!nextTokenIs(b, COLONCOLON)) return false;
+    if (!nextTokenIs(b, DOT)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _LEFT_, REFERENCE_EXP, null);
-    r = consumeToken(b, COLONCOLON);
+    r = consumeToken(b, DOT);
     r = r && consumeToken(b, IDENTIFIER);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   /* ********************************************************** */
-  // '::' identifier
+  // '.' identifier
   public static boolean QualifiedTypeReferenceExp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "QualifiedTypeReferenceExp")) return false;
-    if (!nextTokenIs(b, COLONCOLON)) return false;
+    if (!nextTokenIs(b, DOT)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _LEFT_, TYPE_REFERENCE_EXP, null);
-    r = consumeToken(b, COLONCOLON);
+    r = consumeToken(b, DOT);
     r = r && consumeToken(b, IDENTIFIER);
     exit_section_(b, l, m, r, false, null);
     return r;
@@ -4205,12 +4205,13 @@ public class ResParser implements PsiParser, LightPsiParser {
   static boolean asClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "asClause")) return false;
     if (!nextTokenIs(b, AS)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
     r = consumeToken(b, AS);
+    p = r; // pin = 1
     r = r && consumeToken(b, IDENTIFIER);
-    exit_section_(b, m, null, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */

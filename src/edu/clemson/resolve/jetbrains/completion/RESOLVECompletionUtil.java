@@ -31,8 +31,7 @@ public class RESOLVECompletionUtil {
     public static final int KEYWORD_PRIORITY = 9;
 
     private static class Lazy {
-        private static final QualifierInsertHandler FACILITY_OR_MODULE_INSERT_HANDLER =
-                new QualifierInsertHandler("::", true); //TODO: it'd be nice if there were a way for the user to set padding options..
+        private static final SingleCharInsertHandler FACILITY_OR_MODULE_INSERT_HANDLER = new SingleCharInsertHandler('.');
     }
 
     private static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER =

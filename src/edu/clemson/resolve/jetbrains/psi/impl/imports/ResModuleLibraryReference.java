@@ -1,14 +1,23 @@
 package edu.clemson.resolve.jetbrains.psi.impl.imports;
 
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
 import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.jetbrains.completion.RESOLVECompletionUtil;
+import edu.clemson.resolve.jetbrains.psi.ResModuleLibraryIdentifier;
+import edu.clemson.resolve.jetbrains.sdk.RESOLVESdkUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -17,7 +26,7 @@ import java.util.Set;
  *
  * @author dtwelch
  */
-class ResModuleLibraryReference extends FileReference {
+public class ResModuleLibraryReference extends FileReference {
 
     ResModuleLibraryReference(@NotNull FileReferenceSet fileReferenceSet, TextRange range, int index, String text) {
         super(fileReferenceSet, range, index, text);
@@ -56,4 +65,43 @@ class ResModuleLibraryReference extends FileReference {
 
     //TODO: IsReferenceTo  needs to eventually get implemented for fileReference renaming to work
     //(I think BindsTo()? sp? needs to as well.
+
+    public static class ResModuleLibraryReferenceSet extends FileReferenceSet {
+        public ResModuleLibraryReferenceSet(@NotNull ResModuleLibraryIdentifier libraryIdentifier) {
+            super(libraryIdentifier.getText(), libraryIdentifier,
+                    libraryIdentifier.getModuleLibraryIdentiferTextRange().getStartOffset(), null, true);
+        }
+
+        @NotNull
+        @Override
+        public Collection<PsiFileSystemItem> computeDefaultContexts() {
+            PsiFile file = getContainingFile();
+            if (file == null || !file.isValid() || isAbsolutePathReference()) {
+                return Collections.emptyList();
+            }
+
+            final PsiManager psiManager = file.getManager();
+            Module module = ModuleUtilCore.findModuleForPsiElement(file);
+            Project project = file.getProject();
+            LinkedHashSet<VirtualFile> sourceRoots = RESOLVESdkUtil.getSourcesPathsToLookup(project, module);
+            //all this does is transform each VirtualFile (which better be directory--see above loop) into PsiDirectory
+            return ContainerUtil.mapNotNull(sourceRoots, psiManager::findDirectory);
+        }
+
+        @NotNull
+        @Override
+        public FileReference createFileReference(TextRange range, int index, String text) {
+            return new ResModuleLibraryReference(this, range, index, text);
+        }
+
+        @Override
+        protected Condition<PsiFileSystemItem> getReferenceCompletionFilter() {
+            return DIRECTORY_FILTER;
+        }
+
+        @Override
+        public String getSeparatorString() {
+            return ".";
+        }
+    }
 }

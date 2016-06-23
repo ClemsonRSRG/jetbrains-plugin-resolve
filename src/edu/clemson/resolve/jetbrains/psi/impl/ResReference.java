@@ -254,7 +254,10 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
             }
             else {
                 PsiElement resolve = o.getModuleIdentifier().resolve();
-                if (resolve != null && !processor.execute(resolve, state.put(ACTUAL_NAME, o.getModuleIdentifier().getText()))) return false;
+                if (resolve != null) {
+                    processor.execute(resolve, state.put(ACTUAL_NAME, o.getModuleIdentifier().getText()));
+                    if (!forModuleNameRefs && !processModuleLevelEntities((ResFile) resolve, processor, state, false)) return false;
+                }
             }
         }
         return true;

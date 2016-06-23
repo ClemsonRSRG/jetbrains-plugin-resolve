@@ -13,10 +13,6 @@ import java.util.Collection;
 import static edu.clemson.resolve.jetbrains.psi.impl.ResReference.processNamedElements;
 import static edu.clemson.resolve.jetbrains.psi.impl.ResReference.processSuperModules;
 
-//TODO: Thinking ahead to type appearances in concept/enhancement realizations,
-//we might just need to have to specify that we DONT want to search the
-//spec we're enhancing (and that should be easy since we already have a specialized
-//processor for types, or b.) somehow ignore type models when we'r
 public class ResTypeReference extends PsiPolyVariantReferenceBase<ResTypeReferenceExp> {
 
     ResTypeReference(@NotNull ResTypeReferenceExp o) {
@@ -48,8 +44,9 @@ public class ResTypeReference extends PsiPolyVariantReferenceBase<ResTypeReferen
     @Override
     @NotNull
     public ResolveResult[] multiResolve(boolean incompleteCode) {
-        return myElement.isValid() ? ResolveCache.getInstance(myElement.getProject())
-                .resolveWithCaching(this, MY_RESOLVER, false, false) : ResolveResult.EMPTY_ARRAY;
+        return myElement.isValid()
+                ? ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, MY_RESOLVER, false, false)
+                : ResolveResult.EMPTY_ARRAY;
     }
 
     @NotNull
@@ -75,14 +72,17 @@ public class ResTypeReference extends PsiPolyVariantReferenceBase<ResTypeReferen
                                                       @NotNull ResolveState state) {
         PsiElement target = qualifier.resolve();
         if (target == null || target == qualifier) return false;
+
+        /*if (target instanceof ResModuleIdentifierSpec) { //should happen in event of alias..
+            target = ((ResModuleIdentifierSpec)target).getModuleIdentifier().resolve();
+        }*/
+
         if (target instanceof ResFacilityDecl) {
             ResFile specFile = ((ResFacilityDecl) target).resolveSpecification();
             if (specFile != null) ResReference.processModuleLevelEntities(specFile, processor, state, false, true);
         }
         else if (target instanceof ResFile) {
-            int i;
-            i = 0;
-            //ResReference.processModuleLevelEntities((ResModuleDecl)target, processor, state, false);
+            ResReference.processModuleLevelEntities((ResFile) target, processor, state, false);
         }
         return false;
     }
