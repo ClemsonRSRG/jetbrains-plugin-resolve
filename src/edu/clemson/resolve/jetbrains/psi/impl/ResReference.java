@@ -249,11 +249,13 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                                              boolean forModuleNameRefs) {
         List<ResModuleIdentifierSpec> usesItems = file.getModuleIdentifierSpecs();
         for (ResModuleIdentifierSpec o : usesItems) {
-            PsiElement resolvedFile = o.getModuleIdentifier().resolve();
-            String t = o.getModuleIdentifier().getText();
-            if (!processor.execute(o, state.put(ACTUAL_NAME, o.getModuleIdentifier().getText()))) return false;
-            //maybe ref'ing something INSIDE the module?
-
+            if (o.getAlias() != null) {
+                if (!processor.execute(o, state.put(ACTUAL_NAME, o.getAlias().getText()))) return false;
+            }
+            else {
+                PsiElement resolve = o.getModuleIdentifier().resolve();
+                if (resolve != null && !processor.execute(resolve, state.put(ACTUAL_NAME, o.getModuleIdentifier().getText()))) return false;
+            }
         }
         return true;
     }

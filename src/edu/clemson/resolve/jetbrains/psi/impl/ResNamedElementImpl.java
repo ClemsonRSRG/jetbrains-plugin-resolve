@@ -46,6 +46,11 @@ public abstract class ResNamedElementImpl
                 !(this instanceof ResParamDef));
     }
 
+    @Override
+    public boolean shouldGoDeeper() {
+        return true;
+    }
+
     @Nullable
     @Override
     public String getName() {

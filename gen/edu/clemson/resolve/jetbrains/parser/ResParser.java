@@ -4205,13 +4205,12 @@ public class ResParser implements PsiParser, LightPsiParser {
   static boolean asClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "asClause")) return false;
     if (!nextTokenIs(b, AS)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_);
+    boolean r;
+    Marker m = enter_section_(b);
     r = consumeToken(b, AS);
-    p = r; // pin = 1
     r = r && consumeToken(b, IDENTIFIER);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   /* ********************************************************** */
