@@ -225,7 +225,7 @@ ModuleDecl ::=
     | ConceptModuleDecl
     | ImplModuleDecl
     | FacilityModuleDecl
-    //| ShortFacilityModuleDecl
+    | ShortFacilityModuleDecl
 
 PrecisModuleDecl ::= 'Precis' identifier ';'
 UsesList?
@@ -250,10 +250,7 @@ RequiresClause?
 ConceptBlock
 'end' identifier ';' {pin(".*")=2}
 
-//TODO: These need to just be ModuleIdentifier
-ImplModuleDecl ::= 'Implementation' identifier ImplModuleParameters?
-'for' identifier ('of' identifier)? ';' //These should be ModuleIdentifierSpecs not NameExps since
-//they essentially function as 'implicit imports'
+ImplModuleDecl ::= 'Implementation' identifier ImplModuleParameters? 'for' identifier ('of' identifier)? ';'
 UsesList?
 RequiresClause?
 ImplBlock
@@ -265,7 +262,7 @@ RequiresClause?
 FacilityBlock
 'end' identifier ';' {pin(".*")=3}
 
-//ShortFacilityModuleDecl ::= FacilityDecl {pin(".*")=1}
+ShortFacilityModuleDecl ::= FacilityDecl {pin(".*")=1}
 
 // uses, imports
 
@@ -394,8 +391,8 @@ VarDef ::= identifier {methods=[getResTypeInner getReference]}
 
 // facility decls
 
-FacilityDecl ::= 'Facility' identifier 'is' NameExp ModuleArgList?
-('externally')? 'implemented' 'by' NameExp ModuleArgList?
+FacilityDecl ::= 'Facility' identifier 'is' ModuleIdentifier ModuleArgList? [FromClause]
+('externally')? 'implemented' 'by' ModuleIdentifier ModuleArgList? [FromClause]
 ExtensionList? ';' {pin=2 methods=[resolveSpecification]}
 
 private ExtensionList ::= (ExtensionPairing)* {recoverWhile=ExtensionListRec}

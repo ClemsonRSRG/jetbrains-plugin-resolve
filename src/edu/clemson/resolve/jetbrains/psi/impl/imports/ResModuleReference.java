@@ -17,6 +17,7 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiFileSystemItemProcessor;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
@@ -173,15 +174,22 @@ public class ResModuleReference extends FileReference {
 
             PsiElement e = getElement();
             //handle the 'from' clause..
+
+            ResModuleLibraryIdentifier desiredLib = null;
+            //TODO: technically parent can also now be a facility
             if (e.getParent() instanceof ResModuleIdentifierSpec &&
                     ((ResModuleIdentifierSpec) e.getParent()).getFromLibraryIdentifier() != null) {
-                ResModuleLibraryIdentifier desiredLib =
-                        ((ResModuleIdentifierSpec) e.getParent()).getModuleLibraryIdentifier();
-                if (desiredLib != null) {
-                    PsiElement ele = desiredLib.resolve();
-                    if (ele != null && ele instanceof PsiDirectory) {
-                        sourceRoots.add(((PsiDirectory) ele).getVirtualFile());
-                    }
+                desiredLib = ((ResModuleIdentifierSpec) e.getParent()).getModuleLibraryIdentifier();
+            }
+            else if (e.getParent() instanceof ResFacilityDecl &&
+                    PsiTreeUtil.getNextSiblingOfType(e, ResModuleLibraryIdentifier.class) != null) {
+                desiredLib = PsiTreeUtil.getNextSiblingOfType(e, ResModuleLibraryIdentifier.class);
+            }
+
+            if (desiredLib != null) {
+                PsiElement ele = desiredLib.resolve();
+                if (ele != null && ele instanceof PsiDirectory) {
+                    sourceRoots.add(((PsiDirectory) ele).getVirtualFile());
                 }
             }
             else {

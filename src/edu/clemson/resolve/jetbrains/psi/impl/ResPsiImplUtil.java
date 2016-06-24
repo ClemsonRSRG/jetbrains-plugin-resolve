@@ -54,12 +54,6 @@ public class ResPsiImplUtil {
         return !text.isEmpty() ? TextRange.create(0, text.length() - 1) : TextRange.EMPTY_RANGE;
     }
 
-    @NotNull
-    public static TextRange getModuleInlineIdentiferTextRange(@NotNull ResModuleInlineIdentifier libraryIdentifier) {
-        String text = libraryIdentifier.getText();
-        return !text.isEmpty() ? TextRange.create(0, text.length() - 1) : TextRange.EMPTY_RANGE;
-    }
-
     /**
      * Note that we don't extend {@link PsiPolyVariantReference} for module references (like we do for
      * {@link ResTypeReference}, and {@link ResReference}), instead we simply represent them in the PSI as a
@@ -150,11 +144,6 @@ public class ResPsiImplUtil {
     @Nullable
     public static PsiElement resolve(@NotNull ResModuleLibraryIdentifier libraryIdentifier) {
         return resolveModuleOrLibraryIdentifier(libraryIdentifier.getReferences(), e -> e instanceof PsiDirectory);
-    }
-
-    @Nullable
-    public static PsiElement resolve(@NotNull ResModuleInlineIdentifier moduleInlineIdentifier) {
-        return resolveModuleOrLibraryIdentifier(moduleInlineIdentifier.getReferences(), e -> e instanceof ResFile);
     }
 
     @NotNull

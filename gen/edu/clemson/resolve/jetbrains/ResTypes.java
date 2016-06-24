@@ -113,6 +113,7 @@ public interface ResTypes {
   IElementType RELATIONAL_INFIX_EXP = new ResCompositeElementType("RELATIONAL_INFIX_EXP");
   IElementType REQUIRES_CLAUSE = new ResCompositeElementType("REQUIRES_CLAUSE");
   IElementType SELECTOR_EXP = new ResCompositeElementType("SELECTOR_EXP");
+  IElementType SHORT_FACILITY_MODULE_DECL = new ResCompositeElementType("SHORT_FACILITY_MODULE_DECL");
   IElementType SIMPLE_STATEMENT = new ResCompositeElementType("SIMPLE_STATEMENT");
   IElementType SPEC_MODULE_PARAMETERS = new ResCompositeElementType("SPEC_MODULE_PARAMETERS");
   IElementType STATEMENT = new ResCompositeElementType("STATEMENT");
@@ -201,7 +202,6 @@ public interface ResTypes {
   IElementType IND_BASE = new ResTokenType("(i.)");
   IElementType IND_HYPO = new ResTokenType("(ii.)");
   IElementType INITIALIZATION = new ResTokenType("initialization");
-  IElementType INLINEMODULEIDENTIFIER = new ResTokenType("InlineModuleIdentifier");
   IElementType INT = new ResTokenType("int");
   IElementType INTERSECT = new ResTokenType("intersect");
   IElementType INTERSECT1 = new ResTokenType("∩");
@@ -592,6 +592,9 @@ public interface ResTypes {
       }
       else if (type == SELECTOR_EXP) {
         return new ResSelectorExpImpl(node);
+      }
+      else if (type == SHORT_FACILITY_MODULE_DECL) {
+        return new ResShortFacilityModuleDeclImpl(node);
       }
       else if (type == SIMPLE_STATEMENT) {
         return new ResSimpleStatementImpl(node);
