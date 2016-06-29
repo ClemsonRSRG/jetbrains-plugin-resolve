@@ -122,7 +122,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                                               boolean localResolve) {
 
         PsiElement parent = myElement.getParent();
-        if (parent instanceof ResSelectorExp) {
+    /*    if (parent instanceof ResSelectorExp) {
             boolean result = processSelector((ResSelectorExp) parent, processor, state, myElement);
             if (processor.isCompletion()) return result;
             if (!result || ResPsiImplUtil.prevDot(myElement)) return false;
@@ -136,11 +136,11 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         if (!processParameterLikeThings(processor, state, true)) return false;
         if (!processModuleLevelEntities(file, processor, state, true)) return false;
         if (!processUsesImports(file, processor, state)) return false;
-        if (!processSuperModules(file, processor, state)) return false;
+        if (!processSuperModules(file, processor, state)) return false;*/
         return true;
     }
 
-    private boolean processSelector(@NotNull ResSelectorExp parent,
+    /*private boolean processSelector(@NotNull ResSelectorExp parent,
                                     @NotNull ResScopeProcessor processor,
                                     @NotNull ResolveState state,
                                     @Nullable PsiElement another) {
@@ -150,7 +150,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
             if (type != null && !processResType(type, processor, state)) return false;
         }
         return true;
-    }
+    }*/
 
     private boolean processResType(@NotNull ResType type,
                                    @NotNull ResScopeProcessor processor,

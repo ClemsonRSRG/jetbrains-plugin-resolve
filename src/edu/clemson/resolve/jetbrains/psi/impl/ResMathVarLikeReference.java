@@ -72,9 +72,10 @@ public class ResMathVarLikeReference
             //return processQualifierExpression(((ResFile)file), qualifier,
             //        processor, state);
         }
-        return processUnqualifiedResolve(((ResFile) file), processor, state, true);
+        //return processUnqualifiedResolve(((ResFile) file), processor, state, true);
+        return false;
     }
-
+/*
     private boolean processUnqualifiedResolve(@NotNull ResFile file,
                                               @NotNull ResScopeProcessor processor,
                                               @NotNull ResolveState state,
@@ -103,7 +104,7 @@ public class ResMathVarLikeReference
         if (!processBuiltin(processor, state, myElement)) return false;
         return true;
     }
-
+*/
     private boolean processSuperModules(@NotNull ResFile file,
                                         @NotNull ResScopeProcessor processor,
                                         @NotNull ResolveState state) {
@@ -126,7 +127,7 @@ public class ResMathVarLikeReference
         ResReference.processParameterLikeThings(superModule, delegate);
         return processNamedElements(processor, state, delegate.getVariants(), localResolve);
     }
-
+/*
     private boolean processMathSelector(@NotNull ResMathSelectorExp parent,
                                         @NotNull ResScopeProcessor processor,
                                         @NotNull ResolveState state,
@@ -138,7 +139,8 @@ public class ResMathVarLikeReference
         }
         return true;
     }
-
+*/
+    /*
     private boolean processCartProdFields(@NotNull ResMathExp type,
                                           @NotNull ResScopeProcessor processor,
                                           @NotNull ResolveState state) {
@@ -161,7 +163,7 @@ public class ResMathVarLikeReference
         }
         return true;
     }
-
+(*/
     @NotNull
     private ResolveState createContext() {
         return ResolveState.initial().put(CONTEXT,

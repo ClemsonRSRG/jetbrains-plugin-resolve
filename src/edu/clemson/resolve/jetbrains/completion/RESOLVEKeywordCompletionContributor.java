@@ -160,8 +160,8 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
         return psiElement(ResTypes.IDENTIFIER)
                 .withParent(psiElement(ResTypes.MATH_SYMBOL_NAME)
                         .withParent(psiElement(ResTypes.MATH_REFERENCE_EXP)
-                                .andOr(psiElement().isFirstAcceptedChild(psiElement()),
-                                        psiElement().withParent(ResMathQuantifiedExp.class))));
+                                .andOr(psiElement().isFirstAcceptedChild(psiElement()))));
+                                        //psiElement().withParent(ResMathQuantifiedExp.class))));
     }
 
     private static Capture<PsiElement> otherUsesPattern() {

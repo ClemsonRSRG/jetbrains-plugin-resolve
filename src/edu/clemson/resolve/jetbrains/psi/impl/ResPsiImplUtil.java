@@ -210,10 +210,10 @@ public class ResPsiImplUtil {
             //some code dup but I kinda like it better. Let me think about it more.
             if (resolve instanceof ResTypeOwner) return ((ResTypeOwner) resolve).getResType(context);
         }
-        else if (o instanceof ResSelectorExp) {
+        /*else if (o instanceof ResSelectorExp) {
             ResExp item = ContainerUtil.getLastItem(((ResSelectorExp) o).getExpList());
             return item != null ? item.getResType(context) : null;
-        }
+        }*/
         return null;
     }
 
@@ -303,10 +303,10 @@ public class ResPsiImplUtil {
                 return ((ResMathMetaTypeExpOwner) resolve).getResMathMetaTypeExp(context);
             }
         }
-        else if (o instanceof ResMathSelectorExp) {
+        /*else if (o instanceof ResMathSelectorExp) {
             ResMathExp item = ContainerUtil.getLastItem(((ResMathSelectorExp) o).getMathExpList());
             return item != null ? item.getResMathMetaTypeExp(context) : null;
-        }
+        }*/
         return null;
     }
 }

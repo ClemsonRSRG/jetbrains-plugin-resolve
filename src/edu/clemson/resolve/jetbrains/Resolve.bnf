@@ -16,6 +16,7 @@
 
     tokens=[
         // Punctuation
+        QV                      = '?'
         AT                      = '@'
         TRIPLE_DOT              = '...'
         DOT_DOT                 = '..'
@@ -29,83 +30,17 @@
         LPAREN                  = '('
         RPAREN                  = ')'
         COLON                   = ':'
-        COLONCOLON              = '::'
         SEMICOLON               = ';'
         COMMA                   = ','
         IND_BASE                = '(i.)'
         IND_HYPO                = '(ii.)'
 
-        // Operators
-        EQUALS                  = '='
-        NEQUALS                 = '/='
-        NEQUALS1                = '≠'
-
-        AND                     = 'and'
-        AND1                    = '∧'
-
-        OR                      = 'or'
-        OR1                     = '∨'
-
-        NOT                     = 'not'
-        NOT1                    = '⌐'
-        UMINUS                  = '⨩'
-
-        CAT                     = 'o'
-        CAT1                    = '∘'
-        HTIMES                  = 'ᴴ⨯'
-        TIMES                   = '⨯'
         TRUE                    = 'true'
         FALSE                   = 'false'
-        IMPLIES                 = 'implies'
-
-        UNION                   = 'union'
-        UNION1                  = '∪'
-        UNION_PLUS              = '∪₊'
-
-        INTERSECT               = 'intersect'
-        INTERSECT1              = '∩'
-        INTERSECT_PLUS          = '∩₊'
-
-        IS_IN                   = 'is_in'
-        IS_In1                  = '∈'
-        IS_NOT_IN               = 'is_not_in'
-        IS_NOT_IN1              = '∉'
-        PRECCURLYEQ             = '≼'
-        LESS_OR_EQUAL           = '<='
-        LESS_OR_EQUAL1          = '≤'
-        LESS_OR_EQUAL_U         = '≤ᵤ'
-
-        LESS                    = '<'
-
-        GREATER_OR_EQUAL        = '>='
-        GREATER_OR_EQUAL1       = '≥'
-        GREATER                 = '>'
-
-        RARROW                  = '->'
-        RARROW1                 = '⟶'
-        VROD                    = 'ϒ'
-
-        MOD                     = '%'
-        MUL                     = '*'
-        QUOTIENT                = '/'
-        PLUS                    = '+'
-        MINUS                   = '-'
-        QV                      = '?'
 
         COLON_EQUALS            = ':='
         COLON_EQUALS_COLON      = ':=:'
 
-        TILDE                   = '~'
-        BAR                     = '|'
-        DBL_BAR                 = '||'
-        LCURVE                  = '⎝'
-        RCURVE                  = '⎠'
-
-        LANGLE                  = '⟨'
-        RANGLE                  = '⟩'
-
-        LCEIL                   = '⎡'
-        RCEIL                   = '⎤'
         // Keywords
         INT                     = 'int'
         FACILITY                = 'Facility'
@@ -186,6 +121,7 @@
 
         //these two are so grammarkit's live preview feature will work right,
         //disregard them otherwise
+
         space                   = "regexp:\s+"
         identifier              = 'regexp:\p{Alpha}\w*'
     ]
@@ -196,7 +132,6 @@
 
     extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|Procedure|OperationProcedure|Exemplar|Facility)Decl)|ModuleIdentifierSpec")="edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl"
     extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractTypeLikeNodeImpl"
-    extends("OrInfixExp|SelectorExp")=InfixExp
     //TODO needs to be (MathOpInfixApplyExp|MathSelectorExp)=MathInfixApplyExp
     extends("MathOpInfixApplyExp")=MathInfixApplyExp // this attributes can be placed directly after rule
     extends("Math.*(Exp)")=MathExp
@@ -337,7 +272,7 @@ ExemplarDecl ::= 'exemplar' identifier ';' {pin=2 methods=[getResMathMetaTypeExp
 
 private TypeModelPortion ::= 'is' 'modeled' 'by' MathExp {pin=4}
 
-TypeReprDecl ::= 'Type' identifier '=' (RecordType|Type) ';'
+TypeReprDecl ::= 'Type' identifier 'is' (RecordType|Type) ';'
 ConventionsClause?
 CorrespondenceClause?
 TypeImplInit?
@@ -456,48 +391,12 @@ ElseStatement ::= 'else' Statements {pin=1}
 // program expressions
 
 Exp ::=
-      OrInfixExp
-    | AndInfixExp
-    | RelationalInfixExp
-    | AddInfixExp
-    | MulInfixExp
-    | UnaryExp
-    | Primary
-    | ParenExp {methods=[getResType] implements="edu.clemson.resolve.jetbrains.psi.ResTypeOwner"}
-
-fake InfixExp ::= Exp+ {
-  methods=[left="Exp[0]" right="Exp[1]"]
-}
-
-OrInfixExp ::= Exp 'or' Exp {extends=Exp}
-AndInfixExp ::= Exp 'and' Exp {extends=Exp}
-RelationalInfixExp ::= Exp ('='|'/='|'<'|'<='|'>'|'>=') Exp {extends=Exp}
-AddInfixExp ::= Exp ('-') Exp {extends=Exp}
-MulInfixExp ::= Exp ('*'|'/'|'%') Exp {extends=Exp}
-UnaryExp ::=  ('+'|'-'|'not') Exp {extends=Exp}
-SelectorExp ::= Exp '.' Exp {extends=Exp}
-ParenExp ::= '(' Exp ')' {extends=Exp}
-
-private Primary ::=
       NameExp
-    | SelectorExp
-    | CallExp
-    | LiteralExp
-
-CallExp ::= NameExp ArgumentList {extends=Exp}
-ArgumentList ::= '(' ExpArgumentList? ')' {pin=1}
-private ExpArgumentList ::= ExpWithRecover (',' ExpWithRecover)* {pin(".*")=1}
-private ExpWithRecover ::= Exp {recoverWhile=ExpListRecover}
-private ExpListRecover ::= !('%'|'+'|'-'|'('|')'|','|'*'|'<'|'<='|'>'|'>='|'end'|'Operation'|'Type'|'Facility'|';')
 
 //version of a normal name exp, only this one is guaranteed to be unqualified..
 NameExp ::= ReferenceExp QualifiedReferenceExp? {elementType=ReferenceExp}
 left QualifiedReferenceExp ::= '.' identifier {elementType=ReferenceExp}
 ReferenceExp ::= identifier { methods=[getReference getQualifier resolve shouldReferenceModule] extends=Exp}
-
-LiteralExp ::= int|StringLiteral|BooleanLiteral {extends=Exp}
-BooleanLiteral ::= true | false
-StringLiteral ::= string | raw_string
 
 // math constructs
 
@@ -528,7 +427,7 @@ MathInfixDefnSig ::=
         '(' MathVarDecl ')' ':' MathExp {pin=4}
 
 MathOutfixDefnSig ::=
-('|'|'||'|'<'|'⎝'|'⟨') MathVarDecl ('⟩'|'⎠'|'|'|'||'|'>') ':' MathExp {pin=1}
+'is' MathVarDecl  ':' MathExp {pin=1}
 
 MathPostfixDefnSig ::=
 '(' MathVarDecl ')' '[' MathVarDecl ']' ':' MathExp {pin=2}
@@ -575,29 +474,43 @@ MathAssertionExp ::= /*MathQuantifiedExp|*/MathExp
 
 //MathQuantifiedExp ::= ('∃'|'∀'|'Exists'|'Forall') MathVarDeclGroup ',' MathAssertionExp {pin=1}
 
+/*
 MathExp ::=
           MathNestedExp
         | MathPrimaryExp
         | MathOpInfixApplyExp
  //   | MathPrimaryExp {methods=[getResMathMetaTypeExp]}
+*/
+//TODO: IDEA, if we want nice syntax highlighted operators still, go ahead and add the MATH_SYMBOL
+//lexer to the syntax highlighter -- so then you can keep your (operators) category.
+MathExp ::=
+          MathInfixOpApplyExp
+        | MathPrefixApplyExp
+        | MathNestedExp
+        | MathPrimeExp
 
-MathOpInfixApplyExp ::= MathExp MathInfixOpSymbolName MathExp
-
+MathInfixOpApplyExp ::= MathExp MathOpSymbolName MathExp
+//MathUnaryApplyExp ::= MathOpSymbolName MathExp
+MathPrefixApplyExp ::= MathExp '(' MathArgList ')' {pin=2}
+private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
 
 //MathTypeAssertionExp ::= MathExp ':' MathExp {pin=2}
 MathNestedExp ::= '(' MathExp ')' {pin=1}
 
 //private MathIncomingSymbolExp ::= '@' MathSymbolExp {pin=1}
 
-private MathPrimaryExp ::=
+private MathPrimeExp ::=
              MathSymbolExp
+           | MathSelectorExp
            | MathLambdaExp
 
-private MathInfixOpSymbolName ::= MathSymbolExp
+private MathOpSymbolName ::= MathSymbolExp
 
-MathSymbolName ::= (identifier|int|symbol)
+MathSymbolName ::= (identifier|int|symbol|math_symbol)
 
 MathLambdaExp ::= 'lambda' MathSymbolName
+MathSelectorExp ::= MathExp '.' MathExp
+
 MathSymbolExp ::=  MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}
 left MathQualifiedReferenceExp ::= '.' MathSymbolName {elementType=MathReferenceExp}
 MathReferenceExp ::= MathSymbolName {methods=[getReference getQualifier getIdentifier] extends=MathExp}
