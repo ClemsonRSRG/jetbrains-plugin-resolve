@@ -3395,7 +3395,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // 'Precis' identifier ';'
+  // 'Precis' identifier symbol ';'
   // UsesList?
   // PrecisBlock
   // 'end' identifier ';'
@@ -3405,10 +3405,10 @@ public class ResParser implements PsiParser, LightPsiParser {
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, PRECIS_MODULE_DECL, null);
     r = consumeToken(b, PRECIS);
-    r = r && consumeToken(b, IDENTIFIER);
+    r = r && consumeTokens(b, 1, IDENTIFIER, SYMBOL);
     p = r; // pin = 2
     r = r && report_error_(b, consumeToken(b, SEMICOLON));
-    r = p && report_error_(b, PrecisModuleDecl_3(b, l + 1)) && r;
+    r = p && report_error_(b, PrecisModuleDecl_4(b, l + 1)) && r;
     r = p && report_error_(b, PrecisBlock(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, END)) && r;
     r = p && report_error_(b, consumeToken(b, IDENTIFIER)) && r;
@@ -3418,8 +3418,8 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   // UsesList?
-  private static boolean PrecisModuleDecl_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "PrecisModuleDecl_3")) return false;
+  private static boolean PrecisModuleDecl_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PrecisModuleDecl_4")) return false;
     UsesList(b, l + 1);
     return true;
   }
@@ -4327,13 +4327,12 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // '+'|'-'
+  // ('-')
   private static boolean AddInfixExp_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AddInfixExp_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokenSmart(b, PLUS);
-    if (!r) r = consumeTokenSmart(b, MINUS);
+    r = consumeTokenSmart(b, MINUS);
     exit_section_(b, m, null, r);
     return r;
   }

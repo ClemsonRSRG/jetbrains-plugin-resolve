@@ -226,26 +226,6 @@ public class ResPsiImplUtil {
         return null;
     }
 
-    /**
-     * ok, in the go jetbrains don't be fooled by the seeming lack of connection between
-     * {@code UsesReferenceHelper} and the {@link FileContextProvider} -- these are responsible
-     * for setting {@link }getDefaultContext to "resolve/src/" etc...
-     */
-/*    @Nullable
-    public static PsiFile resolve(@NotNull ResModuleSpec moduleSpec) {
-        PsiReference[] references = moduleSpec.getReferences();
-        for (PsiReference reference : references) {
-            if (reference instanceof FileReferenceOwner) {
-                PsiFileReference lastFileReference =
-                        ((FileReferenceOwner) reference).getLastFileReference();
-                PsiElement result = lastFileReference != null ?
-                        lastFileReference.resolve() : null;
-                return result instanceof ResFile ? ((ResFile) result) : null;
-            }
-        }
-        return null;
-    }
-*/
     public static boolean processDeclarations(@NotNull ResCompositeElement o,
                                               @NotNull PsiScopeProcessor processor,
                                               @NotNull ResolveState state,

@@ -39,6 +39,9 @@ INT_DIGIT = [0-9]
 NUM_INT = "0" | ([1-9] {INT_DIGIT}*)
 
 IDENT = {LETTER} ({LETTER} | {DIGIT} )*
+
+SYM = [!-!#-&*-/<->|-|]+
+
 STR =      "\""
 ESCAPES = [abfnrtv]
 
@@ -145,7 +148,6 @@ ESCAPES = [abfnrtv]
 "%"                                     { return MOD; }
 "*"                                     { return MUL; }
 "/"                                     { return QUOTIENT; }
-"+"                                     { return PLUS; }
 "-"                                     { return MINUS; }
 
 ":="                                    { return COLON_EQUALS; }
@@ -233,6 +235,7 @@ ESCAPES = [abfnrtv]
 "replaces"                              { return REPLACES; }
 "evaluates"                             { return EVALUATES; }
 
+{SYM}                                   { return SYMBOL; }
 {IDENT}                                 { return IDENTIFIER; }
 {NUM_INT}                               { return INT; }
 .                                       { return BAD_CHARACTER; }

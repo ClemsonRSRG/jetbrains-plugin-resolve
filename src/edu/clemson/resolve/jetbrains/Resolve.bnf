@@ -197,7 +197,8 @@
     extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|Procedure|OperationProcedure|Exemplar|Facility)Decl)|ModuleIdentifierSpec")="edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl"
     extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractTypeLikeNodeImpl"
     extends("OrInfixExp|SelectorExp")=InfixExp
-    extends("Math((Minus|Cat|Range|Plus|Div|Mult|Custom)InfixApplyExp|SelectorExp)")=MathInfixApplyExp // this attributes can be placed directly after rule
+    //TODO needs to be (MathOpInfixApplyExp|MathSelectorExp)=MathInfixApplyExp
+    extends("MathOpInfixApplyExp")=MathInfixApplyExp // this attributes can be placed directly after rule
     extends("Math.*(Exp)")=MathExp
 
     implements("Math.*DefnDecl")="edu.clemson.resolve.jetbrains.psi.ResMathDefnDecl"
@@ -471,7 +472,7 @@ fake InfixExp ::= Exp+ {
 OrInfixExp ::= Exp 'or' Exp {extends=Exp}
 AndInfixExp ::= Exp 'and' Exp {extends=Exp}
 RelationalInfixExp ::= Exp ('='|'/='|'<'|'<='|'>'|'>=') Exp {extends=Exp}
-AddInfixExp ::= Exp ('+'|'-') Exp {extends=Exp}
+AddInfixExp ::= Exp ('-') Exp {extends=Exp}
 MulInfixExp ::= Exp ('*'|'/'|'%') Exp {extends=Exp}
 UnaryExp ::=  ('+'|'-'|'not') Exp {extends=Exp}
 SelectorExp ::= Exp '.' Exp {extends=Exp}
@@ -532,10 +533,6 @@ MathOutfixDefnSig ::=
 MathPostfixDefnSig ::=
 '(' MathVarDecl ')' '[' MathVarDecl ']' ':' MathExp {pin=2}
 
-MathSymbolName ::= identifier|
-('o'|'true'|'false'|int|'+'|'-'|'*'|'/'|'>'|'≤'|
- '<'|'<='|'>='|'≥'|'not'|'⌐'|'≼'|'ϒ'|'∪₊'|'≤ᵤ'|'⨩')
-
 private MathDefinitionParams ::= '(' MathDefnParamList ')' { pin=1}
 private ParamListRec ::= !(')'|';')
 private MathDefnParamList ::= MathVarDeclGroup (',' MathVarDeclGroup)* {pin=1 recoverWhile=ParamListRec}
@@ -574,110 +571,36 @@ EntailsClause ::= 'which_entails' MathExp {pin=1}
 
 // mathematical expressions
 
-MathAssertionExp ::= MathQuantifiedExp|MathExp
+MathAssertionExp ::= /*MathQuantifiedExp|*/MathExp
 
-MathQuantifiedExp ::= ('∃'|'∀'|'Exists'|'Forall') MathVarDeclGroup ',' MathAssertionExp {pin=1}
+//MathQuantifiedExp ::= ('∃'|'∀'|'Exists'|'Forall') MathVarDeclGroup ',' MathAssertionExp {pin=1}
 
 MathExp ::=
-      MathBooleanInfixApplyExp
-    | MathImpliesInfixApplyExp
-    | MathEqualityInfixApplyExp
-    | MathRelationalInfixApplyExp
-    | MathApplicationInfixApplyExp
-    | MathSetInfixApplyExp
-    | MathAddInfixApplyExp
-    | MathMultInfixApplyExp
-    | MathIdentInfixApplyExp
-    | MathOutfixGroup
-    | MathIncomingUnaryApplyExp
-    | MathJoiningInfixApplyExp
-    | MathPrefixApplyExp
-    | MathPrefixGeneralizedSqbrApplyExp
-    | MathPrefixGeneralizedCeilApplyExp
-    | MathNestedExp
-    | MathPrimeExp {methods=[getResMathMetaTypeExp]}
+          MathOpInfixApplyExp
+        //| MathNestedExp
+        | MathPrimaryExp
+  //      MathOpInfixApplyExp
+ //   | MathPrimaryExp {methods=[getResMathMetaTypeExp]}
 
-//private rules for operators with the same precedence
-private MathOutfixGroup ::=
-      MathBarOutfixApplyExp
-    | MathAngleOutfixApplyExp
-    | MathDblBarOutfixApplyExp
-    | MathSqBrOutfixApplyExp
-    | MathCupOutfixApplyExp
-    | MathAngle1OutfixApplyExp
+MathOpInfixApplyExp ::= MathExp MathOpName MathExp
 
-MathAddInfixApplyExp ::= MathExp MathAddOp MathExp
-MathBooleanInfixApplyExp ::= MathExp MathBooleanOp MathExp
-MathImpliesInfixApplyExp ::= MathExp MathImpliesOp MathExp
-MathMultInfixApplyExp ::= MathExp MathMultOp MathExp
-MathRelationalInfixApplyExp ::= MathExp MathRelationalOp MathExp
-MathJoiningInfixApplyExp ::= MathExp MathJoiningOp MathExp
-MathEqualityInfixApplyExp ::= MathExp MathEqualityOp MathExp
-MathSetInfixApplyExp ::= MathExp MathSetContainmentOp MathExp
-MathIdentInfixApplyExp  ::= MathExp identifier MathExp
-MathApplicationInfixApplyExp ::= MathExp MathArrowOp MathExp
+private MathOpName ::= ('+');
 
-MathIncomingUnaryApplyExp ::= '@' MathExp
-MathPrefixApplyExp ::= MathExp '(' MathArgList ')' {pin=2}
-MathPrefixGeneralizedSqbrApplyExp ::= MathExp '[' GeneralizedApplyArgList']' {pin=2 recoverWhile=GeneralizedApplyArgList}
-MathPrefixGeneralizedCeilApplyExp ::= MathExp '⎡' GeneralizedApplyArgList'⎤' {pin=2 recoverWhile=GeneralizedApplyArgList}
-private GeneralizedApplyArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=GeneralizedApplyRecover}
-private GeneralizedApplyRecover ::= !(']'|'⎤')
+//MathTypeAssertionExp ::= MathExp ':' MathExp {pin=2}
+MathNestedExp ::= '(' MathExp ')' {pin=1}
 
-MathTypeAssertionExp ::= MathExp ':' MathExp {pin=2}
-MathNestedExp ::= '(' MathAssertionExp ')' {pin=1}
+//private MathIncomingSymbolExp ::= '@' MathSymbolExp {pin=1}
 
-private MathMultOp ::= (MathReferenceExp '::')? ('*'|'/'|'%'|'⨯'|'ᴴ⨯')
-private MathAddOp ::= (MathReferenceExp '::')? ('+'|'-'|'~')
-private MathJoiningOp ::= (MathReferenceExp '::')? ('o'|'union'|'∪'|'∪₊'|'intersect'|'∩'|'∩₊')
-private MathArrowOp ::= (MathReferenceExp '::')? ('->'|'⟶')
-private MathRelationalOp ::= (MathReferenceExp '::')? ('<'|'>'|'<='|'≤'|'≤ᵤ'|'>='|'≥')
-private MathEqualityOp ::= (MathReferenceExp '::')? ('='|'/='|'≠')
-private MathSetContainmentOp ::= (MathReferenceExp '::')? ('is_in'|'is_not_in'|'∈'|'∉');
-private MathImpliesOp ::= (MathReferenceExp '::')? ('implies')
-private MathBooleanOp ::= (MathReferenceExp '::')? ('and'|'or'|'∧'|'∨'|'iff'|)
+private MathPrimaryExp ::=
+             MathSymbolExp
+           | MathLambdaExp
+MathSymbolName ::= identifier
 
-private MathPrimeExp ::=
-          MathSymbolExp
-        | MathTypeAssertionExp
-        | MathSetComprehensionExp
-        | MathSetExp
-        | MathLambdaExp
-        | MathSelectorExp
-        | MathAlternativeExp
-        | MathCartProdExp
-        | MathLiteralExp
-
-MathLiteralExp ::= (int|'true'|'false')
-
-MathCartProdExp ::= 'Cart_Prod' ResMathCartVarGroup+  'end' {pin=1}
-private ResMathCartVarGroup ::= MathVarDeclGroup ';' {pin=1}
-
+MathLambdaExp ::= 'lambda' MathSymbolName
 MathSymbolExp ::=  MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}
 left MathQualifiedReferenceExp ::= '.' MathSymbolName {elementType=MathReferenceExp}
 MathReferenceExp ::= MathSymbolName {methods=[getReference getQualifier getIdentifier] extends=MathExp}
 
-MathBarOutfixApplyExp ::= '|' MathExp '|'
-MathDblBarOutfixApplyExp ::= '||' MathExp '||'
-MathAngleOutfixApplyExp ::= '<' MathExp '>'
-MathAngle1OutfixApplyExp ::= '⟨' MathExp '⟩'
-MathSqBrOutfixApplyExp ::= '[' MathExp ']'
-MathCupOutfixApplyExp ::= '⎝' MathExp '⎠'
-
-MathSelectorExp ::= MathExp '.' MathExp
-
-MathSetComprehensionExp ::= '{' MathVarDecl '|' MathExp '}'
-
-MathSetExp ::= '{' MathSetElementsList? '}' {pin=2}
-MathSetElementsList ::= MathExp (',' MathExp)* {recoverWhile=MathSetEleRecover}
-private MathSetEleRecover ::= !('}')
-
-MathLambdaExp ::= (lambda|'λ') MathVarDecl ','  MathExp  {pin=3}
-MathAlternativeExp ::= '{{' (MathAlternativeItemExp)+ '}}' {pin=2}
-MathAlternativeItemExp ::= MathExp ('if' MathExp ';' | 'otherwise' ';') {pin=1}
-
 fake MathInfixApplyExp ::= MathExp+ {
   methods=[left="MathExp[0]" right="MathExp[1]"]
 }
-
-private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
