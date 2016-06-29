@@ -576,15 +576,13 @@ MathAssertionExp ::= /*MathQuantifiedExp|*/MathExp
 //MathQuantifiedExp ::= ('∃'|'∀'|'Exists'|'Forall') MathVarDeclGroup ',' MathAssertionExp {pin=1}
 
 MathExp ::=
-          MathOpInfixApplyExp
-        //| MathNestedExp
+          MathNestedExp
         | MathPrimaryExp
-  //      MathOpInfixApplyExp
+        | MathOpInfixApplyExp
  //   | MathPrimaryExp {methods=[getResMathMetaTypeExp]}
 
-MathOpInfixApplyExp ::= MathExp MathOpName MathExp
+MathOpInfixApplyExp ::= MathExp MathInfixOpSymbolName MathExp
 
-private MathOpName ::= ('+');
 
 //MathTypeAssertionExp ::= MathExp ':' MathExp {pin=2}
 MathNestedExp ::= '(' MathExp ')' {pin=1}
@@ -594,7 +592,10 @@ MathNestedExp ::= '(' MathExp ')' {pin=1}
 private MathPrimaryExp ::=
              MathSymbolExp
            | MathLambdaExp
-MathSymbolName ::= identifier
+
+private MathInfixOpSymbolName ::= MathSymbolExp
+
+MathSymbolName ::= (identifier|int|symbol)
 
 MathLambdaExp ::= 'lambda' MathSymbolName
 MathSymbolExp ::=  MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}
