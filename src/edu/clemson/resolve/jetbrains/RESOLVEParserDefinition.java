@@ -36,7 +36,7 @@ public class RESOLVEParserDefinition implements ParserDefinition {
 
     public static final TokenSet WHITESPACES = TokenSet.create(WS, NLS);
     public static final TokenSet COMMENTS = TokenSet.create(LINE_COMMENT, MULTILINE_COMMENT);
-    public static final TokenSet STRING_LITERALS = TokenSet.create(STRING, RAW_STRING, CHAR);
+    public static final TokenSet STRING_LITERALS = TokenSet.create(STRING, CHAR);
     public static final TokenSet NUMBERS = TokenSet.create(INT);
     public static final TokenSet KEYWORDS = TokenSet.create(BASE, BY, CART_PROD, CHANGING, CONCEPT, CONSTRAINTS,
             CONVENTIONS, CORRESPONDENCE, DECREASING, DEFINITION, DO, ELSE, END, ENSURES, EXEMPLAR, EXISTS, EXTENSION,

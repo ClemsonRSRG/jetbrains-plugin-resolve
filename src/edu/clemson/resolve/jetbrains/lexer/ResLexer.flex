@@ -66,11 +66,9 @@ ESCAPES = [abfnrtv]
 "'\\" [abfnrtv\\\'] "'"                 { return CHAR; }
 "'\\'"                                  { return BAD_CHARACTER; }
 
-
-"`" [^`]* "`"?                          { return RAW_STRING; }
+"`"                                     { return BACKTICK; }
 {STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}?
                                         { return STRING; }
-
 // brackets & braces
 
 "{{"                                    { return DBL_LBRACE; }
@@ -78,6 +76,7 @@ ESCAPES = [abfnrtv]
 "}"                                     { return RBRACE; }
 "}}"                                    { return DBL_RBRACE; }
 
+"`"                                     { return BACKTICK; }
 "["                                     { return LBRACK; }
 "]"                                     { return RBRACK; }
 

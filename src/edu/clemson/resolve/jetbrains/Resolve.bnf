@@ -15,12 +15,14 @@
     psiImplUtilClass="edu.clemson.resolve.jetbrains.psi.impl.ResPsiImplUtil"
 
     tokens=[
+
         // Punctuation
         QV                      = '?'
         AT                      = '@'
         TRIPLE_DOT              = '...'
         DOT_DOT                 = '..'
         DOT                     = '.'
+        BACKTICK                = '`'
         DBL_LBRACE              = '{{'
         LBRACE                  = '{'
         RBRACE                  = '}'
@@ -108,7 +110,6 @@
         STRING                  = 'string'
         WHICH_ENTAILS           = 'which_entails'
         CHAR                    = 'char'
-        raw_string              = 'raw_string'
 
         // Parameter modes
         ALTERS                  = 'alters'
@@ -132,8 +133,6 @@
 
     extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|Procedure|OperationProcedure|Exemplar|Facility)Decl)|ModuleIdentifierSpec")="edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl"
     extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractTypeLikeNodeImpl"
-    //TODO needs to be (MathOpInfixApplyExp|MathSelectorExp)=MathInfixApplyExp
-    extends("MathOpInfixApplyExp")=MathInfixApplyExp // this attributes can be placed directly after rule
     extends("Math.*(Exp)")=MathExp
 
     implements("Math.*DefnDecl")="edu.clemson.resolve.jetbrains.psi.ResMathDefnDecl"
@@ -341,8 +340,7 @@ ModuleArgList ::= '(' ExpArgumentList ')' {pin=1}
 
 // operations & procedures
 
-OperationDecl ::=
-'Operation' identifier OperationLikeParameters (':' Type)? ';'
+OperationDecl ::= 'Operation' identifier OperationLikeParameters (':' Type)? ';'
 RequiresClause? EnsuresClause? {pin=2}
 
 OperationProcedureDecl ::=
@@ -375,8 +373,7 @@ Statement ::=
     | IfStatement
 
 private StatementRecover ::= !('end'|':='|':=:'|'If'|'While'|'else'|identifier)
-SimpleStatement ::=
-      Exp (AssignStatement|SwapStatement)? ';' {pin(".*")=1}
+SimpleStatement ::= Exp (AssignStatement|SwapStatement)? ';' {pin(".*")=1}
 
 left AssignStatement ::= ':=' Exp {pin=1}
 left SwapStatement ::= ':=:' Exp {pin=1}
@@ -403,34 +400,22 @@ ReferenceExp ::= identifier { methods=[getReference getQualifier resolve shouldR
 MathTheoremDecl ::= ('Corollary'|'Theorem') identifier ':'
 MathAssertionExp ';' {pin = 2}
 
-//MathClassificationTheoremDecl ::= ('Corollary'|'Theorem') identifier ':'
-
 private MathDefnSig ::=
             MathPrefixDefnSig
         |   MathOutfixDefnSig
         |   MathInfixDefnSig
         |   MathPostfixDefnSig
 
-MathPrefixDefnSig ::=
-MathPrefixNameList MathDefinitionParams? ':' MathExp {pin=1}
+MathPrefixDefnSig ::= MathPrefixNameList MathDefinitionParams? ':' MathExp {pin=1}
 
-private MathPrefixNameList ::=
-MathSymbolName (',' MathSymbolName)* {recoverWhile=MathPrefixListRec}
+private MathPrefixNameList ::= MathSymbolName (',' MathSymbolName)* {recoverWhile=MathPrefixListRec}
 private MathPrefixListRec ::= !(':'|';'|'(')
-
-private MathPrefixDefnSigs ::= MathPrefixDefnSig
-(',' MathPrefixDefnSig)* {recoverWhile=CategoricalSigListRec}
+private MathPrefixDefnSigs ::= MathPrefixDefnSig (',' MathPrefixDefnSig)* {recoverWhile=CategoricalSigListRec}
 private CategoricalSigListRec ::= !('is')
 
-MathInfixDefnSig ::=
-        '(' MathVarDecl ')' MathSymbolName
-        '(' MathVarDecl ')' ':' MathExp {pin=4}
-
-MathOutfixDefnSig ::=
-'is' MathVarDecl  ':' MathExp {pin=1}
-
-MathPostfixDefnSig ::=
-'(' MathVarDecl ')' '[' MathVarDecl ']' ':' MathExp {pin=2}
+MathInfixDefnSig ::= '(' MathVarDecl ')' MathSymbolName '(' MathVarDecl ')' ':' MathExp {pin=4}
+MathOutfixDefnSig ::= 'is' MathVarDecl  ':' MathExp {pin=1}
+MathPostfixDefnSig ::= '(' MathVarDecl ')' '[' MathVarDecl ']' ':' MathExp {pin=2}
 
 private MathDefinitionParams ::= '(' MathDefnParamList ')' { pin=1}
 private ParamListRec ::= !(')'|';')
@@ -439,11 +424,9 @@ private MathDefnParamList ::= MathVarDeclGroup (',' MathVarDeclGroup)* {pin=1 re
 MathCategoricalDefnDecl ::= 'Categorical' 'Definition' 'for'
 MathPrefixDefnSigs 'is' MathExp ';' {pin=2}
 
-MathStandardDefnDecl ::= ('Implicit')? 'Definition'
-    MathDefnSig ('is' MathAssertionExp)? ';' {pin=2}
+MathStandardDefnDecl ::= ('Implicit')? 'Definition'  MathDefnSig ('is' MathAssertionExp)? ';' {pin=2}
 
-MathInductiveDefnDecl ::= 'Inductive' 'Definition'
-MathDefnSig 'is'
+MathInductiveDefnDecl ::= 'Inductive' 'Definition' MathDefnSig 'is'
 '(i.)' MathAssertionExp ';'
 '(ii.)' MathAssertionExp ';' {pin=2}
 
@@ -475,16 +458,19 @@ MathAssertionExp ::= MathQuantifiedExp|MathExp
 MathQuantifiedExp ::= ('∃'|'∀'|'Exists'|'Forall') MathVarDeclGroup ',' MathAssertionExp {pin=1}
 
 MathExp ::=
-          MathInfixOpApplyExp
+          MathInfixApplyExp
         | MathPrefixApplyExp
+        | MathOutfixApplyExp
         | MathNestedExp
         | MathPrimeExp
 
 //MathTypeAssertionExp ::= MathExp ':' MathExp {pin=2}
-MathNestedExp ::= '(' MathExp ')' {pin=1}
+MathNestedExp ::= '(' MathAssertionExp ')' {pin=1}
 MathSelectorExp ::= MathExp '.' MathExp
 MathPrefixApplyExp ::= MathExp '(' MathArgList ')' {pin=2}
-MathInfixOpApplyExp ::= MathExp MathOpSymbolName MathExp
+MathOutfixApplyExp ::= '`' MathSymbolNameNoId MathExp MathSymbolNameNoId '`'
+MathInfixApplyExp ::= MathExp MathOpSymbolName MathExp
+
 private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
 
 private MathPrimeExp ::=
@@ -494,6 +480,7 @@ private MathPrimeExp ::=
            | MathAlternativeExp
 
 private MathOpSymbolName ::= MathSymbolExp
+private MathSymbolNameNoId ::= (symbol|math_symbol)
 
 MathSymbolName ::= '@'? (identifier|int|symbol|math_symbol|true|false)
 
@@ -504,7 +491,3 @@ MathReferenceExp ::= MathSymbolName {methods=[getReference getQualifier getIdent
 MathLambdaExp ::= (lambda|'λ') MathVarDecl ','  MathExp  {pin=3}
 MathAlternativeExp ::= '{{' (MathAlternativeItemExp)+ '}}' {pin=2}
 MathAlternativeItemExp ::= MathExp ('if' MathExp ';' | 'otherwise' ';') {pin=1}
-
-fake MathInfixApplyExp ::= MathExp+ {
-  methods=[left="MathExp[0]" right="MathExp[1]"]
-}

@@ -123,7 +123,7 @@ public abstract class RESOLVELiveTemplateContextType extends TemplateContextType
 
         @Override
         protected boolean isInContext(@NotNull PsiElement element) {
-            return element instanceof ResMathReferenceExp || (element instanceof ResMathInfixOpApplyExp); //for infix math exprs mostly
+            return element instanceof ResMathReferenceExp || (element instanceof ResMathInfixApplyExp); //for infix math exprs mostly
         }
     }
 
