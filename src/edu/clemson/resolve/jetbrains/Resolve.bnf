@@ -125,9 +125,6 @@
         identifier              = 'regexp:\p{Alpha}\w*'
     ]
 
-    extends("(Infix|Selector)Exp")=BinaryExp
-    extends("Math.*(Exp)")=MathExp
-
     implements("Math.*DefnDecl")="edu.clemson.resolve.jetbrains.psi.ResMathDefnDecl"
     implements(".*ModuleDecl")="edu.clemson.resolve.jetbrains.psi.ResModuleDecl"
     implements("Math(Prefix|Infix|Outfix|Postfix)(DefnSig)")="edu.clemson.resolve.jetbrains.psi.ResMathDefnSig"
@@ -142,13 +139,13 @@
     extends("Math.*(DefnDecl)")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractMathDefnImpl"
     extends("Math.*(Sig)")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractMathSigImpl"
     extends(".*ModuleDecl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractModuleImpl"
+    extends("Math.*(Exp)")=MathExp
 
     extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|Procedure|OperationProcedure|Exemplar|Facility)Decl)|ModuleIdentifierSpec")="edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl"
     extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractTypeLikeNodeImpl"
 
     pin(".*Statement")=1
     extends(".*Statement")=Statement
-
     generateTokenAccessors=true
     pin('.*List(?:_\d.*)?')=1
 }
@@ -366,8 +363,8 @@ Exp ::= InfixExp | CallExp | NestedExp | PrimeExp
 fake BinaryExp ::= Exp+ { methods=[left="Exp[0]" right="Exp[1]"] extends=Exp }
 
 NestedExp ::= '(' Exp ')'   {extends=Exp}
-SelectorExp ::= Exp '.' Exp {extends=Exp}
-InfixExp ::= Exp ProgSymbolName Exp {extends=Exp}
+SelectorExp ::= Exp '.' Exp {extends=BinaryExp}
+InfixExp ::= Exp ProgSymbolName Exp {extends=BinaryExp}
 CallExp ::= NameExp ArgumentList {extends=Exp}
 ProgSymbolName ::= (identifier|symbol)
 
