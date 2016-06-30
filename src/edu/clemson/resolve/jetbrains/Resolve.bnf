@@ -470,50 +470,40 @@ EntailsClause ::= 'which_entails' MathExp {pin=1}
 
 // mathematical expressions
 
-MathAssertionExp ::= /*MathQuantifiedExp|*/MathExp
+MathAssertionExp ::= MathQuantifiedExp|MathExp
 
-//MathQuantifiedExp ::= ('∃'|'∀'|'Exists'|'Forall') MathVarDeclGroup ',' MathAssertionExp {pin=1}
+MathQuantifiedExp ::= ('∃'|'∀'|'Exists'|'Forall') MathVarDeclGroup ',' MathAssertionExp {pin=1}
 
-/*
-MathExp ::=
-          MathNestedExp
-        | MathPrimaryExp
-        | MathOpInfixApplyExp
- //   | MathPrimaryExp {methods=[getResMathMetaTypeExp]}
-*/
-//TODO: IDEA, if we want nice syntax highlighted operators still, go ahead and add the MATH_SYMBOL
-//lexer to the syntax highlighter -- so then you can keep your (operators) category.
 MathExp ::=
           MathInfixOpApplyExp
         | MathPrefixApplyExp
         | MathNestedExp
         | MathPrimeExp
 
-MathInfixOpApplyExp ::= MathExp MathOpSymbolName MathExp
-//MathUnaryApplyExp ::= MathOpSymbolName MathExp
-MathPrefixApplyExp ::= MathExp '(' MathArgList ')' {pin=2}
-private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
-
 //MathTypeAssertionExp ::= MathExp ':' MathExp {pin=2}
 MathNestedExp ::= '(' MathExp ')' {pin=1}
-
-//private MathIncomingSymbolExp ::= '@' MathSymbolExp {pin=1}
+MathSelectorExp ::= MathExp '.' MathExp
+MathPrefixApplyExp ::= MathExp '(' MathArgList ')' {pin=2}
+MathInfixOpApplyExp ::= MathExp MathOpSymbolName MathExp
+private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
 
 private MathPrimeExp ::=
              MathSymbolExp
            | MathSelectorExp
            | MathLambdaExp
+           | MathAlternativeExp
 
 private MathOpSymbolName ::= MathSymbolExp
 
-MathSymbolName ::= (identifier|int|symbol|math_symbol)
-
-MathLambdaExp ::= 'lambda' MathSymbolName
-MathSelectorExp ::= MathExp '.' MathExp
+MathSymbolName ::= '@'? (identifier|int|symbol|math_symbol|true|false)
 
 MathSymbolExp ::=  MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}
 left MathQualifiedReferenceExp ::= '.' MathSymbolName {elementType=MathReferenceExp}
 MathReferenceExp ::= MathSymbolName {methods=[getReference getQualifier getIdentifier] extends=MathExp}
+
+MathLambdaExp ::= (lambda|'λ') MathVarDecl ','  MathExp  {pin=3}
+MathAlternativeExp ::= '{{' (MathAlternativeItemExp)+ '}}' {pin=2}
+MathAlternativeItemExp ::= MathExp ('if' MathExp ';' | 'otherwise' ';') {pin=1}
 
 fake MathInfixApplyExp ::= MathExp+ {
   methods=[left="MathExp[0]" right="MathExp[1]"]
