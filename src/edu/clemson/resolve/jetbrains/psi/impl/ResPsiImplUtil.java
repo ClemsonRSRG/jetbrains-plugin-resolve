@@ -125,7 +125,6 @@ public class ResPsiImplUtil {
         return PsiTreeUtil.getChildOfType(o, ResReferenceExp.class);
     }
 
-    //TODO: replace with default method in ResReferenceExpBase
     @Nullable
     public static PsiElement resolve(@NotNull ResReferenceExp o) {
         return o.getReference().resolve();

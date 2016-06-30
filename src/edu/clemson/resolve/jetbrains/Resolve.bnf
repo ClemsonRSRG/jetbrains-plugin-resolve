@@ -37,14 +37,12 @@
         COMMA                   = ','
         IND_BASE                = '(i.)'
         IND_HYPO                = '(ii.)'
-
         TRUE                    = 'true'
         FALSE                   = 'false'
-
         COLON_EQUALS            = ':='
         COLON_EQUALS_COLON      = ':=:'
 
-        // Keywords
+        // Keywords TODO: According to the go plugin, we don't actually need these re-iterated in here..
         INT                     = 'int'
         FACILITY                = 'Facility'
         PRECIS                  = 'Precis'
@@ -123,10 +121,12 @@
 
         //these two are so grammarkit's live preview feature will work right,
         //disregard them otherwise
-
         space                   = "regexp:\s+"
         identifier              = 'regexp:\p{Alpha}\w*'
     ]
+
+    extends("(Infix|Selector)Exp")=BinaryExp
+    extends("Math.*(Exp)")=MathExp
 
     implements("Math.*DefnDecl")="edu.clemson.resolve.jetbrains.psi.ResMathDefnDecl"
     implements(".*ModuleDecl")="edu.clemson.resolve.jetbrains.psi.ResModuleDecl"
@@ -145,7 +145,6 @@
 
     extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|Procedure|OperationProcedure|Exemplar|Facility)Decl)|ModuleIdentifierSpec")="edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl"
     extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractTypeLikeNodeImpl"
-    extends("Math.*(Exp)")=MathExp
 
     pin(".*Statement")=1
     extends(".*Statement")=Statement
@@ -296,18 +295,7 @@ private ParamDefinitionListNoPin ::= ParamDef &(!(';'|')')) (',' ParamDef)* {pin
 ParamDef ::= identifier
 
 TypeParamDecl ::= 'type' identifier {pin=2}
-
-ParameterMode ::=
-          'alters'
-        | 'updates'
-        | 'clears'
-        | 'restores'
-        | 'preserves'
-        | 'replaces'
-        | 'evaluates'
-        | identifier //TODO: would like to get rid of identifier here, but results
-                     //in an uglier (partial) psi; which makes keyword completion
-                     //patterns much harder
+ParameterMode ::= ('alters'|'updates'|'clears'|'restores'|'preserves'|'replaces'|'evaluates'|identifier)
 
 // prog variable decls
 
@@ -374,6 +362,8 @@ ElseStatement ::= 'else' Statements {pin=1}
 // program expressions
 
 Exp ::= InfixExp | CallExp | NestedExp | PrimeExp
+{methods=[getResType] implements="edu.clemson.resolve.jetbrains.psi.ResTypeOwner"}
+fake BinaryExp ::= Exp+ { methods=[left="Exp[0]" right="Exp[1]"] extends=Exp }
 
 NestedExp ::= '(' Exp ')'   {extends=Exp}
 SelectorExp ::= Exp '.' Exp {extends=Exp}
@@ -383,7 +373,7 @@ ProgSymbolName ::= (identifier|symbol)
 
 NameExp ::= ReferenceExp QualifiedReferenceExp? {elementType=ReferenceExp}
 left QualifiedReferenceExp ::= '.' identifier {elementType=ReferenceExp}
-ReferenceExp ::= ProgSymbolName { methods=[getReference getQualifier resolve shouldReferenceModule] extends=Exp}
+ReferenceExp ::= identifier { methods=[getReference getQualifier resolve shouldReferenceModule] extends=Exp}
 
 private PrimeExp ::= LiteralExp | NameExp | SelectorExp
 LiteralExp ::= (int|string|true|false)  {extends=Exp}
@@ -458,7 +448,7 @@ MathSelectorExp ::= MathExp '.' MathExp
 MathPrefixApplyExp ::= MathExp '(' MathArgList ')'
 MathOutfixApplyExp ::= '`' MathSymbolNameNoId MathExp MathSymbolNameNoId '`'
 MathInfixApplyExp ::= MathExp MathOpSymbolName MathExp
-MathClssftnalAssrtExp ::= MathExp (':'|'⦂') MathExp
+MathClssftnAssrtExp ::= MathExp (':'|'⦂') MathExp
 
 private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
 
@@ -467,7 +457,7 @@ private MathPrimeExp ::=
         | MathSelectorExp
         | MathLambdaExp
         | MathAlternativeExp
-        | MathClssftnalAssrtExp
+        | MathClssftnAssrtExp
 
 private MathOpSymbolName ::= MathSymbolExp
 private MathSymbolNameNoId ::= (symbol|math_symbol)
