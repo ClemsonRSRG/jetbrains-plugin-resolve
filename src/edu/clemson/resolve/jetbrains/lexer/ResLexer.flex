@@ -84,6 +84,7 @@ ESCAPES = [abfnrtv]
 ")"                                     { return RPAREN; }
 
 ":"                                     { return COLON; }
+"⦂"                                     { return HYPER_COLON; }
 ";"                                     { return SEMICOLON; }
 ","                                     { return COMMA; }
 "(i.)"                                  { return IND_BASE; }

@@ -32,6 +32,7 @@
         LPAREN                  = '('
         RPAREN                  = ')'
         COLON                   = ':'
+        HYPER_COLON             = '⦂'
         SEMICOLON               = ';'
         COMMA                   = ','
         IND_BASE                = '(i.)'
@@ -127,14 +128,6 @@
         identifier              = 'regexp:\p{Alpha}\w*'
     ]
 
-    extends("Math.*(DefnDecl)")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractMathDefnImpl"
-    extends("Math.*(Sig)")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractMathSigImpl"
-    extends(".*ModuleDecl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractModuleImpl"
-
-    extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|Procedure|OperationProcedure|Exemplar|Facility)Decl)|ModuleIdentifierSpec")="edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl"
-    extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractTypeLikeNodeImpl"
-    extends("Math.*(Exp)")=MathExp
-
     implements("Math.*DefnDecl")="edu.clemson.resolve.jetbrains.psi.ResMathDefnDecl"
     implements(".*ModuleDecl")="edu.clemson.resolve.jetbrains.psi.ResModuleDecl"
     implements("Math(Prefix|Infix|Outfix|Postfix)(DefnSig)")="edu.clemson.resolve.jetbrains.psi.ResMathDefnSig"
@@ -145,6 +138,14 @@
 
     implements("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.jetbrains.psi.ResTypeLikeNodeDecl"
     implements(".*Block")="edu.clemson.resolve.jetbrains.psi.ResBlock"
+
+    extends("Math.*(DefnDecl)")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractMathDefnImpl"
+    extends("Math.*(Sig)")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractMathSigImpl"
+    extends(".*ModuleDecl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractModuleImpl"
+
+    extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|Procedure|OperationProcedure|Exemplar|Facility)Decl)|ModuleIdentifierSpec")="edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl"
+    extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractTypeLikeNodeImpl"
+    extends("Math.*(Exp)")=MathExp
 
     pin(".*Statement")=1
     extends(".*Statement")=Statement
@@ -409,13 +410,13 @@ private MathDefnSig ::=
 MathPrefixDefnSig ::= MathPrefixNameList MathDefinitionParams? ':' MathExp {pin=1}
 
 private MathPrefixNameList ::= MathSymbolName (',' MathSymbolName)* {recoverWhile=MathPrefixListRec}
-private MathPrefixListRec ::= !(':'|';'|'(')
+private MathPrefixListRec ::= !(':'|'⦂'|';'|'(')
 private MathPrefixDefnSigs ::= MathPrefixDefnSig (',' MathPrefixDefnSig)* {recoverWhile=CategoricalSigListRec}
 private CategoricalSigListRec ::= !('is')
 
-MathInfixDefnSig ::= '(' MathVarDecl ')' MathSymbolName '(' MathVarDecl ')' ':' MathExp {pin=4}
-MathOutfixDefnSig ::= 'is' MathVarDecl  ':' MathExp {pin=1}
-MathPostfixDefnSig ::= '(' MathVarDecl ')' '[' MathVarDecl ']' ':' MathExp {pin=2}
+MathInfixDefnSig ::= '(' MathVarDecl ')' MathSymbolName '(' MathVarDecl ')' (':'|'⦂') MathExp {pin=4}
+MathOutfixDefnSig ::= 'is' MathVarDecl  (':'|'⦂') MathExp {pin=1}
+MathPostfixDefnSig ::= '(' MathVarDecl ')' '[' MathVarDecl ']' (':'|'⦂') MathExp {pin=2}
 
 private MathDefinitionParams ::= '(' MathDefnParamList ')' { pin=1}
 private ParamListRec ::= !(')'|';')
@@ -432,9 +433,9 @@ MathInductiveDefnDecl ::= 'Inductive' 'Definition' MathDefnSig 'is'
 
 // mathematical variables
 
-MathVarDeclGroup ::= MathVarDeclList ':' MathExp {pin=1}
+MathVarDeclGroup ::= MathVarDeclList (':'|'⦂') MathExp {pin=1}
 
-MathVarDecl ::= MathVarDef ':' MathExp {pin=2 extends=MathVarDeclGroup}
+MathVarDecl ::= MathVarDef (':'|'⦂') MathExp {pin=2 extends=MathVarDeclGroup}
 private MathVarDeclList ::= MathVarDef &(!(')')) (',' MathVarDef)* {pin=1}
 MathVarDef ::= identifier
 
@@ -464,12 +465,12 @@ MathExp ::=
         | MathNestedExp
         | MathPrimeExp {methods=[getResMathMetaTypeExp]}
 
-//MathTypeAssertionExp ::= MathExp ':' MathExp {pin=2}
 MathNestedExp ::= '(' MathAssertionExp ')'
 MathSelectorExp ::= MathExp '.' MathExp
 MathPrefixApplyExp ::= MathExp '(' MathArgList ')'
 MathOutfixApplyExp ::= '`' MathSymbolNameNoId MathExp MathSymbolNameNoId '`'
 MathInfixApplyExp ::= MathExp MathOpSymbolName MathExp
+MathClssftnalAssrtExp ::= MathExp (':'|'⦂') MathExp
 
 private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
 
@@ -478,6 +479,7 @@ private MathPrimeExp ::=
            | MathSelectorExp
            | MathLambdaExp
            | MathAlternativeExp
+           | MathClssftnalAssrtExp
 
 private MathOpSymbolName ::= MathSymbolExp
 private MathSymbolNameNoId ::= (symbol|math_symbol)

@@ -75,7 +75,7 @@ public class ResMathVarLikeReference
         //return processUnqualifiedResolve(((ResFile) file), processor, state, true);
         return false;
     }
-/*
+/*x
     private boolean processUnqualifiedResolve(@NotNull ResFile file,
                                               @NotNull ResScopeProcessor processor,
                                               @NotNull ResolveState state,
