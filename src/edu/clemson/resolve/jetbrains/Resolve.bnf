@@ -462,7 +462,7 @@ MathExp ::=
         | MathPrefixApplyExp
         | MathOutfixApplyExp
         | MathNestedExp
-        | MathPrimeExp
+        | MathPrimeExp {methods=[getResMathMetaTypeExp]}
 
 //MathTypeAssertionExp ::= MathExp ':' MathExp {pin=2}
 MathNestedExp ::= '(' MathAssertionExp ')'

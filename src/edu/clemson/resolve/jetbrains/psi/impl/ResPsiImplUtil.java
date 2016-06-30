@@ -262,8 +262,8 @@ public class ResPsiImplUtil {
     }
 
     /**
-     * An expression describing the type of a mathematical expression
-     * {@code o} written in terms of another mathematical expression.
+     * An expression denoting the classification of a mathematical expression {@code o} written in terms of another
+     * mathematical expression.
      */
     @Nullable
     public static ResMathExp getResMathMetaTypeExp(@NotNull final ResMathExp o,
