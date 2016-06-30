@@ -98,6 +98,9 @@ public class ResParser implements PsiParser, LightPsiParser {
     else if (t == IMPL_MODULE_PARAMETERS) {
       r = ImplModuleParameters(b, 0);
     }
+    else if (t == INFIX_EXP) {
+      r = InfixExp(b, 0);
+    }
     else if (t == INTIALIZATION_CLAUSE) {
       r = IntializationClause(b, 0);
     }
@@ -129,7 +132,7 @@ public class ResParser implements PsiParser, LightPsiParser {
       r = MathInductiveDefnDecl(b, 0);
     }
     else if (t == MATH_INFIX_APPLY_EXP) {
-      r = MathExp(b, 0, -1);
+      r = MathInfixApplyExp(b, 0);
     }
     else if (t == MATH_INFIX_DEFN_SIG) {
       r = MathInfixDefnSig(b, 0);
@@ -1297,6 +1300,20 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // Exp OpName Exp
+  public static boolean InfixExp(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "InfixExp")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Exp(b, l + 1);
+    r = r && OpName(b, l + 1);
+    r = r && Exp(b, l + 1);
+    exit_section_(b, m, INFIX_EXP, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // 'initialization' (EnsuresClause)
   public static boolean IntializationClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "IntializationClause")) return false;
@@ -1529,9 +1546,9 @@ public class ResParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // MathPrefixDefnSig
-  //         |   MathOutfixDefnSig
-  //         |   MathInfixDefnSig
-  //         |   MathPostfixDefnSig
+  //         | MathOutfixDefnSig
+  //         | MathInfixDefnSig
+  //         | MathPostfixDefnSig
   static boolean MathDefnSig(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathDefnSig")) return false;
     boolean r;
@@ -2281,6 +2298,12 @@ public class ResParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "OpBlock_1")) return false;
     Statements(b, l + 1);
     return true;
+  }
+
+  /* ********************************************************** */
+  // NameExp
+  static boolean OpName(PsiBuilder b, int l) {
+    return NameExp(b, l + 1);
   }
 
   /* ********************************************************** */
@@ -3557,7 +3580,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   /* ********************************************************** */
   // Expression root: MathExp
   // Operator priority table:
-  // 0: BINARY(MathInfixApplyExp)
+  // 0: ATOM(MathInfixApplyExp)
   // 1: POSTFIX(MathPrefixApplyExp)
   // 2: PREFIX(MathOutfixApplyExp)
   // 3: PREFIX(MathNestedExp)
@@ -3567,7 +3590,8 @@ public class ResParser implements PsiParser, LightPsiParser {
     addVariant(b, "<math exp>");
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, "<math exp>");
-    r = MathOutfixApplyExp(b, l + 1);
+    r = MathInfixApplyExp(b, l + 1);
+    if (!r) r = MathOutfixApplyExp(b, l + 1);
     if (!r) r = MathNestedExp(b, l + 1);
     if (!r) r = MathSymbolExp(b, l + 1);
     if (!r) r = MathLambdaExp(b, l + 1);
@@ -3583,11 +3607,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     boolean r = true;
     while (true) {
       Marker m = enter_section_(b, l, _LEFT_, null);
-      if (g < 0 && MathOpSymbolName(b, l + 1)) {
-        r = MathExp(b, l, 0);
-        exit_section_(b, l, m, MATH_INFIX_APPLY_EXP, r, true, null);
-      }
-      else if (g < 1 && MathPrefixApplyExp_0(b, l + 1)) {
+      if (g < 1 && MathPrefixApplyExp_0(b, l + 1)) {
         r = true;
         exit_section_(b, l, m, MATH_PREFIX_APPLY_EXP, r, true, null);
       }
@@ -3604,6 +3624,18 @@ public class ResParser implements PsiParser, LightPsiParser {
         break;
       }
     }
+    return r;
+  }
+
+  // MathExp MathSymbolExp MathExp
+  public static boolean MathInfixApplyExp(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathInfixApplyExp")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _COLLAPSE_, MATH_INFIX_APPLY_EXP, "<math infix apply exp>");
+    r = MathExp(b, l + 1, -1);
+    r = r && MathSymbolExp(b, l + 1);
+    r = r && MathExp(b, l + 1, -1);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 

@@ -264,12 +264,8 @@ left QualifiedTypeReferenceExp ::= '.' identifier {elementType=TypeReferenceExp}
 RecordType ::= 'Record' RecordVarDeclGroup* 'end' {pin=1 extends=Type}
 
 TypeModelDecl ::= 'Type' 'family' identifier TypeModelPortion ';'
-    ExemplarDecl
-    ConstraintsClause?
-    IntializationClause? {pin=3}
-
+    ExemplarDecl ConstraintsClause? IntializationClause? {pin=3}
 ExemplarDecl ::= 'exemplar' identifier ';' {pin=2 methods=[getResMathMetaTypeExpInner]}
-
 private TypeModelPortion ::= 'is' 'modeled' 'by' MathExp {pin=4}
 
 TypeReprDecl ::= 'Type' identifier 'is' (RecordType|Type) ';'
@@ -302,16 +298,16 @@ ParamDef ::= identifier
 TypeParamDecl ::= 'type' identifier {pin=2}
 
 ParameterMode ::=
-      'alters'
-    | 'updates'
-    | 'clears'
-    | 'restores'
-    | 'preserves'
-    | 'replaces'
-    | 'evaluates'
-    | identifier //TODO: would like to get rid of identifier here, but results
-                 //in an uglier (partial) psi; which makes keyword completion
-                 //patterns much harder
+          'alters'
+        | 'updates'
+        | 'clears'
+        | 'restores'
+        | 'preserves'
+        | 'replaces'
+        | 'evaluates'
+        | identifier //TODO: would like to get rid of identifier here, but results
+                     //in an uglier (partial) psi; which makes keyword completion
+                     //patterns much harder
 
 // prog variable decls
 
@@ -356,31 +352,20 @@ ProcedureDecl ::=
 OpBlock
 'end' CloseIdentifier ';' {pin=3}
 
-OpBlock ::=
-VarDeclGroup*
-Statements?
-
-/** We cannot have two identifiers referenced in a rule (where one, say, the
- *  first, is pinned): the code doesn't gen a getter for your pinned
- *  identifier. This intermediate rule is simply a workaround for this.
- */
+OpBlock ::= VarDeclGroup* Statements?
 CloseIdentifier ::= identifier
 
-private Statements ::= Statement* {recoverWhile=StatementRecover}
+// statements
 
-Statement ::=
-      SimpleStatement
-    | WhileStatement
-    | IfStatement
-
-private StatementRecover ::= !('end'|':='|':=:'|'If'|'While'|'else'|identifier)
+Statement ::= SimpleStatement | WhileStatement | IfStatement
 SimpleStatement ::= Exp (AssignStatement|SwapStatement)? ';' {pin(".*")=1}
+private Statements ::= Statement* {recoverWhile=StatementRecover}
+private StatementRecover ::= !('end'|':='|':=:'|'If'|'While'|'else'|identifier)
 
 left AssignStatement ::= ':=' Exp {pin=1}
 left SwapStatement ::= ':=:' Exp {pin=1}
 
-WhileStatement ::= 'While' Exp
-ChangingClause? MaintainingClause? DecreasingClause?
+WhileStatement ::= 'While' Exp ChangingClause? MaintainingClause? DecreasingClause?
 'do' Statements 'end' ';'
 
 IfStatement ::= 'If' Exp 'then' Statements (ElseStatement)? 'end' ';' {pin=1}
@@ -388,25 +373,29 @@ ElseStatement ::= 'else' Statements {pin=1}
 
 // program expressions
 
-Exp ::=
-      NameExp
+Exp ::= InfixExp | CallExp | NestedExp | PrimeExp
 
-//version of a normal name exp, only this one is guaranteed to be unqualified..
+NestedExp ::= '(' Exp ')'   {extends=Exp}
+SelectorExp ::= Exp '.' Exp {extends=Exp}
+InfixExp ::= Exp ProgSymbolName Exp {extends=Exp}
+CallExp ::= NameExp ArgumentList {extends=Exp}
+ProgSymbolName ::= (identifier|symbol)
+
 NameExp ::= ReferenceExp QualifiedReferenceExp? {elementType=ReferenceExp}
 left QualifiedReferenceExp ::= '.' identifier {elementType=ReferenceExp}
-ReferenceExp ::= identifier { methods=[getReference getQualifier resolve shouldReferenceModule] extends=Exp}
+ReferenceExp ::= ProgSymbolName { methods=[getReference getQualifier resolve shouldReferenceModule] extends=Exp}
+
+private PrimeExp ::= LiteralExp | NameExp | SelectorExp
+LiteralExp ::= (int|string|true|false)  {extends=Exp}
+ArgumentList ::= '(' ExpArgumentList? ')' {pin=1}
+private ExpArgumentList ::= Exp (',' Exp)* {pin(".*")=1}
 
 // math constructs
 
 MathTheoremDecl ::= ('Corollary'|'Theorem') identifier ':'
 MathAssertionExp ';' {pin = 2}
 
-private MathDefnSig ::=
-            MathPrefixDefnSig
-        |   MathOutfixDefnSig
-        |   MathInfixDefnSig
-        |   MathPostfixDefnSig
-
+private MathDefnSig ::= MathPrefixDefnSig | MathOutfixDefnSig | MathInfixDefnSig | MathPostfixDefnSig
 MathPrefixDefnSig ::= MathPrefixNameList MathDefinitionParams? ':' MathExp {pin=1}
 
 private MathPrefixNameList ::= MathSymbolName (',' MathSymbolName)* {recoverWhile=MathPrefixListRec}
@@ -455,7 +444,6 @@ EntailsClause ::= 'which_entails' MathExp {pin=1}
 // mathematical expressions
 
 MathAssertionExp ::= MathQuantifiedExp|MathExp
-
 MathQuantifiedExp ::= ('∃'|'∀'|'Exists'|'Forall') MathVarDeclGroup ',' MathAssertionExp {pin=1}
 
 MathExp ::=
@@ -475,11 +463,11 @@ MathClssftnalAssrtExp ::= MathExp (':'|'⦂') MathExp
 private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
 
 private MathPrimeExp ::=
-             MathSymbolExp
-           | MathSelectorExp
-           | MathLambdaExp
-           | MathAlternativeExp
-           | MathClssftnalAssrtExp
+          MathSymbolExp
+        | MathSelectorExp
+        | MathLambdaExp
+        | MathAlternativeExp
+        | MathClssftnalAssrtExp
 
 private MathOpSymbolName ::= MathSymbolExp
 private MathSymbolNameNoId ::= (symbol|math_symbol)
