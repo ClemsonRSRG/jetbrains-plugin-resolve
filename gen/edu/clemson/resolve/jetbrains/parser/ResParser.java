@@ -110,6 +110,9 @@ public class ResParser implements PsiParser, LightPsiParser {
     else if (t == MATH_ALTERNATIVE_ITEM_EXP) {
       r = MathAlternativeItemExp(b, 0);
     }
+    else if (t == MATH_ALTERNATIVES_LIST) {
+      r = MathAlternativesList(b, 0);
+    }
     else if (t == MATH_ASSERTION_EXP) {
       r = MathAssertionExp(b, 0);
     }
@@ -1350,25 +1353,24 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MathExp ('if' MathExp ';' | 'otherwise' ';')
+  // MathExp ('if' MathExp ';' | 'otherwise')
   public static boolean MathAlternativeItemExp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathAlternativeItemExp")) return false;
-    boolean r, p;
+    boolean r;
     Marker m = enter_section_(b, l, _COLLAPSE_, MATH_ALTERNATIVE_ITEM_EXP, "<math alternative item exp>");
     r = MathExp(b, l + 1, -1);
-    p = r; // pin = 1
     r = r && MathAlternativeItemExp_1(b, l + 1);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+    exit_section_(b, l, m, r, false, null);
+    return r;
   }
 
-  // 'if' MathExp ';' | 'otherwise' ';'
+  // 'if' MathExp ';' | 'otherwise'
   private static boolean MathAlternativeItemExp_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathAlternativeItemExp_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = MathAlternativeItemExp_1_0(b, l + 1);
-    if (!r) r = MathAlternativeItemExp_1_1(b, l + 1);
+    if (!r) r = consumeToken(b, OTHERWISE);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -1385,14 +1387,20 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // 'otherwise' ';'
-  private static boolean MathAlternativeItemExp_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathAlternativeItemExp_1_1")) return false;
+  /* ********************************************************** */
+  // MathAlternativeItemExp+
+  public static boolean MathAlternativesList(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathAlternativesList")) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, OTHERWISE);
-    r = r && consumeToken(b, SEMICOLON);
-    exit_section_(b, m, null, r);
+    Marker m = enter_section_(b, l, _NONE_, MATH_ALTERNATIVES_LIST, "<math alternatives list>");
+    r = MathAlternativeItemExp(b, l + 1);
+    int c = current_position_(b);
+    while (r) {
+      if (!MathAlternativeItemExp(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "MathAlternativesList", c)) break;
+      c = current_position_(b);
+    }
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -3492,8 +3500,8 @@ public class ResParser implements PsiParser, LightPsiParser {
   // 0: BINARY(MathInfixApplyExp)
   // 1: POSTFIX(MathPrefixApplyExp)
   // 2: PREFIX(MathOutfixApplyExp)
-  // 3: ATOM(MathNestedExp)
-  // 4: ATOM(MathSymbolExp) BINARY(MathSelectorExp) ATOM(MathLambdaExp) ATOM(MathAlternativeExp)
+  // 3: PREFIX(MathNestedExp)
+  // 4: ATOM(MathSymbolExp) BINARY(MathSelectorExp) PREFIX(MathLambdaExp) ATOM(MathAlternativeExp)
   public static boolean MathExp(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "MathExp")) return false;
     addVariant(b, "<math exp>");
@@ -3552,25 +3560,46 @@ public class ResParser implements PsiParser, LightPsiParser {
     if (!nextTokenIsSmart(b, BACKTICK)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, null);
-    r = consumeTokenSmart(b, BACKTICK);
+    r = MathOutfixApplyExp_0(b, l + 1);
     p = r;
     r = p && MathExp(b, l, 2);
-    r = p && report_error_(b, consumeToken(b, BACKTICK)) && r;
+    r = p && report_error_(b, MathOutfixApplyExp_1(b, l + 1)) && r;
     exit_section_(b, l, m, MATH_OUTFIX_APPLY_EXP, r, p, null);
     return r || p;
   }
 
-  // '(' MathAssertionExp ')'
+  // '`' MathSymbolNameNoId
+  private static boolean MathOutfixApplyExp_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathOutfixApplyExp_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, BACKTICK);
+    r = r && MathSymbolNameNoId(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // MathSymbolNameNoId '`'
+  private static boolean MathOutfixApplyExp_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathOutfixApplyExp_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = MathSymbolNameNoId(b, l + 1);
+    r = r && consumeToken(b, BACKTICK);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
   public static boolean MathNestedExp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathNestedExp")) return false;
     if (!nextTokenIsSmart(b, LPAREN)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, MATH_NESTED_EXP, null);
+    Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeTokenSmart(b, LPAREN);
-    p = r; // pin = 1
-    r = r && report_error_(b, MathAssertionExp(b, l + 1));
-    r = p && consumeToken(b, RPAREN) && r;
-    exit_section_(b, l, m, r, p, null);
+    p = r;
+    r = p && MathExp(b, l, 3);
+    r = p && report_error_(b, consumeToken(b, RPAREN)) && r;
+    exit_section_(b, l, m, MATH_NESTED_EXP, r, p, null);
     return r || p;
   }
 
@@ -3592,24 +3621,33 @@ public class ResParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (lambda|'λ') MathVarDecl ','  MathExp
   public static boolean MathLambdaExp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathLambdaExp")) return false;
     if (!nextTokenIsSmart(b, LAMBDA1, LAMBDA)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, MATH_LAMBDA_EXP, "<math lambda exp>");
+    Marker m = enter_section_(b, l, _NONE_, null);
     r = MathLambdaExp_0(b, l + 1);
-    r = r && MathVarDecl(b, l + 1);
-    r = r && consumeToken(b, COMMA);
-    p = r; // pin = 3
-    r = r && MathExp(b, l + 1, -1);
-    exit_section_(b, l, m, r, p, null);
+    p = r;
+    r = p && MathExp(b, l, -1);
+    exit_section_(b, l, m, MATH_LAMBDA_EXP, r, p, null);
     return r || p;
   }
 
-  // lambda|'λ'
+  // (lambda|'λ') MathVarDecl ','
   private static boolean MathLambdaExp_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathLambdaExp_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = MathLambdaExp_0_0(b, l + 1);
+    r = r && MathVarDecl(b, l + 1);
+    r = r && consumeToken(b, COMMA);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // lambda|'λ'
+  private static boolean MathLambdaExp_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathLambdaExp_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeTokenSmart(b, LAMBDA);
@@ -3618,43 +3656,16 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // '{{' (MathAlternativeItemExp)+ '}}'
+  // '{{' MathAlternativesList '}}'
   public static boolean MathAlternativeExp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathAlternativeExp")) return false;
     if (!nextTokenIsSmart(b, DBL_LBRACE)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, MATH_ALTERNATIVE_EXP, null);
+    boolean r;
+    Marker m = enter_section_(b);
     r = consumeTokenSmart(b, DBL_LBRACE);
-    r = r && MathAlternativeExp_1(b, l + 1);
-    p = r; // pin = 2
+    r = r && MathAlternativesList(b, l + 1);
     r = r && consumeToken(b, DBL_RBRACE);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  // (MathAlternativeItemExp)+
-  private static boolean MathAlternativeExp_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathAlternativeExp_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = MathAlternativeExp_1_0(b, l + 1);
-    int c = current_position_(b);
-    while (r) {
-      if (!MathAlternativeExp_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "MathAlternativeExp_1", c)) break;
-      c = current_position_(b);
-    }
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (MathAlternativeItemExp)
-  private static boolean MathAlternativeExp_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathAlternativeExp_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = MathAlternativeItemExp(b, l + 1);
-    exit_section_(b, m, null, r);
+    exit_section_(b, m, MATH_ALTERNATIVE_EXP, r);
     return r;
   }
 

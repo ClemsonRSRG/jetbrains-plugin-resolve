@@ -465,9 +465,9 @@ MathExp ::=
         | MathPrimeExp
 
 //MathTypeAssertionExp ::= MathExp ':' MathExp {pin=2}
-MathNestedExp ::= '(' MathAssertionExp ')' {pin=1}
+MathNestedExp ::= '(' MathAssertionExp ')'
 MathSelectorExp ::= MathExp '.' MathExp
-MathPrefixApplyExp ::= MathExp '(' MathArgList ')' {pin=2}
+MathPrefixApplyExp ::= MathExp '(' MathArgList ')'
 MathOutfixApplyExp ::= '`' MathSymbolNameNoId MathExp MathSymbolNameNoId '`'
 MathInfixApplyExp ::= MathExp MathOpSymbolName MathExp
 
@@ -488,6 +488,7 @@ MathSymbolExp ::=  MathReferenceExp MathQualifiedReferenceExp? {elementType=Math
 left MathQualifiedReferenceExp ::= '.' MathSymbolName {elementType=MathReferenceExp}
 MathReferenceExp ::= MathSymbolName {methods=[getReference getQualifier getIdentifier] extends=MathExp}
 
-MathLambdaExp ::= (lambda|'λ') MathVarDecl ','  MathExp  {pin=3}
-MathAlternativeExp ::= '{{' (MathAlternativeItemExp)+ '}}' {pin=2}
-MathAlternativeItemExp ::= MathExp ('if' MathExp ';' | 'otherwise' ';') {pin=1}
+MathLambdaExp ::= (lambda|'λ') MathVarDecl ','  MathExp
+MathAlternativeExp ::= '{{' MathAlternativesList '}}'
+MathAlternativesList ::= MathAlternativeItemExp+
+MathAlternativeItemExp ::= MathExp ('if' MathExp ';' | 'otherwise')
