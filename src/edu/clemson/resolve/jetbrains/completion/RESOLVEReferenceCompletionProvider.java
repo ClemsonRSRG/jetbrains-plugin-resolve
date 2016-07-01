@@ -3,6 +3,7 @@ package edu.clemson.resolve.jetbrains.completion;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.completion.PlainPrefixMatcher;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
@@ -26,11 +27,10 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
     protected void addCompletions(@NotNull CompletionParameters parameters,
                                   ProcessingContext context,
                                   @NotNull CompletionResultSet set) {
-        ResReferenceExpBase expression = PsiTreeUtil.getParentOfType(
-                parameters.getPosition(), ResReferenceExpBase.class);
+        ResReferenceExpBase expression = PsiTreeUtil.getParentOfType(parameters.getPosition(), ResReferenceExpBase.class);
         if (expression != null) {
-            fillVariantsByReference(expression.getReference(),
-                    set.withPrefixMatcher(createPrefixMatcher(set.getPrefixMatcher())));
+            set = set.withPrefixMatcher(createPrefixMatcher(set.getPrefixMatcher()));
+            fillVariantsByReference(expression.getReference(), set);
         }
         PsiElement parent = parameters.getPosition().getParent();
         if (parent != null) {
@@ -64,7 +64,19 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
             ((ResTypeReference) reference).processResolveVariants(aProcessor);
         }
         else if (reference instanceof ResMathVarLikeReference) {
+
+            //Subclassing (or finding the right written) LookupElement class is key to handling completions started
+            //with the special wildcard keyword I'm playing around with..
+            //so, in a nutshell, see {@link LookupElement} and its many subclasses. Clearly live templates have the
+            //insertion behavior I want here (meaning they replace everything) typed in already upon insertion
+
+            //UPDATE: Look at {@link QualifierInsertHandler#handleInsert}.. I'm thinking we should write a definition
+            //insert handler in its own file.. take ideas from the paren insert handler as well to determine where
+            //to put the caret. for instance, outfix case, caret goes between left and right... etc.
             PsiElement element = reference.getElement();
+            if (element.getText().startsWith("this")) {
+                result = result.withPrefixMatcher(createPrefixMatcher("")); //wildcard reference completion
+            }
             ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
                 @Override
                 protected boolean accept(@NotNull PsiElement e) {

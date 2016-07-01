@@ -433,9 +433,7 @@ EntailsClause ::= 'which_entails' MathExp {pin=1}
 MathAssertionExp ::= MathQuantifiedExp|MathExp
 MathQuantifiedExp ::= ('∃'|'∀'|'Exists'|'Forall') MathVarDeclGroup ',' MathAssertionExp {pin=1}
 
-MathExp ::=
-          MathInfixApplyExp
-        | MathPrefixApplyExp
+MathExp ::= MathInfixApplyExp | MathPrefixApplyExp
         | MathOutfixApplyExp
         | MathNestedExp
         | MathPrimeExp {methods=[getResMathMetaTypeExp]}
@@ -450,9 +448,7 @@ MathIncomingExp ::= '@' MathSymbolExp
 
 private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
 
-private MathPrimeExp ::= MathSymbolExp | MathIncomingExp
-        | MathSelectorExp
-        | MathLambdaExp
+private MathPrimeExp ::= MathSymbolExp | MathIncomingExp | MathSelectorExp | MathLambdaExp
         | MathAlternativeExp
         | MathClssftnAssrtExp
 

@@ -207,8 +207,10 @@ public class RESOLVECompletionUtil {
     }
 
     @NotNull
-    static LookupElement createDefinitionLookupElement(@NotNull ResMathDefnSig signature, @NotNull String lookupString,
-                                                       @Nullable InsertHandler<LookupElement> h, double priority) {
+    static LookupElement createDefinitionLookupElement(@NotNull ResMathDefnSig signature,
+                                                       @NotNull String lookupString,
+                                                       @Nullable InsertHandler<LookupElement> h,
+                                                       double priority) {
         return PrioritizedLookupElement.withPriority(LookupElementBuilder
                 .createWithSmartPointer(lookupString, signature)
                 .withRenderer(DEFINITION_RENDERER)
