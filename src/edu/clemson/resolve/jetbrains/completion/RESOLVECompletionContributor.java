@@ -26,24 +26,4 @@ public class RESOLVECompletionContributor extends CompletionContributor {
         return psiElement().withParent(psiElement(ResMathSymbolName.class)
                 .withParent(ResReferenceExpBase.class));
     }
-
-    /*private static PsiElementPattern.Capture<PsiElement> possiblyQualifiedModuleNameReference() {
-        return psiElement().withParent(psiElement(ResModuleSpec.class));
-    }*/
-
-    // private static PsiElementPattern.Capture<PsiElement> resReference() {
-    //     return psiElement().withParent(psiElement()
-    //             .withReference(ResCachedReference.class));
-    // }
-
-    /**
-     * Allow autoPopup to appear after custom symbol
-     */
-    public boolean invokeAutoPopup(@NotNull PsiElement position, char typeChar) {
-        /*return typeChar != ';' &&
-               typeChar != ' ' &&
-               typeChar != ')' &&
-               typeChar != '=';*/
-        return false;
-    }
 }

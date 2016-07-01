@@ -27,6 +27,21 @@ final class ResolveUtil {
         return true;
     }
 
+    static boolean processChildren(@NotNull PsiElement element,
+                                   @NotNull PsiScopeProcessor processor,
+                                   @NotNull ResolveState substitutor,
+                                   @Nullable PsiElement lastParent,
+                                   @NotNull PsiElement place) {
+        PsiElement run = lastParent == null ? element.getLastChild() : lastParent.getPrevSibling();
+        while (run != null) {
+            if (run instanceof ResCompositeElement && !run.processDeclarations(processor, substitutor, null, place)) {
+                return false;
+            }
+            run = run.getPrevSibling();
+        }
+        return true;
+    }
+
     static boolean processChildrenFromTop(@NotNull PsiElement element,
                                           @NotNull PsiScopeProcessor processor,
                                           @NotNull ResolveState substitutor,
@@ -39,21 +54,6 @@ final class ResolveUtil {
                 if (!run.processDeclarations(processor, substitutor, null, place)) return false;
             }
             run = run.getNextSibling();
-        }
-        return true;
-    }
-
-    static boolean processChildren(@NotNull PsiElement element,
-                                   @NotNull PsiScopeProcessor processor,
-                                   @NotNull ResolveState substitutor,
-                                   @Nullable PsiElement lastParent,
-                                   @NotNull PsiElement place) {
-        PsiElement run = lastParent == null ? element.getLastChild() : lastParent.getPrevSibling();
-        while (run != null) {
-            if (run instanceof ResCompositeElement && !run.processDeclarations(processor, substitutor, null, place)) {
-                return false;
-            }
-            run = run.getPrevSibling();
         }
         return true;
     }

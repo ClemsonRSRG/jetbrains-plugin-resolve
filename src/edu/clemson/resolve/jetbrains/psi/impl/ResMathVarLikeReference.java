@@ -19,20 +19,19 @@ import static edu.clemson.resolve.jetbrains.psi.impl.ResReference.processParamet
 public class ResMathVarLikeReference
         extends
         PsiPolyVariantReferenceBase<ResMathReferenceExp> {
+
     private static final Key<SmartPsiElementPointer<ResMathReferenceExp>> CONTEXT = Key.create("CONTEXT");
 
     ResMathVarLikeReference(@NotNull ResMathReferenceExp o) {
         super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(), o.getIdentifier().getTextLength()));
     }
 
-    private static final ResolveCache
-            .PolyVariantResolver<PsiPolyVariantReferenceBase> MY_RESOLVER =
+    private static final ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase> MY_RESOLVER =
             new ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase>() {
                 @NotNull
                 @Override
-                public ResolveResult[] resolve(
-                        @NotNull PsiPolyVariantReferenceBase psiPolyVariantReferenceBase,
-                        boolean incompleteCode) {
+                public ResolveResult[] resolve(@NotNull PsiPolyVariantReferenceBase psiPolyVariantReferenceBase,
+                                               boolean incompleteCode) {
                     return ((ResMathVarLikeReference) psiPolyVariantReferenceBase).resolveInner();
                 }
             };
@@ -52,8 +51,9 @@ public class ResMathVarLikeReference
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean b) {
-        if (!myElement.isValid()) return ResolveResult.EMPTY_ARRAY;
-        return ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, MY_RESOLVER, false, false);
+        return myElement.isValid()
+                ? ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, MY_RESOLVER, false, false)
+                : ResolveResult.EMPTY_ARRAY;
     }
 
     @NotNull
@@ -72,16 +72,15 @@ public class ResMathVarLikeReference
             //return processQualifierExpression(((ResFile)file), qualifier,
             //        processor, state);
         }
-        //return processUnqualifiedResolve(((ResFile) file), processor, state, true);
-        return false;
+        return processUnqualifiedResolve(((ResFile) file), processor, state, true);
     }
-/*x
+
     private boolean processUnqualifiedResolve(@NotNull ResFile file,
                                               @NotNull ResScopeProcessor processor,
                                               @NotNull ResolveState state,
                                               boolean localResolve) {
 
-        PsiElement parent = myElement.getParent();
+       /* PsiElement parent = myElement.getParent();
         if (parent instanceof ResMathSelectorExp) {
             boolean result = processMathSelector((ResMathSelectorExp) parent, processor, state, myElement);
             if (processor.isCompletion()) return result;
@@ -90,7 +89,7 @@ public class ResMathVarLikeReference
         PsiElement grandPa = parent.getParent();
         if (grandPa instanceof ResMathSelectorExp &&
                 !processMathSelector((ResMathSelectorExp) grandPa, processor, state, parent)) return false;
-        if (ResPsiImplUtil.prevDot(parent)) return false;
+        if (ResPsiImplUtil.prevDot(parent)) return false;*/
         ResScopeProcessorBase delegate = createDelegate(processor);
         ResolveUtil.treeWalkUp(myElement, delegate);
         Collection<? extends ResNamedElement> result = delegate.getVariants();
@@ -99,12 +98,12 @@ public class ResMathVarLikeReference
         ResReference.processParameterLikeThings(myElement, delegate);
         if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
         if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
-        if (!ResReference.processUsesImports(file, processor, state)) return false;
-        if (!processSuperModules(file, processor, state)) return false;
+        //if (!ResReference.processUsesImports(file, processor, state)) return false;
+        //if (!processSuperModules(file, processor, state)) return false;
         if (!processBuiltin(processor, state, myElement)) return false;
         return true;
     }
-*/
+
     private boolean processSuperModules(@NotNull ResFile file,
                                         @NotNull ResScopeProcessor processor,
                                         @NotNull ResolveState state) {
