@@ -5,8 +5,11 @@ import com.intellij.codeInsight.completion.InsertHandler;
 import com.intellij.codeInsight.completion.InsertionContext;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.psi.PsiElement;
-import edu.clemson.resolve.jetbrains.psi.ResMathDefnSig;
+import edu.clemson.resolve.jetbrains.psi.*;
+
+import java.util.List;
 
 //TODO: Needs to handle math infix, outfix, and prefix symbol... prefix will depend on context as well.
 public class MathSymbolInsertHandler extends BasicInsertHandler<LookupElement> {
@@ -27,24 +30,24 @@ public class MathSymbolInsertHandler extends BasicInsertHandler<LookupElement> {
         if (mathWildcardQuery) {
             context.getDocument().deleteString(context.getStartOffset() - 4, context.getStartOffset());
         }
-        //context.setAddCompletionChar(false);
-        // TemplateManager.getInstance(context.getProject()).startTemplate(context.getEditor(), myTemplate);
 
-        int x = context.getStartOffset();
-        int y = context.getTailOffset();
-
+        Editor editor = context.getEditor();
         PsiElement element = item.getPsiElement();
         if (!(element instanceof ResMathDefnSig)) return;
         ResMathDefnSig signature = (ResMathDefnSig) element;
         int paramsCount = signature.getParameters().size();
         //we don't want empty parens for nullary function applications or infix (or outfix)
         //TODO: Actually, we could define some nice insertion handlers for outfix defns.
-        InsertHandler<LookupElement> handler =
-                paramsCount == 0 //||
-                        //signature instanceof ResMathInfixDefinitionSignature ? //||
-                        //signature instanceof ResMathOutfixDefinitionSignature ?
-                        ? new BasicInsertHandler<LookupElement>() :
-                        ParenthesesInsertHandler.WITH_PARAMETERS;
+
+        InsertHandler<LookupElement> handler = new BasicInsertHandler<LookupElement>();
+        if (signature instanceof ResMathPrefixDefnSig && paramsCount != 0) {
+            handler = ParenthesesInsertHandler.WITH_PARAMETERS;
+        }
+        else if (signature instanceof ResMathOutfixDefnSig) {
+            List<ResMathSymbolName> pieces = ((ResMathOutfixDefnSig) signature).getMathSymbolNameList();
+            context.getDocument().insertString(context.getStartOffset(), "`");
+            context.getDocument().insertString(context.getTailOffset(), pieces.get(1).getText() + "`");
+        }
         handler.handleInsert(context, item);
     }
 }

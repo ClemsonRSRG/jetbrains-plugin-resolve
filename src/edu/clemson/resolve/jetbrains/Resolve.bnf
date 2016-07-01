@@ -391,7 +391,7 @@ private MathPrefixDefnSigs ::= MathPrefixDefnSig (',' MathPrefixDefnSig)* {recov
 private CategoricalSigListRec ::= !('is')
 
 MathInfixDefnSig ::= '(' MathVarDecl ')' MathSymbolName '(' MathVarDecl ')' (':'|'⦂') MathExp {pin=4}
-MathOutfixDefnSig ::= '`' MathSymbolNameNoId MathVarDecl MathSymbolNameNoId '`' (':'|'⦂') MathExp {pin=2}
+MathOutfixDefnSig ::= '`' MathSymbolNameNoId '(' MathVarDecl ')' MathSymbolNameNoId '`' (':'|'⦂') MathExp {pin=2}
 MathPostfixDefnSig ::= '(' MathVarDecl ')' '[' MathVarDecl ']' (':'|'⦂') MathExp {pin=2}
 
 private MathDefinitionParams ::= '(' MathDefnParamList ')' { pin=1}
