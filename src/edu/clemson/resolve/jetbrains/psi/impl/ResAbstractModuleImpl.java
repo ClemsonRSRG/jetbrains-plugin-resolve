@@ -2,19 +2,24 @@ package edu.clemson.resolve.jetbrains.psi.impl;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.ArrayUtil;
 import com.intellij.util.Processor;
 import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.containers.MultiMap;
 import edu.clemson.resolve.jetbrains.ResTypes;
 import edu.clemson.resolve.jetbrains.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public abstract class ResAbstractModuleImpl extends ResNamedElementImpl implements ResModuleDecl {
 
@@ -30,6 +35,25 @@ public abstract class ResAbstractModuleImpl extends ResNamedElementImpl implemen
     /*@Nullable
     public List<ResModuleSpec> getModuleSignatureIdentifiers() {
         return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleSpec.class);
+    }*/
+
+    /** @return map like { module name, maybe alias -> module ident spec } for module */
+    /*public Map<String, ResModuleIdentifierSpec> getUsesMap() {
+        return CachedValuesManager.getCachedValue(this, new CachedValueProvider<Map<String, ResModuleIdentifierSpec>>() {
+            @Nullable
+            @Override
+            public Result<Map<String, ResModuleIdentifierSpec>> compute() {
+                Map<String, ResModuleIdentifierSpec> map = new LinkedHashMap<>();
+                List<Object> dependencies = ContainerUtil.newArrayList(GoFile.this);
+                Module module = ModuleUtilCore.findModuleForPsiElement(GoFile.this);
+                for (ResModuleIdentifierSpec spec : getModuleIdentifierSpecs()) {
+                    if (spec.getAlias() != )
+                    String alias = spec.getAlias();
+                    ..
+                }
+                return Result.create(map, ArrayUtil.toObjectArray(dependencies));
+            }
+        });
     }*/
 
     @Nullable
@@ -50,9 +74,9 @@ public abstract class ResAbstractModuleImpl extends ResNamedElementImpl implemen
 
     @NotNull
     @Override
-    public List<ResUsesSpecGroup> getUsesSpecGroups() {
-        return getUsesList() != null ? getUsesList().getUsesSpecGroupList() :
-                ContainerUtil.<ResUsesSpecGroup>newArrayList();
+    public List<ResModuleIdentifierSpec> getModuleIdentifierSpecs() {
+        return getUsesList() != null ? getUsesList().getModuleIdentifierSpecList() :
+                ContainerUtil.<ResModuleIdentifierSpec>newArrayList();
     }
 
     @Nullable

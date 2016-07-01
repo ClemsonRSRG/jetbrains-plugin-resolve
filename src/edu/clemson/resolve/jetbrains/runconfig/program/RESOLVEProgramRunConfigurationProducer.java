@@ -17,8 +17,8 @@ public class RESOLVEProgramRunConfigurationProducer
         extends
         RunConfigurationProducer<RESOLVEProgramRunConfiguration> implements Cloneable {
 
-    protected RESOLVEProgramRunConfigurationProducer(@NotNull ConfigurationType configurationType) {
-        super(configurationType);
+    protected RESOLVEProgramRunConfigurationProducer() {
+        super(RESOLVEProgramRunConfigurationType.getInstance());
     }
 
     @Override
@@ -40,7 +40,7 @@ public class RESOLVEProgramRunConfigurationProducer
 
     @NotNull
     protected String getConfigurationName(@NotNull PsiFile file) {
-        return "RESOLVE run " + file.getName();
+        return "RESOLVE " + file.getName();
     }
 
     @Override

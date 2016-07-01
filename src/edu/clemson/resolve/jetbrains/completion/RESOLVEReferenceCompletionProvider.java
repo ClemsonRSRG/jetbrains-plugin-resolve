@@ -39,9 +39,8 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
         }
     }
 
-    private static void fillVariantsByReference(
-            @Nullable PsiReference reference,
-            @NotNull CompletionResultSet result) {
+    private static void fillVariantsByReference(@Nullable PsiReference reference,
+                                                @NotNull CompletionResultSet result) {
         if (reference == null) return;
         /*if (reference instanceof PsiMultiReference) {
             PsiReference[] references = ((PsiMultiReference)reference).getReferences();
@@ -122,6 +121,7 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
                                     RESOLVECompletionUtil.FUNCTION_PRIORITY);
                 }
             }
+            //TODO: ModuleIdentifierSpec here and make a module alias icon..
             else {
                 //TODO: Apply type info to the lookup renderers for these 'var like' elements
                 return RESOLVECompletionUtil.createVariableLikeLookupElement((ResNamedElement) o);

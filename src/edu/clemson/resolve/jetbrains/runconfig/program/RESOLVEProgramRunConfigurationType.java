@@ -13,21 +13,13 @@ import org.jetbrains.annotations.NotNull;
 public class RESOLVEProgramRunConfigurationType extends ConfigurationTypeBase {
 
     public RESOLVEProgramRunConfigurationType() {
-        super("RESOLVERunConfiguration", "RESOLVE Single Program", "RESOLVE single program run configuration",
+        super("RESOLVERunConfiguration", "RESOLVE Program", "RESOLVE program run configuration",
                 RESOLVEIcons.PROGRAM_RUN);
         addFactory(new ConfigurationFactory(this) {
             @Override
             @NotNull
             public RunConfiguration createTemplateConfiguration(@NotNull Project project) {
                 return new RESOLVEProgramRunConfiguration(RESOLVEConstants.RESOLVE, project, getInstance());
-            }
-
-            @Override
-            public void configureBeforeRunTaskDefaults(Key<? extends BeforeRunTask> providerID, BeforeRunTask task) {
-                super.configureBeforeRunTaskDefaults(providerID, task);
-                if (providerID == CompileStepBeforeRun.ID) {
-               //     task.setEnabled(false);
-                }
             }
         });
     }

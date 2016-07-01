@@ -36,7 +36,7 @@ import java.util.Collection;
 
 public class RESOLVEProgramRunConfiguration extends ModuleBasedConfiguration<RESOLVEModuleBasedConfiguration>
         implements
-        RunConfigurationWithSuppressedDefaultDebugAction {
+        RunConfigurationWithSuppressedDefaultDebugAction, RunConfigurationWithSuppressedDefaultRunAction {
 
     private static final String FILE_PATH_ATTRIBUTE_NAME = "filePath";
     private static final String WORKING_DIRECTORY_NAME = "working_directory";
@@ -47,13 +47,13 @@ public class RESOLVEProgramRunConfiguration extends ModuleBasedConfiguration<RES
     private String filePath = "";
     private String workingDirectory = "";
 
-    public RESOLVEProgramRunConfiguration(String name, Project project, @NotNull ConfigurationType configurationType) {
-        super(name, new RESOLVEModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);
+    RESOLVEProgramRunConfiguration(String name, Project project, @NotNull ConfigurationType configurationType) {
+        this(name, new RESOLVEModuleBasedConfiguration(project), configurationType.getConfigurationFactories()[0]);
     }
 
-    protected RESOLVEProgramRunConfiguration(final String name,
-                                             @NotNull RESOLVEModuleBasedConfiguration configurationModule,
-                                             @NotNull ConfigurationFactory factory) {
+    private RESOLVEProgramRunConfiguration(final String name,
+                                           @NotNull RESOLVEModuleBasedConfiguration configurationModule,
+                                           @NotNull ConfigurationFactory factory) {
         super(name, configurationModule, factory);
         Module module = configurationModule.getModule();
         if (module == null) {
@@ -98,15 +98,6 @@ public class RESOLVEProgramRunConfiguration extends ModuleBasedConfiguration<RES
         if (StringUtil.isNotEmpty(filePath)) {
             JDOMExternalizerUtil.addElementWithValueAttribute(element, FILE_PATH_ATTRIBUTE_NAME, filePath);
         }
-        //if (StringUtil.isNotEmpty(myGoParams)) {
-        //    JDOMExternalizerUtil.addElementWithValueAttribute(element, RESOLVE_PARAMETERS_NAME, parameters);
-        //}
-        //if (StringUtil.isNotEmpty(myParams)) {
-        //    JDOMExternalizerUtil.addElementWithValueAttribute(element, PARAMETERS_NAME, myParams);
-        //}
-        //if (!myCustomEnvironment.isEmpty()) {
-        //    EnvironmentVariablesComponent.writeExternal(element, myCustomEnvironment);
-        //}
     }
 
     protected void checkFileConfiguration() throws RuntimeConfigurationError {
@@ -191,13 +182,7 @@ public class RESOLVEProgramRunConfiguration extends ModuleBasedConfiguration<RES
         if (module == null) {
             throw new ExecutionException("RESOLVE isn't configured for program run configuration: " + getName());
         }
-        return newProgramRunningState(environment, module);
-    }
-
-    @NotNull
-    protected RESOLVEProgramRunningState newProgramRunningState(@NotNull ExecutionEnvironment env,
-                                                                @NotNull Module module) {
-        return new RESOLVEProgramRunningState(env, module, this);
+        return new RESOLVEProgramRunningState(environment, module, this);
     }
 
     @NotNull

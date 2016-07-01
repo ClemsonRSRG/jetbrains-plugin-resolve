@@ -5,16 +5,10 @@
     <vendor email="dtw.welch@gmail.com" url="https://github.com/Welchd1/jetbrains-plugin-resolve">RESOLVE Project</vendor>
 
     <description><![CDATA[
-        <p>
-        This plugin is designed to provide Intellij support for the RESOLVE
-        specification and programming language. Currently supported features
-        inclue: syntax highlighting, limited completion for keywords & refs,
-        goto-declaration, and symbol usage search.
+        Provides support for the RESOLVE specification and programming language.
     ]]></description>
 
     <change-notes><![CDATA[
-        Add change notes here.<br>
-        <em>most HTML tags may be used</em>
         ]]>
     </change-notes>
 
@@ -30,49 +24,66 @@
     </module-components>
 
     <extensions defaultExtensionNs="com.intellij">
-        <fileIconPatcher implementation="edu.clemson.resolve.jetbrains.RESOLVEFileIconPatcher"/>
-        <fileTypeFactory implementation="edu.clemson.resolve.jetbrains.RESOLVEFileTypeFactory"/>
 
-        <lang.parserDefinition language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.RESOLVEParserDefinition"/>
-        <lang.braceMatcher language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.editor.RESOLVEBraceMatcher"/>
-        <quoteHandler fileType="RESOLVE" className="edu.clemson.resolve.jetbrains.editor.RESOLVEQuoteHandler"/>
+        <internalFileTemplate name="RESOLVE File"/>
 
         <!-- project -->
-        <defaultLiveTemplatesProvider implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplatesProvider"/>
-        <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVEEverywhereContextType"/>
-        <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEFileContextType"/>
-        <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEMathRefContextType"/>
-        <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEMathDefContextType"/>
-
         <applicationService serviceImplementation="edu.clemson.resolve.jetbrains.project.RESOLVEApplicationLibrariesService"/>
         <projectService serviceImplementation="edu.clemson.resolve.jetbrains.project.RESOLVEProjectLibrariesService"/>
         <moduleService serviceImplementation="edu.clemson.resolve.jetbrains.project.RESOLVEModuleLibrariesService"/>
 
-        <!-- sdk -->
-        <applicationService serviceImplementation="edu.clemson.resolve.jetbrains.sdk.RESOLVEEnvironmentRESOLVE_PATHModificationTracker"/>
+        <!--<moduleService serviceImplementation="edu.clemson.resolve.jetbrains.project.RESOLVEModuleSettings"/>
+        <projectService serviceImplementation="edu.clemson.resolve.jetbrains.project.RESOLVEExcludedPathsSettings"/>
+        <applicationService serviceImplementation="edu.clemson.resolve.jetbrains.project.RESOLVECodeInsightSettings"/>-->
 
-        <sdkType implementation="edu.clemson.resolve.jetbrains.sdk.RESOLVESdkType"/>
-        <projectService serviceInterface="edu.clemson.resolve.jetbrains.sdk.RESOLVESdkService" serviceImplementation="edu.clemson.resolve.jetbrains.sdk.RESOLVESmallSdkService"
-                        overrides="false"/>
-        <library.presentationProvider implementation="edu.clemson.resolve.jetbrains.sdk.RESOLVESdkLibraryPresentationProvider"/>
+        <!-- live template & contexts -->
+        <defaultLiveTemplatesProvider implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplatesProvider"/>
+        <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVEEverywhereContextType"/>
+        <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEFileContextType"/>
 
-        <directoryProjectGenerator implementation="edu.clemson.resolve.jetbrains.RESOLVEProjectGenerator"/> <!-- for small IDEs-->
+        <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEFacilityModuleContextType"/>
+        <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEConceptModuleContextType"/>
+        <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEConceptExtModuleContextType"/>
+        <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEImplModuleContextType"/>
 
+        <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEMathRefContextType"/>
+        <liveTemplateContext implementation="edu.clemson.resolve.jetbrains.template.RESOLVELiveTemplateContextType$RESOLVEMathDefContextType"/>
+
+        <!-- misc -->
+        <lang.parserDefinition language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.RESOLVEParserDefinition"/>
+        <fileTypeFactory implementation="edu.clemson.resolve.jetbrains.RESOLVEFileTypeFactory"/>
+        <lang.syntaxHighlighterFactory key="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.highlighting.RESOLVESyntaxHighlighterFactory"/>
+        <lang.psiStructureViewFactory language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.editor.RESOLVEStructureViewFactory"/>
+        <colorSettingsPage implementation="edu.clemson.resolve.jetbrains.highlighting.RESOLVEColorsAndFontsPage"/>
+        <lang.braceMatcher language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.editor.RESOLVEBraceMatcher"/>
+        <quoteHandler fileType="RESOLVE" className="edu.clemson.resolve.jetbrains.editor.RESOLVEQuoteHandler"/>
+        <externalAnnotator language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.annotation.RESOLVEExternalAnnotator"/>
+        <fileIconPatcher implementation="edu.clemson.resolve.jetbrains.RESOLVEFileIconPatcher"/>
+
+        <!-- completions -->
         <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.completion.RESOLVECompletionContributor"/>
         <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.completion.RESOLVEKeywordCompletionContributor"/>
 
-        <lang.syntaxHighlighterFactory key="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.highlighting.RESOLVESyntaxHighlighterFactory"/>
-        <colorSettingsPage implementation="edu.clemson.resolve.jetbrains.highlighting.RESOLVEColorsAndFontsPage"/>
+        <!-- formatter -->
 
-        <lang.psiStructureViewFactory language="RESOLVE"
-                                      implementationClass="edu.clemson.resolve.jetbrains.editor.RESOLVEStructureViewFactory"/>
-        <externalAnnotator language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.annotation.RESOLVEExternalAnnotator"/>
+        <!-- sdk -->
+        <sdkType implementation="edu.clemson.resolve.jetbrains.sdk.RESOLVESdkType"/>
+        <applicationService serviceImplementation="edu.clemson.resolve.jetbrains.sdk.RESOLVEEnvironmentRESOLVE_PATHModificationTracker"/>
+        <projectService serviceInterface="edu.clemson.resolve.jetbrains.sdk.RESOLVESdkService" serviceImplementation="edu.clemson.resolve.jetbrains.sdk.RESOLVESmallSdkService"
+                        overrides="false"/>
+        <library.presentationProvider implementation="edu.clemson.resolve.jetbrains.sdk.RESOLVESdkLibraryPresentationProvider"/>
+        <!--<editorNotificationProvider implementation="edu.clemson.resolve.jetbrains.inspections.WrongSdkConfigurationNotificationProvider"/>-->
+        <!--<editorNotificationProvider implementation="edu.clemson.resolve.jetbrains.inspections.RESOLVEFileIgnoredByBuildToolNotificationProvider"/>-->
+        <!--<stepsBeforeRunProvider implementation="edu.clemson.resolve.jetbrains.runconfig.before.RESOLVEBeforeRunTaskProvider"/>-->
 
-
-        <!-- run single file -->
+        <!-- run single file (prog) -->
         <configurationType implementation="edu.clemson.resolve.jetbrains.runconfig.program.RESOLVEProgramRunConfigurationType"/>
         <runConfigurationProducer implementation="edu.clemson.resolve.jetbrains.runconfig.program.RESOLVEProgramRunConfigurationProducer"/>
+        <programRunner id="resolveRunner" implementation="edu.clemson.resolve.jetbrains.runconfig.RESOLVERunner"/>
+        <runLineMarkerContributor language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.runconfig.RESOLVERunLineMarkerProvider"/>
 
+        <!-- color schemes -->
+        <!--<bundledColorScheme path="colorscheme/GithubStyle - dtwelch"/>-->
     </extensions>
 
     <application-components>
@@ -86,10 +97,10 @@
     </project-components>
 
     <actions>
-       <!-- <action id="resolve.NewRESOLVEFile" class="edu.clemson.resolve.jetbrains.actions.RESOLVECreateFileAction"
-                text="RESOLVE File" description="Create new RESOLVE file">
+        <action id="resolve.NewRESOLVEFile" class="edu.clemson.resolve.jetbrains.actions.RESOLVECreateFileAction"
+                text="RESOLVE File" description="Create a new RESOLVE file">
             <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
-        </action>-->
+        </action>
         <action id="resolve.GenVCs" class="edu.clemson.resolve.jetbrains.actions.GenerateVCsAction"
                 text="RESOLVE Generate VCs">
             <keyboard-shortcut keymap="$default" first-keystroke="control shift H"/>

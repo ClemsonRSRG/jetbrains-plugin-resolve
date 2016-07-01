@@ -86,7 +86,7 @@ public class RESOLVEExternalAnnotator extends ExternalAnnotator<PsiFile, List<RE
             ApplicationManager.getApplication().runReadAction(new Runnable() {
                 @Override
                 public void run() {
-                    resolve.workingDirectory = file.getVirtualFile().getParent().getCanonicalPath();
+                    resolve.libDirectory = file.getVirtualFile().getParent().getCanonicalPath();
                 }
             });
         }
@@ -99,7 +99,7 @@ public class RESOLVEExternalAnnotator extends ExternalAnnotator<PsiFile, List<RE
             VirtualFile vfile = file.getVirtualFile();
             in.name = vfile.getPath();
             AnnotatedModule ast = resolve.parseModule(in);
-            if (ast == null || ast.hasErrors) return Collections.emptyList();
+            if (ast == null || ast.hasParseErrors) return Collections.emptyList();
             resolve.processCommandLineTargets(ast);
           /*
             Map<String, GrammarAST> unusedRules = getUnusedParserRules(g);
