@@ -7,6 +7,14 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.codeInsight.lookup.LookupElementRenderer;
+import com.intellij.codeInsight.template.CustomLiveTemplate;
+import com.intellij.codeInsight.template.CustomLiveTemplateBase;
+import com.intellij.codeInsight.template.LiveTemplateBuilder;
+import com.intellij.codeInsight.template.TemplateManager;
+import com.intellij.codeInsight.template.impl.CustomLiveTemplateLookupElement;
+import com.intellij.codeInsight.template.impl.LiveTemplateLookupElement;
+import com.intellij.codeInsight.template.impl.LiveTemplateLookupElementImpl;
+import com.intellij.codeInsight.template.impl.TemplateImpl;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
@@ -59,11 +67,11 @@ public class RESOLVECompletionUtil {
                     ResType type = v.getResType(null);
                     String text = ResPsiImplUtil.getText(type);
                     Icon icon = v instanceof ResMathVarDef ? RESOLVEIcons.VARIABLE :
-                                v instanceof ResVarDef ? RESOLVEIcons.VARIABLE :
-                                v instanceof ResExemplarDecl ? RESOLVEIcons.EXEMPLAR :
-                                v instanceof ResParamDef ? RESOLVEIcons.PARAMETER :
-                                v instanceof ResTypeParamDecl ? RESOLVEIcons.GENERIC_TYPE :
-                                v instanceof ResFieldDef ? RESOLVEIcons.RECORD_FIELD : null;
+                            v instanceof ResVarDef ? RESOLVEIcons.VARIABLE :
+                                    v instanceof ResExemplarDecl ? RESOLVEIcons.EXEMPLAR :
+                                            v instanceof ResParamDef ? RESOLVEIcons.PARAMETER :
+                                                    v instanceof ResTypeParamDecl ? RESOLVEIcons.GENERIC_TYPE :
+                                                            v instanceof ResFieldDef ? RESOLVEIcons.RECORD_FIELD : null;
 
                     if (v instanceof ResMathVarDef) {
                         //Todo: Need to write a getResTypeInner method and put it into the psi util class;
@@ -107,28 +115,6 @@ public class RESOLVECompletionUtil {
                 }
             };
 
-    //TODO: Insert handler for infix defn signatures; Whitespace on lhs and rhs of name
-    private static final InsertHandler<LookupElement> DEFINITION_INSERT_HANDLER =
-            new InsertHandler<LookupElement>() {
-                @Override
-                public void handleInsert(InsertionContext context, LookupElement item) {
-                    PsiElement element = item.getPsiElement();
-                    if (!(element instanceof ResMathDefnSig))
-                        return;
-                    ResMathDefnSig signature = (ResMathDefnSig) element;
-                    int paramsCount = signature.getParameters().size();
-                    //we don't want empty parens for nullary function applications or infix (or outfix)
-                    //TODO: Actually, we could define some nice insertion handlers for outfix defns.
-                    InsertHandler<LookupElement> handler =
-                            paramsCount == 0 //||
-                                    //signature instanceof ResMathInfixDefinitionSignature ? //||
-                                    //signature instanceof ResMathOutfixDefinitionSignature ?
-                                    ? new BasicInsertHandler<LookupElement>() :
-                                    ParenthesesInsertHandler.WITH_PARAMETERS;
-                    handler.handleInsert(context, item);
-                }
-            };
-
     private static final LookupElementRenderer<LookupElement> DEFINITION_RENDERER =
             new LookupElementRenderer<LookupElement>() {
                 @Override
@@ -150,8 +136,7 @@ public class RESOLVECompletionUtil {
                                     typeText += grp.getMathExp().getText();
                                 }
                                 else {
-                                    typeText += " ⨯ " +
-                                            grp.getMathExp().getText();
+                                    typeText += " ⨯ " + grp.getMathExp().getText();
                                 }
                             }
                         }
@@ -163,7 +148,7 @@ public class RESOLVECompletionUtil {
                     p.setTypeText(rangeTypeText);
                     p.setTypeGrayed(true);
                     // p.setTailText(calcTailText(f), true);
-                    String correctColon = typeText.equals("Cls") ? " ː " : " : ";
+                    String correctColon = typeText.equals("Cls") ? " ⦂ " : " : ";
                     p.setItemText(element.getLookupString() + correctColon + typeText);
                 }
             };
@@ -179,10 +164,10 @@ public class RESOLVECompletionUtil {
     }
 
     @NotNull
-    static LookupElement createFunctionOrMethodLookupElement(@NotNull ResOperationLikeNode f,
-                                                             @NotNull String lookupString,
-                                                             @Nullable InsertHandler<LookupElement> h,
-                                                             double priority) {
+    static LookupElement createOpLikeLookupElement(@NotNull ResOperationLikeNode f,
+                                                   @NotNull String lookupString,
+                                                   @Nullable InsertHandler<LookupElement> h,
+                                                   double priority) {
         return PrioritizedLookupElement.withPriority(LookupElementBuilder
                 .createWithSmartPointer(lookupString, f)
                 .withRenderer(FUNCTION_RENDERER)
@@ -207,14 +192,14 @@ public class RESOLVECompletionUtil {
     }
 
     @NotNull
-    static LookupElement createDefinitionLookupElement(@NotNull ResMathDefnSig signature,
+    static LookupElement createMathSymbolLookupElement(@NotNull ResMathDefnSig signature,
                                                        @NotNull String lookupString,
-                                                       @Nullable InsertHandler<LookupElement> h,
+                                                       boolean forLocalMathWildcardQuery,
                                                        double priority) {
         return PrioritizedLookupElement.withPriority(LookupElementBuilder
                 .createWithSmartPointer(lookupString, signature)
                 .withRenderer(DEFINITION_RENDERER)
-                .withInsertHandler(h != null ? h : DEFINITION_INSERT_HANDLER), priority);
+                .withInsertHandler(new MathSymbolInsertHandler(forLocalMathWildcardQuery)), priority);
     }
 
     @NotNull

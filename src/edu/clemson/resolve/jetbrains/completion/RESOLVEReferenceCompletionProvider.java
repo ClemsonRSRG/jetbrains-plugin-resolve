@@ -3,7 +3,6 @@ package edu.clemson.resolve.jetbrains.completion;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.codeInsight.completion.PlainPrefixMatcher;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
@@ -48,11 +47,11 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
             fillVariantsByReference(ArrayUtil.getFirstElement(references), result);
         }*/
         else if (reference instanceof ResReference) {
-            ((ResReference) reference).processResolveVariants(new MyRESOLVEScopeProcessor(result, false));
+            ((ResReference) reference).processResolveVariants(new MyRESOLVEScopeProcessor(result, false, false));
         }
         else if (reference instanceof ResTypeReference) {
             PsiElement element = reference.getElement();
-            ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
+            ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true, false) {
                 @Override
                 protected boolean accept(@NotNull PsiElement e) {
                     return e instanceof ResTypeLikeNodeDecl ||
@@ -74,10 +73,12 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
             //insert handler in its own file.. take ideas from the paren insert handler as well to determine where
             //to put the caret. for instance, outfix case, caret goes between left and right... etc.
             PsiElement element = reference.getElement();
+            boolean wildcardQuery = false;
             if (element.getText().startsWith("this")) {
+                wildcardQuery = true;
                 result = result.withPrefixMatcher(createPrefixMatcher("")); //wildcard reference completion
             }
-            ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
+            ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true, wildcardQuery) {
                 @Override
                 protected boolean accept(@NotNull PsiElement e) {
                     return e instanceof ResMathDefnSig ||
@@ -94,8 +95,9 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
     private static void addElement(@NotNull PsiElement o,
                                    @NotNull ResolveState state,
                                    boolean forTypes,
+                                   boolean forLocalMathWildcardQuery,
                                    @NotNull CompletionResultSet set) {
-        LookupElement lookup = createLookupElement(o, state, forTypes);
+        LookupElement lookup = createLookupElement(o, state, forTypes, forLocalMathWildcardQuery);
         if (lookup != null) {
             set.addElement(lookup);
         }
@@ -104,15 +106,15 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
     @Nullable
     private static LookupElement createLookupElement(@NotNull PsiElement o,
                                                      @NotNull ResolveState state,
-                                                     boolean forTypes) {
+                                                     boolean forTypes,
+                                                     boolean forLocalMathWildcardQuery) {
         if (o instanceof ResNamedElement) {
             if (o instanceof ResMathDefnSig) {
                 String name = ((ResMathDefnSig) o).getName();
                 if (name != null) {
-                    return RESOLVECompletionUtil
-                            .createDefinitionLookupElement(
-                                    (ResMathDefnSig) o, name, null,
-                                    RESOLVECompletionUtil.DEFINITION_PRIORITY);
+                    return RESOLVECompletionUtil.createMathSymbolLookupElement((ResMathDefnSig) o, name,
+                            forLocalMathWildcardQuery,
+                            RESOLVECompletionUtil.DEFINITION_PRIORITY);
                 }
             }
             else if (o instanceof ResTypeLikeNodeDecl || o instanceof ResTypeParamDecl) {
@@ -127,10 +129,8 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
             else if (o instanceof ResOperationLikeNode) {
                 String name = ((ResOperationLikeNode) o).getName();
                 if (name != null) {
-                    return RESOLVECompletionUtil
-                            .createFunctionOrMethodLookupElement(
-                                    (ResOperationLikeNode) o, name, null,
-                                    RESOLVECompletionUtil.FUNCTION_PRIORITY);
+                    return RESOLVECompletionUtil.createOpLikeLookupElement((ResOperationLikeNode) o, name, null,
+                            RESOLVECompletionUtil.FUNCTION_PRIORITY);
                 }
             }
             //TODO: ModuleIdentifierSpec here and make a module alias icon..
@@ -154,17 +154,25 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
     private static class MyRESOLVEScopeProcessor extends ResScopeProcessor {
 
         private final CompletionResultSet result;
-        private final boolean forTypes;
 
-        MyRESOLVEScopeProcessor(@NotNull CompletionResultSet result, boolean forTypes) {
+        /**
+         * This is {@code true} when we're processing a scope from the math wildcard keyword, meaning we wanted to
+         * search for everything.
+         */
+        private final boolean forTypes, forLocalMathWildcardQuery;
+
+        MyRESOLVEScopeProcessor(@NotNull CompletionResultSet result,
+                                boolean forTypes,
+                                boolean forLocalMathWildcardQuery) {
             this.result = result;
             this.forTypes = forTypes;
+            this.forLocalMathWildcardQuery = forLocalMathWildcardQuery;
         }
 
         @Override
         public boolean execute(@NotNull PsiElement o, @NotNull ResolveState state) {
             if (accept(o)) {
-                addElement(o, state, forTypes, result);
+                addElement(o, state, forTypes, forLocalMathWildcardQuery, result);
             }
             return true;
         }
