@@ -391,7 +391,7 @@ private MathPrefixDefnSigs ::= MathPrefixDefnSig (',' MathPrefixDefnSig)* {recov
 private CategoricalSigListRec ::= !('is')
 
 MathInfixDefnSig ::= '(' MathVarDecl ')' MathSymbolName '(' MathVarDecl ')' (':'|'⦂') MathExp {pin=4}
-MathOutfixDefnSig ::= MathSymbolNameNoId MathVarDecl MathSymbolNameNoId (':'|'⦂') MathExp {pin=1}
+MathOutfixDefnSig ::= '`' MathSymbolNameNoId MathVarDecl MathSymbolNameNoId '`' (':'|'⦂') MathExp {pin=2}
 MathPostfixDefnSig ::= '(' MathVarDecl ')' '[' MathVarDecl ']' (':'|'⦂') MathExp {pin=2}
 
 private MathDefinitionParams ::= '(' MathDefnParamList ')' { pin=1}
@@ -446,20 +446,20 @@ MathPrefixApplyExp ::= MathExp '(' MathArgList ')'
 MathOutfixApplyExp ::= '`' MathSymbolNameNoId MathExp MathSymbolNameNoId '`'
 MathInfixApplyExp ::= MathExp MathOpSymbolName MathExp
 MathClssftnAssrtExp ::= MathExp (':'|'⦂') MathExp
+MathIncomingExp ::= '@' MathSymbolExp
 
 private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
 
-private MathPrimeExp ::=
-          MathSymbolExp
+private MathPrimeExp ::= MathSymbolExp | MathIncomingExp
         | MathSelectorExp
         | MathLambdaExp
         | MathAlternativeExp
         | MathClssftnAssrtExp
 
 private MathOpSymbolName ::= MathSymbolExp
-private MathSymbolNameNoId ::= (symbol|math_symbol)
 
-MathSymbolName ::= '@'? (identifier|int|symbol|math_symbol|true|false)
+MathSymbolNameNoId ::= (symbol|math_symbol) {elementType=MathSymbolName}
+MathSymbolName ::= (identifier|int|symbol|math_symbol|true|false)
 
 MathSymbolExp ::=  MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}
 left MathQualifiedReferenceExp ::= '.' MathSymbolName {elementType=MathReferenceExp}
