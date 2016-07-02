@@ -149,7 +149,9 @@ public class RESOLVECompletionUtil {
                     p.setTypeGrayed(true);
                     // p.setTailText(calcTailText(f), true);
                     String correctColon = typeText.equals("Cls") ? " ⦂ " : " : ";
-                    p.setItemText(element.getLookupString() + correctColon + typeText);
+                    String name = signature instanceof ResMathOutfixDefnSig ? signature.getCanonicalName() :
+                            element.getLookupString();
+                    p.setItemText(name + correctColon + typeText);
                 }
             };
 

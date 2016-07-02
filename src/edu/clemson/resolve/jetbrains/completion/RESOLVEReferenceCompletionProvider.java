@@ -64,20 +64,14 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
         }
         else if (reference instanceof ResMathVarLikeReference) {
 
-            //Subclassing (or finding the right written) LookupElement class is key to handling completions started
-            //with the special wildcard keyword I'm playing around with..
-            //so, in a nutshell, see {@link LookupElement} and its many subclasses. Clearly live templates have the
-            //insertion behavior I want here (meaning they replace everything) typed in already upon insertion
-
-            //UPDATE: Look at {@link QualifierInsertHandler#handleInsert}.. I'm thinking we should write a definition
-            //insert handler in its own file.. take ideas from the paren insert handler as well to determine where
-            //to put the caret. for instance, outfix case, caret goes between left and right... etc.
+            //Handle wildcard math queries
             PsiElement element = reference.getElement();
             boolean wildcardQuery = false;
             if (element.getText().startsWith("this")) {
                 wildcardQuery = true;
                 result = result.withPrefixMatcher(createPrefixMatcher("")); //wildcard reference completion
             }
+
             ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true, wildcardQuery) {
                 @Override
                 protected boolean accept(@NotNull PsiElement e) {

@@ -21,6 +21,8 @@ import edu.clemson.resolve.jetbrains.psi.impl.imports.ResModuleReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 /**
  * Gathered from the language
  * <a href="https://confluence.jetbrains.com/display/IntelliJIDEA/PSI+Helpers+and+Utilities">tutorial</a>.

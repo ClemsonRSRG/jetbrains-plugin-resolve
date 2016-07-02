@@ -36,4 +36,15 @@ public abstract class ResAbstractMathSigImpl extends ResNamedElementImpl impleme
     public PsiElement getIdentifier() {
         return findChildByClass(ResMathSymbolName.class);
     }
+
+    @Nullable
+    public String getCanonicalName() {
+        if (this instanceof ResMathOutfixDefnSig) {
+            ResMathOutfixDefnSig o = (ResMathOutfixDefnSig)this;
+            List<ResMathSymbolName> l = o.getMathSymbolNameList();
+            if (l.size() != 2) return null;
+            return l.get(0).getText() + ".." + l.get(1).getText();
+        }
+        return super.getName();
+    }
 }
