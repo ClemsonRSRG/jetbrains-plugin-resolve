@@ -33,7 +33,7 @@ public class MathSymbolInsertHandler extends BasicInsertHandler<LookupElement> {
         ResMathDefnSig signature = (ResMathDefnSig) element;
         int paramsCount = signature.getParameters().size();
 
-        InsertHandler<LookupElement> handler = new BasicInsertHandler<LookupElement>();
+        InsertHandler<LookupElement> handler = new BasicInsertHandler<>();
         if (signature instanceof ResMathPrefixDefnSig && paramsCount != 0) {
             handler = ParenthesesInsertHandler.WITH_PARAMETERS;
         }

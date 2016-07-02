@@ -12,15 +12,6 @@ import edu.clemson.resolve.jetbrains.psi.*;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
-//TODO: requires and ensures keyword completions would certainly be nice..
-
-//NOTE: do a completion here (builtin) if its template can be referenced in one name. For example, Type Family is
-//two names -- and you can't just use "Type" since there are technically type families and type representations and
-//the IDs for the builtin "resolveHidden.xml" templates get all mixed up. So in general, the rule goes to put the
-//bigger, scoped templates into "resolve.xml" (making them user configurable via the live templates dialog in settings)
-//vs those that appear here which are intended to be simple, one liners, requires, ensures, etc. Patterns for these
-//are inherently a little trickier. This is why this class is called KeywordCompletion.. TypeFamily isn't technically
-//a valid keyword, whereas "requires", "ensures", etc are.
 public class RESOLVEKeywordCompletionContributor extends CompletionContributor implements DumbAware {
 
     public RESOLVEKeywordCompletionContributor() {
@@ -74,10 +65,8 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
         extend(CompletionType.BASIC, variablePattern(),
                 new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "Var"));
 
-        /*extend(CompletionType.BASIC, mathQuantifierKeywords(),
-                new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY,
-                        "Forall", "Exists", "lambda"));*/
+        extend(CompletionType.BASIC, moduleRequiresPattern(),
+                new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "requires"));
 
         extend(CompletionType.BASIC, keywordAfterSiblings(
                 ResTypeReprDecl.class, psiElement(ResRecordType.class)),
@@ -192,6 +181,13 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
                 .withParent(psiElement(ResTypes.TYPE_REFERENCE_EXP)
                         .withParent(psiElement()
                                 .withParent(ResTypeReprDecl.class)));
+    }
+
+    private static Capture<PsiElement> moduleRequiresPattern() {
+        return psiElement(ResTypes.IDENTIFIER)
+                .withParent(psiElement(PsiErrorElement.class)
+                        .withParent(psiElement(ResBlock.class)
+                                .afterSibling(psiElement(ResUsesList.class))));
     }
 
     private static Capture<PsiElement> parameterModePattern() {

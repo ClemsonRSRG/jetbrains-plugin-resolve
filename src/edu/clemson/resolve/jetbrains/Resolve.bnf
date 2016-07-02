@@ -72,10 +72,10 @@
         MAINTAINING             = 'maintaining'
         DECREASING              = 'decreasing'
         OTHERWISE               = 'otherwise'
-        FORALL1                  = '∀'
+        FORALL1                 = '∀'
         FORALL                  = 'Forall'
         EXISTS                  = 'Exists'
-        EXISTS1                  = '∃'
+        EXISTS1                 = '∃'
         EXTERNALLY              = 'externally'
         IMPLEMENTED             = 'implemented'
         INITIALIZATION          = 'initialization'
@@ -106,6 +106,7 @@
         WITH                    = 'with'
         DO                      = 'do'
         OF                      = 'of'
+        SUCH_THAT               = 's.t.'
         STRING                  = 'string'
         WHICH_ENTAILS           = 'which_entails'
         CHAR                    = 'char'
@@ -450,16 +451,13 @@ MathIncomingExp ::= '@' MathSymbolExp {pin=1}
 
 private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
 
-private MathPrimeExp ::=
-          MathSymbolExp
-        | MathIncomingExp
-        | MathSelectorExp
+private MathPrimeExp ::= MathSymbolExp | MathIncomingExp | MathSelectorExp
         | MathLambdaExp
         | MathAlternativeExp
         | MathClssftnAssrtExp
+        | MathSetRestrictionExp
 
 private MathOpSymbolName ::= MathSymbolExp
-
 MathSymbolNameNoId ::= (symbol|math_symbol) {elementType=MathSymbolName}
 MathSymbolName ::= (identifier|int|symbol|math_symbol|true|false)
 
@@ -471,3 +469,4 @@ MathLambdaExp ::= (lambda|'λ') MathVarDecl ','  MathExp
 MathAlternativeExp ::= '{{' MathAlternativesList '}}'
 MathAlternativesList ::= MathAlternativeItemExp+
 MathAlternativeItemExp ::= MathExp ('if' MathExp ';' | 'otherwise')
+MathSetRestrictionExp ::= '{' MathVarDecl 's.t.' MathExp '}' {pin=1}

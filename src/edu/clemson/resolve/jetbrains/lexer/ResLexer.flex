@@ -152,6 +152,7 @@ ESCAPES = [abfnrtv]
 "Recursive"                             { return RECURSIVE; }
 "Record"                                { return RECORD; }
 "requires"                              { return REQUIRES; }
+"s.t."                                  { return SUCH_THAT; }
 "then"                                  { return THEN; }
 "true"                                  { return TRUE; }
 "Theorem"                               { return THEOREM; }
