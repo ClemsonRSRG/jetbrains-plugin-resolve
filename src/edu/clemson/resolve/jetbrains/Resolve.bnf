@@ -418,7 +418,7 @@ MathVarDef ::= identifier
 
 // mathematical clauses
 
-IntializationClause ::= 'initialization' (EnsuresClause) {pin=1};
+IntializationClause ::= 'initialization' (EnsuresClause) ;
 RequiresClause ::= 'requires' MathAssertionExp (EntailsClause)? ';' {pin=1}
 EnsuresClause ::= 'ensures' MathAssertionExp ';' {pin=1}
 ConstraintsClause ::= ('constraints') MathAssertionExp ';' {pin=1}
@@ -468,5 +468,5 @@ MathReferenceExp ::= MathSymbolName {methods=[getReference getQualifier getIdent
 MathLambdaExp ::= (lambda|'λ') MathVarDecl ','  MathExp
 MathAlternativeExp ::= '{{' MathAlternativesList '}}'
 MathAlternativesList ::= MathAlternativeItemExp+
-MathAlternativeItemExp ::= MathExp ('if' MathExp ';' | 'otherwise')
+MathAlternativeItemExp ::= MathExp ('if' MathExp ';' | 'otherwise' ';')
 MathSetRestrictionExp ::= '{' MathVarDecl 's.t.' MathExp '}' {pin=1}

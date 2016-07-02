@@ -83,15 +83,10 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
                 new RESOLVEKeywordCompletionProvider(
                         RESOLVECompletionUtil.KEYWORD_PRIORITY, "initialization_repr"));
 
-        extend(CompletionType.BASIC, keywordAfterSiblings(
-                ResTypeModelDecl.class, psiElement(ResMathReferenceExp.class)),
-                new RESOLVEKeywordCompletionProvider(
-                        RESOLVECompletionUtil.KEYWORD_PRIORITY, "constraints"));
-
-        extend(CompletionType.BASIC, keywordAfterSiblings(
-                ResTypeModelDecl.class, psiElement().andOr(psiElement(ResMathReferenceExp.class),
-                        psiElement(ResConstraintsClause.class))),
+        extend(CompletionType.BASIC, modelInitialization(),
                 new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "initialization"));
+        extend(CompletionType.BASIC, initializationEnsures(),
+                new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "ensures"));
     }
 
     private static Capture<PsiElement> definitionParameterPattern() {
@@ -105,6 +100,19 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
 
     private static Capture<PsiElement> operationParamPattern() {
         return psiElement(ResTypes.IDENTIFIER).withParent(ResParameterMode.class).inside(ResImplModuleParameters.class);
+    }
+
+    private static Capture<PsiElement> modelInitialization() {
+        return psiElement(ResTypes.IDENTIFIER)
+                .withParent(psiElement(PsiErrorElement.class)
+                        .afterSibling(psiElement(ResTypeModelDecl.class)
+                                .withLastChild(psiElement().andOr(psiElement(ResExemplarDecl.class),
+                                        psiElement(ResConstraintsClause.class)))));
+    }
+
+    private static Capture<PsiElement> initializationEnsures() {
+        return psiElement(ResTypes.IDENTIFIER)
+                .withParent(psiElement(PsiErrorElement.class).afterLeaf(psiElement(ResTypes.INITIALIZATION)));
     }
 
     private static Capture<PsiElement> modulePattern() {
@@ -155,8 +163,10 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
     }
 
     private static Capture<PsiElement> moduleRequiresPattern() {
-        return psiElement(ResTypes.IDENTIFIER).withParent(psiElement(PsiErrorElement.class)
-                .withParent(psiElement(ResBlock.class).afterSibling(psiElement(ResUsesList.class))));
+        return psiElement(ResTypes.IDENTIFIER)
+                .withParent(psiElement(PsiErrorElement.class)
+                        .withParent(ResBlock.class)
+                        .atStartOf(psiElement(ResBlock.class)));
     }
 
     private static Capture<PsiElement> parameterModePattern() {
