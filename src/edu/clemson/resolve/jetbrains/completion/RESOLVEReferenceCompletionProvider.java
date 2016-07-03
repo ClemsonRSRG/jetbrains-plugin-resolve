@@ -79,7 +79,8 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
                             e instanceof ResMathVarDef ||
                             e instanceof ResParamDef ||
                             e instanceof ResTypeParamDecl ||
-                            e instanceof ResExemplarDecl;
+                            e instanceof ResExemplarDecl ||
+                            e instanceof ResFile;
                 }
             };
             ((ResMathVarLikeReference) reference).processResolveVariants(aProcessor);

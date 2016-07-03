@@ -9,6 +9,7 @@ import com.intellij.util.containers.OrderedSet;
 import edu.clemson.resolve.jetbrains.psi.ResMathDefnDecl;
 import edu.clemson.resolve.jetbrains.psi.ResNamedElement;
 import edu.clemson.resolve.jetbrains.psi.ResOperationLikeNode;
+import edu.clemson.resolve.jetbrains.psi.ResUsesList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,6 +42,7 @@ public abstract class ResScopeProcessorBase extends ResScopeProcessor {
                            @NotNull ResolveState resolveState) {
         if (psiElement instanceof ResMathDefnDecl) return false;
         if (psiElement instanceof ResOperationLikeNode) return false;
+        if (psiElement instanceof ResUsesList) return false;
         //if (psiElement instanceof ResMathCartProdExp) return false;
 
         if (!(psiElement instanceof ResNamedElement)) return true;

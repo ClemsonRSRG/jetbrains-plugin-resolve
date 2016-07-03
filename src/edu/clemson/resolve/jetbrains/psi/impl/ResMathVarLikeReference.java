@@ -68,9 +68,7 @@ public class ResMathVarLikeReference
         ResolveState state = ResolveState.initial();
         ResMathReferenceExp qualifier = myElement.getQualifier();
         if (qualifier != null) {
-            return false;
-            //return processQualifierExpression(((ResFile)file), qualifier,
-            //        processor, state);
+            return ResReference.processQualifierExpression(((ResFile)file), qualifier,  processor, state);
         }
         return processUnqualifiedResolve(((ResFile) file), processor, state, true);
     }
@@ -91,6 +89,14 @@ public class ResMathVarLikeReference
                 !processMathSelector((ResMathSelectorExp) grandPa, processor, state, parent)) return false;
         if (ResPsiImplUtil.prevDot(parent)) return false;*/
         ResScopeProcessorBase delegate = createDelegate(processor);
+
+        //If we're trying to resolve a qualifier for math symbol in a global context -- meaning global requires clause,
+        //global constraints, etc. This next line will find a moduleIdentifierSpec
+        //if the module indeed exists in the uses list.. TODO: Maybe just use ModuleIdentifierSpec then instead of a mixture
+        //of PsiFile and ModuleIdentifierSpec..
+        //TODO: Ok, for now, in scopeProcessorBase to keep us from prematurely searching the usesList, I tell it to not
+        //search ResUsesList in 'execute'. We should try getting refactor rename working first before we get too
+        //comfortable..
         ResolveUtil.treeWalkUp(myElement, delegate);
         Collection<? extends ResNamedElement> result = delegate.getVariants();
         //this processes any named elements we've found searching up the tree in the previous line

@@ -91,10 +91,10 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                 processUnqualifiedResolve(((ResFile) file), processor, state, true);
     }
 
-    private boolean processQualifierExpression(@NotNull ResFile file,
-                                               @NotNull ResReferenceExpBase qualifier,
-                                               @NotNull ResScopeProcessor processor,
-                                               @NotNull ResolveState state) {
+    public static boolean processQualifierExpression(@NotNull ResFile file,
+                                                     @NotNull ResReferenceExpBase qualifier,
+                                                     @NotNull ResScopeProcessor processor,
+                                                     @NotNull ResolveState state) {
         PsiReference reference = qualifier.getReference();
         PsiElement target = reference != null ? reference.resolve() : null;
         if (target == null || target == qualifier) return false;
@@ -109,6 +109,12 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                 if (spec == null) continue;
                 processModuleLevelEntities(spec, processor, state, false);
             }*/
+        }
+        else if (target instanceof ResModuleIdentifierSpec) {
+            PsiElement e = ((ResModuleIdentifierSpec) target).getModuleIdentifier().resolve();
+            if (e != null && e instanceof ResFile) {
+                processModuleLevelEntities((ResFile) e, processor, state, false, false);
+            }
         }
         else if (target instanceof ResFile) {
             processModuleLevelEntities((ResFile) target, processor, state, false, false);
@@ -356,9 +362,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         return true;
     }
 
-    /**
-     * processing parameters of the definition we happen to be within
-     */
+    /** processing parameters of the definition we happen to be within */
     private static boolean processDefinitionParams(@NotNull ResScopeProcessorBase processor,
                                                    @NotNull ResMathDefnDecl o) {
         List<ResMathDefnSig> sigs = o.getSignatures();

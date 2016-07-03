@@ -268,6 +268,10 @@ public class ResPsiImplUtil {
         return result != null ? (ResFile) result : null;
     }
 
+    public static boolean shouldGoDeeper(@SuppressWarnings("UnusedParameters") ResModuleIdentifierSpec o) {
+        return false;
+    }
+
     public static boolean prevDot(@Nullable PsiElement parent) {
         PsiElement prev = parent == null ? null : PsiTreeUtil.prevVisibleLeaf(parent);
         return prev instanceof LeafElement && ((LeafElement) prev).getElementType() == ResTypes.DOT;
