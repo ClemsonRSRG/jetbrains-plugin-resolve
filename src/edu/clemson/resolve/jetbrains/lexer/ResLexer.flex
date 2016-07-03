@@ -42,7 +42,7 @@ IDENT = {LETTER} ({LETTER} | {DIGIT} )*
 
 MSYM = ([\u2200-\u22FF] | [\u27F0-\u27FF] | [\u2A00-\u2AFF] | [\u2300-\u23BF] | [\u0370-\u03FF])
 
-SYM = [!-!#-&*-/<->|-|]+
+SYM = ("!"|"*"|"+"|"-"|"/"|"|"|"~"|[<->])+
 
 STR =      "\""
 ESCAPES = [abfnrtv]

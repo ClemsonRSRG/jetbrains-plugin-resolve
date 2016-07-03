@@ -311,7 +311,7 @@ VarDef ::= identifier {methods=[getResTypeInner getReference]}
 
 FacilityDecl ::= 'Facility' identifier 'is' ModuleIdentifier ModuleArgList? [FromClause]
 ('externally')? 'implemented' 'by' ModuleIdentifier ModuleArgList? [FromClause]
-ExtensionList? ';' {pin=2 methods=[resolveSpecification]}
+ExtensionList? ';' {pin=2 methods=[resolveSpecification resolveImplementation]}
 
 private ExtensionList ::= (ExtensionPairing)* {recoverWhile=ExtensionListRec}
 private ExtensionListRec ::= !(';')

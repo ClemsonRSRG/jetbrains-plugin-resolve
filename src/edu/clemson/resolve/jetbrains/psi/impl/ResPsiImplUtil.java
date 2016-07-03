@@ -18,9 +18,11 @@ import edu.clemson.resolve.jetbrains.ResTypes;
 import edu.clemson.resolve.jetbrains.psi.*;
 import edu.clemson.resolve.jetbrains.psi.impl.imports.ResModuleLibraryReference;
 import edu.clemson.resolve.jetbrains.psi.impl.imports.ResModuleReference;
+import edu.clemson.resolve.semantics.ModuleIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -250,12 +252,21 @@ public class ResPsiImplUtil {
 
     @Nullable
     public static ResFile resolveSpecification(ResFacilityDecl o) {
-        //if (o.getReferenceExpList().isEmpty()) return null;
-        //ResReferenceExp specification = o.getReferenceExpList().get(0);
-        //PsiElement result = specification.resolve();
-        return null; //result instanceof ResFile ? (ResFile) result : null;
+        return resolveFacilityModuleId(o, 0);
     }
 
+    @Nullable
+    public static ResFile resolveImplementation(ResFacilityDecl o) {
+        return resolveFacilityModuleId(o, 1);
+    }
+
+    @Nullable
+    private static ResFile resolveFacilityModuleId(@NotNull ResFacilityDecl o, int idNum) {
+        if (o.getModuleIdentifierList().size() != 2) return null;
+        ResModuleIdentifier id = o.getModuleIdentifierList().get(idNum);
+        PsiElement result = id.resolve();
+        return result != null ? (ResFile) result : null;
+    }
 
     public static boolean prevDot(@Nullable PsiElement parent) {
         PsiElement prev = parent == null ? null : PsiTreeUtil.prevVisibleLeaf(parent);
