@@ -131,6 +131,8 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
             //TODO: ModuleIdentifierSpec here and make a module alias icon..
             else {
                 //TODO: Apply type info to the lookup renderers for these 'var like' elements
+                //TODO: When math var refs get completed, we need to use the math symbol (defn) insert handler
+                //that handles wildcard math queries.
                 return RESOLVECompletionUtil.createVariableLikeLookupElement((ResNamedElement) o);
             }
         }

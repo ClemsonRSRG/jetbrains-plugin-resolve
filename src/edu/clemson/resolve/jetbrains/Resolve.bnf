@@ -417,7 +417,7 @@ MathVarDeclGroup ::= MathVarDeclList (':'|'⦂') MathExp {pin=1}
 
 MathVarDecl ::= MathVarDef (':'|'⦂') MathExp {pin=2 extends=MathVarDeclGroup}
 private MathVarDeclList ::= MathVarDef &(!(')')) (',' MathVarDef)* {pin=1}
-MathVarDef ::= identifier  {methods=[getIdentifier]} //TODO: Make this a MathSymbolName
+MathVarDef ::= MathSymbolName //TODO: Make this a MathSymbolName
 
 // mathematical clauses
 
