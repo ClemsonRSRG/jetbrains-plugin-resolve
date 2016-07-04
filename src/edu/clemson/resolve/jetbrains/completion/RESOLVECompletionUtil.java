@@ -194,14 +194,23 @@ public class RESOLVECompletionUtil {
     }
 
     @NotNull
-    static LookupElement createMathSymbolLookupElement(@NotNull ResMathDefnSig signature,
-                                                       @NotNull String lookupString,
-                                                       boolean forLocalMathWildcardQuery,
-                                                       double priority) {
+    static LookupElement createMathDefinitionLookupElement(@NotNull ResMathDefnSig signature,
+                                                           @NotNull String lookupString,
+                                                           boolean forLocalMathWildcardQuery,
+                                                           double priority) {
         return PrioritizedLookupElement.withPriority(LookupElementBuilder
                 .createWithSmartPointer(lookupString, signature)
                 .withRenderer(DEFINITION_RENDERER)
                 .withInsertHandler(new MathSymbolInsertHandler(forLocalMathWildcardQuery)), priority);
+    }
+
+    @NotNull
+    static LookupElement createMathVarLookupElement(@NotNull ResMathVarDef v,
+                                                    boolean forLocalMathWildcardQuery) {
+        return PrioritizedLookupElement.withPriority(LookupElementBuilder
+                .createWithSmartPointer(v.getMathSymbolName().getText(), v)
+                .withRenderer(VARIABLE_RENDERER)
+                .withInsertHandler(new MathSymbolInsertHandler(forLocalMathWildcardQuery)), VAR_PRIORITY);
     }
 
     @NotNull
@@ -230,7 +239,7 @@ public class RESOLVECompletionUtil {
     }
 
     @Nullable
-    static LookupElement createResModuleLookupElement(@NotNull ResModuleDecl module, String name) {
+    private static LookupElement createResModuleLookupElement(@NotNull ResModuleDecl module, String name) {
         return PrioritizedLookupElement.withPriority(
                 LookupElementBuilder.create(name)
                         .withInsertHandler(Lazy.FACILITY_OR_MODULE_INSERT_HANDLER)
@@ -238,7 +247,7 @@ public class RESOLVECompletionUtil {
     }
 
     @Nullable
-    static LookupElement createFacilityLookupElement(@NotNull ResFacilityDecl facility, @NotNull String name) {
+    private static LookupElement createFacilityLookupElement(@NotNull ResFacilityDecl facility, @NotNull String name) {
         return PrioritizedLookupElement.withPriority(
                 LookupElementBuilder.create(name)
                         .withInsertHandler(Lazy.FACILITY_OR_MODULE_INSERT_HANDLER)

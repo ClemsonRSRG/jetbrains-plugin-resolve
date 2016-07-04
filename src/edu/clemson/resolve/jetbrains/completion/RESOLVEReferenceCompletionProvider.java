@@ -107,10 +107,13 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
             if (o instanceof ResMathDefnSig) {
                 String name = ((ResMathDefnSig) o).getName();
                 if (name != null) {
-                    return RESOLVECompletionUtil.createMathSymbolLookupElement((ResMathDefnSig) o, name,
+                    return RESOLVECompletionUtil.createMathDefinitionLookupElement((ResMathDefnSig) o, name,
                             forLocalMathWildcardQuery,
                             RESOLVECompletionUtil.DEFINITION_PRIORITY);
                 }
+            }
+            else if (o instanceof ResMathVarDef) {
+                return RESOLVECompletionUtil.createMathVarLookupElement((ResMathVarDef) o, forLocalMathWildcardQuery);
             }
             else if (o instanceof ResTypeLikeNodeDecl || o instanceof ResTypeParamDecl) {
                 return RESOLVECompletionUtil.createTypeLookupElement((ResNamedElement) o);
