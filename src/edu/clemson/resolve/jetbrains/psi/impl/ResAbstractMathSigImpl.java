@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public abstract class ResAbstractMathSigImpl extends ResNamedElementImpl implements ResMathDefnSig {
+public abstract class ResAbstractMathSigImpl extends ResMathNamedElementImpl implements ResMathDefnSig {
 
     public ResAbstractMathSigImpl(@NotNull ASTNode node) {
         super(node);
@@ -25,16 +25,6 @@ public abstract class ResAbstractMathSigImpl extends ResNamedElementImpl impleme
     @Override
     public ResMathExp getMathTypeExp() {
         return findChildByClass(ResMathExp.class);
-    }
-
-    /**
-     * This has to be {@code Nullable} at the moment; think about it: We have infix and outfix signatures, how would
-     * we create the |..| needed? In other words, it's tough doing completion for non-identifier like things
-     */
-    @Nullable
-    @Override
-    public PsiElement getIdentifier() {
-        return findChildByClass(ResMathSymbolName.class);
     }
 
     @Nullable

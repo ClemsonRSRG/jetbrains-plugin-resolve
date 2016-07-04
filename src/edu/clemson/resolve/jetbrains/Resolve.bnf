@@ -140,9 +140,10 @@
     extends("Math.*(DefnDecl)")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractMathDefnImpl"
     extends("Math.*(Sig)")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractMathSigImpl"
     extends(".*ModuleDecl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractModuleImpl"
+    extends("MathVarDef")="edu.clemson.resolve.jetbrains.psi.impl.ResMathNamedElementImpl"
     extends("Math.*(Exp)")=MathExp
 
-    extends(".*((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|Procedure|OperationProcedure|Exemplar|Facility)Decl)|ModuleIdentifierSpec")="edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl"
+    extends("((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|Procedure|OperationProcedure|Exemplar|Facility)Decl)|ModuleIdentifierSpec")="edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl"
     extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractTypeLikeNodeImpl"
 
     pin(".*Statement")=1
@@ -416,7 +417,7 @@ MathVarDeclGroup ::= MathVarDeclList (':'|'⦂') MathExp {pin=1}
 
 MathVarDecl ::= MathVarDef (':'|'⦂') MathExp {pin=2 extends=MathVarDeclGroup}
 private MathVarDeclList ::= MathVarDef &(!(')')) (',' MathVarDef)* {pin=1}
-MathVarDef ::= identifier
+MathVarDef ::= identifier  {methods=[getIdentifier]} //TODO: Make this a MathSymbolName
 
 // mathematical clauses
 
