@@ -458,6 +458,7 @@ private MathPrimeExp ::= MathSymbolExp | MathIncomingExp | MathSelectorExp
         | MathLambdaExp
         | MathAlternativeExp
         | MathClssftnAssrtExp
+        | MathCartProdExp
         | MathSetRestrictionExp
 
 private MathOpSymbolName ::= MathSymbolExp
@@ -468,6 +469,8 @@ MathSymbolExp ::=  MathReferenceExp MathQualifiedReferenceExp? {elementType=Math
 left MathQualifiedReferenceExp ::= '.' MathSymbolName {elementType=MathReferenceExp}
 MathReferenceExp ::= MathSymbolName {methods=[getReference getQualifier getIdentifier] extends=MathExp}
 
+MathCartProdExp ::= 'Cart_Prod' ResMathCartVarGroup+  'end' {pin=1}
+private ResMathCartVarGroup ::= MathVarDeclGroup ';' {pin=1}
 MathLambdaExp ::= (lambda|'λ') MathVarDecl ','  MathExp
 MathAlternativeExp ::= '{{' MathAlternativesList '}}'
 MathAlternativesList ::= MathAlternativeItemExp+

@@ -68,7 +68,7 @@ public class ResMathVarLikeReference
         ResolveState state = ResolveState.initial();
         ResMathReferenceExp qualifier = myElement.getQualifier();
         if (qualifier != null) {
-            return ResReference.processQualifierExpression(((ResFile)file), qualifier,  processor, state);
+            return ResReference.processQualifierExpression(((ResFile) file), qualifier, processor, state);
         }
         return processUnqualifiedResolve(((ResFile) file), processor, state, true);
     }
@@ -78,7 +78,7 @@ public class ResMathVarLikeReference
                                               @NotNull ResolveState state,
                                               boolean localResolve) {
 
-       /* PsiElement parent = myElement.getParent();
+        PsiElement parent = myElement.getParent();
         if (parent instanceof ResMathSelectorExp) {
             boolean result = processMathSelector((ResMathSelectorExp) parent, processor, state, myElement);
             if (processor.isCompletion()) return result;
@@ -87,7 +87,7 @@ public class ResMathVarLikeReference
         PsiElement grandPa = parent.getParent();
         if (grandPa instanceof ResMathSelectorExp &&
                 !processMathSelector((ResMathSelectorExp) grandPa, processor, state, parent)) return false;
-        if (ResPsiImplUtil.prevDot(parent)) return false;*/
+        if (ResPsiImplUtil.prevDot(parent)) return false;
         ResScopeProcessorBase delegate = createDelegate(processor);
 
         //If we're trying to resolve a qualifier for math symbol in a global context -- meaning global requires clause,
@@ -132,7 +132,7 @@ public class ResMathVarLikeReference
         ResReference.processParameterLikeThings(superModule, delegate);
         return processNamedElements(processor, state, delegate.getVariants(), localResolve);
     }
-/*
+
     private boolean processMathSelector(@NotNull ResMathSelectorExp parent,
                                         @NotNull ResScopeProcessor processor,
                                         @NotNull ResolveState state,
@@ -144,8 +144,7 @@ public class ResMathVarLikeReference
         }
         return true;
     }
-*/
-    /*
+
     private boolean processCartProdFields(@NotNull ResMathExp type,
                                           @NotNull ResScopeProcessor processor,
                                           @NotNull ResolveState state) {
@@ -168,12 +167,11 @@ public class ResMathVarLikeReference
         }
         return true;
     }
-(*/
+
     @NotNull
     private ResolveState createContext() {
-        return ResolveState.initial().put(CONTEXT,
-                SmartPointerManager.getInstance(myElement.getProject())
-                        .createSmartPsiElementPointer(myElement));
+        return ResolveState.initial().put(CONTEXT, SmartPointerManager.getInstance(myElement.getProject())
+                .createSmartPsiElementPointer(myElement));
     }
 
     private boolean processBuiltin(@NotNull ResScopeProcessor processor,
