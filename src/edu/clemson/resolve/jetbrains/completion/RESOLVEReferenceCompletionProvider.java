@@ -26,7 +26,8 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
     protected void addCompletions(@NotNull CompletionParameters parameters,
                                   ProcessingContext context,
                                   @NotNull CompletionResultSet set) {
-        ResReferenceExpBase expression = PsiTreeUtil.getParentOfType(parameters.getPosition(), ResReferenceExpBase.class);
+        ResReferenceExpBase expression =
+                PsiTreeUtil.getParentOfType(parameters.getPosition(), ResReferenceExpBase.class);
         if (expression != null) {
             set = set.withPrefixMatcher(createPrefixMatcher(set.getPrefixMatcher()));
             fillVariantsByReference(expression.getReference(), set);
@@ -47,11 +48,11 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
             fillVariantsByReference(ArrayUtil.getFirstElement(references), result);
         }*/
         else if (reference instanceof ResReference) {
-            ((ResReference) reference).processResolveVariants(new MyRESOLVEScopeProcessor(result, false, false));
+            ((ResReference) reference).processResolveVariants(new MyRESOLVEScopeProcessor(result, false));
         }
         else if (reference instanceof ResTypeReference) {
             PsiElement element = reference.getElement();
-            ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true, false) {
+            ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
                 @Override
                 protected boolean accept(@NotNull PsiElement e) {
                     return e instanceof ResTypeLikeNodeDecl ||
@@ -64,15 +65,11 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
         }
         else if (reference instanceof ResMathVarLikeReference) {
 
-            //Handle wildcard math queries
-            PsiElement element = reference.getElement();
-            boolean wildcardQuery = false;
-            if (element.getText().startsWith("this")) {
-                wildcardQuery = true;
-                result = result.withPrefixMatcher(createPrefixMatcher("")); //wildcard reference completion
-            }
+            //Handle wildcard math queries.
+            //UPDATE: We don't need this actually. Just type control + space to provide a list of all possible
+            //completions.
 
-            ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true, wildcardQuery) {
+            ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
                 @Override
                 protected boolean accept(@NotNull PsiElement e) {
                     return e instanceof ResMathDefnSig ||
@@ -90,9 +87,8 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
     private static void addElement(@NotNull PsiElement o,
                                    @NotNull ResolveState state,
                                    boolean forTypes,
-                                   boolean forLocalMathWildcardQuery,
                                    @NotNull CompletionResultSet set) {
-        LookupElement lookup = createLookupElement(o, state, forTypes, forLocalMathWildcardQuery);
+        LookupElement lookup = createLookupElement(o, state, forTypes);
         if (lookup != null) {
             set.addElement(lookup);
         }
@@ -101,19 +97,17 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
     @Nullable
     private static LookupElement createLookupElement(@NotNull PsiElement o,
                                                      @NotNull ResolveState state,
-                                                     boolean forTypes,
-                                                     boolean forLocalMathWildcardQuery) {
+                                                     boolean forTypes) {
         if (o instanceof ResNamedElement) {
             if (o instanceof ResMathDefnSig) {
                 String name = ((ResMathDefnSig) o).getName();
                 if (name != null) {
                     return RESOLVECompletionUtil.createMathDefinitionLookupElement((ResMathDefnSig) o, name,
-                            forLocalMathWildcardQuery,
                             RESOLVECompletionUtil.DEFINITION_PRIORITY);
                 }
             }
             else if (o instanceof ResMathVarDef) {
-                return RESOLVECompletionUtil.createMathVarLookupElement((ResMathVarDef) o, forLocalMathWildcardQuery);
+                return RESOLVECompletionUtil.createMathVarLookupElement((ResMathVarDef) o);
             }
             else if (o instanceof ResTypeLikeNodeDecl || o instanceof ResTypeParamDecl) {
                 return RESOLVECompletionUtil.createTypeLookupElement((ResNamedElement) o);
@@ -154,25 +148,18 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
     private static class MyRESOLVEScopeProcessor extends ResScopeProcessor {
 
         private final CompletionResultSet result;
-
-        /**
-         * This is {@code true} when we're processing a scope from the math wildcard keyword, meaning we wanted to
-         * search for everything.
-         */
-        private final boolean forTypes, forLocalMathWildcardQuery;
+        private final boolean forTypes;
 
         MyRESOLVEScopeProcessor(@NotNull CompletionResultSet result,
-                                boolean forTypes,
-                                boolean forLocalMathWildcardQuery) {
+                                boolean forTypes) {
             this.result = result;
             this.forTypes = forTypes;
-            this.forLocalMathWildcardQuery = forLocalMathWildcardQuery;
         }
 
         @Override
         public boolean execute(@NotNull PsiElement o, @NotNull ResolveState state) {
             if (accept(o)) {
-                addElement(o, state, forTypes, forLocalMathWildcardQuery, result);
+                addElement(o, state, forTypes, result);
             }
             return true;
         }

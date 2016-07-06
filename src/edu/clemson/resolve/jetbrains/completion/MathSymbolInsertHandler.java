@@ -13,20 +13,11 @@ import java.util.List;
 
 public class MathSymbolInsertHandler extends BasicInsertHandler<LookupElement> {
 
-    private final boolean mathWildcardQuery;
-
-    MathSymbolInsertHandler(boolean mathWildcardQuery) {
-        this.mathWildcardQuery = mathWildcardQuery;
+    MathSymbolInsertHandler() {
     }
 
     @Override
     public void handleInsert(InsertionContext context, LookupElement item) {
-        //this is 4 because that's the length of the current wildcard query keyword: 'this', we want to
-        //erase that.. and it comes directly before the symbol (or name) we just inserted.
-        if (mathWildcardQuery) {
-            context.getDocument().deleteString(context.getStartOffset() - 4, context.getStartOffset());
-        }
-
         Editor editor = context.getEditor();
         PsiElement element = item.getPsiElement();
         if (!(element instanceof ResMathDefnSig)) return;

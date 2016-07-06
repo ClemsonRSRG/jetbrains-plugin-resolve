@@ -197,21 +197,19 @@ public class RESOLVECompletionUtil {
     @NotNull
     static LookupElement createMathDefinitionLookupElement(@NotNull ResMathDefnSig signature,
                                                            @NotNull String lookupString,
-                                                           boolean forLocalMathWildcardQuery,
                                                            double priority) {
         return PrioritizedLookupElement.withPriority(LookupElementBuilder
                 .createWithSmartPointer(lookupString, signature)
                 .withRenderer(DEFINITION_RENDERER)
-                .withInsertHandler(new MathSymbolInsertHandler(forLocalMathWildcardQuery)), priority);
+                .withInsertHandler(new MathSymbolInsertHandler()), priority);
     }
 
     @NotNull
-    static LookupElement createMathVarLookupElement(@NotNull ResMathVarDef v,
-                                                    boolean forLocalMathWildcardQuery) {
+    static LookupElement createMathVarLookupElement(@NotNull ResMathVarDef v) {
         return PrioritizedLookupElement.withPriority(LookupElementBuilder
                 .createWithSmartPointer(v.getMathSymbolName().getText(), v)
                 .withRenderer(VARIABLE_RENDERER)
-                .withInsertHandler(new MathSymbolInsertHandler(forLocalMathWildcardQuery)), VAR_PRIORITY);
+                .withInsertHandler(new MathSymbolInsertHandler()), VAR_PRIORITY);
     }
 
     @NotNull
