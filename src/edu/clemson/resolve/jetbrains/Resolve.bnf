@@ -32,6 +32,7 @@
         LPAREN                  = '('
         RPAREN                  = ')'
         COLON                   = ':'
+        COLON_COLON             = '::'
         HYPER_COLON             = '⦂'
         SEMICOLON               = ';'
         COMMA                   = ','
@@ -262,7 +263,7 @@ private FacilityItemRecover ::= !('Facility'|'Definition'|'Operation'|'Type'|'en
 Type ::= RecordType | NamedType
 private NamedType ::= TypeReferenceExp QualifiedTypeReferenceExp?
 TypeReferenceExp ::= identifier { methods=[getReference getQualifier resolve] }
-left QualifiedTypeReferenceExp ::= '.' identifier {elementType=TypeReferenceExp}
+left QualifiedTypeReferenceExp ::= '::' identifier {elementType=TypeReferenceExp}
 RecordType ::= 'Record' RecordVarDeclGroup* 'end' {pin=1 extends=Type}
 
 TypeModelDecl ::= 'Type' 'family' identifier TypeModelPortion ';'
@@ -373,7 +374,7 @@ CallExp ::= NameExp ArgumentList {extends=Exp}
 ProgSymbolName ::= (identifier|symbol)
 
 NameExp ::= ReferenceExp QualifiedReferenceExp? {elementType=ReferenceExp}
-left QualifiedReferenceExp ::= '.' identifier {elementType=ReferenceExp}
+left QualifiedReferenceExp ::= '::' identifier {elementType=ReferenceExp}
 ReferenceExp ::= identifier { methods=[getReference getQualifier resolve shouldReferenceModule] extends=Exp}
 
 private PrimeExp ::= LiteralExp | NameExp | SelectorExp
@@ -466,7 +467,7 @@ MathSymbolNameNoId ::= (symbol|math_symbol) {elementType=MathSymbolName}
 MathSymbolName ::= (identifier|int|symbol|math_symbol|true|false)
 
 MathSymbolExp ::=  MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}
-left MathQualifiedReferenceExp ::= '.' MathSymbolName {elementType=MathReferenceExp}
+left MathQualifiedReferenceExp ::= '::' MathSymbolName {elementType=MathReferenceExp}
 MathReferenceExp ::= MathSymbolName {methods=[getReference getQualifier getIdentifier] extends=MathExp}
 
 MathCartProdExp ::= 'Cart_Prod' ResMathCartVarGroup+  'end' {pin=1}

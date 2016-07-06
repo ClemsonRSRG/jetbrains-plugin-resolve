@@ -4,6 +4,7 @@ import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
+import edu.clemson.resolve.jetbrains.ResTypes;
 import edu.clemson.resolve.jetbrains.psi.ResMathSymbolName;
 import edu.clemson.resolve.jetbrains.psi.ResReferenceExpBase;
 import org.jetbrains.annotations.NotNull;
@@ -23,5 +24,9 @@ public class RESOLVECompletionContributor extends CompletionContributor {
 
     private static PsiElementPattern.Capture<PsiElement> mathReferenceExp() {
         return psiElement().withParent(psiElement(ResMathSymbolName.class).withParent(ResReferenceExpBase.class));
+    }
+
+    public boolean invokeAutoPopup(@NotNull PsiElement position, char typeChar) {
+        return false;
     }
 }

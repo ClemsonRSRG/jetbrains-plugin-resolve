@@ -39,7 +39,8 @@ public class RESOLVECompletionUtil {
     public static final int KEYWORD_PRIORITY = 1;
 
     private static class Lazy {
-        private static final SingleCharInsertHandler FACILITY_OR_MODULE_INSERT_HANDLER = new SingleCharInsertHandler('.');
+        private static final QualifierInsertHandler FACILITY_OR_MODULE_INSERT_HANDLER =
+                new QualifierInsertHandler("::", true);
     }
 
     private static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER =
