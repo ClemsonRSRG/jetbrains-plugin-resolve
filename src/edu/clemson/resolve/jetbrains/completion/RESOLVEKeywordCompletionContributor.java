@@ -3,7 +3,7 @@ package edu.clemson.resolve.jetbrains.completion;
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.openapi.project.DumbAware;
-import com.intellij.patterns.ElementPattern;
+import com.intellij.patterns.*;
 import com.intellij.patterns.PsiElementPattern.Capture;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiErrorElement;
@@ -11,6 +11,7 @@ import edu.clemson.resolve.jetbrains.ResTypes;
 import edu.clemson.resolve.jetbrains.psi.*;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
+import static com.intellij.patterns.StandardPatterns.instanceOf;
 
 public class RESOLVEKeywordCompletionContributor extends CompletionContributor implements DumbAware {
 
@@ -59,8 +60,8 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
         extend(CompletionType.BASIC, statementPattern(),
                 new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "While", "If"));
 
-        extend(CompletionType.BASIC, elseStatementPattern(),
-                new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "else"));
+        //extend(CompletionType.BASIC, elseStatementPattern(),
+        //        new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "else"));
 
         extend(CompletionType.BASIC, variablePattern(),
                 new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "Var"));
@@ -142,15 +143,19 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
         return onKeywordStartWithParent(ResBlock.class);
     }
 
+    //TreeElementPattern
+    //TODO: Debug tip for the cookbook, breakpoints in "TreeElementPattern.java" line 122..
     private static Capture<PsiElement> statementPattern() {
-        return psiElement(ResTypes.IDENTIFIER).withParent(psiElement(ResTypes.REFERENCE_EXP)
+        //IntellijIdeaRulezzz is what the psiElement(ResTypes.IDENTIFIER) bit with previous sibling = "::"
+        return psiElement(ResTypes.IDENTIFIER).andNot(psiElement().afterLeaf(psiElement(ResTypes.COLON_COLON)))
+                .withParent(psiElement(ResTypes.REFERENCE_EXP)
                 .withParent(psiElement(ResTypes.SIMPLE_STATEMENT)));
     }
 
-    private static Capture<PsiElement> elseStatementPattern() {
+    /*private static Capture<PsiElement> elseStatementPattern() {
         return psiElement(ResTypes.IDENTIFIER).withParent(psiElement(ResTypes.REFERENCE_EXP)
                 .withParent(psiElement(ResTypes.SIMPLE_STATEMENT).withParent(psiElement(ResTypes.IF_STATEMENT))));
-    }
+    }*/
 
     private static Capture<PsiElement> variablePattern() {
         return psiElement(ResTypes.IDENTIFIER).withParent(psiElement(ResTypes.REFERENCE_EXP)

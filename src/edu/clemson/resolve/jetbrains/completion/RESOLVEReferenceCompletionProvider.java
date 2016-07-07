@@ -125,11 +125,7 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
                             RESOLVECompletionUtil.FUNCTION_PRIORITY);
                 }
             }
-            //TODO: ModuleIdentifierSpec here and make a module alias icon..
             else {
-                //TODO: Apply type info to the lookup renderers for these 'var like' elements
-                //TODO: When math var refs get completed, we need to use the math symbol (defn) insert handler
-                //that handles wildcard math queries.
                 return RESOLVECompletionUtil.createVariableLikeLookupElement((ResNamedElement) o);
             }
         }
@@ -150,8 +146,7 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
         private final CompletionResultSet result;
         private final boolean forTypes;
 
-        MyRESOLVEScopeProcessor(@NotNull CompletionResultSet result,
-                                boolean forTypes) {
+        MyRESOLVEScopeProcessor(@NotNull CompletionResultSet result, boolean forTypes) {
             this.result = result;
             this.forTypes = forTypes;
         }
