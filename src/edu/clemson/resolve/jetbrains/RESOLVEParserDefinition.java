@@ -44,8 +44,8 @@ public class RESOLVEParserDefinition implements ParserDefinition {
             INDUCTIVE, INITIALIZATION, IS, LAMBDA, MAINTAINING, MODELED, OPERATION, OF, OTHERWISE, PARAM_TYPE, PRECIS,
             PROCEDURE, PROG_IF, RECORD, RECURSIVE, REQUIRES, THEN, USES, VAR, WHICH_ENTAILS, WHILE, WITH, CATEGORICAL,
             IMPLICIT, THEOREM, COROLLARY, EXTENDED);
-    //TODO: Builtin unicode ops need adding here.
-    public static final TokenSet OPERATORS = TokenSet.create(AT, /*EQUALS, NEQUALS, AND, OR, NOT, CAT, LESS_OR_EQUAL,
+
+    public static final TokenSet OPERATORS = TokenSet.create(AT, SYMBOL, MATH_SYMBOL, /*EQUALS, NEQUALS, AND, OR, NOT, CAT, LESS_OR_EQUAL,
             LESS, GREATER_OR_EQUAL, GREATER, MOD, MUL, QUOTIENT, PLUS, MINUS,*/ COLON_EQUALS, COLON_EQUALS_COLON, //RARROW,
             /*TILDE, UNION, INTERSECT, IS_IN, IS_NOT_IN, BAR, DBL_BAR,*/ IFF, /*IMPLIES,*/ TRUE, FALSE, QV);
     public static final TokenSet PARAMETER_MODES = TokenSet.create(ALTERS,

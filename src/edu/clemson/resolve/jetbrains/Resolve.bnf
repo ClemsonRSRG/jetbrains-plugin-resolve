@@ -455,8 +455,7 @@ MathIncomingExp ::= '@' MathSymbolExp {pin=1}
 
 private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
 
-private MathPrimeExp ::= MathSymbolExp | MathIncomingExp | MathSelectorExp
-        | MathLambdaExp
+private MathPrimeExp ::= MathIncomingExp | MathSymbolExp | MathSelectorExp | MathLambdaExp
         | MathAlternativeExp
         | MathClssftnAssrtExp
         | MathCartProdExp
@@ -472,8 +471,8 @@ MathReferenceExp ::= MathSymbolName {methods=[getReference getQualifier getIdent
 
 MathCartProdExp ::= 'Cart_Prod' ResMathCartVarGroup+  'end' {pin=1}
 private ResMathCartVarGroup ::= MathVarDeclGroup ';' {pin=1}
-MathLambdaExp ::= (lambda|'λ') MathVarDecl ','  MathExp
-MathAlternativeExp ::= '{{' MathAlternativesList '}}'
+MathLambdaExp ::= (lambda|'λ') MathVarDecl ','  MathExp {pin=1}
+MathAlternativeExp ::= '{{' MathAlternativesList '}}' {pin=1}
 MathAlternativesList ::= MathAlternativeItemExp+
 MathAlternativeItemExp ::= MathExp ('if' MathExp ';' | 'otherwise' ';')
 MathSetRestrictionExp ::= '{' MathVarDecl 's.t.' MathExp '}' {pin=1}
