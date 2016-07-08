@@ -32,10 +32,10 @@ public abstract class ResAbstractModuleImpl extends ResNamedElementImpl implemen
         return findNotNullChildByClass(ResBlock.class);
     }
 
-    /*@Nullable
-    public List<ResModuleSpec> getModuleSignatureIdentifiers() {
-        return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleSpec.class);
-    }*/
+    @NotNull
+    public List<ResReferenceExp> getModuleHeaderReferences() {
+        return PsiTreeUtil.getChildrenOfTypeAsList(this, ResReferenceExp.class);
+    }
 
     /** @return map like { module name, maybe alias -> module ident spec } for module */
     /*public Map<String, ResModuleIdentifierSpec> getUsesMap() {
@@ -55,6 +55,8 @@ public abstract class ResAbstractModuleImpl extends ResNamedElementImpl implemen
             }
         });
     }*/
+
+
 
     @Nullable
     @Override

@@ -233,16 +233,9 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         return processNamedElements(processor, state, delegate.getVariants(), localResolve);
     }
 
-    static boolean processUsesImports(@NotNull ResFile file,
-                                      @NotNull ResScopeProcessor processor,
-                                      @NotNull ResolveState state) {
-        return processUsesImports(file, processor, state, false);
-    }
-
     public static boolean processUsesImports(@NotNull ResFile file,
                                              @NotNull ResScopeProcessor processor,
-                                             @NotNull ResolveState state,
-                                             boolean forModuleNameRefs) {
+                                             @NotNull ResolveState state) {
         List<ResModuleIdentifierSpec> usesItems = file.getModuleIdentifierSpecs();
         for (ResModuleIdentifierSpec o : usesItems) {
             if (o.getAlias() != null) {
@@ -252,9 +245,24 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                 PsiElement resolve = o.getModuleIdentifier().resolve();
                 if (resolve != null) {
                     processor.execute(resolve, state.put(ACTUAL_NAME, o.getModuleIdentifier().getText()));
-                    if (!forModuleNameRefs && !processModuleLevelEntities((ResFile) resolve, processor, state, false)) return false;
+                    if (!processModuleLevelEntities((ResFile) resolve, processor, state, false)) return false;
                 }
             }
+        }
+        return true;
+    }
+
+    protected static boolean processSuperModulesUsesImports(@NotNull ResFile file,
+                                                            @NotNull ResScopeProcessor processor,
+                                                            @NotNull ResolveState state) {
+        ResModuleDecl module = file.getEnclosedModule();
+        if (module == null) return true;
+
+        List<ResModuleIdentifierSpec> sourceIdentifierSpecs = file.getModuleIdentifierSpecs();
+        for (ResReferenceExp moduleRef : module.getModuleHeaderReferences()) {
+            PsiElement resolvedFile = moduleRef.resolve(); //resolve the header reference from my own uses list.
+            if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
+            processUsesImports((ResFile) resolvedFile, processor, state);
         }
         return true;
     }
@@ -279,23 +287,22 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
     //but ideally in the future we can tune this some more. For instance, now if we're
     //in an enhancement impl for do nothing, we'd get two do_nothings() one from the
     //spec and one from the impl, etc. The simplicity of this is nice right now though.
-    protected static boolean processSuperModules(@NotNull ResFile file, @NotNull ResScopeProcessor processor,
+    protected static boolean processSuperModules(@NotNull ResFile file,
+                                                 @NotNull ResScopeProcessor processor,
                                                  @NotNull ResScopeProcessorBase delegate,
                                                  @NotNull ResolveState state) {
-        int specIdx = 0;
-       /* for (ResModuleSpec spec : file.getSuperModuleModuleIdentifierList()) {
-            PsiElement resolvedFile = spec.resolve();
-            if (resolvedFile == null || !(resolvedFile instanceof ResFile))
-                continue;
-            ResFile eleFile = (ResFile) resolvedFile;
-            //ResScopeProcessorBase delegate = createDelegate(processor);
-            processParameterLikeThings(((ResFile) resolvedFile).getEnclosedModule(), delegate);
-            processModuleLevelEntities(eleFile, processor, state, false);
-            // processNamedElements(processor, state, delegate.getVariants(), false);
-            specIdx++;
-        }*/
+        ResModuleDecl module = file.getEnclosedModule();
+        if (module == null) return true;
+        for (ResReferenceExp moduleRef : module.getModuleHeaderReferences()) {
+            PsiElement resolvedFile = moduleRef.resolve();
+            if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
+            processParameterLikeThings((ResFile)resolvedFile, delegate);
+            processModuleLevelEntities((ResFile)resolvedFile, processor, state, false);
+        }
         return true;
     }
+
+
 
     static boolean processModuleLevelEntities(@NotNull ResFile file,
                                               @NotNull ResScopeProcessor processor,
@@ -321,15 +328,11 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                                               @NotNull ResolveState state,
                                               boolean localProcessing,
                                               boolean fromFacility) {
-        if (!processNamedElements(processor, state, module.getOperationLikeThings(), localProcessing, fromFacility))
-            return false;
-        if (!processNamedElements(processor, state, module.getFacilities(), localProcessing, fromFacility))
-            return false;
+        if (!processNamedElements(processor, state, module.getOperationLikeThings(), localProcessing, fromFacility)) return false;
+        if (!processNamedElements(processor, state, module.getFacilities(), localProcessing, fromFacility)) return false;
         if (!processNamedElements(processor, state, module.getTypes(), localProcessing, fromFacility)) return false;
-        if (!processNamedElements(processor, state, module.getGenericTypeParams(), localProcessing, fromFacility))
-            return false;
-        if (!processNamedElements(processor, state, module.getMathDefnSigs(), localProcessing, fromFacility))
-            return false;
+        if (!processNamedElements(processor, state, module.getGenericTypeParams(), localProcessing, fromFacility)) return false;
+        if (!processNamedElements(processor, state, module.getMathDefnSigs(), localProcessing, fromFacility)) return false;
         return true;
     }
 
