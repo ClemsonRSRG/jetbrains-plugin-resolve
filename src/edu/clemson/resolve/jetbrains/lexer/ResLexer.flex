@@ -25,8 +25,8 @@ import static edu.clemson.resolve.jetbrains.RESOLVEParserDefinition.*;
   return;
 %eof}
 
-NL = [\r\n] | \r\n      // NewLine
-WS = [ \t\f]            // Whitespaces
+NL = \R             //newline
+WS = [ \t\f]        //whitespaces
 
 LINE_COMMENT = "//" [^\r\n]*
 

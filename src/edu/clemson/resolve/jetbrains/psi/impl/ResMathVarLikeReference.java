@@ -100,12 +100,10 @@ public class ResMathVarLikeReference
         ResolveUtil.treeWalkUp(myElement, delegate);
         Collection<? extends ResNamedElement> result = delegate.getVariants();
         //this processes any named elements we've found searching up the tree in the previous line
+        
         if (!processNamedElements(processor, state, result, localResolve)) return false;
-        ResReference.processParameterLikeThings(myElement, delegate);
-        if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
         if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
         if (!ResReference.processUsesImports(file, processor, state)) return false;
-
         if (!ResReference.processSuperModulesUsesImports(file, processor, state)) return false;
 
         if (!processBuiltin(processor, state, myElement)) return false;

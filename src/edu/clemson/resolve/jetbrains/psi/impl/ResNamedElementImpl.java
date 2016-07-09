@@ -129,15 +129,11 @@ public abstract class ResNamedElementImpl
     }
 
     /**
-     * Ok, here's the deal: this will basically look to our right hand side
-     * siblings of {@code this} AST (Jetbrains speak: PSI) node for a math exp
+     * Ok, here's the deal: this will basically look to our right hand side siblings of {@code this} AST (Jetbrains speak: PSI) node for a math exp
      * and return the first one it finds.
      * <p>
-     * Here's the thing though, this is
-     * not good/flexible enough since we also want to return a ResType, think
-     * in the case of a parameter decl: there we'll want a ResType, resolve
-     * that,
-     * and get back to the math expr.</p>
+     * Here's the thing though, this is not good/flexible enough since we also want to return a ResType, think in the case of a parameter
+     * decl: there we'll want a ResType, resolve that, and get back to the math expr.</p>
      */
     @Nullable
     @Override
@@ -173,14 +169,14 @@ public abstract class ResNamedElementImpl
         else if (this instanceof ResMathVarDef) icon = RESOLVEIcons.VARIABLE;
         else if (this instanceof ResOperationDecl) icon = RESOLVEIcons.FUNCTION_DECL;
         else if (this instanceof ResOperationProcedureDecl) icon = RESOLVEIcons.FUNCTION_IMPL;
+        else if (this instanceof ResProcedureDecl) icon = RESOLVEIcons.FUNCTION_IMPL;
         else if (this instanceof ResParamDef) icon = RESOLVEIcons.PARAMETER;
         //TODO: complete the icon list here as you go along
+
         if (icon != null) {
             if ((flags & Iconable.ICON_FLAG_VISIBILITY) != 0) {
-                RowIcon rowIcon =
-                        ElementBase.createLayeredIcon(this, icon, flags);
-                rowIcon.setIcon(isUsesClauseVisible() ? PlatformIcons.PUBLIC_ICON :
-                        PlatformIcons.PRIVATE_ICON, 1);
+                RowIcon rowIcon = ElementBase.createLayeredIcon(this, icon, flags);
+                rowIcon.setIcon(isUsesClauseVisible() ? PlatformIcons.PUBLIC_ICON : PlatformIcons.PRIVATE_ICON, 1);
                 return rowIcon;
             }
             return icon;

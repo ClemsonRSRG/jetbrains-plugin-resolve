@@ -27,7 +27,6 @@ public class RESOLVECompletionContributor extends CompletionContributor {
     }
 
     public boolean invokeAutoPopup(@NotNull PsiElement position, char typeChar) {
-        boolean result = typeChar == ':' && position.getNode().getElementType() == ResTypes.COLON;
-        return result;
+        return typeChar == ':' && position.getNode().getElementType() == ResTypes.COLON;
     }
 }

@@ -138,10 +138,9 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
             return false;
         if (ResPsiImplUtil.prevDot(parent)) return false;
         if (!processBlock(processor, state, true)) return false;
-        if (!processParameterLikeThings(processor, state, true)) return false;
+        //if (!processParameterLikeThings(processor, state, true)) return false;
         if (!processModuleLevelEntities(file, processor, state, true)) return false;
         if (!processUsesImports(file, processor, state)) return false;
-        //if (!processSuperModules(file, processor, state)) return false;
         return true;
     }
 
@@ -236,6 +235,13 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
     public static boolean processUsesImports(@NotNull ResFile file,
                                              @NotNull ResScopeProcessor processor,
                                              @NotNull ResolveState state) {
+        return processUsesImports(file, processor, state, false);
+    }
+
+    private static boolean processUsesImports(@NotNull ResFile file,
+                                             @NotNull ResScopeProcessor processor,
+                                             @NotNull ResolveState state,
+                                             boolean forSuperModules) {
         List<ResModuleIdentifierSpec> usesItems = file.getModuleIdentifierSpecs();
         for (ResModuleIdentifierSpec o : usesItems) {
             if (o.getAlias() != null) {
@@ -245,7 +251,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                 PsiElement resolve = o.getModuleIdentifier().resolve();
                 if (resolve != null) {
                     processor.execute(resolve, state.put(ACTUAL_NAME, o.getModuleIdentifier().getText()));
-                    if (!processModuleLevelEntities((ResFile) resolve, processor, state, false)) return false;
+                    if (!processModuleLevelEntities((ResFile) resolve, processor, state, forSuperModules)) return false;
                 }
             }
         }
@@ -262,7 +268,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         for (ResReferenceExp moduleRef : module.getModuleHeaderReferences()) {
             PsiElement resolvedFile = moduleRef.resolve(); //resolve the header reference from my own uses list.
             if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
-            processUsesImports((ResFile) resolvedFile, processor, state);
+            processUsesImports((ResFile) resolvedFile, processor, state, true);
         }
         return true;
     }
@@ -274,35 +280,6 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                 m instanceof ResPrecisModuleDecl ||
                 m instanceof ResConceptModuleDecl;
     }
-
-    private boolean processSuperModules(@NotNull ResFile file,
-                                        @NotNull ResScopeProcessor processor,
-                                        @NotNull ResolveState state) {
-        ResScopeProcessorBase delegate = createDelegate(processor);
-        processSuperModules(file, processor, delegate, state);
-        return processNamedElements(processor, state, delegate.getVariants(), false);
-    }
-
-    //TODO: This is good enough for now in terms of processing specs/super modules,
-    //but ideally in the future we can tune this some more. For instance, now if we're
-    //in an enhancement impl for do nothing, we'd get two do_nothings() one from the
-    //spec and one from the impl, etc. The simplicity of this is nice right now though.
-    protected static boolean processSuperModules(@NotNull ResFile file,
-                                                 @NotNull ResScopeProcessor processor,
-                                                 @NotNull ResScopeProcessorBase delegate,
-                                                 @NotNull ResolveState state) {
-        ResModuleDecl module = file.getEnclosedModule();
-        if (module == null) return true;
-        for (ResReferenceExp moduleRef : module.getModuleHeaderReferences()) {
-            PsiElement resolvedFile = moduleRef.resolve();
-            if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
-            processParameterLikeThings((ResFile)resolvedFile, delegate);
-            processModuleLevelEntities((ResFile)resolvedFile, processor, state, false);
-        }
-        return true;
-    }
-
-
 
     static boolean processModuleLevelEntities(@NotNull ResFile file,
                                               @NotNull ResScopeProcessor processor,
@@ -370,8 +347,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         List<ResMathDefnSig> sigs = o.getSignatures();
         if (sigs.size() == 1) {
             ResMathDefnSig sig = o.getSignatures().get(0);
-            if (!processDefinitionParams(processor, sig.getParameters()))
-                return false;
+            if (!processDefinitionParams(processor, sig.getParameters())) return false;
         } //size > 1 ? then we're categorical; size == 0, we're null
         return true;
     }
@@ -389,8 +365,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
     private static boolean processProgParamDecls(@NotNull ResScopeProcessorBase processor,
                                                  @NotNull List<ResParamDecl> parameters) {
         for (ResParamDecl declaration : parameters) {
-            if (!processNamedElements(processor, ResolveState.initial(),
-                    declaration.getParamDefList(), true)) return false;
+            if (!processNamedElements(processor, ResolveState.initial(), declaration.getParamDefList(), true)) return false;
         }
         return true;
     }
