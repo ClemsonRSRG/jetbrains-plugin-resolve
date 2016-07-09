@@ -14,7 +14,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 import static edu.clemson.resolve.jetbrains.psi.impl.ResReference.processModuleLevelEntities;
-import static edu.clemson.resolve.jetbrains.psi.impl.ResReference.processParameterLikeThings;
 
 public class ResMathVarLikeReference
         extends
@@ -85,51 +84,25 @@ public class ResMathVarLikeReference
             if (!result || ResPsiImplUtil.prevDot(myElement)) return false;
         }
         PsiElement grandPa = parent.getParent();
-        if (grandPa instanceof ResMathSelectorExp &&
-                !processMathSelector((ResMathSelectorExp) grandPa, processor, state, parent)) return false;
+        if (grandPa instanceof ResMathSelectorExp && !processMathSelector((ResMathSelectorExp) grandPa, processor, state, parent)) return false;
         if (ResPsiImplUtil.prevDot(parent)) return false;
-        ResScopeProcessorBase delegate = createDelegate(processor);
 
-        //If we're trying to resolve a qualifier for math symbol in a global context -- meaning global requires clause,
-        //global constraints, etc. This next line will find a moduleIdentifierSpec
-        //if the module indeed exists in the uses list.. TODO: Maybe just use ModuleIdentifierSpec then instead of a mixture
-        //of PsiFile and ModuleIdentifierSpec..
-        //TODO: Ok, for now, in scopeProcessorBase to keep us from prematurely searching the usesList, I tell it to not
-        //search ResUsesList in 'execute'. We should try getting refactor rename working first before we get too
-        //comfortable..
-        ResolveUtil.treeWalkUp(myElement, delegate);
-        Collection<? extends ResNamedElement> result = delegate.getVariants();
-        //this processes any named elements we've found searching up the tree in the previous line
-        
-        if (!processNamedElements(processor, state, result, localResolve)) return false;
+        if (!processBlock(processor, state, true)) return false;
         if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
         if (!ResReference.processUsesImports(file, processor, state)) return false;
         if (!ResReference.processSuperModulesUsesImports(file, processor, state)) return false;
-
         if (!processBuiltin(processor, state, myElement)) return false;
         return true;
     }
 
-    private boolean processSuperModules(@NotNull ResFile file,
-                                        @NotNull ResScopeProcessor processor,
-                                        @NotNull ResolveState state) {
-        /*for (ResModuleSpec spec : file.getSuperModuleModuleIdentifierList()) {
-            PsiElement resolvedFile = spec.resolve();
-            if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
-            ResModuleDecl resolvedModule = ((ResFile) resolvedFile).getEnclosedModule();
-            if (resolvedModule == null) continue;
-            if (!processModuleLevelEntities((ResFile) resolvedFile, processor, state, false)) return false;
-            if (!processSuperModuleParams(resolvedModule, processor, state, true)) return false;
-        }*/
-        return true;
-    }
-
-    private boolean processSuperModuleParams(@NotNull ResModuleDecl superModule,
-                                             @NotNull ResScopeProcessor processor,
-                                             @NotNull ResolveState state,
-                                             boolean localResolve) {
+    private boolean processBlock(@NotNull ResScopeProcessor processor,
+                                 @NotNull ResolveState state,
+                                 boolean localResolve) {
         ResScopeProcessorBase delegate = createDelegate(processor);
-        ResReference.processParameterLikeThings(superModule, delegate);
+        ResolveUtil.treeWalkUp(myElement, delegate);
+        //process local parameters if we're in a local definition or an operation like thing (doesn't include module
+        //params; that's in processModuleLevelEntities)
+        ResReference.processBlockParameters(myElement, delegate);
         return processNamedElements(processor, state, delegate.getVariants(), localResolve);
     }
 

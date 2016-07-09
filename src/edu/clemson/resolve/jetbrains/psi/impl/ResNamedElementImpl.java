@@ -42,6 +42,7 @@ public abstract class ResNamedElementImpl
      */
     public boolean isUsesClauseVisible() {
         return (!(this instanceof ResOperationDecl) &&
+                !(this instanceof ResProcedureDecl) &&
                 !(this instanceof ResParamDef));
     }
 

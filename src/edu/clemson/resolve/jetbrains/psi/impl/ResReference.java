@@ -134,8 +134,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
             if (!result || ResPsiImplUtil.prevDot(myElement)) return false;
         }
         PsiElement grandPa = parent.getParent();
-        if (grandPa instanceof ResSelectorExp && !processSelector((ResSelectorExp) grandPa, processor, state, parent))
-            return false;
+        if (grandPa instanceof ResSelectorExp && !processSelector((ResSelectorExp) grandPa, processor, state, parent)) return false;
         if (ResPsiImplUtil.prevDot(parent)) return false;
         if (!processBlock(processor, state, true)) return false;
         if (!processModuleLevelEntities(file, processor, state, true)) return false;
@@ -228,7 +227,22 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                                  boolean localResolve) {
         ResScopeProcessorBase delegate = createDelegate(processor);
         ResolveUtil.treeWalkUp(myElement, delegate);
+
+        //process local parameters if we're in a local definition or an operation like thing (doesn't include module
+        //params; that's in processModuleLevelEntities)
+        processBlockParameters(myElement, delegate);
         return processNamedElements(processor, state, delegate.getVariants(), localResolve);
+    }
+
+    //Go plugin rolls this step into the "treeWalkUp" phase -- see processParameters in GoCompositeElementImpl.
+    //I just do it here for simplicity
+    static boolean processBlockParameters(@NotNull ResCompositeElement e,
+                                          @NotNull ResScopeProcessorBase processor) {
+        ResMathDefnDecl def = PsiTreeUtil.getParentOfType(e, ResMathDefnDecl.class);
+        ResOperationLikeNode operation = PsiTreeUtil.getParentOfType(e, ResOperationLikeNode.class);
+        if (def != null) processDefinitionParams(processor, def);
+        if (operation != null) processProgParamDecls(processor, operation.getParamDeclList());
+        return true;
     }
 
     public static boolean processUsesImports(@NotNull ResFile file,
@@ -308,35 +322,8 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         if (!processNamedElements(processor, state, module.getFacilities(), localProcessing, fromFacility)) return false;
         if (!processNamedElements(processor, state, module.getTypes(), localProcessing, fromFacility)) return false;
         if (!processNamedElements(processor, state, module.getGenericTypeParams(), localProcessing, fromFacility)) return false;
+        //TODO: Other module params go here too..
         if (!processNamedElements(processor, state, module.getMathDefnSigs(), localProcessing, fromFacility)) return false;
-        return true;
-    }
-
-    private boolean processParameterLikeThings(@NotNull ResScopeProcessor processor,
-                                               @NotNull ResolveState state,
-                                               boolean localResolve) {
-        ResScopeProcessorBase delegate = createDelegate(processor);
-        processParameterLikeThings(myElement, delegate);
-        return processNamedElements(processor, state, delegate.getVariants(), localResolve);
-    }
-
-    static boolean processParameterLikeThings(@NotNull ResFile e,
-                                              @NotNull ResScopeProcessorBase processor) {
-        if (e.getEnclosedModule() != null) {
-            processParameterLikeThings(e.getEnclosedModule(), processor);
-        }
-        return true;
-    }
-
-    static boolean processParameterLikeThings(@NotNull ResCompositeElement e,
-                                              @NotNull ResScopeProcessorBase processor) {
-        ResMathDefnDecl def = PsiTreeUtil.getParentOfType(e, ResMathDefnDecl.class);
-        ResOperationLikeNode operation = PsiTreeUtil.getParentOfType(e, ResOperationLikeNode.class);
-        ResModuleDecl module = PsiTreeUtil.getParentOfType(e, ResModuleDecl.class);
-        if (e instanceof ResModuleDecl) module = (ResModuleDecl) e;
-        if (def != null) processDefinitionParams(processor, def);
-        if (operation != null) processProgParamDecls(processor, operation.getParamDeclList());
-        if (module != null) processModuleParams(processor, module);
         return true;
     }
 
@@ -354,9 +341,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
     private static boolean processDefinitionParams(@NotNull ResScopeProcessorBase processor,
                                                    @NotNull List<ResMathVarDeclGroup> parameters) {
         for (ResMathVarDeclGroup declaration : parameters) {
-            if (!processNamedElements(processor, ResolveState.initial(),
-                    declaration.getMathVarDefList(), true)) return false;
-            //if (!processImplicitTypeParameters(processor, ResolveState.initial(), declaration.getMathExp(), true)) return false;
+            if (!processNamedElements(processor, ResolveState.initial(), declaration.getMathVarDefList(), true)) return false;
         }
         return true;
     }
@@ -369,8 +354,8 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         return true;
     }
 
-    private static boolean processModuleParams(@NotNull ResScopeProcessorBase processor,
-                                               @NotNull ResModuleDecl o) {
+    //move some of this logic into ResModuleDecl (the abstract base class or whatever)
+    private static boolean processModuleParams(@NotNull ResScopeProcessorBase processor, @NotNull ResModuleDecl o) {
         ResModuleParameters paramNode = o.getModuleParameters();
         List<ResTypeParamDecl> typeParamDecls = new ArrayList<>();
         List<ResParamDecl> constantParamDeclGrps = new ArrayList<>();
