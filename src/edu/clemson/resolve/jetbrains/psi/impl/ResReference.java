@@ -138,7 +138,6 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
             return false;
         if (ResPsiImplUtil.prevDot(parent)) return false;
         if (!processBlock(processor, state, true)) return false;
-        //if (!processParameterLikeThings(processor, state, true)) return false;
         if (!processModuleLevelEntities(file, processor, state, true)) return false;
         if (!processUsesImports(file, processor, state)) return false;
         return true;
