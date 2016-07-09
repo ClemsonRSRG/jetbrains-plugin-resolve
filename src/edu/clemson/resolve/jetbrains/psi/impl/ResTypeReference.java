@@ -69,11 +69,6 @@ public class ResTypeReference extends PsiPolyVariantReferenceBase<ResTypeReferen
                                                       @NotNull ResolveState state) {
         PsiElement target = qualifier.resolve();
         if (target == null || target == qualifier) return false;
-
-        /*if (target instanceof ResModuleIdentifierSpec) { //should happen in event of alias..
-            target = ((ResModuleIdentifierSpec)target).getModuleIdentifier().resolve();
-        }*/
-
         if (target instanceof ResFacilityDecl) {
             ResFile specFile = ((ResFacilityDecl) target).resolveSpecification();
             if (specFile != null) ResReference.processModuleLevelEntities(specFile, processor, state, false, true);
@@ -88,14 +83,6 @@ public class ResTypeReference extends PsiPolyVariantReferenceBase<ResTypeReferen
                                               @NotNull ResScopeProcessor processor,
                                               @NotNull ResolveState state,
                                               boolean localResolve) {
-
-        //TODO: Why do we have to walk up the tree to resolve types? Don't we just need to processModuleLevelEntities?
-        //ResScopeProcessorBase delegate = createDelegate(processor);
-        //ResolveUtil.treeWalkUp(myElement, delegate);
-        //Collection<? extends ResNamedElement> result = delegate.getVariants();
-        //this processes any named elements we've found searching up the tree in the previous line
-        //if (!ResReference.processNamedElements(processor, state, result, localResolve)) return false;
-
         if (!ResReference.processModuleLevelEntities(file, processor, state, localResolve)) return false;
         if (!ResReference.processUsesImports(file, processor, state)) return false;
         if (!ResReference.processSuperModulesUsesImports(file, processor, state)) return false;
