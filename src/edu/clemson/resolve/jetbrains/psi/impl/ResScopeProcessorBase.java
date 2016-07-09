@@ -6,10 +6,7 @@ import com.intellij.psi.ResolveState;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.OrderedSet;
 //import edu.clemson.resolve.jetbrains.psi.ResMathCartProdExp;
-import edu.clemson.resolve.jetbrains.psi.ResMathDefnDecl;
-import edu.clemson.resolve.jetbrains.psi.ResNamedElement;
-import edu.clemson.resolve.jetbrains.psi.ResOperationLikeNode;
-import edu.clemson.resolve.jetbrains.psi.ResUsesList;
+import edu.clemson.resolve.jetbrains.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,8 +40,7 @@ public abstract class ResScopeProcessorBase extends ResScopeProcessor {
         if (psiElement instanceof ResMathDefnDecl) return false;
         if (psiElement instanceof ResOperationLikeNode) return false;
         if (psiElement instanceof ResUsesList) return false;
-        //if (psiElement instanceof ResMathCartProdExp) return false;
-
+        if (psiElement instanceof ResMathCartProdExp) return false;
         if (!(psiElement instanceof ResNamedElement)) return true;
         String name = ((ResNamedElement) psiElement).getName();
         if (StringUtil.isEmpty(name) || !isCompletion && !requestedNameElement.textMatches(name)) return true;
