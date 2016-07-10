@@ -85,7 +85,6 @@ public class ResTypeReference extends PsiPolyVariantReferenceBase<ResTypeReferen
                                               boolean localResolve) {
         if (!ResReference.processModuleLevelEntities(file, processor, state, localResolve)) return false;
         if (!ResReference.processUsesImports(file, processor, state)) return false;
-        if (!ResReference.processSuperModulesUsesImports(file, processor, state)) return false;
         return true;
     }
 

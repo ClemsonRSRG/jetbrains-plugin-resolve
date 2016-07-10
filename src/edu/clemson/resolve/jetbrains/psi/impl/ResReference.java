@@ -139,8 +139,6 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         if (!processBlock(processor, state, true)) return false;
         if (!processModuleLevelEntities(file, processor, state, true)) return false;
         if (!processUsesImports(file, processor, state)) return false;
-        if (!processSuperModulesUsesImports(file, processor, state)) return false;
-
         return true;
     }
 
@@ -251,58 +249,51 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                                              @NotNull ResScopeProcessor processor,
                                              @NotNull ResolveState state) {
         if (file.getEnclosedModule() == null) return true;
-        return processUsesImports(file.getEnclosedModule(), processor, state, false);
-    }
-
-    public static boolean processUsesImports(@NotNull ResModuleDecl module,
-                                             @NotNull ResScopeProcessor processor,
-                                             @NotNull ResolveState state) {
-        return processUsesImports(module, processor, state, false);
+        return processUsesImports(file.getEnclosedModule(), processor, state);
     }
 
     //OK: So it looks like this is the method that's going to have to initiate the search into the super modules...
+    //Update: Ok so at least this method is doing what I *think* it needs to be doing right now. Don't get me wrong its a godawful
+    //mess, but at least its working as I expect for the moment. TODO: Clean it up, improve names etc.
     private static boolean processUsesImports(@NotNull ResModuleDecl moduleDecl,
                                              @NotNull ResScopeProcessor processor,
-                                             @NotNull ResolveState state,
-                                             boolean forSuperModules) {
-        Map<String, ResModuleIdentifierSpec> x = moduleDecl.getModuleIdentifierSpecMap();
+                                             @NotNull ResolveState state) {
         List<ResModuleIdentifierSpec> usesItems = moduleDecl.getModuleIdentifierSpecs();
+
+        List<ResReferenceExp> headerModules = moduleDecl.getModuleHeaderReferences();
         for (ResModuleIdentifierSpec o : usesItems) {
             if (o.getAlias() != null) {
                 if (!processor.execute(o, state.put(ACTUAL_NAME, o.getAlias().getText()))) return false;
             }
             else {
                 PsiElement resolve = o.getModuleIdentifier().resolve();
-                if (resolve != null) {
+                if (resolve != null && resolve instanceof ResFile) {
+                    for (ResReferenceExp e : headerModules) {
+                        //process the super module's uses clauses
+                        List<ResModuleIdentifierSpec> superModuleUses = ((ResFile) resolve).getModuleIdentifierSpecs();
+
+                        for (ResModuleIdentifierSpec e1 : superModuleUses) {
+                            PsiElement eRes = e1.getModuleIdentifier().resolve();
+                            if (eRes != null) {
+                                if (!processModuleLevelEntities((ResFile) eRes, processor, state, false)) return false;
+                            }
+                        }
+                    }
                     processor.execute(resolve, state.put(ACTUAL_NAME, o.getModuleIdentifier().getText()));
-                    if (!processModuleLevelEntities((ResFile) resolve, processor, state, forSuperModules)) return false;
+                    boolean forSuperModule = forSuperModule(moduleDecl, o.getName());
+                    if (!processModuleLevelEntities((ResFile) resolve, processor, state, forSuperModule)) return false;
                 }
             }
         }
         return true;
     }
 
-    protected static boolean processSuperModulesUsesImports(@NotNull ResFile file,
-                                                            @NotNull ResScopeProcessor processor,
-                                                            @NotNull ResolveState state) {
-        ResModuleDecl module = file.getEnclosedModule();
-        if (module == null) return true;
 
-        List<ResModuleIdentifierSpec> sourceIdentifierSpecs = file.getModuleIdentifierSpecs();
-        for (ResReferenceExp moduleRef : module.getModuleHeaderReferences()) {
-            //PsiElement resolvedFile = moduleRef.resolve(); //resolve the header reference from my own uses list.
-            //if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
-            //processUsesImports((ResFile) resolvedFile, processor, state, true);
+    private static boolean forSuperModule(@NotNull ResModuleDecl module, @NotNull String currentUsesName) {
+        for (ResReferenceExp e : module.getModuleHeaderReferences()) {
+            if (e.getIdentifier().getText().equals(currentUsesName)) return true;
         }
-        return true;
-    }
-
-    private static boolean isSearchableUsesModule(@NotNull ResFile e) {
-        if (e.getEnclosedModule() == null) return true; //its ok if we're null
-        ResModuleDecl m = e.getEnclosedModule();
-        return m instanceof ResFacilityModuleDecl ||
-                m instanceof ResPrecisModuleDecl ||
-                m instanceof ResConceptModuleDecl;
+        return false;
     }
 
     static boolean processModuleLevelEntities(@NotNull ResFile file,
