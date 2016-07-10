@@ -265,6 +265,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                                              @NotNull ResScopeProcessor processor,
                                              @NotNull ResolveState state,
                                              boolean forSuperModules) {
+        Map<String, ResModuleIdentifierSpec> x = moduleDecl.getModuleIdentifierSpecMap();
         List<ResModuleIdentifierSpec> usesItems = moduleDecl.getModuleIdentifierSpecs();
         for (ResModuleIdentifierSpec o : usesItems) {
             if (o.getAlias() != null) {
@@ -289,9 +290,9 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
 
         List<ResModuleIdentifierSpec> sourceIdentifierSpecs = file.getModuleIdentifierSpecs();
         for (ResReferenceExp moduleRef : module.getModuleHeaderReferences()) {
-           // PsiElement resolvedFile = moduleRef.resolve(); //resolve the header reference from my own uses list.
-        //    if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
-        //    processUsesImports((ResFile) resolvedFile, processor, state, true);
+            //PsiElement resolvedFile = moduleRef.resolve(); //resolve the header reference from my own uses list.
+            //if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
+            //processUsesImports((ResFile) resolvedFile, processor, state, true);
         }
         return true;
     }

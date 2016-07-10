@@ -33,6 +33,17 @@ public abstract class ResAbstractModuleImpl extends ResNamedElementImpl implemen
     }
 
     @NotNull
+    public List<ResModuleIdentifierSpec> getImports() {
+        return CachedValuesManager.getCachedValue(this, new CachedValueProvider<List<ResModuleIdentifierSpec>>() {
+            @Override
+            public Result<List<ResModuleIdentifierSpec>> compute() {
+                List<ResModuleIdentifierSpec> imports = calcImports();
+                return Result.create(imports, ResAbstractModuleImpl.this);
+            }
+        });
+    }
+
+    @NotNull
     public List<ResReferenceExp> getModuleHeaderReferences() {
         return PsiTreeUtil.getChildrenOfTypeAsList(this, ResReferenceExp.class);
     }
@@ -56,6 +67,23 @@ public abstract class ResAbstractModuleImpl extends ResNamedElementImpl implemen
         });
     }*/
 
+    @NotNull
+    public Map<String, ResModuleIdentifierSpec> getModuleIdentifierSpecMap() {
+        return CachedValuesManager.getCachedValue(this, new CachedValueProvider<Map<String, ResModuleIdentifierSpec>>() {
+            @Nullable
+            @Override
+            public Result<Map<String, ResModuleIdentifierSpec>> compute() {
+                Map<String, ResModuleIdentifierSpec> result = new HashMap<>();
+                for (ResModuleIdentifierSpec spec : getImports()) {
+                    result.put(spec.getName(), spec);
+                    if (spec.getAlias() != null) {
+                        result.put(spec.getAlias().getText(), spec);
+                    }
+                }
+                return Result.create(result, ResAbstractModuleImpl.this);
+            }
+        });
+    }
 
 
     @Nullable
@@ -76,6 +104,7 @@ public abstract class ResAbstractModuleImpl extends ResNamedElementImpl implemen
 
     @NotNull
     @Override
+    @Deprecated
     public List<ResModuleIdentifierSpec> getModuleIdentifierSpecs() {
         return getUsesList() != null ? getUsesList().getModuleIdentifierSpecList() :
                 ContainerUtil.<ResModuleIdentifierSpec>newArrayList();
@@ -211,5 +240,16 @@ public abstract class ResAbstractModuleImpl extends ResNamedElementImpl implemen
                 return true;
             }
         }.process(module);
+    }
+
+    @NotNull
+    private List<ResModuleIdentifierSpec> calcImports() {
+        List<ResModuleIdentifierSpec> result = ContainerUtil.newArrayList();
+        ResUsesList list = getUsesList();
+        if (list == null) return ContainerUtil.emptyList();
+        for (ResModuleIdentifierSpec identifier : list.getModuleIdentifierSpecList()) {
+            result.add(identifier);
+        }
+        return result;
     }
 }

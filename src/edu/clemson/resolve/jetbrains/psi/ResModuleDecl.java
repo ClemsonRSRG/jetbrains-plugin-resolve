@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents the root of all module like declarations in RESOLVE.
@@ -15,6 +16,9 @@ public interface ResModuleDecl extends ResNamedElement {
 
     @NotNull
     public List<ResModuleIdentifierSpec> getModuleIdentifierSpecs();
+
+    @NotNull
+    public Map<String, ResModuleIdentifierSpec> getModuleIdentifierSpecMap();
 
     /**
      * For implementations primary, returns a list of {@link ResReferenceExp}s corresponding to the one or two specifications
