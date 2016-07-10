@@ -139,6 +139,8 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         if (!processBlock(processor, state, true)) return false;
         if (!processModuleLevelEntities(file, processor, state, true)) return false;
         if (!processUsesImports(file, processor, state)) return false;
+        if (!processSuperModulesUsesImports(file, processor, state)) return false;
+
         return true;
     }
 
@@ -248,14 +250,22 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
     public static boolean processUsesImports(@NotNull ResFile file,
                                              @NotNull ResScopeProcessor processor,
                                              @NotNull ResolveState state) {
-        return processUsesImports(file, processor, state, false);
+        if (file.getEnclosedModule() == null) return true;
+        return processUsesImports(file.getEnclosedModule(), processor, state, false);
     }
 
-    private static boolean processUsesImports(@NotNull ResFile file,
+    public static boolean processUsesImports(@NotNull ResModuleDecl module,
+                                             @NotNull ResScopeProcessor processor,
+                                             @NotNull ResolveState state) {
+        return processUsesImports(module, processor, state, false);
+    }
+
+    //OK: So it looks like this is the method that's going to have to initiate the search into the super modules...
+    private static boolean processUsesImports(@NotNull ResModuleDecl moduleDecl,
                                              @NotNull ResScopeProcessor processor,
                                              @NotNull ResolveState state,
                                              boolean forSuperModules) {
-        List<ResModuleIdentifierSpec> usesItems = file.getModuleIdentifierSpecs();
+        List<ResModuleIdentifierSpec> usesItems = moduleDecl.getModuleIdentifierSpecs();
         for (ResModuleIdentifierSpec o : usesItems) {
             if (o.getAlias() != null) {
                 if (!processor.execute(o, state.put(ACTUAL_NAME, o.getAlias().getText()))) return false;
@@ -279,9 +289,9 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
 
         List<ResModuleIdentifierSpec> sourceIdentifierSpecs = file.getModuleIdentifierSpecs();
         for (ResReferenceExp moduleRef : module.getModuleHeaderReferences()) {
-            PsiElement resolvedFile = moduleRef.resolve(); //resolve the header reference from my own uses list.
-            if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
-            processUsesImports((ResFile) resolvedFile, processor, state, true);
+           // PsiElement resolvedFile = moduleRef.resolve(); //resolve the header reference from my own uses list.
+        //    if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
+        //    processUsesImports((ResFile) resolvedFile, processor, state, true);
         }
         return true;
     }
@@ -357,32 +367,6 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         return true;
     }
 
-    //move some of this logic into ResModuleDecl (the abstract base class or whatever)
-    private static boolean processModuleParams(@NotNull ResScopeProcessorBase processor, @NotNull ResModuleDecl o) {
-        ResModuleParameters paramNode = o.getModuleParameters();
-        List<ResTypeParamDecl> typeParamDecls = new ArrayList<>();
-        List<ResParamDecl> constantParamDeclGrps = new ArrayList<>();
-        List<ResMathDefnDecl> definitionParams = new ArrayList<>();
-        List<ResMathDefnSig> defnSigs = new ArrayList<>();
-
-        if (paramNode instanceof ResSpecModuleParameters) {
-            typeParamDecls.addAll(((ResSpecModuleParameters) paramNode).getTypeParamDeclList());
-            constantParamDeclGrps.addAll(((ResSpecModuleParameters) paramNode).getParamDeclList());
-            definitionParams.addAll(((ResSpecModuleParameters) paramNode).getMathStandardDefnDeclList());
-        }
-        if (paramNode instanceof ResImplModuleParameters) {
-            //definitionParams.addAll(((ResImplModuleParameters) paramNode).g
-        }
-        for (ResMathDefnDecl d : definitionParams) {
-            defnSigs.addAll(d.getSignatures());
-        }
-        //TODO: else if (paramNode instanceof ResImplModuleParameters) ..
-        processProgParamDecls(processor, constantParamDeclGrps);
-        processNamedElements(processor, ResolveState.initial(), typeParamDecls, true);
-        processNamedElements(processor, ResolveState.initial(), defnSigs, true);
-        return true;
-    }
-
     static boolean processNamedElements(@NotNull PsiScopeProcessor processor,
                                         @NotNull ResolveState state,
                                         @NotNull Collection<? extends ResNamedElement> elements,
@@ -397,8 +381,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                                         boolean facilityResolve) {
         for (ResNamedElement definition : elements) {
             //if (!definition.isValid() || checkContainingFile && !allowed(definition.getContainingFile(), contextFile)) continue;
-            if ((localResolve || definition.isUsesClauseVisible() || facilityResolve) &&
-                    !processor.execute(definition, state)) return false;
+            if ((localResolve || definition.isUsesClauseVisible() || facilityResolve) && !processor.execute(definition, state)) return false;
         }
         return true;
     }
