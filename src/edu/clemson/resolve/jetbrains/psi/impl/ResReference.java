@@ -372,7 +372,6 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                                         boolean localResolve,
                                         boolean facilityResolve) {
         for (ResNamedElement definition : elements) {
-            //if (!definition.isValid() || checkContainingFile && !allowed(definition.getContainingFile(), contextFile)) continue;
             if ((localResolve || definition.isUsesClauseVisible() || facilityResolve) && !processor.execute(definition, state)) return false;
         }
         return true;
