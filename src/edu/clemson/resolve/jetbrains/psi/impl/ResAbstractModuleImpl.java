@@ -87,6 +87,7 @@ public abstract class ResAbstractModuleImpl extends ResNamedElementImpl implemen
     }
 
     @NotNull
+    @Override
     public List<ResTypeParamDecl> getGenericTypeParams() {
         List<ResTypeParamDecl> genericTypes = new ArrayList<>();
         ResModuleParameters params = getModuleParameters();
@@ -94,6 +95,32 @@ public abstract class ResAbstractModuleImpl extends ResNamedElementImpl implemen
             genericTypes.addAll(((ResSpecModuleParameters) params).getTypeParamDeclList());
         }
         return genericTypes;
+    }
+
+    @NotNull
+    @Override
+    public List<ResParamDef> getConstantParamDefs() {
+        List<ResParamDef> result = new ArrayList<>();
+        ResModuleParameters params = getModuleParameters();
+        if (params instanceof ResSpecModuleParameters) {
+            for (ResParamDecl paramGroup : (((ResSpecModuleParameters) params).getParamDeclList())) {
+                result.addAll(paramGroup.getParamDefList());
+            }
+        }
+        return result;
+    }
+
+    @NotNull
+    @Override
+    public List<ResMathDefnSig> getDefinitionParams() {
+        List<ResMathDefnSig> result = new ArrayList<>();
+        ResModuleParameters params = getModuleParameters();
+        if (params instanceof ResSpecModuleParameters) {
+            for (ResMathStandardDefnDecl paramGroup : (((ResSpecModuleParameters) params).getMathStandardDefnDeclList())) {
+                result.addAll(paramGroup.getSignatures());
+            }
+        }
+        return result;
     }
 
     @NotNull

@@ -321,8 +321,11 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         if (!processNamedElements(processor, state, module.getOperationLikeThings(), localProcessing, fromFacility)) return false;
         if (!processNamedElements(processor, state, module.getFacilities(), localProcessing, fromFacility)) return false;
         if (!processNamedElements(processor, state, module.getTypes(), localProcessing, fromFacility)) return false;
+
+        //module parameter-like-things
         if (!processNamedElements(processor, state, module.getGenericTypeParams(), localProcessing, fromFacility)) return false;
-        //TODO: Other module params go here too..
+        if (!processNamedElements(processor, state, module.getConstantParamDefs(), localProcessing, fromFacility)) return false;
+
         if (!processNamedElements(processor, state, module.getMathDefnSigs(), localProcessing, fromFacility)) return false;
         return true;
     }

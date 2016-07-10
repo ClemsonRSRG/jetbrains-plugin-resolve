@@ -50,6 +50,12 @@ public interface ResModuleDecl extends ResNamedElement {
     public List<ResTypeParamDecl> getGenericTypeParams();
 
     @NotNull
+    public List<ResParamDef> getConstantParamDefs();
+
+    @NotNull
+    public List<ResMathDefnSig> getDefinitionParams();
+
+    @NotNull
     public List<ResOperationLikeNode> getOperationLikeThings();
 
 }
