@@ -759,8 +759,8 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // 'extended' 'by' NameExp ModuleArgList? ('externally')?
-  // 'implemented' 'by' NameExp ModuleArgList?
+  // 'extended' 'by' ModuleIdentifier ModuleArgList? [FromClause] ('externally')?
+  // 'implemented' 'by' ModuleIdentifier ModuleArgList? [FromClause]
   public static boolean ExtensionPairing(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExtensionPairing")) return false;
     if (!nextTokenIs(b, EXTENDED)) return false;
@@ -769,13 +769,15 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, EXTENDED);
     p = r; // pin = 1
     r = r && report_error_(b, consumeToken(b, BY));
-    r = p && report_error_(b, NameExp(b, l + 1)) && r;
+    r = p && report_error_(b, ModuleIdentifier(b, l + 1)) && r;
     r = p && report_error_(b, ExtensionPairing_3(b, l + 1)) && r;
     r = p && report_error_(b, ExtensionPairing_4(b, l + 1)) && r;
+    r = p && report_error_(b, ExtensionPairing_5(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, IMPLEMENTED)) && r;
     r = p && report_error_(b, consumeToken(b, BY)) && r;
-    r = p && report_error_(b, NameExp(b, l + 1)) && r;
-    r = p && ExtensionPairing_8(b, l + 1) && r;
+    r = p && report_error_(b, ModuleIdentifier(b, l + 1)) && r;
+    r = p && report_error_(b, ExtensionPairing_9(b, l + 1)) && r;
+    r = p && ExtensionPairing_10(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -787,16 +789,23 @@ public class ResParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // ('externally')?
+  // [FromClause]
   private static boolean ExtensionPairing_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExtensionPairing_4")) return false;
-    ExtensionPairing_4_0(b, l + 1);
+    FromClause(b, l + 1);
+    return true;
+  }
+
+  // ('externally')?
+  private static boolean ExtensionPairing_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExtensionPairing_5")) return false;
+    ExtensionPairing_5_0(b, l + 1);
     return true;
   }
 
   // ('externally')
-  private static boolean ExtensionPairing_4_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ExtensionPairing_4_0")) return false;
+  private static boolean ExtensionPairing_5_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExtensionPairing_5_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, EXTERNALLY);
@@ -805,9 +814,16 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   // ModuleArgList?
-  private static boolean ExtensionPairing_8(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ExtensionPairing_8")) return false;
+  private static boolean ExtensionPairing_9(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExtensionPairing_9")) return false;
     ModuleArgList(b, l + 1);
+    return true;
+  }
+
+  // [FromClause]
+  private static boolean ExtensionPairing_10(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ExtensionPairing_10")) return false;
+    FromClause(b, l + 1);
     return true;
   }
 
