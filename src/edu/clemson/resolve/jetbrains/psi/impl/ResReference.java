@@ -103,12 +103,11 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
             ResFile resolvedSpec = facility.resolveSpecification();
             if (resolvedSpec != null) processModuleLevelEntities(resolvedSpec, processor, state, false, true);
 
-           /* for (ResExtensionPairing p : facility.getExtensionPairingList()) {
-                if (p.getModuleSpecList().isEmpty()) continue;
-                ResFile spec = (ResFile) p.getModuleSpecList().get(0).resolve();
-                if (spec == null) continue;
-                processModuleLevelEntities(spec, processor, state, false);
-            }*/
+            for (ResExtensionPairing p : facility.getExtensionPairingList()) {
+                if (p.getModuleIdentifierList().isEmpty()) continue;
+                ResFile extSpec = (ResFile) p.resolveSpecification();
+                if (extSpec != null) processModuleLevelEntities(extSpec, processor, state, false, true);
+            }
         }
         else if (target instanceof ResModuleIdentifierSpec) {
             PsiElement e = ((ResModuleIdentifierSpec) target).getModuleIdentifier().resolve();

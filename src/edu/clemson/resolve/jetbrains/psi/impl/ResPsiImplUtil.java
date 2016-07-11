@@ -253,9 +253,8 @@ public class ResPsiImplUtil {
 
     @Nullable
     public static ResFile resolveSpecification(ResFacilityDecl o) {
-        return resolveFacilityModuleId(o, 0);
+        return resolveFacilityModuleId(o.getModuleIdentifierList(), 0);
     }
-
     @Nullable
     public static ResFile resolveImplementation(ResFacilityDecl o) {
         return resolveFacilityModuleId(o.getModuleIdentifierList(), 1);
@@ -264,6 +263,10 @@ public class ResPsiImplUtil {
     @Nullable
     public static ResFile resolveSpecification(ResExtensionPairing o) {
         return resolveFacilityModuleId(o.getModuleIdentifierList(), 0);
+    }
+    @Nullable
+    public static ResFile resolveImplementation(ResExtensionPairing o) {
+        return resolveFacilityModuleId(o.getModuleIdentifierList(), 1);
     }
 
     @Nullable
