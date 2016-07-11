@@ -288,7 +288,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         return true;
     }
 
-
+    /** Returns true if {@code currentUsesName} is named in a module's first line as a spec being implemented. */
     private static boolean forSuperModule(@NotNull ResModuleDecl module, @NotNull String currentUsesName) {
         for (ResReferenceExp e : module.getModuleHeaderReferences()) {
             if (e.getIdentifier().getText().equals(currentUsesName)) return true;

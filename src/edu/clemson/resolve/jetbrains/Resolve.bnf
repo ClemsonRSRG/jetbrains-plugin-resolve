@@ -168,7 +168,7 @@ PrecisBlock
 'end' identifier ';' {pin(".*")=2}
 
 PrecisExtensionModuleDecl ::= 'Precis' 'Extension' identifier 'for'
-ModuleIdentifierSpec ('with' ModuleIdentifierSpec)? ';'
+ReferenceExp ('with' ReferenceExp)? ';'
 PrecisBlock
 'end' identifier ';' {pin(".*")=2}
 
@@ -185,7 +185,7 @@ RequiresClause?
 ConceptBlock
 'end' identifier ';' {pin(".*")=2}
 
-ImplModuleDecl ::= 'Implementation' identifier ImplModuleParameters? 'for' ReferenceExp ('of' identifier)? ';'
+ImplModuleDecl ::= 'Implementation' identifier ImplModuleParameters? 'for' ReferenceExp ('of' ReferenceExp)? ';'
 UsesList?
 RequiresClause?
 ImplBlock
