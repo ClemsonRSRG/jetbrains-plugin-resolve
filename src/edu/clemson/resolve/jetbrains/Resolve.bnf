@@ -323,7 +323,8 @@ private ExtensionList ::= (ExtensionPairing)* {recoverWhile=ExtensionListRec}
 private ExtensionListRec ::= !(';')
 
 ExtensionPairing ::= 'extended' 'by' ModuleIdentifier ModuleArgList? [FromClause] ('externally')?
-'implemented' 'by' ModuleIdentifier ModuleArgList? [FromClause] {pin=1}
+'implemented' 'by' ModuleIdentifier ModuleArgList? [FromClause]
+{pin=1 methods=[resolveSpecification resolveImplementation]}
 
 ModuleArgList ::= '(' ExpArgumentList ')' {pin=1}
 

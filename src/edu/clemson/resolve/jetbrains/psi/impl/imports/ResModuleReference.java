@@ -185,6 +185,10 @@ public class ResModuleReference extends FileReference {
                     PsiTreeUtil.getNextSiblingOfType(e, ResModuleLibraryIdentifier.class) != null) {
                 desiredLib = PsiTreeUtil.getNextSiblingOfType(e, ResModuleLibraryIdentifier.class);
             }
+            else if (e.getParent() instanceof ResExtensionPairing &&
+                    PsiTreeUtil.getNextSiblingOfType(e, ResModuleLibraryIdentifier.class) != null) {
+                desiredLib = PsiTreeUtil.getNextSiblingOfType(e, ResModuleLibraryIdentifier.class);
+            }
 
             if (desiredLib != null) {
                 PsiElement ele = desiredLib.resolve();

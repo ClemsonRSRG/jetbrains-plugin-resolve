@@ -37,7 +37,8 @@ import java.util.List;
 public class ResPsiImplUtil {
 
     @Nullable
-    public static ResModuleLibraryIdentifier getFromLibraryIdentifier(@NotNull ResModuleIdentifierSpec moduleIdentifierSpec) {
+    public static ResModuleLibraryIdentifier getFromLibraryIdentifier(
+            @NotNull ResModuleIdentifierSpec moduleIdentifierSpec) {
         return moduleIdentifierSpec.getModuleLibraryIdentifier();
     }
 
@@ -257,13 +258,18 @@ public class ResPsiImplUtil {
 
     @Nullable
     public static ResFile resolveImplementation(ResFacilityDecl o) {
-        return resolveFacilityModuleId(o, 1);
+        return resolveFacilityModuleId(o.getModuleIdentifierList(), 1);
     }
 
     @Nullable
-    private static ResFile resolveFacilityModuleId(@NotNull ResFacilityDecl o, int idNum) {
-        if (o.getModuleIdentifierList().size() != 2) return null;
-        ResModuleIdentifier id = o.getModuleIdentifierList().get(idNum);
+    public static ResFile resolveSpecification(ResExtensionPairing o) {
+        return resolveFacilityModuleId(o.getModuleIdentifierList(), 0);
+    }
+
+    @Nullable
+    private static ResFile resolveFacilityModuleId(@NotNull List<ResModuleIdentifier> o, int idNum) {
+        if (o.size() != 2) return null;
+        ResModuleIdentifier id = o.get(idNum);
         PsiElement result = id.resolve();
         return result != null ? (ResFile) result : null;
     }
