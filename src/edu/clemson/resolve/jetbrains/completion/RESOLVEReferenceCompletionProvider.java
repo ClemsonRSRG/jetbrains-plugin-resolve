@@ -26,11 +26,11 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
     protected void addCompletions(@NotNull CompletionParameters parameters,
                                   ProcessingContext context,
                                   @NotNull CompletionResultSet set) {
-        ResReferenceExpBase expression = PsiTreeUtil.getParentOfType(
-                parameters.getPosition(), ResReferenceExpBase.class);
+        ResReferenceExpBase expression =
+                PsiTreeUtil.getParentOfType(parameters.getPosition(), ResReferenceExpBase.class);
         if (expression != null) {
-            fillVariantsByReference(expression.getReference(),
-                    set.withPrefixMatcher(createPrefixMatcher(set.getPrefixMatcher())));
+            set = set.withPrefixMatcher(createPrefixMatcher(set.getPrefixMatcher()));
+            fillVariantsByReference(expression.getReference(), set);
         }
         PsiElement parent = parameters.getPosition().getParent();
         if (parent != null) {
@@ -64,7 +64,11 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
             ((ResTypeReference) reference).processResolveVariants(aProcessor);
         }
         else if (reference instanceof ResMathVarLikeReference) {
-            PsiElement element = reference.getElement();
+
+            //Handle wildcard math queries.
+            //UPDATE: We don't need this actually. Just type control + space to provide a list of all possible
+            //completions.
+
             ResScopeProcessor aProcessor = new MyRESOLVEScopeProcessor(result, true) {
                 @Override
                 protected boolean accept(@NotNull PsiElement e) {
@@ -72,7 +76,8 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
                             e instanceof ResMathVarDef ||
                             e instanceof ResParamDef ||
                             e instanceof ResTypeParamDecl ||
-                            e instanceof ResExemplarDecl;
+                            e instanceof ResExemplarDecl ||
+                            e instanceof ResFile;
                 }
             };
             ((ResMathVarLikeReference) reference).processResolveVariants(aProcessor);
@@ -97,11 +102,12 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
             if (o instanceof ResMathDefnSig) {
                 String name = ((ResMathDefnSig) o).getName();
                 if (name != null) {
-                    return RESOLVECompletionUtil
-                            .createDefinitionLookupElement(
-                                    (ResMathDefnSig) o, name, null,
-                                    RESOLVECompletionUtil.DEFINITION_PRIORITY);
+                    return RESOLVECompletionUtil.createMathDefinitionLookupElement((ResMathDefnSig) o, name,
+                            RESOLVECompletionUtil.DEFINITION_PRIORITY);
                 }
+            }
+            else if (o instanceof ResMathVarDef) {
+                return RESOLVECompletionUtil.createMathVarLookupElement((ResMathVarDef) o);
             }
             else if (o instanceof ResTypeLikeNodeDecl || o instanceof ResTypeParamDecl) {
                 return RESOLVECompletionUtil.createTypeLookupElement((ResNamedElement) o);
@@ -115,15 +121,11 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
             else if (o instanceof ResOperationLikeNode) {
                 String name = ((ResOperationLikeNode) o).getName();
                 if (name != null) {
-                    return RESOLVECompletionUtil
-                            .createFunctionOrMethodLookupElement(
-                                    (ResOperationLikeNode) o, name, null,
-                                    RESOLVECompletionUtil.FUNCTION_PRIORITY);
+                    return RESOLVECompletionUtil.createOpLikeLookupElement((ResOperationLikeNode) o, name, null,
+                            RESOLVECompletionUtil.FUNCTION_PRIORITY);
                 }
             }
-            //TODO: ModuleIdentifierSpec here and make a module alias icon..
             else {
-                //TODO: Apply type info to the lookup renderers for these 'var like' elements
                 return RESOLVECompletionUtil.createVariableLikeLookupElement((ResNamedElement) o);
             }
         }

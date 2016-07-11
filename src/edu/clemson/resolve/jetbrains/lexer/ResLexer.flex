@@ -25,8 +25,8 @@ import static edu.clemson.resolve.jetbrains.RESOLVEParserDefinition.*;
   return;
 %eof}
 
-NL = [\r\n] | \r\n      // NewLine
-WS = [ \t\f]            // Whitespaces
+NL = \R             //newline
+WS = [ \t\f]        //whitespaces
 
 LINE_COMMENT = "//" [^\r\n]*
 
@@ -39,6 +39,11 @@ INT_DIGIT = [0-9]
 NUM_INT = "0" | ([1-9] {INT_DIGIT}*)
 
 IDENT = {LETTER} ({LETTER} | {DIGIT} )*
+
+MSYM = ([\u2200-\u22FF] | [\u27F0-\u27FF] | [\u2A00-\u2AFF] | [\u2300-\u23BF] | [\u0370-\u03FF])
+
+SYM = ("!"|"*"|"+"|"-"|"/"|"|"|"~"|[<->])+
+
 STR =      "\""
 ESCAPES = [abfnrtv]
 
@@ -61,11 +66,9 @@ ESCAPES = [abfnrtv]
 "'\\" [abfnrtv\\\'] "'"                 { return CHAR; }
 "'\\'"                                  { return BAD_CHARACTER; }
 
-
-"`" [^`]* "`"?                          { return RAW_STRING; }
+"`"                                     { return BACKTICK; }
 {STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}?
                                         { return STRING; }
-
 // brackets & braces
 
 "{{"                                    { return DBL_LBRACE; }
@@ -73,23 +76,16 @@ ESCAPES = [abfnrtv]
 "}"                                     { return RBRACE; }
 "}}"                                    { return DBL_RBRACE; }
 
+"`"                                     { return BACKTICK; }
 "["                                     { return LBRACK; }
 "]"                                     { return RBRACK; }
-
-"⎝"                                     { return LCURVE; }
-"⎠"                                     { return RCURVE; }
 
 "("                                     { return LPAREN; }
 ")"                                     { return RPAREN; }
 
-"⟨"                                     { return LANGLE; }
-"⟩"                                     { return RANGLE; }
-
-"⎡"                                     { return LCEIL; }
-"⎤"                                     { return RCEIL; }
-
 ":"                                     { return COLON; }
-"::"                                    { return COLONCOLON; }
+"::"                                    { return COLON_COLON; }
+"⦂"                                     { return HYPER_COLON; }
 ";"                                     { return SEMICOLON; }
 ","                                     { return COMMA; }
 "(i.)"                                  { return IND_BASE; }
@@ -97,63 +93,10 @@ ESCAPES = [abfnrtv]
 
 // Operators
 
-"ϒ"                                     { return VROD; }
-"≼"                                     { return PRECCURLYEQ; }
-"="                                     { return EQUALS; }
-"/="                                    { return NEQUALS; }
-"≠"                                     { return NEQUALS; }
-"⨩"                                     { return UMINUS; }
-
-"and"                                   { return AND; }
-"∧"                                     { return AND; }
-
-"or"                                    { return OR; }
-"∨"                                     { return OR; }
-"not"                                   { return NOT; }
-"⌐"                                     { return NOT; }
-"o"                                     { return CAT; }
-"∘"                                     { return CAT; }
-"ᴴ⨯"                                    { return HTIMES; }
-"⨯"                                     { return TIMES; }
-
-"is_in"                                 { return IS_IN; }
-"∈"                                     { return IS_IN; }
-"is_not_in"                             { return IS_NOT_IN; }
-"∉"                                     { return IS_NOT_IN; }
-
-"union"                                 { return UNION; }
-"∪"                                     { return UNION; }
-"∪₊"                                    { return UNION_PLUS; }
-
-"intersect"                             { return INTERSECT; }
-"∩"                                     { return INTERSECT; }
-"∩₊"                                    { return INTERSECT_PLUS; }
-
 "λ"                                     { return LAMBDA; }
-"<="                                    { return LESS_OR_EQUAL; }
-"≤"                                     { return LESS_OR_EQUAL; }
-"≤ᵤ"                                    { return LESS_OR_EQUAL_U; }
-"<"                                     { return LESS; }
-
-">="                                    { return GREATER_OR_EQUAL; }
-"≥"                                     { return GREATER_OR_EQUAL; }
-">"                                     { return GREATER; }
-
-"->"                                    { return RARROW; }
-"⟶"                                   { return RARROW; }
-
-"%"                                     { return MOD; }
-"*"                                     { return MUL; }
-"/"                                     { return QUOTIENT; }
-"+"                                     { return PLUS; }
-"-"                                     { return MINUS; }
 
 ":="                                    { return COLON_EQUALS; }
 ":=:"                                   { return COLON_EQUALS_COLON; }
-
-"~"			                            { return TILDE; }
-"|"                                     { return BAR; }
-"||"                                    { return DBL_BAR; }
 "?"                                     { return QV; }
 
 // Keywords
@@ -192,8 +135,6 @@ ESCAPES = [abfnrtv]
 "from"                                  { return FROM; }
 "hypo"                                  { return HYPO; }
 "if"                                    { return IF; }
-"iff"                                   { return IFF; }
-"implies"                               { return IMPLIES; }
 "If"                                    { return PROG_IF; }
 "is"                                    { return IS; }
 "implemented"                           { return IMPLEMENTED; }
@@ -212,6 +153,7 @@ ESCAPES = [abfnrtv]
 "Recursive"                             { return RECURSIVE; }
 "Record"                                { return RECORD; }
 "requires"                              { return REQUIRES; }
+"s.t."                                  { return SUCH_THAT; }
 "then"                                  { return THEN; }
 "true"                                  { return TRUE; }
 "Theorem"                               { return THEOREM; }
@@ -233,6 +175,8 @@ ESCAPES = [abfnrtv]
 "replaces"                              { return REPLACES; }
 "evaluates"                             { return EVALUATES; }
 
+{MSYM}                                  { return MATH_SYMBOL; }
+{SYM}                                   { return SYMBOL; }
 {IDENT}                                 { return IDENTIFIER; }
 {NUM_INT}                               { return INT; }
 .                                       { return BAD_CHARACTER; }

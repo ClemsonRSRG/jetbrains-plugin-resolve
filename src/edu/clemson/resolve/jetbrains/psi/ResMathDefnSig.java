@@ -22,4 +22,7 @@ public interface ResMathDefnSig extends ResNamedElement {
      */
     @Nullable
     public ResMathExp getMathTypeExp();
+
+    @Nullable
+    public String getCanonicalName();
 }

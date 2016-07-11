@@ -91,10 +91,10 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                 processUnqualifiedResolve(((ResFile) file), processor, state, true);
     }
 
-    private boolean processQualifierExpression(@NotNull ResFile file,
-                                               @NotNull ResReferenceExpBase qualifier,
-                                               @NotNull ResScopeProcessor processor,
-                                               @NotNull ResolveState state) {
+    public static boolean processQualifierExpression(@NotNull ResFile file,
+                                                     @NotNull ResReferenceExpBase qualifier,
+                                                     @NotNull ResScopeProcessor processor,
+                                                     @NotNull ResolveState state) {
         PsiReference reference = qualifier.getReference();
         PsiElement target = reference != null ? reference.resolve() : null;
         if (target == null || target == qualifier) return false;
@@ -103,12 +103,17 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
             ResFile resolvedSpec = facility.resolveSpecification();
             if (resolvedSpec != null) processModuleLevelEntities(resolvedSpec, processor, state, false, true);
 
-           /* for (ResExtensionPairing p : facility.getExtensionPairingList()) {
-                if (p.getModuleSpecList().isEmpty()) continue;
-                ResFile spec = (ResFile) p.getModuleSpecList().get(0).resolve();
-                if (spec == null) continue;
-                processModuleLevelEntities(spec, processor, state, false);
-            }*/
+            for (ResExtensionPairing p : facility.getExtensionPairingList()) {
+                if (p.getModuleIdentifierList().isEmpty()) continue;
+                ResFile extSpec = (ResFile) p.resolveSpecification();
+                if (extSpec != null) processModuleLevelEntities(extSpec, processor, state, false, true);
+            }
+        }
+        else if (target instanceof ResModuleIdentifierSpec) {
+            PsiElement e = ((ResModuleIdentifierSpec) target).getModuleIdentifier().resolve();
+            if (e != null && e instanceof ResFile) {
+                processModuleLevelEntities((ResFile) e, processor, state, false, false);
+            }
         }
         else if (target instanceof ResFile) {
             processModuleLevelEntities((ResFile) target, processor, state, false, false);
@@ -128,15 +133,11 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
             if (!result || ResPsiImplUtil.prevDot(myElement)) return false;
         }
         PsiElement grandPa = parent.getParent();
-        if (grandPa instanceof ResSelectorExp && !processSelector((ResSelectorExp) grandPa, processor, state, parent))
-            return false;
+        if (grandPa instanceof ResSelectorExp && !processSelector((ResSelectorExp) grandPa, processor, state, parent)) return false;
         if (ResPsiImplUtil.prevDot(parent)) return false;
-
         if (!processBlock(processor, state, true)) return false;
-        if (!processParameterLikeThings(processor, state, true)) return false;
         if (!processModuleLevelEntities(file, processor, state, true)) return false;
         if (!processUsesImports(file, processor, state)) return false;
-        if (!processSuperModules(file, processor, state)) return false;
         return true;
     }
 
@@ -225,71 +226,73 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                                  boolean localResolve) {
         ResScopeProcessorBase delegate = createDelegate(processor);
         ResolveUtil.treeWalkUp(myElement, delegate);
+
+        //process local parameters if we're in a local definition or an operation like thing (doesn't include module
+        //params; that's in processModuleLevelEntities)
+        processBlockParameters(myElement, delegate);
         return processNamedElements(processor, state, delegate.getVariants(), localResolve);
     }
 
-    static boolean processUsesImports(@NotNull ResFile file,
-                                      @NotNull ResScopeProcessor processor,
-                                      @NotNull ResolveState state) {
-        return processUsesImports(file, processor, state, false);
+    //Go plugin rolls this step into the "treeWalkUp" phase -- see processParameters in GoCompositeElementImpl.
+    //I just do it here for simplicity
+    static boolean processBlockParameters(@NotNull ResCompositeElement e,
+                                          @NotNull ResScopeProcessorBase processor) {
+        ResMathDefnDecl def = PsiTreeUtil.getParentOfType(e, ResMathDefnDecl.class);
+        ResOperationLikeNode operation = PsiTreeUtil.getParentOfType(e, ResOperationLikeNode.class);
+        if (def != null) processDefinitionParams(processor, def);
+        if (operation != null) processProgParamDecls(processor, operation.getParamDeclList());
+        return true;
     }
 
     public static boolean processUsesImports(@NotNull ResFile file,
                                              @NotNull ResScopeProcessor processor,
-                                             @NotNull ResolveState state,
-                                             boolean forModuleNameRefs) {
-        List<ResModuleIdentifierSpec> usesItems = file.getModuleIdentifierSpecs();
+                                             @NotNull ResolveState state) {
+        if (file.getEnclosedModule() == null) return true;
+        return processUsesImports(file.getEnclosedModule(), processor, state);
+    }
+
+    //OK: So it looks like this is the method that's going to have to initiate the search into the super modules...
+    //Update: Ok so at least this method is doing what I *think* it needs to be doing right now. Don't get me wrong its a godawful
+    //mess, but at least its working as I expect for the moment. TODO: Clean it up, improve names etc.
+    private static boolean processUsesImports(@NotNull ResModuleDecl moduleDecl,
+                                             @NotNull ResScopeProcessor processor,
+                                             @NotNull ResolveState state) {
+        List<ResModuleIdentifierSpec> usesItems = moduleDecl.getModuleIdentifierSpecs();
+
+        List<ResReferenceExp> headerModules = moduleDecl.getModuleHeaderReferences();
         for (ResModuleIdentifierSpec o : usesItems) {
             if (o.getAlias() != null) {
                 if (!processor.execute(o, state.put(ACTUAL_NAME, o.getAlias().getText()))) return false;
             }
             else {
                 PsiElement resolve = o.getModuleIdentifier().resolve();
-                if (resolve != null) {
+                if (resolve != null && resolve instanceof ResFile) {
+                    for (ResReferenceExp e : headerModules) {
+                        //process the super module's uses clauses
+                        List<ResModuleIdentifierSpec> superModuleUses = ((ResFile) resolve).getModuleIdentifierSpecs();
+
+                        for (ResModuleIdentifierSpec e1 : superModuleUses) {
+                            PsiElement eRes = e1.getModuleIdentifier().resolve();
+                            if (eRes != null) {
+                                if (!processModuleLevelEntities((ResFile) eRes, processor, state, false)) return false;
+                            }
+                        }
+                    }
                     processor.execute(resolve, state.put(ACTUAL_NAME, o.getModuleIdentifier().getText()));
-                    if (!forModuleNameRefs && !processModuleLevelEntities((ResFile) resolve, processor, state, false)) return false;
+                    boolean forSuperModule = forSuperModule(moduleDecl, o.getName());
+                    if (!processModuleLevelEntities((ResFile) resolve, processor, state, forSuperModule)) return false;
                 }
             }
         }
         return true;
     }
 
-    private static boolean isSearchableUsesModule(@NotNull ResFile e) {
-        if (e.getEnclosedModule() == null) return true; //its ok if we're null
-        ResModuleDecl m = e.getEnclosedModule();
-        return m instanceof ResFacilityModuleDecl ||
-                m instanceof ResPrecisModuleDecl ||
-                m instanceof ResConceptModuleDecl;
-    }
-
-    private boolean processSuperModules(@NotNull ResFile file,
-                                        @NotNull ResScopeProcessor processor,
-                                        @NotNull ResolveState state) {
-        ResScopeProcessorBase delegate = createDelegate(processor);
-        processSuperModules(file, processor, delegate, state);
-        return processNamedElements(processor, state, delegate.getVariants(), false);
-    }
-
-    //TODO: This is good enough for now in terms of processing specs/super modules,
-    //but ideally in the future we can tune this some more. For instance, now if we're
-    //in an enhancement impl for do nothing, we'd get two do_nothings() one from the
-    //spec and one from the impl, etc. The simplicity of this is nice right now though.
-    protected static boolean processSuperModules(@NotNull ResFile file, @NotNull ResScopeProcessor processor,
-                                                 @NotNull ResScopeProcessorBase delegate,
-                                                 @NotNull ResolveState state) {
-        int specIdx = 0;
-       /* for (ResModuleSpec spec : file.getSuperModuleModuleIdentifierList()) {
-            PsiElement resolvedFile = spec.resolve();
-            if (resolvedFile == null || !(resolvedFile instanceof ResFile))
-                continue;
-            ResFile eleFile = (ResFile) resolvedFile;
-            //ResScopeProcessorBase delegate = createDelegate(processor);
-            processParameterLikeThings(((ResFile) resolvedFile).getEnclosedModule(), delegate);
-            processModuleLevelEntities(eleFile, processor, state, false);
-            // processNamedElements(processor, state, delegate.getVariants(), false);
-            specIdx++;
-        }*/
-        return true;
+    /** Returns true if {@code currentUsesName} is named in a module's first line as a spec being implemented. */
+    private static boolean forSuperModule(@NotNull ResModuleDecl module, @NotNull String currentUsesName) {
+        for (ResReferenceExp e : module.getModuleHeaderReferences()) {
+            if (e.getIdentifier().getText().equals(currentUsesName)) return true;
+        }
+        return false;
     }
 
     static boolean processModuleLevelEntities(@NotNull ResFile file,
@@ -316,56 +319,25 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                                               @NotNull ResolveState state,
                                               boolean localProcessing,
                                               boolean fromFacility) {
-        if (!processNamedElements(processor, state, module.getOperationLikeThings(), localProcessing, fromFacility))
-            return false;
-        if (!processNamedElements(processor, state, module.getFacilities(), localProcessing, fromFacility))
-            return false;
+        if (!processNamedElements(processor, state, module.getOperationLikeThings(), localProcessing, fromFacility)) return false;
+        if (!processNamedElements(processor, state, module.getFacilities(), localProcessing, fromFacility)) return false;
         if (!processNamedElements(processor, state, module.getTypes(), localProcessing, fromFacility)) return false;
-        if (!processNamedElements(processor, state, module.getGenericTypeParams(), localProcessing, fromFacility))
-            return false;
-        if (!processNamedElements(processor, state, module.getMathDefnSigs(), localProcessing, fromFacility))
-            return false;
+
+        //module parameter-like-things
+        if (!processNamedElements(processor, state, module.getGenericTypeParams(), localProcessing, fromFacility)) return false;
+        if (!processNamedElements(processor, state, module.getConstantParamDefs(), localProcessing, fromFacility)) return false;
+
+        if (!processNamedElements(processor, state, module.getMathDefnSigs(), localProcessing, fromFacility)) return false;
         return true;
     }
 
-    private boolean processParameterLikeThings(@NotNull ResScopeProcessor processor,
-                                               @NotNull ResolveState state,
-                                               boolean localResolve) {
-        ResScopeProcessorBase delegate = createDelegate(processor);
-        processParameterLikeThings(myElement, delegate);
-        return processNamedElements(processor, state, delegate.getVariants(), localResolve);
-    }
-
-    static boolean processParameterLikeThings(@NotNull ResFile e,
-                                              @NotNull ResScopeProcessorBase processor) {
-        if (e.getEnclosedModule() != null) {
-            processParameterLikeThings(e.getEnclosedModule(), processor);
-        }
-        return true;
-    }
-
-    static boolean processParameterLikeThings(@NotNull ResCompositeElement e,
-                                              @NotNull ResScopeProcessorBase processor) {
-        ResMathDefnDecl def = PsiTreeUtil.getParentOfType(e, ResMathDefnDecl.class);
-        ResOperationLikeNode operation = PsiTreeUtil.getParentOfType(e, ResOperationLikeNode.class);
-        ResModuleDecl module = PsiTreeUtil.getParentOfType(e, ResModuleDecl.class);
-        if (e instanceof ResModuleDecl) module = (ResModuleDecl) e;
-        if (def != null) processDefinitionParams(processor, def);
-        if (operation != null) processProgParamDecls(processor, operation.getParamDeclList());
-        if (module != null) processModuleParams(processor, module);
-        return true;
-    }
-
-    /**
-     * processing parameters of the definition we happen to be within
-     */
+    /** processing parameters of the definition we happen to be within */
     private static boolean processDefinitionParams(@NotNull ResScopeProcessorBase processor,
                                                    @NotNull ResMathDefnDecl o) {
         List<ResMathDefnSig> sigs = o.getSignatures();
         if (sigs.size() == 1) {
             ResMathDefnSig sig = o.getSignatures().get(0);
-            if (!processDefinitionParams(processor, sig.getParameters()))
-                return false;
+            if (!processDefinitionParams(processor, sig.getParameters())) return false;
         } //size > 1 ? then we're categorical; size == 0, we're null
         return true;
     }
@@ -373,9 +345,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
     private static boolean processDefinitionParams(@NotNull ResScopeProcessorBase processor,
                                                    @NotNull List<ResMathVarDeclGroup> parameters) {
         for (ResMathVarDeclGroup declaration : parameters) {
-            if (!processNamedElements(processor, ResolveState.initial(),
-                    declaration.getMathVarDefList(), true)) return false;
-            //if (!processImplicitTypeParameters(processor, ResolveState.initial(), declaration.getMathExp(), true)) return false;
+            if (!processNamedElements(processor, ResolveState.initial(), declaration.getMathVarDefList(), true)) return false;
         }
         return true;
     }
@@ -383,35 +353,8 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
     private static boolean processProgParamDecls(@NotNull ResScopeProcessorBase processor,
                                                  @NotNull List<ResParamDecl> parameters) {
         for (ResParamDecl declaration : parameters) {
-            if (!processNamedElements(processor, ResolveState.initial(),
-                    declaration.getParamDefList(), true)) return false;
+            if (!processNamedElements(processor, ResolveState.initial(), declaration.getParamDefList(), true)) return false;
         }
-        return true;
-    }
-
-    private static boolean processModuleParams(@NotNull ResScopeProcessorBase processor,
-                                               @NotNull ResModuleDecl o) {
-        ResModuleParameters paramNode = o.getModuleParameters();
-        List<ResTypeParamDecl> typeParamDecls = new ArrayList<>();
-        List<ResParamDecl> constantParamDeclGrps = new ArrayList<>();
-        List<ResMathDefnDecl> definitionParams = new ArrayList<>();
-        List<ResMathDefnSig> defnSigs = new ArrayList<>();
-
-        if (paramNode instanceof ResSpecModuleParameters) {
-            typeParamDecls.addAll(((ResSpecModuleParameters) paramNode).getTypeParamDeclList());
-            constantParamDeclGrps.addAll(((ResSpecModuleParameters) paramNode).getParamDeclList());
-            definitionParams.addAll(((ResSpecModuleParameters) paramNode).getMathStandardDefnDeclList());
-        }
-        if (paramNode instanceof ResImplModuleParameters) {
-            //definitionParams.addAll(((ResImplModuleParameters) paramNode).g
-        }
-        for (ResMathDefnDecl d : definitionParams) {
-            defnSigs.addAll(d.getSignatures());
-        }
-        //TODO: else if (paramNode instanceof ResImplModuleParameters) ..
-        processProgParamDecls(processor, constantParamDeclGrps);
-        processNamedElements(processor, ResolveState.initial(), typeParamDecls, true);
-        processNamedElements(processor, ResolveState.initial(), defnSigs, true);
         return true;
     }
 
@@ -428,9 +371,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                                         boolean localResolve,
                                         boolean facilityResolve) {
         for (ResNamedElement definition : elements) {
-            //if (!definition.isValid() || checkContainingFile && !allowed(definition.getContainingFile(), contextFile)) continue;
-            if ((localResolve || definition.isUsesClauseVisible() || facilityResolve) &&
-                    !processor.execute(definition, state)) return false;
+            if ((localResolve || definition.isUsesClauseVisible() || facilityResolve) && !processor.execute(definition, state)) return false;
         }
         return true;
     }

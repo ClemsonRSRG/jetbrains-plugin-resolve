@@ -7,6 +7,14 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.codeInsight.lookup.LookupElementPresentation;
 import com.intellij.codeInsight.lookup.LookupElementRenderer;
+import com.intellij.codeInsight.template.CustomLiveTemplate;
+import com.intellij.codeInsight.template.CustomLiveTemplateBase;
+import com.intellij.codeInsight.template.LiveTemplateBuilder;
+import com.intellij.codeInsight.template.TemplateManager;
+import com.intellij.codeInsight.template.impl.CustomLiveTemplateLookupElement;
+import com.intellij.codeInsight.template.impl.LiveTemplateLookupElement;
+import com.intellij.codeInsight.template.impl.LiveTemplateLookupElementImpl;
+import com.intellij.codeInsight.template.impl.TemplateImpl;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
@@ -28,10 +36,11 @@ public class RESOLVECompletionUtil {
     public static final int FACILITY_PRIORITY = 5;
     public static final int DEFINITION_PRIORITY = 10;
     public static final int TYPE_PRIORITY = 20;
-    public static final int KEYWORD_PRIORITY = 40;
+    public static final int KEYWORD_PRIORITY = 1;
 
     private static class Lazy {
-        private static final SingleCharInsertHandler FACILITY_OR_MODULE_INSERT_HANDLER = new SingleCharInsertHandler('.');
+        private static final QualifierInsertHandler FACILITY_OR_MODULE_INSERT_HANDLER =
+                new QualifierInsertHandler("::", true);
     }
 
     private static final InsertHandler<LookupElement> FUNCTION_INSERT_HANDLER =
@@ -58,13 +67,13 @@ public class RESOLVECompletionUtil {
                     ResNamedElement v = (ResNamedElement) o;
                     ResType type = v.getResType(null);
                     String text = ResPsiImplUtil.getText(type);
-                    Icon icon = v instanceof ResMathVarDef ? RESOLVEIcons.VARIABLE :
-                                v instanceof ResVarDef ? RESOLVEIcons.VARIABLE :
-                                v instanceof ResExemplarDecl ? RESOLVEIcons.EXEMPLAR :
-                                v instanceof ResParamDef ? RESOLVEIcons.PARAMETER :
-                                v instanceof ResTypeParamDecl ? RESOLVEIcons.GENERIC_TYPE :
-                                v instanceof ResFieldDef ? RESOLVEIcons.RECORD_FIELD : null;
-
+                    Icon icon =
+                            v instanceof ResMathVarDef ? RESOLVEIcons.VARIABLE :
+                            v instanceof ResVarDef ? RESOLVEIcons.VARIABLE :
+                            v instanceof ResExemplarDecl ? RESOLVEIcons.EXEMPLAR :
+                            v instanceof ResParamDef ? RESOLVEIcons.PARAMETER :
+                            v instanceof ResTypeParamDecl ? RESOLVEIcons.GENERIC_TYPE :
+                            v instanceof ResFieldDef ? RESOLVEIcons.RECORD_FIELD : null;
                     if (v instanceof ResMathVarDef) {
                         //Todo: Need to write a getResTypeInner method and put it into the psi util class;
                         //should be called from ResMathVarDefImpl...
@@ -107,28 +116,6 @@ public class RESOLVECompletionUtil {
                 }
             };
 
-    //TODO: Insert handler for infix defn signatures; Whitespace on lhs and rhs of name
-    private static final InsertHandler<LookupElement> DEFINITION_INSERT_HANDLER =
-            new InsertHandler<LookupElement>() {
-                @Override
-                public void handleInsert(InsertionContext context, LookupElement item) {
-                    PsiElement element = item.getPsiElement();
-                    if (!(element instanceof ResMathDefnSig))
-                        return;
-                    ResMathDefnSig signature = (ResMathDefnSig) element;
-                    int paramsCount = signature.getParameters().size();
-                    //we don't want empty parens for nullary function applications or infix (or outfix)
-                    //TODO: Actually, we could define some nice insertion handlers for outfix defns.
-                    InsertHandler<LookupElement> handler =
-                            paramsCount == 0 //||
-                                    //signature instanceof ResMathInfixDefinitionSignature ? //||
-                                    //signature instanceof ResMathOutfixDefinitionSignature ?
-                                    ? new BasicInsertHandler<LookupElement>() :
-                                    ParenthesesInsertHandler.WITH_PARAMETERS;
-                    handler.handleInsert(context, item);
-                }
-            };
-
     private static final LookupElementRenderer<LookupElement> DEFINITION_RENDERER =
             new LookupElementRenderer<LookupElement>() {
                 @Override
@@ -150,8 +137,7 @@ public class RESOLVECompletionUtil {
                                     typeText += grp.getMathExp().getText();
                                 }
                                 else {
-                                    typeText += " ⨯ " +
-                                            grp.getMathExp().getText();
+                                    typeText += " ⨯ " + grp.getMathExp().getText();
                                 }
                             }
                         }
@@ -163,8 +149,10 @@ public class RESOLVECompletionUtil {
                     p.setTypeText(rangeTypeText);
                     p.setTypeGrayed(true);
                     // p.setTailText(calcTailText(f), true);
-                    String correctColon = typeText.equals("Cls") ? " ː " : " : ";
-                    p.setItemText(element.getLookupString() + correctColon + typeText);
+                    String correctColon = typeText.equals("Cls") ? " ⦂ " : " : ";
+                    String name = signature instanceof ResMathOutfixDefnSig ? signature.getCanonicalName() :
+                            element.getLookupString();
+                    p.setItemText(name + correctColon + typeText);
                 }
             };
 
@@ -179,10 +167,10 @@ public class RESOLVECompletionUtil {
     }
 
     @NotNull
-    static LookupElement createFunctionOrMethodLookupElement(@NotNull ResOperationLikeNode f,
-                                                             @NotNull String lookupString,
-                                                             @Nullable InsertHandler<LookupElement> h,
-                                                             double priority) {
+    static LookupElement createOpLikeLookupElement(@NotNull ResOperationLikeNode f,
+                                                   @NotNull String lookupString,
+                                                   @Nullable InsertHandler<LookupElement> h,
+                                                   double priority) {
         return PrioritizedLookupElement.withPriority(LookupElementBuilder
                 .createWithSmartPointer(lookupString, f)
                 .withRenderer(FUNCTION_RENDERER)
@@ -207,12 +195,21 @@ public class RESOLVECompletionUtil {
     }
 
     @NotNull
-    static LookupElement createDefinitionLookupElement(@NotNull ResMathDefnSig signature, @NotNull String lookupString,
-                                                       @Nullable InsertHandler<LookupElement> h, double priority) {
+    static LookupElement createMathDefinitionLookupElement(@NotNull ResMathDefnSig signature,
+                                                           @NotNull String lookupString,
+                                                           double priority) {
         return PrioritizedLookupElement.withPriority(LookupElementBuilder
                 .createWithSmartPointer(lookupString, signature)
                 .withRenderer(DEFINITION_RENDERER)
-                .withInsertHandler(h != null ? h : DEFINITION_INSERT_HANDLER), priority);
+                .withInsertHandler(new MathSymbolInsertHandler()), priority);
+    }
+
+    @NotNull
+    static LookupElement createMathVarLookupElement(@NotNull ResMathVarDef v) {
+        return PrioritizedLookupElement.withPriority(LookupElementBuilder
+                .createWithSmartPointer(v.getMathSymbolName().getText(), v)
+                .withRenderer(VARIABLE_RENDERER)
+                .withInsertHandler(new MathSymbolInsertHandler()), VAR_PRIORITY);
     }
 
     @NotNull
@@ -241,7 +238,7 @@ public class RESOLVECompletionUtil {
     }
 
     @Nullable
-    static LookupElement createResModuleLookupElement(@NotNull ResModuleDecl module, String name) {
+    private static LookupElement createResModuleLookupElement(@NotNull ResModuleDecl module, String name) {
         return PrioritizedLookupElement.withPriority(
                 LookupElementBuilder.create(name)
                         .withInsertHandler(Lazy.FACILITY_OR_MODULE_INSERT_HANDLER)
@@ -249,7 +246,7 @@ public class RESOLVECompletionUtil {
     }
 
     @Nullable
-    static LookupElement createFacilityLookupElement(@NotNull ResFacilityDecl facility, @NotNull String name) {
+    private static LookupElement createFacilityLookupElement(@NotNull ResFacilityDecl facility, @NotNull String name) {
         return PrioritizedLookupElement.withPriority(
                 LookupElementBuilder.create(name)
                         .withInsertHandler(Lazy.FACILITY_OR_MODULE_INSERT_HANDLER)

@@ -10,9 +10,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-import static edu.clemson.resolve.jetbrains.psi.impl.ResReference.processNamedElements;
-import static edu.clemson.resolve.jetbrains.psi.impl.ResReference.processSuperModules;
-
 public class ResTypeReference extends PsiPolyVariantReferenceBase<ResTypeReferenceExp> {
 
     ResTypeReference(@NotNull ResTypeReferenceExp o) {
@@ -72,11 +69,6 @@ public class ResTypeReference extends PsiPolyVariantReferenceBase<ResTypeReferen
                                                       @NotNull ResolveState state) {
         PsiElement target = qualifier.resolve();
         if (target == null || target == qualifier) return false;
-
-        /*if (target instanceof ResModuleIdentifierSpec) { //should happen in event of alias..
-            target = ((ResModuleIdentifierSpec)target).getModuleIdentifier().resolve();
-        }*/
-
         if (target instanceof ResFacilityDecl) {
             ResFile specFile = ((ResFacilityDecl) target).resolveSpecification();
             if (specFile != null) ResReference.processModuleLevelEntities(specFile, processor, state, false, true);
@@ -91,28 +83,9 @@ public class ResTypeReference extends PsiPolyVariantReferenceBase<ResTypeReferen
                                               @NotNull ResScopeProcessor processor,
                                               @NotNull ResolveState state,
                                               boolean localResolve) {
-        ResScopeProcessorBase delegate = createDelegate(processor);
-        ResolveUtil.treeWalkUp(myElement, delegate);
-        Collection<? extends ResNamedElement> result = delegate.getVariants();
-        //this processes any named elements we've found searching up the tree in the previous line
-        if (!processNamedElements(processor, state, result, localResolve)) return false;
         if (!ResReference.processModuleLevelEntities(file, processor, state, localResolve)) return false;
-
-        //if (!ResReference.processReferencedFiles(file, processor, state)) return false;
         if (!ResReference.processUsesImports(file, processor, state)) return false;
-
-        //TODO: What we really need to avoid finding both the models and reprs
-        // is some flag, say, "stopAfterFirst" (I think...)
-        //if (!processTypeSuperModules(file, processor, state)) return false;
         return true;
-    }
-
-    private boolean processTypeSuperModules(@NotNull ResFile file,
-                                            @NotNull ResScopeProcessor processor,
-                                            @NotNull ResolveState state) {
-        ResScopeProcessorBase delegate = createDelegate(processor);
-        processSuperModules(file, processor, delegate, state);
-        return processNamedElements(processor, state, delegate.getVariants(), false);
     }
 
     @NotNull
@@ -120,9 +93,7 @@ public class ResTypeReference extends PsiPolyVariantReferenceBase<ResTypeReferen
         return new ResTypeProcessor(myElement, processor.isCompletion());
     }
 
-    /**
-     * A processor for treewalking
-     */
+    /** A processor for treewalking */
     private static class ResTypeProcessor extends ResScopeProcessorBase {
 
         ResTypeProcessor(@NotNull ResTypeReferenceExp origin, boolean completion) {

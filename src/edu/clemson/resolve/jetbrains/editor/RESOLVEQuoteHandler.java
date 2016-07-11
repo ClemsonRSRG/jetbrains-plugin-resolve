@@ -16,7 +16,7 @@ public class RESOLVEQuoteHandler extends SimpleTokenSetQuoteHandler implements J
     private static final TokenSet SINGLE_LINE_LITERALS = TokenSet.create(ResTypes.STRING);
 
     public RESOLVEQuoteHandler() {
-        super(ResTypes.STRING, ResTypes.RAW_STRING, ResTypes.CHAR, TokenType.BAD_CHARACTER);
+        super(ResTypes.STRING, ResTypes.CHAR, TokenType.BAD_CHARACTER);
     }
 
     @Override

@@ -14,25 +14,23 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 import static edu.clemson.resolve.jetbrains.psi.impl.ResReference.processModuleLevelEntities;
-import static edu.clemson.resolve.jetbrains.psi.impl.ResReference.processParameterLikeThings;
 
 public class ResMathVarLikeReference
         extends
         PsiPolyVariantReferenceBase<ResMathReferenceExp> {
+
     private static final Key<SmartPsiElementPointer<ResMathReferenceExp>> CONTEXT = Key.create("CONTEXT");
 
     ResMathVarLikeReference(@NotNull ResMathReferenceExp o) {
         super(o, TextRange.from(o.getIdentifier().getStartOffsetInParent(), o.getIdentifier().getTextLength()));
     }
 
-    private static final ResolveCache
-            .PolyVariantResolver<PsiPolyVariantReferenceBase> MY_RESOLVER =
+    private static final ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase> MY_RESOLVER =
             new ResolveCache.PolyVariantResolver<PsiPolyVariantReferenceBase>() {
                 @NotNull
                 @Override
-                public ResolveResult[] resolve(
-                        @NotNull PsiPolyVariantReferenceBase psiPolyVariantReferenceBase,
-                        boolean incompleteCode) {
+                public ResolveResult[] resolve(@NotNull PsiPolyVariantReferenceBase psiPolyVariantReferenceBase,
+                                               boolean incompleteCode) {
                     return ((ResMathVarLikeReference) psiPolyVariantReferenceBase).resolveInner();
                 }
             };
@@ -52,8 +50,9 @@ public class ResMathVarLikeReference
     @NotNull
     @Override
     public ResolveResult[] multiResolve(boolean b) {
-        if (!myElement.isValid()) return ResolveResult.EMPTY_ARRAY;
-        return ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, MY_RESOLVER, false, false);
+        return myElement.isValid()
+                ? ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, MY_RESOLVER, false, false)
+                : ResolveResult.EMPTY_ARRAY;
     }
 
     @NotNull
@@ -68,9 +67,7 @@ public class ResMathVarLikeReference
         ResolveState state = ResolveState.initial();
         ResMathReferenceExp qualifier = myElement.getQualifier();
         if (qualifier != null) {
-            return false;
-            //return processQualifierExpression(((ResFile)file), qualifier,
-            //        processor, state);
+            return ResReference.processQualifierExpression(((ResFile) file), qualifier, processor, state);
         }
         return processUnqualifiedResolve(((ResFile) file), processor, state, true);
     }
@@ -87,43 +84,24 @@ public class ResMathVarLikeReference
             if (!result || ResPsiImplUtil.prevDot(myElement)) return false;
         }
         PsiElement grandPa = parent.getParent();
-        if (grandPa instanceof ResMathSelectorExp &&
-                !processMathSelector((ResMathSelectorExp) grandPa, processor, state, parent)) return false;
+        if (grandPa instanceof ResMathSelectorExp && !processMathSelector((ResMathSelectorExp) grandPa, processor, state, parent)) return false;
         if (ResPsiImplUtil.prevDot(parent)) return false;
-        ResScopeProcessorBase delegate = createDelegate(processor);
-        ResolveUtil.treeWalkUp(myElement, delegate);
-        Collection<? extends ResNamedElement> result = delegate.getVariants();
-        //this processes any named elements we've found searching up the tree in the previous line
-        if (!processNamedElements(processor, state, result, localResolve)) return false;
-        ResReference.processParameterLikeThings(myElement, delegate);
-        if (!processNamedElements(processor, state, delegate.getVariants(), localResolve)) return false;
+
+        if (!processBlock(processor, state, true)) return false;
         if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
         if (!ResReference.processUsesImports(file, processor, state)) return false;
-        if (!processSuperModules(file, processor, state)) return false;
         if (!processBuiltin(processor, state, myElement)) return false;
         return true;
     }
 
-    private boolean processSuperModules(@NotNull ResFile file,
-                                        @NotNull ResScopeProcessor processor,
-                                        @NotNull ResolveState state) {
-        /*for (ResModuleSpec spec : file.getSuperModuleModuleIdentifierList()) {
-            PsiElement resolvedFile = spec.resolve();
-            if (resolvedFile == null || !(resolvedFile instanceof ResFile)) continue;
-            ResModuleDecl resolvedModule = ((ResFile) resolvedFile).getEnclosedModule();
-            if (resolvedModule == null) continue;
-            if (!processModuleLevelEntities((ResFile) resolvedFile, processor, state, false)) return false;
-            if (!processSuperModuleParams(resolvedModule, processor, state, true)) return false;
-        }*/
-        return true;
-    }
-
-    private boolean processSuperModuleParams(@NotNull ResModuleDecl superModule,
-                                             @NotNull ResScopeProcessor processor,
-                                             @NotNull ResolveState state,
-                                             boolean localResolve) {
+    private boolean processBlock(@NotNull ResScopeProcessor processor,
+                                 @NotNull ResolveState state,
+                                 boolean localResolve) {
         ResScopeProcessorBase delegate = createDelegate(processor);
-        ResReference.processParameterLikeThings(superModule, delegate);
+        ResolveUtil.treeWalkUp(myElement, delegate);
+        //process local parameters if we're in a local definition or an operation like thing (doesn't include module
+        //params; that's in processModuleLevelEntities)
+        ResReference.processBlockParameters(myElement, delegate);
         return processNamedElements(processor, state, delegate.getVariants(), localResolve);
     }
 
@@ -164,9 +142,8 @@ public class ResMathVarLikeReference
 
     @NotNull
     private ResolveState createContext() {
-        return ResolveState.initial().put(CONTEXT,
-                SmartPointerManager.getInstance(myElement.getProject())
-                        .createSmartPsiElementPointer(myElement));
+        return ResolveState.initial().put(CONTEXT, SmartPointerManager.getInstance(myElement.getProject())
+                .createSmartPsiElementPointer(myElement));
     }
 
     private boolean processBuiltin(@NotNull ResScopeProcessor processor,

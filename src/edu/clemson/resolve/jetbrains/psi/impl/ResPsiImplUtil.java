@@ -18,8 +18,12 @@ import edu.clemson.resolve.jetbrains.ResTypes;
 import edu.clemson.resolve.jetbrains.psi.*;
 import edu.clemson.resolve.jetbrains.psi.impl.imports.ResModuleLibraryReference;
 import edu.clemson.resolve.jetbrains.psi.impl.imports.ResModuleReference;
+import edu.clemson.resolve.semantics.ModuleIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.File;
+import java.util.List;
 
 /**
  * Gathered from the language
@@ -33,7 +37,8 @@ import org.jetbrains.annotations.Nullable;
 public class ResPsiImplUtil {
 
     @Nullable
-    public static ResModuleLibraryIdentifier getFromLibraryIdentifier(@NotNull ResModuleIdentifierSpec moduleIdentifierSpec) {
+    public static ResModuleLibraryIdentifier getFromLibraryIdentifier(
+            @NotNull ResModuleIdentifierSpec moduleIdentifierSpec) {
         return moduleIdentifierSpec.getModuleLibraryIdentifier();
     }
 
@@ -125,7 +130,6 @@ public class ResPsiImplUtil {
         return PsiTreeUtil.getChildOfType(o, ResReferenceExp.class);
     }
 
-    //TODO: replace with default method in ResReferenceExpBase
     @Nullable
     public static PsiElement resolve(@NotNull ResReferenceExp o) {
         return o.getReference().resolve();
@@ -210,10 +214,10 @@ public class ResPsiImplUtil {
             //some code dup but I kinda like it better. Let me think about it more.
             if (resolve instanceof ResTypeOwner) return ((ResTypeOwner) resolve).getResType(context);
         }
-        else if (o instanceof ResSelectorExp) {
+        /*else if (o instanceof ResSelectorExp) {
             ResExp item = ContainerUtil.getLastItem(((ResSelectorExp) o).getExpList());
             return item != null ? item.getResType(context) : null;
-        }
+        }*/
         return null;
     }
 
@@ -226,26 +230,6 @@ public class ResPsiImplUtil {
         return null;
     }
 
-    /**
-     * ok, in the go jetbrains don't be fooled by the seeming lack of connection between
-     * {@code UsesReferenceHelper} and the {@link FileContextProvider} -- these are responsible
-     * for setting {@link }getDefaultContext to "resolve/src/" etc...
-     */
-/*    @Nullable
-    public static PsiFile resolve(@NotNull ResModuleSpec moduleSpec) {
-        PsiReference[] references = moduleSpec.getReferences();
-        for (PsiReference reference : references) {
-            if (reference instanceof FileReferenceOwner) {
-                PsiFileReference lastFileReference =
-                        ((FileReferenceOwner) reference).getLastFileReference();
-                PsiElement result = lastFileReference != null ?
-                        lastFileReference.resolve() : null;
-                return result instanceof ResFile ? ((ResFile) result) : null;
-            }
-        }
-        return null;
-    }
-*/
     public static boolean processDeclarations(@NotNull ResCompositeElement o,
                                               @NotNull PsiScopeProcessor processor,
                                               @NotNull ResolveState state,
@@ -269,12 +253,33 @@ public class ResPsiImplUtil {
 
     @Nullable
     public static ResFile resolveSpecification(ResFacilityDecl o) {
-        //if (o.getReferenceExpList().isEmpty()) return null;
-        //ResReferenceExp specification = o.getReferenceExpList().get(0);
-        //PsiElement result = specification.resolve();
-        return null; //result instanceof ResFile ? (ResFile) result : null;
+        return resolveFacilityModuleId(o.getModuleIdentifierList(), 0);
+    }
+    @Nullable
+    public static ResFile resolveImplementation(ResFacilityDecl o) {
+        return resolveFacilityModuleId(o.getModuleIdentifierList(), 1);
     }
 
+    @Nullable
+    public static ResFile resolveSpecification(ResExtensionPairing o) {
+        return resolveFacilityModuleId(o.getModuleIdentifierList(), 0);
+    }
+    @Nullable
+    public static ResFile resolveImplementation(ResExtensionPairing o) {
+        return resolveFacilityModuleId(o.getModuleIdentifierList(), 1);
+    }
+
+    @Nullable
+    private static ResFile resolveFacilityModuleId(@NotNull List<ResModuleIdentifier> o, int idNum) {
+        if (o.size() != 2) return null;
+        ResModuleIdentifier id = o.get(idNum);
+        PsiElement result = id.resolve();
+        return result != null ? (ResFile) result : null;
+    }
+
+    public static boolean shouldGoDeeper(@SuppressWarnings("UnusedParameters") ResModuleIdentifierSpec o) {
+        return false;
+    }
 
     public static boolean prevDot(@Nullable PsiElement parent) {
         PsiElement prev = parent == null ? null : PsiTreeUtil.prevVisibleLeaf(parent);
@@ -282,8 +287,8 @@ public class ResPsiImplUtil {
     }
 
     /**
-     * An expression describing the type of a mathematical expression
-     * {@code o} written in terms of another mathematical expression.
+     * An expression denoting the classification of a mathematical expression {@code o} written in terms of another
+     * mathematical expression.
      */
     @Nullable
     public static ResMathExp getResMathMetaTypeExp(@NotNull final ResMathExp o,
@@ -323,10 +328,10 @@ public class ResPsiImplUtil {
                 return ((ResMathMetaTypeExpOwner) resolve).getResMathMetaTypeExp(context);
             }
         }
-        else if (o instanceof ResMathSelectorExp) {
+        /*else if (o instanceof ResMathSelectorExp) {
             ResMathExp item = ContainerUtil.getLastItem(((ResMathSelectorExp) o).getMathExpList());
             return item != null ? item.getResMathMetaTypeExp(context) : null;
-        }
+        }*/
         return null;
     }
 }

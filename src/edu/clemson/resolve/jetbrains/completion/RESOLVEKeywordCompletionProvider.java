@@ -68,13 +68,10 @@ public class RESOLVEKeywordCompletionProvider extends CompletionProvider<Complet
 
     @NotNull
     private LookupElement createKeywordLookupElement(@NotNull final String keyword) {
-        final InsertHandler<LookupElement> handler =
-                ObjectUtils.chooseNotNull(this.insertHandler,
-                        createTemplateBasedInsertHandler("resolve_lang_" + keyword));
-        LookupElement result =
-                createKeywordLookupElement(keyword, priority, handler);
-        return completionPolicy != null ?
-                completionPolicy.applyPolicy(result) : result;
+        final InsertHandler<LookupElement> handler = ObjectUtils.chooseNotNull(
+                this.insertHandler, createTemplateBasedInsertHandler("resolve_lang_" + keyword));
+        LookupElement result = createKeywordLookupElement(keyword, priority, handler);
+        return completionPolicy != null ? completionPolicy.applyPolicy(result) : result;
     }
 
     public static LookupElement createKeywordLookupElement(@NotNull final String keyword,
