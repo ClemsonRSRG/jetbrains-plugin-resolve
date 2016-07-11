@@ -390,7 +390,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // 'Concept' 'Extension' identifier SpecModuleParameters? 'for' ModuleIdentifier ';'
+  // 'Concept' 'Extension' identifier SpecModuleParameters? 'for' ReferenceExp ';'
   // UsesList?
   // RequiresClause?
   // ConceptBlock
@@ -406,7 +406,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = r && report_error_(b, consumeToken(b, IDENTIFIER));
     r = p && report_error_(b, ConceptExtensionModuleDecl_3(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, FOR)) && r;
-    r = p && report_error_(b, ModuleIdentifier(b, l + 1)) && r;
+    r = p && report_error_(b, ReferenceExp(b, l + 1)) && r;
     r = p && report_error_(b, consumeToken(b, SEMICOLON)) && r;
     r = p && report_error_(b, ConceptExtensionModuleDecl_7(b, l + 1)) && r;
     r = p && report_error_(b, ConceptExtensionModuleDecl_8(b, l + 1)) && r;

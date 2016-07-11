@@ -179,7 +179,7 @@ ConceptBlock
 'end' identifier ';' {pin(".*")=1}
 
 ConceptExtensionModuleDecl ::=
-'Concept' 'Extension' identifier SpecModuleParameters? 'for' ModuleIdentifier ';'
+'Concept' 'Extension' identifier SpecModuleParameters? 'for' ReferenceExp ';'
 UsesList?
 RequiresClause?
 ConceptBlock
