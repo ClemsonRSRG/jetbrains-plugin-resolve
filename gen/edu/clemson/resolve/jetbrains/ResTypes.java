@@ -174,7 +174,6 @@ public interface ResTypes {
   IElementType LAMBDA = new ResTokenType("lambda");
   IElementType LAMBDA1 = new ResTokenType("λ");
   IElementType LBRACE = new ResTokenType("{");
-  IElementType LBRACK = new ResTokenType("[");
   IElementType LPAREN = new ResTokenType("(");
   IElementType MAINTAINING = new ResTokenType("maintaining");
   IElementType MATH_SYMBOL = new ResTokenType("math_symbol");
@@ -189,7 +188,6 @@ public interface ResTypes {
   IElementType PROG_IF = new ResTokenType("If");
   IElementType QV = new ResTokenType("?");
   IElementType RBRACE = new ResTokenType("}");
-  IElementType RBRACK = new ResTokenType("]");
   IElementType RECORD = new ResTokenType("Record");
   IElementType RECURSIVE = new ResTokenType("Recursive");
   IElementType REPLACES = new ResTokenType("replaces");

@@ -1694,7 +1694,8 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '(' MathVarDecl ')' '[' MathVarDecl ']' (':'|'⦂') MathExp
+  // '(' MathVarDecl ')' '`' MathSymbolNameNoId MathVarDecl MathSymbolNameNoId '`'
+  //     (':'|'⦂') MathExp
   public static boolean MathPostfixDefnSig(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathPostfixDefnSig")) return false;
     if (!nextTokenIs(b, LPAREN)) return false;
@@ -1704,18 +1705,20 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = r && MathVarDecl(b, l + 1);
     p = r; // pin = 2
     r = r && report_error_(b, consumeToken(b, RPAREN));
-    r = p && report_error_(b, consumeToken(b, LBRACK)) && r;
+    r = p && report_error_(b, consumeToken(b, BACKTICK)) && r;
+    r = p && report_error_(b, MathSymbolNameNoId(b, l + 1)) && r;
     r = p && report_error_(b, MathVarDecl(b, l + 1)) && r;
-    r = p && report_error_(b, consumeToken(b, RBRACK)) && r;
-    r = p && report_error_(b, MathPostfixDefnSig_6(b, l + 1)) && r;
+    r = p && report_error_(b, MathSymbolNameNoId(b, l + 1)) && r;
+    r = p && report_error_(b, consumeToken(b, BACKTICK)) && r;
+    r = p && report_error_(b, MathPostfixDefnSig_8(b, l + 1)) && r;
     r = p && MathExp(b, l + 1, -1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
   // ':'|'⦂'
-  private static boolean MathPostfixDefnSig_6(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathPostfixDefnSig_6")) return false;
+  private static boolean MathPostfixDefnSig_8(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathPostfixDefnSig_8")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, COLON);
@@ -1947,46 +1950,18 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier| (math_symbol|symbol)+ |int|symbol|math_symbol|true|false
+  // identifier|int|symbol|math_symbol|true|false
   public static boolean MathSymbolName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathSymbolName")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, MATH_SYMBOL_NAME, "<math symbol name>");
     r = consumeToken(b, IDENTIFIER);
-    if (!r) r = MathSymbolName_1(b, l + 1);
     if (!r) r = consumeToken(b, INT);
     if (!r) r = consumeToken(b, SYMBOL);
     if (!r) r = consumeToken(b, MATH_SYMBOL);
     if (!r) r = consumeToken(b, TRUE);
     if (!r) r = consumeToken(b, FALSE);
     exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // (math_symbol|symbol)+
-  private static boolean MathSymbolName_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathSymbolName_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = MathSymbolName_1_0(b, l + 1);
-    int c = current_position_(b);
-    while (r) {
-      if (!MathSymbolName_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "MathSymbolName_1", c)) break;
-      c = current_position_(b);
-    }
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // math_symbol|symbol
-  private static boolean MathSymbolName_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathSymbolName_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, MATH_SYMBOL);
-    if (!r) r = consumeToken(b, SYMBOL);
-    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -3778,7 +3753,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // '`' MathSymbolNameNoId MathArgList MathSymbolNameNoId
+  // '`' MathSymbolNameNoId MathArgList MathSymbolNameNoId '`'
   private static boolean MathNonStdApplyExp_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathNonStdApplyExp_0")) return false;
     boolean r;
@@ -3787,6 +3762,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = r && MathSymbolNameNoId(b, l + 1);
     r = r && MathArgList(b, l + 1);
     r = r && MathSymbolNameNoId(b, l + 1);
+    r = r && consumeToken(b, BACKTICK);
     exit_section_(b, m, null, r);
     return r;
   }
