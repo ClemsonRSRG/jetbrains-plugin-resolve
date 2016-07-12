@@ -442,6 +442,7 @@ MathQuantifiedExp ::= ('∃'|'∀'|'Exists'|'Forall') MathVarDeclGroup ',' MathA
 MathExp ::=
           MathInfixApplyExp
         | MathPrefixApplyExp
+    //    | MathNonStdApplyExp
         | MathOutfixApplyExp
         | MathNestedExp
         | MathPrimeExp {methods=[getResMathMetaTypeExp]}
@@ -449,6 +450,7 @@ MathExp ::=
 MathNestedExp ::= '(' MathAssertionExp ')' {pin=1}
 MathSelectorExp ::= MathExp '.' MathExp
 MathPrefixApplyExp ::= MathExp '(' MathArgList ')'
+//MathNonStdApplyExp ::= MathExp '`' MathSymbolNameNoId MathArgList MathSymbolNameNoId
 MathOutfixApplyExp ::= '`' MathSymbolNameNoId MathExp MathSymbolNameNoId '`'
 MathInfixApplyExp ::= MathExp MathOpSymbolName MathExp {pin=2}
 MathClssftnAssrtExp ::= MathExp (':'|'⦂') MathExp
@@ -464,7 +466,7 @@ private MathPrimeExp ::= MathIncomingExp | MathSymbolExp | MathSelectorExp | Mat
 
 private MathOpSymbolName ::= MathSymbolExp
 MathSymbolNameNoId ::= (symbol|math_symbol) {elementType=MathSymbolName}
-MathSymbolName ::= (identifier|int|symbol|math_symbol|true|false)
+MathSymbolName ::= (identifier| (math_symbol|symbol)+ |int|symbol|math_symbol|true|false)
 
 MathSymbolExp ::=  MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}
 left MathQualifiedReferenceExp ::= '::' MathSymbolName {elementType=MathReferenceExp}

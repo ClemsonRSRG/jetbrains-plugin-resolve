@@ -55,6 +55,7 @@ public interface ResTypes {
   IElementType MATH_INFIX_DEFN_SIG = new ResCompositeElementType("MATH_INFIX_DEFN_SIG");
   IElementType MATH_LAMBDA_EXP = new ResCompositeElementType("MATH_LAMBDA_EXP");
   IElementType MATH_NESTED_EXP = new ResCompositeElementType("MATH_NESTED_EXP");
+  IElementType MATH_NON_STD_APPLY_EXP = new ResCompositeElementType("MATH_NON_STD_APPLY_EXP");
   IElementType MATH_OUTFIX_APPLY_EXP = new ResCompositeElementType("MATH_OUTFIX_APPLY_EXP");
   IElementType MATH_OUTFIX_DEFN_SIG = new ResCompositeElementType("MATH_OUTFIX_DEFN_SIG");
   IElementType MATH_POSTFIX_DEFN_SIG = new ResCompositeElementType("MATH_POSTFIX_DEFN_SIG");
@@ -347,6 +348,9 @@ public interface ResTypes {
       }
       else if (type == MATH_NESTED_EXP) {
         return new ResMathNestedExpImpl(node);
+      }
+      else if (type == MATH_NON_STD_APPLY_EXP) {
+        return new ResMathNonStdApplyExpImpl(node);
       }
       else if (type == MATH_OUTFIX_APPLY_EXP) {
         return new ResMathOutfixApplyExpImpl(node);
