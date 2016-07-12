@@ -386,7 +386,7 @@ private ExpArgumentList ::= Exp (',' Exp)* {pin(".*")=1}
 MathTheoremDecl ::= ('Corollary'|'Theorem') identifier ':'
 MathAssertionExp ';' {pin = 2}
 
-private MathDefnSig ::= MathPrefixDefnSig | MathOutfixDefnSig | MathInfixDefnSig | MathPostfixDefnSig
+private MathDefnSig ::= MathPrefixDefnSig | MathPostfixDefnSig | MathOutfixDefnSig | MathInfixDefnSig
 MathPrefixDefnSig ::= MathPrefixNameList MathDefinitionParams? ':' MathExp {pin=1}
 
 private MathPrefixNameList ::= MathSymbolName (',' MathSymbolName)* {recoverWhile=MathPrefixListRec}
@@ -396,8 +396,8 @@ private CategoricalSigListRec ::= !('is')
 
 MathInfixDefnSig ::= '(' MathVarDecl ')' MathSymbolName '(' MathVarDecl ')' (':'|'⦂') MathExp {pin=4}
 MathOutfixDefnSig ::= '`' MathSymbolNameNoId '(' MathVarDecl ')' MathSymbolNameNoId '`' (':'|'⦂') MathExp {pin=2}
-MathPostfixDefnSig ::= '(' MathVarDecl ')' '`' MathSymbolNameNoId MathVarDecl MathSymbolNameNoId '`'
-    (':'|'⦂') MathExp {pin=2}
+MathPostfixDefnSig ::= '(' MathVarDecl ')' '`' MathSymbolNameNoId '(' MathVarDecl ')' MathSymbolNameNoId '`'
+    (':'|'⦂') MathExp
 
 private MathDefinitionParams ::= '(' MathDefnParamList ')' { pin=1}
 private ParamListRec ::= !(')'|';')
@@ -448,12 +448,14 @@ MathExp ::=
 
 MathNestedExp ::= '(' MathAssertionExp ')' {pin=1}
 MathSelectorExp ::= MathExp '.' MathExp
-MathPrefixApplyExp ::= MathExp '(' MathArgList ')'
-MathNonStdApplyExp ::= MathExp '`' MathSymbolNameNoId MathArgList MathSymbolNameNoId '`'
-MathOutfixApplyExp ::= '`' MathSymbolNameNoId MathExp MathSymbolNameNoId '`'
+MathPrefixApplyExp ::= MathExp MathFunctionAppList
+MathNonStdApplyExp ::= MathExp '`' MathSymbolNameNoId MathFunctionAppList MathSymbolNameNoId '`'
+MathOutfixApplyExp ::= '`' MathSymbolNameNoId MathExp MathSymbolNameNoId '`' {pin=1}
 MathInfixApplyExp ::= MathExp MathOpSymbolName MathExp {pin=2}
 MathClssftnAssrtExp ::= MathExp (':'|'⦂') MathExp
 MathIncomingExp ::= '@' MathSymbolExp {pin=1}
+
+MathFunctionAppList ::= '(' MathArgList ')'
 
 private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
 
