@@ -450,7 +450,7 @@ MathNestedExp ::= '(' MathAssertionExp ')' {pin=1}
 MathSelectorExp ::= MathExp '.' MathExp
 MathPrefixApplyExp ::= MathExp MathFunctionAppList
 MathNonStdApplyExp ::= MathExp '`' MathSymbolNameNoId MathFunctionAppList MathSymbolNameNoId '`'
-MathOutfixApplyExp ::= '`' MathSymbolNameNoId MathExp MathSymbolNameNoId '`' {pin=1}
+MathOutfixApplyExp ::= '`' MathSymbolNameNoId MathExp MathSymbolNameNoId '`'
 MathInfixApplyExp ::= MathExp MathOpSymbolName MathExp {pin=2}
 MathClssftnAssrtExp ::= MathExp (':'|'⦂') MathExp
 MathIncomingExp ::= '@' MathSymbolExp {pin=1}

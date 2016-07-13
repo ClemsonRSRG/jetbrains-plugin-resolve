@@ -3704,7 +3704,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   // 0: BINARY(MathInfixApplyExp)
   // 1: POSTFIX(MathPrefixApplyExp)
   // 2: POSTFIX(MathNonStdApplyExp)
-  // 3: ATOM(MathOutfixApplyExp)
+  // 3: PREFIX(MathOutfixApplyExp)
   // 4: ATOM(MathNestedExp)
   // 5: ATOM(MathIncomingExp) ATOM(MathSymbolExp) BINARY(MathSelectorExp) ATOM(MathLambdaExp)
   //    ATOM(MathAlternativeExp) BINARY(MathClssftnAssrtExp) ATOM(MathCartProdExp) ATOM(MathSetRestrictionExp)
@@ -3774,20 +3774,39 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // '`' MathSymbolNameNoId MathExp MathSymbolNameNoId '`'
   public static boolean MathOutfixApplyExp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathOutfixApplyExp")) return false;
     if (!nextTokenIsSmart(b, BACKTICK)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, MATH_OUTFIX_APPLY_EXP, null);
-    r = consumeTokenSmart(b, BACKTICK);
-    p = r; // pin = 1
-    r = r && report_error_(b, MathSymbolNameNoId(b, l + 1));
-    r = p && report_error_(b, MathExp(b, l + 1, -1)) && r;
-    r = p && report_error_(b, MathSymbolNameNoId(b, l + 1)) && r;
-    r = p && consumeToken(b, BACKTICK) && r;
-    exit_section_(b, l, m, r, p, null);
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = MathOutfixApplyExp_0(b, l + 1);
+    p = r;
+    r = p && MathExp(b, l, 3);
+    r = p && report_error_(b, MathOutfixApplyExp_1(b, l + 1)) && r;
+    exit_section_(b, l, m, MATH_OUTFIX_APPLY_EXP, r, p, null);
     return r || p;
+  }
+
+  // '`' MathSymbolNameNoId
+  private static boolean MathOutfixApplyExp_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathOutfixApplyExp_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, BACKTICK);
+    r = r && MathSymbolNameNoId(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // MathSymbolNameNoId '`'
+  private static boolean MathOutfixApplyExp_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathOutfixApplyExp_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = MathSymbolNameNoId(b, l + 1);
+    r = r && consumeToken(b, BACKTICK);
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   // '(' MathAssertionExp ')'
