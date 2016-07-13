@@ -26,8 +26,7 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
     protected void addCompletions(@NotNull CompletionParameters parameters,
                                   ProcessingContext context,
                                   @NotNull CompletionResultSet set) {
-        ResReferenceExpBase expression =
-                PsiTreeUtil.getParentOfType(parameters.getPosition(), ResReferenceExpBase.class);
+        ResReferenceExpBase expression = PsiTreeUtil.getParentOfType(parameters.getPosition(), ResReferenceExpBase.class);
         if (expression != null) {
             set = set.withPrefixMatcher(createPrefixMatcher(set.getPrefixMatcher()));
             fillVariantsByReference(expression.getReference(), set);

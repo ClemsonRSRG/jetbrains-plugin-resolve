@@ -1589,15 +1589,15 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // MathPrefixDefnSig | MathOutfixDefnSig | MathInfixDefnSig | MathPostfixDefnSig
+  // MathPrefixDefnSig | MathPostfixDefnSig | MathOutfixDefnSig | MathInfixDefnSig
   static boolean MathDefnSig(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathDefnSig")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = MathPrefixDefnSig(b, l + 1);
+    if (!r) r = MathPostfixDefnSig(b, l + 1);
     if (!r) r = MathOutfixDefnSig(b, l + 1);
     if (!r) r = MathInfixDefnSig(b, l + 1);
-    if (!r) r = MathPostfixDefnSig(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -1712,31 +1712,32 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // '(' MathVarDecl ')' '`' MathSymbolNameNoId MathVarDecl MathSymbolNameNoId '`'
+  // '(' MathVarDecl ')' '`' MathSymbolNameNoId '(' MathVarDecl ')' MathSymbolNameNoId '`'
   //     (':'|'⦂') MathExp
   public static boolean MathPostfixDefnSig(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathPostfixDefnSig")) return false;
     if (!nextTokenIs(b, LPAREN)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, MATH_POSTFIX_DEFN_SIG, null);
+    boolean r;
+    Marker m = enter_section_(b);
     r = consumeToken(b, LPAREN);
     r = r && MathVarDecl(b, l + 1);
-    p = r; // pin = 2
-    r = r && report_error_(b, consumeToken(b, RPAREN));
-    r = p && report_error_(b, consumeToken(b, BACKTICK)) && r;
-    r = p && report_error_(b, MathSymbolNameNoId(b, l + 1)) && r;
-    r = p && report_error_(b, MathVarDecl(b, l + 1)) && r;
-    r = p && report_error_(b, MathSymbolNameNoId(b, l + 1)) && r;
-    r = p && report_error_(b, consumeToken(b, BACKTICK)) && r;
-    r = p && report_error_(b, MathPostfixDefnSig_8(b, l + 1)) && r;
-    r = p && MathExp(b, l + 1, -1) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+    r = r && consumeToken(b, RPAREN);
+    r = r && consumeToken(b, BACKTICK);
+    r = r && MathSymbolNameNoId(b, l + 1);
+    r = r && consumeToken(b, LPAREN);
+    r = r && MathVarDecl(b, l + 1);
+    r = r && consumeToken(b, RPAREN);
+    r = r && MathSymbolNameNoId(b, l + 1);
+    r = r && consumeToken(b, BACKTICK);
+    r = r && MathPostfixDefnSig_10(b, l + 1);
+    r = r && MathExp(b, l + 1, -1);
+    exit_section_(b, m, MATH_POSTFIX_DEFN_SIG, r);
+    return r;
   }
 
   // ':'|'⦂'
-  private static boolean MathPostfixDefnSig_8(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MathPostfixDefnSig_8")) return false;
+  private static boolean MathPostfixDefnSig_10(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathPostfixDefnSig_10")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, COLON);

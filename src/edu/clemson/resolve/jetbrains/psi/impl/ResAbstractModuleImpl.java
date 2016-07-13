@@ -141,7 +141,7 @@ public abstract class ResAbstractModuleImpl extends ResNamedElementImpl implemen
 
     @NotNull
     @Override
-    public List<ResMathDefnSig> getDefinitionParams() {
+    public List<ResMathDefnSig> getDefinitionParamSigs() {
         List<ResMathDefnSig> result = new ArrayList<>();
         ResModuleParameters params = getModuleParameters();
         if (params instanceof ResSpecModuleParameters) {

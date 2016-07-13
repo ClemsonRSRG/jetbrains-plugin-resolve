@@ -57,7 +57,7 @@ public interface ResModuleDecl extends ResNamedElement {
     public List<ResParamDef> getConstantParamDefs();
 
     @NotNull
-    public List<ResMathDefnSig> getDefinitionParams();
+    public List<ResMathDefnSig> getDefinitionParamSigs();
 
     @NotNull
     public List<ResOperationLikeNode> getOperationLikeThings();
