@@ -107,6 +107,7 @@ ESCAPES = [abfnrtv]
 "Cart_Prod"                             { return CART_PROD; }
 "Categorical"                           { return CATEGORICAL; }
 "changing"                              { return CHANGING; }
+"Classification"                        { return CLASSIFICATION; }
 "Concept"                               { return CONCEPT;  }
 ("constraints"|"Constraints")           { return CONSTRAINTS; }
 "conventions"                           { return CONVENTIONS; }

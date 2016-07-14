@@ -48,6 +48,7 @@ public interface ResTypes {
   IElementType MATH_CART_PROD_EXP = new ResCompositeElementType("MATH_CART_PROD_EXP");
   IElementType MATH_CATEGORICAL_DEFN_DECL = new ResCompositeElementType("MATH_CATEGORICAL_DEFN_DECL");
   IElementType MATH_CLSSFTN_ASSRT_EXP = new ResCompositeElementType("MATH_CLSSFTN_ASSRT_EXP");
+  IElementType MATH_CLSSFTN_COROLLARY_DECL = new ResCompositeElementType("MATH_CLSSFTN_COROLLARY_DECL");
   IElementType MATH_EXP = new ResCompositeElementType("MATH_EXP");
   IElementType MATH_FUNCTION_APP_LIST = new ResCompositeElementType("MATH_FUNCTION_APP_LIST");
   IElementType MATH_INCOMING_EXP = new ResCompositeElementType("MATH_INCOMING_EXP");
@@ -120,6 +121,7 @@ public interface ResTypes {
   IElementType CATEGORICAL = new ResTokenType("Categorical");
   IElementType CHANGING = new ResTokenType("changing");
   IElementType CHAR = new ResTokenType("char");
+  IElementType CLASSIFICATION = new ResTokenType("Classification");
   IElementType CLEARS = new ResTokenType("clears");
   IElementType COLON = new ResTokenType(":");
   IElementType COLON_COLON = new ResTokenType("::");
@@ -326,6 +328,9 @@ public interface ResTypes {
       }
       else if (type == MATH_CLSSFTN_ASSRT_EXP) {
         return new ResMathClssftnAssrtExpImpl(node);
+      }
+      else if (type == MATH_CLSSFTN_COROLLARY_DECL) {
+        return new ResMathClssftnCorollaryDeclImpl(node);
       }
       else if (type == MATH_EXP) {
         return new ResMathExpImpl(node);

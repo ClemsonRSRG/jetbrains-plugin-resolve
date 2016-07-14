@@ -59,6 +59,7 @@
         CONSTRAINTS             = 'constraints'
         CONVENTIONS             = 'conventions'
         CORRESPONDENCE          = 'correspondence'
+        CLASSIFICATION          = 'Classification'
         EXTENSION               = 'Extension'
         END                     = 'end'
         ELSE                    = 'else'
@@ -227,9 +228,10 @@ private PrecisItem ::=
           MathTheoremDecl
         | MathStandardDefnDecl
         | MathCategoricalDefnDecl
+        | MathClssftnCorollaryDecl
         | MathInductiveDefnDecl {pin=1 recoverWhile=PrecisItemRecover}
 
-private PrecisItemRecover ::= !('Definition'|'Implicit'|'Theorem'|'Corollary'|'Categorical'|'Inductive'|'end')
+private PrecisItemRecover ::= !('Definition'|'Implicit'|'Theorem'|'Corollary'|'Categorical'|'Inductive'|'Classification'|'end')
 
 private ConceptItem ::=
       TypeModelDecl
@@ -383,8 +385,9 @@ private ExpArgumentList ::= Exp (',' Exp)* {pin(".*")=1}
 
 // math constructs
 
-MathTheoremDecl ::= ('Corollary'|'Theorem') identifier ':'
-MathAssertionExp ';' {pin = 2}
+MathTheoremDecl ::= ('Corollary'|'Theorem') identifier ':' MathAssertionExp ';' {pin = 2}
+
+MathClssftnCorollaryDecl ::= 'Classification' 'Corollary' ':' MathAssertionExp ';'
 
 private MathDefnSig ::= MathPrefixDefnSig | MathPostfixDefnSig | MathOutfixDefnSig | MathInfixDefnSig
 MathPrefixDefnSig ::= MathPrefixNameList MathDefinitionParams? ':' MathExp {pin=1}
