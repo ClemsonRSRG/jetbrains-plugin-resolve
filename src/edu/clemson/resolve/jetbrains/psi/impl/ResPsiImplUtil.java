@@ -12,6 +12,7 @@ import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.ObjectUtils;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.Predicate;
 import edu.clemson.resolve.jetbrains.ResTypes;
@@ -203,22 +204,49 @@ public class ResPsiImplUtil {
         });
     }
 
+    @NotNull
+    public static ResType getUnderlyingType(@NotNull final ResType o) {
+        ResType type = RecursionManager.doPreventingRecursion(o, true, new Computable<ResType>() {
+            @Override
+            public ResType compute() {
+                return getTypeInner(o);
+            }
+        });
+        return ObjectUtils.notNull(type, o);
+    }
+
+    @NotNull
+    private static ResType getTypeInner(@NotNull ResType o) {
+        if (o instanceof ResOperationLikeNode) {
+            return o;
+        }
+        return o;
+    }
+
+
     @Nullable
     public static ResType getResTypeInner(@NotNull final ResExp o, @Nullable ResolveState context) {
         if (o instanceof ResReferenceExp) {
             PsiReference reference = o.getReference();
             PsiElement resolve = reference != null ? reference.resolve() : null;
 
-            //TODO: Look closer at this line, I really don't think we need TypeOwner... wait... no. just Make
-            //sure ResNamedElement doesn't extend ResTypeOwner. Do it only for Exp and ResTypeRepr, paramDef, varDef, OperationDecl, OpProcedureDecl, etc.
-            //some code dup but I kinda like it better. Let me think about it more.
-            if (resolve instanceof ResTypeOwner) return ((ResTypeOwner) resolve).getResType(context);
+            //TODO: It was the commented out line before 7/19/2016
+            //if (resolve instanceof ResTypeOwner) return ((ResTypeOwner) resolve).getResType(context);
+            if (resolve instanceof ResTypeOwner) return typeOrParameterType((ResTypeOwner) resolve, context);
         }
-        /*else if (o instanceof ResSelectorExp) {
+        else if (o instanceof ResSelectorExp) {
             ResExp item = ContainerUtil.getLastItem(((ResSelectorExp) o).getExpList());
             return item != null ? item.getResType(context) : null;
-        }*/
+        }
         return null;
+    }
+
+    @Nullable
+    public static ResType typeOrParameterType(@NotNull ResTypeOwner resolve, @Nullable ResolveState context) {
+        if (resolve instanceof ResOperationLikeNode) {
+            return new ResLightType.LightFunctionType((ResOperationLikeNode) resolve);
+        }
+        return ((ResTypeOwner) resolve).getResType(context);
     }
 
     @Nullable
