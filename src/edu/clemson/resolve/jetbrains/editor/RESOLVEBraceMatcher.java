@@ -13,7 +13,6 @@ public class RESOLVEBraceMatcher implements PairedBraceMatcher {
 
     private static final BracePair[] PAIRS = new BracePair[]{
             new BracePair(ResTypes.LPAREN, ResTypes.RPAREN, false),
-            new BracePair(ResTypes.LBRACK, ResTypes.RBRACK, false),
             new BracePair(ResTypes.LBRACE, ResTypes.RBRACE, false),
             new BracePair(ResTypes.DBL_LBRACE, ResTypes.DBL_RBRACE, false),
     };
@@ -30,7 +29,6 @@ public class RESOLVEBraceMatcher implements PairedBraceMatcher {
                 || type == ResTypes.SEMICOLON
                 || type == ResTypes.COMMA
                 || type == ResTypes.RPAREN
-                || type == ResTypes.RBRACK
                 || type == ResTypes.RBRACE
                 || null == type;
     }

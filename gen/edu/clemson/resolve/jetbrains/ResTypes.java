@@ -48,13 +48,16 @@ public interface ResTypes {
   IElementType MATH_CART_PROD_EXP = new ResCompositeElementType("MATH_CART_PROD_EXP");
   IElementType MATH_CATEGORICAL_DEFN_DECL = new ResCompositeElementType("MATH_CATEGORICAL_DEFN_DECL");
   IElementType MATH_CLSSFTN_ASSRT_EXP = new ResCompositeElementType("MATH_CLSSFTN_ASSRT_EXP");
+  IElementType MATH_CLSSFTN_COROLLARY_DECL = new ResCompositeElementType("MATH_CLSSFTN_COROLLARY_DECL");
   IElementType MATH_EXP = new ResCompositeElementType("MATH_EXP");
+  IElementType MATH_FUNCTION_APP_LIST = new ResCompositeElementType("MATH_FUNCTION_APP_LIST");
   IElementType MATH_INCOMING_EXP = new ResCompositeElementType("MATH_INCOMING_EXP");
   IElementType MATH_INDUCTIVE_DEFN_DECL = new ResCompositeElementType("MATH_INDUCTIVE_DEFN_DECL");
   IElementType MATH_INFIX_APPLY_EXP = new ResCompositeElementType("MATH_INFIX_APPLY_EXP");
   IElementType MATH_INFIX_DEFN_SIG = new ResCompositeElementType("MATH_INFIX_DEFN_SIG");
   IElementType MATH_LAMBDA_EXP = new ResCompositeElementType("MATH_LAMBDA_EXP");
   IElementType MATH_NESTED_EXP = new ResCompositeElementType("MATH_NESTED_EXP");
+  IElementType MATH_NON_STD_APPLY_EXP = new ResCompositeElementType("MATH_NON_STD_APPLY_EXP");
   IElementType MATH_OUTFIX_APPLY_EXP = new ResCompositeElementType("MATH_OUTFIX_APPLY_EXP");
   IElementType MATH_OUTFIX_DEFN_SIG = new ResCompositeElementType("MATH_OUTFIX_DEFN_SIG");
   IElementType MATH_POSTFIX_DEFN_SIG = new ResCompositeElementType("MATH_POSTFIX_DEFN_SIG");
@@ -118,6 +121,7 @@ public interface ResTypes {
   IElementType CATEGORICAL = new ResTokenType("Categorical");
   IElementType CHANGING = new ResTokenType("changing");
   IElementType CHAR = new ResTokenType("char");
+  IElementType CLASSIFICATION = new ResTokenType("Classification");
   IElementType CLEARS = new ResTokenType("clears");
   IElementType COLON = new ResTokenType(":");
   IElementType COLON_COLON = new ResTokenType("::");
@@ -173,7 +177,6 @@ public interface ResTypes {
   IElementType LAMBDA = new ResTokenType("lambda");
   IElementType LAMBDA1 = new ResTokenType("λ");
   IElementType LBRACE = new ResTokenType("{");
-  IElementType LBRACK = new ResTokenType("[");
   IElementType LPAREN = new ResTokenType("(");
   IElementType MAINTAINING = new ResTokenType("maintaining");
   IElementType MATH_SYMBOL = new ResTokenType("math_symbol");
@@ -188,7 +191,6 @@ public interface ResTypes {
   IElementType PROG_IF = new ResTokenType("If");
   IElementType QV = new ResTokenType("?");
   IElementType RBRACE = new ResTokenType("}");
-  IElementType RBRACK = new ResTokenType("]");
   IElementType RECORD = new ResTokenType("Record");
   IElementType RECURSIVE = new ResTokenType("Recursive");
   IElementType REPLACES = new ResTokenType("replaces");
@@ -327,8 +329,14 @@ public interface ResTypes {
       else if (type == MATH_CLSSFTN_ASSRT_EXP) {
         return new ResMathClssftnAssrtExpImpl(node);
       }
+      else if (type == MATH_CLSSFTN_COROLLARY_DECL) {
+        return new ResMathClssftnCorollaryDeclImpl(node);
+      }
       else if (type == MATH_EXP) {
         return new ResMathExpImpl(node);
+      }
+      else if (type == MATH_FUNCTION_APP_LIST) {
+        return new ResMathFunctionAppListImpl(node);
       }
       else if (type == MATH_INCOMING_EXP) {
         return new ResMathIncomingExpImpl(node);
@@ -347,6 +355,9 @@ public interface ResTypes {
       }
       else if (type == MATH_NESTED_EXP) {
         return new ResMathNestedExpImpl(node);
+      }
+      else if (type == MATH_NON_STD_APPLY_EXP) {
+        return new ResMathNonStdApplyExpImpl(node);
       }
       else if (type == MATH_OUTFIX_APPLY_EXP) {
         return new ResMathOutfixApplyExpImpl(node);

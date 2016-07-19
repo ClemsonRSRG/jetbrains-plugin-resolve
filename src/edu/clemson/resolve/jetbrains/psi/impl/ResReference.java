@@ -233,7 +233,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         return processNamedElements(processor, state, delegate.getVariants(), localResolve);
     }
 
-    //Go plugin rolls this step into the "treeWalkUp" phase -- see processParameters in GoCompositeElementImpl.
+    //Go plugin rolls this step into the "treeWalkUp" phase -- see processParameters in GoCompositeElementImpl.x
     //I just do it here for simplicity
     static boolean processBlockParameters(@NotNull ResCompositeElement e,
                                           @NotNull ResScopeProcessorBase processor) {
@@ -326,7 +326,9 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         //module parameter-like-things
         if (!processNamedElements(processor, state, module.getGenericTypeParams(), localProcessing, fromFacility)) return false;
         if (!processNamedElements(processor, state, module.getConstantParamDefs(), localProcessing, fromFacility)) return false;
+        if (!processNamedElements(processor, state, module.getDefinitionParamSigs(), localProcessing, fromFacility)) return false;
 
+        //TODO: Math defns, opers
         if (!processNamedElements(processor, state, module.getMathDefnSigs(), localProcessing, fromFacility)) return false;
         return true;
     }

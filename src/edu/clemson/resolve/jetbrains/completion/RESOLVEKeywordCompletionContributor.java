@@ -63,6 +63,9 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
         //extend(CompletionType.BASIC, elseStatementPattern(),
         //        new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "else"));
 
+        extend(CompletionType.BASIC, mathCartProdPattern(),
+                new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "Cart_Prod"));
+
         extend(CompletionType.BASIC, variablePattern(),
                 new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "Var"));
 
@@ -88,6 +91,12 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
                 new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "initialization"));
         extend(CompletionType.BASIC, initializationEnsures(),
                 new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "ensures"));
+    }
+
+    private static Capture<PsiElement> mathCartProdPattern() {
+        return psiElement(ResTypes.IDENTIFIER)
+                .withParent(psiElement(ResTypes.MATH_SYMBOL_NAME)
+                        .withParent(psiElement(ResTypes.MATH_REFERENCE_EXP)));
     }
 
     private static Capture<PsiElement> definitionParameterPattern() {

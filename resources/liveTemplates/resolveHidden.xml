@@ -9,6 +9,13 @@
         </context>
     </template>
 
+    <template description='Cart prod type' id='resolve_lang_Cart_Prod' name='resolve_lang_Cart_Prod' toReformat='true' toShortenFQNames='true'
+              value='Cart_Prod&#10;        $END$&#10;    end'>
+        <context>
+            <option name='RESOLVE' value='true'/>
+        </context>
+    </template>
+
     <template description='Representation initialization' id='resolve_lang_initialization_repr' name='resolve_lang_initialization_repr' toReformat='true' toShortenFQNames='true'
               value='initialization&#10;    $END$&#10;end;'>
         <context>

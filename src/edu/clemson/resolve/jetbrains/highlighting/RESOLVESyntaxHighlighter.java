@@ -42,7 +42,6 @@ public class RESOLVESyntaxHighlighter extends SyntaxHighlighterBase {
         fillMap(ATTRIBUTES, BLOCK_COMMENT, RESOLVEParserDefinition.MULTILINE_COMMENT);
         fillMap(ATTRIBUTES, PARENTHESES, ResTypes.LPAREN, ResTypes.RPAREN);
         fillMap(ATTRIBUTES, BRACES, ResTypes.LBRACE, ResTypes.RBRACE, ResTypes.DBL_LBRACE, ResTypes.DBL_RBRACE);
-        fillMap(ATTRIBUTES, BRACKETS, ResTypes.LBRACK, ResTypes.RBRACK);
         fillMap(ATTRIBUTES, BAD_CHARACTER, TokenType.BAD_CHARACTER);
         fillMap(ATTRIBUTES, IDENTIFIER, ResTypes.IDENTIFIER);
         fillMap(ATTRIBUTES, DOT, ResTypes.DOT, ResTypes.DOT_DOT, ResTypes.TRIPLE_DOT);
