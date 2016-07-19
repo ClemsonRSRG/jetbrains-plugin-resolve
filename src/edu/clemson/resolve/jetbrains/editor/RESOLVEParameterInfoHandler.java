@@ -97,11 +97,11 @@ public class RESOLVEParameterInfoHandler implements ParameterInfoHandlerWithTabA
     public void showParameterInfo(@NotNull ResArgumentList argList, @NotNull CreateParameterInfoContext context) {
         PsiElement parent = argList.getParent();
         if (!(parent instanceof ResCallExp)) return;
-        ResFunctionType type = findFunctionType(((ResCallExp)parent).getExp().getResType(null));
+        /*ResFunctionType type = findFunctionType(((ResCallExp)parent).getExp().getResType(null));
         if (type != null) {
             context.setItemsToShow(new Object[]{type});
             context.showHint(argList, argList.getTextRange().getStartOffset(), this);
-        }
+        }*/
     }
 
     @Nullable
