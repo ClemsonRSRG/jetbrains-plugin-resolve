@@ -143,7 +143,8 @@
     extends("MathVarDef")="edu.clemson.resolve.jetbrains.psi.impl.ResMathNamedElementImpl"
     extends("Math.*(Exp)")=MathExp
 
-    extends("((Var|Param|Field)Def|(MathTheorem|TypeParam|Operation|Procedure|OperationProcedure|Exemplar|Facility)Decl)|ModuleIdentifierSpec")="edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl"
+    extends("(Operation|Procedure|OperationProcedure)Decl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractOperationLikeNode"
+    extends("((Var|Param|Field)Def|(MathTheorem|TypeParam|Exemplar|Facility)Decl)|ModuleIdentifierSpec")="edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl"
     extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractTypeLikeNodeImpl"
 
     pin(".*Statement")=1

@@ -1,12 +1,14 @@
 package edu.clemson.resolve.jetbrains.editor;
 
 import com.intellij.codeInsight.CodeInsightBundle;
+import com.intellij.codeInsight.hint.ParameterInfoComponent;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.lang.parameterInfo.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
+import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.jetbrains.ResTypes;
 import edu.clemson.resolve.jetbrains.psi.*;
@@ -128,11 +130,6 @@ public class RESOLVEParameterInfoHandler implements ParameterInfoHandlerWithTabA
         return true;
     }
 
-    @Override
-    public void updateUI(@Nullable Object p, @NotNull ParameterInfoUIContext context) {
-        updatePresentation(p, context);
-    }
-
     @Nullable
     private static LightFunctionType findFunctionType(@Nullable ResType type) {
         if (type instanceof LightFunctionType || type == null) return (LightFunctionType)type;
@@ -140,16 +137,22 @@ public class RESOLVEParameterInfoHandler implements ParameterInfoHandlerWithTabA
         return base instanceof LightFunctionType ? (LightFunctionType)base : null;
     }
 
+    @Override
+    public void updateUI(@Nullable Object p, @NotNull ParameterInfoUIContext context) {
+        updatePresentation(p, context);
+    }
+
     static String updatePresentation(@Nullable Object p, @NotNull ParameterInfoUIContext context) {
         if (p == null) {
             context.setUIComponentEnabled(false);
             return null;
         }
-        ResOperationLikeNode signature = p instanceof ResOperationLikeNode ? ((ResOperationLikeNode)p) : null;
-        if (signature == null) return null;
-        List<ResParamDecl> parameters = signature.getParamDeclList();
 
-        List<String> parametersPresentations = getParameterPresentations(parameters, GoPsiImplUtil.GET_TEXT_FUNCTION);
+        ResOperationLikeNode operation = p instanceof LightFunctionType ?
+                ((LightFunctionType)p).getOperationLikeNode() : null;
+        if (operation == null) return null;
+        List<ResParamDecl> parameters = operation.getParamDeclList();
+        List<String> parametersPresentations = getParameterPresentations(parameters);
 
         StringBuilder builder = new StringBuilder();
         int start = 0;
@@ -157,10 +160,7 @@ public class RESOLVEParameterInfoHandler implements ParameterInfoHandlerWithTabA
         if (!parametersPresentations.isEmpty()) {
             // Figure out what particular presentation is actually selected. Take in
             // account possibility of the last variadic parameter.
-            int selected = isLastParameterVariadic(parameters.getParameterDeclarationList())
-                    ? Math.min(context.getCurrentParameterIndex(), parametersPresentations.size() - 1)
-                    : context.getCurrentParameterIndex();
-
+            int selected = context.getCurrentParameterIndex();
             for (int i = 0; i < parametersPresentations.size(); ++i) {
                 if (i != 0) {
                     builder.append(", ");
@@ -174,6 +174,9 @@ public class RESOLVEParameterInfoHandler implements ParameterInfoHandlerWithTabA
                     end = builder.length();
                 }
             }
+            //if (operation.getRequiresClause() != null) {
+            //    builder.append(operation.getRequiresClause().getText())
+            //}
         }
         else {
             builder.append(CodeInsightBundle.message("parameter.info.no.parameters"));
@@ -181,7 +184,14 @@ public class RESOLVEParameterInfoHandler implements ParameterInfoHandlerWithTabA
         return context.setupUIComponentPresentation(builder.toString(), start, end, false, false, false, context.getDefaultParameterColor());
     }
 
-    private List<String> getParameterPresentations(List<ResParamDecl> parameters) {
+    private static List<String> getParameterPresentations(@NotNull List<ResParamDecl> parameters) {
         List<String> result = new ArrayList<>();
+        for (ResParamDecl p : parameters) {
+            for (ResParamDef e : p.getParamDefList()) {
+                String type = p.getType() != null ? p.getType().getText() : "<null>";
+                result.add(p.getParameterMode().getText() + " " + e.getName() + " : " + type);
+            }
+        }
+        return result;
     }
 }

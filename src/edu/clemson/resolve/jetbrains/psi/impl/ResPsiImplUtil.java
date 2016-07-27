@@ -223,7 +223,6 @@ public class ResPsiImplUtil {
         return o;
     }
 
-
     @Nullable
     public static ResType getResTypeInner(@NotNull final ResExp o, @Nullable ResolveState context) {
         if (o instanceof ResReferenceExp) {
