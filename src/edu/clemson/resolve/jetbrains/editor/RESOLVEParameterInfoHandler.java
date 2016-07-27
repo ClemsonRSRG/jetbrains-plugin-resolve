@@ -142,7 +142,7 @@ public class RESOLVEParameterInfoHandler implements ParameterInfoHandlerWithTabA
         updatePresentation(p, context);
     }
 
-    static String updatePresentation(@Nullable Object p, @NotNull ParameterInfoUIContext context) {
+    private static String updatePresentation(@Nullable Object p, @NotNull ParameterInfoUIContext context) {
         if (p == null) {
             context.setUIComponentEnabled(false);
             return null;
