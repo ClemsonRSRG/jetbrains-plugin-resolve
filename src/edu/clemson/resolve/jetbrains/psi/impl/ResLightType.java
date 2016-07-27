@@ -32,6 +32,12 @@ public abstract class ResLightType<E extends ResCompositeElement> extends LightE
         return null;
     }
 
+    @NotNull
+    @Override
+    public ResType getUnderlyingType() {
+        return ResPsiImplUtil.getUnderlyingType(this);
+    }
+
     @Override
     public boolean shouldGoDeeper() {
         return false;
@@ -42,7 +48,7 @@ public abstract class ResLightType<E extends ResCompositeElement> extends LightE
         return getClass().getSimpleName() + "{" + myElement + "}";
     }
 
-    static class LightFunctionType extends ResLightType<ResOperationLikeNode> {
+    public static class LightFunctionType extends ResLightType<ResOperationLikeNode> {
         public LightFunctionType(@NotNull ResOperationLikeNode o) {
             super(o);
         }

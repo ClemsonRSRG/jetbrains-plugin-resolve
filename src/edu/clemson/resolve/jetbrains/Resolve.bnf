@@ -260,7 +260,7 @@ private FacilityItemRecover ::= !('Facility'|'Definition'|'Operation'|'Type'|'en
 
 // type refs & decls
 
-Type ::= RecordType | NamedType
+Type ::= RecordType | NamedType {methods=[getUnderlyingType]}
 private NamedType ::= TypeReferenceExp QualifiedTypeReferenceExp?
 TypeReferenceExp ::= identifier { methods=[getReference getQualifier resolve] }
 left QualifiedTypeReferenceExp ::= '::' identifier {elementType=TypeReferenceExp}

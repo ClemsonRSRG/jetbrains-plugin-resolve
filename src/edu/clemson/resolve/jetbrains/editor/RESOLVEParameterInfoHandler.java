@@ -9,12 +9,13 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.jetbrains.ResTypes;
-import edu.clemson.resolve.jetbrains.psi.ResArgumentList;
-import edu.clemson.resolve.jetbrains.psi.ResCallExp;
-import edu.clemson.resolve.jetbrains.psi.ResExp;
+import edu.clemson.resolve.jetbrains.psi.*;
+import edu.clemson.resolve.jetbrains.psi.impl.ResLightType;
+import edu.clemson.resolve.jetbrains.psi.impl.ResLightType.LightFunctionType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -97,11 +98,11 @@ public class RESOLVEParameterInfoHandler implements ParameterInfoHandlerWithTabA
     public void showParameterInfo(@NotNull ResArgumentList argList, @NotNull CreateParameterInfoContext context) {
         PsiElement parent = argList.getParent();
         if (!(parent instanceof ResCallExp)) return;
-        /*ResFunctionType type = findFunctionType(((ResCallExp)parent).getExp().getResType(null));
+        LightFunctionType type = findFunctionType(((ResCallExp)parent).getReferenceExp().getResType(null));
         if (type != null) {
             context.setItemsToShow(new Object[]{type});
             context.showHint(argList, argList.getTextRange().getStartOffset(), this);
-        }*/
+        }
     }
 
     @Nullable
@@ -132,11 +133,55 @@ public class RESOLVEParameterInfoHandler implements ParameterInfoHandlerWithTabA
         updatePresentation(p, context);
     }
 
+    @Nullable
+    private static LightFunctionType findFunctionType(@Nullable ResType type) {
+        if (type instanceof LightFunctionType || type == null) return (LightFunctionType)type;
+        ResType base = type.getUnderlyingType();
+        return base instanceof LightFunctionType ? (LightFunctionType)base : null;
+    }
+
     static String updatePresentation(@Nullable Object p, @NotNull ParameterInfoUIContext context) {
         if (p == null) {
             context.setUIComponentEnabled(false);
             return null;
         }
-        return "";
+        ResOperationLikeNode signature = p instanceof ResOperationLikeNode ? ((ResOperationLikeNode)p) : null;
+        if (signature == null) return null;
+        List<ResParamDecl> parameters = signature.getParamDeclList();
+
+        List<String> parametersPresentations = getParameterPresentations(parameters, GoPsiImplUtil.GET_TEXT_FUNCTION);
+
+        StringBuilder builder = new StringBuilder();
+        int start = 0;
+        int end = 0;
+        if (!parametersPresentations.isEmpty()) {
+            // Figure out what particular presentation is actually selected. Take in
+            // account possibility of the last variadic parameter.
+            int selected = isLastParameterVariadic(parameters.getParameterDeclarationList())
+                    ? Math.min(context.getCurrentParameterIndex(), parametersPresentations.size() - 1)
+                    : context.getCurrentParameterIndex();
+
+            for (int i = 0; i < parametersPresentations.size(); ++i) {
+                if (i != 0) {
+                    builder.append(", ");
+                }
+                if (i == selected) {
+                    start = builder.length();
+                }
+                builder.append(parametersPresentations.get(i));
+
+                if (i == selected) {
+                    end = builder.length();
+                }
+            }
+        }
+        else {
+            builder.append(CodeInsightBundle.message("parameter.info.no.parameters"));
+        }
+        return context.setupUIComponentPresentation(builder.toString(), start, end, false, false, false, context.getDefaultParameterColor());
+    }
+
+    private List<String> getParameterPresentations(List<ResParamDecl> parameters) {
+        List<String> result = new ArrayList<>();
     }
 }
