@@ -61,6 +61,7 @@
         <externalAnnotator language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.annotation.RESOLVEExternalAnnotator"/>
         <fileIconPatcher implementation="edu.clemson.resolve.jetbrains.RESOLVEFileIconPatcher"/>
         <codeInsight.parameterInfo language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.editor.RESOLVEParameterInfoHandler"/>
+        <lang.documentationProvider language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.RESOLVEDocumentationProvider"/>
 
         <!-- completions -->
         <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.completion.RESOLVECompletionContributor"/>
