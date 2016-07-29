@@ -249,11 +249,10 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
     public static boolean processFacilityImports(@NotNull ResFile file,
                                                  @NotNull ResScopeProcessor processor,
                                                  @NotNull ResolveState state) {
-        List<ResFacilityDecl> facilities = file.getFacilities();
         List<ResModuleIdentifierSpec> usesItems = file.getModuleIdentifierSpecs();
-
         Set<ResModuleIdentifier> v = new LinkedHashSet<>();
 
+        //get ModuleIdentifiers from facilities visible through named uses items
         for (ResModuleIdentifierSpec usesItem : usesItems) {
             PsiElement resolve = usesItem.getModuleIdentifier().resolve();
             if (resolve != null && resolve instanceof ResFile) {
@@ -266,11 +265,13 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
             }
         }
 
-        for (ResFacilityDecl facility : facilities) {
+        //now get ModuleIdentifiers from any local facilities
+        for (ResFacilityDecl facility : file.getFacilities()) {
             if (facility.getModuleIdentifierList().size() != 2) continue;
             v.add(facility.getModuleIdentifierList().get(0));
         }
 
+        //resolve through their specifications
         for (ResModuleIdentifier identifier : v) {
             PsiElement resolve = identifier.resolve();
             if (resolve == null || !(resolve instanceof ResFile)) continue;
