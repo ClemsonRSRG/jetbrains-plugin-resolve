@@ -137,6 +137,8 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         if (ResPsiImplUtil.prevDot(parent)) return false;
         if (!processBlock(processor, state, true)) return false;
         if (!processModuleLevelEntities(file, processor, state, true)) return false;
+        if (!processFacilityImports(file, processor, state)) return false;
+
         if (!processUsesImports(file, processor, state)) return false;
         return true;
     }
@@ -244,6 +246,39 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         return true;
     }
 
+    public static boolean processFacilityImports(@NotNull ResFile file,
+                                                 @NotNull ResScopeProcessor processor,
+                                                 @NotNull ResolveState state) {
+        List<ResFacilityDecl> facilities = file.getFacilities();
+        List<ResModuleIdentifierSpec> usesItems = file.getModuleIdentifierSpecs();
+
+        Set<ResModuleIdentifier> v = new LinkedHashSet<>();
+
+        for (ResModuleIdentifierSpec usesItem : usesItems) {
+            PsiElement resolve = usesItem.getModuleIdentifier().resolve();
+            if (resolve != null && resolve instanceof ResFile) {
+                ResModuleDecl moduleDecl = ((ResFile) resolve).getEnclosedModule();
+                if (moduleDecl == null) continue;
+                for (ResFacilityDecl f : moduleDecl.getFacilities()) {
+                    if (f.getModuleIdentifierList().size() != 2) continue;
+                    v.add(f.getModuleIdentifierList().get(0));
+                }
+            }
+        }
+
+        for (ResFacilityDecl facility : facilities) {
+            if (facility.getModuleIdentifierList().size() != 2) continue;
+            v.add(facility.getModuleIdentifierList().get(0));
+        }
+
+        for (ResModuleIdentifier identifier : v) {
+            PsiElement resolve = identifier.resolve();
+            if (resolve == null || !(resolve instanceof ResFile)) continue;
+            if (!processModuleLevelEntities((ResFile) resolve, processor, state, true)) return false;
+        }
+        return true;
+    }
+
     public static boolean processUsesImports(@NotNull ResFile file,
                                              @NotNull ResScopeProcessor processor,
                                              @NotNull ResolveState state) {
@@ -255,8 +290,8 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
     //Update: Ok so at least this method is doing what I *think* it needs to be doing right now. Don't get me wrong its a godawful
     //mess, but at least its working as I expect for the moment. TODO: Clean it up, improve names etc.
     private static boolean processUsesImports(@NotNull ResModuleDecl moduleDecl,
-                                             @NotNull ResScopeProcessor processor,
-                                             @NotNull ResolveState state) {
+                                              @NotNull ResScopeProcessor processor,
+                                              @NotNull ResolveState state) {
         List<ResModuleIdentifierSpec> usesItems = moduleDecl.getModuleIdentifierSpecs();
 
         List<ResReferenceExp> headerModules = moduleDecl.getModuleHeaderReferences();
