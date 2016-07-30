@@ -6,6 +6,7 @@ import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
 import edu.clemson.resolve.jetbrains.ResTypes;
 import edu.clemson.resolve.jetbrains.psi.ResMathSymbolName;
+import edu.clemson.resolve.jetbrains.psi.ResProgSymbolName;
 import edu.clemson.resolve.jetbrains.psi.ResReferenceExpBase;
 import org.jetbrains.annotations.NotNull;
 

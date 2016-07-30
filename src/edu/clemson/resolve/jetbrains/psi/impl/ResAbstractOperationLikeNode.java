@@ -1,9 +1,9 @@
 package edu.clemson.resolve.jetbrains.psi.impl;
 
 import com.intellij.lang.ASTNode;
-import edu.clemson.resolve.jetbrains.psi.ResEnsuresClause;
-import edu.clemson.resolve.jetbrains.psi.ResOperationLikeNode;
-import edu.clemson.resolve.jetbrains.psi.ResRequiresClause;
+import com.intellij.psi.PsiElement;
+import edu.clemson.resolve.jetbrains.ResTypes;
+import edu.clemson.resolve.jetbrains.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,6 +11,23 @@ public abstract class ResAbstractOperationLikeNode extends ResNamedElementImpl i
 
     public ResAbstractOperationLikeNode(@NotNull ASTNode node) {
         super(node);
+    }
+
+    //TODO: Have a method that gets the alt pretty syntax name, then override getNameIdentifier here and return that
+    //instead
+    @Nullable
+    public ResProgSymbolName getSugaredName() {
+        return findChildByType(ResTypes.PROG_SYMBOL_NAME);
+    }
+
+    @NotNull
+    @Override
+    public PsiElement getIdentifier() {
+        PsiElement result = getSugaredName();
+        if (result == null) {
+            result = findNotNullChildByType(ResTypes.IDENTIFIER);
+        }
+        return result;
     }
 
     //TODO:
