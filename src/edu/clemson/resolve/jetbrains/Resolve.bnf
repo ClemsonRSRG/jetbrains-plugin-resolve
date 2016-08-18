@@ -31,6 +31,8 @@
         RPAREN                  = ')'
         COLON                   = ':'
         COLON_COLON             = '::'
+
+        RESTRICTION_BAR         = '∣'
         HYPER_COLON             = '⦂'
         SEMICOLON               = ';'
         COMMA                   = ','
@@ -58,6 +60,7 @@
         DEFINITION              = 'Definition'
         CONSTRAINTS             = 'constraints'
         CONVENTIONS             = 'conventions'
+        CHAINABLE               = 'Chainable'
         CORRESPONDENCE          = 'correspondence'
         CLASSIFICATION          = 'Classification'
         EXTENSION               = 'Extension'
@@ -106,7 +109,6 @@
         WITH                    = 'with'
         DO                      = 'do'
         OF                      = 'of'
-        SUCH_THAT               = 's.t.'
         STRING                  = 'string'
         WHICH_ENTAILS           = 'which_entails'
         CHAR                    = 'char'
@@ -169,6 +171,7 @@ PrecisBlock
 
 PrecisExtensionModuleDecl ::= 'Precis' 'Extension' identifier 'for'
 ReferenceExp ('with' ReferenceExp)? ';'
+UsesList?
 PrecisBlock
 'end' identifier ';' {pin(".*")=2}
 
@@ -232,7 +235,7 @@ private PrecisItem ::=
         | MathClssftnCorollaryDecl
         | MathInductiveDefnDecl {pin=1 recoverWhile=PrecisItemRecover}
 
-private PrecisItemRecover ::= !('Definition'|'Implicit'|'Theorem'|'Corollary'|'Categorical'|'Inductive'|'Classification'|'end')
+private PrecisItemRecover ::= !('Definition'|'Implicit'|'Theorem'|'Corollary'|'Categorical'|'Inductive'|'Classification'|'Chainable'|'end')
 
 private ConceptItem ::=
       TypeModelDecl
@@ -388,10 +391,10 @@ private ExpArgumentList ::= Exp (',' Exp)* {pin(".*")=1}
 
 MathTheoremDecl ::= ('Corollary'|'Theorem') identifier ':' MathAssertionExp ';' {pin = 2}
 
-MathClssftnCorollaryDecl ::= 'Classification' 'Corollary' ':' MathAssertionExp ';'
+MathClssftnCorollaryDecl ::= 'Classification' 'Corollary' ':' MathAssertionExp ';' {pin=1}
 
 private MathDefnSig ::= MathPrefixDefnSig | MathPostfixDefnSig | MathOutfixDefnSig | MathInfixDefnSig
-MathPrefixDefnSig ::= MathPrefixNameList MathDefinitionParams? ':' MathExp {pin=1}
+MathPrefixDefnSig ::= MathPrefixNameList MathDefinitionParams? (':'|'⦂') MathExp {pin=1}
 
 private MathPrefixNameList ::= MathSymbolName (',' MathSymbolName)* {recoverWhile=MathPrefixListRec}
 private MathPrefixListRec ::= !(':'|'⦂'|';'|'(')
@@ -410,7 +413,7 @@ private MathDefnParamList ::= MathVarDeclGroup (',' MathVarDeclGroup)* {pin=1 re
 MathCategoricalDefnDecl ::= 'Categorical' 'Definition' 'for'
 MathPrefixDefnSigs 'is' MathExp ';' {pin=2}
 
-MathStandardDefnDecl ::= ('Implicit')? 'Definition'  MathDefnSig ('is' MathAssertionExp)? ';' {pin=2}
+MathStandardDefnDecl ::= ('Chainable')? ('Implicit'?)'Definition'  MathDefnSig ('is' MathAssertionExp)? ';' {pin=3}
 
 MathInductiveDefnDecl ::= 'Inductive' 'Definition' MathDefnSig 'is'
 '(i.)' MathAssertionExp ';'
@@ -483,4 +486,4 @@ MathLambdaExp ::= (lambda|'λ') MathVarDecl ','  MathExp {pin=1}
 MathAlternativeExp ::= '{{' MathAlternativesList '}}' {pin=1}
 MathAlternativesList ::= MathAlternativeItemExp+
 MathAlternativeItemExp ::= MathExp ('if' MathExp ';' | 'otherwise' ';')
-MathSetRestrictionExp ::= '{' MathVarDecl 's.t.' MathExp '}' {pin=1}
+MathSetRestrictionExp ::= '{' MathVarDecl '∣' MathExp '}' {pin=1}

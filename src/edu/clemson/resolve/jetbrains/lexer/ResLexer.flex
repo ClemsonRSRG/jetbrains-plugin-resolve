@@ -40,7 +40,7 @@ NUM_INT = "0" | ([1-9] {INT_DIGIT}*)
 
 IDENT = {LETTER} ({LETTER} | {DIGIT} )*
 
-MSYM = ([\u2200-\u22FF] | [\u27F0-\u27FF] | [\u2A00-\u2AFF] | [\u2300-\u23BF] | [\u0370-\u03FF])
+MSYM = ([\u2100-\u214F] | [\u2200-\u22FF] | [\u27C0-\u27EF] | [\u27F0-\u27FF] | [\u2A00-\u2AFF] | [\u2300-\u23BF] | [\u0370-\u03FF])
 
 SYM = ("!"|"*"|"+"|"-"|"/"|"["|"]"|"|"|"~"|[<->])+
 
@@ -57,6 +57,7 @@ ESCAPES = [abfnrtv]
 
 // Punctuation
 
+//TODO: Add new 'prime' symbol
 "@"                                     { return AT; }
 "..."                                   { return TRIPLE_DOT; }
 "."                                     { return DOT; }
@@ -82,7 +83,7 @@ ESCAPES = [abfnrtv]
 
 "("                                     { return LPAREN; }
 ")"                                     { return RPAREN; }
-
+"∣"                                     { return RESTRICTION_BAR; }
 ":"                                     { return COLON; }
 "::"                                    { return COLON_COLON; }
 "⦂"                                     { return HYPER_COLON; }
@@ -107,6 +108,7 @@ ESCAPES = [abfnrtv]
 "Cart_Prod"                             { return CART_PROD; }
 "Categorical"                           { return CATEGORICAL; }
 "changing"                              { return CHANGING; }
+"Chainable"                             { return CHAINABLE; }
 "Classification"                        { return CLASSIFICATION; }
 "Concept"                               { return CONCEPT;  }
 ("constraints"|"Constraints")           { return CONSTRAINTS; }
@@ -154,7 +156,6 @@ ESCAPES = [abfnrtv]
 "Recursive"                             { return RECURSIVE; }
 "Record"                                { return RECORD; }
 "requires"                              { return REQUIRES; }
-"s.t."                                  { return SUCH_THAT; }
 "then"                                  { return THEN; }
 "true"                                  { return TRUE; }
 "Theorem"                               { return THEOREM; }

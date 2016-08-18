@@ -119,6 +119,7 @@ public interface ResTypes {
   IElementType BY = new ResTokenType("by");
   IElementType CART_PROD = new ResTokenType("Cart_Prod");
   IElementType CATEGORICAL = new ResTokenType("Categorical");
+  IElementType CHAINABLE = new ResTokenType("Chainable");
   IElementType CHANGING = new ResTokenType("changing");
   IElementType CHAR = new ResTokenType("char");
   IElementType CLASSIFICATION = new ResTokenType("Classification");
@@ -196,10 +197,10 @@ public interface ResTypes {
   IElementType REPLACES = new ResTokenType("replaces");
   IElementType REQUIRES = new ResTokenType("requires");
   IElementType RESTORES = new ResTokenType("restores");
+  IElementType RESTRICTION_BAR = new ResTokenType("∣");
   IElementType RPAREN = new ResTokenType(")");
   IElementType SEMICOLON = new ResTokenType(";");
   IElementType STRING = new ResTokenType("string");
-  IElementType SUCH_THAT = new ResTokenType("s.t.");
   IElementType SYMBOL = new ResTokenType("symbol");
   IElementType THEN = new ResTokenType("then");
   IElementType THEOREM = new ResTokenType("Theorem");
