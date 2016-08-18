@@ -137,8 +137,26 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         if (ResPsiImplUtil.prevDot(parent)) return false;
         if (!processBlock(processor, state, true)) return false;
         if (!processModuleLevelEntities(file, processor, state, true)) return false;
+
         if (!processUsesImports(file, processor, state)) return false;
+        if (!processFacilityImports(file, processor, state)) return false;
+
         return true;
+    }
+
+    @NotNull
+    public static List<ResFile> resolveSuperModules(@NotNull ResFile file) {
+        List<ResFile> result = new ArrayList<>();
+        ResModuleDecl module = file.getEnclosedModule();
+        if (module == null) return result;
+
+        for (ResReferenceExp e : module.getModuleHeaderReferences()) {
+            PsiElement resolve = e.resolve();
+            if (resolve instanceof ResFile) {
+                result.add((ResFile)resolve);
+            }
+        }
+        return result;
     }
 
     private boolean processSelector(@NotNull ResSelectorExp parent,
@@ -244,6 +262,73 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         return true;
     }
 
+    //
+
+    /** Searches the specifications of any facility modules accessible from {@code file}. */
+    public static boolean processFacilityImports(@NotNull ResFile file,
+                                                 @NotNull ResScopeProcessor processor,
+                                                 @NotNull ResolveState state) {
+        List<ResModuleIdentifierSpec> usesItems = file.getModuleIdentifierSpecs();
+        Set<ResModuleIdentifier> v = new LinkedHashSet<>();
+        List<String> superModuleRefs = new ArrayList<>();
+        if (file.getEnclosedModule() != null) {
+            for (ResReferenceExp e : file.getEnclosedModule().getModuleHeaderReferences()) {
+                superModuleRefs.add(e.getText());
+            }
+        }
+        List<ResModuleDecl> superModuleDecls = new ArrayList<>();
+        //get ModuleIdentifiers from facilities visible through any named uses items (remember: uses items currently
+        //explicitly include header modules)
+        for (ResModuleIdentifierSpec usesItem : usesItems) {
+            PsiElement resolve = usesItem.getModuleIdentifier().resolve();
+
+            if (resolve != null && resolve instanceof ResFile) {
+
+                ResModuleDecl moduleDecl = ((ResFile) resolve).getEnclosedModule();
+                if (moduleDecl == null) continue;
+                if (superModuleRefs.contains(usesItem.getName())) {
+                    superModuleDecls.add(moduleDecl);
+                }
+                for (ResFacilityDecl f : moduleDecl.getFacilities()) {
+                    if (f.getModuleIdentifierList().size() != 2) continue;
+                    v.add(f.getModuleIdentifierList().get(0));
+                }
+            }
+        }
+
+        //resolve into the ModuleIdentifiers named in each of the super modules' useslists looking for facilities.
+        for (ResModuleDecl superModule : superModuleDecls) {
+            for (ResModuleIdentifierSpec usesItem : superModule.getModuleIdentifierSpecs()) {
+                PsiElement resolve = usesItem.getModuleIdentifier().resolve();
+                if (resolve != null && resolve instanceof ResFile) {
+
+                    ResModuleDecl moduleDecl = ((ResFile) resolve).getEnclosedModule();
+                    if (moduleDecl == null) continue;
+                    for (ResFacilityDecl f : moduleDecl.getFacilities()) {
+                        if (f.getModuleIdentifierList().size() != 2) continue;
+                        v.add(f.getModuleIdentifierList().get(0));
+                    }
+                }
+            }
+        }
+
+        //now get ModuleIdentifiers from any local facilities
+        for (ResFacilityDecl facility : file.getFacilities()) {
+            //skip this facility if for some reason it's malformed: i.e. missing the spec or impl;
+            //size 2 implies both are present and accounted for
+            if (facility.getModuleIdentifierList().size() != 2) continue;
+            v.add(facility.getModuleIdentifierList().get(0));
+        }
+
+        //resolve through their specifications
+        for (ResModuleIdentifier identifier : v) {
+            PsiElement resolve = identifier.resolve();
+            if (resolve == null || !(resolve instanceof ResFile)) continue;
+            if (!processModuleLevelEntities((ResFile) resolve, processor, state, true)) return false;
+        }
+        return true;
+    }
+
     public static boolean processUsesImports(@NotNull ResFile file,
                                              @NotNull ResScopeProcessor processor,
                                              @NotNull ResolveState state) {
@@ -255,8 +340,8 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
     //Update: Ok so at least this method is doing what I *think* it needs to be doing right now. Don't get me wrong its a godawful
     //mess, but at least its working as I expect for the moment. TODO: Clean it up, improve names etc.
     private static boolean processUsesImports(@NotNull ResModuleDecl moduleDecl,
-                                             @NotNull ResScopeProcessor processor,
-                                             @NotNull ResolveState state) {
+                                              @NotNull ResScopeProcessor processor,
+                                              @NotNull ResolveState state) {
         List<ResModuleIdentifierSpec> usesItems = moduleDecl.getModuleIdentifierSpecs();
 
         List<ResReferenceExp> headerModules = moduleDecl.getModuleHeaderReferences();

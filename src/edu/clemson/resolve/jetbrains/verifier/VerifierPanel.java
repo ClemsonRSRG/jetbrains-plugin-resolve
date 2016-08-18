@@ -27,8 +27,6 @@ import com.sun.istack.internal.NotNull;
 import edu.clemson.resolve.jetbrains.RESOLVEFileType;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.actions.GenerateVCsAction;
-import edu.clemson.resolve.proving.Antecedent;
-import edu.clemson.resolve.proving.Consequent;
 import edu.clemson.resolve.proving.absyn.PExp;
 import edu.clemson.resolve.vcgen.VC;
 
@@ -129,7 +127,7 @@ public class VerifierPanel extends JPanel {
 
             this.explanation = vc.getExplanation();
             this.goal = vc.getConsequent().toString();
-            for (PExp e : vc.getAntecedent()) {
+            for (PExp e : vc.getAntecedent().splitIntoConjuncts()) {
                 antecedentParts.add(e.toString());
             }
             this.vcNumber = vc.getNumber();
