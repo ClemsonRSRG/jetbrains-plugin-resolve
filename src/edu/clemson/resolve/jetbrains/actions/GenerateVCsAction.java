@@ -23,10 +23,11 @@ import java.util.*;
 
 public class GenerateVCsAction extends RESOLVEAction {
 
-    private static final Logger LOG = Logger.getInstance("RESOLVEGenerateVCsAction");
+    private static final Logger LOGGER = Logger.getInstance("RESOLVEGenerateVCsAction");
 
     @Override
     public void update(AnActionEvent e) {
+
         super.update(e); //checks we're dealing with a resolve file (and that's it)
 
     }
@@ -55,11 +56,11 @@ public class GenerateVCsAction extends RESOLVEAction {
     public void actionPerformed(AnActionEvent e) {
         Project project = e.getData(PlatformDataKeys.PROJECT);
         if (project == null) {
-            LOG.error("actionPerformed (genVCs): no project for " + e);
+            LOGGER.error("actionPerformed (genVCs): no project for " + e);
             return; // whoa!
         }
         VirtualFile resolveFile = getRESOLVEFileFromEvent(e);
-        LOG.info("generate VCs actionPerformed " + (resolveFile == null ? "NONE" : resolveFile));
+        LOGGER.info("generate VCs actionPerformed " + (resolveFile == null ? "NONE" : resolveFile));
         if (resolveFile == null) return;
         String title = "RESOLVE VC Generation";
         boolean canBeCancelled = true;

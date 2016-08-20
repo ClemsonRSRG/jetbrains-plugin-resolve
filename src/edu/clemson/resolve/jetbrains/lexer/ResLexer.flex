@@ -78,6 +78,8 @@ ESCAPES = [abfnrtv]
 "}}"                                    { return DBL_RBRACE; }
 
 "`"                                     { return BACKTICK; }
+"′"                                     { return PRIME; }
+
 //"["                                     { return LBRACK; }
 //"]"                                     { return RBRACK; }
 
