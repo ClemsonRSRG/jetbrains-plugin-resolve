@@ -1,5 +1,6 @@
 package edu.clemson.resolve.jetbrains.actions;
 
+import com.intellij.ide.util.treeView.AbstractTreeBuilder;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
@@ -305,6 +306,7 @@ public class ProveAction extends RESOLVEAction {
 
         @Override
         public void update(AnActionEvent e) {
+            //e.getPresentation()
             if (pl.vcIsProved.containsKey(vcNum) && pl.vcIsProved.get(vcNum)) {
                 e.getPresentation().setIcon(RESOLVEIcons.PRECIS_EXT);
             }
@@ -312,8 +314,10 @@ public class ProveAction extends RESOLVEAction {
                 e.getPresentation().setIcon(RESOLVEIcons.CONCEPT_EXT);
             }
         }
+
         @Override
         public void actionPerformed(AnActionEvent e) {
+            AbstractTreeBuilder x;
             //TODO
             //controller.getVerifierWindow().show(null);  //open the tool(verifier)window
             //VerifierPanel verifierPanel = controller.getVerifierPanel();
