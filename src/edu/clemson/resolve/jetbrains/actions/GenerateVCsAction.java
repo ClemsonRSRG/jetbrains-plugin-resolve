@@ -147,7 +147,6 @@ public class GenerateVCsAction extends RESOLVEAction {
 
                     @Nullable
                     public ActionGroup getPopupMenuActions() {
-                        //TODO: Find a nicer looking actiongroup to use.
                         DefaultActionGroup g = new DefaultActionGroup();
                         g.addAll(actionsPerVC);
                         return g;

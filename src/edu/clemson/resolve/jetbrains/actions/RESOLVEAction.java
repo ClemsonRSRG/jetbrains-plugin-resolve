@@ -36,6 +36,7 @@ abstract class RESOLVEAction extends AnAction implements DumbAware {
         // only enable action if we're looking at RESOLVE file in a RESOLVE module
         e.getPresentation().setEnabled(true);
         e.getPresentation().setVisible(true);
+
     }
 
     VirtualFile getRESOLVEFileFromEvent(AnActionEvent e) {
