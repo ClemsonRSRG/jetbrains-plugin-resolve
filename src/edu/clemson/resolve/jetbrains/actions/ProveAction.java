@@ -15,6 +15,7 @@ import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.containers.*;
 import edu.clemson.resolve.RESOLVECompiler;
@@ -37,7 +38,7 @@ import java.util.*;
 
 public class ProveAction extends RESOLVEAction {
     private boolean proved = false;
-    private static DataKey<Boolean> key = DataKey.create("proved");
+    private static Key<Boolean> provedKey = Key.create("proved");
 
    /* @Override
     public void update(AnActionEvent e) {
@@ -89,6 +90,7 @@ public class ProveAction extends RESOLVEAction {
     @Override
     public void update(AnActionEvent e) {
 
+        //e.getPresentation()
         super.update(e); //checks we're dealing with a resolve file (and that's it)
 
     }
@@ -115,6 +117,7 @@ public class ProveAction extends RESOLVEAction {
     //manipulates the PsiViewer panel..
 
 
+    //
     @Override
     public void actionPerformed(AnActionEvent e) {
         Project project = e.getData(PlatformDataKeys.PROJECT);
@@ -139,14 +142,20 @@ public class ProveAction extends RESOLVEAction {
                         title);
 
 
-        boolean successful = false;
+        MyProverListener pl = new MyProverListener();
+
+        VCOutputFile vco = generateVCs(resolveFile, editor, project);
+        //give each action an instance of the prover listener and make Update() print the result as it comes back produce
+        if (vco == null) return;
+        presentVCs(vco, editor, project, pl);
+
+        //runProver
         List<String> args = new ArrayList<String>();
         args.add(resolveFile.getPath());
         args.add("-lib");
         args.add(RunRESOLVEOnLanguageFile.getContentRoot(project, resolveFile).getPath());
         args.add("-prove");
         RESOLVECompiler compiler = new RESOLVECompiler(args.toArray(new String[args.size()]));
-        MyProverListener pl = new MyProverListener();
         compiler.addProverListener(pl);
 
         ProgressManager.getInstance().run(new Task.Backgroundable(project, "Description") {
@@ -157,17 +166,36 @@ public class ProveAction extends RESOLVEAction {
                 // to access Project use myProject field
             }
         });
-        int i = 0;
+        int i;
+        i=0;
+    }
 
-        while (i < 200) {
-            System.out.println("number of proofs recieved: " + pl.vcIsProved.size());
-            i++;
+    @Nullable
+    private VCOutputFile generateVCs(VirtualFile resolveFile, Editor editor, Project project) {
+        boolean forceGeneration = true; // from action, they really mean it
+        RunRESOLVEOnLanguageFile gen =
+                new RunRESOLVEOnLanguageFile(resolveFile,
+                        project,
+                        "gen vcs");
+
+        Map<String, String> argMap = new LinkedHashMap<>();
+        argMap.put("-lib", RunRESOLVEOnLanguageFile.getContentRoot(project, resolveFile).getPath());
+        argMap.put("-vcs", "");
+        gen.addArgs(argMap);
+        boolean successful = false;
+        try {
+            successful = ProgressManager.getInstance().run(gen); //, "Generating", canBeCancelled, e.getData(PlatformDataKeys.PROJECT));
+        } catch (Exception e1) {
         }
-       /*
         if (successful && !editor.isDisposed()) {
-            MarkupModel markup = editor.getMarkupModel();
-            processResult(gen.getVCOutput());
+            return gen.getVCOutput();
+        }
+        return null;
+    }
 
+    private void presentVCs(VCOutputFile vco, Editor editor, Project project, MyProverListener listener) {
+        if (!editor.isDisposed()) {
+            MarkupModel markup = editor.getMarkupModel();
             RESOLVEPluginController controller = RESOLVEPluginController.getInstance(project);
 
             //TODO, if we do runProverAction(), instead of passing 'null' for this Runnable object that's
@@ -176,17 +204,16 @@ public class ProveAction extends RESOLVEAction {
             //and see how they do that processing
             markup.removeAllHighlighters();
 
-            VCOutputFile vcOutput = gen.getVCOutput();
-
             //A mapping from [line number] -> [vc_1, .., vc_j]
-            Map<Integer, List<VC>> byLine = vcOutput.getVCsGroupedByLineNumber();
+            Map<Integer, List<VC>> byLine = vco.getVCsGroupedByLineNumber();
             List<RangeHighlighter> vcRelatedHighlighters = new ArrayList<>();
 
-            for (Map.Entry<Integer, List<VC>> vcsByLine : vcOutput.getVCsGroupedByLineNumber().entrySet()) {
+            for (Map.Entry<Integer, List<VC>> vcsByLine : byLine.entrySet()) {
                 List<AnAction> actionsPerVC = new ArrayList<>();
                 //create clickable actions for each vc
                 for (VC vc : vcsByLine.getValue()) {
-                    actionsPerVC.add(new AnAction("VC " + vc.getNumber()+ ": " + vc.getExplanation()) {
+                    actionsPerVC.add(new ProverVCAction(listener, vc.getNumber() + "", vc.getExplanation()));
+                    /*actionsPerVC.add(new AnAction("VC " + vc.getNumber()+ ": " + vc.getExplanation()) {
 
                         @Override
                         public void update(AnActionEvent e) {
@@ -203,7 +230,7 @@ public class ProveAction extends RESOLVEAction {
                             verifierPanel.setActiveVcPanel(new VerifierPanel.VCPanelMock(project, vc));
                         }
 
-                    });
+                    });*/
                 }
 
                 RangeHighlighter highlighter =
@@ -233,6 +260,7 @@ public class ProveAction extends RESOLVEAction {
                     @Nullable
                     public ActionGroup getPopupMenuActions() {
                         DefaultActionGroup g = new DefaultActionGroup();
+
                         g.addAll(actionsPerVC);
                         return g;
                     }
@@ -262,8 +290,41 @@ public class ProveAction extends RESOLVEAction {
                     verifierPanel.revertToBaseGUI();
                 }
             });
-        }*/
+        }
     }
+
+    static class ProverVCAction extends AnAction {
+        private final MyProverListener pl;
+        private final String vcNum;
+
+        ProverVCAction(MyProverListener l, String vcNum, String explanation) {
+            super("VC #" + vcNum + " : " + explanation);
+            this.pl = l;
+            this.vcNum = vcNum;
+        }
+
+        @Override
+        public void update(AnActionEvent e) {
+            if (pl.vcIsProved.containsKey(vcNum) && pl.vcIsProved.get(vcNum)) {
+                e.getPresentation().setIcon(RESOLVEIcons.PRECIS_EXT);
+            }
+            else {
+                e.getPresentation().setIcon(RESOLVEIcons.CONCEPT_EXT);
+            }
+        }
+        @Override
+        public void actionPerformed(AnActionEvent e) {
+            //TODO
+            //controller.getVerifierWindow().show(null);  //open the tool(verifier)window
+            //VerifierPanel verifierPanel = controller.getVerifierPanel();
+
+            //I performed an action, let's remember to clean up after ourselves before we go and update
+            //the vc panel
+            //verifierPanel.setActiveVcPanel(new VerifierPanel.VCPanelMock(project, vc));
+        }
+    }
+
+
     public static class MyProverListener implements ProverListener {
         public final Map<String, Boolean> vcIsProved = new com.intellij.util.containers.HashMap<>();
         @Override
