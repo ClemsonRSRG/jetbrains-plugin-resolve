@@ -37,9 +37,18 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.util.*;
 
+//Write one similar to JUnit where all vcs show up. Could even be hierarchy where they show up in a hierarchy under the
+//assertive block that generated them.
 public class ProveAction extends RESOLVEAction {
 
     private static final Logger LOGGER = Logger.getInstance("RESOLVEGenerateVCsAction");
+    private RangeHighlighter highlighter = null;
+    private final List<RangeHighlighter> highlighters = new ArrayList<>();
+
+    @Override
+    public void update(AnActionEvent e) {
+
+    }
 
     @Override
     public void actionPerformed(AnActionEvent e) {
@@ -78,7 +87,7 @@ public class ProveAction extends RESOLVEAction {
         RESOLVECompiler compiler = new RESOLVECompiler(args.toArray(new String[args.size()]));
         compiler.addProverListener(pl);
 
-        ProgressManager.getInstance().run(new Task.Backgroundable(project, "Description") {
+        ProgressManager.getInstance().run(new Task.Backgroundable(project, "Proving") {
             @Override
             public void run(@NotNull final ProgressIndicator progressIndicator) {
                 compiler.processCommandLineTargets();
@@ -111,6 +120,7 @@ public class ProveAction extends RESOLVEAction {
 
     private void presentVCs(VCOutputFile vco, Editor editor, Project project, MyProverListener listener) {
         if (!editor.isDisposed()) {
+            highlighters.clear();
             MarkupModel markup = editor.getMarkupModel();
             RESOLVEPluginController controller = RESOLVEPluginController.getInstance(project);
             markup.removeAllHighlighters();
@@ -126,7 +136,7 @@ public class ProveAction extends RESOLVEAction {
                     actionsPerVC.add(new ProverVCAction(listener, vc.getNumber() + "", vc.getExplanation()));
                 }
 
-                RangeHighlighter highlighter =
+                highlighter =
                         markup.addLineHighlighter(vcsByLine.getKey() - 1, HighlighterLayer.ELEMENT_UNDER_CARET, null);
                 highlighter.setGutterIconRenderer(new GutterIconRenderer() {
                     @NotNull
@@ -167,6 +177,7 @@ public class ProveAction extends RESOLVEAction {
 
                 });
                 vcRelatedHighlighters.add(highlighter);
+                highlighters.add(highlighter);
                 //actionsPerVC.clear();
             }
 
@@ -191,7 +202,7 @@ public class ProveAction extends RESOLVEAction {
     static class ProverVCAction extends AnAction {
         private final MyProverListener pl;
         private final String vcNum;
-
+        public boolean isProved = false;
         ProverVCAction(MyProverListener l, String vcNum, String explanation) {
             super("VC #" + vcNum + " : " + explanation);
             this.pl = l;
@@ -203,6 +214,7 @@ public class ProveAction extends RESOLVEAction {
             //e.getPresentation()
             if (pl.vcIsProved.containsKey(vcNum) && pl.vcIsProved.get(vcNum)) {
                 e.getPresentation().setIcon(RESOLVEIcons.PROVED);
+                isProved = true;
             }
             else {
                 e.getPresentation().setIcon(RESOLVEIcons.NOT_PROVED);
