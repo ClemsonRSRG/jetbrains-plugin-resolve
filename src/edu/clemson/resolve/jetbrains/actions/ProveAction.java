@@ -38,93 +38,15 @@ import javax.swing.*;
 import java.util.*;
 
 public class ProveAction extends RESOLVEAction {
-    private boolean proved = false;
-    private static Key<Boolean> provedKey = Key.create("proved");
-
-   /* @Override
-    public void update(AnActionEvent e) {
-        if (proved) {
-            e.getPresentation().setIcon(RESOLVEIcons.CONCEPT_EXT);
-        }
-        else {
-            e.getPresentation().setIcon(RESOLVEIcons.PRECIS);
-        }
-    }
-
-    @Override
-    public void actionPerformed(AnActionEvent e) {
-        /*int i = 0;
-        while (i != 5000000) {
-            i++;
-        }
-        proved = true;
-        Project project = e.getData(PlatformDataKeys.PROJECT);
-        if (project == null) {
-            LOGGER.error("actionPerformed (genVCs): no project for " + e);
-            return; // whoa!
-        }
-        VirtualFile resolveFile = getRESOLVEFileFromEvent(e);
-        LOGGER.info("generate VCs actionPerformed " + (resolveFile == null ? "NONE" : resolveFile));
-        if (resolveFile == null) return;
-        String title = "RESOLVE VC Generation";
-        boolean canBeCancelled = true;
-
-        commitDoc(project, resolveFile);
-        Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
-        if (editor == null) return;
-
-        boolean forceGeneration = true; // from action, they really mean it
-        Map<String, String> argMap = new LinkedHashMap<>();
-        ProgressManager.getInstance().run(new Task.Backgroundable(project, "Description") {
-            @Override
-            public void run(@NotNull final ProgressIndicator progressIndicator) {
-
-
-                // put your code here
-                // to access Project use myProject field
-            }
-        });
-    }*/
 
     private static final Logger LOGGER = Logger.getInstance("RESOLVEGenerateVCsAction");
 
     @Override
-    public void update(AnActionEvent e) {
-
-        //e.getPresentation()
-        super.update(e); //checks we're dealing with a resolve file (and that's it)
-
-    }
-    //IDEAS:
-    // o Have a place to view derivations in a cool way.. (maybe have completion for these fragments of assertive code,
-    //          navigational features?, etc
-    // o Have a meta-language for crafting assertive code blocks and reduce them in real time showing the steps
-    // o Have where users can browse/peruse the rules? hmm.
-    // o Here's another interesting idea:
-    //      make VCGeneration parameterizable (configurable!)
-    //          --have option for generating parsimonious vcs
-    //          --have option for generating non-parsimonious vcs
-    // o Show HOW rules are applied -- and what happens when the parsimonious step tosses out gives. You can use one of the
-    //      interesting set visualization techniques discussed in 804 (consult Levine about this)
-
-    //for now though, lets just try to do what the web interface does..
-
-    //classes of interest:
-    //TextAttributes
-    //MarkupModel <-- probably the most likely candidate for a place to start.
-    //LineMarkerProvider
-
-    //PluginController (antlr v4 + Psi viewer -- this one could be useful since clicking the psi node in the editor
-    //manipulates the PsiViewer panel..
-
-
-    //
-    @Override
     public void actionPerformed(AnActionEvent e) {
         Project project = e.getData(PlatformDataKeys.PROJECT);
         if (project == null) {
             LOGGER.error("actionPerformed (genVCs): no project for " + e);
-            return; // whoa!
+            return;
         }
         VirtualFile resolveFile = getRESOLVEFileFromEvent(e);
         LOGGER.info("prove actionPerformed " + (resolveFile == null ? "NONE" : resolveFile));
@@ -136,15 +58,12 @@ public class ProveAction extends RESOLVEAction {
         Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
         if (editor == null) return;
 
-        boolean forceGeneration = true; // from action, they really mean it
         RunRESOLVEOnLanguageFile gen =
                 new RunRESOLVEOnLanguageFile(resolveFile,
                         project,
                         title);
 
-
         MyProverListener pl = new MyProverListener();
-
         VCOutputFile vco = generateVCs(resolveFile, editor, project);
         //give each action an instance of the prover listener and make Update() print the result as it comes back produce
         if (vco == null) return;
@@ -163,12 +82,8 @@ public class ProveAction extends RESOLVEAction {
             @Override
             public void run(@NotNull final ProgressIndicator progressIndicator) {
                 compiler.processCommandLineTargets();
-                // put your code here
-                // to access Project use myProject field
             }
         });
-        int i;
-        i=0;
     }
 
     @Nullable
@@ -198,11 +113,6 @@ public class ProveAction extends RESOLVEAction {
         if (!editor.isDisposed()) {
             MarkupModel markup = editor.getMarkupModel();
             RESOLVEPluginController controller = RESOLVEPluginController.getInstance(project);
-
-            //TODO, if we do runProverAction(), instead of passing 'null' for this Runnable object that's
-            //expected, we'll pass a process for proving the vcs. For now though, since we're just showing
-            //look at the logika plugin (in the lower right hand corner of the ide)
-            //and see how they do that processing
             markup.removeAllHighlighters();
 
             //A mapping from [line number] -> [vc_1, .., vc_j]
@@ -214,24 +124,6 @@ public class ProveAction extends RESOLVEAction {
                 //create clickable actions for each vc
                 for (VC vc : vcsByLine.getValue()) {
                     actionsPerVC.add(new ProverVCAction(listener, vc.getNumber() + "", vc.getExplanation()));
-                    /*actionsPerVC.add(new AnAction("VC " + vc.getNumber()+ ": " + vc.getExplanation()) {
-
-                        @Override
-                        public void update(AnActionEvent e) {
-
-                        }
-
-                        @Override
-                        public void actionPerformed(AnActionEvent e) {
-                            controller.getVerifierWindow().show(null);  //open the tool(verifier)window
-                            VerifierPanel verifierPanel = controller.getVerifierPanel();
-
-                            //I performed an action, let's remember to clean up after ourselves before we go and update
-                            //the vc panel
-                            verifierPanel.setActiveVcPanel(new VerifierPanel.VCPanelMock(project, vc));
-                        }
-
-                    });*/
                 }
 
                 RangeHighlighter highlighter =
@@ -308,10 +200,10 @@ public class ProveAction extends RESOLVEAction {
         public void update(AnActionEvent e) {
             //e.getPresentation()
             if (pl.vcIsProved.containsKey(vcNum) && pl.vcIsProved.get(vcNum)) {
-                e.getPresentation().setIcon(RESOLVEIcons.PRECIS_EXT);
+                e.getPresentation().setIcon(RESOLVEIcons.PROVED);
             }
             else {
-                e.getPresentation().setIcon(RESOLVEIcons.CONCEPT_EXT);
+                e.getPresentation().setIcon(RESOLVEIcons.NOT_PROVED);
             }
         }
 

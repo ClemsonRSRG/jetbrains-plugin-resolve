@@ -104,15 +104,15 @@
                 text="RESOLVE File" description="Create a new RESOLVE file">
             <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
         </action>
-        <action id="resolve.GenVCs" class="edu.clemson.resolve.jetbrains.actions.GenerateVCsAction"
+        <!--<action id="resolve.GenVCs" class="edu.clemson.resolve.jetbrains.actions.GenerateVCsAction"
                                  text="RESOLVE Generate VCs">
         <keyboard-shortcut keymap="$default" first-keystroke="control shift H"/>
         <add-to-group group-id="ToolsMenu" anchor="before" relative-to-action="com.intellij.tools.ExternalToolsGroup"/>
         <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
-    </action>
+    </action>-->
         <action id="resolve.ProveVCs" class="edu.clemson.resolve.jetbrains.actions.ProveAction"
-                text="RESOLVE Prove VCs">
+                text="RESOLVE Prove Program">
             <keyboard-shortcut keymap="$default" first-keystroke="control shift P"/>
             <add-to-group group-id="ToolsMenu" anchor="before" relative-to-action="com.intellij.tools.ExternalToolsGroup"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>

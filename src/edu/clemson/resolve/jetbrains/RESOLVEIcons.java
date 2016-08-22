@@ -43,6 +43,9 @@ public interface RESOLVEIcons {
     public static final Icon FUNCTION_DECL = IconLoader.getIcon("/edu/clemson/resolve/icons/function.png");
     public static final Icon FUNCTION_IMPL = IconLoader.getIcon("/edu/clemson/resolve/icons/function_impl.png");
 
+    public static final Icon PROVED = IconLoader.getIcon("/edu/clemson/resolve/icons/proved.png");
+    public static final Icon NOT_PROVED = IconLoader.getIcon("/edu/clemson/resolve/icons/not_proved.png");
+
     /**
      * Places a small icon (mark) in the lower right hand corner of the {@code base} icon.
      * Used from go lang plugin.
