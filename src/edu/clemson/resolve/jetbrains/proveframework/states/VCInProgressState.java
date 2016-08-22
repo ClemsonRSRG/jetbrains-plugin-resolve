@@ -1,20 +1,16 @@
 package edu.clemson.resolve.jetbrains.proveframework.states;
 
-public class NotRunState extends AbstractState {
+/** Indicates that a vc is in the process of being proven (or at least is in line) */
+public class VCInProgressState extends AbstractState {
 
-    private static final NotRunState INSTANCE = new NotRunState();
+    public static final VCInProgressState TEST = new VCInProgressState();
 
-    private NotRunState() {
-    }
-
-    /** This state is common for all instances and doesn't contains instance-specific information */
-    public static NotRunState getInstance() {
-        return INSTANCE;
+    protected VCInProgressState() {
     }
 
     @Override
     public boolean isInProgress() {
-        return false;
+        return true;
     }
 
     @Override
@@ -24,7 +20,7 @@ public class NotRunState extends AbstractState {
 
     @Override
     public boolean wasLaunched() {
-        return false;
+        return true;
     }
 
     @Override

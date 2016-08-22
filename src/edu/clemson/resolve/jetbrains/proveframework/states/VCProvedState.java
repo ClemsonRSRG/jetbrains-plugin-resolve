@@ -1,15 +1,10 @@
 package edu.clemson.resolve.jetbrains.proveframework.states;
 
-public class NotRunState extends AbstractState {
+public class VCProvedState extends AbstractState {
 
-    private static final NotRunState INSTANCE = new NotRunState();
+    public static final VCProvedState INSTANCE = new VCProvedState();
 
-    private NotRunState() {
-    }
-
-    /** This state is common for all instances and doesn't contains instance-specific information */
-    public static NotRunState getInstance() {
-        return INSTANCE;
+    private VCProvedState() {
     }
 
     @Override
@@ -24,12 +19,12 @@ public class NotRunState extends AbstractState {
 
     @Override
     public boolean wasLaunched() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isFinal() {
-        return false;
+        return true;
     }
 
     @Override

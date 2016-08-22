@@ -1,17 +1,9 @@
 package edu.clemson.resolve.jetbrains.proveframework.states;
 
-public class NotRunState extends AbstractState {
-
-    private static final NotRunState INSTANCE = new NotRunState();
-
-    private NotRunState() {
-    }
-
-    /** This state is common for all instances and doesn't contains instance-specific information */
-    public static NotRunState getInstance() {
-        return INSTANCE;
-    }
-
+/**
+ * Created by daniel on 8/22/16.
+ */
+public class VCNotProvedState extends AbstractState {
     @Override
     public boolean isInProgress() {
         return false;
