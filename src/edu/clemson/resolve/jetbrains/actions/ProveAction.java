@@ -131,6 +131,8 @@ public class ProveAction extends RESOLVEAction {
                 highlighter.setGutterIconRenderer(new GutterIconRenderer() {
                     @NotNull
                     @Override
+                    //clearly something will need to change here if I want this gutter icon animating somehow;
+                    //but haven't yet found any good examples of other projects doing this for *gutter icons*...
                     public Icon getIcon() {
                         return RESOLVEIcons.VC;
                     }
