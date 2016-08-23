@@ -1,6 +1,5 @@
 package edu.clemson.resolve.jetbrains.actions;
 
-import com.intellij.execution.testframework.sm.SMTestRunnerConnectionUtil;
 import com.intellij.ide.util.treeView.AbstractTreeBuilder;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.diagnostic.Logger;
@@ -11,23 +10,17 @@ import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.openapi.editor.markup.HighlighterLayer;
 import com.intellij.openapi.editor.markup.MarkupModel;
 import com.intellij.openapi.editor.markup.RangeHighlighter;
-import com.intellij.openapi.externalSystem.action.OpenTasksActivationManagerAction;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.ui.treeStructure.Tree;
-import com.intellij.util.containers.*;
 import edu.clemson.resolve.RESOLVECompiler;
-import edu.clemson.resolve.compiler.AnnotatedModule;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
-import edu.clemson.resolve.jetbrains.annotation.AnnotatorCompilerListener;
-import edu.clemson.resolve.jetbrains.annotation.RESOLVEExternalAnnotator;
-import edu.clemson.resolve.jetbrains.verifier.VerifierPanel;
+import edu.clemson.resolve.jetbrains.verifier2.SidebarSection;
+import edu.clemson.resolve.jetbrains.verifier2.VerifierPanel2;
 import edu.clemson.resolve.proving.Metrics;
 import edu.clemson.resolve.proving.PerVCProverModel;
 import edu.clemson.resolve.proving.ProverListener;
@@ -78,8 +71,15 @@ public class ProveAction extends RESOLVEAction {
         VCOutputFile vco = generateVCs(resolveFile, editor, project);
         //give each action an instance of the prover listener and make Update() print the result as it comes back produce
         if (vco == null) return;
-        presentVCs(vco, editor, project, pl);
 
+        RESOLVEPluginController controller = RESOLVEPluginController.getInstance(project);
+        VerifierPanel2 verifierPanel = controller.getVerifierPanel();
+        verifierPanel.createVerifierView();
+        for (VC vc : vco.getFinalVCs()) {
+            verifierPanel.addVCTab(vc);
+        }
+        addVCGutterIcons(vco, editor, project, pl);
+        controller.getVerifierWindow().show(null);
         //runProver
         List<String> args = new ArrayList<String>();
         args.add(resolveFile.getPath());
@@ -95,11 +95,32 @@ public class ProveAction extends RESOLVEAction {
                 compiler.processCommandLineTargets();
             }
         });
+        /*ApplicationManager.getApplication().invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                while (pl.vcIsProved.size() != 5) {
+                    verifierPanel.removeAll();
+                    // if (pl.)
+                    int i;
+                    i=0;
+                }
+            }
+        });*/
 
-        RESOLVEPluginController controller = RESOLVEPluginController.getInstance(project);
-        VerifierPanel verifierPanel = controller.getVerifierPanel();
-
-
+        ProgressManager.getInstance().run(new Task.Backgroundable(project, "Hmmm") {
+            @Override
+            public void run(@NotNull final ProgressIndicator progressIndicator) {
+                while (pl.vcIsProved.size() != vco.getFinalVCs().size()) {
+                    for (VC vc : vco.getFinalVCs()) {
+                        if (pl.vcIsProved.containsKey(vc.getName())) {
+                            SidebarSection x = verifierPanel.activeVCSideBar.sections.get(vc.getName());
+                            Icon i = pl.vcIsProved.get(vc.getName()) ? RESOLVEIcons.PROVED : RESOLVEIcons.NOT_PROVED;
+                            x.label.setIcon(i);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     @Nullable
@@ -125,7 +146,7 @@ public class ProveAction extends RESOLVEAction {
         return null;
     }
 
-    private void presentVCs(VCOutputFile vco, Editor editor, Project project, MyProverListener listener) {
+    private void addVCGutterIcons(VCOutputFile vco, Editor editor, Project project, MyProverListener listener) {
         if (!editor.isDisposed()) {
             highlighters.clear();
             MarkupModel markup = editor.getMarkupModel();
@@ -198,7 +219,7 @@ public class ProveAction extends RESOLVEAction {
                     for (RangeHighlighter h : vcRelatedHighlighters) {
                         markup.removeHighlighter(h);
                     }
-                    VerifierPanel verifierPanel = controller.getVerifierPanel();
+                    VerifierPanel2 verifierPanel = controller.getVerifierPanel();
                     controller.getVerifierWindow().hide(null);
                     verifierPanel.revertToBaseGUI();
                 }

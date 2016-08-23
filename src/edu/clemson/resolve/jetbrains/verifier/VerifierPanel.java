@@ -26,7 +26,6 @@ import com.intellij.util.ui.UIUtil;
 import com.sun.istack.internal.NotNull;
 import edu.clemson.resolve.jetbrains.RESOLVEFileType;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
-import edu.clemson.resolve.jetbrains.actions.GenerateVCsAction;
 import edu.clemson.resolve.proving.absyn.PExp;
 import edu.clemson.resolve.vcgen.VC;
 

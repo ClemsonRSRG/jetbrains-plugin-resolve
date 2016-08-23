@@ -20,6 +20,7 @@ import com.intellij.ui.content.ContentFactory;
 import edu.clemson.resolve.jetbrains.verifier.SimpleVerificationEditorPreview;
 import edu.clemson.resolve.jetbrains.verifier.VerificationEditorPreview;
 import edu.clemson.resolve.jetbrains.verifier.VerifierPanel;
+import edu.clemson.resolve.jetbrains.verifier2.VerifierPanel2;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -45,7 +46,7 @@ public class RESOLVEPluginController implements ProjectComponent {
     public ToolWindow consoleWindow;
 
     public ToolWindow verifierWindow;
-    public VerifierPanel verifierPanel;
+    public VerifierPanel2 verifierPanel;
 
     public RESOLVEPluginController(@NotNull Project project) {
         this.project = project;
@@ -80,7 +81,7 @@ public class RESOLVEPluginController implements ProjectComponent {
         LOG.info("createToolWindows " + project.getName());
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
 
-        verifierPanel = new VerifierPanel(project);
+        verifierPanel = new VerifierPanel2(project);
 
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content content = contentFactory.createContent(verifierPanel, "", false);
@@ -131,7 +132,7 @@ public class RESOLVEPluginController implements ProjectComponent {
         return verifierWindow;
     }
 
-    public VerifierPanel getVerifierPanel() {
+    public VerifierPanel2 getVerifierPanel() {
         return verifierPanel;
     }
 

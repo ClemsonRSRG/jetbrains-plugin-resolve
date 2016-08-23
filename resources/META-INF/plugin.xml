@@ -1,6 +1,6 @@
 <idea-plugin version="2">
     <id>edu.clemson.resolve.jetbrains</id>
-    <name>RESOLVE langauge plugin</name>
+    <name>RESOLVE language plugin</name>
     <version>0.1.2a</version>
     <vendor email="dtw.welch@gmail.com" url="https://github.com/Welchd1/jetbrains-plugin-resolve">RESOLVE Project</vendor>
 

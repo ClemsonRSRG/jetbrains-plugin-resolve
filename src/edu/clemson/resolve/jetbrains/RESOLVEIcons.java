@@ -45,6 +45,7 @@ public interface RESOLVEIcons {
 
     public static final Icon PROVED = IconLoader.getIcon("/edu/clemson/resolve/icons/proved.png");
     public static final Icon NOT_PROVED = IconLoader.getIcon("/edu/clemson/resolve/icons/not_proved.png");
+    public static final Icon PROCESSING = IconLoader.getIcon("/edu/clemson/resolve/icons/processing.png");
 
     /**
      * Places a small icon (mark) in the lower right hand corner of the {@code base} icon.

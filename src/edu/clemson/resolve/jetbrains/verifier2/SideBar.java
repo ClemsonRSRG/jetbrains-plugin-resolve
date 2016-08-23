@@ -4,6 +4,10 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -17,7 +21,7 @@ public class SideBar extends JPanel {
 	
 	/** the currently expanded section */
 	private SidebarSection currentSection = null;
-
+	public final Map<String, SidebarSection> sections = new HashMap<>();
 	SideBarMode thisMode;
 
 	boolean showArrow;
@@ -57,6 +61,7 @@ public class SideBar extends JPanel {
 	
     public void addSection(SidebarSection newSection, boolean collapse) {
  		add(newSection);
+		sections.put(newSection.name, newSection);
  		if(collapse){
              newSection.collapse(false);
          }else{

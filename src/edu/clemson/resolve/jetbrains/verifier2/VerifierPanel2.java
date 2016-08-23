@@ -3,7 +3,6 @@ package edu.clemson.resolve.jetbrains.verifier2;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.keymap.KeymapUtil;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Splitter;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBPanel;
@@ -23,15 +22,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** Pairs a vc display panel with (optional) derivation info panel */
+
+//Corresponds to SliderTester...
+
+    //TODO: This seems redundant now. This just needs to be "Sidebar" though perhaps think carefully .. it may still
+    //have a place if we incorporate a toolbar. In which case, this will encapsulate a toolbar plus the verifier accordion pane.
 public class VerifierPanel2 extends JPanel {
 
+    public List<SidebarSection> activeSections = new ArrayList<>();
     public static final Logger LOG = Logger.getInstance("RESOLVE VerifierPanel");
     private VCPanelMock activeVcPanel;
+
+    public SideBar activeVCSideBar = null;
     private final Project project;
 
     public VerifierPanel2(Project project) {
         this.project = project;
-        //revalidate();
         createBaseGUI();
     }
 
@@ -68,6 +74,13 @@ public class VerifierPanel2 extends JPanel {
         this.add(emptyLabel);
     }
 
+    //prep VerifierPanel2 for showing vc tabs, toolbars, etc.
+    public void createVerifierView() {
+        this.removeAll();
+        activeVCSideBar = new SideBar(SideBar.SideBarMode.TOP_LEVEL, true, 300, true);
+        add(activeVCSideBar);
+    }
+
     public void revertToBaseGUI() {
         if (activeVcPanel != null && activeVcPanel.goalPreview != null) {
             //we're going back to the default screen, so if there were active editors (before say the user messed
@@ -76,8 +89,16 @@ public class VerifierPanel2 extends JPanel {
         }
         this.removeAll();
         this.activeVcPanel = null;
+        this.activeVCSideBar = null;
         createBaseGUI();
         revalidate();
+    }
+
+    public void addVCTab(VC x) {
+        SidebarSection ss2 = new SidebarSection(activeVCSideBar, x.getName(), "VC " + x.getName(),
+                getMockContent4(), RESOLVEIcons.PROCESSING);
+        activeVCSideBar.addSection(ss2);
+        add(activeVCSideBar);
     }
 
     public void setActiveVcPanel(VCPanelMock vcp) {
@@ -93,6 +114,19 @@ public class VerifierPanel2 extends JPanel {
         splitPane.setSecondComponent(new AssertiveCodeBrowserMock().getComponent());
         this.add(splitPane);*/
         revalidate();
+    }
+
+    private static JList<String> getMockContent4() {
+        DefaultListModel<String> model = new DefaultListModel<String>();
+        model.add(0, "Bill Gates");
+        model.add(1, "Steven Spielberg");
+        model.add(2, "Donald Trump");
+        model.add(3, "Steve Jobs");
+
+        JList<String> list = new JList<String>();
+
+        list.setModel(model);
+        return list;
     }
 
     public static class VCPanelMock  {
