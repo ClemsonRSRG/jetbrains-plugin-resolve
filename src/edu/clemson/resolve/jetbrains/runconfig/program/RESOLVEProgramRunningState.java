@@ -35,7 +35,9 @@ public class RESOLVEProgramRunningState extends CommandLineState {
         //addConsoleFilters(new RESOLVEConsoleFilter(
         //        configuration.getProject(), module, configuration.getWorkingDirectoryUrl()));
     }
+    public static void  main(String[] args) {
 
+    }
     @NotNull
     public RESOLVEProgramRunConfiguration getConfiguration() {
         return configuration;

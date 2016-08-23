@@ -1,5 +1,6 @@
 package edu.clemson.resolve.jetbrains.actions;
 
+import com.intellij.execution.testframework.sm.SMTestRunnerConnectionUtil;
 import com.intellij.ide.util.treeView.AbstractTreeBuilder;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.diagnostic.Logger;
@@ -18,6 +19,7 @@ import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.containers.*;
 import edu.clemson.resolve.RESOLVECompiler;
 import edu.clemson.resolve.compiler.AnnotatedModule;
@@ -93,6 +95,11 @@ public class ProveAction extends RESOLVEAction {
                 compiler.processCommandLineTargets();
             }
         });
+
+        RESOLVEPluginController controller = RESOLVEPluginController.getInstance(project);
+        VerifierPanel verifierPanel = controller.getVerifierPanel();
+
+
     }
 
     @Nullable
@@ -102,7 +109,7 @@ public class ProveAction extends RESOLVEAction {
                 new RunRESOLVEOnLanguageFile(resolveFile,
                         project,
                         "gen vcs");
-
+        //SMTestRunnerConnectionUtil
         Map<String, String> argMap = new LinkedHashMap<>();
         argMap.put("-lib", RunRESOLVEOnLanguageFile.getContentRoot(project, resolveFile).getPath());
         argMap.put("-vcs", "");

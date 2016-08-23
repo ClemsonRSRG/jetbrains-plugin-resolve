@@ -1,5 +1,6 @@
 package edu.clemson.resolve.jetbrains;
 
+import com.intellij.execution.JavaTestFrameworkRunnableState;
 import com.intellij.execution.filters.TextConsoleBuilder;
 import com.intellij.execution.filters.TextConsoleBuilderFactory;
 import com.intellij.execution.ui.ConsoleView;
