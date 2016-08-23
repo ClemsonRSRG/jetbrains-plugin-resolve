@@ -16,6 +16,7 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.util.ui.AnimatedIcon;
 import edu.clemson.resolve.RESOLVECompiler;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
@@ -75,6 +76,7 @@ public class ProveAction extends RESOLVEAction {
         RESOLVEPluginController controller = RESOLVEPluginController.getInstance(project);
         VerifierPanel2 verifierPanel = controller.getVerifierPanel();
         verifierPanel.createVerifierView();
+
         for (VC vc : vco.getFinalVCs()) {
             verifierPanel.addVCTab(vc);
         }
@@ -95,19 +97,8 @@ public class ProveAction extends RESOLVEAction {
                 compiler.processCommandLineTargets();
             }
         });
-        /*ApplicationManager.getApplication().invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                while (pl.vcIsProved.size() != 5) {
-                    verifierPanel.removeAll();
-                    // if (pl.)
-                    int i;
-                    i=0;
-                }
-            }
-        });*/
 
-        ProgressManager.getInstance().run(new Task.Backgroundable(project, "Hmmm") {
+        ProgressManager.getInstance().run(new Task.Backgroundable(project, "Updating Presentation") {
             @Override
             public void run(@NotNull final ProgressIndicator progressIndicator) {
                 while (pl.vcIsProved.size() != vco.getFinalVCs().size()) {

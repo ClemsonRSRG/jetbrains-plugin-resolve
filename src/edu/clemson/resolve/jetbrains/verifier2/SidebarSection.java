@@ -23,6 +23,8 @@ import javax.swing.plaf.basic.BasicArrowButton;
 
 public class SidebarSection extends JPanel {
 
+    private static enum Status {PROVED, NOT_PROVED, TIMED_OUT}
+
 	private static final long serialVersionUID = 1L;
 	
 	public int minComponentHeight = 40;
@@ -37,6 +39,13 @@ public class SidebarSection extends JPanel {
 	private int calculatedHeight;
     public JLabel label;
     public String name;
+    public Status status;
+
+    public SidebarSection(SideBar owner, String name, Status initialStatus) {
+        this.sideBarOwner = owner;
+        this.name = name;
+        this.status = initialStatus;
+    }
 
 	public SidebarSection(SideBar owner,
                           String name,
@@ -102,6 +111,7 @@ public class SidebarSection extends JPanel {
 			titlePanel.add(arrowPanel, BorderLayout.EAST);
 		
 		this.label = new JLabel(icon);
+        label.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 		titlePanel.add(label, BorderLayout.WEST);
 		
 		titleComponent.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(2, 8, 2, 2), titleComponent.getBorder()));

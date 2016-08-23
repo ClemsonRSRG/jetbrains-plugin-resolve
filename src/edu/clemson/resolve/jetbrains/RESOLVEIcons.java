@@ -47,6 +47,15 @@ public interface RESOLVEIcons {
     public static final Icon NOT_PROVED = IconLoader.getIcon("/edu/clemson/resolve/icons/not_proved.png");
     public static final Icon PROCESSING = IconLoader.getIcon("/edu/clemson/resolve/icons/processing.png");
 
+    public static final Icon PROCESSING1 = IconLoader.getIcon("/runConfigurations/testInProgress1@2x.png");
+    public static final Icon PROCESSING2 = IconLoader.getIcon("/runConfigurations/testInProgress2@2x.png");
+    public static final Icon PROCESSING3 = IconLoader.getIcon("/runConfigurations/testInProgress3@2x.png");
+    public static final Icon PROCESSING4 = IconLoader.getIcon("/runConfigurations/testInProgress4@2x.png");
+    public static final Icon PROCESSING5 = IconLoader.getIcon("/runConfigurations/testInProgress5@2x.png");
+    public static final Icon PROCESSING6 = IconLoader.getIcon("/runConfigurations/testInProgress6@2x.png");
+    public static final Icon PROCESSING7 = IconLoader.getIcon("/runConfigurations/testInProgress7@2x.png");
+    public static final Icon PROCESSING8 = IconLoader.getIcon("/runConfigurations/testInProgress8@2x.png");
+
     /**
      * Places a small icon (mark) in the lower right hand corner of the {@code base} icon.
      * Used from go lang plugin.
