@@ -1,29 +1,60 @@
 package edu.clemson.resolve.jetbrains.verifier2;
 
+import com.intellij.util.ui.AnimatedIcon;
+import edu.clemson.resolve.jetbrains.RESOLVEIcons;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.plaf.basic.BasicArrowButton;
 
 /**
- * Panel that contains both the title/header part and the content part.
- * 
- * @author oliver
- *
+ * Adapted from code provided by Oliver Watkins:
+ * See <a href="https://github.com/oliverwatkins/swing_library">Oliver's swing component library</a>.
  */
-
 public class SidebarSection extends JPanel {
 
-    private static enum Status {PROVED, NOT_PROVED, TIMED_OUT}
+	private static final int FRAMES_COUNT = 8;
+	public static final Icon[] FRAMES = new Icon[FRAMES_COUNT];
+
+	static {
+		FRAMES[0] = RESOLVEIcons.PROCESSING1;
+		FRAMES[1] = RESOLVEIcons.PROCESSING2;
+		FRAMES[2] = RESOLVEIcons.PROCESSING3;
+		FRAMES[3] = RESOLVEIcons.PROCESSING4;
+		FRAMES[4] = RESOLVEIcons.PROCESSING5;
+		FRAMES[5] = RESOLVEIcons.PROCESSING6;
+		FRAMES[6] = RESOLVEIcons.PROCESSING7;
+		FRAMES[7] = RESOLVEIcons.PROCESSING8;
+	}
+
+    private static enum FinalStatus {
+		PROVED {
+			@Override
+			public Icon getIcon() {
+				return RESOLVEIcons.PROVED;
+			}
+		},
+		NOT_PROVED {
+			@Override
+			public Icon getIcon() {
+				return RESOLVEIcons.NOT_PROVED;
+			}
+		},
+		TIMED_OUT {
+			@Override
+			public Icon getIcon() {
+				return RESOLVEIcons.TIMED_OUT;
+			}
+		};
+
+		public abstract Icon getIcon();
+    }
 
 	private static final long serialVersionUID = 1L;
 	
@@ -39,38 +70,62 @@ public class SidebarSection extends JPanel {
 	private int calculatedHeight;
     public JLabel label;
     public String name;
-    public Status status;
+    public FinalStatus finalStatus;
+	public AnimatedIcon processingSpinner;
 
-    public SidebarSection(SideBar owner, String name, Status initialStatus) {
+    public SidebarSection(SideBar owner, String name, JComponent body) {
         this.sideBarOwner = owner;
         this.name = name;
-        this.status = initialStatus;
-    }
+		this.processingSpinner = new AnimatedIcon("processing", FRAMES, FRAMES[0], 20);
 
-	public SidebarSection(SideBar owner,
-                          String name,
-                          String presentationName,
-                          JComponent component,
-                          Icon icon) {
-		this(owner, name, new JLabel(presentationName), component, icon);
+		if (owner.thisMode == SideBar.SideBarMode.INNER_LEVEL) {
+			minComponentHeight = 30;
+		}
+		else {
+			minComponentHeight = 40;
+		}
+		titlePanel = new JPanel();
+		titlePanel.addMouseListener(new MouseAdapter() {
+			public void mouseReleased(MouseEvent e) {
+
+				if (SidebarSection.this != sideBarOwner.getCurrentSection()) {
+					if (sideBarOwner.getCurrentSection() != null) {
+						sideBarOwner.getCurrentSection().collapse(true);
+					}
+					expand(); //expand this!
+				}
+				else {
+					collapse(true);
+				}
+			}
+		});
+		setLayout(new BorderLayout());
+		add(titlePanel, BorderLayout.NORTH);
+
+		titlePanel.setLayout(new BorderLayout());
+		titlePanel.setPreferredSize(new Dimension(this.getPreferredSize().width, minComponentHeight));
+		titlePanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+		titlePanel.add(processingSpinner, BorderLayout.WEST);
+
+		JLabel vcNameLabel = new JLabel("VC " + name);
+		vcNameLabel.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(2, 8, 2, 2), vcNameLabel.getBorder()));
+		titlePanel.add(vcNameLabel);
+
+		add(body, BorderLayout.CENTER);
+
+		revalidate();
 	}
-	
-	/**
-	 * Construct a new sidebar section with the specified owner and model. 
-	 * 
-	 * @param owner - SideBar
-	 * @param
-	 */
-	public SidebarSection(SideBar owner,
+
+	/*public SidebarSection(SideBar owner,
                           String name,
-			JComponent titleComponent, 
-			JComponent component, Icon icon) {
+						  JComponent titleComponent,
+						  JComponent component) {
 		
 		if (owner.thisMode == SideBar.SideBarMode.INNER_LEVEL)
 			minComponentHeight = 30;
 		else
 			minComponentHeight = 40;
-
+		AnimatedIcon x = new AnimatedIcon("processing", )
         this.name = name;
 		this.contentPane = component;
 		
@@ -110,7 +165,7 @@ public class SidebarSection extends JPanel {
 			//add into tab panel the arrow and labels.
 			titlePanel.add(arrowPanel, BorderLayout.EAST);
 		
-		this.label = new JLabel(icon);
+		//this.label = new JLabel(icon);
         label.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 		titlePanel.add(label, BorderLayout.WEST);
 		
@@ -123,7 +178,7 @@ public class SidebarSection extends JPanel {
 		add(component, BorderLayout.CENTER);
 
 		revalidate();
-	}
+	}*/
 
     public JComponent getTitlePanel() {
         return titlePanel;
