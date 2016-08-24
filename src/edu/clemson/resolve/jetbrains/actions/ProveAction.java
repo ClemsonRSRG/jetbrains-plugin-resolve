@@ -2,6 +2,8 @@ package edu.clemson.resolve.jetbrains.actions;
 
 import com.intellij.ide.util.treeView.AbstractTreeBuilder;
 import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.event.DocumentEvent;
@@ -32,6 +34,8 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.*;
+
+import static edu.clemson.resolve.jetbrains.verifier2.VerifierPanel2.getMockContent4;
 
 //Write one similar to JUnit where all vcs show up. Could even be hierarchy where they show up in a hierarchy under the
 //assertive block that generated them.
@@ -98,15 +102,26 @@ public class ProveAction extends RESOLVEAction {
             }
         });
 
+
         ProgressManager.getInstance().run(new Task.Backgroundable(project, "Updating Presentation") {
             @Override
             public void run(@NotNull final ProgressIndicator progressIndicator) {
+                Map<String, Boolean> processed = new HashMap<String, Boolean>();
+                for (VC vc : vco.getFinalVCs()) {
+                    processed.put(vc.getName(), false);
+                }
                 while (pl.vcIsProved.size() != vco.getFinalVCs().size()) {
                     for (VC vc : vco.getFinalVCs()) {
-                        if (pl.vcIsProved.containsKey(vc.getName())) {
-                            SidebarSection x = verifierPanel.activeVCSideBar.sections.get(vc.getName());
-                            Icon i = pl.vcIsProved.get(vc.getName()) ? RESOLVEIcons.PROVED : RESOLVEIcons.NOT_PROVED;
-                            x.label.setIcon(i);
+                        if (pl.vcIsProved.containsKey(vc.getName()) && !processed.get(vc.getName())) {
+                            processed.put(vc.getName(), true);
+                            SidebarSection section = verifierPanel.activeVCSideBar.sections.get(vc.getName());
+                            verifierPanel.activeVCSideBar.remove(section);
+                            verifierPanel.activeVCSideBar.sections.put(vc.getName(),
+                                    new SidebarSection(verifierPanel.activeVCSideBar, "foo", getMockContent4()));
+                            verifierPanel.activeVCSideBar.revalidate();
+                            /*section.changeToFinalState(pl.vcIsProved.get(vc.getName()) ?
+                                    SidebarSection.FinalState.PROVED :
+                                    SidebarSection.FinalState.NOT_PROVED);*/
                         }
                     }
                 }

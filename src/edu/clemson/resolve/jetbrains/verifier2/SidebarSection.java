@@ -1,5 +1,6 @@
 package edu.clemson.resolve.jetbrains.verifier2;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.util.ui.AnimatedIcon;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 
@@ -33,7 +34,7 @@ public class SidebarSection extends JPanel {
 		FRAMES[7] = RESOLVEIcons.PROCESSING8;
 	}
 
-    private static enum FinalStatus {
+    public static enum FinalState {
 		PROVED {
 			@Override
 			public Icon getIcon() {
@@ -68,15 +69,16 @@ public class SidebarSection extends JPanel {
 	private ArrowPanel arrowPanel;
 	
 	private int calculatedHeight;
-    public JLabel label;
+    public JLabel vcNameLabel;
     public String name;
-    public FinalStatus finalStatus;
+    public FinalState finalState;
 	public AnimatedIcon processingSpinner;
 
-    public SidebarSection(SideBar owner, String name, JComponent body) {
+    public SidebarSection(SideBar owner, String name, JComponent contentPane) {
         this.sideBarOwner = owner;
         this.name = name;
-		this.processingSpinner = new AnimatedIcon("processing", FRAMES, FRAMES[0], 20);
+		this.processingSpinner = new AnimatedIcon("processing", FRAMES, FRAMES[0], 800);
+        this.contentPane = contentPane;
 
 		if (owner.thisMode == SideBar.SideBarMode.INNER_LEVEL) {
 			minComponentHeight = 30;
@@ -105,16 +107,31 @@ public class SidebarSection extends JPanel {
 		titlePanel.setLayout(new BorderLayout());
 		titlePanel.setPreferredSize(new Dimension(this.getPreferredSize().width, minComponentHeight));
 		titlePanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
+
+        processingSpinner.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 10));
 		titlePanel.add(processingSpinner, BorderLayout.WEST);
 
-		JLabel vcNameLabel = new JLabel("VC " + name);
+        arrowPanel = new ArrowPanel(BasicArrowButton.EAST);
+        arrowPanel.setPreferredSize(new Dimension(40, 40));
+
+        if (sideBarOwner.showArrow) {
+            //add into tab panel the arrow and labels.
+            titlePanel.add(arrowPanel, BorderLayout.EAST);
+        }
+		this.vcNameLabel = new JLabel("VC " + name);
 		vcNameLabel.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(2, 8, 2, 2), vcNameLabel.getBorder()));
 		titlePanel.add(vcNameLabel);
 
-		add(body, BorderLayout.CENTER);
-
+		add(contentPane, BorderLayout.CENTER);
 		revalidate();
 	}
+
+	public void changeToFinalState(FinalState e) {
+	    this.finalState = e;
+        titlePanel.remove(processingSpinner);
+        vcNameLabel.setIcon(finalState.getIcon());
+
+    }
 
 	/*public SidebarSection(SideBar owner,
                           String name,

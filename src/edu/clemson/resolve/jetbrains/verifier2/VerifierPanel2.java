@@ -95,9 +95,7 @@ public class VerifierPanel2 extends JPanel {
     }
 
     public void addVCTab(VC x) {
-
-        SidebarSection ss2 = new SidebarSection(activeVCSideBar, x.getName(), "VC " + x.getName(),
-                getMockContent4(), RESOLVEIcons.TIMED_OUT);
+        SidebarSection ss2 = new SidebarSection(activeVCSideBar, x.getName(), getMockContent4());
         activeVCSideBar.addSection(ss2);
         add(activeVCSideBar);
     }
@@ -117,7 +115,7 @@ public class VerifierPanel2 extends JPanel {
         revalidate();
     }
 
-    private static JList<String> getMockContent4() {
+    public static JList<String> getMockContent4() {
         DefaultListModel<String> model = new DefaultListModel<String>();
         model.add(0, "Bill Gates");
         model.add(1, "Steven Spielberg");
