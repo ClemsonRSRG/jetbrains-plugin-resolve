@@ -1,6 +1,5 @@
 package edu.clemson.resolve.jetbrains.verifier2;
 
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.util.ui.AnimatedIcon;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 
@@ -34,7 +33,7 @@ public class SidebarSection extends JPanel {
 		FRAMES[7] = RESOLVEIcons.PROCESSING8;
 	}
 
-    public static enum FinalState {
+    public static enum State {
 		PROVED {
 			@Override
 			public Icon getIcon() {
@@ -52,7 +51,14 @@ public class SidebarSection extends JPanel {
 			public Icon getIcon() {
 				return RESOLVEIcons.TIMED_OUT;
 			}
-		};
+		},
+        PROCESSING {
+            @Override
+            //Shouldn't get called. TODO: Would be nice if I could figure out how to get this returning an intellij AnimatedIcon
+            public Icon getIcon() {
+                return RESOLVEIcons.TIMED_OUT;
+            }
+        };
 
 		public abstract Icon getIcon();
     }
@@ -71,10 +77,15 @@ public class SidebarSection extends JPanel {
 	private int calculatedHeight;
     public JLabel vcNameLabel;
     public String name;
-    public FinalState finalState;
+    public State state;
 	public AnimatedIcon processingSpinner;
 
     public SidebarSection(SideBar owner, String name, JComponent contentPane) {
+        this(owner, name, contentPane, State.PROCESSING);
+    }
+
+    //Starting constructor.
+    public SidebarSection(SideBar owner, String name, JComponent contentPane, State activeState) {
         this.sideBarOwner = owner;
         this.name = name;
 		this.processingSpinner = new AnimatedIcon("processing", FRAMES, FRAMES[0], 800);
@@ -108,8 +119,18 @@ public class SidebarSection extends JPanel {
 		titlePanel.setPreferredSize(new Dimension(this.getPreferredSize().width, minComponentHeight));
 		titlePanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 
-        processingSpinner.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 10));
-		titlePanel.add(processingSpinner, BorderLayout.WEST);
+        this.vcNameLabel = new JLabel("VC " + name);
+        vcNameLabel.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(2, 8, 2, 2), vcNameLabel.getBorder()));
+        titlePanel.add(vcNameLabel);
+
+        if (activeState == State.PROCESSING) {
+            processingSpinner.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 10));
+            titlePanel.add(processingSpinner, BorderLayout.WEST);
+        }
+        else {
+            vcNameLabel.setIcon(activeState.getIcon());
+        }
+
 
         arrowPanel = new ArrowPanel(BasicArrowButton.EAST);
         arrowPanel.setPreferredSize(new Dimension(40, 40));
@@ -118,18 +139,14 @@ public class SidebarSection extends JPanel {
             //add into tab panel the arrow and labels.
             titlePanel.add(arrowPanel, BorderLayout.EAST);
         }
-		this.vcNameLabel = new JLabel("VC " + name);
-		vcNameLabel.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(2, 8, 2, 2), vcNameLabel.getBorder()));
-		titlePanel.add(vcNameLabel);
-
 		add(contentPane, BorderLayout.CENTER);
 		revalidate();
 	}
 
-	public void changeToFinalState(FinalState e) {
-	    this.finalState = e;
+	public void changeToFinalState(State e) {
+	    this.state = e;
         titlePanel.remove(processingSpinner);
-        vcNameLabel.setIcon(finalState.getIcon());
+        vcNameLabel.setIcon(state.getIcon());
 
     }
 

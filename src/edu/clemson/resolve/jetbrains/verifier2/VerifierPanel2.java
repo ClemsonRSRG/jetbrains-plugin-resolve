@@ -95,6 +95,7 @@ public class VerifierPanel2 extends JPanel {
     }
 
     public void addVCTab(VC x) {
+
         SidebarSection ss2 = new SidebarSection(activeVCSideBar, x.getName(), getMockContent4());
         activeVCSideBar.addSection(ss2);
         add(activeVCSideBar);

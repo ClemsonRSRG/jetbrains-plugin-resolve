@@ -103,6 +103,9 @@ public class ProveAction extends RESOLVEAction {
         });
 
 
+        List<SidebarSection> proved = new ArrayList<>();
+        List<SidebarSection> notProved = new ArrayList<>();
+
         ProgressManager.getInstance().run(new Task.Backgroundable(project, "Updating Presentation") {
             @Override
             public void run(@NotNull final ProgressIndicator progressIndicator) {
@@ -116,8 +119,16 @@ public class ProveAction extends RESOLVEAction {
                             processed.put(vc.getName(), true);
                             SidebarSection section = verifierPanel.activeVCSideBar.sections.get(vc.getName());
                             verifierPanel.activeVCSideBar.remove(section);
-                            verifierPanel.activeVCSideBar.sections.put(vc.getName(),
-                                    new SidebarSection(verifierPanel.activeVCSideBar, "foo", getMockContent4()));
+
+                            SidebarSection upd = new SidebarSection(verifierPanel.activeVCSideBar,
+                                    "VC: " + vc.getName(), getMockContent4(),
+                                    pl.vcIsProved.get(vc.getName()) ?
+                                            SidebarSection.State.PROVED :
+                                            SidebarSection.State.NOT_PROVED);
+
+                            verifierPanel.activeVCSideBar.sections.put(vc.getName(), upd);
+                            verifierPanel.activeVCSideBar.add(upd);
+
                             verifierPanel.activeVCSideBar.revalidate();
                             /*section.changeToFinalState(pl.vcIsProved.get(vc.getName()) ?
                                     SidebarSection.FinalState.PROVED :
