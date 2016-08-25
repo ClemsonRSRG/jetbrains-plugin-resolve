@@ -1,6 +1,7 @@
 package edu.clemson.resolve.jetbrains.verifier2;
 
 import com.intellij.util.ui.AnimatedIcon;
+import com.intellij.util.ui.JBFont;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 
 import java.awt.BorderLayout;
@@ -140,79 +141,13 @@ public class SidebarSection extends JPanel {
             titlePanel.add(arrowPanel, BorderLayout.EAST);
         }
 		add(contentPane, BorderLayout.CENTER);
-		revalidate();
 	}
 
 	public void changeToFinalState(State e) {
 	    this.state = e;
         titlePanel.remove(processingSpinner);
         vcNameLabel.setIcon(state.getIcon());
-
     }
-
-	/*public SidebarSection(SideBar owner,
-                          String name,
-						  JComponent titleComponent,
-						  JComponent component) {
-		
-		if (owner.thisMode == SideBar.SideBarMode.INNER_LEVEL)
-			minComponentHeight = 30;
-		else
-			minComponentHeight = 40;
-		AnimatedIcon x = new AnimatedIcon("processing", )
-        this.name = name;
-		this.contentPane = component;
-		
-		sideBarOwner = owner;
-		
-		titlePanel = new JPanel();
-		titlePanel.addMouseListener(new MouseAdapter() {
-			public void mouseReleased(MouseEvent e) {
-				
-				if (SidebarSection.this != sideBarOwner.getCurrentSection()) {
-					if (sideBarOwner.getCurrentSection() != null)
-						sideBarOwner.getCurrentSection().collapse(true);
-					
-					expand(); //expand this!
-				}
-				else {
-					collapse(true);
-				}
-			}
-		});
-
-		//absolute layout
-//		setLayout(null);
-		setLayout(new BorderLayout());
-		
-		add(titlePanel, BorderLayout.NORTH);
-
-		titlePanel.setLayout(new BorderLayout());
-		titlePanel.setPreferredSize(new Dimension(this.getPreferredSize().width, minComponentHeight));
-		titlePanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
-		
-		arrowPanel = new ArrowPanel(BasicArrowButton.EAST);
-		arrowPanel.setPreferredSize(new Dimension(40, 40));
-		
-		
-		if (sideBarOwner.showArrow)
-			//add into tab panel the arrow and labels.
-			titlePanel.add(arrowPanel, BorderLayout.EAST);
-		
-		//this.label = new JLabel(icon);
-        label.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
-		titlePanel.add(label, BorderLayout.WEST);
-		
-		titleComponent.setBorder(new CompoundBorder(BorderFactory.createEmptyBorder(2, 8, 2, 2), titleComponent.getBorder()));
-		titlePanel.add(titleComponent);
-
-//		this.setMinimumSize(new Dimension(minComponentWidth, minComponentHeight));
-//		component.setPreferredSize(new Dimension(0,0));
-		
-		add(component, BorderLayout.CENTER);
-
-		revalidate();
-	}*/
 
     public JComponent getTitlePanel() {
         return titlePanel;

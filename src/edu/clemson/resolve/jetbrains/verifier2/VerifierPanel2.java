@@ -1,10 +1,14 @@
 package edu.clemson.resolve.jetbrains.verifier2;
 
+import com.intellij.application.options.colors.ColorAndFontOptions;
+import com.intellij.ide.ui.UISettings;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.editor.ex.util.EditorUIUtil;
 import com.intellij.openapi.keymap.KeymapUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBLabel;
+import com.intellij.ui.components.JBList;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.util.ui.JBFont;
 import com.intellij.util.ui.UIUtil;
@@ -53,7 +57,7 @@ public class VerifierPanel2 extends JPanel {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
         String vcShortcut = KeymapUtil.getFirstKeyboardShortcutText("resolve.GenVCs");
-        JLabel emptyLabel = new JBLabel(
+        JBLabel emptyLabel = new JBLabel(
                 "<html>" +
                 "<div style='text-align: center;'>" +
                 "<font color='#7E7C7B'>" +
@@ -66,7 +70,7 @@ public class VerifierPanel2 extends JPanel {
                 "<br><br>" +
                 "Then left-click one of the VC icons<br>in the gutter to view" +
                 "</font>" +
-                "</html>", JLabel.CENTER);
+                "</html>", JBLabel.CENTER);
         emptyLabel.setFont(createFont(12));
         JPanel dummypanel = new JBPanel();
         dummypanel.setOpaque(false);
@@ -96,7 +100,7 @@ public class VerifierPanel2 extends JPanel {
 
     public void addVCTab(VC x) {
 
-        SidebarSection ss2 = new SidebarSection(activeVCSideBar, x.getName(), getMockContent4());
+        SidebarSection ss2 = new SidebarSection(activeVCSideBar, x.getName(), getGivensAndGoalsInfo(x));
         activeVCSideBar.addSection(ss2);
         add(activeVCSideBar);
     }
@@ -116,16 +120,21 @@ public class VerifierPanel2 extends JPanel {
         revalidate();
     }
 
-    public static JList<String> getMockContent4() {
+    public static JList<String> getGivensAndGoalsInfo(VC vc) {
+
         DefaultListModel<String> model = new DefaultListModel<String>();
-        model.add(0, "Bill Gates");
-        model.add(1, "Steven Spielberg");
-        model.add(2, "Donald Trump");
-        model.add(3, "Steve Jobs");
+        List<PExp> antecedents = vc.getAntecedent().splitIntoConjuncts();
 
-        JList<String> list = new JList<String>();
-
+        for (int i = 0; i < antecedents.size(); i++) {
+            model.add(i, i + 1 + ".  " + antecedents.get(i));
+        }
+        model.add(antecedents.size(), "⊢");
+        model.add(antecedents.size() + 1, vc.getConsequent().toString());
+        JList<String> list = new JBList();
         list.setModel(model);
+        list.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+       // JBFont.create(new Font(UIUtil.getMenuFont().getName(), Font.PLAIN, size));
+        Color
         return list;
     }
 

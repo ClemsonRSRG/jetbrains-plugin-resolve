@@ -35,8 +35,6 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.util.*;
 
-import static edu.clemson.resolve.jetbrains.verifier2.VerifierPanel2.getMockContent4;
-
 //Write one similar to JUnit where all vcs show up. Could even be hierarchy where they show up in a hierarchy under the
 //assertive block that generated them.
 public class ProveAction extends RESOLVEAction {
@@ -118,21 +116,10 @@ public class ProveAction extends RESOLVEAction {
                         if (pl.vcIsProved.containsKey(vc.getName()) && !processed.get(vc.getName())) {
                             processed.put(vc.getName(), true);
                             SidebarSection section = verifierPanel.activeVCSideBar.sections.get(vc.getName());
-                            verifierPanel.activeVCSideBar.remove(section);
 
-                            SidebarSection upd = new SidebarSection(verifierPanel.activeVCSideBar,
-                                    "VC: " + vc.getName(), getMockContent4(),
-                                    pl.vcIsProved.get(vc.getName()) ?
-                                            SidebarSection.State.PROVED :
-                                            SidebarSection.State.NOT_PROVED);
-
-                            verifierPanel.activeVCSideBar.sections.put(vc.getName(), upd);
-                            verifierPanel.activeVCSideBar.add(upd);
-
-                            verifierPanel.activeVCSideBar.revalidate();
-                            /*section.changeToFinalState(pl.vcIsProved.get(vc.getName()) ?
-                                    SidebarSection.FinalState.PROVED :
-                                    SidebarSection.FinalState.NOT_PROVED);*/
+                            section.changeToFinalState(pl.vcIsProved.get(vc.getName()) ?
+                                    SidebarSection.State.PROVED :
+                                    SidebarSection.State.NOT_PROVED);
                         }
                     }
                 }
