@@ -1,13 +1,12 @@
-package edu.clemson.resolve.jetbrains.verifier2;
+package edu.clemson.resolve.jetbrains.ui;
 
-import java.awt.Cursor;
-import java.awt.Dimension;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.util.*;
-
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SideBar extends JPanel {
 	
@@ -34,24 +33,24 @@ public class SideBar extends JPanel {
 		this.showArrow = showArrow;
 		this.thisMode = mode;
 		this.animate = animate;
-		
+
 		this.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		
+
 		setLayout(boxLayout);
-		
+
 		setPreferredSize(new Dimension(preferredWidth, getPreferredSize().height));
-		
+
 		setFocusable(false);
-		
+
         this.addComponentListener(new ComponentAdapter() {
             public void componentResized(ComponentEvent e) {
             	resize();
             }
         });
-		
+
 		revalidate();
 	}
-	
+
     public void resize() {
     	if (currentSection != null) {
         	currentSection.setMaximumSize(new Dimension(Integer.MAX_VALUE, this.getHeight()));
@@ -59,7 +58,7 @@ public class SideBar extends JPanel {
         	currentSection.revalidate();
     	}
 	}
-	
+
     public void addSection(VCSection newSection, boolean collapse) {
  		add(newSection);
 		sections.put(newSection.name, newSection);
@@ -69,11 +68,11 @@ public class SideBar extends JPanel {
              setCurrentSection(newSection);
          }
  	}
-    
+
     public void addSection(VCSection newSection) {
     	addSection(newSection, true);
  	}
-	
+
 	public boolean isCurrentExpandedSection(VCSection section) {
 		return (section != null) && (currentSection != null)
 				&& section.equals(currentSection);

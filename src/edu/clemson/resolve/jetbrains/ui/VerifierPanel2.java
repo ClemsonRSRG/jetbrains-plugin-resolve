@@ -1,6 +1,5 @@
-package edu.clemson.resolve.jetbrains.verifier2;
+package edu.clemson.resolve.jetbrains.ui;
 
-import com.intellij.application.options.colors.ColorAndFontSettingsListener;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.keymap.KeymapUtil;
 import com.intellij.openapi.project.Project;
@@ -25,21 +24,9 @@ public class VerifierPanel2 extends JPanel {
     public static final Logger LOG = Logger.getInstance("RESOLVE VerifierPanel");
 
     public SideBar activeVCSideBar = null;
-    private final Project project;
 
-    public VerifierPanel2(Project project) {
-        this.project = project;
+    public VerifierPanel2() {
         createBaseGUI();
-    }
-
-    public List<VerificationEditorPreview> getActivePreviewEditors() {
-        List<VerificationEditorPreview> result = new ArrayList<>();
-        if (activeVCSideBar != null) {
-            for (VCSection s : activeVCSideBar.getSections()) {
-                result.add(s.previewEditor);
-            }
-        }
-        return result;
     }
 
     private void createBaseGUI() {
@@ -89,24 +76,21 @@ public class VerifierPanel2 extends JPanel {
     }
 
     public void addVCTab(VC x) {
-        VCSection s = new VCSection(activeVCSideBar, x.getName(), getVCPreview(x));
+        VCSection s = new VCSection(activeVCSideBar, x.getName(), getInner4());
         activeVCSideBar.addSection(s);
         add(activeVCSideBar);
     }
 
-    public VerificationEditorPreview getVCPreview(VC vc) {
-        List<PExp> antecedents = vc.getAntecedent().splitIntoConjuncts();
-        String vcText = "";
-        for (int i = 0; i < antecedents.size(); i++) {
-            vcText += i + 1 + ". " + antecedents.get(i) + "\n";
-        }
-        vcText += "⊢\n";
-        vcText += vc.getConsequent();
-        VerificationEditorPreview preview = new VerificationEditorPreview(project, vcText);
-        preview.setBackground(JBColor.WHITE);
-        preview.addNotify();    //TODODO
+    private static JList<String> getInner4() {
+        DefaultListModel<String> model = new DefaultListModel<String>();
+        model.add(0, "Bill Gates");
+        model.add(1, "Steven Spielberg");
+        model.add(3, "Steve Jobs");
 
-        return preview;
+        JList<String> list = new JList<String>();
+
+        list.setModel(model);
+        return list;
     }
 
     private static Font createFont(int size) {

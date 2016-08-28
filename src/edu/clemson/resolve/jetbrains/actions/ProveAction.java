@@ -2,8 +2,6 @@ package edu.clemson.resolve.jetbrains.actions;
 
 import com.intellij.ide.util.treeView.AbstractTreeBuilder;
 import com.intellij.openapi.actionSystem.*;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.event.DocumentEvent;
@@ -13,16 +11,12 @@ import com.intellij.openapi.editor.markup.HighlighterLayer;
 import com.intellij.openapi.editor.markup.MarkupModel;
 import com.intellij.openapi.editor.markup.RangeHighlighter;
 import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.util.ui.AnimatedIcon;
 import edu.clemson.resolve.RESOLVECompiler;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
-import edu.clemson.resolve.jetbrains.verifier2.SidebarSection;
 import edu.clemson.resolve.jetbrains.verifier2.VerifierPanel2;
 import edu.clemson.resolve.proving.Metrics;
 import edu.clemson.resolve.proving.PerVCProverModel;
@@ -82,6 +76,12 @@ public class ProveAction extends RESOLVEAction {
         for (VC vc : vco.getFinalVCs()) {
             verifierPanel.addVCTab(vc);
         }
+      /*  for (VC vc : vco.getFinalVCs()) {
+            verifierPanel.addVCTab(vc);
+        }
+        for (VC vc : vco.getFinalVCs()) {
+            verifierPanel.addVCTab(vc);
+        }*/
         addVCGutterIcons(vco, editor, project, pl);
         controller.getVerifierWindow().show(null);
         //runProver
@@ -93,7 +93,7 @@ public class ProveAction extends RESOLVEAction {
         RESOLVECompiler compiler = new RESOLVECompiler(args.toArray(new String[args.size()]));
         compiler.addProverListener(pl);
 
-        ProgressManager.getInstance().run(new Task.Backgroundable(project, "Proving") {
+     /*   ProgressManager.getInstance().run(new Task.Backgroundable(project, "Proving") {
             @Override
             public void run(@NotNull final ProgressIndicator progressIndicator) {
                 compiler.processCommandLineTargets();
@@ -124,7 +124,7 @@ public class ProveAction extends RESOLVEAction {
                     }
                 }
             }
-        });
+        });*/
     }
 
     @Nullable

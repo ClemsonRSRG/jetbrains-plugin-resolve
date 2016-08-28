@@ -1,24 +1,22 @@
-package edu.clemson.resolve.jetbrains.verifier2;
+package edu.clemson.resolve.jetbrains.ui;
 
 import com.intellij.util.ui.AnimatedIcon;
-import com.intellij.util.ui.JBFont;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
-
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import edu.clemson.resolve.jetbrains.verifier.VerificationEditorPreview;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
 import javax.swing.plaf.basic.BasicArrowButton;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Adapted from code provided by Oliver Watkins:
  * See <a href="https://github.com/oliverwatkins/swing_library">Oliver's swing component library</a>.
  */
-public class SidebarSection extends JPanel {
+public class VCSection extends JPanel {
 
 	private static final int FRAMES_COUNT = 8;
 	public static final Icon[] FRAMES = new Icon[FRAMES_COUNT];
@@ -71,27 +69,28 @@ public class SidebarSection extends JPanel {
 	
 	public JComponent titlePanel;
 	private SideBar sideBarOwner;
-	public JComponent contentPane; //sidebar section's content
+	public JComponent previewEditor; //the information about the vc
 	
 	private ArrowPanel arrowPanel;
-	
+
 	private int calculatedHeight;
     public JLabel vcNameLabel;
     public String name;
     public State state;
 	public AnimatedIcon processingSpinner;
 
-    public SidebarSection(SideBar owner, String name, JComponent contentPane) {
-        this(owner, name, contentPane, State.PROCESSING);
+	int numOfLines = 7;
+
+    public VCSection(SideBar owner, String name, JComponent preview) {
+        this(owner, name, preview, State.PROCESSING);
     }
 
     //Starting constructor.
-    public SidebarSection(SideBar owner, String name, JComponent contentPane, State activeState) {
+    public VCSection(SideBar owner, String name, JComponent preview, State activeState) {
         this.sideBarOwner = owner;
         this.name = name;
 		this.processingSpinner = new AnimatedIcon("processing", FRAMES, FRAMES[0], 800);
-        this.contentPane = contentPane;
-
+        this.previewEditor = preview;
 		if (owner.thisMode == SideBar.SideBarMode.INNER_LEVEL) {
 			minComponentHeight = 30;
 		}
@@ -102,7 +101,7 @@ public class SidebarSection extends JPanel {
 		titlePanel.addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent e) {
 
-				if (SidebarSection.this != sideBarOwner.getCurrentSection()) {
+				if (VCSection.this != sideBarOwner.getCurrentSection()) {
 					if (sideBarOwner.getCurrentSection() != null) {
 						sideBarOwner.getCurrentSection().collapse(true);
 					}
@@ -131,8 +130,6 @@ public class SidebarSection extends JPanel {
         else {
             vcNameLabel.setIcon(activeState.getIcon());
         }
-
-
         arrowPanel = new ArrowPanel(BasicArrowButton.EAST);
         arrowPanel.setPreferredSize(new Dimension(40, 40));
 
@@ -140,7 +137,7 @@ public class SidebarSection extends JPanel {
             //add into tab panel the arrow and labels.
             titlePanel.add(arrowPanel, BorderLayout.EAST);
         }
-		add(contentPane, BorderLayout.CENTER);
+		add(preview, BorderLayout.CENTER);
 	}
 
 	public void changeToFinalState(State e) {
@@ -152,8 +149,7 @@ public class SidebarSection extends JPanel {
     public JComponent getTitlePanel() {
         return titlePanel;
     }
-	
-	
+
 	public void expand() {
 		sideBarOwner.setCurrentSection(this);
 		
@@ -161,9 +157,9 @@ public class SidebarSection extends JPanel {
 		arrowPanel.updateUI();
 		
 		calculatedHeight = -1;
-		calculatedHeight = sideBarOwner.getSize().height;
+		calculatedHeight = previewEditor.getHeight();
 		
-		System.out.println("sidebarSection.contentPane.getHeight() " + contentPane.getHeight());
+		System.out.println("sidebarSection.previewEditor.getHeight() " + previewEditor.getHeight());
 		
 		/*if (this.sideBarOwner.animate) {
 			SidebarAnimation anim = new SidebarAnimation(this, 200); // ANIMATION BIT
@@ -177,11 +173,11 @@ public class SidebarSection extends JPanel {
 				Dimension d = new Dimension(Integer.MAX_VALUE, calculatedHeight);
 				setMaximumSize(d);
 				sideBarOwner.setPreferredSize(d);
-				contentPane.setVisible(true);
+				previewEditor.setVisible(true);
 				revalidate();
 			} else {
 				setMaximumSize(new Dimension(Integer.MAX_VALUE, calculatedHeight));
-				contentPane.setVisible(true);
+				previewEditor.setVisible(true);
 				revalidate();
 			}
 
@@ -193,7 +189,7 @@ public class SidebarSection extends JPanel {
 	
 	public void collapse(boolean animate) {
 		// remove reference
-		if (sideBarOwner.getCurrentSection() == SidebarSection.this)
+		if (sideBarOwner.getCurrentSection() == VCSection.this)
 			sideBarOwner.setCurrentSection(null);
 		
 		arrowPanel.changeDirection(BasicArrowButton.EAST);
@@ -206,7 +202,7 @@ public class SidebarSection extends JPanel {
 			anim.start();
 		} else {*/
 			setMaximumSize(new Dimension(Integer.MAX_VALUE, titlePanel.getPreferredSize().height));
-			contentPane.setVisible(false);
+			previewEditor.setVisible(false);
 			revalidate();
 //				printDimensions();
 		//}
@@ -229,7 +225,7 @@ public class SidebarSection extends JPanel {
 
 		System.out.println("sideBarSection height              " + getSize().height);
 		System.out.println("sideBarSection titlePanel height   " + titlePanel.getSize().height);
-		System.out.println("sideBarSection.contentPane height  " + contentPane.getSize().height);
+		System.out.println("sideBarSection.previewEditor height  " + previewEditor.getSize().height);
 	}
 	
 }

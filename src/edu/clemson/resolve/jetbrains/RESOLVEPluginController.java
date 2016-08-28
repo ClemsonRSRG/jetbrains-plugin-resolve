@@ -113,9 +113,8 @@ public class RESOLVEPluginController implements ProjectComponent {
         //Really, due to the way we create (and destory vcPanel's on calls to setXXX) I think there should only
         //every really be one activePreview to destroy -- if the user sudddenly decides to close IntelliJ.
         for (VerificationEditorPreview e : lingeringEditors) {
-            //e.removeNotify();
+            e.removeNotify();
         }
-
         consoleWindow = null;
         project = null;
     }
