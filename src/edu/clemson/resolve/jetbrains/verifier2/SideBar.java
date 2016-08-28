@@ -49,7 +49,7 @@ public class SideBar extends JPanel {
             }
         });
 		
-		revalidate();
+		//revalidate();
 	}
 	
     public void resize() {

@@ -7,6 +7,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBPanel;
+import com.intellij.ui.components.JBScrollBar;
+import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.ui.JBFont;
 import com.intellij.util.ui.UIUtil;
 import edu.clemson.resolve.jetbrains.verifier.VerificationEditorPreview;
@@ -30,6 +32,7 @@ public class VerifierPanel2 extends JPanel {
     public VerifierPanel2(Project project) {
         this.project = project;
         createBaseGUI();
+
     }
 
     public List<VerificationEditorPreview> getActivePreviewEditors() {
@@ -43,6 +46,7 @@ public class VerifierPanel2 extends JPanel {
     }
 
     private void createBaseGUI() {
+        //TODO: This should be drawn on the "activeVCsSidebar" JPanel
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
         String vcShortcut = KeymapUtil.getFirstKeyboardShortcutText("resolve.GenVCs");
@@ -70,8 +74,16 @@ public class VerifierPanel2 extends JPanel {
     //prep VerifierPanel2 for showing vc tabs, toolbars, etc.
     public void createVerifierView() {
         this.removeAll();
-        activeVCSideBar = new SideBar(SideBar.SideBarMode.TOP_LEVEL, true, 300, true);
-        add(activeVCSideBar);
+        activeVCSideBar = new SideBar(SideBar.SideBarMode.TOP_LEVEL, true, 300, false);
+        for (int i = 0; i < 50; i++) {
+            activeVCSideBar.add(new JLabel("Foo: " + i));
+        }
+        JBScrollPane scrollPane = new JBScrollPane(activeVCSideBar,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        add(scrollPane, BorderLayout.CENTER);
+
+        revalidate();
     }
 
     public void revertToBaseGUI() {
@@ -87,11 +99,22 @@ public class VerifierPanel2 extends JPanel {
         createBaseGUI();
         revalidate();
     }
+    int i =0;
 
+    public static class Foo extends JPanel {
+        public Foo(int i) {
+            setPreferredSize(new Dimension(250, 30));
+            setBorder(BorderFactory.createBevelBorder(1));
+            add(new JLabel("FOOZ: " + i));
+        }
+    }
     public void addVCTab(VC x) {
-        VCSection s = new VCSection(activeVCSideBar, x.getName(), getVCPreview(x));
-        activeVCSideBar.addSection(s);
-        add(activeVCSideBar);
+        activeVCSideBar.add(new Foo(i));
+
+        i++;
+       // VCSection s = new VCSection(activeVCSideBar, x.getName(), getVCPreview(x));
+       // activeVCSideBar.addSection(s);
+       // add(activeVCSideBar);
     }
 
     public VerificationEditorPreview getVCPreview(VC vc) {
