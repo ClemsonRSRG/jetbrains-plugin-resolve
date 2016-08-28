@@ -47,7 +47,7 @@ public class VerifierPanel2 extends JPanel {
 
     private void createBaseGUI() {
         //TODO: This should be drawn on the "activeVCsSidebar" JPanel
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+      /*  this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
         String vcShortcut = KeymapUtil.getFirstKeyboardShortcutText("resolve.GenVCs");
         JBLabel emptyLabel = new JBLabel(
@@ -68,22 +68,30 @@ public class VerifierPanel2 extends JPanel {
         JPanel dummypanel = new JBPanel();
         dummypanel.setOpaque(false);
         this.add(Box.createRigidArea(new Dimension(0, 50)));
-        this.add(emptyLabel);
+        this.add(emptyLabel);*/
     }
 
+    public static class SideStuff extends JPanel {
+        public SideStuff() {
+
+        }
+    }
     //prep VerifierPanel2 for showing vc tabs, toolbars, etc.
     public void createVerifierView() {
-        this.removeAll();
-        activeVCSideBar = new SideBar(SideBar.SideBarMode.TOP_LEVEL, true, 300, false);
+        //this.removeAll();
+        //activeVCSideBar = new SideBar(SideBar.SideBarMode.TOP_LEVEL, true, 300, false);
+        //activeVCSideBar.setLayout(new BoxLayout(activeVCSideBar, BoxLayout.Y_AXIS));
+        SideStuff s = new SideStuff();
+        s.setLayout(new BoxLayout(s, BoxLayout.Y_AXIS));
         for (int i = 0; i < 50; i++) {
-            activeVCSideBar.add(new JLabel("Foo: " + i));
+            s.add(new JLabel("asdjansfkljasnflkasjnflaskjfbaslfbalskfbalsfjbaslfjbas;fjbalskfjbsalgjbaFoo: " + i));
         }
-        JBScrollPane scrollPane = new JBScrollPane(activeVCSideBar,
+        JBScrollPane scrollPane = new JBScrollPane(s,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         add(scrollPane, BorderLayout.CENTER);
 
-        revalidate();
+        //revalidate();
     }
 
     public void revertToBaseGUI() {
