@@ -82,6 +82,7 @@ public class RESOLVEPluginController implements ProjectComponent {
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
 
         verifierPanel = new VerifierPanel2(project);
+        verifierPanel.setLayout(new BoxLayout(verifierPanel, BoxLayout.Y_AXIS));
 
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content content = contentFactory.createContent(verifierPanel, "", false);

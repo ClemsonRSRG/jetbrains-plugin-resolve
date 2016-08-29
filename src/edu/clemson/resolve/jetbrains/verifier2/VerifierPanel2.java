@@ -73,9 +73,11 @@ public class VerifierPanel2 extends JPanel {
 
     public static class SideStuff extends JPanel {
         public SideStuff() {
-
+            setBorder(BorderFactory.createLineBorder(JBColor.GRAY));
         }
     }
+
+    //DemoSelectorPanel swingset3
     //prep VerifierPanel2 for showing vc tabs, toolbars, etc.
     public void createVerifierView() {
         //this.removeAll();
@@ -83,8 +85,11 @@ public class VerifierPanel2 extends JPanel {
         //activeVCSideBar.setLayout(new BoxLayout(activeVCSideBar, BoxLayout.Y_AXIS));
         SideStuff s = new SideStuff();
         s.setLayout(new BoxLayout(s, BoxLayout.Y_AXIS));
-        for (int i = 0; i < 50; i++) {
-            s.add(new JLabel("asdjansfkljasnflkasjnflaskjfbaslfbalskfbalsfjbaslfjbas;fjbalskfjbsalgjbaFoo: " + i));
+        for (int i = 0; i < 20; i++) {
+            SideStuff vc = new SideStuff();
+            vc.add(new JBLabel("VC: " + i));
+            s.add(vc);
+            //s.add(new JLabel("asdjansfkljasnflkasjnflaskjfbaslfbalskfbalsfjbaslfjbas;fjbalskfjbsalgjbaFoo: " + i));
         }
         JBScrollPane scrollPane = new JBScrollPane(s,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
