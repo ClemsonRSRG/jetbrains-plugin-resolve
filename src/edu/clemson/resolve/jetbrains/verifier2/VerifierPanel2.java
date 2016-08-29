@@ -32,9 +32,9 @@ public class VerifierPanel2 extends JPanel {
     public VerificationSelectorPanel vcSelectorPanel = null;
 
     public VerifierPanel2(Project project) {
+        super(new BorderLayout());
         this.project = project;
         createBaseGUI();
-
     }
 
     public List<VerificationEditorPreview> getActivePreviewEditors() {

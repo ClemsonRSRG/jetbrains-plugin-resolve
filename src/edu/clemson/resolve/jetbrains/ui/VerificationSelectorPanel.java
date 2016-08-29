@@ -31,6 +31,7 @@ public class VerificationSelectorPanel extends JPanel {
 
         this.project = project;
         this.scrollPane = new JBScrollPane(selector);
+        this.scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         this.scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         add(scrollPane, BorderLayout.CENTER);
     }
