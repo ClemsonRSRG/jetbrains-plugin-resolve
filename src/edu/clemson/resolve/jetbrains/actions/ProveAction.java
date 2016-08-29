@@ -71,7 +71,7 @@ public class ProveAction extends RESOLVEAction {
 
         RESOLVEPluginController controller = RESOLVEPluginController.getInstance(project);
         VerifierPanel2 verifierPanel = controller.getVerifierPanel();
-        verifierPanel.createVerifierView();//TODO: maybe make this take in a list of VCs
+        verifierPanel.createVerifierView2(vco.getFinalVCs());//TODO: maybe make this take in a list of VCs
 
       /*  for (VC vc : vco.getFinalVCs()) {
             verifierPanel.addVCTab(vc);

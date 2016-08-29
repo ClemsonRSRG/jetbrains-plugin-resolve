@@ -37,6 +37,7 @@ public class VerificationEditorPreview extends EditorTextField {
         EditorEx e = super.createEditor();
         e.setBorder(new EmptyBorder(4, 4, 4, 4));
         e.setVerticalScrollbarVisible(true);
+        e.setHorizontalScrollbarVisible(true);
         return e;
     }
 }

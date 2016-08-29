@@ -11,6 +11,7 @@ import com.intellij.ui.components.JBScrollBar;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.util.ui.JBFont;
 import com.intellij.util.ui.UIUtil;
+import edu.clemson.resolve.jetbrains.ui.VerificationSelectorPanel;
 import edu.clemson.resolve.jetbrains.verifier.VerificationEditorPreview;
 import edu.clemson.resolve.proving.absyn.PExp;
 import edu.clemson.resolve.vcgen.VC;
@@ -28,6 +29,7 @@ public class VerifierPanel2 extends JPanel {
 
     public SideBar activeVCSideBar = null;
     private final Project project;
+    public VerificationSelectorPanel vcSelectorPanel = null;
 
     public VerifierPanel2(Project project) {
         this.project = project;
@@ -97,6 +99,11 @@ public class VerifierPanel2 extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
 
         //revalidate();
+    }
+
+    public void createVerifierView2(List<VC> vcs) {
+        vcSelectorPanel = new VerificationSelectorPanel(project, vcs);
+        add(vcSelectorPanel, BorderLayout.CENTER);
     }
 
     public void revertToBaseGUI() {
