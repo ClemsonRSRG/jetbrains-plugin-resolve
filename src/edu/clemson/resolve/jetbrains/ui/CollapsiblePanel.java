@@ -24,53 +24,37 @@ public class CollapsiblePanel extends JPanel {
     private Dimension childPrefSize;
     private boolean expanded = true;
 
-    public CollapsiblePanel(JComponent child) {
-        this(child, Orientation.VERTICAL);
-    }
-
-    public CollapsiblePanel(JComponent child, Orientation orientation) {
+    public CollapsiblePanel(JComponent child, Orientation orientation,
+                            String title, String tooltip) {
         this.orientation = orientation;
         this.child = child;
         setLayout(new BorderLayout());
         panel = new JPanel(new BorderLayout());
         add(panel, BorderLayout.CENTER);
         panel.add(child, BorderLayout.CENTER);
-    }
 
-    /** Creates a new instance of CollapsiblePanel */
-    public CollapsiblePanel(JComponent child, String title, String tooltip) {
-        this(child, Orientation.VERTICAL, title, tooltip);
-    }
-
-    public CollapsiblePanel(JComponent child, String title) {
-        this(child, Orientation.VERTICAL, title, null);
-    }
-
-    public CollapsiblePanel(JComponent child, Orientation orientation,
-                            String title, String tooltip) {
-        this(child, orientation);
         add(createCollapseControl(title, tooltip),
-                orientation == Orientation.HORIZONTAL?
-                        BorderLayout.WEST : BorderLayout.NORTH);
-
+                orientation == Orientation.HORIZONTAL ? BorderLayout.WEST : BorderLayout.NORTH);
     }
 
     protected Component createCollapseControl(String title, String tooltip) {
         // Add upper panel to hold collapse control
         Box box = Box.createHorizontalBox();
         Font font = VerifierPanel2.createFont(12);
-        expandCheckBox = new JCheckBox(title);
+
+        expandCheckBox = new JCheckBox(title, RESOLVEIcons.RIGHT_TRIANGLE);
         expandCheckBox.setFont(VerifierPanel2.createFont(12));
         expandCheckBox.setBorder(new EmptyBorder(0,4,0,0));
         expandCheckBox.setToolTipText(tooltip);
         expandCheckBox.setHorizontalTextPosition(JCheckBox.RIGHT);
-        expandCheckBox.setSelectedIcon(RESOLVEIcons.DOWN_TRIANGLE);
-        expandCheckBox.setIcon(RESOLVEIcons.RIGHT_TRIANGLE);
-        expandCheckBox.setSelected(isExpanded());
 
+        //expandCheckBox.setIcon(RESOLVEIcons.RIGHT_TRIANGLE);
+        //expandCheckBox.setIcon(RESOLVEIcons.RIGHT_TRIANGLE);
+
+        expandCheckBox.setSelected(isExpanded());
         expandCheckBox.addChangeListener(new CollapseListener());
         box.add(expandCheckBox);
-
+    revalidate();
         return box;
     }
 

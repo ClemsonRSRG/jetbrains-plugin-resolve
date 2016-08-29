@@ -71,6 +71,7 @@ public class VerifierPanel2 extends JPanel {
         this.removeAll();
         vcSelectorPanel = new VerificationSelectorPanel(project, vcs);
         add(vcSelectorPanel, BorderLayout.CENTER);
+        //revalidate();
     }
 
     public void revertToBaseGUI() {

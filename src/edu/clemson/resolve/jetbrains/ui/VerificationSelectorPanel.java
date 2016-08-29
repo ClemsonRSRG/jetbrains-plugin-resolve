@@ -3,6 +3,7 @@ package edu.clemson.resolve.jetbrains.ui;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBScrollPane;
+import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.verifier.VerificationEditorPreview;
 import edu.clemson.resolve.proving.absyn.PExp;
 import edu.clemson.resolve.vcgen.VC;
@@ -21,6 +22,9 @@ public class VerificationSelectorPanel extends JPanel {
     private static final Border PANEL_BORDER = new CompoundBorder(CHISEL_BORDER, new EmptyBorder(6,8,6,0));
     private static final Border CATEGORY_BORDER = new CompoundBorder(CHISEL_BORDER, new EmptyBorder(0,0,10,0));
 
+    private Icon expandedIcon;
+    private Icon collapsedIcon;
+
     private final Project project;
     private JBScrollPane scrollPane;
     private final List<CollapsiblePanel> collapsePanels = new ArrayList<>();
@@ -34,6 +38,8 @@ public class VerificationSelectorPanel extends JPanel {
         this.scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         this.scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         add(scrollPane, BorderLayout.CENTER);
+
+        applyDefaults();
     }
 
     protected JComponent createDemoSelector(List<VC> vcs) {
@@ -50,13 +56,16 @@ public class VerificationSelectorPanel extends JPanel {
         cc.gridx = cc.gridy = 0;
         cc.weightx = 1;
         cc.fill = GridBagConstraints.HORIZONTAL;
-        CollapsiblePanel collapsePanel;
+
         for (VC vc : vcs) {
             JPanel categoryPanel = new JPanel();
             categoryGridbag = new GridBagLayout();
             categoryPanel.setLayout(categoryGridbag);
 
-            collapsePanel = new CollapsiblePanel(categoryPanel, "<html><b>VC #" + vc.getNumber() + "</b></html>", "click to expand and view VC information");
+            CollapsiblePanel collapsePanel =
+                    new CollapsiblePanel(categoryPanel, CollapsiblePanel.Orientation.VERTICAL,
+                            "<html><b>VC #" + vc.getNumber() + "</b></html>",
+                            "click to expand and view VC information");
             collapsePanels.add(collapsePanel);
             collapsePanel.setBorder(CATEGORY_BORDER);
 
@@ -74,7 +83,28 @@ public class VerificationSelectorPanel extends JPanel {
         gridbag.addLayoutComponent(trailer, c);
         selectorPanel.add(trailer);
 
+        applyDefaults();
         return selectorPanel;
+    }
+
+    @Override
+    public void updateUI() {
+        super.updateUI();
+        applyDefaults();
+    }
+
+    private void applyDefaults() {
+
+        expandedIcon = new ArrowIcon(ArrowIcon.SOUTH, JBColor.ORANGE);
+        collapsedIcon = new ArrowIcon(ArrowIcon.EAST, JBColor.ORANGE);
+        if (collapsePanels != null) {
+
+            for (CollapsiblePanel p : collapsePanels) {
+                p.setExpandedIcon(expandedIcon);
+                p.setCollapsedIcon(collapsedIcon);
+            }
+        }
+        revalidate();
     }
 
     private static class ChiselBorder implements Border {
