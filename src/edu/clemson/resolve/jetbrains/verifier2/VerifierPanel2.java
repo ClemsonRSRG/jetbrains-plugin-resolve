@@ -21,6 +21,7 @@ public class VerifierPanel2 extends JPanel {
     public static final Logger LOG = Logger.getInstance("RESOLVE VerifierPanel");
 
     private final Project project;
+
     public VerificationSelectorPanel vcSelectorPanel = null;
     public JPanel startingPanel = null;
 
@@ -86,7 +87,7 @@ public class VerifierPanel2 extends JPanel {
         revalidate();
     }
 
-    private static Font createFont(int size) {
+    public static Font createFont(int size) {
         return JBFont.create(new Font(UIUtil.getMenuFont().getName(), Font.PLAIN, size));
     }
 }

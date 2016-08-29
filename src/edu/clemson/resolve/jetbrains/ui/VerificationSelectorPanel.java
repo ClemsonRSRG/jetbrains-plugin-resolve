@@ -56,7 +56,7 @@ public class VerificationSelectorPanel extends JPanel {
             categoryGridbag = new GridBagLayout();
             categoryPanel.setLayout(categoryGridbag);
 
-            collapsePanel = new CollapsiblePanel(categoryPanel, vc.getNumber() + "", "click to view goal and given information");
+            collapsePanel = new CollapsiblePanel(categoryPanel, "<html><b>VC #" + vc.getNumber() + "</b></html>", "click to expand and view VC information");
             collapsePanels.add(collapsePanel);
             collapsePanel.setBorder(CATEGORY_BORDER);
 
@@ -67,17 +67,12 @@ public class VerificationSelectorPanel extends JPanel {
             categoryGridbag.addLayoutComponent(preview, cc);
             cc.gridy++;
             categoryPanel.add(preview);
-            //if (buttonHeight == 0) {
-            //    buttonHeight = demoButton.getPreferredSize().height;
-           // }
         }
         // add empty component to take up any extra room on bottom
         JPanel trailer = new JPanel();
         c.weighty = 1.0;
         gridbag.addLayoutComponent(trailer, c);
         selectorPanel.add(trailer);
-
-        //applyDefaults();
 
         return selectorPanel;
     }
@@ -115,8 +110,7 @@ public class VerificationSelectorPanel extends JPanel {
         vcText += vc.getConsequent();
         VerificationEditorPreview preview = new VerificationEditorPreview(project, vcText);
         preview.setBackground(JBColor.WHITE);
-        preview.addNotify();    //TODODO
-
+        preview.addNotify();
         return preview;
     }
 }

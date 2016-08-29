@@ -1,5 +1,7 @@
 package edu.clemson.resolve.jetbrains.ui;
 
+import edu.clemson.resolve.jetbrains.verifier2.VerifierPanel2;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
@@ -57,6 +59,7 @@ public class CollapsiblePanel extends JPanel {
         Box box = Box.createHorizontalBox();
 
         expandCheckBox = new JCheckBox(title);
+        expandCheckBox.setFont(VerifierPanel2.createFont(12));
         expandCheckBox.setBorder(new EmptyBorder(0,4,0,0));
         expandCheckBox.setToolTipText(tooltip);
         expandCheckBox.setHorizontalTextPosition(JCheckBox.RIGHT);
