@@ -1,5 +1,6 @@
 package edu.clemson.resolve.jetbrains.ui;
 
+import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.verifier2.VerifierPanel2;
 
 import javax.swing.*;
@@ -57,14 +58,14 @@ public class CollapsiblePanel extends JPanel {
     protected Component createCollapseControl(String title, String tooltip) {
         // Add upper panel to hold collapse control
         Box box = Box.createHorizontalBox();
-
+        Font font = VerifierPanel2.createFont(12);
         expandCheckBox = new JCheckBox(title);
         expandCheckBox.setFont(VerifierPanel2.createFont(12));
         expandCheckBox.setBorder(new EmptyBorder(0,4,0,0));
         expandCheckBox.setToolTipText(tooltip);
         expandCheckBox.setHorizontalTextPosition(JCheckBox.RIGHT);
-        //expandCheckBox.setSelectedIcon(new ArrowIcon(ArrowIcon.SOUTH));
-        //expandCheckBox.setIcon(new ArrowIcon(ArrowIcon.EAST));
+        expandCheckBox.setSelectedIcon(RESOLVEIcons.DOWN_TRIANGLE);
+        expandCheckBox.setIcon(RESOLVEIcons.RIGHT_TRIANGLE);
         expandCheckBox.setSelected(isExpanded());
 
         expandCheckBox.addChangeListener(new CollapseListener());

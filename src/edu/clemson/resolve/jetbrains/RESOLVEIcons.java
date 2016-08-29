@@ -56,6 +56,10 @@ public interface RESOLVEIcons {
     public static final Icon PROCESSING7 = IconLoader.getIcon("/runConfigurations/testInProgress7@2x.png");
     public static final Icon PROCESSING8 = IconLoader.getIcon("/runConfigurations/testInProgress8@2x.png");
 
+    public static final Icon RIGHT_TRIANGLE = IconLoader.getIcon("/edu/clemson/resolve/icons/righttriangle.png");
+    public static final Icon DOWN_TRIANGLE = IconLoader.getIcon("/edu/clemson/resolve/icons/downtriangle.png");
+
+
     /**
      * Places a small icon (mark) in the lower right hand corner of the {@code base} icon.
      * Used from go lang plugin.
