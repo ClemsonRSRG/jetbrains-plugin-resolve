@@ -65,7 +65,7 @@ public class VerificationSelectorPanel extends JPanel {
 
             CollapsiblePanel collapsePanel =
                     new CollapsiblePanel(categoryPanel, CollapsiblePanel.Orientation.VERTICAL,
-                            "<html><b>VC #" + vc.getNumber() + "</b></html>",
+                            "<html>  <b>VC #" + vc.getNumber() + "</b></html>",
                             "click to expand and view VC information");
             collapsePanels.add(collapsePanel);
             collapsePanel.setExpanded(false);
