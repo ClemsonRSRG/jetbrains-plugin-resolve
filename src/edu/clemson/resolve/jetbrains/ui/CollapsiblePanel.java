@@ -1,5 +1,6 @@
 package edu.clemson.resolve.jetbrains.ui;
 
+import com.intellij.openapi.util.IconLoader;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.verifier2.VerifierPanel2;
 
@@ -19,7 +20,7 @@ public class CollapsiblePanel extends JPanel {
     private JPanel panel;
     private JComponent child;
 
-    private JCheckBox expandCheckBox; // may be null, if no title was supplied
+    public JCheckBox expandCheckBox; // may be null, if no title was supplied
     private Orientation orientation = Orientation.VERTICAL;
     private Dimension childPrefSize;
     private boolean expanded = true;
@@ -39,22 +40,23 @@ public class CollapsiblePanel extends JPanel {
 
     protected Component createCollapseControl(String title, String tooltip) {
         // Add upper panel to hold collapse control
-        Box box = Box.createHorizontalBox();
+        JPanel box = new JPanel();
         Font font = VerifierPanel2.createFont(12);
 
-        expandCheckBox = new JCheckBox(title, RESOLVEIcons.RIGHT_TRIANGLE);
+        Icon  x =  IconLoader.getIcon("/precis.png");
+
+        expandCheckBox = new JCheckBox(title, x);
         expandCheckBox.setFont(VerifierPanel2.createFont(12));
         expandCheckBox.setBorder(new EmptyBorder(0,4,0,0));
         expandCheckBox.setToolTipText(tooltip);
         expandCheckBox.setHorizontalTextPosition(JCheckBox.RIGHT);
 
-        //expandCheckBox.setIcon(RESOLVEIcons.RIGHT_TRIANGLE);
-        //expandCheckBox.setIcon(RESOLVEIcons.RIGHT_TRIANGLE);
 
-        expandCheckBox.setSelected(isExpanded());
-        expandCheckBox.addChangeListener(new CollapseListener());
+        //expandCheckBox.setSelectedIcon(x);
+
+        //expandCheckBox.setSelected(isExpanded());
+        //expandCheckBox.addChangeListener(new CollapseListener());
         box.add(expandCheckBox);
-    revalidate();
         return box;
     }
 
@@ -112,18 +114,6 @@ public class CollapsiblePanel extends JPanel {
 
     public boolean isExpanded() {
         return expanded;
-    }
-
-    public void setExpandedIcon(Icon expandedIcon) {
-        if (expandCheckBox != null) {
-            expandCheckBox.setSelectedIcon(expandedIcon);
-        }
-    }
-
-    public void setCollapsedIcon(Icon collapsedIcon) {
-        if (expandCheckBox != null) {
-            expandCheckBox.setIcon(collapsedIcon);
-        }
     }
 
     @Override

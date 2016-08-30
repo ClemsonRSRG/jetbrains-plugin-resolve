@@ -1,7 +1,9 @@
 package edu.clemson.resolve.jetbrains.ui;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.IconLoader;
 import com.intellij.ui.JBColor;
+import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBScrollPane;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.verifier.VerificationEditorPreview;
@@ -38,8 +40,7 @@ public class VerificationSelectorPanel extends JPanel {
         this.scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         this.scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         add(scrollPane, BorderLayout.CENTER);
-
-        applyDefaults();
+        //applyDefaults();
     }
 
     protected JComponent createDemoSelector(List<VC> vcs) {
@@ -67,6 +68,7 @@ public class VerificationSelectorPanel extends JPanel {
                             "<html><b>VC #" + vc.getNumber() + "</b></html>",
                             "click to expand and view VC information");
             collapsePanels.add(collapsePanel);
+            collapsePanel.setExpanded(false);
             collapsePanel.setBorder(CATEGORY_BORDER);
 
             gridbag.addLayoutComponent(collapsePanel, c);
@@ -83,28 +85,8 @@ public class VerificationSelectorPanel extends JPanel {
         gridbag.addLayoutComponent(trailer, c);
         selectorPanel.add(trailer);
 
-        applyDefaults();
+        //applyDefaults();
         return selectorPanel;
-    }
-
-    @Override
-    public void updateUI() {
-        super.updateUI();
-        applyDefaults();
-    }
-
-    private void applyDefaults() {
-
-        expandedIcon = new ArrowIcon(ArrowIcon.SOUTH, JBColor.ORANGE);
-        collapsedIcon = new ArrowIcon(ArrowIcon.EAST, JBColor.ORANGE);
-        if (collapsePanels != null) {
-
-            for (CollapsiblePanel p : collapsePanels) {
-                p.setExpandedIcon(expandedIcon);
-                p.setCollapsedIcon(collapsedIcon);
-            }
-        }
-        revalidate();
     }
 
     private static class ChiselBorder implements Border {
@@ -129,6 +111,22 @@ public class VerificationSelectorPanel extends JPanel {
             g.drawLine(x, y + height - 1, x + width, y + height - 1);
         }
     }
+   /* @Override
+    public void updateUI() {
+        super.updateUI();
+        applyDefaults();
+    }
+    protected void applyDefaults() {
+
+        Icon x =  IconLoader.getIcon("/precis.png");
+        if (collapsePanels != null) {
+            for (CollapsiblePanel collapsePanel : collapsePanels) {
+                collapsePanel.setCollapsedIcon(x);
+               //collapsePanel.setExpandedIcon(x);
+            }
+        }
+        revalidate();
+    }*/
 
     public VerificationEditorPreview getVCPreview(VC vc) {
         List<PExp> antecedents = vc.getAntecedent().splitIntoConjuncts();
