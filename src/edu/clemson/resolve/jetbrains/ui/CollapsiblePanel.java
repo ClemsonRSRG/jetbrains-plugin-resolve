@@ -1,6 +1,9 @@
 package edu.clemson.resolve.jetbrains.ui;
 
 import com.intellij.openapi.util.IconLoader;
+import com.intellij.ui.StateRestoringCheckBox;
+import com.intellij.ui.components.JBCheckBox;
+import com.intellij.ui.components.JBLabel;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.verifier2.VerifierPanel2;
 
@@ -41,22 +44,34 @@ public class CollapsiblePanel extends JPanel {
     protected Component createCollapseControl(String title, String tooltip) {
         // Add upper panel to hold collapse control
         JPanel box = new JPanel();
-        Font font = VerifierPanel2.createFont(12);
 
-        Icon  x =  IconLoader.getIcon("/precis.png");
+        //THIS ONE KINDA WORKS...
+        JToggleButton b = new JToggleButton(IconLoader.getIcon("/precis.png"));
+        b.setSelectedIcon(IconLoader.getIcon("/concept.png"));
+        b.setContentAreaFilled(false);
+        b.setOpaque(false);
+        box.add(b);
 
-        expandCheckBox = new JCheckBox(title, x);
+        //JRadioButton
+        //StateRestoringCheckBox b = new StateRestoringCheckBox(IconLoader.getIcon("/precis.png"));
+       // b.setIcon(IconLoader.getIcon("/precis.png"));
+        //b.setSelectedIcon(IconLoader.getIcon("/concept.png"));
+        //box.add(b);
+        /*Font font = VerifierPanel2.createFont(12);
+        box.add(expandCheckBox);
+
+        //expandCheckBox.setIcon(x);
+
         expandCheckBox.setFont(VerifierPanel2.createFont(12));
         expandCheckBox.setBorder(new EmptyBorder(0,4,0,0));
         expandCheckBox.setToolTipText(tooltip);
         expandCheckBox.setHorizontalTextPosition(JCheckBox.RIGHT);
 
-
+*/
         //expandCheckBox.setSelectedIcon(x);
 
         //expandCheckBox.setSelected(isExpanded());
         //expandCheckBox.addChangeListener(new CollapseListener());
-        box.add(expandCheckBox);
         return box;
     }
 
