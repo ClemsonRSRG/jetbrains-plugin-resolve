@@ -1,9 +1,8 @@
-package edu.clemson.resolve.jetbrains.ui;
+package edu.clemson.resolve.jetbrains.verifier;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBScrollPane;
-import edu.clemson.resolve.jetbrains.verifier.VerificationEditorPreview;
 import edu.clemson.resolve.proving.absyn.PExp;
 import edu.clemson.resolve.vcgen.VC;
 import org.jetbrains.annotations.NotNull;

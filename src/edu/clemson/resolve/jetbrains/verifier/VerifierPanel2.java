@@ -1,4 +1,4 @@
-package edu.clemson.resolve.jetbrains.verifier2;
+package edu.clemson.resolve.jetbrains.verifier;
 
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.keymap.KeymapUtil;
@@ -6,9 +6,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.util.ui.JBFont;
 import com.intellij.util.ui.UIUtil;
-import edu.clemson.resolve.jetbrains.ui.ConditionCollapsiblePanel;
-import edu.clemson.resolve.jetbrains.ui.VerificationConditionSelectorPanel;
-import edu.clemson.resolve.jetbrains.verifier.VerificationEditorPreview;
 import edu.clemson.resolve.vcgen.VC;
 
 import javax.swing.*;

@@ -1,9 +1,9 @@
-package edu.clemson.resolve.jetbrains.ui;
+package edu.clemson.resolve.jetbrains.verifier;
 
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.util.ui.AnimatedIcon;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
-import edu.clemson.resolve.jetbrains.verifier2.VerifierPanel2;
+import edu.clemson.resolve.jetbrains.verifier.VerifierPanel2;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
