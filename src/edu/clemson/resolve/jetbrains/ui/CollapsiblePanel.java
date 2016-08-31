@@ -57,7 +57,6 @@ public class CollapsiblePanel extends JPanel {
         box.add(expandButton);
         box.add(Box.createRigidArea(new Dimension(3,0)));
         box.add(label, LEFT_ALIGNMENT);
-
         return box;
     }
 
