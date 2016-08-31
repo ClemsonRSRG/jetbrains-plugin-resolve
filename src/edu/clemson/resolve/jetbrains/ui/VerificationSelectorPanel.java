@@ -21,8 +21,7 @@ import java.util.List;
 public class VerificationSelectorPanel extends JPanel {
 
     private static final Border CHISEL_BORDER = new ChiselBorder();
-    private static final Border PANEL_BORDER = new CompoundBorder(CHISEL_BORDER, new EmptyBorder(6,8,6,0));
-    private static final Border CATEGORY_BORDER = new CompoundBorder(CHISEL_BORDER, new EmptyBorder(0,0,10,0));
+    private static final Border CATEGORY_BORDER = new CompoundBorder(CHISEL_BORDER, new EmptyBorder(0,0,11,0));
 
     private Icon expandedIcon;
     private Icon collapsedIcon;
@@ -76,7 +75,7 @@ public class VerificationSelectorPanel extends JPanel {
             c.gridy++;
             VerificationEditorPreview preview = getVCPreview(vc);
             categoryGridbag.addLayoutComponent(preview, cc);
-            cc.gridy++;
+            cc.gridy += 32;
             categoryPanel.add(preview);
         }
         // add empty component to take up any extra room on bottom
@@ -105,28 +104,18 @@ public class VerificationSelectorPanel extends JPanel {
             Color color = c.getBackground();
             // render highlight at top
             //g.setColor(Utilities.deriveColorHSB(color, 0, 0, .2f));
-            g.drawLine(x, y, x + width, y);
+            Graphics2D g2d = (Graphics2D) g.create();
+            g2d.setStroke(new BasicStroke(2));
+            g2d.drawLine(x, y, x + width, y);
+            g2d.setColor(JBColor.GRAY);
+            //g.drawLine(x, y, x + width, y);
+
             // render shadow on bottom
             //g.setColor(Utilities.deriveColorHSB(color, 0, 0, -.2f));
-            g.drawLine(x, y + height - 1, x + width, y + height - 1);
+            g2d.drawLine(x, y + height - 1, x + width, y + height - 1);
+            //g.drawLine(x, y + height - 1, x + width, y + height - 1);
         }
     }
-   /* @Override
-    public void updateUI() {
-        super.updateUI();
-        applyDefaults();
-    }
-    protected void applyDefaults() {
-
-        Icon x =  IconLoader.getIcon("/precis.png");
-        if (collapsePanels != null) {
-            for (CollapsiblePanel collapsePanel : collapsePanels) {
-                collapsePanel.setCollapsedIcon(x);
-               //collapsePanel.setExpandedIcon(x);
-            }
-        }
-        revalidate();
-    }*/
 
     public VerificationEditorPreview getVCPreview(VC vc) {
         List<PExp> antecedents = vc.getAntecedent().splitIntoConjuncts();
