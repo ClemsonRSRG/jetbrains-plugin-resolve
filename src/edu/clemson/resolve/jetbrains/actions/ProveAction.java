@@ -20,7 +20,7 @@ import edu.clemson.resolve.RESOLVECompiler;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
 import edu.clemson.resolve.jetbrains.verifier.ConditionCollapsiblePanel;
-import edu.clemson.resolve.jetbrains.verifier.VerifierPanel2;
+import edu.clemson.resolve.jetbrains.verifier.VerifierPanel;
 import edu.clemson.resolve.proving.Metrics;
 import edu.clemson.resolve.proving.PerVCProverModel;
 import edu.clemson.resolve.proving.ProverListener;
@@ -72,7 +72,7 @@ public class ProveAction extends RESOLVEAction {
         if (vco == null) return;
 
         RESOLVEPluginController controller = RESOLVEPluginController.getInstance(project);
-        VerifierPanel2 verifierPanel = controller.getVerifierPanel();
+        VerifierPanel verifierPanel = controller.getVerifierPanel();
         verifierPanel.createVerifierView2(vco.getFinalVCs());//TODO: maybe make this take in a list of VCs
 
         addVCGutterIcons(vco, editor, project, pl);
@@ -216,7 +216,7 @@ public class ProveAction extends RESOLVEAction {
                     for (RangeHighlighter h : vcRelatedHighlighters) {
                         markup.removeHighlighter(h);
                     }
-                    VerifierPanel2 verifierPanel = controller.getVerifierPanel();
+                    VerifierPanel verifierPanel = controller.getVerifierPanel();
                     controller.getVerifierWindow().hide(null);
                     verifierPanel.revertToBaseGUI();
                 }

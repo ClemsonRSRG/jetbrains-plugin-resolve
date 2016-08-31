@@ -14,7 +14,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VerifierPanel2 extends JPanel {
+public class VerifierPanel extends JPanel {
 
     public static final Logger LOG = Logger.getInstance("RESOLVE VerifierPanel");
 
@@ -23,7 +23,7 @@ public class VerifierPanel2 extends JPanel {
     public VerificationConditionSelectorPanel vcSelectorPanel = null;
     public JPanel startingPanel = null;
 
-    public VerifierPanel2(Project project) {
+    public VerifierPanel(Project project) {
         super(new BorderLayout());
         this.project = project;
         createStartingGUI();

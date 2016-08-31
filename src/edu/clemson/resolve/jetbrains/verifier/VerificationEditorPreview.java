@@ -31,7 +31,6 @@ public class VerificationEditorPreview extends EditorTextField {
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         setOneLineMode(false);
         setViewerEnabled(true);
-        s
     }
 
     @Override

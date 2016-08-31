@@ -3,7 +3,6 @@ package edu.clemson.resolve.jetbrains.verifier;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.util.ui.AnimatedIcon;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
-import edu.clemson.resolve.jetbrains.verifier.VerifierPanel2;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -117,7 +116,7 @@ public class ConditionCollapsiblePanel extends JPanel {
         expandButton.setSelectedIcon(IconLoader.getIcon("/edu/clemson/resolve/icons/downtriangle.png"));
 
         JLabel label = new JLabel(title);
-        label.setFont(VerifierPanel2.createFont(12));
+        label.setFont(VerifierPanel.createFont(12));
 
         expandButton.setBorder(new EmptyBorder(0,4,0,0));
         expandButton.setToolTipText(tooltip);
