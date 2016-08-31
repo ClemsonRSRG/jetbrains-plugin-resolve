@@ -21,7 +21,7 @@ import java.util.List;
 public class VerificationSelectorPanel extends JPanel {
 
     private static final Border CHISEL_BORDER = new ChiselBorder();
-    private static final Border CATEGORY_BORDER = new CompoundBorder(CHISEL_BORDER, new EmptyBorder(0,0,11,0));
+    private static final Border CATEGORY_BORDER = new CompoundBorder(CHISEL_BORDER, new EmptyBorder(0,0,11,0)); //VARY THICKNESS OF HORIZONTAL RECT HERE
 
     private Icon expandedIcon;
     private Icon collapsedIcon;
@@ -89,6 +89,7 @@ public class VerificationSelectorPanel extends JPanel {
     }
 
     private static class ChiselBorder implements Border {
+
         private Insets insets = new Insets(1, 0, 1, 0);
 
         public ChiselBorder() {
@@ -97,23 +98,18 @@ public class VerificationSelectorPanel extends JPanel {
         public Insets getBorderInsets(Component c) {
             return insets;
         }
+
         public boolean isBorderOpaque() {
             return true;
         }
+
         public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-            Color color = c.getBackground();
-            // render highlight at top
-            //g.setColor(Utilities.deriveColorHSB(color, 0, 0, .2f));
             Graphics2D g2d = (Graphics2D) g.create();
             g2d.setStroke(new BasicStroke(2));
-            g2d.drawLine(x, y, x + width, y);
-            g2d.setColor(JBColor.GRAY);
-            //g.drawLine(x, y, x + width, y);
-
-            // render shadow on bottom
-            //g.setColor(Utilities.deriveColorHSB(color, 0, 0, -.2f));
+            //g2d.setColor(JBColor.LIGHT_GRAY);
+            //g2d.drawLine(x, y, x + width, y);
+            g2d.setColor(JBColor.LIGHT_GRAY);
             g2d.drawLine(x, y + height - 1, x + width, y + height - 1);
-            //g.drawLine(x, y + height - 1, x + width, y + height - 1);
         }
     }
 
