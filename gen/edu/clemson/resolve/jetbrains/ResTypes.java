@@ -188,6 +188,7 @@ public interface ResTypes {
   IElementType PARAM_TYPE = new ResTokenType("type");
   IElementType PRECIS = new ResTokenType("Precis");
   IElementType PRESERVES = new ResTokenType("preserves");
+  IElementType PRIME = new ResTokenType("′");
   IElementType PROCEDURE = new ResTokenType("Procedure");
   IElementType PROG_IF = new ResTokenType("If");
   IElementType QV = new ResTokenType("?");
