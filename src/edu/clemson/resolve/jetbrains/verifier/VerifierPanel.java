@@ -7,6 +7,7 @@ import com.intellij.ui.components.JBLabel;
 import com.intellij.util.ui.JBFont;
 import com.intellij.util.ui.UIUtil;
 import edu.clemson.resolve.vcgen.VC;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -33,6 +34,11 @@ public class VerifierPanel extends JPanel {
         List<VerificationEditorPreview> result = new ArrayList<>();
         if (vcSelectorPanel != null) result.addAll(vcSelectorPanel.previewEditors);
         return result;
+    }
+
+    @Nullable
+    public VerificationConditionSelectorPanel getVcSelectorPanel() {
+        return vcSelectorPanel;
     }
 
     private void createStartingGUI() {

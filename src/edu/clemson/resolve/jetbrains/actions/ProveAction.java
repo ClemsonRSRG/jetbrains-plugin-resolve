@@ -20,6 +20,7 @@ import edu.clemson.resolve.RESOLVECompiler;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
 import edu.clemson.resolve.jetbrains.verifier.ConditionCollapsiblePanel;
+import edu.clemson.resolve.jetbrains.verifier.VerificationConditionSelectorPanel;
 import edu.clemson.resolve.jetbrains.verifier.VerifierPanel;
 import edu.clemson.resolve.proving.Metrics;
 import edu.clemson.resolve.proving.PerVCProverModel;
@@ -226,8 +227,10 @@ public class ProveAction extends RESOLVEAction {
 
     static class ProverVCAction extends AnAction {
         private final MyProverListener pl;
-        private final String vcNum;
+
+        private final String vcNum; //TODO: Make this a
         public boolean isProved = false;
+
         ProverVCAction(MyProverListener l, String vcNum, String explanation) {
             super("VC #" + vcNum + " : " + explanation);
             this.pl = l;
@@ -248,10 +251,19 @@ public class ProveAction extends RESOLVEAction {
 
         @Override
         public void actionPerformed(AnActionEvent e) {
-            AbstractTreeBuilder x;
-            //TODO
-            //controller.getVerifierWindow().show(null);  //open the tool(verifier)window
-            //VerifierPanel verifierPanel = controller.getVerifierPanel();
+            if (e.getProject() == null) return;
+            RESOLVEPluginController controller = RESOLVEPluginController.getInstance(e.getProject());
+            controller.getVerifierWindow().show(null);  //open the verifier window
+            VerificationConditionSelectorPanel vcselector = controller.getVerifierPanel().getVcSelectorPanel();
+            if (vcselector == null) return;
+            vcselector.vcTabs.get(Integer.parseInt(vcNum));
+            VerifierPanel verifierPanel = controller.getVerifierPanel();
+            if (verifierPanel.getVcSelectorPanel() == null) return;
+            VerificationConditionSelectorPanel selector = verifierPanel.getVcSelectorPanel();
+
+            ConditionCollapsiblePanel details = selector.vcTabs.get(Integer.parseInt(vcNum));
+            details.setExpanded(true);
+            //verifierPanel.getVcSelectorPanel().vcTabs
 
             //I performed an action, let's remember to clean up after ourselves before we go and update
             //the vc panel
