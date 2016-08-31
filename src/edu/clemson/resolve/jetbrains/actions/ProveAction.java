@@ -11,12 +11,15 @@ import com.intellij.openapi.editor.markup.HighlighterLayer;
 import com.intellij.openapi.editor.markup.MarkupModel;
 import com.intellij.openapi.editor.markup.RangeHighlighter;
 import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import edu.clemson.resolve.RESOLVECompiler;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
+import edu.clemson.resolve.jetbrains.ui.ConditionCollapsiblePanel;
 import edu.clemson.resolve.jetbrains.verifier2.VerifierPanel2;
 import edu.clemson.resolve.proving.Metrics;
 import edu.clemson.resolve.proving.PerVCProverModel;
@@ -39,7 +42,6 @@ public class ProveAction extends RESOLVEAction {
 
     @Override
     public void update(AnActionEvent e) {
-
     }
 
     @Override
@@ -73,17 +75,9 @@ public class ProveAction extends RESOLVEAction {
         VerifierPanel2 verifierPanel = controller.getVerifierPanel();
         verifierPanel.createVerifierView2(vco.getFinalVCs());//TODO: maybe make this take in a list of VCs
 
-      /*  for (VC vc : vco.getFinalVCs()) {
-            verifierPanel.addVCTab(vc);
-        }
-      for (VC vc : vco.getFinalVCs()) {
-            verifierPanel.addVCTab(vc);
-        }
-        for (VC vc : vco.getFinalVCs()) {
-            verifierPanel.addVCTab(vc);
-        }*/
         addVCGutterIcons(vco, editor, project, pl);
         controller.getVerifierWindow().show(null);
+
         //runProver
         List<String> args = new ArrayList<String>();
         args.add(resolveFile.getPath());
@@ -93,7 +87,7 @@ public class ProveAction extends RESOLVEAction {
         RESOLVECompiler compiler = new RESOLVECompiler(args.toArray(new String[args.size()]));
         compiler.addProverListener(pl);
 
-     /*   ProgressManager.getInstance().run(new Task.Backgroundable(project, "Proving") {
+        ProgressManager.getInstance().run(new Task.Backgroundable(project, "Proving") {
             @Override
             public void run(@NotNull final ProgressIndicator progressIndicator) {
                 compiler.processCommandLineTargets();
@@ -101,8 +95,8 @@ public class ProveAction extends RESOLVEAction {
         });
 
 
-        List<SidebarSection> proved = new ArrayList<>();
-        List<SidebarSection> notProved = new ArrayList<>();
+        //List<SidebarSection> proved = new ArrayList<>();
+        //List<SidebarSection> notProved = new ArrayList<>();
 
         ProgressManager.getInstance().run(new Task.Backgroundable(project, "Updating Presentation") {
             @Override
@@ -115,16 +109,15 @@ public class ProveAction extends RESOLVEAction {
                     for (VC vc : vco.getFinalVCs()) {
                         if (pl.vcIsProved.containsKey(vc.getName()) && !processed.get(vc.getName())) {
                             processed.put(vc.getName(), true);
-                            SidebarSection section = verifierPanel.activeVCSideBar.sections.get(vc.getName());
-
+                            ConditionCollapsiblePanel section = verifierPanel.vcSelectorPanel.vcTabs.get(vc.getNumber());
                             section.changeToFinalState(pl.vcIsProved.get(vc.getName()) ?
-                                    SidebarSection.State.PROVED :
-                                    SidebarSection.State.NOT_PROVED);
+                                    ConditionCollapsiblePanel.State.PROVED :
+                                    ConditionCollapsiblePanel.State.NOT_PROVED);
                         }
                     }
                 }
             }
-        });*/
+        });
     }
 
     @Nullable

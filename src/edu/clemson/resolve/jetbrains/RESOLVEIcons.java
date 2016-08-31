@@ -43,18 +43,18 @@ public interface RESOLVEIcons {
     public static final Icon FUNCTION_DECL = IconLoader.getIcon("/edu/clemson/resolve/icons/function.png");
     public static final Icon FUNCTION_IMPL = IconLoader.getIcon("/edu/clemson/resolve/icons/function_impl.png");
 
-    public static final Icon PROVED = IconLoader.getIcon("/edu/clemson/resolve/icons/proved@2x.png");
-    public static final Icon NOT_PROVED = IconLoader.getIcon("/edu/clemson/resolve/icons/not_proved@2x.png");
-    public static final Icon TIMED_OUT = IconLoader.getIcon("/edu/clemson/resolve/icons/timeout@2x.png");
+    public static final Icon PROVED = IconLoader.getIcon("/edu/clemson/resolve/icons/proved.png");
+    public static final Icon NOT_PROVED = IconLoader.getIcon("/edu/clemson/resolve/icons/not_proved.png");
+    public static final Icon TIMED_OUT = IconLoader.getIcon("/edu/clemson/resolve/icons/timeout.png");
 
-    public static final Icon PROCESSING1 = IconLoader.getIcon("/runConfigurations/testInProgress1@2x.png");
-    public static final Icon PROCESSING2 = IconLoader.getIcon("/runConfigurations/testInProgress2@2x.png");
-    public static final Icon PROCESSING3 = IconLoader.getIcon("/runConfigurations/testInProgress3@2x.png");
-    public static final Icon PROCESSING4 = IconLoader.getIcon("/runConfigurations/testInProgress4@2x.png");
-    public static final Icon PROCESSING5 = IconLoader.getIcon("/runConfigurations/testInProgress5@2x.png");
-    public static final Icon PROCESSING6 = IconLoader.getIcon("/runConfigurations/testInProgress6@2x.png");
-    public static final Icon PROCESSING7 = IconLoader.getIcon("/runConfigurations/testInProgress7@2x.png");
-    public static final Icon PROCESSING8 = IconLoader.getIcon("/runConfigurations/testInProgress8@2x.png");
+    public static final Icon PROCESSING1 = IconLoader.getIcon("/runConfigurations/testInProgress1.png");
+    public static final Icon PROCESSING2 = IconLoader.getIcon("/runConfigurations/testInProgress2.png");
+    public static final Icon PROCESSING3 = IconLoader.getIcon("/runConfigurations/testInProgress3.png");
+    public static final Icon PROCESSING4 = IconLoader.getIcon("/runConfigurations/testInProgress4.png");
+    public static final Icon PROCESSING5 = IconLoader.getIcon("/runConfigurations/testInProgress5.png");
+    public static final Icon PROCESSING6 = IconLoader.getIcon("/runConfigurations/testInProgress6.png");
+    public static final Icon PROCESSING7 = IconLoader.getIcon("/runConfigurations/testInProgress7.png");
+    public static final Icon PROCESSING8 = IconLoader.getIcon("/runConfigurations/testInProgress8.png");
 
     public static final Icon RIGHT_TRIANGLE = IconLoader.getIcon("/edu/clemson/resolve/icons/righttriangle.png");
     public static final Icon DOWN_TRIANGLE = IconLoader.getIcon("/edu/clemson/resolve/icons/downtriangle.png");

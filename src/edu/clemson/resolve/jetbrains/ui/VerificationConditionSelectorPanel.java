@@ -1,14 +1,12 @@
 package edu.clemson.resolve.jetbrains.ui;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.IconLoader;
 import com.intellij.ui.JBColor;
-import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBScrollPane;
-import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.verifier.VerificationEditorPreview;
 import edu.clemson.resolve.proving.absyn.PExp;
 import edu.clemson.resolve.vcgen.VC;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -16,33 +14,35 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class VerificationSelectorPanel extends JPanel {
+public class VerificationConditionSelectorPanel extends JPanel {
 
     private static final Border CHISEL_BORDER = new ChiselBorder();
-    private static final Border CATEGORY_BORDER = new CompoundBorder(CHISEL_BORDER, new EmptyBorder(0,0,11,0)); //VARY THICKNESS OF HORIZONTAL RECT HERE
+    private static final Border CATEGORY_BORDER = new CompoundBorder(CHISEL_BORDER, new EmptyBorder(0, 0, 10, 0)); //VARY THICKNESS OF HORIZONTAL RECT HERE
 
     private Icon expandedIcon;
     private Icon collapsedIcon;
 
     private final Project project;
     private JBScrollPane scrollPane;
-    private final List<CollapsiblePanel> collapsePanels = new ArrayList<>();
+    public final Map<Integer, ConditionCollapsiblePanel> vcTabs = new HashMap<>();
+    public final List<VerificationEditorPreview> previewEditors = new ArrayList<>();
 
-    public VerificationSelectorPanel(Project project, List<VC> vcs) {
+    public VerificationConditionSelectorPanel(@NotNull Project project, @NotNull List<VC> vcs) {
         super(new BorderLayout());
-        JComponent selector = createDemoSelector(vcs);
+        JComponent selector = createVerificationConditionSelector(vcs);
 
         this.project = project;
         this.scrollPane = new JBScrollPane(selector);
         this.scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         this.scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         add(scrollPane, BorderLayout.CENTER);
-        //applyDefaults();
     }
 
-    protected JComponent createDemoSelector(List<VC> vcs) {
+    protected JComponent createVerificationConditionSelector(@NotNull List<VC> vcs) {
         JPanel selectorPanel = new JPanel();
         GridBagLayout gridbag = new GridBagLayout();
         selectorPanel.setLayout(gridbag);
@@ -62,20 +62,22 @@ public class VerificationSelectorPanel extends JPanel {
             categoryGridbag = new GridBagLayout();
             categoryPanel.setLayout(categoryGridbag);
 
-            CollapsiblePanel collapsePanel =
-                    new CollapsiblePanel(categoryPanel, CollapsiblePanel.Orientation.VERTICAL,
-                            "<html>  <b>VC #" + vc.getNumber() + "</b></html>",
+            ConditionCollapsiblePanel collapsePanel =
+                    new ConditionCollapsiblePanel(categoryPanel, ConditionCollapsiblePanel.Orientation.VERTICAL,
+                            "<html><font color='#404040'><b>VC #" + vc.getNumber() + "</b></html>",
                             "click to expand and view VC information");
-            collapsePanels.add(collapsePanel);
+            vcTabs.put(vc.getNumber(), collapsePanel);
             collapsePanel.setExpanded(false);
+
             collapsePanel.setBorder(CATEGORY_BORDER);
 
             gridbag.addLayoutComponent(collapsePanel, c);
             selectorPanel.add(collapsePanel);
             c.gridy++;
             VerificationEditorPreview preview = getVCPreview(vc);
+            previewEditors.add(preview);
             categoryGridbag.addLayoutComponent(preview, cc);
-            cc.gridy += 32;
+            cc.gridy++;
             categoryPanel.add(preview);
         }
         // add empty component to take up any extra room on bottom
@@ -89,7 +91,6 @@ public class VerificationSelectorPanel extends JPanel {
     }
 
     private static class ChiselBorder implements Border {
-
         private Insets insets = new Insets(1, 0, 1, 0);
 
         public ChiselBorder() {
@@ -105,7 +106,7 @@ public class VerificationSelectorPanel extends JPanel {
 
         public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
             Graphics2D g2d = (Graphics2D) g.create();
-            g2d.setStroke(new BasicStroke(2));
+            g2d.setStroke(new BasicStroke(3));
             //g2d.setColor(JBColor.LIGHT_GRAY);
             //g2d.drawLine(x, y, x + width, y);
             g2d.setColor(JBColor.LIGHT_GRAY);

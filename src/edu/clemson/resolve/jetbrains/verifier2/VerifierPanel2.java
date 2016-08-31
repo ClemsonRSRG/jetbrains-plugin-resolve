@@ -6,7 +6,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.util.ui.JBFont;
 import com.intellij.util.ui.UIUtil;
-import edu.clemson.resolve.jetbrains.ui.VerificationSelectorPanel;
+import edu.clemson.resolve.jetbrains.ui.ConditionCollapsiblePanel;
+import edu.clemson.resolve.jetbrains.ui.VerificationConditionSelectorPanel;
 import edu.clemson.resolve.jetbrains.verifier.VerificationEditorPreview;
 import edu.clemson.resolve.vcgen.VC;
 
@@ -22,7 +23,7 @@ public class VerifierPanel2 extends JPanel {
 
     private final Project project;
 
-    public VerificationSelectorPanel vcSelectorPanel = null;
+    public VerificationConditionSelectorPanel vcSelectorPanel = null;
     public JPanel startingPanel = null;
 
     public VerifierPanel2(Project project) {
@@ -33,11 +34,7 @@ public class VerifierPanel2 extends JPanel {
 
     public List<VerificationEditorPreview> getActivePreviewEditors() {
         List<VerificationEditorPreview> result = new ArrayList<>();
-        /*if (activeVCSideBar != null) {
-            for (VCSection s : activeVCSideBar.getSections()) {
-                result.add(s.previewEditor);
-            }
-        }*/
+        if (vcSelectorPanel != null) result.addAll(vcSelectorPanel.previewEditors);
         return result;
     }
 
@@ -69,7 +66,7 @@ public class VerifierPanel2 extends JPanel {
 
     public void createVerifierView2(List<VC> vcs) {
         this.removeAll();
-        vcSelectorPanel = new VerificationSelectorPanel(project, vcs);
+        vcSelectorPanel = new VerificationConditionSelectorPanel(project, vcs);
         add(vcSelectorPanel, BorderLayout.CENTER);
         revalidate();
     }
