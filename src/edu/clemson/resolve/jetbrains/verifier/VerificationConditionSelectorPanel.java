@@ -1,10 +1,13 @@
 package edu.clemson.resolve.jetbrains.verifier;
 
 import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
+import com.intellij.openapi.actionSystem.ToggleAction;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBScrollPane;
+import edu.clemson.resolve.jetbrains.actions.PropertyToggleAction;
 import edu.clemson.resolve.proving.absyn.PExp;
 import edu.clemson.resolve.vcgen.VC;
 import org.jetbrains.annotations.NotNull;
@@ -49,8 +52,19 @@ public class VerificationConditionSelectorPanel extends JPanel {
 
         ActionManager actionManager = ActionManager.getInstance();
 
-    /*    DefaultActionGroup actionGroup = new DefaultActionGroup(ID_ACTION_GROUP, false);
-        actionGroup.add(new PropertyToggleAction("Filter Whitespace",
+        DefaultActionGroup actionGroup = new DefaultActionGroup(ID_ACTION_GROUP, false);
+        actionGroup.add(new ToggleAction("Group proved vcs", "clump em", ) {
+            @Override
+            public boolean isSelected(AnActionEvent e) {
+                return false;
+            }
+
+            @Override
+            public void setSelected(AnActionEvent e, boolean state) {
+
+            }
+        };
+ /*       actionGroup.add(new PropertyToggleAction("Filter Whitespace",
                 "Remove whitespace elements",
                 Helpers.getIcon(ICON_FILTER_WHITESPACE),
                 this,
