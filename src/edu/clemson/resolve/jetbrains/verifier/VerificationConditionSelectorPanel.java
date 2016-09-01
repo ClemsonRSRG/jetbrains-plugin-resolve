@@ -1,13 +1,10 @@
 package edu.clemson.resolve.jetbrains.verifier;
 
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
-import com.intellij.openapi.actionSystem.ToggleAction;
+import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBScrollPane;
-import edu.clemson.resolve.jetbrains.actions.PropertyToggleAction;
+import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.proving.absyn.PExp;
 import edu.clemson.resolve.vcgen.VC;
 import org.jetbrains.annotations.NotNull;
@@ -25,9 +22,11 @@ import java.util.Map;
 public class VerificationConditionSelectorPanel extends JPanel {
 
     public static final String ID_ACTION_GROUP = "RESOLVEVerifierActionGroup";
+    public static final String ID_ACTION_TOOLBAR = "RESOLVEVerifierActionToolbar";
 
     private static final Border CHISEL_BORDER = new ChiselBorder();
     private static final Border CATEGORY_BORDER = new CompoundBorder(CHISEL_BORDER, new EmptyBorder(0, 0, 10, 0)); //VARY THICKNESS OF HORIZONTAL RECT HERE
+    private static final Border TOOLBAR_BORDER = new CompoundBorder(CHISEL_BORDER, new EmptyBorder(0, 0, 10, 0)); //VARY THICKNESS OF HORIZONTAL RECT HERE
 
     private Icon expandedIcon;
     private Icon collapsedIcon;
@@ -53,7 +52,7 @@ public class VerificationConditionSelectorPanel extends JPanel {
         ActionManager actionManager = ActionManager.getInstance();
 
         DefaultActionGroup actionGroup = new DefaultActionGroup(ID_ACTION_GROUP, false);
-        actionGroup.add(new ToggleAction("Group proved vcs", "clump em", ) {
+        actionGroup.add(new ToggleAction("Group proved vcs", "clump em", RESOLVEIcons.TOOL_ICON) {
             @Override
             public boolean isSelected(AnActionEvent e) {
                 return false;
@@ -63,45 +62,23 @@ public class VerificationConditionSelectorPanel extends JPanel {
             public void setSelected(AnActionEvent e, boolean state) {
 
             }
-        };
- /*       actionGroup.add(new PropertyToggleAction("Filter Whitespace",
-                "Remove whitespace elements",
-                Helpers.getIcon(ICON_FILTER_WHITESPACE),
-                this,
-                "filterWhitespace"));
-        actionGroup.add(new PropertyToggleAction("Highlight",
-                "Highlight selected PSI element",
-                Helpers.getIcon(ICON_TOGGLE_HIGHLIGHT),
-                this,
-                "highlighted"));
-        actionGroup.add(new PropertyToggleAction("Properties",
-                "Show PSI element properties",
-                AllIcons.General.Settings,
-                this,
-                "showProperties"));
-        actionGroup.add(new PropertyToggleAction("Autoscroll to Source",
-                "Autoscroll to Source",
-                AllIcons.General.AutoscrollToSource,
-                this,
-                "autoScrollToSource"));
-        actionGroup.add(new PropertyToggleAction("Autoscroll from Source",
-                "Autoscroll from Source111",
-                AllIcons.General.AutoscrollFromSource,
-                this,
-                "autoScrollFromSource"));
-
+        });
         ActionToolbar toolBar = actionManager.createActionToolbar(ID_ACTION_TOOLBAR, actionGroup, true);
 
-        JPanel panel = new JPanel(new HorizontalLayout(0));
-        panel.add(toolBar.getComponent());
-*/
         JPanel selectorPanel = new JPanel();
+        JComponent buttonBar = toolBar.getComponent();
+        buttonBar.setBorder(CHISEL_BORDER);
+
         GridBagLayout gridbag = new GridBagLayout();
         selectorPanel.setLayout(gridbag);
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = c.gridy = 0;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1;
+
+        gridbag.addLayoutComponent(buttonBar, c);
+        selectorPanel.add(buttonBar);
+        c.gridy++;
 
         GridBagLayout categoryGridbag = null;
         GridBagConstraints cc = new GridBagConstraints();
