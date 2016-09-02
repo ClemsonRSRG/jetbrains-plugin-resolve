@@ -54,8 +54,7 @@ public class VerificationConditionSelectorPanel extends JPanel {
         ActionManager actionManager = ActionManager.getInstance();
 
         DefaultActionGroup actionGroup = new DefaultActionGroup(ID_ACTION_GROUP, false);
-
-        actionGroup.add(new ToggleAction("Reprove", "Rerun the prover on the current collection of VCs", RESOLVEIcons.RERUN) {
+        actionGroup.add(new ToggleAction("Reprove", "Stop any ongoing proofs and rerun the prover on the current collection of VCs", RESOLVEIcons.RERUN) {
             @Override
             public boolean isSelected(AnActionEvent e) {
                 return false;
@@ -84,6 +83,14 @@ public class VerificationConditionSelectorPanel extends JPanel {
             public void actionPerformed(AnActionEvent e) {
                 for (ConditionCollapsiblePanel v : vcTabs.values()) {
                     v.setExpanded(false);
+                }
+            }
+        });
+        actionGroup.add(new AnAction("Expand all VCs", "Expand all", RESOLVEIcons.EXPAND) {
+            @Override
+            public void actionPerformed(AnActionEvent e) {
+                for (ConditionCollapsiblePanel v : vcTabs.values()) {
+                    v.setExpanded(true);
                 }
             }
         });
