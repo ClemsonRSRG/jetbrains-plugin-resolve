@@ -30,8 +30,8 @@ public class VerifierPanel extends JPanel {
         createStartingGUI();
     }
 
-    public List<VerificationEditorPreview> getActivePreviewEditors() {
-        List<VerificationEditorPreview> result = new ArrayList<>();
+    public List<VerificationPreviewEditor> getActivePreviewEditors() {
+        List<VerificationPreviewEditor> result = new ArrayList<>();
         if (vcSelectorPanel != null) result.addAll(vcSelectorPanel.previewEditors);
         return result;
     }

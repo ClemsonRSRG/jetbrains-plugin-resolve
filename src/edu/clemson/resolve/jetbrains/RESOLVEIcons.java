@@ -59,6 +59,7 @@ public interface RESOLVEIcons {
     public static final Icon RIGHT_TRIANGLE = IconLoader.getIcon("/edu/clemson/resolve/icons/righttriangle.png");
     public static final Icon DOWN_TRIANGLE = IconLoader.getIcon("/edu/clemson/resolve/icons/downtriangle.png");
 
+    public static final Icon SORT_PROVED = IconLoader.getIcon("/edu/clemson/resolve/icons/sort_proved.png");
 
     /**
      * Places a small icon (mark) in the lower right hand corner of the {@code base} icon.

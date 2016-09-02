@@ -80,7 +80,7 @@ public class ProveAction extends RESOLVEAction {
         controller.getVerifierWindow().show(null);
 
         //runProver
-        List<String> args = new ArrayList<String>();
+        List<String> args = new ArrayList<>();
         args.add(resolveFile.getPath());
         args.add("-lib");
         args.add(RunRESOLVEOnLanguageFile.getContentRoot(project, resolveFile).getPath());

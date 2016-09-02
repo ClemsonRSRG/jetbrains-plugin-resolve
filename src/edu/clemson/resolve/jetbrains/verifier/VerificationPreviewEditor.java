@@ -23,9 +23,9 @@ import java.awt.*;
 
 //call {@link #addNotify()} after this object is created (and {@link #removeNotify} when this object is done being
 //used
-public class VerificationEditorPreview extends EditorTextField {
+public class VerificationPreviewEditor extends EditorTextField {
 
-    public VerificationEditorPreview(Project project, String content) {
+    public VerificationPreviewEditor(Project project, String content) {
         super(EditorFactory.getInstance().createDocument(content), project, RESOLVEFileType.INSTANCE, true);
         setBackground(Gray._237);    //Figure out a way to make this work with changes to LAF
         setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));

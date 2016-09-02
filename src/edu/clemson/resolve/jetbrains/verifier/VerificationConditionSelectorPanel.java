@@ -26,7 +26,6 @@ public class VerificationConditionSelectorPanel extends JPanel {
 
     private static final Border CHISEL_BORDER = new ChiselBorder();
     private static final Border CATEGORY_BORDER = new CompoundBorder(CHISEL_BORDER, new EmptyBorder(0, 0, 10, 0)); //VARY THICKNESS OF HORIZONTAL RECT HERE
-    private static final Border TOOLBAR_BORDER = new CompoundBorder(CHISEL_BORDER, new EmptyBorder(0, 0, 10, 0)); //VARY THICKNESS OF HORIZONTAL RECT HERE
 
     private Icon expandedIcon;
     private Icon collapsedIcon;
@@ -34,7 +33,7 @@ public class VerificationConditionSelectorPanel extends JPanel {
     private final Project project;
     private JBScrollPane scrollPane;
     public final Map<Integer, ConditionCollapsiblePanel> vcTabs = new HashMap<>();
-    public final List<VerificationEditorPreview> previewEditors = new ArrayList<>();
+    public final List<VerificationPreviewEditor> previewEditors = new ArrayList<>();
 
     public VerificationConditionSelectorPanel(@NotNull Project project, @NotNull List<VC> vcs) {
         super(new BorderLayout());
@@ -103,7 +102,7 @@ public class VerificationConditionSelectorPanel extends JPanel {
             gridbag.addLayoutComponent(collapsePanel, c);
             selectorPanel.add(collapsePanel);
             c.gridy++;
-            VerificationEditorPreview preview = getVCPreview(vc);
+            VerificationPreviewEditor preview = getVCPreview(vc);
             previewEditors.add(preview);
             categoryGridbag.addLayoutComponent(preview, cc);
             cc.gridy++;
@@ -143,7 +142,7 @@ public class VerificationConditionSelectorPanel extends JPanel {
         }
     }
 
-    public VerificationEditorPreview getVCPreview(VC vc) {
+    public VerificationPreviewEditor getVCPreview(VC vc) {
         List<PExp> antecedents = vc.getAntecedent().splitIntoConjuncts();
         String vcText = "";
         for (int i = 0; i < antecedents.size(); i++) {
@@ -151,7 +150,7 @@ public class VerificationConditionSelectorPanel extends JPanel {
         }
         vcText += "⊢\n";
         vcText += vc.getConsequent();
-        VerificationEditorPreview preview = new VerificationEditorPreview(project, vcText);
+        VerificationPreviewEditor preview = new VerificationPreviewEditor(project, vcText);
         preview.setBackground(JBColor.WHITE);
         preview.addNotify();
         return preview;
