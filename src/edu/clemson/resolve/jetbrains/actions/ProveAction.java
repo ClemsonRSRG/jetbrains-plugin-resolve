@@ -74,7 +74,7 @@ public class ProveAction extends RESOLVEAction {
 
         RESOLVEPluginController controller = RESOLVEPluginController.getInstance(project);
         VerifierPanel verifierPanel = controller.getVerifierPanel();
-        verifierPanel.createVerifierView2(vco.getFinalVCs());//TODO: maybe make this take in a list of VCs
+        verifierPanel.createVerifierView2(vco.getFinalVCs(), pl);//TODO: maybe make this take in a list of VCs
 
         addVCGutterIcons(vco, editor, project, pl);
         controller.getVerifierWindow().show(null);
@@ -87,7 +87,7 @@ public class ProveAction extends RESOLVEAction {
         args.add("-prove");
         RESOLVECompiler compiler = new RESOLVECompiler(args.toArray(new String[args.size()]));
         compiler.addProverListener(pl);
-/*
+
         ProgressManager.getInstance().run(new Task.Backgroundable(project, "Proving") {
             @Override
             public void run(@NotNull final ProgressIndicator progressIndicator) {
@@ -95,14 +95,12 @@ public class ProveAction extends RESOLVEAction {
             }
         });
 
-
-        //List<SidebarSection> proved = new ArrayList<>();
-        //List<SidebarSection> notProved = new ArrayList<>();
-
+        //TODO: Different status icons for different proof results.
+        //todo: Don't allow users to run another prove action until the current one is done (or cancelled)
         ProgressManager.getInstance().run(new Task.Backgroundable(project, "Updating Presentation") {
             @Override
             public void run(@NotNull final ProgressIndicator progressIndicator) {
-                Map<String, Boolean> processed = new HashMap<String, Boolean>();
+                Map<String, Boolean> processed = new HashMap<>();
                 for (VC vc : vco.getFinalVCs()) {
                     processed.put(vc.getName(), false);
                 }
@@ -118,7 +116,7 @@ public class ProveAction extends RESOLVEAction {
                     }
                 }
             }
-        });*/
+        });
     }
 
     @Nullable
@@ -274,6 +272,7 @@ public class ProveAction extends RESOLVEAction {
 
     public static class MyProverListener implements ProverListener {
         public final Map<String, Boolean> vcIsProved = new com.intellij.util.containers.HashMap<>();
+        public boolean cancelled = false;
         @Override
         public void progressUpdate(double v) {
         }
@@ -282,8 +281,11 @@ public class ProveAction extends RESOLVEAction {
         public void vcResult(boolean b, PerVCProverModel perVCProverModel, Metrics metrics) {
             vcIsProved.put(perVCProverModel.getVCName(), b);
         }
-    }
-    private void processResult(VCOutputFile vcs) {
 
+        @Override
+        public boolean isCancelled() {
+            return cancelled;
+        }
     }
+
 }

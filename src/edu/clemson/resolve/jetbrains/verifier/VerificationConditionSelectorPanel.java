@@ -1,10 +1,13 @@
 package edu.clemson.resolve.jetbrains.verifier;
 
 import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBScrollPane;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
+import edu.clemson.resolve.jetbrains.actions.ProveAction;
 import edu.clemson.resolve.proving.absyn.PExp;
 import edu.clemson.resolve.vcgen.VC;
 import org.jetbrains.annotations.NotNull;
@@ -37,12 +40,17 @@ public class VerificationConditionSelectorPanel extends JPanel {
     private JBScrollPane scrollPane;
     public final Map<Integer, ConditionCollapsiblePanel> vcTabs = new HashMap<>();
     public final List<VerificationPreviewEditor> previewEditors = new ArrayList<>();
+    private final ProveAction.MyProverListener listener;
 
-    public VerificationConditionSelectorPanel(@NotNull Project project, @NotNull List<VC> vcs) {
+    public VerificationConditionSelectorPanel(@NotNull Project project,
+                                              @NotNull List<VC> vcs,
+                                              @NotNull ProveAction.MyProverListener listener) {
         super(new BorderLayout());
         JComponent selector = createVerificationConditionSelector(vcs);
 
         this.project = project;
+        this.listener = listener;
+
         this.scrollPane = new JBScrollPane(selector);
         this.scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         this.scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -54,26 +62,17 @@ public class VerificationConditionSelectorPanel extends JPanel {
         ActionManager actionManager = ActionManager.getInstance();
 
         DefaultActionGroup actionGroup = new DefaultActionGroup(ID_ACTION_GROUP, false);
-        actionGroup.add(new ToggleAction("Reprove", "Stop any ongoing proofs and rerun the prover on the current collection of VCs", RESOLVEIcons.RERUN) {
+        /*actionGroup.add(new AnAction("Reprove", "Stop any ongoing proofs and rerun the prover on the current collection of VCs", RESOLVEIcons.RERUN) {
             @Override
-            public boolean isSelected(AnActionEvent e) {
-                return false;
+            public void actionPerformed(AnActionEvent e) {
+                Task proverTask = new RunProverAction.ProveBackgroundableTask(project, proverListener, vcs, activeVerifierPanel);
+                ProgressManager.getInstance().run(proverTask);
             }
-
+        });*/
+        actionGroup.add(new AnAction("Cancel", "Stop the prover", RESOLVEIcons.STOP) {
             @Override
-            public void setSelected(AnActionEvent e, boolean state) {
-
-            }
-        });
-        actionGroup.add(new ToggleAction("Cancel", "Stop the prover", RESOLVEIcons.STOP) {
-            @Override
-            public boolean isSelected(AnActionEvent e) {
-                return false;
-            }
-
-            @Override
-            public void setSelected(AnActionEvent e, boolean state) {
-
+            public void actionPerformed(AnActionEvent e) {
+                listener.cancelled = true;
             }
         });
         actionGroup.addSeparator();
