@@ -87,7 +87,7 @@ public class ProveAction extends RESOLVEAction {
         args.add("-prove");
         RESOLVECompiler compiler = new RESOLVECompiler(args.toArray(new String[args.size()]));
         compiler.addProverListener(pl);
-
+/*
         ProgressManager.getInstance().run(new Task.Backgroundable(project, "Proving") {
             @Override
             public void run(@NotNull final ProgressIndicator progressIndicator) {
@@ -118,7 +118,7 @@ public class ProveAction extends RESOLVEAction {
                     }
                 }
             }
-        });
+        });*/
     }
 
     @Nullable

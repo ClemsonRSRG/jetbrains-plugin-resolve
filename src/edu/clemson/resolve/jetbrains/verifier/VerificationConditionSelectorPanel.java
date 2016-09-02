@@ -25,7 +25,10 @@ public class VerificationConditionSelectorPanel extends JPanel {
     public static final String ID_ACTION_TOOLBAR = "RESOLVEVerifierActionToolbar";
 
     private static final Border CHISEL_BORDER = new ChiselBorder();
+    private static final Border SEP = new ToolBarBorder();
+
     private static final Border CATEGORY_BORDER = new CompoundBorder(CHISEL_BORDER, new EmptyBorder(0, 0, 10, 0)); //VARY THICKNESS OF HORIZONTAL RECT HERE
+    private static final Border TOOLBAR_BORDER = new CompoundBorder(SEP, new EmptyBorder(0, 0, 10, 0)); //VARY THICKNESS OF HORIZONTAL RECT HERE
 
     private Icon expandedIcon;
     private Icon collapsedIcon;
@@ -51,7 +54,8 @@ public class VerificationConditionSelectorPanel extends JPanel {
         ActionManager actionManager = ActionManager.getInstance();
 
         DefaultActionGroup actionGroup = new DefaultActionGroup(ID_ACTION_GROUP, false);
-        actionGroup.add(new ToggleAction("Group proved vcs", "clump em", RESOLVEIcons.TOOL_ICON) {
+
+        actionGroup.add(new ToggleAction("Reprove", "Rerun the prover on the current collection of VCs", RESOLVEIcons.RERUN) {
             @Override
             public boolean isSelected(AnActionEvent e) {
                 return false;
@@ -62,11 +66,32 @@ public class VerificationConditionSelectorPanel extends JPanel {
 
             }
         });
+        actionGroup.add(new ToggleAction("Cancel", "Stop the prover", RESOLVEIcons.STOP) {
+            @Override
+            public boolean isSelected(AnActionEvent e) {
+                return false;
+            }
+
+            @Override
+            public void setSelected(AnActionEvent e, boolean state) {
+
+            }
+        });
+        actionGroup.addSeparator();
+
+        actionGroup.add(new AnAction("Collapse all VCs", "Collapse all", RESOLVEIcons.COLLAPSE) {
+            @Override
+            public void actionPerformed(AnActionEvent e) {
+                for (ConditionCollapsiblePanel v : vcTabs.values()) {
+                    v.setExpanded(false);
+                }
+            }
+        });
         ActionToolbar toolBar = actionManager.createActionToolbar(ID_ACTION_TOOLBAR, actionGroup, true);
 
         JPanel selectorPanel = new JPanel();
         JComponent buttonBar = toolBar.getComponent();
-        buttonBar.setBorder(CHISEL_BORDER);
+        buttonBar.setBorder(TOOLBAR_BORDER);
 
         GridBagLayout gridbag = new GridBagLayout();
         selectorPanel.setLayout(gridbag);
@@ -78,6 +103,11 @@ public class VerificationConditionSelectorPanel extends JPanel {
         gridbag.addLayoutComponent(buttonBar, c);
         selectorPanel.add(buttonBar);
         c.gridy++;
+
+        //Component x = Box.createVerticalStrut(2);
+        //gridbag.addLayoutComponent(x, c);
+        //selectorPanel.add(x);
+       // c.gridy++;
 
         GridBagLayout categoryGridbag = null;
         GridBagConstraints cc = new GridBagConstraints();
@@ -135,10 +165,18 @@ public class VerificationConditionSelectorPanel extends JPanel {
         public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
             Graphics2D g2d = (Graphics2D) g.create();
             g2d.setStroke(new BasicStroke(3));
-            //g2d.setColor(JBColor.LIGHT_GRAY);
-            //g2d.drawLine(x, y, x + width, y);
             g2d.setColor(JBColor.LIGHT_GRAY);
             g2d.drawLine(x, y + height - 1, x + width, y + height - 1);
+        }
+    }
+
+    private static class ToolBarBorder extends ChiselBorder {
+
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            Graphics2D g2d = (Graphics2D) g.create();
+            g2d.setStroke(new BasicStroke(3));
+            g2d.setColor(JBColor.LIGHT_GRAY);
+            g2d.drawLine(x, y+(height-6), x + width, y+(height-6));
         }
     }
 

@@ -45,7 +45,7 @@ public interface RESOLVEIcons {
 
     public static final Icon PROVED = IconLoader.getIcon("/edu/clemson/resolve/icons/proved.png");
     public static final Icon NOT_PROVED = IconLoader.getIcon("/edu/clemson/resolve/icons/not_proved.png");
-    public static final Icon TIMED_OUT = IconLoader.getIcon("/edu/clemson/resolve/icons/timeout.png");
+    public static final Icon TIMED_OUT = IconLoader.getIcon("/edu/clemson/resolve/icons/timeout.png");  //TODO: Make this exlamation point (with triangle, etc)
 
     public static final Icon PROCESSING1 = IconLoader.getIcon("/runConfigurations/testInProgress1.png");
     public static final Icon PROCESSING2 = IconLoader.getIcon("/runConfigurations/testInProgress2.png");
@@ -59,7 +59,13 @@ public interface RESOLVEIcons {
     public static final Icon RIGHT_TRIANGLE = IconLoader.getIcon("/edu/clemson/resolve/icons/righttriangle.png");
     public static final Icon DOWN_TRIANGLE = IconLoader.getIcon("/edu/clemson/resolve/icons/downtriangle.png");
 
+    //Toolbar icons
+    public static final Icon RERUN = IconLoader.getIcon("/edu/clemson/resolve/icons/rerun.png");
+    public static final Icon STOP = IconLoader.getIcon("/edu/clemson/resolve/icons/suspend.png");
+    public static final Icon COLLAPSE = IconLoader.getIcon("/edu/clemson/resolve/icons/collapseall.png");
+    public static final Icon EXPAND = IconLoader.getIcon("/edu/clemson/resolve/icons/expandall.png");
     public static final Icon SORT_PROVED = IconLoader.getIcon("/edu/clemson/resolve/icons/sort_proved.png");
+    public static final Icon EXPORT = IconLoader.getIcon("/edu/clemson/resolve/icons/export.png");
 
     /**
      * Places a small icon (mark) in the lower right hand corner of the {@code base} icon.
