@@ -11,8 +11,9 @@ import org.jetbrains.annotations.NotNull;
 class QualifierInsertHandler extends BasicInsertHandler<LookupElement> {
     private final String insertStr;
 
+    //TODO: Get rid of pad.
     QualifierInsertHandler(String aStr, boolean pad) {
-        this.insertStr = pad ? " " + aStr + " " : aStr;
+        this.insertStr = aStr;
     }
 
     @Override

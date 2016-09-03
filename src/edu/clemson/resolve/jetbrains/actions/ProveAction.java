@@ -1,6 +1,5 @@
 package edu.clemson.resolve.jetbrains.actions;
 
-import com.intellij.ide.util.treeView.AbstractTreeBuilder;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
@@ -35,14 +34,22 @@ import java.util.*;
 
 //Write one similar to JUnit where all vcs show up. Could even be hierarchy where they show up in a hierarchy under the
 //assertive block that generated them.
-public class ProveAction extends RESOLVEAction {
+public class ProveAction extends RESOLVEAction implements AnAction.TransparentUpdate {
 
     private static final Logger LOGGER = Logger.getInstance("RESOLVEGenerateVCsAction");
     private RangeHighlighter highlighter = null;
     private final List<RangeHighlighter> highlighters = new ArrayList<>();
+    boolean buttonEnabled = true;
 
     @Override
     public void update(AnActionEvent e) {
+        Presentation presentation = e.getPresentation();
+        if (!buttonEnabled) {
+            e.getPresentation().setEnabled(false);
+        }
+        else {
+            e.getPresentation().setEnabled(true);
+        }
     }
 
     @Override
@@ -66,6 +73,7 @@ public class ProveAction extends RESOLVEAction {
                 new RunRESOLVEOnLanguageFile(resolveFile,
                         project,
                         title);
+        buttonEnabled = false;
 
         MyProverListener pl = new MyProverListener();
         VCOutputFile vco = generateVCs(resolveFile, editor, project);
@@ -117,6 +125,7 @@ public class ProveAction extends RESOLVEAction {
                 }
             }
         });
+        buttonEnabled = true;
     }
 
     @Nullable
