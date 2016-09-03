@@ -32,8 +32,6 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.util.*;
 
-//Write one similar to JUnit where all vcs show up. Could even be hierarchy where they show up in a hierarchy under the
-//assertive block that generated them.
 public class ProveAction extends RESOLVEAction implements AnAction.TransparentUpdate {
 
     private static final Logger LOGGER = Logger.getInstance("RESOLVEGenerateVCsAction");
@@ -101,7 +99,6 @@ public class ProveAction extends RESOLVEAction implements AnAction.TransparentUp
         });
 
         //TODO: Different status icons for different proof results.
-        //TODO: Don't allow users to run another prove action until the current one is done (or cancelled)
         running = true;
         Task.Backgroundable task = new Task.Backgroundable(project, "Updating Presentation") {
 
@@ -118,7 +115,7 @@ public class ProveAction extends RESOLVEAction implements AnAction.TransparentUp
                             ConditionCollapsiblePanel section = verifierPanel.vcSelectorPanel.vcTabs.get(vc.getNumber());
                             section.changeToFinalState(pl.vcIsProved.get(vc.getName()) ?
                                     ConditionCollapsiblePanel.State.PROVED :
-                                    ConditionCollapsiblePanel.State.NOT_PROVED);
+                                    ConditionCollapsiblePanel.State.NOT_PROVED, 0); //TODO: Get duration metrics here
                         }
                     }
                 }
@@ -165,7 +162,7 @@ public class ProveAction extends RESOLVEAction implements AnAction.TransparentUp
                 List<AnAction> actionsPerVC = new ArrayList<>();
                 //create clickable actions for each vc
                 for (VC vc : vcsByLine.getValue()) {
-                    actionsPerVC.add(new ProverVCAction(listener, vc.getNumber() + "", vc.getExplanation()));
+                    actionsPerVC.add(new VCNavigationAction(listener, vc.getNumber() + "", vc.getExplanation()));
                 }
 
                 highlighter =
@@ -197,7 +194,6 @@ public class ProveAction extends RESOLVEAction implements AnAction.TransparentUp
                     @Nullable
                     public ActionGroup getPopupMenuActions() {
                         DefaultActionGroup g = new DefaultActionGroup();
-
                         g.addAll(actionsPerVC);
                         return g;
                     }
@@ -231,13 +227,13 @@ public class ProveAction extends RESOLVEAction implements AnAction.TransparentUp
         }
     }
 
-    static class ProverVCAction extends AnAction {
+    static class VCNavigationAction extends AnAction {
         private final MyProverListener pl;
 
         private final String vcNum; //TODO: Make this a
         public boolean isProved = false;
 
-        ProverVCAction(MyProverListener l, String vcNum, String explanation) {
+        VCNavigationAction(MyProverListener l, String vcNum, String explanation) {
             super("VC #" + vcNum + " : " + explanation);
             this.pl = l;
             this.vcNum = vcNum;

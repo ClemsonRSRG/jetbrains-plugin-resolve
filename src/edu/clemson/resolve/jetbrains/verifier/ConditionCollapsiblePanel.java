@@ -132,7 +132,7 @@ public class ConditionCollapsiblePanel extends JPanel {
         return box;
     }
 
-    public void changeToFinalState(State e) {
+    public void changeToFinalState(State e, double duration) {
         if (e == State.PROCESSING) {
             throw new IllegalArgumentException("final state means not processing!");
         }
