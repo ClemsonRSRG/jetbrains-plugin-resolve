@@ -39,16 +39,14 @@ public class ProveAction extends RESOLVEAction implements AnAction.TransparentUp
     private static final Logger LOGGER = Logger.getInstance("RESOLVEGenerateVCsAction");
     private RangeHighlighter highlighter = null;
     private final List<RangeHighlighter> highlighters = new ArrayList<>();
-    boolean buttonEnabled = true;
+    boolean running = false;
 
-    @Override
     public void update(AnActionEvent e) {
-        Presentation presentation = e.getPresentation();
-        if (!buttonEnabled) {
-            e.getPresentation().setEnabled(false);
+        if (!running) {
+            e.getPresentation().setEnabled(true);
         }
         else {
-            e.getPresentation().setEnabled(true);
+            e.getPresentation().setEnabled(false);
         }
     }
 
@@ -73,7 +71,6 @@ public class ProveAction extends RESOLVEAction implements AnAction.TransparentUp
                 new RunRESOLVEOnLanguageFile(resolveFile,
                         project,
                         title);
-        buttonEnabled = false;
 
         MyProverListener pl = new MyProverListener();
         VCOutputFile vco = generateVCs(resolveFile, editor, project);
@@ -104,8 +101,10 @@ public class ProveAction extends RESOLVEAction implements AnAction.TransparentUp
         });
 
         //TODO: Different status icons for different proof results.
-        //todo: Don't allow users to run another prove action until the current one is done (or cancelled)
-        ProgressManager.getInstance().run(new Task.Backgroundable(project, "Updating Presentation") {
+        //TODO: Don't allow users to run another prove action until the current one is done (or cancelled)
+        running = true;
+        Task.Backgroundable task = new Task.Backgroundable(project, "Updating Presentation") {
+
             @Override
             public void run(@NotNull final ProgressIndicator progressIndicator) {
                 Map<String, Boolean> processed = new HashMap<>();
@@ -123,12 +122,12 @@ public class ProveAction extends RESOLVEAction implements AnAction.TransparentUp
                         }
                     }
                 }
+                running = false;
             }
-        });
-        buttonEnabled = true;
+        };
+        ProgressManager.getInstance().run(task);
     }
 
-    @Nullable
     private VCOutputFile generateVCs(VirtualFile resolveFile, Editor editor, Project project) {
         boolean forceGeneration = true; // from action, they really mean it
         RunRESOLVEOnLanguageFile gen =
