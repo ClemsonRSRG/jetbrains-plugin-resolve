@@ -91,12 +91,16 @@ public class ProveAction extends RESOLVEAction implements AnAction.TransparentUp
         RESOLVECompiler compiler = new RESOLVECompiler(args.toArray(new String[args.size()]));
         compiler.addProverListener(pl);
 
-        ProgressManager.getInstance().run(new Task.Backgroundable(project, "Proving") {
+        //TODO: Instead of this being anon, make a separate static class and add an error listener to 'compiler' that (make it accessible
+        //right here though so the UI part below can stop and update remaining (unproved) vcs if the compiler does indeed suffer some
+        //catastrophic failure: npe, etc.
+        Task.Backgroundable proverTask = new Task.Backgroundable(project, "Proving") {
             @Override
             public void run(@NotNull final ProgressIndicator progressIndicator) {
                 compiler.processCommandLineTargets();
             }
-        });
+        };
+        ProgressManager.getInstance().run(proverTask);
 
         //TODO: Different status icons for different proof results.
         running = true;
@@ -109,6 +113,7 @@ public class ProveAction extends RESOLVEAction implements AnAction.TransparentUp
                     processed.put(vc.getName(), false);
                 }
                 while (pl.vcIsProved.size() != vco.getFinalVCs().size()) {
+                    //if (proverTask.getNotificationInfo().)//TODO: Put something here that breaks out of this if the compiler crashes..
                     for (VC vc : vco.getFinalVCs()) {
                         if (pl.vcIsProved.containsKey(vc.getName()) && !processed.get(vc.getName())) {
                             processed.put(vc.getName(), true);
