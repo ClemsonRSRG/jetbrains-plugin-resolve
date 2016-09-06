@@ -27,6 +27,12 @@ public class ResSelectorExpImpl extends ResBinaryExpImpl implements ResSelectorE
 
   @Override
   @NotNull
+  public List<ResExp> getExpList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResExp.class);
+  }
+
+  @Override
+  @NotNull
   public PsiElement getDot() {
     return findNotNullChildByType(DOT);
   }

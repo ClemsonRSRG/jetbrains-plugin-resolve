@@ -202,6 +202,7 @@ public interface ResTypes {
   IElementType RPAREN = new ResTokenType(")");
   IElementType SEMICOLON = new ResTokenType(";");
   IElementType STRING = new ResTokenType("string");
+  IElementType SUCH_THAT = new ResTokenType("∋");
   IElementType SYMBOL = new ResTokenType("symbol");
   IElementType THEN = new ResTokenType("then");
   IElementType THEOREM = new ResTokenType("Theorem");

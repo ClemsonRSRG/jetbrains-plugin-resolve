@@ -27,6 +27,12 @@ public class ResInfixExpImpl extends ResBinaryExpImpl implements ResInfixExp {
 
   @Override
   @NotNull
+  public List<ResExp> getExpList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResExp.class);
+  }
+
+  @Override
+  @NotNull
   public ResProgSymbolName getProgSymbolName() {
     return findNotNullChildByClass(ResProgSymbolName.class);
   }

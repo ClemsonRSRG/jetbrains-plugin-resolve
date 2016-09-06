@@ -101,6 +101,7 @@ ESCAPES = [abfnrtv]
 ":="                                    { return COLON_EQUALS; }
 ":=:"                                   { return COLON_EQUALS_COLON; }
 "?"                                     { return QV; }
+"∋"                                     { return SUCH_THAT; }
 
 // Keywords
 
