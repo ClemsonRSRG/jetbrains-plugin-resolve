@@ -137,10 +137,19 @@ public class ConditionCollapsiblePanel extends JPanel {
             throw new IllegalArgumentException("final state means not processing!");
         }
         this.state = e;
+
+        JLabel durationLab = new JLabel("<html><font color='#404040'><b>" + String.valueOf(duration) + "ms</b></html>");
+        durationLab.setFont(VerifierPanel.createFont(9));
+
         collapseControlBar.remove(processingSpinner);
-        collapseControlBar.add(new JLabel(e.getIcon()), RIGHT_ALIGNMENT);
+        JPanel x = new JPanel();
+        x.add(new JLabel(e.getIcon()), LEFT_ALIGNMENT);
+        x.add(Box.createHorizontalGlue());
+        x.add(durationLab, RIGHT_ALIGNMENT);
+
+        collapseControlBar.add(x);
         collapseControlBar.add(Box.createRigidArea(new Dimension(10, 0)), RIGHT_ALIGNMENT);
-        //vcNameLabel.setIcon(state.getIcon());
+
         revalidate();
     }
 

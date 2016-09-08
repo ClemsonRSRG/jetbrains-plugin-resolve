@@ -117,10 +117,11 @@ public class ProveAction extends RESOLVEAction implements AnAction.TransparentUp
                     for (VC vc : vco.getFinalVCs()) {
                         if (pl.vcIsProved.containsKey(vc.getName()) && !processed.get(vc.getName())) {
                             processed.put(vc.getName(), true);
+                            long dur = pl.vcMetrics.get(vc.getName()).getProofDuration();
                             ConditionCollapsiblePanel section = verifierPanel.vcSelectorPanel.vcTabs.get(vc.getNumber());
                             section.changeToFinalState(pl.vcIsProved.get(vc.getName()) ?
                                     ConditionCollapsiblePanel.State.PROVED :
-                                    ConditionCollapsiblePanel.State.NOT_PROVED, 0); //TODO: Get duration metrics here
+                                    ConditionCollapsiblePanel.State.NOT_PROVED, dur);
                         }
                     }
                 }
@@ -175,8 +176,6 @@ public class ProveAction extends RESOLVEAction implements AnAction.TransparentUp
                 highlighter.setGutterIconRenderer(new GutterIconRenderer() {
                     @NotNull
                     @Override
-                    //clearly something will need to change here if I want this gutter icon animating somehow;
-                    //but haven't yet found any good examples of other projects doing this for *gutter icons*...
                     public Icon getIcon() {
                         return RESOLVEIcons.VC;
                     }
@@ -211,7 +210,6 @@ public class ProveAction extends RESOLVEAction implements AnAction.TransparentUp
                 });
                 vcRelatedHighlighters.add(highlighter);
                 highlighters.add(highlighter);
-                //actionsPerVC.clear();
             }
 
             editor.getDocument().addDocumentListener(new DocumentListener() {
@@ -232,10 +230,10 @@ public class ProveAction extends RESOLVEAction implements AnAction.TransparentUp
         }
     }
 
-    static class VCNavigationAction extends AnAction {
+    private static class VCNavigationAction extends AnAction {
         private final MyProverListener pl;
 
-        private final String vcNum; //TODO: Make this a
+        private final String vcNum;
         public boolean isProved = false;
 
         VCNavigationAction(MyProverListener l, String vcNum, String explanation) {
@@ -267,20 +265,15 @@ public class ProveAction extends RESOLVEAction implements AnAction.TransparentUp
             VerifierPanel verifierPanel = controller.getVerifierPanel();
             if (verifierPanel.getVcSelectorPanel() == null) return;
             VerificationConditionSelectorPanel selector = verifierPanel.getVcSelectorPanel();
-
             ConditionCollapsiblePanel details = selector.vcTabs.get(Integer.parseInt(vcNum));
             details.setExpanded(true);
-            //verifierPanel.getVcSelectorPanel().vcTabs
-
-            //I performed an action, let's remember to clean up after ourselves before we go and update
-            //the vc panel
-            //verifierPanel.setActiveVcPanel(new VerifierPanel.VCPanelMock(project, vc));
         }
     }
 
 
     public static class MyProverListener implements ProverListener {
         public final Map<String, Boolean> vcIsProved = new com.intellij.util.containers.HashMap<>();
+        public final Map<String, Metrics> vcMetrics = new com.intellij.util.containers.HashMap<>();
         public boolean cancelled = false;
         @Override
         public void progressUpdate(double v) {
@@ -289,6 +282,7 @@ public class ProveAction extends RESOLVEAction implements AnAction.TransparentUp
         @Override
         public void vcResult(boolean b, PerVCProverModel perVCProverModel, Metrics metrics) {
             vcIsProved.put(perVCProverModel.getVCName(), b);
+            vcMetrics.put(perVCProverModel.getVCName(), metrics);
         }
 
         @Override
