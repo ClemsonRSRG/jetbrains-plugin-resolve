@@ -20,12 +20,15 @@ public interface ResMathQuantifiedExp extends ResMathExp {
   PsiElement getExists();
 
   @Nullable
-  PsiElement getExists1();
+  PsiElement getEXISTS1();
 
   @Nullable
   PsiElement getForall();
 
   @Nullable
-  PsiElement getForall1();
+  PsiElement getFORALL1();
+
+  @Nullable
+  PsiElement getSuchThat();
 
 }

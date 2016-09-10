@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface ResInfixExp extends ResBinaryExp {
 
   @NotNull
+  List<ResExp> getExpList();
+
+  @NotNull
   ResProgSymbolName getProgSymbolName();
 
 }

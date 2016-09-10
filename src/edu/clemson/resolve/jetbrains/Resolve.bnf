@@ -43,6 +43,7 @@
         FALSE                   = 'false'
         COLON_EQUALS            = ':='
         COLON_EQUALS_COLON      = ':=:'
+        SUCH_THAT               = '∋'
 
         // Keywords TODO: According to the go plugin, we don't actually need these re-iterated in here..
         INT                     = 'int'
@@ -444,7 +445,7 @@ EntailsClause ::= 'which_entails' MathExp {pin=1}
 // mathematical expressions
 
 MathAssertionExp ::= MathQuantifiedExp|MathExp
-MathQuantifiedExp ::= ('∃'|'∀'|'Exists'|'Forall') MathVarDeclGroup ',' MathAssertionExp {pin=1}
+MathQuantifiedExp ::= ('∃'|'∀'|'Exists'|'Forall') MathVarDeclGroup ('∋'|',') MathAssertionExp {pin=1}
 
 MathExp ::=
           MathInfixApplyExp

@@ -284,6 +284,7 @@ public class ResParser implements PsiParser, LightPsiParser {
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
     create_token_set_(RECORD_TYPE, TYPE),
+    create_token_set_(INFIX_EXP, SELECTOR_EXP),
     create_token_set_(MATH_VAR_DECL, MATH_VAR_DECL_GROUP),
     create_token_set_(ASSIGN_STATEMENT, ELSE_STATEMENT, IF_STATEMENT, SIMPLE_STATEMENT,
       STATEMENT, SWAP_STATEMENT, WHILE_STATEMENT),
@@ -1908,7 +1909,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ('∃'|'∀'|'Exists'|'Forall') MathVarDeclGroup ',' MathAssertionExp
+  // ('∃'|'∀'|'Exists'|'Forall') MathVarDeclGroup ('∋'|',') MathAssertionExp
   public static boolean MathQuantifiedExp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "MathQuantifiedExp")) return false;
     boolean r, p;
@@ -1916,7 +1917,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = MathQuantifiedExp_0(b, l + 1);
     p = r; // pin = 1
     r = r && report_error_(b, MathVarDeclGroup(b, l + 1));
-    r = p && report_error_(b, consumeToken(b, COMMA)) && r;
+    r = p && report_error_(b, MathQuantifiedExp_2(b, l + 1)) && r;
     r = p && MathAssertionExp(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
@@ -1931,6 +1932,17 @@ public class ResParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, FORALL1);
     if (!r) r = consumeToken(b, EXISTS);
     if (!r) r = consumeToken(b, FORALL);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // '∋'|','
+  private static boolean MathQuantifiedExp_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathQuantifiedExp_2")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, SUCH_THAT);
+    if (!r) r = consumeToken(b, COMMA);
     exit_section_(b, m, null, r);
     return r;
   }

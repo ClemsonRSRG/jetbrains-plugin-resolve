@@ -1,10 +1,13 @@
 package edu.clemson.resolve.jetbrains.verifier;
 
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
+import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBScrollPane;
+import edu.clemson.resolve.jetbrains.RESOLVEIcons;
+import edu.clemson.resolve.jetbrains.actions.ProveAction;
 import edu.clemson.resolve.proving.absyn.PExp;
 import edu.clemson.resolve.vcgen.VC;
 import org.jetbrains.annotations.NotNull;
@@ -22,9 +25,13 @@ import java.util.Map;
 public class VerificationConditionSelectorPanel extends JPanel {
 
     public static final String ID_ACTION_GROUP = "RESOLVEVerifierActionGroup";
+    public static final String ID_ACTION_TOOLBAR = "RESOLVEVerifierActionToolbar";
 
     private static final Border CHISEL_BORDER = new ChiselBorder();
+    private static final Border SEP = new ToolBarBorder();
+
     private static final Border CATEGORY_BORDER = new CompoundBorder(CHISEL_BORDER, new EmptyBorder(0, 0, 10, 0)); //VARY THICKNESS OF HORIZONTAL RECT HERE
+    private static final Border TOOLBAR_BORDER = new CompoundBorder(SEP, new EmptyBorder(0, 0, 10, 0)); //VARY THICKNESS OF HORIZONTAL RECT HERE
 
     private Icon expandedIcon;
     private Icon collapsedIcon;
@@ -32,13 +39,18 @@ public class VerificationConditionSelectorPanel extends JPanel {
     private final Project project;
     private JBScrollPane scrollPane;
     public final Map<Integer, ConditionCollapsiblePanel> vcTabs = new HashMap<>();
-    public final List<VerificationEditorPreview> previewEditors = new ArrayList<>();
+    public final List<VerificationPreviewEditor> previewEditors = new ArrayList<>();
+    private final ProveAction.MyProverListener listener;
 
-    public VerificationConditionSelectorPanel(@NotNull Project project, @NotNull List<VC> vcs) {
+    public VerificationConditionSelectorPanel(@NotNull Project project,
+                                              @NotNull List<VC> vcs,
+                                              @NotNull ProveAction.MyProverListener listener) {
         super(new BorderLayout());
         JComponent selector = createVerificationConditionSelector(vcs);
 
         this.project = project;
+        this.listener = listener;
+
         this.scrollPane = new JBScrollPane(selector);
         this.scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         this.scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -49,45 +61,59 @@ public class VerificationConditionSelectorPanel extends JPanel {
 
         ActionManager actionManager = ActionManager.getInstance();
 
-    /*    DefaultActionGroup actionGroup = new DefaultActionGroup(ID_ACTION_GROUP, false);
-        actionGroup.add(new PropertyToggleAction("Filter Whitespace",
-                "Remove whitespace elements",
-                Helpers.getIcon(ICON_FILTER_WHITESPACE),
-                this,
-                "filterWhitespace"));
-        actionGroup.add(new PropertyToggleAction("Highlight",
-                "Highlight selected PSI element",
-                Helpers.getIcon(ICON_TOGGLE_HIGHLIGHT),
-                this,
-                "highlighted"));
-        actionGroup.add(new PropertyToggleAction("Properties",
-                "Show PSI element properties",
-                AllIcons.General.Settings,
-                this,
-                "showProperties"));
-        actionGroup.add(new PropertyToggleAction("Autoscroll to Source",
-                "Autoscroll to Source",
-                AllIcons.General.AutoscrollToSource,
-                this,
-                "autoScrollToSource"));
-        actionGroup.add(new PropertyToggleAction("Autoscroll from Source",
-                "Autoscroll from Source111",
-                AllIcons.General.AutoscrollFromSource,
-                this,
-                "autoScrollFromSource"));
+        DefaultActionGroup actionGroup = new DefaultActionGroup(ID_ACTION_GROUP, false);
+        /*actionGroup.add(new AnAction("Reprove", "Stop any ongoing proofs and rerun the prover on the current collection of VCs", RESOLVEIcons.RERUN) {
+            @Override
+            public void actionPerformed(AnActionEvent e) {
+                Task proverTask = new RunProverAction.ProveBackgroundableTask(project, proverListener, vcs, activeVerifierPanel);
+                ProgressManager.getInstance().run(proverTask);
+            }
+        });*/
+        actionGroup.add(new AnAction("Cancel", "Stop the prover", RESOLVEIcons.STOP) {
+            @Override
+            public void actionPerformed(AnActionEvent e) {
+                listener.cancelled = true;
+            }
+        });
+        actionGroup.addSeparator();
 
+        actionGroup.add(new AnAction("Collapse all VCs", "Collapse all", RESOLVEIcons.COLLAPSE) {
+            @Override
+            public void actionPerformed(AnActionEvent e) {
+                for (ConditionCollapsiblePanel v : vcTabs.values()) {
+                    v.setExpanded(false);
+                }
+            }
+        });
+        actionGroup.add(new AnAction("Expand all VCs", "Expand all", RESOLVEIcons.EXPAND) {
+            @Override
+            public void actionPerformed(AnActionEvent e) {
+                for (ConditionCollapsiblePanel v : vcTabs.values()) {
+                    v.setExpanded(true);
+                }
+            }
+        });
         ActionToolbar toolBar = actionManager.createActionToolbar(ID_ACTION_TOOLBAR, actionGroup, true);
 
-        JPanel panel = new JPanel(new HorizontalLayout(0));
-        panel.add(toolBar.getComponent());
-*/
         JPanel selectorPanel = new JPanel();
+        JComponent buttonBar = toolBar.getComponent();
+        buttonBar.setBorder(TOOLBAR_BORDER);
+
         GridBagLayout gridbag = new GridBagLayout();
         selectorPanel.setLayout(gridbag);
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = c.gridy = 0;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1;
+
+        gridbag.addLayoutComponent(buttonBar, c);
+        selectorPanel.add(buttonBar);
+        c.gridy++;
+
+        //Component x = Box.createVerticalStrut(2);
+        //gridbag.addLayoutComponent(x, c);
+        //selectorPanel.add(x);
+       // c.gridy++;
 
         GridBagLayout categoryGridbag = null;
         GridBagConstraints cc = new GridBagConstraints();
@@ -112,7 +138,7 @@ public class VerificationConditionSelectorPanel extends JPanel {
             gridbag.addLayoutComponent(collapsePanel, c);
             selectorPanel.add(collapsePanel);
             c.gridy++;
-            VerificationEditorPreview preview = getVCPreview(vc);
+            VerificationPreviewEditor preview = getVCPreview(vc);
             previewEditors.add(preview);
             categoryGridbag.addLayoutComponent(preview, cc);
             cc.gridy++;
@@ -145,14 +171,22 @@ public class VerificationConditionSelectorPanel extends JPanel {
         public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
             Graphics2D g2d = (Graphics2D) g.create();
             g2d.setStroke(new BasicStroke(3));
-            //g2d.setColor(JBColor.LIGHT_GRAY);
-            //g2d.drawLine(x, y, x + width, y);
             g2d.setColor(JBColor.LIGHT_GRAY);
             g2d.drawLine(x, y + height - 1, x + width, y + height - 1);
         }
     }
 
-    public VerificationEditorPreview getVCPreview(VC vc) {
+    private static class ToolBarBorder extends ChiselBorder {
+
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            Graphics2D g2d = (Graphics2D) g.create();
+            g2d.setStroke(new BasicStroke(3));
+            g2d.setColor(JBColor.LIGHT_GRAY);
+            g2d.drawLine(x, y+(height-6), x + width, y+(height-6));
+        }
+    }
+
+    public VerificationPreviewEditor getVCPreview(VC vc) {
         List<PExp> antecedents = vc.getAntecedent().splitIntoConjuncts();
         String vcText = "";
         for (int i = 0; i < antecedents.size(); i++) {
@@ -160,7 +194,7 @@ public class VerificationConditionSelectorPanel extends JPanel {
         }
         vcText += "⊢\n";
         vcText += vc.getConsequent();
-        VerificationEditorPreview preview = new VerificationEditorPreview(project, vcText);
+        VerificationPreviewEditor preview = new VerificationPreviewEditor(project, vcText);
         preview.setBackground(JBColor.WHITE);
         preview.addNotify();
         return preview;

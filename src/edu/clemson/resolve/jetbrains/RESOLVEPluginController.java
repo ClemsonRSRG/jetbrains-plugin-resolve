@@ -16,7 +16,7 @@ import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
-import edu.clemson.resolve.jetbrains.verifier.VerificationEditorPreview;
+import edu.clemson.resolve.jetbrains.verifier.VerificationPreviewEditor;
 import edu.clemson.resolve.jetbrains.verifier.VerifierPanel;
 import org.jetbrains.annotations.NotNull;
 
@@ -106,10 +106,10 @@ public class RESOLVEPluginController implements ProjectComponent {
         //uninstallListeners();
 
         console.dispose();
-        List<VerificationEditorPreview> lingeringEditors = verifierPanel.getActivePreviewEditors();
+        List<VerificationPreviewEditor> lingeringEditors = verifierPanel.getActivePreviewEditors();
         //Really, due to the way we create (and destory vcPanel's on calls to setXXX) I think there should only
         //every really be one activePreview to destroy -- if the user sudddenly decides to close IntelliJ.
-        for (VerificationEditorPreview e : lingeringEditors) {
+        for (VerificationPreviewEditor e : lingeringEditors) {
           //  e.rel
         }
         consoleWindow = null;

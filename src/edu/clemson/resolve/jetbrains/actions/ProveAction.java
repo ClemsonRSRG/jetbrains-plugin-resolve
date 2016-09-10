@@ -1,6 +1,5 @@
 package edu.clemson.resolve.jetbrains.actions;
 
-import com.intellij.ide.util.treeView.AbstractTreeBuilder;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Editor;
@@ -20,6 +19,7 @@ import edu.clemson.resolve.RESOLVECompiler;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
 import edu.clemson.resolve.jetbrains.verifier.ConditionCollapsiblePanel;
+import edu.clemson.resolve.jetbrains.verifier.VerificationConditionSelectorPanel;
 import edu.clemson.resolve.jetbrains.verifier.VerifierPanel;
 import edu.clemson.resolve.proving.Metrics;
 import edu.clemson.resolve.proving.PerVCProverModel;
@@ -32,16 +32,21 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.util.*;
 
-//Write one similar to JUnit where all vcs show up. Could even be hierarchy where they show up in a hierarchy under the
-//assertive block that generated them.
-public class ProveAction extends RESOLVEAction {
+public class ProveAction extends RESOLVEAction implements AnAction.TransparentUpdate {
 
     private static final Logger LOGGER = Logger.getInstance("RESOLVEGenerateVCsAction");
     private RangeHighlighter highlighter = null;
     private final List<RangeHighlighter> highlighters = new ArrayList<>();
+    boolean running = false;
 
-    @Override
     public void update(AnActionEvent e) {
+        if (!running) {
+            e.getPresentation().setEnabled(true);
+            e.getPresentation().setIcon(RESOLVEIcons.CHECKMARK);
+        }
+        else {
+            e.getPresentation().setEnabled(false);
+        }
     }
 
     @Override
@@ -73,13 +78,13 @@ public class ProveAction extends RESOLVEAction {
 
         RESOLVEPluginController controller = RESOLVEPluginController.getInstance(project);
         VerifierPanel verifierPanel = controller.getVerifierPanel();
-        verifierPanel.createVerifierView2(vco.getFinalVCs());//TODO: maybe make this take in a list of VCs
+        verifierPanel.createVerifierView2(vco.getFinalVCs(), pl);//TODO: maybe make this take in a list of VCs
 
         addVCGutterIcons(vco, editor, project, pl);
         controller.getVerifierWindow().show(null);
 
         //runProver
-        List<String> args = new ArrayList<String>();
+        List<String> args = new ArrayList<>();
         args.add(resolveFile.getPath());
         args.add("-lib");
         args.add(RunRESOLVEOnLanguageFile.getContentRoot(project, resolveFile).getPath());
@@ -87,40 +92,46 @@ public class ProveAction extends RESOLVEAction {
         RESOLVECompiler compiler = new RESOLVECompiler(args.toArray(new String[args.size()]));
         compiler.addProverListener(pl);
 
-        ProgressManager.getInstance().run(new Task.Backgroundable(project, "Proving") {
+        //TODO: Instead of this being anon, make a separate static class and add an error listener to 'compiler' that (make it accessible
+        //right here though so the UI part below can stop and update remaining (unproved) vcs if the compiler does indeed suffer some
+        //catastrophic failure: npe, etc.
+        Task.Backgroundable proverTask = new Task.Backgroundable(project, "Proving") {
             @Override
             public void run(@NotNull final ProgressIndicator progressIndicator) {
                 compiler.processCommandLineTargets();
             }
-        });
+        };
+        ProgressManager.getInstance().run(proverTask);
 
+        //TODO: Different status icons for different proof results.
+        running = true;
+        Task.Backgroundable task = new Task.Backgroundable(project, "Updating Presentation") {
 
-        //List<SidebarSection> proved = new ArrayList<>();
-        //List<SidebarSection> notProved = new ArrayList<>();
-
-        ProgressManager.getInstance().run(new Task.Backgroundable(project, "Updating Presentation") {
             @Override
             public void run(@NotNull final ProgressIndicator progressIndicator) {
-                Map<String, Boolean> processed = new HashMap<String, Boolean>();
+                Map<String, Boolean> processed = new HashMap<>();
                 for (VC vc : vco.getFinalVCs()) {
                     processed.put(vc.getName(), false);
                 }
                 while (pl.vcIsProved.size() != vco.getFinalVCs().size()) {
+                    //if (proverTask.getNotificationInfo().)//TODO: Put something here that breaks out of this if the compiler crashes..
                     for (VC vc : vco.getFinalVCs()) {
                         if (pl.vcIsProved.containsKey(vc.getName()) && !processed.get(vc.getName())) {
                             processed.put(vc.getName(), true);
+                            long dur = pl.vcMetrics.get(vc.getName()).getProofDuration();
                             ConditionCollapsiblePanel section = verifierPanel.vcSelectorPanel.vcTabs.get(vc.getNumber());
                             section.changeToFinalState(pl.vcIsProved.get(vc.getName()) ?
                                     ConditionCollapsiblePanel.State.PROVED :
-                                    ConditionCollapsiblePanel.State.NOT_PROVED);
+                                    ConditionCollapsiblePanel.State.NOT_PROVED, dur);
                         }
                     }
                 }
+                running = false;
             }
-        });
+        };
+        ProgressManager.getInstance().run(task);
     }
 
-    @Nullable
     private VCOutputFile generateVCs(VirtualFile resolveFile, Editor editor, Project project) {
         boolean forceGeneration = true; // from action, they really mean it
         RunRESOLVEOnLanguageFile gen =
@@ -158,7 +169,7 @@ public class ProveAction extends RESOLVEAction {
                 List<AnAction> actionsPerVC = new ArrayList<>();
                 //create clickable actions for each vc
                 for (VC vc : vcsByLine.getValue()) {
-                    actionsPerVC.add(new ProverVCAction(listener, vc.getNumber() + "", vc.getExplanation()));
+                    actionsPerVC.add(new VCNavigationAction(listener, vc.getNumber() + "", vc.getExplanation()));
                 }
 
                 highlighter =
@@ -166,8 +177,6 @@ public class ProveAction extends RESOLVEAction {
                 highlighter.setGutterIconRenderer(new GutterIconRenderer() {
                     @NotNull
                     @Override
-                    //clearly something will need to change here if I want this gutter icon animating somehow;
-                    //but haven't yet found any good examples of other projects doing this for *gutter icons*...
                     public Icon getIcon() {
                         return RESOLVEIcons.VC;
                     }
@@ -190,7 +199,6 @@ public class ProveAction extends RESOLVEAction {
                     @Nullable
                     public ActionGroup getPopupMenuActions() {
                         DefaultActionGroup g = new DefaultActionGroup();
-
                         g.addAll(actionsPerVC);
                         return g;
                     }
@@ -203,7 +211,6 @@ public class ProveAction extends RESOLVEAction {
                 });
                 vcRelatedHighlighters.add(highlighter);
                 highlighters.add(highlighter);
-                //actionsPerVC.clear();
             }
 
             editor.getDocument().addDocumentListener(new DocumentListener() {
@@ -224,11 +231,13 @@ public class ProveAction extends RESOLVEAction {
         }
     }
 
-    static class ProverVCAction extends AnAction {
+    private static class VCNavigationAction extends AnAction {
         private final MyProverListener pl;
+
         private final String vcNum;
         public boolean isProved = false;
-        ProverVCAction(MyProverListener l, String vcNum, String explanation) {
+
+        VCNavigationAction(MyProverListener l, String vcNum, String explanation) {
             super("VC #" + vcNum + " : " + explanation);
             this.pl = l;
             this.vcNum = vcNum;
@@ -248,20 +257,25 @@ public class ProveAction extends RESOLVEAction {
 
         @Override
         public void actionPerformed(AnActionEvent e) {
-            AbstractTreeBuilder x;
-            //TODO
-            //controller.getVerifierWindow().show(null);  //open the tool(verifier)window
-            //VerifierPanel verifierPanel = controller.getVerifierPanel();
-
-            //I performed an action, let's remember to clean up after ourselves before we go and update
-            //the vc panel
-            //verifierPanel.setActiveVcPanel(new VerifierPanel.VCPanelMock(project, vc));
+            if (e.getProject() == null) return;
+            RESOLVEPluginController controller = RESOLVEPluginController.getInstance(e.getProject());
+            controller.getVerifierWindow().show(null);  //open the verifier window
+            VerificationConditionSelectorPanel vcselector = controller.getVerifierPanel().getVcSelectorPanel();
+            if (vcselector == null) return;
+            vcselector.vcTabs.get(Integer.parseInt(vcNum));
+            VerifierPanel verifierPanel = controller.getVerifierPanel();
+            if (verifierPanel.getVcSelectorPanel() == null) return;
+            VerificationConditionSelectorPanel selector = verifierPanel.getVcSelectorPanel();
+            ConditionCollapsiblePanel details = selector.vcTabs.get(Integer.parseInt(vcNum));
+            details.setExpanded(true);
         }
     }
 
 
     public static class MyProverListener implements ProverListener {
         public final Map<String, Boolean> vcIsProved = new com.intellij.util.containers.HashMap<>();
+        public final Map<String, Metrics> vcMetrics = new com.intellij.util.containers.HashMap<>();
+        public boolean cancelled = false;
         @Override
         public void progressUpdate(double v) {
         }
@@ -269,9 +283,13 @@ public class ProveAction extends RESOLVEAction {
         @Override
         public void vcResult(boolean b, PerVCProverModel perVCProverModel, Metrics metrics) {
             vcIsProved.put(perVCProverModel.getVCName(), b);
+            vcMetrics.put(perVCProverModel.getVCName(), metrics);
+        }
+
+        @Override
+        public boolean isCancelled() {
+            return cancelled;
         }
     }
-    private void processResult(VCOutputFile vcs) {
 
-    }
 }
