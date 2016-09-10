@@ -143,12 +143,15 @@ public class ConditionCollapsiblePanel extends JPanel {
 
         collapseControlBar.remove(processingSpinner);
         JPanel x = new JPanel();
-        x.add(new JLabel(e.getIcon()), LEFT_ALIGNMENT);
-        x.add(Box.createHorizontalGlue());
-        x.add(durationLab, RIGHT_ALIGNMENT);
+        //x.add(new JLabel(e.getIcon()), LEFT_ALIGNMENT);
+        //x.add(Box.createHorizontalGlue());
+        //x.add(durationLab, RIGHT_ALIGNMENT);
+        //collapseControlBar.add(x);
 
-        collapseControlBar.add(x);
+        collapseControlBar.add(durationLab, RIGHT_ALIGNMENT);
+        collapseControlBar.add(new JLabel(e.getIcon()), RIGHT_ALIGNMENT);
         collapseControlBar.add(Box.createRigidArea(new Dimension(10, 0)), RIGHT_ALIGNMENT);
+        collapseControlBar.add(Box.createHorizontalGlue());
 
         revalidate();
     }

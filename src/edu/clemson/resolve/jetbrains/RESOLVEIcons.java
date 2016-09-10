@@ -45,6 +45,8 @@ public interface RESOLVEIcons {
 
     public static final Icon PROVED = IconLoader.getIcon("/edu/clemson/resolve/icons/proved.png");
     public static final Icon NOT_PROVED = IconLoader.getIcon("/edu/clemson/resolve/icons/not_proved.png");
+    public static final Icon CHECKMARK = IconLoader.getIcon("/edu/clemson/resolve/icons/proved_alt.png");
+
     public static final Icon TIMED_OUT = IconLoader.getIcon("/edu/clemson/resolve/icons/timeout.png");  //TODO: Make this exlamation point (with triangle, etc)
 
     public static final Icon PROCESSING1 = IconLoader.getIcon("/runConfigurations/testInProgress1.png");

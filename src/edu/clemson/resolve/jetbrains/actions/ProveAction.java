@@ -42,6 +42,7 @@ public class ProveAction extends RESOLVEAction implements AnAction.TransparentUp
     public void update(AnActionEvent e) {
         if (!running) {
             e.getPresentation().setEnabled(true);
+            e.getPresentation().setIcon(RESOLVEIcons.CHECKMARK);
         }
         else {
             e.getPresentation().setEnabled(false);
