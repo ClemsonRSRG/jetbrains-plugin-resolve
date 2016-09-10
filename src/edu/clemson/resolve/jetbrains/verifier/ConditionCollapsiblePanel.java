@@ -142,21 +142,11 @@ public class ConditionCollapsiblePanel extends JPanel {
         JLabel durationLab = new JLabel("<html><font color='#404040'><b>" + String.valueOf(duration) + "ms</b></html>");
         durationLab.setFont(VerifierPanel.createFont(9));
         durationLab.setHorizontalAlignment(JLabel.RIGHT);
+        
         collapseControlBar.add(durationLab, RIGHT_ALIGNMENT);
         collapseControlBar.add(Box.createRigidArea(new Dimension(8, 0))); //some space between duration and the result icon
         collapseControlBar.add(new JLabel(e.getIcon()), RIGHT_ALIGNMENT);
         collapseControlBar.add(Box.createRigidArea(new Dimension(10, 0)), RIGHT_ALIGNMENT);
-      /*  JLabel durationLab = new JLabel("<html><font color='#404040'><b>" + String.valueOf(duration) + "ms</b></html>");
-        durationLab.setFont(VerifierPanel.createFont(9));
-        durationLab.setIcon(e.getIcon());
-        durationLab.setIconTextGap(30);
-
-        JPanel x = new JPanel();
-        x.add(durationLab);
-        collapseControlBar.remove(processingSpinner);
-        collapseControlBar.add(Box.createHorizontalGlue());
-        collapseControlBar.add(x);
-*/
         revalidate();
     }
 
