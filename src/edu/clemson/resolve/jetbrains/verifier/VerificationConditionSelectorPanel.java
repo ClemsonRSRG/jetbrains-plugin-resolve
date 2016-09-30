@@ -115,19 +115,19 @@ public class VerificationConditionSelectorPanel extends JPanel {
         //selectorPanel.add(x);
        // c.gridy++;
 
+        /*
         GridBagLayout categoryGridbag = null;
         GridBagConstraints cc = new GridBagConstraints();
         cc.gridx = cc.gridy = 0;
         cc.weightx = 1;
         cc.fill = GridBagConstraints.HORIZONTAL;
-
+*/
         for (VC vc : vcs) {
             JPanel categoryPanel = new JPanel();
-            categoryGridbag = new GridBagLayout();
-            categoryPanel.setLayout(categoryGridbag);
+            categoryPanel.setLayout(new BorderLayout());
 
             ConditionCollapsiblePanel collapsePanel =
-                    new ConditionCollapsiblePanel(categoryPanel, ConditionCollapsiblePanel.Orientation.VERTICAL,
+                    new ConditionCollapsiblePanel(categoryPanel,
                             "<html><font color='#404040'><b>VC #" + vc.getNumber() + "</b></html>",
                             "click to expand and view VC information");
             vcTabs.put(vc.getNumber(), collapsePanel);
@@ -140,8 +140,8 @@ public class VerificationConditionSelectorPanel extends JPanel {
             c.gridy++;
             VerificationPreviewEditor preview = getVCPreview(vc);
             previewEditors.add(preview);
-            categoryGridbag.addLayoutComponent(preview, cc);
-            cc.gridy++;
+           // categoryGridbag.addLayoutComponent(preview, cc);
+           // cc.gridy++;
             categoryPanel.add(preview);
         }
         // add empty component to take up any extra room on bottom

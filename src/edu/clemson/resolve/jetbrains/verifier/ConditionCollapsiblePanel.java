@@ -69,25 +69,20 @@ public class ConditionCollapsiblePanel extends JPanel {
 
     public AnimatedIcon processingSpinner;
     public JToggleButton expandButton; // may be null, if no title was supplied
-    private Orientation orientation = Orientation.VERTICAL;
-    private Dimension childPrefSize;
     private boolean expanded = true;
     private Box collapseControlBar = null;
     private State state;
 
     public ConditionCollapsiblePanel(@NotNull JComponent child,
-                                     @NotNull Orientation orientation,
                                      @NotNull String title,
                                      @Nullable String tooltip) {
-        this(child, orientation, title, tooltip, State.PROCESSING);
+        this(child, title, tooltip, State.PROCESSING);
     }
 
     public ConditionCollapsiblePanel(@NotNull JComponent child,
-                                     @NotNull Orientation orientation,
                                      @NotNull String title,
                                      @Nullable String tooltip,
                                      @NotNull State state) {
-        this.orientation = orientation;
         this.child = child;
         this.processingSpinner = new AnimatedIcon("processing", FRAMES, FRAMES[0], 800);
         this.state = state;
@@ -104,7 +99,7 @@ public class ConditionCollapsiblePanel extends JPanel {
             collapseControlBar.add(processingSpinner, RIGHT_ALIGNMENT);
             collapseControlBar.add(Box.createRigidArea(new Dimension(10, 0)), RIGHT_ALIGNMENT);
         }
-        add(collapseControlBar, orientation == Orientation.HORIZONTAL ? BorderLayout.WEST : BorderLayout.NORTH);
+        add(collapseControlBar, BorderLayout.NORTH);
     }
 
     private Box createCollapseControl(String title, String tooltip) {
@@ -123,7 +118,12 @@ public class ConditionCollapsiblePanel extends JPanel {
         expandButton.setHorizontalTextPosition(JCheckBox.RIGHT);
 
         expandButton.setSelected(isExpanded());
-        expandButton.addChangeListener(new CollapseListener());
+        expandButton.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                setExpanded(expandButton.isSelected());
+            }
+        });
         box.add(expandButton);
 
         //little bit of space between the 'expand' triangle and the "VC #.." text
@@ -150,47 +150,22 @@ public class ConditionCollapsiblePanel extends JPanel {
         revalidate();
     }
 
-    public void setExpanded(boolean expanded) {
-        boolean oldExpanded = this.expanded;
-        if (oldExpanded != expanded) {
-            if (expandButton != null) {
-                expandButton.setSelected(expanded);
-            }
-            childPrefSize = child.getPreferredSize();
-            this.expanded = expanded;
-            if (orientation == Orientation.VERTICAL) {
-                setCollapseHeight(expanded? childPrefSize.height : 0);
-
-            } else if (orientation == Orientation.HORIZONTAL) {
-                setCollapseWidth(expanded ? childPrefSize.width : 0);
-            }
-            firePropertyChange("expanded", oldExpanded, expanded);
-
+    public void setExpanded(boolean expand) {
+        this.expanded = expand;
+        expandButton.setSelected(expand);
+        if (expand) {
+            Dimension childPrefSize = child.getPreferredSize();
+            panel.setPreferredSize(new Dimension(30, childPrefSize.height));
         }
-    }
-
-    // intended only for animator, but must be public
-    public void setCollapseHeight(int height) {
-        panel.setPreferredSize(new Dimension(childPrefSize.width, height));
+        else {
+            panel.setPreferredSize(new Dimension(0, 0));
+        }
         child.revalidate();
         repaint();
-    }
 
-    // intended only for animator, but must be public
-    public void setCollapseWidth(int width) {
-        panel.setPreferredSize(new Dimension(width, childPrefSize.height));
-        child.revalidate();
-        repaint();
     }
 
     public boolean isExpanded() {
         return expanded;
-    }
-
-    // only used if checkbox is present
-    private class CollapseListener implements ChangeListener {
-        public void stateChanged(ChangeEvent event) {
-            setExpanded(expandButton.isSelected());
-        }
     }
 }
