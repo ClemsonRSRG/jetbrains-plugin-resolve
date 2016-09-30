@@ -240,6 +240,8 @@ public class ProveAction extends RESOLVEAction implements AnAction.TransparentUp
         VCNavigationAction(MyProverListener l, String vcNum, String explanation) {
             super("VC #" + vcNum + " : " + explanation);
             this.pl = l;
+            Presentation template = this.getTemplatePresentation();
+            template.setText("VC #" + vcNum + " : " + explanation, false);   //mneumonic set to false so my tooltips can have underscores.
             this.vcNum = vcNum;
         }
 
@@ -270,7 +272,6 @@ public class ProveAction extends RESOLVEAction implements AnAction.TransparentUp
             details.setExpanded(true);
         }
     }
-
 
     public static class MyProverListener implements ProverListener {
         public final Map<String, Boolean> vcIsProved = new com.intellij.util.containers.HashMap<>();
