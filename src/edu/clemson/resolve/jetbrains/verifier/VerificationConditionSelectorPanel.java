@@ -51,14 +51,21 @@ public class VerificationConditionSelectorPanel extends JPanel {
         this.project = project;
         this.listener = listener;
 
+        JPanel x = new JPanel();
+        x.setLayout(new BorderLayout());
+
         this.scrollPane = new JBScrollPane(selector);
         this.scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         this.scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        this.scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        x.add(createButtonBar());
+        x.add(scrollPane);
+        add(createButtonBar(), BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
+
     }
 
-    protected JComponent createVerificationConditionSelector(@NotNull List<VC> vcs) {
-
+    private JComponent createButtonBar() {
         ActionManager actionManager = ActionManager.getInstance();
 
         DefaultActionGroup actionGroup = new DefaultActionGroup(ID_ACTION_GROUP, false);
@@ -95,9 +102,13 @@ public class VerificationConditionSelectorPanel extends JPanel {
         });
         ActionToolbar toolBar = actionManager.createActionToolbar(ID_ACTION_TOOLBAR, actionGroup, true);
 
-        JPanel selectorPanel = new JPanel();
         JComponent buttonBar = toolBar.getComponent();
         buttonBar.setBorder(TOOLBAR_BORDER);
+        return buttonBar;
+    }
+
+    protected JComponent createVerificationConditionSelector(@NotNull List<VC> vcs) {
+        JPanel selectorPanel = new JPanel();
 
         GridBagLayout gridbag = new GridBagLayout();
         selectorPanel.setLayout(gridbag);
@@ -105,10 +116,6 @@ public class VerificationConditionSelectorPanel extends JPanel {
         c.gridx = c.gridy = 0;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1;
-
-        gridbag.addLayoutComponent(buttonBar, c);
-        selectorPanel.add(buttonBar);
-        c.gridy++;
 
         for (VC vc : vcs) {
             JPanel categoryPanel = new JPanel();
@@ -136,7 +143,6 @@ public class VerificationConditionSelectorPanel extends JPanel {
         gridbag.addLayoutComponent(trailer, c);
         selectorPanel.add(trailer);
 
-        //applyDefaults();
         return selectorPanel;
     }
 
@@ -158,7 +164,7 @@ public class VerificationConditionSelectorPanel extends JPanel {
             Graphics2D g2d = (Graphics2D) g.create();
             g2d.setStroke(new BasicStroke(3));
             g2d.setColor(JBColor.LIGHT_GRAY);
-            g2d.drawLine(x, y + height - 1, x + width, y + height - 1);
+            g2d.drawLine(x, y+(height), x + width, y+(height));
         }
     }
 
@@ -166,7 +172,7 @@ public class VerificationConditionSelectorPanel extends JPanel {
 
         public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
             Graphics2D g2d = (Graphics2D) g.create();
-            g2d.setStroke(new BasicStroke(3));
+            g2d.setStroke(new BasicStroke(2));
             g2d.setColor(JBColor.LIGHT_GRAY);
             g2d.drawLine(x, y+(height-6), x + width, y+(height-6));
         }
