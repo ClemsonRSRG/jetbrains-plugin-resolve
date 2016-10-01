@@ -4,6 +4,7 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.keymap.KeymapUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.components.JBLabel;
+import com.intellij.ui.components.JBPanel;
 import com.intellij.util.ui.JBFont;
 import com.intellij.util.ui.UIUtil;
 import edu.clemson.resolve.jetbrains.actions.ProveAction;
@@ -16,7 +17,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VerifierPanel extends JPanel {
+public class VerifierPanel extends JBPanel {
 
     public static final Logger LOG = Logger.getInstance("RESOLVE VerifierPanel");
 
@@ -68,7 +69,7 @@ public class VerifierPanel extends JPanel {
         add(startingPanel);
     }
 
-    public void createVerifierView2(List<VC> vcs, ProveAction.MyProverListener pl) {
+    public void createVerifierView(List<VC> vcs, ProveAction.MyProverListener pl) {
         this.removeAll();
         vcSelectorPanel = new VerificationConditionSelectorPanel(project, vcs, pl);
         add(vcSelectorPanel, BorderLayout.CENTER);
@@ -76,13 +77,9 @@ public class VerifierPanel extends JPanel {
     }
 
     public void revertToBaseGUI() {
-       // if (activeVCSideBar != null) {
-            //we're going back to the default screen, so if there were active editors (before say the user messed
-            //with the doc) remove em' here.
-           // for (VCSection s : activeVCSideBar.getSections()) {
-           //     s.previewEditor.removeNotify();
-           // }
-      //  }
+        for (VerificationPreviewEditor e : getActivePreviewEditors()) {
+            e.removeNotify();
+        }
         this.removeAll();
         this.vcSelectorPanel = null;
         createStartingGUI();

@@ -64,8 +64,8 @@ public class ConditionCollapsiblePanel extends JPanel {
 
     public enum Orientation { HORIZONTAL, VERTICAL }
 
-    private JPanel panel;
-    private JComponent child;
+    private final JPanel panel;
+    private final JComponent child;
 
     public AnimatedIcon processingSpinner;
     public JToggleButton expandButton; // may be null, if no title was supplied

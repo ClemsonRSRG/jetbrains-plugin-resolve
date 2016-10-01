@@ -110,18 +110,6 @@ public class VerificationConditionSelectorPanel extends JPanel {
         selectorPanel.add(buttonBar);
         c.gridy++;
 
-        //Component x = Box.createVerticalStrut(2);
-        //gridbag.addLayoutComponent(x, c);
-        //selectorPanel.add(x);
-       // c.gridy++;
-
-        /*
-        GridBagLayout categoryGridbag = null;
-        GridBagConstraints cc = new GridBagConstraints();
-        cc.gridx = cc.gridy = 0;
-        cc.weightx = 1;
-        cc.fill = GridBagConstraints.HORIZONTAL;
-*/
         for (VC vc : vcs) {
             JPanel categoryPanel = new JPanel();
             categoryPanel.setLayout(new BorderLayout());
@@ -140,8 +128,6 @@ public class VerificationConditionSelectorPanel extends JPanel {
             c.gridy++;
             VerificationPreviewEditor preview = getVCPreview(vc);
             previewEditors.add(preview);
-           // categoryGridbag.addLayoutComponent(preview, cc);
-           // cc.gridy++;
             categoryPanel.add(preview);
         }
         // add empty component to take up any extra room on bottom
@@ -196,7 +182,7 @@ public class VerificationConditionSelectorPanel extends JPanel {
         vcText += vc.getConsequent();
         VerificationPreviewEditor preview = new VerificationPreviewEditor(project, vcText);
         preview.setBackground(JBColor.WHITE);
-        preview.addNotify();
+        //preview.addNotify();
         return preview;
     }
 }

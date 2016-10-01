@@ -20,6 +20,7 @@ import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
 import edu.clemson.resolve.jetbrains.verifier.ConditionCollapsiblePanel;
 import edu.clemson.resolve.jetbrains.verifier.VerificationConditionSelectorPanel;
+import edu.clemson.resolve.jetbrains.verifier.VerificationPreviewEditor;
 import edu.clemson.resolve.jetbrains.verifier.VerifierPanel;
 import edu.clemson.resolve.proving.Metrics;
 import edu.clemson.resolve.proving.PerVCProverModel;
@@ -78,10 +79,10 @@ public class ProveAction extends RESOLVEAction implements AnAction.TransparentUp
 
         RESOLVEPluginController controller = RESOLVEPluginController.getInstance(project);
         VerifierPanel verifierPanel = controller.getVerifierPanel();
-        verifierPanel.createVerifierView2(vco.getFinalVCs(), pl);//TODO: maybe make this take in a list of VCs
+        verifierPanel.createVerifierView(vco.getFinalVCs(), pl);//TODO: maybe make this take in a list of VCs
 
         addVCGutterIcons(vco, editor, project, pl);
-        controller.getVerifierWindow().show(null);
+        RESOLVEPluginController.showVerifierWindow(project);
 
         //runProver
         List<String> args = new ArrayList<>();

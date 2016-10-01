@@ -104,16 +104,20 @@ public class RESOLVEPluginController implements ProjectComponent {
         LOG.info("projectClosed " + project.getName());
         projectIsClosed = true;
         //uninstallListeners();
-
         console.dispose();
-        List<VerificationPreviewEditor> lingeringEditors = verifierPanel.getActivePreviewEditors();
-        //Really, due to the way we create (and destory vcPanel's on calls to setXXX) I think there should only
-        //every really be one activePreview to destroy -- if the user sudddenly decides to close IntelliJ.
-        for (VerificationPreviewEditor e : lingeringEditors) {
-          //  e.rel
-        }
+
+        unregisterWindow(VERIFIER_WINDOW_ID);
+        unregisterWindow(CONSOLE_WINDOW_ID);
+
+        verifierPanel = null;
         consoleWindow = null;
+        verifierWindow = null;
         project = null;
+    }
+
+    public void unregisterWindow(String id) {
+        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
+        toolWindowManager.unregisterToolWindow(id);
     }
 
     public ConsoleView getConsole() {
@@ -140,6 +144,20 @@ public class RESOLVEPluginController implements ProjectComponent {
                         RESOLVEPluginController
                                 .getInstance(project)
                                 .getConsoleWindow()
+                                .show(null);
+                    }
+                }
+        );
+    }
+
+    public static void showVerifierWindow(final Project project) {
+        ApplicationManager.getApplication().invokeLater(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        RESOLVEPluginController
+                                .getInstance(project)
+                                .getVerifierWindow()
                                 .show(null);
                     }
                 }
