@@ -3,8 +3,11 @@ package edu.clemson.resolve.jetbrains.verifier;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ex.EditorEx;
+import com.intellij.openapi.editor.markup.HighlighterLayer;
+import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.treeStructure.Tree;
@@ -18,6 +21,8 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 public class MathSymbolPanel extends JBPanel {
 
@@ -26,15 +31,24 @@ public class MathSymbolPanel extends JBPanel {
     public MathSymbolPanel(Project project) {
         DefaultMutableTreeNode top = new DefaultMutableTreeNode("top");
         createSections(top);
-
-
+        
         this.tree = new Tree(top);
+        this.tree.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                System.out.println("Focus Gained!!!!!!!");
+            }
 
+            @Override
+            public void focusLost(FocusEvent e) {
+                System.out.println("Focus Lost!!!!!!!");
+            }
+        });
         //fires when an element is selected
-        tree.addTreeSelectionListener(new TreeSelectionListener() {
+     /*   tree.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
-                setEditorCaretVisible(project);
+                setEditorCaretEnabledAndVisible(project);
             }
         });
 
@@ -42,14 +56,14 @@ public class MathSymbolPanel extends JBPanel {
         tree.addTreeExpansionListener(new TreeExpansionListener() {
             @Override
             public void treeExpanded(TreeExpansionEvent event) {
-                setEditorCaretVisible(project);
+                setEditorCaretEnabledAndVisible(project);
             }
 
             @Override
             public void treeCollapsed(TreeExpansionEvent event) {
-                setEditorCaretVisible(project);
+                setEditorCaretEnabledAndVisible(project);
             }
-        });
+        });*/
 
         //Create a tree that allows one selection at a time.
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
@@ -60,11 +74,16 @@ public class MathSymbolPanel extends JBPanel {
         add(treeView);
     }
 
-    private void setEditorCaretVisible(Project p) {
+    private void setEditorCaretEnabledAndVisible(Project p) {
         Editor editor = FileEditorManager.getInstance(p).getSelectedTextEditor();
         if (editor instanceof EditorEx) {
-            ((EditorEx) editor).setCaretVisible(true);
+            //int x = ((EditorEx)editor).getExpectedCaretOffset();
+            TextAttributes y = new TextAttributes();
+            y.setBackgroundColor(JBColor.GREEN);
+            ((EditorEx) editor).getMarkupModel().addLineHighlighter(
+                    3, HighlighterLayer.ELEMENT_UNDER_CARET, y);
         }
+
     }
 
     public void createSections(@NotNull DefaultMutableTreeNode e) {
