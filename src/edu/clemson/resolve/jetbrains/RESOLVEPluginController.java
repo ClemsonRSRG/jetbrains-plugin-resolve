@@ -42,8 +42,11 @@ public class RESOLVEPluginController implements ProjectComponent {
     public ConsoleView console;
     public ToolWindow consoleWindow;
 
-    public ToolWindow verifierWindow;
     public VerifierPanel verifierPanel;
+    public ToolWindow verifierWindow;
+
+    public VerifierPanel mathSymbolPanel;
+    public ToolWindow mathSymbolWindow;
 
     public RESOLVEPluginController(@NotNull Project project) {
         this.project = project;
