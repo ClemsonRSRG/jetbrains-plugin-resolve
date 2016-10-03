@@ -16,6 +16,7 @@ import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
+import edu.clemson.resolve.jetbrains.verifier.MathSymbolPanel;
 import edu.clemson.resolve.jetbrains.verifier.VerificationPreviewEditor;
 import edu.clemson.resolve.jetbrains.verifier.VerifierPanel;
 import org.jetbrains.annotations.NotNull;
@@ -34,6 +35,7 @@ public class RESOLVEPluginController implements ProjectComponent {
 
     public static final String CONSOLE_WINDOW_ID = "RESOLVE Output";
     public static final String VERIFIER_WINDOW_ID = "RESOLVE Verifier";
+    public static final String SYMBOL_WINDOW_ID = "Symbols";
 
     public boolean projectIsClosed = false;
 
@@ -45,7 +47,7 @@ public class RESOLVEPluginController implements ProjectComponent {
     public VerifierPanel verifierPanel;
     public ToolWindow verifierWindow;
 
-    public VerifierPanel mathSymbolPanel;
+    public MathSymbolPanel mathSymbolPanel;
     public ToolWindow mathSymbolWindow;
 
     public RESOLVEPluginController(@NotNull Project project) {
@@ -82,23 +84,28 @@ public class RESOLVEPluginController implements ProjectComponent {
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
 
         verifierPanel = new VerifierPanel(project);
+        mathSymbolPanel = new MathSymbolPanel(project);
 
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-        Content content = contentFactory.createContent(verifierPanel, "", false);
 
+        //init verifier window
         verifierWindow = toolWindowManager.registerToolWindow(VERIFIER_WINDOW_ID, true, ToolWindowAnchor.RIGHT);
-        verifierWindow.getContentManager().addContent(content);
+        verifierWindow.getContentManager().addContent(contentFactory.createContent(verifierPanel, "", false));
         verifierWindow.setIcon(RESOLVEIcons.TOOL_ICON);
 
+        //init math symbol browser window
+        mathSymbolWindow = toolWindowManager.registerToolWindow(SYMBOL_WINDOW_ID, true, ToolWindowAnchor.RIGHT);
+        mathSymbolWindow.getContentManager().addContent(contentFactory.createContent(mathSymbolPanel, "", false));
+        mathSymbolWindow.setIcon(RESOLVEIcons.SYMBOL_ICON);
+
+        //init console window
         TextConsoleBuilderFactory factory = TextConsoleBuilderFactory.getInstance();
         TextConsoleBuilder consoleBuilder = factory.createBuilder(project);
         console = consoleBuilder.getConsole();
 
         JComponent consoleComponent = console.getComponent();
-        content = contentFactory.createContent(consoleComponent, "", false);
-
         consoleWindow = toolWindowManager.registerToolWindow(CONSOLE_WINDOW_ID, true, ToolWindowAnchor.BOTTOM);
-        consoleWindow.getContentManager().addContent(content);
+        consoleWindow.getContentManager().addContent(contentFactory.createContent(consoleComponent, "", false));
         consoleWindow.setIcon(RESOLVEIcons.TOOL_ICON);
     }
 
@@ -110,6 +117,7 @@ public class RESOLVEPluginController implements ProjectComponent {
         console.dispose();
 
         unregisterWindow(VERIFIER_WINDOW_ID);
+        unregisterWindow(SYMBOL_WINDOW_ID);
         unregisterWindow(CONSOLE_WINDOW_ID);
 
         verifierPanel = null;
