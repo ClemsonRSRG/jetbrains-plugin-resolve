@@ -1,5 +1,6 @@
 package edu.clemson.resolve.jetbrains.verifier;
 
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Document;
@@ -15,6 +16,7 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.ui.JBColor;
+import com.intellij.ui.JBDefaultTreeCellRenderer;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.treeStructure.Tree;
@@ -42,8 +44,13 @@ public class MathSymbolPanel extends JBPanel {
     public MathSymbolPanel(Project project) {
         DefaultMutableTreeNode top = new DefaultMutableTreeNode("top");
         createSections(top);
-
         this.tree = new Tree(top);
+        JBDefaultTreeCellRenderer renderer = new JBDefaultTreeCellRenderer(tree);
+        renderer.setLeafIcon(null);
+        renderer.setClosedIcon(AllIcons.Nodes.NewFolder);
+        renderer.setOpenIcon(AllIcons.Nodes.NewFolder);
+        tree.setCellRenderer(renderer);
+
         /*this.tree.addFocusListener(new FocusListener() {
             private RangeHighlighter activeHighlighter = null;
 
