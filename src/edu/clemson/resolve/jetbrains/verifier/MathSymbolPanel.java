@@ -4,6 +4,7 @@ import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.editor.markup.HighlighterLayer;
+import com.intellij.openapi.editor.markup.HighlighterTargetArea;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
@@ -31,11 +32,22 @@ public class MathSymbolPanel extends JBPanel {
     public MathSymbolPanel(Project project) {
         DefaultMutableTreeNode top = new DefaultMutableTreeNode("top");
         createSections(top);
-        
+
         this.tree = new Tree(top);
         this.tree.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
+                Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+                if (editor instanceof EditorEx) {
+                    //int x = ((EditorEx)editor).getExpectedCaretOffset();
+                    TextAttributes y = new TextAttributes();
+                    //HighlighterTargetArea.EXACT_RANGE
+                    y.setBackgroundColor(JBColor.GREEN);
+
+                    ((EditorEx) editor).getMarkupModel().addRangeHighlighter(((EditorEx) editor).getExpectedCaretOffset(),
+                            ((EditorEx) editor).getExpectedCaretOffset() + 1, HighlighterLayer.ELEMENT_UNDER_CARET, y,
+                            HighlighterTargetArea.EXACT_RANGE);
+                }
                 System.out.println("Focus Gained!!!!!!!");
             }
 
