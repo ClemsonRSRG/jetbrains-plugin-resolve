@@ -53,7 +53,6 @@ public class MathSymbolPanel extends JBPanel {
 
         /*this.tree.addFocusListener(new FocusListener() {
             private RangeHighlighter activeHighlighter = null;
-
             @Override
             public void focusGained(FocusEvent e) {
 
@@ -67,10 +66,8 @@ public class MathSymbolPanel extends JBPanel {
                             HighlighterTargetArea.EXACT_RANGE);
                     activeHighlighter.setGreedyToLeft(false);
                     activeHighlighter.setGreedyToRight(true);
-
                 }
             }
-
             @Override
             public void focusLost(FocusEvent e) {
                 if (activeHighlighter != null && editor != null) {
@@ -103,51 +100,22 @@ public class MathSymbolPanel extends JBPanel {
                     }
                 };
                 WriteCommandAction.runWriteCommandAction(project, runnable);
-
-                //document.insertString(tailOffset, s.symbol);
                 editor.getCaretModel().moveToOffset(tailOffset + 1);
-
             }
         });
-/*
-        //fires when a section is opened or closed.
-        tree.addTreeExpansionListener(new TreeExpansionListener() {
-            @Override
-            public void treeExpanded(TreeExpansionEvent event) {
-                setEditorCaretEnabledAndVisible(project);
-            }
 
-            @Override
-            public void treeCollapsed(TreeExpansionEvent event) {
-                setEditorCaretEnabledAndVisible(project);
-            }
-        });*/
-
-        //Create a tree that allows one selection at a time.
+        //Create a tree that allows multiple (non contiguous) expansions at a time
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-        this.tree.setRootVisible(false); //give things the appearance of multiple levels.
-
+        this.tree.setRootVisible(false);
         JScrollPane treeView = new JBScrollPane(tree);
         setLayout(new BorderLayout());
         add(treeView);
     }
 
-    private void setEditorCaretEnabledAndVisible(Project p) {
-        Editor editor = FileEditorManager.getInstance(p).getSelectedTextEditor();
-        if (editor instanceof EditorEx) {
-            //int x = ((EditorEx)editor).getExpectedCaretOffset();
-            TextAttributes y = new TextAttributes();
-            y.setBackgroundColor(JBColor.GREEN);
-            ((EditorEx) editor).getMarkupModel().addLineHighlighter(
-                    3, HighlighterLayer.ELEMENT_UNDER_CARET, y);
-        }
-
-    }
-
     public void createSections(@NotNull DefaultMutableTreeNode e) {
         addArrowsSection(e);
         addGreekAlphabetSection(e);
-        //TODO
+        //TODO: Add the rest
     }
 
     private void addArrowsSection(@NotNull DefaultMutableTreeNode e) {
@@ -171,6 +139,7 @@ public class MathSymbolPanel extends JBPanel {
         e.add(category);
     }
 
+    /** A class for grouping all math glyph related information */
     private static class SymbolInfo {
         private final String symbol, command;
         private final boolean activated;
