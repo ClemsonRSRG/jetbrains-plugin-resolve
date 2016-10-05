@@ -1,26 +1,40 @@
 package edu.clemson.resolve.jetbrains.verifier;
 
+import com.intellij.application.options.colors.ColorAndFontDescriptionPanel;
+import com.intellij.application.options.colors.ColorAndFontOptions;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.colors.EditorFontType;
+import com.intellij.openapi.editor.colors.ex.DefaultColorSchemesManager;
 import com.intellij.openapi.editor.event.DocumentEvent;
 import com.intellij.openapi.editor.event.DocumentListener;
 import com.intellij.openapi.editor.ex.EditorEx;
+import com.intellij.openapi.editor.ex.EditorMarkupModel;
+import com.intellij.openapi.editor.impl.EditorImpl;
+import com.intellij.openapi.editor.impl.FontInfo;
 import com.intellij.openapi.editor.markup.HighlighterLayer;
 import com.intellij.openapi.editor.markup.HighlighterTargetArea;
 import com.intellij.openapi.editor.markup.RangeHighlighter;
 import com.intellij.openapi.editor.markup.TextAttributes;
+import com.intellij.openapi.editor.richcopy.FontMapper;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
+import com.intellij.ui.EditorTextField;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.JBDefaultTreeCellRenderer;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.treeStructure.Tree;
+import com.intellij.util.FontUtil;
+import com.intellij.util.ui.JBFont;
+import com.intellij.util.ui.JBUI;
+import com.intellij.util.ui.UIUtil;
 import com.sun.istack.internal.NotNull;
+import org.jetbrains.lang.manifest.highlighting.ManifestColorsAndFonts;
 
 import javax.swing.*;
 import javax.swing.event.TreeExpansionEvent;
@@ -28,10 +42,12 @@ import javax.swing.event.TreeExpansionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.Locale;
 
 /**
  * Displays a hierarchy of useful math symbols and the corresponding live template commands to insert them into
@@ -49,8 +65,8 @@ public class MathSymbolPanel extends JBPanel {
         renderer.setLeafIcon(null);
         renderer.setClosedIcon(AllIcons.Nodes.NewFolder);
         renderer.setOpenIcon(AllIcons.Nodes.NewFolder);
+        //renderer.setFont();
         tree.setCellRenderer(renderer);
-
         /*this.tree.addFocusListener(new FocusListener() {
             private RangeHighlighter activeHighlighter = null;
             @Override
@@ -77,11 +93,36 @@ public class MathSymbolPanel extends JBPanel {
             }
         });*/
 
+        tree.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+
+                if (editor == null) return;
+                String currentEditorFontName = editor.getColorsScheme().getEditorFontName();
+
+                //if the panel's current font is not the same as the current editor's, then update the renderer
+                //to make them match
+                if (getFont().getName().equals(currentEditorFontName)) return;
+
+                TreeCellRenderer x = tree.getCellRenderer();
+                if (!(x instanceof JBDefaultTreeCellRenderer)) return;
+                Font xs= JBFont.create(new Font(currentEditorFontName, Font.PLAIN, 12));
+                ((JBDefaultTreeCellRenderer) x).setFont(xs);
+                tree.setCellRenderer(x);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+            }
+        });
+
         //fires when an element is selected
+
         tree.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
-                Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+\                Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
                 if (editor == null) return;
                 int tailOffset = editor.getCaretModel().getOffset();
                 Document document = editor.getDocument();
@@ -89,8 +130,6 @@ public class MathSymbolPanel extends JBPanel {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
                 if (node == null) return;
                 if (!(node.getUserObject() instanceof SymbolInfo)) return;
-
-               // e.getNewLeadSelectionPath().getLastPathComponent().
                 SymbolInfo s = (SymbolInfo)node.getUserObject();
 
                 Runnable runnable = new Runnable() {
@@ -101,6 +140,7 @@ public class MathSymbolPanel extends JBPanel {
                 };
                 WriteCommandAction.runWriteCommandAction(project, runnable);
                 editor.getCaretModel().moveToOffset(tailOffset + 1);
+                tree.clearSelection();
             }
         });
 
@@ -136,6 +176,24 @@ public class MathSymbolPanel extends JBPanel {
         category.add(new DefaultMutableTreeNode(new SymbolInfo("η", "eta")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("θ", "theta")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("ι", "iota")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("κ", "kappa")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("λ", "lambda")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("μ", "mu")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("ν", "nu")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("ξ", "xi")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("ο", "omnicron")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("π", "pi")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("ρ", "rho")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("σ", "sigma")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("τ", "tau")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("υ", "upsilon")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("φ", "phi")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("χ", "chi")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("ψ", "psi")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("ω", "omega")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("Γ", "Gamma")));
+        //category.add(new DefaultMutableTreeNode(new SymbolInfo("Γ", "Gamma")));
         e.add(category);
     }
 

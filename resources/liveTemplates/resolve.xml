@@ -202,28 +202,28 @@
         </context>
     </template>
 
-    <template description='λ' name='lambda' toReformat='true' toShortenFQNames='true'
+    <template description='λ' name='lt_lambda' toReformat='true' toShortenFQNames='true'
               value='λ'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
         </context>
     </template>
 
-    <template description='⌐' name='neg' toReformat='true' toShortenFQNames='true'
+    <template description='⌐' name='lt_neg' toReformat='true' toShortenFQNames='true'
               value='⌐'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
         </context>
     </template>
 
-    <template description='∧' name='and' toReformat='true' toShortenFQNames='true'
+    <template description='∧' name='lt_and' toReformat='true' toShortenFQNames='true'
               value='∧'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
         </context>
     </template>
 
-    <template description='∨' name='or' toReformat='true' toShortenFQNames='true'
+    <template description='∨' name='lt_or' toReformat='true' toShortenFQNames='true'
               value='∨'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>

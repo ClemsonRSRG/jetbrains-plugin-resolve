@@ -225,7 +225,7 @@ public class ProveAction extends RESOLVEAction implements AnAction.TransparentUp
                         markup.removeHighlighter(h);
                     }
                     VerifierPanel verifierPanel = controller.getVerifierPanel();
-                    controller.getVerifierWindow().hide(null);
+                    //controller.getVerifierWindow().hide(null);
                     verifierPanel.revertToBaseGUI();
                 }
             });
