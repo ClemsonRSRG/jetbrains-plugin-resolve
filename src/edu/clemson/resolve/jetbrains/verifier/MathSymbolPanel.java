@@ -28,6 +28,7 @@ import com.intellij.ui.JBColor;
 import com.intellij.ui.JBDefaultTreeCellRenderer;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.JBScrollPane;
+import com.intellij.ui.components.JBTextField;
 import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.FontUtil;
 import com.intellij.util.ui.JBFont;
@@ -37,6 +38,7 @@ import com.sun.istack.internal.NotNull;
 import org.jetbrains.lang.manifest.highlighting.ManifestColorsAndFonts;
 
 import javax.swing.*;
+import javax.swing.border.AbstractBorder;
 import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
 import javax.swing.event.TreeSelectionEvent;
@@ -47,6 +49,9 @@ import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.geom.Area;
+import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
 import java.util.Locale;
 
 /**
@@ -122,7 +127,7 @@ public class MathSymbolPanel extends JBPanel {
         tree.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
-\                Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+                Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
                 if (editor == null) return;
                 int tailOffset = editor.getCaretModel().getOffset();
                 Document document = editor.getDocument();
@@ -148,7 +153,28 @@ public class MathSymbolPanel extends JBPanel {
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         this.tree.setRootVisible(false);
         JScrollPane treeView = new JBScrollPane(tree);
+        treeView.setBorder(BorderFactory.createEmptyBorder());
         setLayout(new BorderLayout());
+
+        JTextField ff = new JBTextField("filter");
+        ff.addFocusListener(new FocusListener() {
+            public void focusGained(FocusEvent e) {
+                ff.setText("");
+            }
+
+            public void focusLost(FocusEvent e) {
+                // nothing
+            }
+        });
+        ff.setBorder(new RoundedCornerBorder());
+
+        JPanel filterPanel = new JPanel();
+        filterPanel.setLayout(new BorderLayout());
+        filterPanel.add(ff, BorderLayout.CENTER);
+        filterPanel.setBorder(BorderFactory.createLineBorder(JBColor.WHITE, 4));
+        //ff.setBackground(treeView.getBackground());
+
+        add(filterPanel, BorderLayout.NORTH);
         add(treeView);
     }
 
@@ -193,6 +219,17 @@ public class MathSymbolPanel extends JBPanel {
         category.add(new DefaultMutableTreeNode(new SymbolInfo("ω", "omega")));
 
         category.add(new DefaultMutableTreeNode(new SymbolInfo("Γ", "Gamma")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("Δ", "Delta")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("Λ", "Lambda")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("Ξ", "Xi")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("Π", "Pi")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("Σ", "Sigma")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("Υ", "Upsilon")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("Φ", "Phi")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("Ψ", "Psi")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("Ω", "Omega")));
+
+
         //category.add(new DefaultMutableTreeNode(new SymbolInfo("Γ", "Gamma")));
         e.add(category);
     }
@@ -211,6 +248,37 @@ public class MathSymbolPanel extends JBPanel {
         @Override
         public String toString() {
             return symbol + "   " + command;
+        }
+    }
+
+    static class RoundedCornerBorder extends AbstractBorder {
+        @Override public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            Graphics2D g2 = (Graphics2D)g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            int r = height - 1;
+            RoundRectangle2D round = new RoundRectangle2D.Float(x, y, width - 1, height - 1, r, r);
+            Container parent = c.getParent();
+            if (parent != null) {
+                g2.setColor(JBColor.WHITE);
+                Area corner = new Area(new Rectangle2D.Float(x, y, width, height));
+                corner.subtract(new Area(round));
+                g2.fill(corner);
+            }
+            g2.setColor(JBColor.GRAY);
+            g2.draw(round);
+            g2.dispose();
+        }
+
+        @Override
+        public Insets getBorderInsets(Component c) {
+            return new Insets(4, 8, 4, 8);
+        }
+
+        @Override
+        public Insets getBorderInsets(Component c, Insets insets) {
+            insets.left = insets.right = 8;
+            insets.top = insets.bottom = 4;
+            return insets;
         }
     }
 }
