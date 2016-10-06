@@ -1,7 +1,6 @@
 package edu.clemson.resolve.jetbrains.verifier;
 
-import com.intellij.application.options.colors.ColorAndFontDescriptionPanel;
-import com.intellij.application.options.colors.ColorAndFontOptions;
+import com.intellij.application.options.colors.*;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Caret;
@@ -20,7 +19,9 @@ import com.intellij.openapi.editor.markup.HighlighterTargetArea;
 import com.intellij.openapi.editor.markup.RangeHighlighter;
 import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.editor.richcopy.FontMapper;
+import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.options.colors.ColorSettingsPage;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.ui.EditorTextField;
@@ -30,11 +31,13 @@ import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.components.JBTextField;
 import com.intellij.ui.treeStructure.Tree;
+import com.intellij.util.EventDispatcher;
 import com.intellij.util.FontUtil;
 import com.intellij.util.ui.JBFont;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import com.sun.istack.internal.NotNull;
+import org.jdom.Element;
 import org.jetbrains.lang.manifest.highlighting.ManifestColorsAndFonts;
 
 import javax.swing.*;
@@ -44,9 +47,11 @@ import javax.swing.event.TreeExpansionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.geom.Area;
@@ -60,50 +65,69 @@ import java.util.Locale;
  */
 public class MathSymbolPanel extends JBPanel {
 
-    private final JTree tree;
+    private final Tree tree;
+    ColorAndFontSettingsListener listener;
+    private final EventDispatcher<ColorAndFontSettingsListener> dispatcher = EventDispatcher.create(ColorAndFontSettingsListener.class);
 
     public MathSymbolPanel(Project project) {
         DefaultMutableTreeNode top = new DefaultMutableTreeNode("top");
-        createSections(top);
         this.tree = new Tree(top);
         JBDefaultTreeCellRenderer renderer = new JBDefaultTreeCellRenderer(tree);
         renderer.setLeafIcon(null);
         renderer.setClosedIcon(AllIcons.Nodes.NewFolder);
         renderer.setOpenIcon(AllIcons.Nodes.NewFolder);
-        //renderer.setFont();
-        tree.setCellRenderer(renderer);
-        /*this.tree.addFocusListener(new FocusListener() {
-            private RangeHighlighter activeHighlighter = null;
+        this.tree.setCellRenderer(renderer);
+        createSections(top);
+        DefaultTreeModel treeModel = new DefaultTreeModel(top);
+        this.tree.setModel(treeModel);
+
+        NewColorAndFontPanel x;
+        Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+        FileEditor[] xsss = FileEditorManager.getInstance(project).getAllEditors();
+        tree.
+        //TODO: i need to be able to get the active scheme name in order to get the name of the font from the scheme manager..
+        //where to I find this i wonder?
+        Element c = DefaultColorSchemesManager.getInstance().getState();
+        //FileEditorManager.getInstance(project).addBottomComponent();
+        dispatcher.addListener(new ColorAndFontSettingsListener() {
+
             @Override
-            public void focusGained(FocusEvent e) {
-
-                if (editor instanceof EditorEx) {
-                    TextAttributes y = new TextAttributes();
-                    y.setBackgroundColor(JBColor.GREEN);
-                    int expectedOffset = ((EditorEx) editor).getCaretModel().getOffset();
-
-                    activeHighlighter = ((EditorEx) editor).getMarkupModel().addRangeHighlighter(
-                            expectedOffset-1, expectedOffset, HighlighterLayer.CARET_ROW, y,
-                            HighlighterTargetArea.EXACT_RANGE);
-                    activeHighlighter.setGreedyToLeft(false);
-                    activeHighlighter.setGreedyToRight(true);
-                }
+            public void selectedOptionChanged(Object selected) {
+                int k;
+                k=0;
             }
+
             @Override
-            public void focusLost(FocusEvent e) {
-                if (activeHighlighter != null && editor != null) {
-                    editor.getMarkupModel().removeAllHighlighters();
-                    activeHighlighter = null;
-                }
+            public void schemeChanged(Object source) {
+                int k;
+                k=0;
             }
-        });*/
 
+            @Override
+            public void settingsChanged() {
+                int i;
+                i=9;
+            }
+
+            @Override
+            public void selectionInPreviewChanged(String typeToSelect) {
+                int k;
+                k=0;
+            }
+
+            @Override
+            public void fontChanged() {
+                int i;
+                i= 0;
+            }
+        });
+
+        /*
         tree.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
 
-                if (editor == null) return;
+                /*if (editor == null) return;
                 String currentEditorFontName = editor.getColorsScheme().getEditorFontName();
 
                 //if the panel's current font is not the same as the current editor's, then update the renderer
@@ -115,12 +139,12 @@ public class MathSymbolPanel extends JBPanel {
                 Font xs= JBFont.create(new Font(currentEditorFontName, Font.PLAIN, 12));
                 ((JBDefaultTreeCellRenderer) x).setFont(xs);
                 tree.setCellRenderer(x);
+                ((DefaultTreeModel)tree.getModel()).reload(top);
             }
-
             @Override
             public void focusLost(FocusEvent e) {
             }
-        });
+        });*/
 
         //fires when an element is selected
 
@@ -189,6 +213,8 @@ public class MathSymbolPanel extends JBPanel {
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⟶", "longrightarrow")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⟹", "Longrightarrow")));
         e.add(category);
+        //((DefaultTreeModel)tree.getModel()).nodeChanged(e);
+
     }
 
     private void addGreekAlphabetSection(@NotNull DefaultMutableTreeNode e) {
@@ -228,10 +254,8 @@ public class MathSymbolPanel extends JBPanel {
         category.add(new DefaultMutableTreeNode(new SymbolInfo("Φ", "Phi")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("Ψ", "Psi")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("Ω", "Omega")));
-
-
-        //category.add(new DefaultMutableTreeNode(new SymbolInfo("Γ", "Gamma")));
         e.add(category);
+       // ((DefaultTreeModel)tree.getModel()).nodeChanged(e);
     }
 
     /** A class for grouping all math glyph related information */
