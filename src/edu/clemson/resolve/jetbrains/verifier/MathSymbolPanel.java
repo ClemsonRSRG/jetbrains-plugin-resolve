@@ -2,10 +2,14 @@ package edu.clemson.resolve.jetbrains.verifier;
 
 import com.intellij.application.options.colors.*;
 import com.intellij.icons.AllIcons;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.colors.EditorColorsListener;
+import com.intellij.openapi.editor.colors.EditorColorsManager;
+import com.intellij.openapi.editor.colors.EditorColorsScheme;
 import com.intellij.openapi.editor.colors.EditorFontType;
 import com.intellij.openapi.editor.colors.ex.DefaultColorSchemesManager;
 import com.intellij.openapi.editor.event.DocumentEvent;
@@ -33,6 +37,7 @@ import com.intellij.ui.components.JBTextField;
 import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.EventDispatcher;
 import com.intellij.util.FontUtil;
+import com.intellij.util.messages.Topic;
 import com.intellij.util.ui.JBFont;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
@@ -76,78 +81,30 @@ public class MathSymbolPanel extends JBPanel {
         renderer.setLeafIcon(null);
         renderer.setClosedIcon(AllIcons.Nodes.NewFolder);
         renderer.setOpenIcon(AllIcons.Nodes.NewFolder);
-        this.tree.setCellRenderer(renderer);
+        renderer.setFont(JBFont.create(new Font(EditorColorsManager.getInstance()
+                .getGlobalScheme().getEditorFontName(), Font.PLAIN, 12)));
+        tree.setCellRenderer(renderer);
         createSections(top);
+
         DefaultTreeModel treeModel = new DefaultTreeModel(top);
         this.tree.setModel(treeModel);
 
-        NewColorAndFontPanel x;
-        Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
-        FileEditor[] xsss = FileEditorManager.getInstance(project).getAllEditors();
-        tree.
-        //TODO: i need to be able to get the active scheme name in order to get the name of the font from the scheme manager..
-        //where to I find this i wonder?
-        Element c = DefaultColorSchemesManager.getInstance().getState();
-        //FileEditorManager.getInstance(project).addBottomComponent();
-        dispatcher.addListener(new ColorAndFontSettingsListener() {
-
+        EditorColorsManager.getInstance().getGlobalScheme().getEditorFontName();
+        ApplicationManager.getApplication().getMessageBus().connect()
+                .subscribe(EditorColorsManager.TOPIC, new EditorColorsListener() {
             @Override
-            public void selectedOptionChanged(Object selected) {
-                int k;
-                k=0;
-            }
-
-            @Override
-            public void schemeChanged(Object source) {
-                int k;
-                k=0;
-            }
-
-            @Override
-            public void settingsChanged() {
-                int i;
-                i=9;
-            }
-
-            @Override
-            public void selectionInPreviewChanged(String typeToSelect) {
-                int k;
-                k=0;
-            }
-
-            @Override
-            public void fontChanged() {
-                int i;
-                i= 0;
+            public void globalSchemeChange(EditorColorsScheme scheme) {
+                TreeCellRenderer r = tree.getCellRenderer();
+                if (!(r instanceof JBDefaultTreeCellRenderer)) return;
+                JBDefaultTreeCellRenderer rAsJBCellRenderer = (JBDefaultTreeCellRenderer)r;
+                rAsJBCellRenderer.setFont(JBFont.create(new Font(EditorColorsManager.getInstance()
+                        .getGlobalScheme().getEditorFontName(), Font.PLAIN, 12)));
+                revalidate();
+                //System.out.println(EditorColorsManager.getInstance().getGlobalScheme().getEditorFontName());
             }
         });
 
-        /*
-        tree.addFocusListener(new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent e) {
-
-                /*if (editor == null) return;
-                String currentEditorFontName = editor.getColorsScheme().getEditorFontName();
-
-                //if the panel's current font is not the same as the current editor's, then update the renderer
-                //to make them match
-                if (getFont().getName().equals(currentEditorFontName)) return;
-
-                TreeCellRenderer x = tree.getCellRenderer();
-                if (!(x instanceof JBDefaultTreeCellRenderer)) return;
-                Font xs= JBFont.create(new Font(currentEditorFontName, Font.PLAIN, 12));
-                ((JBDefaultTreeCellRenderer) x).setFont(xs);
-                tree.setCellRenderer(x);
-                ((DefaultTreeModel)tree.getModel()).reload(top);
-            }
-            @Override
-            public void focusLost(FocusEvent e) {
-            }
-        });*/
-
         //fires when an element is selected
-
         tree.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
@@ -187,7 +144,6 @@ public class MathSymbolPanel extends JBPanel {
             }
 
             public void focusLost(FocusEvent e) {
-                // nothing
             }
         });
         ff.setBorder(new RoundedCornerBorder());
@@ -218,7 +174,7 @@ public class MathSymbolPanel extends JBPanel {
     }
 
     private void addGreekAlphabetSection(@NotNull DefaultMutableTreeNode e) {
-        DefaultMutableTreeNode category = new DefaultMutableTreeNode("Greek alphabet");
+        DefaultMutableTreeNode category = new DefaultMutableTreeNode("Greek");
         category.add(new DefaultMutableTreeNode(new SymbolInfo("α", "alpha")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("β", "beta")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("γ", "gamma")));
