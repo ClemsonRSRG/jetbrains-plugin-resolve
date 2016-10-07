@@ -71,8 +71,6 @@ import java.util.Locale;
 public class MathSymbolPanel extends JBPanel {
 
     private final Tree tree;
-    ColorAndFontSettingsListener listener;
-    private final EventDispatcher<ColorAndFontSettingsListener> dispatcher = EventDispatcher.create(ColorAndFontSettingsListener.class);
 
     public MathSymbolPanel(Project project) {
         DefaultMutableTreeNode top = new DefaultMutableTreeNode("top");
@@ -166,15 +164,32 @@ public class MathSymbolPanel extends JBPanel {
 
     private void addArrowsSection(@NotNull DefaultMutableTreeNode e) {
         DefaultMutableTreeNode category = new DefaultMutableTreeNode("Arrows");
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("←", "leftarrow")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⇐", "Leftarrow")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⟵", "longleftarrow")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⟸", "Longleftarrow")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("→", "rightarrow")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⇒", "Rightarrow")));
+
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⟶", "longrightarrow")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⟹", "Longrightarrow")));
-        e.add(category);
-        //((DefaultTreeModel)tree.getModel()).nodeChanged(e);
 
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("↔", "leftrightarrow")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⇔", "Leftrightarrow")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⟷", "longleftrightarrow")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⟺", "Longleftrightarrow")));
+
+        e.add(category);
     }
 
     private void addGreekAlphabetSection(@NotNull DefaultMutableTreeNode e) {
         DefaultMutableTreeNode category = new DefaultMutableTreeNode("Greek");
+
+        //lowercase
         category.add(new DefaultMutableTreeNode(new SymbolInfo("α", "alpha")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("β", "beta")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("γ", "gamma")));
@@ -200,6 +215,7 @@ public class MathSymbolPanel extends JBPanel {
         category.add(new DefaultMutableTreeNode(new SymbolInfo("ψ", "psi")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("ω", "omega")));
 
+        //capitals
         category.add(new DefaultMutableTreeNode(new SymbolInfo("Γ", "Gamma")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("Δ", "Delta")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("Λ", "Lambda")));
@@ -211,7 +227,6 @@ public class MathSymbolPanel extends JBPanel {
         category.add(new DefaultMutableTreeNode(new SymbolInfo("Ψ", "Psi")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("Ω", "Omega")));
         e.add(category);
-       // ((DefaultTreeModel)tree.getModel()).nodeChanged(e);
     }
 
     /** A class for grouping all math glyph related information */
@@ -251,7 +266,7 @@ public class MathSymbolPanel extends JBPanel {
 
         @Override
         public Insets getBorderInsets(Component c) {
-            return new Insets(4, 8, 4, 8);
+            return JBUI.insets(4, 8);
         }
 
         @Override
