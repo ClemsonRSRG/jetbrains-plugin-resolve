@@ -69,6 +69,8 @@ import java.util.Locale;
  * the active editor.
  */
 public class MathSymbolPanel extends JBPanel {
+    Cloneable x;
+
 
     private final Tree tree;
 
@@ -87,7 +89,8 @@ public class MathSymbolPanel extends JBPanel {
         DefaultTreeModel treeModel = new DefaultTreeModel(top);
         this.tree.setModel(treeModel);
 
-        EditorColorsManager.getInstance().getGlobalScheme().getEditorFontName();
+        //allows us to change font dynamically in the symbol browser
+        //(it matters cause the symbols are utf8 and various fonts render them differently)
         ApplicationManager.getApplication().getMessageBus().connect()
                 .subscribe(EditorColorsManager.TOPIC, new EditorColorsListener() {
             @Override
@@ -98,7 +101,6 @@ public class MathSymbolPanel extends JBPanel {
                 rAsJBCellRenderer.setFont(JBFont.create(new Font(EditorColorsManager.getInstance()
                         .getGlobalScheme().getEditorFontName(), Font.PLAIN, 12)));
                 rAsJBCellRenderer.revalidate();
-                //System.out.println(EditorColorsManager.getInstance().getGlobalScheme().getEditorFontName());
             }
         });
 
@@ -136,6 +138,7 @@ public class MathSymbolPanel extends JBPanel {
         setLayout(new BorderLayout());
 
         JTextField ff = new JBTextField("filter");
+        //ff.setFont(UIUtil.getTreeFont().co);
         ff.addFocusListener(new FocusListener() {
             public void focusGained(FocusEvent e) {
                 ff.setText("");
@@ -150,13 +153,12 @@ public class MathSymbolPanel extends JBPanel {
         filterPanel.setLayout(new BorderLayout());
         filterPanel.add(ff, BorderLayout.CENTER);
         filterPanel.setBorder(BorderFactory.createLineBorder(JBColor.WHITE, 4));
-        //ff.setBackground(treeView.getBackground());
 
         add(filterPanel, BorderLayout.NORTH);
         add(treeView);
     }
 
-    public void createSections(@NotNull DefaultMutableTreeNode e) {
+    private void createSections(@NotNull DefaultMutableTreeNode e) {
         addArrowsSection(e);
         addGreekSection(e);
         addLettersSection(e);
@@ -183,7 +185,6 @@ public class MathSymbolPanel extends JBPanel {
 
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⟷", "longleftrightarrow")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⟺", "Longleftrightarrow")));
-
         e.add(category);
     }
 
@@ -240,15 +241,13 @@ public class MathSymbolPanel extends JBPanel {
         e.add(category);
     }
 
-    /** A class for grouping all math glyph related information */
+    /** A class for grouping all math glyph related information. */
     private static class SymbolInfo {
         private final String symbol, command;
-        private final boolean activated;
 
         SymbolInfo(@NotNull String s, @NotNull String command) {
             this.symbol = s;
             this.command = command;
-            this.activated = true;
         }
 
         @Override
@@ -257,6 +256,10 @@ public class MathSymbolPanel extends JBPanel {
         }
     }
 
+    /**
+     * An extension of {@link AbstractBorder} for the symbol/glyph search box embedded
+     * at the top of the panel
+     */
     static class RoundedCornerBorder extends AbstractBorder {
         @Override public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
             Graphics2D g2 = (Graphics2D)g.create();
