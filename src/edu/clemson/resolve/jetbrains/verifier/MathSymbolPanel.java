@@ -97,7 +97,7 @@ public class MathSymbolPanel extends JBPanel {
                 JBDefaultTreeCellRenderer rAsJBCellRenderer = (JBDefaultTreeCellRenderer)r;
                 rAsJBCellRenderer.setFont(JBFont.create(new Font(EditorColorsManager.getInstance()
                         .getGlobalScheme().getEditorFontName(), Font.PLAIN, 12)));
-                revalidate();
+                rAsJBCellRenderer.revalidate();
                 //System.out.println(EditorColorsManager.getInstance().getGlobalScheme().getEditorFontName());
             }
         });
@@ -158,7 +158,8 @@ public class MathSymbolPanel extends JBPanel {
 
     public void createSections(@NotNull DefaultMutableTreeNode e) {
         addArrowsSection(e);
-        addGreekAlphabetSection(e);
+        addGreekSection(e);
+        addLettersSection(e);
         //TODO: Add the rest
     }
 
@@ -186,7 +187,7 @@ public class MathSymbolPanel extends JBPanel {
         e.add(category);
     }
 
-    private void addGreekAlphabetSection(@NotNull DefaultMutableTreeNode e) {
+    private void addGreekSection(@NotNull DefaultMutableTreeNode e) {
         DefaultMutableTreeNode category = new DefaultMutableTreeNode("Greek");
 
         //lowercase
@@ -226,6 +227,16 @@ public class MathSymbolPanel extends JBPanel {
         category.add(new DefaultMutableTreeNode(new SymbolInfo("Φ", "Phi")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("Ψ", "Psi")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("Ω", "Omega")));
+        e.add(category);
+    }
+
+    private void addLettersSection(@NotNull DefaultMutableTreeNode e) {
+        DefaultMutableTreeNode category = new DefaultMutableTreeNode("Letters");
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("ℂ", "Complex")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("ℕ", "Natual")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("ℚ", "Rational")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("ℝ", "Real")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("ℤ", "Integer")));
         e.add(category);
     }
 
