@@ -69,8 +69,6 @@ import java.util.Locale;
  * the active editor.
  */
 public class MathSymbolPanel extends JBPanel {
-    Cloneable x;
-
 
     private final Tree tree;
 

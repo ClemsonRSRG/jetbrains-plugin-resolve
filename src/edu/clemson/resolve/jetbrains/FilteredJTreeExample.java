@@ -6,10 +6,7 @@ import com.intellij.ui.treeStructure.Tree;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -29,7 +26,7 @@ public final class FilteredJTreeExample {
 
     private static void createAndShowGUI() {
         JFrame frame = new JFrame("Filtered JTree Demo");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         addComponentsToPane(frame.getContentPane());
 
