@@ -1,19 +1,23 @@
-package edu.clemson.resolve.jetbrains;
+package edu.clemson.resolve.jetbrains.verifier;
+
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-public final class TreeFiltering implements TreeModel {
+/** Adapted from: TODO: Get url again.. */
+public final class TreeFilteringModel implements TreeModel {
 
-    private TreeModel treeModel;
+    private final TreeModel treeModel;
     private String filter;
 
-    public TreeFiltering(final TreeModel treeModel) {
+    public TreeFilteringModel(@NotNull final TreeModel treeModel) {
         this.treeModel = treeModel;
         this.filter = "";
     }
 
+    @NotNull
     public TreeModel getTreeModel() {
         return treeModel;
     }

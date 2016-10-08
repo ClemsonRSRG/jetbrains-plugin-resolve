@@ -1,68 +1,39 @@
 package edu.clemson.resolve.jetbrains.verifier;
 
-import com.intellij.application.options.colors.*;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
-import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.colors.EditorColorsListener;
 import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.editor.colors.EditorColorsScheme;
-import com.intellij.openapi.editor.colors.EditorFontType;
-import com.intellij.openapi.editor.colors.ex.DefaultColorSchemesManager;
-import com.intellij.openapi.editor.event.DocumentEvent;
-import com.intellij.openapi.editor.event.DocumentListener;
-import com.intellij.openapi.editor.ex.EditorEx;
-import com.intellij.openapi.editor.ex.EditorMarkupModel;
-import com.intellij.openapi.editor.impl.EditorImpl;
-import com.intellij.openapi.editor.impl.FontInfo;
-import com.intellij.openapi.editor.markup.HighlighterLayer;
-import com.intellij.openapi.editor.markup.HighlighterTargetArea;
-import com.intellij.openapi.editor.markup.RangeHighlighter;
-import com.intellij.openapi.editor.markup.TextAttributes;
-import com.intellij.openapi.editor.richcopy.FontMapper;
-import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.options.colors.ColorSettingsPage;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
-import com.intellij.ui.EditorTextField;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.JBDefaultTreeCellRenderer;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.components.JBTextField;
 import com.intellij.ui.treeStructure.Tree;
-import com.intellij.util.EventDispatcher;
-import com.intellij.util.FontUtil;
-import com.intellij.util.messages.Topic;
+import com.intellij.ui.treeStructure.filtered.FilteringTreeStructure;
 import com.intellij.util.ui.JBFont;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 import com.sun.istack.internal.NotNull;
-import org.jdom.Element;
-import org.jetbrains.lang.manifest.highlighting.ManifestColorsAndFonts;
 
 import javax.swing.*;
 import javax.swing.border.AbstractBorder;
-import javax.swing.event.TreeExpansionEvent;
-import javax.swing.event.TreeExpansionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeCellRenderer;
-import javax.swing.tree.TreeSelectionModel;
+import javax.swing.tree.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
-import java.util.Locale;
 
 /**
  * Displays a hierarchy of useful math symbols and the corresponding live template commands to insert them into
@@ -84,8 +55,8 @@ public class MathSymbolPanel extends JBPanel {
         tree.setCellRenderer(renderer);
         createSections(top);
 
-        DefaultTreeModel treeModel = new DefaultTreeModel(top);
-        this.tree.setModel(treeModel);
+        TreeFilteringModel filteringModel = new TreeFilteringModel(new DefaultTreeModel(top));
+        this.tree.setModel(filteringModel);
 
         //allows us to change font dynamically in the symbol browser
         //(it matters cause the symbols are utf8 and various fonts render them differently)
@@ -135,25 +106,60 @@ public class MathSymbolPanel extends JBPanel {
         treeView.setBorder(BorderFactory.createEmptyBorder());
         setLayout(new BorderLayout());
 
-        JTextField ff = new JBTextField("filter");
-        //ff.setFont(UIUtil.getTreeFont().co);
-        ff.addFocusListener(new FocusListener() {
+        JTextField filter = createFilterField();
+        filter.getDocument().addDocumentListener(createDocumentListener(tree, filter));
+
+        add(filter, BorderLayout.NORTH);
+        add(treeView);
+    }
+
+    private JTextField createFilterField() {
+        JTextField filterField = new JBTextField("filter");
+        filterField.setFont(UIUtil.getTreeFont());
+
+        filterField.addFocusListener(new FocusListener() {
             public void focusGained(FocusEvent e) {
-                ff.setText("");
+                if (filterField.getText().equals("filter")) filterField.setText("");
             }
 
             public void focusLost(FocusEvent e) {
             }
         });
-        ff.setBorder(new RoundedCornerBorder());
+        filterField.setBorder(new RoundedCornerBorder());
+        return filterField;
+    }
 
-        JPanel filterPanel = new JPanel();
-        filterPanel.setLayout(new BorderLayout());
-        filterPanel.add(ff, BorderLayout.CENTER);
-        filterPanel.setBorder(BorderFactory.createLineBorder(JBColor.WHITE, 4));
+    private static javax.swing.event.DocumentListener createDocumentListener(final JTree tree,
+                                                                             final JTextField filter) {
+        return new javax.swing.event.DocumentListener() {
 
-        add(filterPanel, BorderLayout.NORTH);
-        add(treeView);
+            @Override
+            public void insertUpdate(final javax.swing.event.DocumentEvent e) {
+                applyFilter();
+            }
+
+            @Override
+            public void removeUpdate(final javax.swing.event.DocumentEvent e) {
+                applyFilter();
+            }
+
+            @Override
+            public void changedUpdate(final javax.swing.event.DocumentEvent e) {
+                applyFilter();
+            }
+
+            void applyFilter() {
+                TreeFilteringModel filteringModel = (TreeFilteringModel) tree.getModel();
+                filteringModel.setFilter(filter.getText());
+
+                DefaultTreeModel treeModel = (DefaultTreeModel) filteringModel.getTreeModel();
+                treeModel.reload();
+
+                for (int i = 0; i < tree.getRowCount(); i++) {
+                    tree.expandRow(i);
+                }
+            }
+        };
     }
 
     private void createSections(@NotNull DefaultMutableTreeNode e) {

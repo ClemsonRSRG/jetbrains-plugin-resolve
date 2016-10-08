@@ -2,6 +2,7 @@ package edu.clemson.resolve.jetbrains;
 
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.treeStructure.Tree;
+import edu.clemson.resolve.jetbrains.verifier.TreeFilteringModel;
 
 import java.awt.Container;
 import java.awt.GridBagConstraints;
@@ -45,7 +46,7 @@ public final class FilteredJTreeExample {
 
     private static JTree createTree(final Container pane) {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("JTree");
-        TreeFiltering model = new TreeFiltering(new DefaultTreeModel(root));
+        TreeFilteringModel model = new TreeFilteringModel(new DefaultTreeModel(root));
         JTree tree = new Tree(model);
         JScrollPane scrollPane = new JBScrollPane(tree);
         GridBagConstraints c = new GridBagConstraints();
@@ -93,7 +94,7 @@ public final class FilteredJTreeExample {
             }
 
             public void applyFilter() {
-                TreeFiltering filteredModel = (TreeFiltering) tree.getModel();
+                TreeFilteringModel filteredModel = (TreeFilteringModel) tree.getModel();
                 filteredModel.setFilter(filter.getText());
 
                 DefaultTreeModel treeModel = (DefaultTreeModel) filteredModel.getTreeModel();
