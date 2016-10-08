@@ -109,7 +109,12 @@ public class MathSymbolPanel extends JBPanel {
         JTextField filter = createFilterField();
         filter.getDocument().addDocumentListener(createDocumentListener(tree, filter));
 
-        add(filter, BorderLayout.NORTH);
+        //intermediate panel to put some space between edges of outer pane and the filter field.
+        JPanel filterPanel = new JPanel(new BorderLayout());
+        filterPanel.add(filter);
+        filterPanel.setBorder(BorderFactory.createLineBorder(JBColor.WHITE, 5));
+
+        add(filterPanel, BorderLayout.NORTH);
         add(treeView);
     }
 
