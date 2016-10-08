@@ -166,7 +166,11 @@ public class MathSymbolPanel extends JBPanel {
         addArrowsSection(e);
         addGreekSection(e);
         addLettersSection(e);
-        //TODO: Add the rest
+        addLogicSection(e);
+        addPunctuationSection(e);
+        addOperatorSection(e);
+        addRelationSection(e);
+        //TODO: Prune any not currently accepted by resolve's grammar. This is enough for now.
     }
 
     private void addArrowsSection(@NotNull DefaultMutableTreeNode e) {
@@ -189,6 +193,33 @@ public class MathSymbolPanel extends JBPanel {
 
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⟷", "longleftrightarrow")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⟺", "Longleftrightarrow")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("↩", "hookleftarrow")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("↪", "hookrightarrow")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("↽", "leftharpoondown")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⇁", "rightharpoondown")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("↼", "leftharpoonup")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⇀", "rightharpoonup")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⇌", "leftrightharpoons")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("↝", "leadsto")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⇃", "downharpoonleft")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⇂", "downharpoonright")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("↿", "upharpoonleft")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("↾", "upharpoonright")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("↑", "up")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⇑", "Up")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("↓", "down")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⇓", "Down")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("↕", "updown")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⇕", "Updown")));
         e.add(category);
     }
 
@@ -242,6 +273,181 @@ public class MathSymbolPanel extends JBPanel {
         category.add(new DefaultMutableTreeNode(new SymbolInfo("ℚ", "Rational")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("ℝ", "Real")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("ℤ", "Integer")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("℘", "Powerset")));
+        e.add(category);
+    }
+
+    private void addLogicSection(@NotNull DefaultMutableTreeNode e) {
+        DefaultMutableTreeNode category = new DefaultMutableTreeNode("Logic");
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊥", "bottom")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊤", "top")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("∧", "and")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⋀", "And")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("∨", "or")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⋁", "Or")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("∀", "forall")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("∃", "exists")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("¬", "not")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("□", "box")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("◇", "diamond")));
+        e.add(category);
+    }
+
+    private void addPunctuationSection(@NotNull DefaultMutableTreeNode e) {
+        DefaultMutableTreeNode category = new DefaultMutableTreeNode("Punctuation");
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("∷", "coloncolon")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⟨", "langle")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⟩", "rangle")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⌈", "lceil")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⌉", "rceil")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⌊", "lfloor")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⌋", "rfloor")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⎝", "lcup")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⎠", "rcup")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⎛", "lcap")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⎞", "rcap")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⦇", "lparr")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⦈", "rparr")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⟦", "lbrakk")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⟧", "rbrakk")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("«", "guillemotleft")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("»", "guillemotright")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⎥", "mid")));
+        e.add(category);
+    }
+
+    private void addOperatorSection(@NotNull DefaultMutableTreeNode e) {
+        DefaultMutableTreeNode category = new DefaultMutableTreeNode("Operators");
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("∩", "cap")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⋂", "Cap")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("∪", "cup")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⋃", "Cup")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊔", "sqcup")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⨆", "Sqcup")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊓", "sqcap")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⨅", "Sqcap")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("∝", "propto")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊎", "cupplus")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⨄", "Cupplus")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("±", "plusminus")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("∓", "minusplus")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("×", "times")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("÷", "div")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⋅", "cdot")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⋆", "star")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("∙", "bullet")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("∘", "circ")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊕", "oplus")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⨁", "Oplus")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊗", "otimes")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⨂", "Otimes")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊙", "odot")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⨀", "Odot")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊖", "ominus")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊘", "oslash")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⟕", "lojoin")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⟖", "rojoin")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⟗", "fojoin")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("∑", "Sum")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("∏", "Prod")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⨿", "coprod")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("∐", "Coprod")));
+        e.add(category);
+    }
+
+    private void addRelationSection(@NotNull DefaultMutableTreeNode e) {
+        DefaultMutableTreeNode category = new DefaultMutableTreeNode("Relations");
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊢", "turnstile")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊨", "Turnstile")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊩", "tturnstile")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊫", "TTurnstile")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊣", "stileturn")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("√", "surd")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("≤", "le")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("≥", "ge")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("≪", "lless")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("≫", "ggreater")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("≲", "lesssim")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("≳", "greatersim")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⪅", "lessapprox")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⪆", "greaterapprox")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("∈", "in")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("∉", "notin")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊂", "subset")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊃", "supset")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊆", "subseteq")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊇", "supseteq")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊏", "sqsubset")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊐", "sqsupset")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊑", "sqsubseteq")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊒", "sqsupseteq")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("≠", "noteq")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("∼", "sim")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("≐", "doteq")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("≃", "simeq")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("≈", "approx")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("≍", "asymp")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("≅", "cong")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("≡", "equiv")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("≼", "preceq")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("≽", "succeq")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊲", "lhd")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊳", "rhd")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊴", "unlhd")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊵", "unrhd")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("◃", "triangleleft")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("▹", "triangleright")));
+
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("△", "triangle")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("≜", "triangleq")));
         e.add(category);
     }
 
