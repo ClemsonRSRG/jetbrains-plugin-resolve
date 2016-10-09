@@ -298,8 +298,8 @@ public class MathSymbolPanel extends JBPanel {
         category.add(new DefaultMutableTreeNode(new SymbolInfo("∃", "exists")));
 
         category.add(new DefaultMutableTreeNode(new SymbolInfo("¬", "not")));
-        category.add(new DefaultMutableTreeNode(new SymbolInfo("□", "box")));
-        category.add(new DefaultMutableTreeNode(new SymbolInfo("◇", "diamond")));
+        //category.add(new DefaultMutableTreeNode(new SymbolInfo("□", "box")));
+        //category.add(new DefaultMutableTreeNode(new SymbolInfo("◇", "diamond")));
         e.add(category);
     }
 
@@ -323,14 +323,14 @@ public class MathSymbolPanel extends JBPanel {
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⎛", "lcap")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⎞", "rcap")));
 
-        category.add(new DefaultMutableTreeNode(new SymbolInfo("⦇", "lparr")));
-        category.add(new DefaultMutableTreeNode(new SymbolInfo("⦈", "rparr")));
+        //category.add(new DefaultMutableTreeNode(new SymbolInfo("⦇", "lparr")));
+        //category.add(new DefaultMutableTreeNode(new SymbolInfo("⦈", "rparr")));
 
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⟦", "lbrakk")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⟧", "rbrakk")));
 
-        category.add(new DefaultMutableTreeNode(new SymbolInfo("«", "guillemotleft")));
-        category.add(new DefaultMutableTreeNode(new SymbolInfo("»", "guillemotright")));
+        //category.add(new DefaultMutableTreeNode(new SymbolInfo("«", "guillemotleft")));
+        //category.add(new DefaultMutableTreeNode(new SymbolInfo("»", "guillemotright")));
 
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⎥", "mid")));
         e.add(category);
@@ -448,8 +448,8 @@ public class MathSymbolPanel extends JBPanel {
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⊴", "unlhd")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⊵", "unrhd")));
 
-        category.add(new DefaultMutableTreeNode(new SymbolInfo("◃", "triangleleft")));
-        category.add(new DefaultMutableTreeNode(new SymbolInfo("▹", "triangleright")));
+        //category.add(new DefaultMutableTreeNode(new SymbolInfo("◃", "triangleleft")));
+        //category.add(new DefaultMutableTreeNode(new SymbolInfo("▹", "triangleright")));
 
         category.add(new DefaultMutableTreeNode(new SymbolInfo("△", "triangle")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("≜", "triangleq")));
