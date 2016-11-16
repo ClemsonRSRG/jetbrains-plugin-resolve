@@ -7,16 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface ResMathVarDecl extends ResMathVarDeclGroup {
 
-  @Nullable
-  ResMathExp getMathExp();
-
   @NotNull
   ResMathVarDef getMathVarDef();
 
-  @Nullable
+  @NotNull
   PsiElement getColon();
-
-  @Nullable
-  PsiElement getHyperColon();
 
 }

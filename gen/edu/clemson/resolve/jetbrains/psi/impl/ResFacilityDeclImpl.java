@@ -69,14 +69,14 @@ public class ResFacilityDeclImpl extends ResNamedElementImpl implements ResFacil
 
   @Override
   @Nullable
-  public PsiElement getImplemented() {
-    return findChildByType(IMPLEMENTED);
+  public PsiElement getIs() {
+    return findChildByType(IS);
   }
 
   @Override
   @Nullable
-  public PsiElement getIs() {
-    return findChildByType(IS);
+  public PsiElement getRealized() {
+    return findChildByType(REALIZED);
   }
 
   @Override

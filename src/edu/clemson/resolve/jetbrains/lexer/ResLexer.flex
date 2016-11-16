@@ -41,8 +41,8 @@ NUM_INT = "0" | ([1-9] {INT_DIGIT}*)
 IDENT = {LETTER} ({LETTER} | {DIGIT} )*
 
 MSYM = ([\u2190-\u21FF] | [\u2100-\u214F] | [\u2200-\u22FF] | [\u27C0-\u27EF] | [\u27F0-\u27FF] | [\u2A00-\u2AFF] | [\u2300-\u23BF] | [\u0370-\u03FF])
-
-SYM = ("!"|"*"|"+"|"-"|"/"|"["|"]"|"|"|"~"|[<->])+
+MBRACKET = ("|"|"∥"|"⟨"|"⟩"|"⎡"|"⎤"|"⎝"|"⎠"|"["|"]")
+SYM = ("!"|"*"|"+"|"-"|"/"|"|"|"~"|[<->])+
 
 STR =      "\""
 ESCAPES = [abfnrtv]
@@ -67,7 +67,6 @@ ESCAPES = [abfnrtv]
 "'\\" [abfnrtv\\\'] "'"                 { return CHAR; }
 "'\\'"                                  { return BAD_CHARACTER; }
 
-"`"                                     { return BACKTICK; }
 {STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}?
                                         { return STRING; }
 // brackets & braces
@@ -77,18 +76,12 @@ ESCAPES = [abfnrtv]
 "}"                                     { return RBRACE; }
 "}}"                                    { return DBL_RBRACE; }
 
-"`"                                     { return BACKTICK; }
 "′"                                     { return PRIME; }
-
-//"["                                     { return LBRACK; }
-//"]"                                     { return RBRACK; }
 
 "("                                     { return LPAREN; }
 ")"                                     { return RPAREN; }
-"∣"                                     { return RESTRICTION_BAR; }
 ":"                                     { return COLON; }
 "::"                                    { return COLON_COLON; }
-"⦂"                                     { return HYPER_COLON; }
 ";"                                     { return SEMICOLON; }
 ","                                     { return COMMA; }
 "(i.)"                                  { return IND_BASE; }
@@ -97,11 +90,9 @@ ESCAPES = [abfnrtv]
 // Operators
 
 "λ"                                     { return LAMBDA; }
-
+"="                                     { return EQUALS; }
 ":="                                    { return COLON_EQUALS; }
 ":=:"                                   { return COLON_EQUALS_COLON; }
-"?"                                     { return QV; }
-"∋"                                     { return SUCH_THAT; }
 
 // Keywords
 
@@ -118,14 +109,15 @@ ESCAPES = [abfnrtv]
 "conventions"                           { return CONVENTIONS; }
 "Corollary"                             { return COROLLARY; }
 "correspondence"                        { return CORRESPONDENCE; }
+"do"                                    { return DO; }
 "decreasing"                            { return DECREASING; }
 "Definition"                            { return DEFINITION; }
 "Defines"                               { return DEFINES; }
 "else"                                  { return ELSE; }
 "Extension"                             { return EXTENSION; }
+"Enhancement"                             { return ENHANCEMENT; }
 "extended_by"                           { return EXTENDED_BY; }
 "extended"                              { return EXTENDED; }
-"do"                                    { return DO; }
 "end"                                   { return END;  }
 "ensures"                               { return ENSURES; }
 "exemplar"                              { return EXEMPLAR; }
@@ -143,8 +135,8 @@ ESCAPES = [abfnrtv]
 "if"                                    { return IF; }
 "If"                                    { return PROG_IF; }
 "is"                                    { return IS; }
-"implemented"                           { return IMPLEMENTED; }
-"Implementation"                        { return IMPLEMENTATION; }
+"realized"                              { return REALIZED; }
+"Realization"                           { return REALIZATION; }
 "Implicit"                              { return IMPLICIT; }
 "initialization"                        { return INITIALIZATION; }
 "Inductive"                             { return INDUCTIVE; }
@@ -181,6 +173,7 @@ ESCAPES = [abfnrtv]
 "evaluates"                             { return EVALUATES; }
 
 {MSYM}                                  { return MATH_SYMBOL; }
+{MBRACKET}                              { return MATH_BRACKET_SYMBOL; }
 {SYM}                                   { return SYMBOL; }
 {IDENT}                                 { return IDENTIFIER; }
 {NUM_INT}                               { return INT; }

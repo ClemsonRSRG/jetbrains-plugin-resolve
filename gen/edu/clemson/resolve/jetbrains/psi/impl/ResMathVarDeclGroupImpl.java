@@ -43,10 +43,4 @@ public class ResMathVarDeclGroupImpl extends ResCompositeElementImpl implements 
     return findChildByType(COLON);
   }
 
-  @Override
-  @Nullable
-  public PsiElement getHyperColon() {
-    return findChildByType(HYPER_COLON);
-  }
-
 }

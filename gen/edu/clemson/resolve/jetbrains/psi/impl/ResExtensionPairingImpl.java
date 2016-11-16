@@ -57,8 +57,8 @@ public class ResExtensionPairingImpl extends ResCompositeElementImpl implements 
 
   @Override
   @Nullable
-  public PsiElement getImplemented() {
-    return findChildByType(IMPLEMENTED);
+  public PsiElement getRealized() {
+    return findChildByType(REALIZED);
   }
 
   @Nullable

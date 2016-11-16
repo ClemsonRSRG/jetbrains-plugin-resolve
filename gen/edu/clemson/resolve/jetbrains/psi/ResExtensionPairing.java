@@ -23,7 +23,7 @@ public interface ResExtensionPairing extends ResCompositeElement {
   PsiElement getExternally();
 
   @Nullable
-  PsiElement getImplemented();
+  PsiElement getRealized();
 
   @Nullable
   ResFile resolveSpecification();

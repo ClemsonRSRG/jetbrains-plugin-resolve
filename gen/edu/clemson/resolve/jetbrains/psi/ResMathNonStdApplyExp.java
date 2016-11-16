@@ -8,10 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface ResMathNonStdApplyExp extends ResMathExp {
 
   @NotNull
-  ResMathExp getMathExp();
-
-  @NotNull
-  ResMathFunctionAppList getMathFunctionAppList();
+  List<ResMathExp> getMathExpList();
 
   @NotNull
   List<ResMathSymbolName> getMathSymbolNameList();

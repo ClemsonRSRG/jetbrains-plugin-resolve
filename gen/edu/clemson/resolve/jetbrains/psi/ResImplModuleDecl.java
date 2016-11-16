@@ -28,10 +28,10 @@ public interface ResImplModuleDecl extends ResModuleDecl {
   @Nullable
   PsiElement getFor();
 
-  @NotNull
-  PsiElement getImplementation();
-
   @Nullable
   PsiElement getOf();
+
+  @NotNull
+  PsiElement getRealization();
 
 }

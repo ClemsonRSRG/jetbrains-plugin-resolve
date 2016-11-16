@@ -51,15 +51,15 @@ public class ResTypeReprDeclImpl extends ResAbstractTypeLikeNodeImpl implements 
   }
 
   @Override
-  @NotNull
-  public PsiElement getFamilyType() {
-    return findNotNullChildByType(FAMILY_TYPE);
+  @Nullable
+  public PsiElement getEquals() {
+    return findChildByType(EQUALS);
   }
 
   @Override
-  @Nullable
-  public PsiElement getIs() {
-    return findChildByType(IS);
+  @NotNull
+  public PsiElement getFamilyType() {
+    return findNotNullChildByType(FAMILY_TYPE);
   }
 
   @Override

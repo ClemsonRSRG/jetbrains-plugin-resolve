@@ -49,10 +49,4 @@ public class ResMathSetRestrictionExpImpl extends ResMathExpImpl implements ResM
     return findChildByType(RBRACE);
   }
 
-  @Override
-  @Nullable
-  public PsiElement getRestrictionBar() {
-    return findChildByType(RESTRICTION_BAR);
-  }
-
 }

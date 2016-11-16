@@ -20,11 +20,11 @@ public interface ResTypeReprDecl extends ResTypeLikeNodeDecl {
   @Nullable
   ResTypeImplInit getTypeImplInit();
 
+  @Nullable
+  PsiElement getEquals();
+
   @NotNull
   PsiElement getFamilyType();
-
-  @Nullable
-  PsiElement getIs();
 
   @Nullable
   PsiElement getSemicolon();

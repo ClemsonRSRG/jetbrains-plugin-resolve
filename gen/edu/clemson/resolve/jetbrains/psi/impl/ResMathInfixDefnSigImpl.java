@@ -49,10 +49,4 @@ public class ResMathInfixDefnSigImpl extends ResAbstractMathSigImpl implements R
     return findChildByType(COLON);
   }
 
-  @Override
-  @Nullable
-  public PsiElement getHyperColon() {
-    return findChildByType(HYPER_COLON);
-  }
-
 }

@@ -17,7 +17,7 @@ public interface ResMathLambdaExp extends ResMathExp {
   PsiElement getComma();
 
   @Nullable
-  PsiElement getLAMBDA1();
+  PsiElement getLambda1();
 
   @Nullable
   PsiElement getLambda();

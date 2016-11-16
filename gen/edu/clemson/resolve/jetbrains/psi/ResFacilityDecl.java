@@ -29,10 +29,10 @@ public interface ResFacilityDecl extends ResNamedElement {
   PsiElement getFacility();
 
   @Nullable
-  PsiElement getImplemented();
+  PsiElement getIs();
 
   @Nullable
-  PsiElement getIs();
+  PsiElement getRealized();
 
   @Nullable
   PsiElement getSemicolon();

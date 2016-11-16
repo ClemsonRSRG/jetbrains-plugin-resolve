@@ -27,14 +27,8 @@ public class ResMathNonStdApplyExpImpl extends ResMathExpImpl implements ResMath
 
   @Override
   @NotNull
-  public ResMathExp getMathExp() {
-    return findNotNullChildByClass(ResMathExp.class);
-  }
-
-  @Override
-  @NotNull
-  public ResMathFunctionAppList getMathFunctionAppList() {
-    return findNotNullChildByClass(ResMathFunctionAppList.class);
+  public List<ResMathExp> getMathExpList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResMathExp.class);
   }
 
   @Override

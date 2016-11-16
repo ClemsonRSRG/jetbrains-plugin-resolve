@@ -17,12 +17,10 @@
     tokens=[
 
         // Punctuation
-        QV                      = '?'
         AT                      = '@'
         TRIPLE_DOT              = '...'
         DOT_DOT                 = '..'
         DOT                     = '.'
-        BACKTICK                = '`'
         DBL_LBRACE              = '{{'
         LBRACE                  = '{'
         RBRACE                  = '}'
@@ -33,19 +31,16 @@
         COLON_COLON             = '::'
 
         PRIME                   = '′'
-        RESTRICTION_BAR         = '∣'
-        HYPER_COLON             = '⦂'
         SEMICOLON               = ';'
         COMMA                   = ','
         IND_BASE                = '(i.)'
         IND_HYPO                = '(ii.)'
         TRUE                    = 'true'
         FALSE                   = 'false'
+        EQUALS            = '='
         COLON_EQUALS            = ':='
         COLON_EQUALS_COLON      = ':=:'
-        SUCH_THAT               = '∋'
 
-        // Keywords TODO: According to the go plugin, we don't actually need these re-iterated in here..
         INT                     = 'int'
         FACILITY                = 'Facility'
         PRECIS                  = 'Precis'
@@ -65,6 +60,7 @@
         CHAINABLE               = 'Chainable'
         CORRESPONDENCE          = 'correspondence'
         CLASSIFICATION          = 'Classification'
+        ENHANCEMENT             = 'Enhancement'
         EXTENSION               = 'Extension'
         END                     = 'end'
         ELSE                    = 'else'
@@ -82,9 +78,9 @@
         EXISTS                  = 'Exists'
         EXISTS1                 = '∃'
         EXTERNALLY              = 'externally'
-        IMPLEMENTED             = 'implemented'
+        REALIZED                = 'realized'
         INITIALIZATION          = 'initialization'
-        IMPLEMENTATION          = 'Implementation'
+        REALIZATION             = 'Realization'
         INDUCTIVE               = 'Inductive'
         IMPLICIT                = 'Implicit'
         THEOREM                 = 'Theorem'
@@ -184,13 +180,13 @@ ConceptBlock
 'end' identifier ';' {pin(".*")=1}
 
 ConceptExtensionModuleDecl ::=
-'Concept' 'Extension' identifier SpecModuleParameters? 'for' ReferenceExp ';'
+'Enhancement' identifier SpecModuleParameters? 'for' ReferenceExp ';'
 UsesList?
 RequiresClause?
 ConceptBlock
 'end' identifier ';' {pin(".*")=2}
 
-ImplModuleDecl ::= 'Implementation' identifier ImplModuleParameters? 'for' ReferenceExp ('of' ReferenceExp)? ';'
+ImplModuleDecl ::= 'Realization' identifier ImplModuleParameters? 'for' ReferenceExp ('of' ReferenceExp)? ';'
 UsesList?
 RequiresClause?
 ImplBlock
@@ -277,7 +273,7 @@ TypeModelDecl ::= 'Type' 'family' identifier TypeModelPortion ';'
 ExemplarDecl ::= 'exemplar' identifier ';' {pin=2 methods=[getResMathMetaTypeExpInner]}
 private TypeModelPortion ::= 'is' 'modeled' 'by' MathExp {pin=4}
 
-TypeReprDecl ::= 'Type' identifier 'is' (RecordType|Type) ';'
+TypeReprDecl ::= 'Type' identifier '=' (RecordType|Type) ';'
 ConventionsClause?
 CorrespondenceClause?
 TypeImplInit?
@@ -322,14 +318,14 @@ VarDef ::= identifier {methods=[getResTypeInner getReference]}
 // facility decls
 
 FacilityDecl ::= 'Facility' identifier 'is' ModuleIdentifier ModuleArgList? [FromClause]
-('externally')? 'implemented' 'by' ModuleIdentifier ModuleArgList? [FromClause]
+('externally')? 'realized' 'by' ModuleIdentifier ModuleArgList? [FromClause]
 ExtensionList? ';' {pin=2 methods=[resolveSpecification resolveImplementation]}
 
 private ExtensionList ::= (ExtensionPairing)* {recoverWhile=ExtensionListRec}
 private ExtensionListRec ::= !(';')
 
 ExtensionPairing ::= 'extended' 'by' ModuleIdentifier ModuleArgList? [FromClause] ('externally')?
-'implemented' 'by' ModuleIdentifier ModuleArgList? [FromClause]
+'realized' 'by' ModuleIdentifier ModuleArgList? [FromClause]
 {pin=1 methods=[resolveSpecification resolveImplementation]}
 
 ModuleArgList ::= '(' ExpArgumentList ')' {pin=1}
@@ -396,17 +392,16 @@ MathTheoremDecl ::= ('Corollary'|'Theorem') identifier ':' MathAssertionExp ';' 
 MathClssftnCorollaryDecl ::= 'Classification' 'Corollary' ':' MathAssertionExp ';' {pin=1}
 
 private MathDefnSig ::= MathPrefixDefnSig | MathPostfixDefnSig | MathOutfixDefnSig | MathInfixDefnSig
-MathPrefixDefnSig ::= MathPrefixNameList MathDefinitionParams? (':'|'⦂') MathExp {pin=1}
+MathPrefixDefnSig ::= MathPrefixNameList MathDefinitionParams? ':' MathExp {pin=1}
 
 private MathPrefixNameList ::= MathSymbolName (',' MathSymbolName)* {recoverWhile=MathPrefixListRec}
-private MathPrefixListRec ::= !(':'|'⦂'|';'|'(')
+private MathPrefixListRec ::= !(':'|';'|'(')
 private MathPrefixDefnSigs ::= MathPrefixDefnSig (',' MathPrefixDefnSig)* {recoverWhile=CategoricalSigListRec}
 private CategoricalSigListRec ::= !('is')
 
-MathInfixDefnSig ::= '(' MathVarDecl ')' MathSymbolName '(' MathVarDecl ')' (':'|'⦂') MathExp {pin=4}
-MathOutfixDefnSig ::= '`' MathSymbolNameNoId '(' MathVarDecl ')' MathSymbolNameNoId '`' (':'|'⦂') MathExp {pin=2}
-MathPostfixDefnSig ::= '(' MathVarDecl ')' '`' MathSymbolNameNoId '(' MathVarDecl ')' MathSymbolNameNoId '`'
-    (':'|'⦂') MathExp
+MathInfixDefnSig ::= '(' MathVarDecl ')' MathSymbolName '(' MathVarDecl ')' ':' MathExp {pin=4}
+MathOutfixDefnSig ::= MathBracketName '(' MathVarDecl ')' MathBracketName ':' MathExp {pin=1}
+MathPostfixDefnSig ::= '(' MathVarDecl ')' MathBracketName '(' MathVarDecl ')' MathBracketName ':' MathExp
 
 private MathDefinitionParams ::= '(' MathDefnParamList ')' { pin=1}
 private ParamListRec ::= !(')'|';')
@@ -423,9 +418,9 @@ MathInductiveDefnDecl ::= 'Inductive' 'Definition' MathDefnSig 'is'
 
 // mathematical variables
 
-MathVarDeclGroup ::= MathVarDeclList (':'|'⦂') MathExp {pin=1}
+MathVarDeclGroup ::= MathVarDeclList ':' MathExp {pin=1}
 
-MathVarDecl ::= MathVarDef (':'|'⦂') MathExp {pin=2 extends=MathVarDeclGroup}
+MathVarDecl ::= MathVarDef ':' MathExp {pin=2 extends=MathVarDeclGroup}
 private MathVarDeclList ::= MathVarDef &(!(')')) (',' MathVarDef)* {pin=1}
 MathVarDef ::= MathSymbolName //TODO: Make this a MathSymbolName
 
@@ -445,7 +440,7 @@ EntailsClause ::= 'which_entails' MathExp {pin=1}
 // mathematical expressions
 
 MathAssertionExp ::= MathQuantifiedExp|MathExp
-MathQuantifiedExp ::= ('∃'|'∀'|'Exists'|'Forall') MathVarDeclGroup ('∋'|',') MathAssertionExp {pin=1}
+MathQuantifiedExp ::= ('∃'|'∀'|'Exists'|'Forall') MathVarDeclGroup ',' MathAssertionExp {pin=1}
 
 MathExp ::=
           MathInfixApplyExp
@@ -458,13 +453,16 @@ MathExp ::=
 MathNestedExp ::= '(' MathAssertionExp ')' {pin=1}
 MathSelectorExp ::= MathExp '.' MathExp
 MathPrefixApplyExp ::= MathExp MathFunctionAppList
-MathNonStdApplyExp ::= MathExp '`' MathSymbolNameNoId MathFunctionAppList MathSymbolNameNoId '`'
-MathOutfixApplyExp ::= '`' MathSymbolNameNoId MathExp MathSymbolNameNoId '`'
+MathNonStdApplyExp ::= MathExp MathBracketName MathNonStdAppList MathBracketName
+MathOutfixApplyExp ::= MathBracketName MathExp MathBracketName
 MathInfixApplyExp ::= MathExp MathOpSymbolName MathExp {pin=2}
-MathClssftnAssrtExp ::= MathExp (':'|'⦂') MathExp
+MathClssftnAssrtExp ::= MathExp ':' MathExp
 MathIncomingExp ::= '@' MathSymbolExp {pin=1}
 
 MathFunctionAppList ::= '(' MathArgList ')'
+
+private MathNonStdAppList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=NonStdAppRec}
+private NonStdAppRec ::= !(math_bracket_symbol)
 
 private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
 
@@ -475,7 +473,7 @@ private MathPrimeExp ::= MathIncomingExp | MathSymbolExp | MathSelectorExp | Mat
         | MathSetRestrictionExp
 
 private MathOpSymbolName ::= MathSymbolExp
-MathSymbolNameNoId ::= (symbol|math_symbol) {elementType=MathSymbolName}
+MathBracketName ::= (math_bracket_symbol) {elementType=MathSymbolName}
 MathSymbolName ::= (identifier|int|symbol|math_symbol|true|false)
 
 MathSymbolExp ::=  MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}

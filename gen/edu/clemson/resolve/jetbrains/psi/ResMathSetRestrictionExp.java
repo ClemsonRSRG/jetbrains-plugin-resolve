@@ -19,7 +19,4 @@ public interface ResMathSetRestrictionExp extends ResMathExp {
   @Nullable
   PsiElement getRbrace();
 
-  @Nullable
-  PsiElement getRestrictionBar();
-
 }

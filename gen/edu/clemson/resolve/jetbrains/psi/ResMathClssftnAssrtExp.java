@@ -10,10 +10,7 @@ public interface ResMathClssftnAssrtExp extends ResMathExp {
   @NotNull
   List<ResMathExp> getMathExpList();
 
-  @Nullable
+  @NotNull
   PsiElement getColon();
-
-  @Nullable
-  PsiElement getHyperColon();
 
 }
