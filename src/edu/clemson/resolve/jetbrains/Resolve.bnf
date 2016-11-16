@@ -445,7 +445,6 @@ MathExp ::=
           MathInfixApplyExp
         | MathPrefixApplyExp
         | MathNonStdApplyExp
-        | MathOutfixApplyExp
         | MathNestedExp
         | MathPrimeExp {methods=[getResMathMetaTypeExp]}
 
@@ -468,12 +467,13 @@ private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
 private MathPrimeExp ::= MathIncomingExp | MathSymbolExp | MathSelectorExp | MathLambdaExp
         | MathAlternativeExp
         | MathClssftnAssrtExp
+        | MathOutfixApplyExp
         | MathCartProdExp
         | MathSetRestrictionExp
 
 private MathOpSymbolName ::= MathSymbolExp
-MathBracketName ::= (math_bracket_symbol) {elementType=MathSymbolName}
-MathSymbolName ::= (identifier|int|symbol|math_symbol|true|false)
+MathBracketName ::= (math_bracket_symbol | '|') {elementType=MathSymbolName}
+MathSymbolName ::= (identifier|int|symbol|math_symbol|true|false|'=')
 
 MathSymbolExp ::=  MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}
 left MathQualifiedReferenceExp ::= '::' MathSymbolName {elementType=MathReferenceExp}
