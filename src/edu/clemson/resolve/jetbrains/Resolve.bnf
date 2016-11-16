@@ -17,7 +17,7 @@
     tokens=[
 
         // Punctuation
-        AT                      = '@'
+        POUND                   = '#'
         TRIPLE_DOT              = '...'
         DOT_DOT                 = '..'
         DOT                     = '.'
@@ -31,21 +31,20 @@
         COLON_COLON             = '::'
 
         PRIME                   = '′'
+        BAR                     = '|'
         SEMICOLON               = ';'
         COMMA                   = ','
         IND_BASE                = '(i.)'
         IND_HYPO                = '(ii.)'
         TRUE                    = 'true'
         FALSE                   = 'false'
-        EQUALS            = '='
+        EQUALS                  = '='
         COLON_EQUALS            = ':='
         COLON_EQUALS_COLON      = ':=:'
 
         INT                     = 'int'
         FACILITY                = 'Facility'
         PRECIS                  = 'Precis'
-        BASE                    = 'base'
-        HYPO                    = 'hypo'
         AS                      = 'as'
         CONCEPT                 = 'Concept'
         EXTENSION               = 'Extension'
@@ -167,7 +166,7 @@ UsesList?
 PrecisBlock
 'end' identifier ';' {pin(".*")=2}
 
-PrecisExtensionModuleDecl ::= 'Precis' 'Extension' identifier 'for'
+PrecisExtensionModuleDecl ::= 'Extension' identifier 'for'
 ReferenceExp ('with' ReferenceExp)? ';'
 UsesList?
 PrecisBlock
@@ -457,7 +456,7 @@ MathNonStdApplyExp ::= MathExp MathBracketName MathNonStdAppList MathBracketName
 MathOutfixApplyExp ::= MathBracketName MathExp MathBracketName
 MathInfixApplyExp ::= MathExp MathOpSymbolName MathExp {pin=2}
 MathClssftnAssrtExp ::= MathExp ':' MathExp
-MathIncomingExp ::= '@' MathSymbolExp {pin=1}
+MathIncomingExp ::= '#' MathSymbolExp {pin=1}
 
 MathFunctionAppList ::= '(' MathArgList ')'
 
@@ -486,4 +485,4 @@ MathLambdaExp ::= (lambda|'λ') MathVarDecl ','  MathExp {pin=1}
 MathAlternativeExp ::= '{{' MathAlternativesList '}}' {pin=1}
 MathAlternativesList ::= MathAlternativeItemExp+
 MathAlternativeItemExp ::= MathExp ('if' MathExp ';' | 'otherwise' ';')
-MathSetRestrictionExp ::= '{' MathVarDecl '∣' MathExp '}' {pin=1}
+MathSetRestrictionExp ::= '{' MathVarDecl '|' MathExp '}'

@@ -20,8 +20,8 @@
         </context>
     </template>
 
-    <template description='Précis extension module declaration' name='Precis ext' toReformat='true' toShortenFQNames='true'
-              value='Precis Extension $NAME$ for $PRECIS$;&#10;    $END$&#10;end $NAME$;'>
+    <template description='Précis extension module declaration' name='Extension (precis)' toReformat='true' toShortenFQNames='true'
+              value='Extension $NAME$ for $PRECIS$;&#10;    $END$&#10;end $NAME$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
         <variable alwaysStopAt='true' defaultValue='&quot;précis&quot;' expression='' name='PRECIS'/>
         <context>
@@ -37,8 +37,8 @@
         </context>
     </template>
 
-    <template description='Concept extension module declaration' name='Concept (ext)' toReformat='true' toShortenFQNames='true'
-              value='Concept Extension $NAME$ for $CONCEPT$;&#10;    $END$&#10;end $NAME$;'>
+    <template description='Enhancement module declaration' name='Enhancement' toReformat='true' toShortenFQNames='true'
+              value='Enhancement $NAME$ for $CONCEPT$;&#10;    $END$&#10;end $NAME$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
         <variable alwaysStopAt='true' defaultValue='&quot;concept&quot;' expression='' name='CONCEPT'/>
         <context>
@@ -46,8 +46,8 @@
         </context>
     </template>
 
-    <template description='Concept implementation declaration' name='Implementation' toReformat='true' toShortenFQNames='true'
-              value='Implementation $NAME$ for $CONCEPT$;&#10;    $END$&#10;end $NAME$;'>
+    <template description='Concept realization declaration' name='Realization' toReformat='true' toShortenFQNames='true'
+              value='Realization $NAME$ for $CONCEPT$;&#10;    $END$&#10;end $NAME$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
         <variable alwaysStopAt='true' defaultValue='&quot;concept&quot;' expression='' name='CONCEPT'/>
         <context>
@@ -55,8 +55,8 @@
         </context>
     </template>
 
-    <template description='Concept extension implementation declaration' name='Implementation (concept ext)' toReformat='true' toShortenFQNames='true'
-              value='Implementation $NAME$ for $EXTENSION$ of $CONCEPT$;&#10;    $END$&#10;end $NAME$;'>
+    <template description='Enhancement realization declaration' name='Enhancement Realization' toReformat='true' toShortenFQNames='true'
+              value='Realization $NAME$ for $EXTENSION$ of $CONCEPT$;&#10;    $END$&#10;end $NAME$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
         <variable alwaysStopAt='true' defaultValue='&quot;extension&quot;' expression='' name='EXTENSION'/>
         <variable alwaysStopAt='true' defaultValue='&quot;concept&quot;' expression='' name='CONCEPT'/>

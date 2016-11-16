@@ -40,8 +40,8 @@ NUM_INT = "0" | ([1-9] {INT_DIGIT}*)
 
 IDENT = {LETTER} ({LETTER} | {DIGIT} )*
 
-MSYM = ([\u2190-\u21FF] | [\u2100-\u214F] | [\u2200-\u22FF] | [\u27C0-\u27EF] | [\u27F0-\u27FF] | [\u2A00-\u2AFF] | [\u2300-\u23BF] | [\u0370-\u03FF])
 MBRACKET = ("|"|"∥"|"⟨"|"⟩"|"⎡"|"⎤"|"⎝"|"⎠"|"["|"]")
+MSYM = ([\u2190-\u21FF] | [\u2100-\u214F] | [\u2200-\u22FF] | [\u27C0-\u27EF] | [\u27F0-\u27FF] | [\u2A00-\u2AFF] | [\u2300-\u23BF] | [\u0370-\u03FF])
 SYM = ("!"|"*"|"+"|"-"|"/"|"|"|"~"|[<->])+
 
 STR =      "\""
@@ -58,7 +58,7 @@ ESCAPES = [abfnrtv]
 // Punctuation
 
 //TODO: Add new 'prime' symbol
-"@"                                     { return AT; }
+"#"                                     { return POUND; }
 "..."                                   { return TRIPLE_DOT; }
 "."                                     { return DOT; }
 
@@ -77,7 +77,7 @@ ESCAPES = [abfnrtv]
 "}}"                                    { return DBL_RBRACE; }
 
 "′"                                     { return PRIME; }
-
+"|"                                     { return BAR; }
 "("                                     { return LPAREN; }
 ")"                                     { return RPAREN; }
 ":"                                     { return COLON; }
@@ -97,7 +97,6 @@ ESCAPES = [abfnrtv]
 // Keywords
 
 "as"                                    { return AS; }
-"base"                                  { return BASE;}
 "by"                                    { return BY; }
 "Cart_Prod"                             { return CART_PROD; }
 "Categorical"                           { return CATEGORICAL; }
@@ -115,7 +114,7 @@ ESCAPES = [abfnrtv]
 "Defines"                               { return DEFINES; }
 "else"                                  { return ELSE; }
 "Extension"                             { return EXTENSION; }
-"Enhancement"                             { return ENHANCEMENT; }
+"Enhancement"                           { return ENHANCEMENT; }
 "extended_by"                           { return EXTENDED_BY; }
 "extended"                              { return EXTENDED; }
 "end"                                   { return END;  }
@@ -131,7 +130,6 @@ ESCAPES = [abfnrtv]
 "∀"                                     { return FORALL; }
 "for"                                   { return FOR; }
 "from"                                  { return FROM; }
-"hypo"                                  { return HYPO; }
 "if"                                    { return IF; }
 "If"                                    { return PROG_IF; }
 "is"                                    { return IS; }
@@ -172,8 +170,8 @@ ESCAPES = [abfnrtv]
 "replaces"                              { return REPLACES; }
 "evaluates"                             { return EVALUATES; }
 
-{MSYM}                                  { return MATH_SYMBOL; }
 {MBRACKET}                              { return MATH_BRACKET_SYMBOL; }
+{MSYM}                                  { return MATH_SYMBOL; }
 {SYM}                                   { return SYMBOL; }
 {IDENT}                                 { return IDENTIFIER; }
 {NUM_INT}                               { return INT; }

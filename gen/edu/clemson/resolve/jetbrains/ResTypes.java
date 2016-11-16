@@ -113,8 +113,7 @@ public interface ResTypes {
 
   IElementType ALTERS = new ResTokenType("alters");
   IElementType AS = new ResTokenType("as");
-  IElementType AT = new ResTokenType("@");
-  IElementType BASE = new ResTokenType("base");
+  IElementType BAR = new ResTokenType("|");
   IElementType BY = new ResTokenType("by");
   IElementType CART_PROD = new ResTokenType("Cart_Prod");
   IElementType CATEGORICAL = new ResTokenType("Categorical");
@@ -162,7 +161,6 @@ public interface ResTypes {
   IElementType FORALL = new ResTokenType("Forall");
   IElementType FORALL1 = new ResTokenType("∀");
   IElementType FROM = new ResTokenType("from");
-  IElementType HYPO = new ResTokenType("hypo");
   IElementType IDENTIFIER = new ResTokenType("identifier");
   IElementType IF = new ResTokenType("if");
   IElementType IFF = new ResTokenType("iff");
@@ -185,6 +183,7 @@ public interface ResTypes {
   IElementType OPERATION = new ResTokenType("Operation");
   IElementType OTHERWISE = new ResTokenType("otherwise");
   IElementType PARAM_TYPE = new ResTokenType("type");
+  IElementType POUND = new ResTokenType("#");
   IElementType PRECIS = new ResTokenType("Precis");
   IElementType PRESERVES = new ResTokenType("preserves");
   IElementType PRIME = new ResTokenType("′");
