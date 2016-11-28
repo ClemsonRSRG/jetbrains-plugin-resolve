@@ -7,7 +7,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBScrollPane;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
-import edu.clemson.resolve.jetbrains.actions.ProveAction;
 import edu.clemson.resolve.proving.absyn.PExp;
 import edu.clemson.resolve.vcgen.VC;
 import org.jetbrains.annotations.NotNull;
@@ -17,10 +16,8 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class VerificationConditionSelectorPanel extends JPanel {
 
@@ -40,16 +37,13 @@ public class VerificationConditionSelectorPanel extends JPanel {
     private JBScrollPane scrollPane;
     public final Map<Integer, ConditionCollapsiblePanel> vcTabs = new HashMap<>();
     public final List<VerificationPreviewEditor> previewEditors = new ArrayList<>();
-    private final ProveAction.MyProverListener listener;
 
     public VerificationConditionSelectorPanel(@NotNull Project project,
-                                              @NotNull List<VC> vcs,
-                                              @NotNull ProveAction.MyProverListener listener) {
+                                              @NotNull Collection<VC> vcs) {
         super(new BorderLayout());
         JComponent selector = createVerificationConditionSelector(vcs);
 
         this.project = project;
-        this.listener = listener;
 
         JPanel x = new JPanel();
         x.setLayout(new BorderLayout());
@@ -76,13 +70,15 @@ public class VerificationConditionSelectorPanel extends JPanel {
                 ProgressManager.getInstance().run(proverTask);
             }
         });*/
-        actionGroup.add(new AnAction("Cancel", "Stop the prover", RESOLVEIcons.STOP) {
+
+        //TODO: Need an export option...
+        /*actionGroup.add(new AnAction("Cancel", "Stop the prover", RESOLVEIcons.STOP) {
             @Override
             public void actionPerformed(AnActionEvent e) {
                 listener.cancelled = true;
             }
-        });
-        actionGroup.addSeparator();
+        });*/
+        //actionGroup.addSeparator();
 
         actionGroup.add(new AnAction("Collapse all VCs", "Collapse all", RESOLVEIcons.COLLAPSE) {
             @Override
@@ -107,7 +103,7 @@ public class VerificationConditionSelectorPanel extends JPanel {
         return buttonBar;
     }
 
-    protected JComponent createVerificationConditionSelector(@NotNull List<VC> vcs) {
+    protected JComponent createVerificationConditionSelector(@NotNull Collection<VC> vcs) {
         JPanel selectorPanel = new JPanel();
 
         GridBagLayout gridbag = new GridBagLayout();
@@ -179,13 +175,7 @@ public class VerificationConditionSelectorPanel extends JPanel {
     }
 
     public VerificationPreviewEditor getVCPreview(VC vc) {
-        List<PExp> antecedents = vc.getAntecedent().splitIntoConjuncts();
-        String vcText = "";
-        for (int i = 0; i < antecedents.size(); i++) {
-            vcText += i + 1 + ". " + antecedents.get(i) + "\n";
-        }
-        vcText += "⊢\n";
-        vcText += vc.getConsequent();
+        String vcText = vc.toString();
         VerificationPreviewEditor preview = new VerificationPreviewEditor(project, vcText);
         preview.setBackground(JBColor.WHITE);
         //preview.addNotify();

@@ -25,7 +25,7 @@ import edu.clemson.resolve.misc.Utils;
 import edu.clemson.resolve.proving.Metrics;
 import edu.clemson.resolve.proving.PerVCProverModel;
 import edu.clemson.resolve.proving.ProverListener;
-import edu.clemson.resolve.vcgen.model.VCOutputFile;
+import edu.clemson.resolve.vcgen.VCOutputFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.stringtemplate.v4.misc.Misc;

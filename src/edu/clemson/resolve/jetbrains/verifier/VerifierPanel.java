@@ -7,7 +7,6 @@ import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.util.ui.JBFont;
 import com.intellij.util.ui.UIUtil;
-import edu.clemson.resolve.jetbrains.actions.ProveAction;
 import edu.clemson.resolve.vcgen.VC;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,6 +14,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 public class VerifierPanel extends JBPanel {
@@ -69,9 +70,16 @@ public class VerifierPanel extends JBPanel {
         add(startingPanel);
     }
 
-    public void createVerifierView(List<VC> vcs, ProveAction.MyProverListener pl) {
+    public void createVerifierView(Collection<VC> vcs) {
         this.removeAll();
-        vcSelectorPanel = new VerificationConditionSelectorPanel(project, vcs, pl);
+        vcSelectorPanel = new VerificationConditionSelectorPanel(project, vcs);
+        add(vcSelectorPanel, BorderLayout.CENTER);
+        revalidate();
+    }
+
+    public void createVCOnlyView(Collection<VC> vcs) {
+        this.removeAll();
+        vcSelectorPanel = new VerificationConditionSelectorPanel(project, vcs);
         add(vcSelectorPanel, BorderLayout.CENTER);
         revalidate();
     }

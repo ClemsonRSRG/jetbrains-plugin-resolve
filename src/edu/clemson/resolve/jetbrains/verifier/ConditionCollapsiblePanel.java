@@ -20,48 +20,6 @@ public class ConditionCollapsiblePanel extends JPanel {
 
     private static final int FRAMES_COUNT = 8;
     public static final Icon[] FRAMES = new Icon[FRAMES_COUNT];
-
-    static {
-        FRAMES[0] = RESOLVEIcons.PROCESSING1;
-        FRAMES[1] = RESOLVEIcons.PROCESSING2;
-        FRAMES[2] = RESOLVEIcons.PROCESSING3;
-        FRAMES[3] = RESOLVEIcons.PROCESSING4;
-        FRAMES[4] = RESOLVEIcons.PROCESSING5;
-        FRAMES[5] = RESOLVEIcons.PROCESSING6;
-        FRAMES[6] = RESOLVEIcons.PROCESSING7;
-        FRAMES[7] = RESOLVEIcons.PROCESSING8;
-    }
-
-    public static enum State {
-        PROVED {
-            @Override
-            public Icon getIcon() {
-                return RESOLVEIcons.PROVED;
-            }
-        },
-        NOT_PROVED {
-            @Override
-            public Icon getIcon() {
-                return RESOLVEIcons.NOT_PROVED;
-            }
-        },
-        TIMED_OUT {
-            @Override
-            public Icon getIcon() {
-                return RESOLVEIcons.TIMED_OUT;
-            }
-        },
-        PROCESSING {
-            @Override
-            //Shouldn't get called. TODO: Would be nice if I could figure out how to get this returning an intellij AnimatedIcon
-            public Icon getIcon() {
-                return RESOLVEIcons.TIMED_OUT;
-            }
-        };
-
-        public abstract Icon getIcon();
-    }
-
     public enum Orientation { HORIZONTAL, VERTICAL }
 
     private final JPanel panel;
@@ -71,34 +29,23 @@ public class ConditionCollapsiblePanel extends JPanel {
     public JToggleButton expandButton; // may be null, if no title was supplied
     private boolean expanded = true;
     private Box collapseControlBar = null;
-    private State state;
 
     public ConditionCollapsiblePanel(@NotNull JComponent child,
                                      @NotNull String title,
                                      @Nullable String tooltip) {
-        this(child, title, tooltip, State.PROCESSING);
-    }
-
-    public ConditionCollapsiblePanel(@NotNull JComponent child,
-                                     @NotNull String title,
-                                     @Nullable String tooltip,
-                                     @NotNull State state) {
         this.child = child;
-        this.processingSpinner = new AnimatedIcon("processing", FRAMES, FRAMES[0], 800);
-        this.state = state;
 
         setLayout(new BorderLayout());
         panel = new JPanel(new BorderLayout());
-        add(processingSpinner, BorderLayout.EAST);
 
         add(panel, BorderLayout.CENTER);
         panel.add(child, BorderLayout.CENTER);
         collapseControlBar = createCollapseControl(title, tooltip);
 
-        if (state == State.PROCESSING) {
+        /*if (state == State.PROCESSING) {
             collapseControlBar.add(processingSpinner, RIGHT_ALIGNMENT);
             collapseControlBar.add(Box.createRigidArea(new Dimension(10, 0)), RIGHT_ALIGNMENT);
-        }
+        }*/
         add(collapseControlBar, BorderLayout.NORTH);
     }
 
@@ -130,24 +77,6 @@ public class ConditionCollapsiblePanel extends JPanel {
         box.add(Box.createRigidArea(new Dimension(3, 0)));
         box.add(label, LEFT_ALIGNMENT);
         return box;
-    }
-
-    public void changeToFinalState(State e, double duration) {
-        if (e == State.PROCESSING) {
-            throw new IllegalArgumentException("final state means not processing!");
-        }
-        this.state = e;
-        collapseControlBar.remove(processingSpinner);
-
-        JLabel durationLab = new JLabel("<html><font color='#404040'><b>" + String.valueOf(duration) + "ms</b></html>");
-        durationLab.setFont(VerifierPanel.createFont(9));
-        durationLab.setHorizontalAlignment(JLabel.RIGHT);
-        
-        collapseControlBar.add(durationLab, RIGHT_ALIGNMENT);
-        collapseControlBar.add(Box.createRigidArea(new Dimension(8, 0))); //some space between duration and the result icon
-        collapseControlBar.add(new JLabel(e.getIcon()), RIGHT_ALIGNMENT);
-        collapseControlBar.add(Box.createRigidArea(new Dimension(10, 0)), RIGHT_ALIGNMENT);
-        revalidate();
     }
 
     public void setExpanded(boolean expand) {
