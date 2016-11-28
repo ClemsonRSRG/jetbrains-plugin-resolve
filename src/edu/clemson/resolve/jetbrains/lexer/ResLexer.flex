@@ -40,9 +40,8 @@ NUM_INT = "0" | ([1-9] {INT_DIGIT}*)
 
 IDENT = {LETTER} ({LETTER} | {DIGIT} )*
 
-MBRACKET = ("∥"|"⟨"|"⟩"|"⎡"|"⎤"|"⎝"|"⎠"|"["|"]")
 MSYM = ([\u2190-\u21FF] | [\u2100-\u214F] | [\u2200-\u22FF] | [\u27C0-\u27EF] | [\u27F0-\u27FF] | [\u2A00-\u2AFF] | [\u2300-\u23BF] | [\u0370-\u03FF])
-SYM = ("!"|"*"|"+"|"-"|"/"|"|"|"~"|[<->])+
+SYM = ("!"|"*"|"+"|"-"|"/"|"~"|[<->])+ //if we allow '|' in here then math outfix exprs need to be | |x| o b| (space between the |x| and the leftmost
 
 STR =      "\""
 ESCAPES = [abfnrtv]
@@ -75,6 +74,16 @@ ESCAPES = [abfnrtv]
 "{"                                     { return LBRACE; }
 "}"                                     { return RBRACE; }
 "}}"                                    { return DBL_RBRACE; }
+
+"∥"                                      { return DBL_BAR; }
+"⟨"                                     { return LANGLE; }
+"⟩"                                     { return RANGLE; }
+"⎡"                                     { return LCEIL; }
+"⎤"                                     { return RCEIL; }
+"⎝"                                     { return LCUP; }
+"⎠"                                     { return RCUP; }
+"["                                     { return LBRACK; }
+"]"                                     { return RBRACK; }
 
 "′"                                     { return PRIME; }
 "|"                                     { return BAR; }
@@ -141,6 +150,7 @@ ESCAPES = [abfnrtv]
 "lambda"                                { return LAMBDA; }
 "maintaining"                           { return MAINTAINING; }
 "modeled"                               { return MODELED; }
+"Notice"                                { return NOTICE; }
 "Operation"                             { return OPERATION; }
 "otherwise"                             { return OTHERWISE; }
 "of"                                    { return OF; }
@@ -170,7 +180,6 @@ ESCAPES = [abfnrtv]
 "replaces"                              { return REPLACES; }
 "evaluates"                             { return EVALUATES; }
 
-{MBRACKET}                              { return MATH_BRACKET_SYMBOL; }
 {MSYM}                                  { return MATH_SYMBOL; }
 {SYM}                                   { return SYMBOL; }
 {IDENT}                                 { return IDENTIFIER; }

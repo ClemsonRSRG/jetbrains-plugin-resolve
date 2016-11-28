@@ -283,6 +283,10 @@ public class ResVisitor extends PsiElementVisitor {
     visitExp(o);
   }
 
+  public void visitNoticeClause(@NotNull ResNoticeClause o) {
+    visitCompositeElement(o);
+  }
+
   public void visitOpBlock(@NotNull ResOpBlock o) {
     visitBlock(o);
   }

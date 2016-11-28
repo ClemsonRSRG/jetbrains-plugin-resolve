@@ -78,6 +78,7 @@ public interface ResTypes {
   IElementType MODULE_IDENTIFIER_SPEC = new ResCompositeElementType("MODULE_IDENTIFIER_SPEC");
   IElementType MODULE_LIBRARY_IDENTIFIER = new ResCompositeElementType("MODULE_LIBRARY_IDENTIFIER");
   IElementType NESTED_EXP = new ResCompositeElementType("NESTED_EXP");
+  IElementType NOTICE_CLAUSE = new ResCompositeElementType("NOTICE_CLAUSE");
   IElementType OPERATION_DECL = new ResCompositeElementType("OPERATION_DECL");
   IElementType OPERATION_PROCEDURE_DECL = new ResCompositeElementType("OPERATION_PROCEDURE_DECL");
   IElementType OP_BLOCK = new ResCompositeElementType("OP_BLOCK");
@@ -132,6 +133,7 @@ public interface ResTypes {
   IElementType CONVENTIONS = new ResTokenType("conventions");
   IElementType COROLLARY = new ResTokenType("Corollary");
   IElementType CORRESPONDENCE = new ResTokenType("correspondence");
+  IElementType DBL_BAR = new ResTokenType("∥");
   IElementType DBL_LBRACE = new ResTokenType("{{");
   IElementType DBL_RBRACE = new ResTokenType("}}");
   IElementType DECREASING = new ResTokenType("decreasing");
@@ -173,12 +175,17 @@ public interface ResTypes {
   IElementType IS = new ResTokenType("is");
   IElementType LAMBDA = new ResTokenType("lambda");
   IElementType LAMBDA1 = new ResTokenType("λ");
+  IElementType LANGLE = new ResTokenType("⟨");
   IElementType LBRACE = new ResTokenType("{");
+  IElementType LBRACK = new ResTokenType("[");
+  IElementType LCEIL = new ResTokenType("⎡");
+  IElementType LCUP = new ResTokenType("⎝");
   IElementType LPAREN = new ResTokenType("(");
   IElementType MAINTAINING = new ResTokenType("maintaining");
   IElementType MATH_BRACKET_SYMBOL = new ResTokenType("math_bracket_symbol");
   IElementType MATH_SYMBOL = new ResTokenType("math_symbol");
   IElementType MODELED = new ResTokenType("modeled");
+  IElementType NOTICE = new ResTokenType("Notice");
   IElementType OF = new ResTokenType("of");
   IElementType OPERATION = new ResTokenType("Operation");
   IElementType OTHERWISE = new ResTokenType("otherwise");
@@ -189,7 +196,11 @@ public interface ResTypes {
   IElementType PRIME = new ResTokenType("′");
   IElementType PROCEDURE = new ResTokenType("Procedure");
   IElementType PROG_IF = new ResTokenType("If");
+  IElementType RANGLE = new ResTokenType("⟩");
   IElementType RBRACE = new ResTokenType("}");
+  IElementType RBRACK = new ResTokenType("]");
+  IElementType RCEIL = new ResTokenType("⎤");
+  IElementType RCUP = new ResTokenType("⎠");
   IElementType REALIZATION = new ResTokenType("Realization");
   IElementType REALIZED = new ResTokenType("realized");
   IElementType RECORD = new ResTokenType("Record");
@@ -409,6 +420,9 @@ public interface ResTypes {
       }
       else if (type == NESTED_EXP) {
         return new ResNestedExpImpl(node);
+      }
+      else if (type == NOTICE_CLAUSE) {
+        return new ResNoticeClauseImpl(node);
       }
       else if (type == OPERATION_DECL) {
         return new ResOperationDeclImpl(node);

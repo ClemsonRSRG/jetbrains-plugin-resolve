@@ -26,7 +26,7 @@ import edu.clemson.resolve.proving.Metrics;
 import edu.clemson.resolve.proving.PerVCProverModel;
 import edu.clemson.resolve.proving.ProverListener;
 import edu.clemson.resolve.vcgen.VC;
-import edu.clemson.resolve.vcgen.model.VCOutputFile;
+import edu.clemson.resolve.vcgen.VCOutputFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +35,7 @@ import java.util.*;
 
 public class ProveAction extends RESOLVEAction implements AnAction.TransparentUpdate {
 
-    private static final Logger LOGGER = Logger.getInstance("RESOLVEGenerateVCsAction");
+    private static final Logger LOGGER = Logger.getInstance("RESOLVEProveAction");
     private RangeHighlighter highlighter = null;
     private final List<RangeHighlighter> highlighters = new ArrayList<>();
     boolean running = false;

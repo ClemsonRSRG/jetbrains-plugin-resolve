@@ -25,6 +25,17 @@
         LBRACE                  = '{'
         RBRACE                  = '}'
         DBL_RBRACE              = '}}'
+
+        DBL_BAR                 = '∥'
+        LANGLE                  = '⟨'
+        RANGLE                  = '⟩'
+        LCEIL                   = '⎡'
+        RCEIL                   = '⎤'
+        LCUP                    = '⎝'
+        RCUP                    = '⎠'
+        LBRACK                  = '['
+        RBRACK                  = ']'
+
         LPAREN                  = '('
         RPAREN                  = ')'
         COLON                   = ':'
@@ -104,6 +115,7 @@
         THEN                    = 'then'
         WHILE                   = 'While'
         WITH                    = 'with'
+        NOTICE                  = 'Notice'
         DO                      = 'do'
         OF                      = 'of'
         STRING                  = 'string'
@@ -344,7 +356,7 @@ ProcedureDecl ::= ('Recursive')? 'Procedure' identifier OperationLikeParameters 
 OpBlock
 'end' CloseIdentifier ';' {pin=3}
 
-OpBlock ::= VarDeclGroup* Statements?
+OpBlock ::= VarDeclGroup* NoticeClause* Statements?
 CloseIdentifier ::= identifier
 
 // statements
@@ -435,7 +447,7 @@ ChangingClause ::= 'changing' ExpArgumentList ';' {pin=1}
 MaintainingClause ::= 'maintaining' MathAssertionExp ';' {pin=1}
 DecreasingClause ::= 'decreasing' MathAssertionExp ';' {pin=1}
 EntailsClause ::= 'which_entails' MathExp {pin=1}
-
+NoticeClause ::= 'Notice' MathExp ';' {pin=1}
 // mathematical expressions
 
 MathAssertionExp ::= MathQuantifiedExp|MathExp
@@ -472,7 +484,7 @@ private MathPrimeExp ::= MathIncomingExp | MathSymbolExp | MathSelectorExp | Mat
         | MathSetRestrictionExp
 
 private MathOpSymbolName ::= MathSymbolExp
-MathBracketName ::= (math_bracket_symbol | '|') {elementType=MathSymbolName}
+MathBracketName ::= ('∥'|'⟨'|'⟩'|'⎡'|'⎤'|'⎝'|'⎠'|'['|']'|'|') {elementType=MathSymbolName}
 MathSymbolName ::= (identifier|int|symbol|math_symbol|true|false|'=')
 
 MathSymbolExp ::=  MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}
