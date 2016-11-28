@@ -175,7 +175,7 @@ public class VerificationConditionSelectorPanel extends JPanel {
     }
 
     public VerificationPreviewEditor getVCPreview(VC vc) {
-        String vcText = vc.toString();
+        String vcText = vc.toString();//dynamically set width..);
         VerificationPreviewEditor preview = new VerificationPreviewEditor(project, vcText);
         preview.setBackground(JBColor.WHITE);
         //preview.addNotify();

@@ -2312,7 +2312,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // 'Notice' MathExp
+  // 'Notice' MathExp ';'
   public static boolean NoticeClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NoticeClause")) return false;
     if (!nextTokenIs(b, NOTICE)) return false;
@@ -2320,19 +2320,21 @@ public class ResParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, NOTICE_CLAUSE, null);
     r = consumeToken(b, NOTICE);
     p = r; // pin = 1
-    r = r && MathExp(b, l + 1, -1);
+    r = r && report_error_(b, MathExp(b, l + 1, -1));
+    r = p && consumeToken(b, SEMICOLON) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
   /* ********************************************************** */
-  // VarDeclGroup* Statements?
+  // VarDeclGroup* NoticeClause* Statements?
   public static boolean OpBlock(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "OpBlock")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, OP_BLOCK, "<op block>");
     r = OpBlock_0(b, l + 1);
     r = r && OpBlock_1(b, l + 1);
+    r = r && OpBlock_2(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -2349,9 +2351,21 @@ public class ResParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // Statements?
+  // NoticeClause*
   private static boolean OpBlock_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "OpBlock_1")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!NoticeClause(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "OpBlock_1", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // Statements?
+  private static boolean OpBlock_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "OpBlock_2")) return false;
     Statements(b, l + 1);
     return true;
   }

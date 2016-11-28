@@ -27,6 +27,12 @@ public class ResOpBlockImpl extends ResCompositeElementImpl implements ResOpBloc
 
   @Override
   @NotNull
+  public List<ResNoticeClause> getNoticeClauseList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResNoticeClause.class);
+  }
+
+  @Override
+  @NotNull
   public List<ResStatement> getStatementList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ResStatement.class);
   }

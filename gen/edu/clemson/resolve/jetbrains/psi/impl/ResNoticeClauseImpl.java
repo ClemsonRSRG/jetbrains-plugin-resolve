@@ -37,4 +37,10 @@ public class ResNoticeClauseImpl extends ResCompositeElementImpl implements ResN
     return findNotNullChildByType(NOTICE);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
 }

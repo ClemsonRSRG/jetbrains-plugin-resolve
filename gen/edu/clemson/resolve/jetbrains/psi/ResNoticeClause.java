@@ -13,4 +13,7 @@ public interface ResNoticeClause extends ResCompositeElement {
   @NotNull
   PsiElement getNotice();
 
+  @Nullable
+  PsiElement getSemicolon();
+
 }

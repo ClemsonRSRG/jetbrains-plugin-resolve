@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface ResOpBlock extends ResBlock {
 
   @NotNull
+  List<ResNoticeClause> getNoticeClauseList();
+
+  @NotNull
   List<ResStatement> getStatementList();
 
   @NotNull

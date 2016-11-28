@@ -111,13 +111,13 @@
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
         </action>
-        <!--<action id="resolve.ProveVCs" class="edu.clemson.resolve.jetbrains.actions.ProveAction"
-                text="RESOLVE Prove Program">
+        <action id="resolve.Analyze" class="edu.clemson.resolve.jetbrains.actions.AnalyzeAction"
+                text="RESOLVE Analyze Current Source">
             <keyboard-shortcut keymap="$default" first-keystroke="control shift P"/>
             <add-to-group group-id="ToolsMenu" anchor="before" relative-to-action="com.intellij.tools.ExternalToolsGroup"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
-        </action>-->
+        </action>
     </actions>
 
 </idea-plugin>

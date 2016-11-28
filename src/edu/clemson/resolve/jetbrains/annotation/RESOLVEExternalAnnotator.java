@@ -115,7 +115,6 @@ public class RESOLVEExternalAnnotator extends ExternalAnnotator<PsiFile, List<RE
                 processIssue(file, issue);
             }
         } catch (Exception e) {
-            LOG.error("antlr can't process " + file.getName(), e);
         }
         return listener.issues;
     }
