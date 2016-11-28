@@ -1,11 +1,19 @@
 package edu.clemson.resolve.jetbrains.actions;
 
+import com.intellij.codeInsight.daemon.impl.AnnotationHolderImpl;
+import com.intellij.lang.annotation.AnnotationHolder;
+import com.intellij.lang.annotation.AnnotationSession;
+import com.intellij.lang.annotation.Annotator;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.impl.DocumentMarkupModel;
 import com.intellij.openapi.editor.markup.MarkupModel;
+import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiUtil;
@@ -30,21 +38,14 @@ public class AnalyzeAction extends RESOLVEAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
+        Project project = e.getData(PlatformDataKeys.PROJECT);
         VirtualFile resolveFile = getRESOLVEFileFromEvent(e);
-        if (resolveFile == null) return;
-        if (e.getProject() == null) return;
         PsiFile file = e.getData(LangDataKeys.PSI_FILE);
-        if (file == null) return;
+        if (resolveFile == null || project == null || file == null) return;
+        commitDoc(project, resolveFile);
+        Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+        if (editor == null) return;
 
-         new ArrayList<>();
-        RESOLVEExternalAnnotator a = new RESOLVEExternalAnnotator();
-        a.collectInformation(file);
-        List<RESOLVEExternalAnnotator.Issue> issues = a.doAnnotate(file);
-
-        int i;
-        i =0;
-        /*String grammarFileName = resolveFile.getPath();
-        LOG.info("doAnnotate " + grammarFileName);
         Map<String, String> argMap = new LinkedHashMap<>();
         argMap.put("-lib", RunRESOLVEOnLanguageFile.getContentRoot(e.getProject(), resolveFile).getPath());
         List<String> args = RunRESOLVEOnLanguageFile.getRESOLVEArgsAsList(argMap);
@@ -55,9 +56,13 @@ public class AnalyzeAction extends RESOLVEAction {
         resolve.removeListeners();
         AnnotatorCompilerListener listener = new AnnotatorCompilerListener();
         resolve.addListener(listener);
-        resolve.processCommandLineTargets();*/
+        resolve.processCommandLineTargets();
 
-
-
+        AnnotationSession session = new AnnotationSession(file);
+        AnnotationHolder holder = new AnnotationHolderImpl(session);
+        DocumentMarkupModel x;
+        Annotator annotator;
+        int i;
+        i = 0;
     }
 }

@@ -26,6 +26,12 @@ public class ResMathVarDeclImpl extends ResMathVarDeclGroupImpl implements ResMa
   }
 
   @Override
+  @Nullable
+  public ResMathExp getMathExp() {
+    return findChildByClass(ResMathExp.class);
+  }
+
+  @Override
   @NotNull
   public ResMathVarDef getMathVarDef() {
     return findNotNullChildByClass(ResMathVarDef.class);

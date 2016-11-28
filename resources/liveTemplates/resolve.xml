@@ -144,7 +144,7 @@
         </context>
     </template>
 
-    <template description='≤' name='leq' toReformat='true' toShortenFQNames='true'
+    <template description='≤' name='_leq' toReformat='true' toShortenFQNames='true'
               value='≤'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -152,7 +152,7 @@
         </context>
     </template>
 
-    <template description='≥' name='geq' toReformat='true' toShortenFQNames='true'
+    <template description='≥' name='_geq' toReformat='true' toShortenFQNames='true'
               value='≥'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -160,70 +160,70 @@
         </context>
     </template>
 
-    <template description='∈' name='in' toReformat='true' toShortenFQNames='true'
+    <template description='∈' name='_in' toReformat='true' toShortenFQNames='true'
               value='∈'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
         </context>
     </template>
 
-    <template description='∉' name='nin' toReformat='true' toShortenFQNames='true'
+    <template description='∉' name='_nin' toReformat='true' toShortenFQNames='true'
               value='∉'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
         </context>
     </template>
 
-    <template description='∪' name='cup' toReformat='true' toShortenFQNames='true'
+    <template description='∪' name='_cup' toReformat='true' toShortenFQNames='true'
               value='∪'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
         </context>
     </template>
 
-    <template description='∩' name='cap' toReformat='true' toShortenFQNames='true'
+    <template description='∩' name='_cap' toReformat='true' toShortenFQNames='true'
               value='∩'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
         </context>
     </template>
 
-    <template description='⟶' name='rightarrow' toReformat='true' toShortenFQNames='true'
+    <template description='⟶' name='_rightarrow' toReformat='true' toShortenFQNames='true'
               value='⟶'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
         </context>
     </template>
 
-    <template description='≠' name='neq' toReformat='true' toShortenFQNames='true'
+    <template description='≠' name='_neq' toReformat='true' toShortenFQNames='true'
               value='≠'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
         </context>
     </template>
 
-    <template description='λ' name='lt_lambda' toReformat='true' toShortenFQNames='true'
+    <template description='λ' name='lambda' toReformat='true' toShortenFQNames='true'
               value='λ'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
         </context>
     </template>
 
-    <template description='⌐' name='lt_neg' toReformat='true' toShortenFQNames='true'
+    <template description='⌐' name='_neg' toReformat='true' toShortenFQNames='true'
               value='⌐'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
         </context>
     </template>
 
-    <template description='∧' name='lt_and' toReformat='true' toShortenFQNames='true'
+    <template description='∧' name='_and' toReformat='true' toShortenFQNames='true'
               value='∧'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
         </context>
     </template>
 
-    <template description='∨' name='lt_or' toReformat='true' toShortenFQNames='true'
+    <template description='∨' name='_or' toReformat='true' toShortenFQNames='true'
               value='∨'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>

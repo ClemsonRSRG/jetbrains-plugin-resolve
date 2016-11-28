@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static edu.clemson.resolve.jetbrains.ResTypes.*;
 import edu.clemson.resolve.jetbrains.psi.*;
 
-public abstract class ResMathAssertionExpImpl extends ResMathExpImpl implements ResMathAssertionExp {
+public class ResMathAssertionExpImpl extends ResMathExpImpl implements ResMathAssertionExp {
 
   public ResMathAssertionExpImpl(ASTNode node) {
     super(node);
