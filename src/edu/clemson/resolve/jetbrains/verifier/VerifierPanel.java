@@ -49,15 +49,15 @@ public class VerifierPanel extends JBPanel {
         startingPanel.setLayout(new BoxLayout(startingPanel, BoxLayout.Y_AXIS));
         startingPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-        String proverShortcut = KeymapUtil.getFirstKeyboardShortcutText("resolve.ProveVCs");
+        String proverShortcut = KeymapUtil.getFirstKeyboardShortcutText("resolve.GenVCs");
         JBLabel startingLabel = new JBLabel(
                 "<html>" +
                 "<div style='text-align: center;'>" +
                 "<font color='#7E7C7B'>" +
-                "<b>Program has not yet been verified</b>" +
+                "<b>No VCs generated</b>" +
                 "<br><br>" +
                 "Right-click an open editor and select<br>" +
-                "\"RESOLVE Prove Program\"" +
+                "\"RESOLVE Generate VCs\"" +
                 "<br>" +
                 "(shortcut: <span style=\"color: #7CB5FA\">" + proverShortcut + "</span>)" +
                 "<br><br>" +
