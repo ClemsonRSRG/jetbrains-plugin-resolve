@@ -36,6 +36,7 @@ public class GenerateVCsAction extends RESOLVEAction implements AnAction.Transpa
 
     @Override
     public void update(AnActionEvent e) {
+        e.getPresentation().setIcon(RESOLVEIcons.VC);
     }
 
     @Override
