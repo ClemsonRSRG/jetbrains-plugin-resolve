@@ -314,25 +314,23 @@ public class MathSymbolPanel extends JBPanel {
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⌈", "lceil")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⌉", "rceil")));
 
-        category.add(new DefaultMutableTreeNode(new SymbolInfo("⌊", "lfloor")));
-        category.add(new DefaultMutableTreeNode(new SymbolInfo("⌋", "rfloor")));
+        //category.add(new DefaultMutableTreeNode(new SymbolInfo("⌊", "lfloor")));
+        //category.add(new DefaultMutableTreeNode(new SymbolInfo("⌋", "rfloor")));
 
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⎝", "lcup")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⎠", "rcup")));
 
-        category.add(new DefaultMutableTreeNode(new SymbolInfo("⎛", "lcap")));
-        category.add(new DefaultMutableTreeNode(new SymbolInfo("⎞", "rcap")));
+        //category.add(new DefaultMutableTreeNode(new SymbolInfo("⎛", "lcap")));
+        //category.add(new DefaultMutableTreeNode(new SymbolInfo("⎞", "rcap")));
 
         //category.add(new DefaultMutableTreeNode(new SymbolInfo("⦇", "lparr")));
         //category.add(new DefaultMutableTreeNode(new SymbolInfo("⦈", "rparr")));
 
-        category.add(new DefaultMutableTreeNode(new SymbolInfo("⟦", "lbrakk")));
-        category.add(new DefaultMutableTreeNode(new SymbolInfo("⟧", "rbrakk")));
+        //category.add(new DefaultMutableTreeNode(new SymbolInfo("⟦", "lbrakk")));
+        //category.add(new DefaultMutableTreeNode(new SymbolInfo("⟧", "rbrakk")));
 
         //category.add(new DefaultMutableTreeNode(new SymbolInfo("«", "guillemotleft")));
         //category.add(new DefaultMutableTreeNode(new SymbolInfo("»", "guillemotright")));
-
-        category.add(new DefaultMutableTreeNode(new SymbolInfo("⎥", "mid")));
         e.add(category);
     }
 

@@ -130,19 +130,7 @@
 
     <!-- MATH SYMBOL TEMPLATES -->
 
-    <template description='∃' name='Exists' toReformat='true' toShortenFQNames='true'
-              value='∃ $END$'>
-        <context>
-            <option name='RESOLVE_MATH_REF' value='true'/>
-        </context>
-    </template>
 
-    <template description='∀' name='Forall' toReformat='true' toShortenFQNames='true'
-              value='∀ $END$'>
-        <context>
-            <option name='RESOLVE_MATH_REF' value='true'/>
-        </context>
-    </template>
 
 
 
@@ -171,26 +159,7 @@
 
 
 
-    <template description='⌐' name='_neg' toReformat='true' toShortenFQNames='true'
-              value='⌐ '>
-        <context>
-            <option name='RESOLVE_MATH_REF' value='true'/>
-        </context>
-    </template>
 
-    <template description='∧' name='_and' toReformat='true' toShortenFQNames='true'
-              value='∧ '>
-        <context>
-            <option name='RESOLVE_MATH_REF' value='true'/>
-        </context>
-    </template>
-
-    <template description='∨' name='_or' toReformat='true' toShortenFQNames='true'
-              value='∨ '>
-        <context>
-            <option name='RESOLVE_MATH_REF' value='true'/>
-        </context>
-    </template>
 
     <!-- ARROWS -->
 
@@ -668,6 +637,156 @@
 
     <template description='Ω' name='_Omega' toReformat='true' toShortenFQNames='true'
               value='Ω'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <!-- LETTERS -->
+
+    <template description='ℂ' name='_Complex' toReformat='true' toShortenFQNames='true'
+              value='ℂ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='ℕ' name='_Nat' toReformat='true' toShortenFQNames='true'
+              value='ℕ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='ℚ' name='_Rational' toReformat='true' toShortenFQNames='true'
+              value='ℚ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='ℝ' name='_Real' toReformat='true' toShortenFQNames='true'
+              value='ℝ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='ℤ' name='_Int' toReformat='true' toShortenFQNames='true'
+              value='ℤ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='℘' name='_Powerset' toReformat='true' toShortenFQNames='true'
+              value='℘'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <!-- LOGIC -->
+
+    <template description='∃' name='Exists' toReformat='true' toShortenFQNames='true'
+              value='∃ $END$'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='∀' name='Forall' toReformat='true' toShortenFQNames='true'
+              value='∀ $END$'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⌐' name='_neg' toReformat='true' toShortenFQNames='true'
+              value='⌐ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='∧' name='_and' toReformat='true' toShortenFQNames='true'
+              value='∧ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⋀' name='_And' toReformat='true' toShortenFQNames='true'
+              value='⋀'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='∨' name='_or' toReformat='true' toShortenFQNames='true'
+              value='∨ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⋁' name='_Or' toReformat='true' toShortenFQNames='true'
+              value='⋁'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <!-- PUNCTUATION -->
+
+    <template description='⟨' name='_langle' toReformat='true' toShortenFQNames='true'
+              value='⟨'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⟩' name='_rangle' toReformat='true' toShortenFQNames='true'
+              value='$END$⟩'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⟨..⟩' name='_lrangle' toReformat='true' toShortenFQNames='true'
+              value='⟨$END$⟩'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⌈' name='_lceil' toReformat='true' toShortenFQNames='true'
+              value='⌈'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⌉' name='_rceil' toReformat='true' toShortenFQNames='true'
+              value='$END$⌉'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⌈..⌉' name='_lrceil' toReformat='true' toShortenFQNames='true'
+              value='⌈$END$⌉'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
             <option name='RESOLVE_MATH_DEF' value='true'/>
