@@ -400,7 +400,6 @@
     </template>
 
     <!-- GREEK -->
-    υφχψωΓΔΛΞΠΣΥΦΩ
 
     <template description='α' name='_alpha' toReformat='true' toShortenFQNames='true'
               value='α'>
@@ -563,6 +562,112 @@
 
     <template description='υ' name='_upsilon' toReformat='true' toShortenFQNames='true'
               value='υ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='φ' name='_phi' toReformat='true' toShortenFQNames='true'
+              value='φ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='χ' name='_chi' toReformat='true' toShortenFQNames='true'
+              value='χ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='ψ' name='_psi' toReformat='true' toShortenFQNames='true'
+              value='ψ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='ω' name='_omega' toReformat='true' toShortenFQNames='true'
+              value='ω'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='Γ' name='_Gamma' toReformat='true' toShortenFQNames='true'
+              value='Γ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='Δ' name='_Delta' toReformat='true' toShortenFQNames='true'
+              value='Δ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='Λ' name='_Lambda' toReformat='true' toShortenFQNames='true'
+              value='Λ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='Ξ' name='_Xi' toReformat='true' toShortenFQNames='true'
+              value='Ξ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    ΔΛΞΠΣΥΦΩ
+
+    <template description='Σ' name='_Sigma' toReformat='true' toShortenFQNames='true'
+              value='Σ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='Υ' name='_Upsilon' toReformat='true' toShortenFQNames='true'
+              value='Υ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='Φ' name='_Phi' toReformat='true' toShortenFQNames='true'
+              value='Φ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='Ψ' name='_Psi' toReformat='true' toShortenFQNames='true'
+              value='Ψ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='Ω' name='_Omega' toReformat='true' toShortenFQNames='true'
+              value='Ω'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
             <option name='RESOLVE_MATH_DEF' value='true'/>
