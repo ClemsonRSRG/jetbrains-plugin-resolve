@@ -144,8 +144,449 @@
         </context>
     </template>
 
+
+
+
+
+    <template description='∪' name='_cup' toReformat='true' toShortenFQNames='true'
+              value='∪ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='∩' name='_cap' toReformat='true' toShortenFQNames='true'
+              value='∩ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='≠' name='_neq' toReformat='true' toShortenFQNames='true'
+              value='≠ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+
+
+    <template description='⌐' name='_neg' toReformat='true' toShortenFQNames='true'
+              value='⌐ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='∧' name='_and' toReformat='true' toShortenFQNames='true'
+              value='∧ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='∨' name='_or' toReformat='true' toShortenFQNames='true'
+              value='∨ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <!-- ARROWS -->
+
+    <template description='←' name='_leftarrow' toReformat='true' toShortenFQNames='true'
+              value='← '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⇐' name='_Leftarrow' toReformat='true' toShortenFQNames='true'
+              value='⇐ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='→' name='_rightarrow' toReformat='true' toShortenFQNames='true'
+              value='→ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⇒' name='_Rightarrow' toReformat='true' toShortenFQNames='true'
+              value='⇒ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⟶' name='_longrightarrow' toReformat='true' toShortenFQNames='true'
+              value='⟶ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⟹' name='_Longrightarrow' toReformat='true' toShortenFQNames='true'
+              value='⟹ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='↔' name='_leftrightarrow' toReformat='true' toShortenFQNames='true'
+              value='↔ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⇔' name='_Leftrightarrow' toReformat='true' toShortenFQNames='true'
+              value='⇔ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⟷' name='_longleftrightarrow' toReformat='true' toShortenFQNames='true'
+              value='⟷ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⟺' name='_Longleftrightarrow' toReformat='true' toShortenFQNames='true'
+              value='⟺ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='↩' name='_hookleftarrow' toReformat='true' toShortenFQNames='true'
+              value='↩ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='↪' name='_hookrightarrow' toReformat='true' toShortenFQNames='true'
+              value='↪ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='↽' name='_leftharpoondown' toReformat='true' toShortenFQNames='true'
+              value='↽ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⇀' name='_rightharpoonup' toReformat='true' toShortenFQNames='true'
+              value='⇀ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⇌' name='_leftrightharpoons' toReformat='true' toShortenFQNames='true'
+              value='⇌ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='↝' name='_leadsto' toReformat='true' toShortenFQNames='true'
+              value='↝ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⇃' name='_downharpoonleft' toReformat='true' toShortenFQNames='true'
+              value='⇃ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⇂' name='_downharpoonright' toReformat='true' toShortenFQNames='true'
+              value='⇂ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='↿' name='_upharpoonleft' toReformat='true' toShortenFQNames='true'
+              value='↿ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='↾' name='_upharpoonright' toReformat='true' toShortenFQNames='true'
+              value='↾ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='↑' name='_up' toReformat='true' toShortenFQNames='true'
+              value='↑ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⇑' name='_Up' toReformat='true' toShortenFQNames='true'
+              value='⇑ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='↓' name='_down' toReformat='true' toShortenFQNames='true'
+              value='↓ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⇓' name='_Down' toReformat='true' toShortenFQNames='true'
+              value='⇓ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='↕' name='_updown' toReformat='true' toShortenFQNames='true'
+              value='↕ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⇕' name='_Updown' toReformat='true' toShortenFQNames='true'
+              value='⇕ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <!-- GREEK -->
+    υφχψωΓΔΛΞΠΣΥΦΩ
+
+    <template description='α' name='_alpha' toReformat='true' toShortenFQNames='true'
+              value='α'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='β' name='_beta' toReformat='true' toShortenFQNames='true'
+              value='β '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='γ' name='_gamma' toReformat='true' toShortenFQNames='true'
+              value='γ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='δ' name='_delta' toReformat='true' toShortenFQNames='true'
+              value='δ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='ε' name='_epsilon' toReformat='true' toShortenFQNames='true'
+              value='ε'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='ζ' name='_zeta' toReformat='true' toShortenFQNames='true'
+              value='ζ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='η' name='_eta' toReformat='true' toShortenFQNames='true'
+              value='η'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='θ' name='_theta' toReformat='true' toShortenFQNames='true'
+              value='θ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='ι' name='_iota' toReformat='true' toShortenFQNames='true'
+              value='ι'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='κ' name='_kappa' toReformat='true' toShortenFQNames='true'
+              value='κ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='κ' name='_kappa' toReformat='true' toShortenFQNames='true'
+              value='κ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='λ' name='_lambda' toReformat='true' toShortenFQNames='true'
+              value='λ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='μ' name='_mu' toReformat='true' toShortenFQNames='true'
+              value='μ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='ν' name='_nu' toReformat='true' toShortenFQNames='true'
+              value='ν'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='ξ' name='_xi' toReformat='true' toShortenFQNames='true'
+              value='ξ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='ο' name='_omnicron' toReformat='true' toShortenFQNames='true'
+              value='ο'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='π' name='_pi' toReformat='true' toShortenFQNames='true'
+              value='π'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='ρ' name='_rho' toReformat='true' toShortenFQNames='true'
+              value='ρ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='σ' name='_sigma' toReformat='true' toShortenFQNames='true'
+              value='σ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='τ' name='_tau' toReformat='true' toShortenFQNames='true'
+              value='τ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='υ' name='_upsilon' toReformat='true' toShortenFQNames='true'
+              value='υ'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <!-- RELATIONS -->
+
+    <template description='∈' name='_in' toReformat='true' toShortenFQNames='true'
+              value='∈ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
+    <template description='∉' name='_nin' toReformat='true' toShortenFQNames='true'
+              value='∉ '>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+        </context>
+    </template>
+
     <template description='≤' name='_leq' toReformat='true' toShortenFQNames='true'
-              value='≤'>
+              value='≤ '>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
             <option name='RESOLVE_MATH_DEF' value='true'/>
@@ -153,80 +594,10 @@
     </template>
 
     <template description='≥' name='_geq' toReformat='true' toShortenFQNames='true'
-              value='≥'>
+              value='≥ '>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
             <option name='RESOLVE_MATH_DEF' value='true'/>
-        </context>
-    </template>
-
-    <template description='∈' name='_in' toReformat='true' toShortenFQNames='true'
-              value='∈'>
-        <context>
-            <option name='RESOLVE_MATH_REF' value='true'/>
-        </context>
-    </template>
-
-    <template description='∉' name='_nin' toReformat='true' toShortenFQNames='true'
-              value='∉'>
-        <context>
-            <option name='RESOLVE_MATH_REF' value='true'/>
-        </context>
-    </template>
-
-    <template description='∪' name='_cup' toReformat='true' toShortenFQNames='true'
-              value='∪'>
-        <context>
-            <option name='RESOLVE_MATH_REF' value='true'/>
-        </context>
-    </template>
-
-    <template description='∩' name='_cap' toReformat='true' toShortenFQNames='true'
-              value='∩'>
-        <context>
-            <option name='RESOLVE_MATH_REF' value='true'/>
-        </context>
-    </template>
-
-    <template description='⟶' name='_rightarrow' toReformat='true' toShortenFQNames='true'
-              value='⟶'>
-        <context>
-            <option name='RESOLVE_MATH_REF' value='true'/>
-        </context>
-    </template>
-
-    <template description='≠' name='_neq' toReformat='true' toShortenFQNames='true'
-              value='≠'>
-        <context>
-            <option name='RESOLVE_MATH_REF' value='true'/>
-        </context>
-    </template>
-
-    <template description='λ' name='lambda' toReformat='true' toShortenFQNames='true'
-              value='λ'>
-        <context>
-            <option name='RESOLVE_MATH_REF' value='true'/>
-        </context>
-    </template>
-
-    <template description='⌐' name='_neg' toReformat='true' toShortenFQNames='true'
-              value='⌐'>
-        <context>
-            <option name='RESOLVE_MATH_REF' value='true'/>
-        </context>
-    </template>
-
-    <template description='∧' name='_and' toReformat='true' toShortenFQNames='true'
-              value='∧'>
-        <context>
-            <option name='RESOLVE_MATH_REF' value='true'/>
-        </context>
-    </template>
-
-    <template description='∨' name='_or' toReformat='true' toShortenFQNames='true'
-              value='∨'>
-        <context>
-            <option name='RESOLVE_MATH_REF' value='true'/>
         </context>
     </template>
 

@@ -472,7 +472,7 @@ MathIncomingExp ::= '#' MathSymbolExp {pin=1}
 MathFunctionAppList ::= '(' MathArgList ')'
 
 private MathNonStdAppList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=NonStdAppRec}
-private NonStdAppRec ::= !(math_bracket_symbol)
+private NonStdAppRec ::= !(MathBracketName)
 
 private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
 
