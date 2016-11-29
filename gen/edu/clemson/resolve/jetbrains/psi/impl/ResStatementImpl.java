@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static edu.clemson.resolve.jetbrains.ResTypes.*;
 import edu.clemson.resolve.jetbrains.psi.*;
 
-public class ResStatementImpl extends ResCompositeElementImpl implements ResStatement {
+public abstract class ResStatementImpl extends ResCompositeElementImpl implements ResStatement {
 
   public ResStatementImpl(ASTNode node) {
     super(node);

@@ -7,9 +7,6 @@ import com.intellij.psi.PsiElement;
 
 public interface ResMathVarDecl extends ResMathVarDeclGroup {
 
-  @Nullable
-  ResMathExp getMathExp();
-
   @NotNull
   ResMathVarDef getMathVarDef();
 

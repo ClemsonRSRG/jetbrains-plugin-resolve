@@ -8,9 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface ResSelectorExp extends ResBinaryExp {
 
   @NotNull
-  List<ResExp> getExpList();
-
-  @NotNull
   PsiElement getDot();
 
 }

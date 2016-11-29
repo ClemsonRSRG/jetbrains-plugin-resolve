@@ -287,7 +287,6 @@ public class ResParser implements PsiParser, LightPsiParser {
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
     create_token_set_(RECORD_TYPE, TYPE),
-    create_token_set_(INFIX_EXP, SELECTOR_EXP),
     create_token_set_(MATH_VAR_DECL, MATH_VAR_DECL_GROUP),
     create_token_set_(ASSIGN_STATEMENT, ELSE_STATEMENT, IF_STATEMENT, SIMPLE_STATEMENT,
       STATEMENT, SWAP_STATEMENT, WHILE_STATEMENT),
@@ -539,28 +538,18 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // ('constraints') MathAssertionExp ';'
+  // 'constraints' MathAssertionExp ';'
   public static boolean ConstraintsClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ConstraintsClause")) return false;
     if (!nextTokenIs(b, CONSTRAINTS)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, CONSTRAINTS_CLAUSE, null);
-    r = ConstraintsClause_0(b, l + 1);
+    r = consumeToken(b, CONSTRAINTS);
     p = r; // pin = 1
     r = r && report_error_(b, MathAssertionExp(b, l + 1));
     r = p && consumeToken(b, SEMICOLON) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
-  }
-
-  // ('constraints')
-  private static boolean ConstraintsClause_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ConstraintsClause_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, CONSTRAINTS);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */
@@ -2302,13 +2291,24 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !(math_bracket_symbol)
+  // !(MathBracketName|';')
   static boolean NonStdAppRec(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NonStdAppRec")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NOT_);
-    r = !consumeToken(b, MATH_BRACKET_SYMBOL);
+    r = !NonStdAppRec_0(b, l + 1);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // MathBracketName|';'
+  private static boolean NonStdAppRec_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NonStdAppRec_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = MathBracketName(b, l + 1);
+    if (!r) r = consumeToken(b, SEMICOLON);
+    exit_section_(b, m, null, r);
     return r;
   }
 

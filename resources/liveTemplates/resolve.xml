@@ -132,10 +132,6 @@
 
 
 
-
-
-
-
     <template description='∪' name='_cup' toReformat='true' toShortenFQNames='true'
               value='∪ '>
         <context>
@@ -787,6 +783,38 @@
 
     <template description='⌈..⌉' name='_lrceil' toReformat='true' toShortenFQNames='true'
               value='⌈$END$⌉'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⎝' name='_lcup' toReformat='true' toShortenFQNames='true'
+              value='⎝'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⎠' name='_rcup' toReformat='true' toShortenFQNames='true'
+              value='$END$⎠'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⎝' name='_lcup' toReformat='true' toShortenFQNames='true'
+              value='⎝'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
+    <template description='⎝..⎠' name='_lrcup' toReformat='true' toShortenFQNames='true'
+              value='⎝$END$⎠'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
             <option name='RESOLVE_MATH_DEF' value='true'/>

@@ -182,7 +182,6 @@ public interface ResTypes {
   IElementType LCUP = new ResTokenType("⎝");
   IElementType LPAREN = new ResTokenType("(");
   IElementType MAINTAINING = new ResTokenType("maintaining");
-  IElementType MATH_BRACKET_SYMBOL = new ResTokenType("math_bracket_symbol");
   IElementType MATH_SYMBOL = new ResTokenType("math_symbol");
   IElementType MODELED = new ResTokenType("modeled");
   IElementType NOTICE = new ResTokenType("Notice");
@@ -274,9 +273,6 @@ public interface ResTypes {
       else if (type == EXEMPLAR_DECL) {
         return new ResExemplarDeclImpl(node);
       }
-      else if (type == EXP) {
-        return new ResExpImpl(node);
-      }
       else if (type == EXTENSION_PAIRING) {
         return new ResExtensionPairingImpl(node);
       }
@@ -328,9 +324,6 @@ public interface ResTypes {
       else if (type == MATH_ALTERNATIVE_ITEM_EXP) {
         return new ResMathAlternativeItemExpImpl(node);
       }
-      else if (type == MATH_ASSERTION_EXP) {
-        return new ResMathAssertionExpImpl(node);
-      }
       else if (type == MATH_CART_PROD_EXP) {
         return new ResMathCartProdExpImpl(node);
       }
@@ -342,9 +335,6 @@ public interface ResTypes {
       }
       else if (type == MATH_CLSSFTN_COROLLARY_DECL) {
         return new ResMathClssftnCorollaryDeclImpl(node);
-      }
-      else if (type == MATH_EXP) {
-        return new ResMathExpImpl(node);
       }
       else if (type == MATH_FUNCTION_APP_LIST) {
         return new ResMathFunctionAppListImpl(node);
@@ -489,9 +479,6 @@ public interface ResTypes {
       }
       else if (type == SPEC_MODULE_PARAMETERS) {
         return new ResSpecModuleParametersImpl(node);
-      }
-      else if (type == STATEMENT) {
-        return new ResStatementImpl(node);
       }
       else if (type == SWAP_STATEMENT) {
         return new ResSwapStatementImpl(node);
