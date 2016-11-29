@@ -385,7 +385,7 @@ NestedExp ::= '(' Exp ')'   {pin=1 extends=Exp}
 SelectorExp ::= Exp '.' Exp {extends=BinaryExp}
 InfixExp ::= Exp ProgSymbolName Exp {extends=BinaryExp}
 CallExp ::= NameExp ArgumentList {extends=Exp}
-ProgSymbolName ::= (identifier|symbol)
+ProgSymbolName ::= (identifier|symbol|'=')
 
 NameExp ::= ReferenceExp QualifiedReferenceExp? {elementType=ReferenceExp}
 left QualifiedReferenceExp ::= '::' identifier {elementType=ReferenceExp}

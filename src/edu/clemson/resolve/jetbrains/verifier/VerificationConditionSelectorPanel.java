@@ -7,6 +7,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBScrollPane;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
+import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
 import edu.clemson.resolve.proving.absyn.PExp;
 import edu.clemson.resolve.vcgen.VC;
 import org.jetbrains.annotations.NotNull;
@@ -175,10 +176,9 @@ public class VerificationConditionSelectorPanel extends JPanel {
     }
 
     public VerificationPreviewEditor getVCPreview(VC vc) {
-        String vcText = vc.toString();//dynamically set width..);
+        String vcText = vc.toString();
         VerificationPreviewEditor preview = new VerificationPreviewEditor(project, vcText);
         preview.setBackground(JBColor.WHITE);
-        //preview.addNotify();
         return preview;
     }
 }

@@ -162,7 +162,7 @@ public class RESOLVECompletionUtil {
 
     @NotNull
     static CamelHumpMatcher createPrefixMatcher(@NotNull String prefix) {
-        return new CamelHumpMatcher(prefix, false);
+        return new CamelHumpMatcher(prefix, true);
     }
 
     @NotNull

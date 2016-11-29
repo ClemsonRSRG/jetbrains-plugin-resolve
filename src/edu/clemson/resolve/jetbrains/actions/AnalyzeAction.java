@@ -20,8 +20,6 @@ import com.intellij.psi.util.PsiUtil;
 import edu.clemson.resolve.RESOLVECompiler;
 import edu.clemson.resolve.compiler.AnnotatedModule;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
-import edu.clemson.resolve.jetbrains.annotation.AnnotatorCompilerListener;
-import edu.clemson.resolve.jetbrains.annotation.RESOLVEExternalAnnotator;
 
 import java.util.*;
 
@@ -54,8 +52,6 @@ public class AnalyzeAction extends RESOLVEAction {
         final RESOLVECompiler resolve = new RESOLVECompiler(args.toArray(new String[args.size()]));
 
         resolve.removeListeners();
-        AnnotatorCompilerListener listener = new AnnotatorCompilerListener();
-        resolve.addListener(listener);
         resolve.processCommandLineTargets();
 
         AnnotationSession session = new AnnotationSession(file);

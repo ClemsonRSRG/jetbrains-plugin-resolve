@@ -27,6 +27,12 @@ public class ResProgSymbolNameImpl extends ResCompositeElementImpl implements Re
 
   @Override
   @Nullable
+  public PsiElement getEquals() {
+    return findChildByType(EQUALS);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);
   }

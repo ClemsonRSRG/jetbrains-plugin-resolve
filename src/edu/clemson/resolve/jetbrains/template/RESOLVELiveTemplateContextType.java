@@ -135,7 +135,7 @@ public abstract class RESOLVELiveTemplateContextType extends TemplateContextType
 
         @Override
         protected boolean isInContext(@NotNull PsiElement element) {
-            return element instanceof ResMathDefnSig;
+            return element instanceof ResMathDefnSig || element instanceof ResMathVarDef;
         }
     }
 

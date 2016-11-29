@@ -2912,14 +2912,14 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier|symbol
+  // identifier|symbol|'='
   public static boolean ProgSymbolName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ProgSymbolName")) return false;
-    if (!nextTokenIs(b, "<prog symbol name>", IDENTIFIER, SYMBOL)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, PROG_SYMBOL_NAME, "<prog symbol name>");
     r = consumeToken(b, IDENTIFIER);
     if (!r) r = consumeToken(b, SYMBOL);
+    if (!r) r = consumeToken(b, EQUALS);
     exit_section_(b, l, m, r, false, null);
     return r;
   }

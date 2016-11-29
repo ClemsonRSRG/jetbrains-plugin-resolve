@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface ResProgSymbolName extends ResCompositeElement {
 
   @Nullable
+  PsiElement getEquals();
+
+  @Nullable
   PsiElement getIdentifier();
 
   @Nullable

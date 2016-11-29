@@ -77,13 +77,6 @@ public class VerifierPanel extends JBPanel {
         revalidate();
     }
 
-    public void createVCOnlyView(Collection<VC> vcs) {
-        this.removeAll();
-        vcSelectorPanel = new VerificationConditionSelectorPanel(project, vcs);
-        add(vcSelectorPanel, BorderLayout.CENTER);
-        revalidate();
-    }
-
     public void revertToBaseGUI() {
         for (VerificationPreviewEditor e : getActivePreviewEditors()) {
             e.removeNotify();

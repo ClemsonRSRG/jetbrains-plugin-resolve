@@ -285,8 +285,8 @@ public class MathSymbolPanel extends JBPanel {
     private void addLogicSection(@NotNull DefaultMutableTreeNode e) {
         DefaultMutableTreeNode category = new DefaultMutableTreeNode("Logic");
 
-        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊥", "bottom")));
-        category.add(new DefaultMutableTreeNode(new SymbolInfo("⊤", "top")));
+        //category.add(new DefaultMutableTreeNode(new SymbolInfo("⊥", "bottom")));
+        //category.add(new DefaultMutableTreeNode(new SymbolInfo("⊤", "top")));
 
         category.add(new DefaultMutableTreeNode(new SymbolInfo("∧", "and")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⋀", "And")));
