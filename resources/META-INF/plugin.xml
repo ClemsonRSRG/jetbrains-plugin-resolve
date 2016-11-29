@@ -112,7 +112,7 @@
         </action>
         <action id="resolve.Analyze" class="edu.clemson.resolve.jetbrains.actions.AnalyzeAction"
                 text="RESOLVE Analyze Current Source">
-            <keyboard-shortcut keymap="$default" first-keystroke="control shift P"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="control shift G"/>
             <add-to-group group-id="ToolsMenu" anchor="before" relative-to-action="com.intellij.tools.ExternalToolsGroup"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>

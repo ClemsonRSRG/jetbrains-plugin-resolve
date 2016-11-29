@@ -55,11 +55,6 @@ public class GenerateVCsAction extends RESOLVEAction implements AnAction.Transpa
         commitDoc(project, resolveFile);
         Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
         if (editor == null) return;
-
-        RunRESOLVEOnLanguageFile gen =
-                new RunRESOLVEOnLanguageFile(resolveFile,
-                        project,
-                        title);
         VCOutputFile vco = generateVCs(resolveFile, editor, project);
         //give each action an instance of the prover listener and make Update() print the result as it comes back produce
         if (vco == null) return;

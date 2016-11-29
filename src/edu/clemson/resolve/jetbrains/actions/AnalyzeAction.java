@@ -13,6 +13,9 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.impl.DocumentMarkupModel;
 import com.intellij.openapi.editor.markup.MarkupModel;
 import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
@@ -20,6 +23,7 @@ import com.intellij.psi.util.PsiUtil;
 import edu.clemson.resolve.RESOLVECompiler;
 import edu.clemson.resolve.compiler.AnnotatedModule;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -36,6 +40,7 @@ public class AnalyzeAction extends RESOLVEAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
+
         Project project = e.getData(PlatformDataKeys.PROJECT);
         VirtualFile resolveFile = getRESOLVEFileFromEvent(e);
         PsiFile file = e.getData(LangDataKeys.PSI_FILE);
@@ -49,16 +54,15 @@ public class AnalyzeAction extends RESOLVEAction {
         List<String> args = RunRESOLVEOnLanguageFile.getRESOLVEArgsAsList(argMap);
         String fileName = resolveFile.getName();
         args.add(0, fileName);
-        final RESOLVECompiler resolve = new RESOLVECompiler(args.toArray(new String[args.size()]));
-
-        resolve.removeListeners();
-        resolve.processCommandLineTargets();
-
-        AnnotationSession session = new AnnotationSession(file);
-        AnnotationHolder holder = new AnnotationHolderImpl(session);
-        DocumentMarkupModel x;
-        Annotator annotator;
-        int i;
-        i = 0;
+        RunRESOLVEOnLanguageFile gen =
+                new RunRESOLVEOnLanguageFile(resolveFile,
+                        project,
+                        "Analyzing Sources");
+        gen.addArgs(argMap);
+        boolean successful = false;
+        try {
+            successful = ProgressManager.getInstance().run(gen);
+        } catch (Exception e1) {
+        }
     }
 }
