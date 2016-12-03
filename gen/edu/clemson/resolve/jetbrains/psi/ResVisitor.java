@@ -166,6 +166,10 @@ public class ResVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitMathEqualsInfixApplyExp(@NotNull ResMathEqualsInfixApplyExp o) {
+    visitMathExp(o);
+  }
+
   public void visitMathExp(@NotNull ResMathExp o) {
     visitCompositeElement(o);
   }

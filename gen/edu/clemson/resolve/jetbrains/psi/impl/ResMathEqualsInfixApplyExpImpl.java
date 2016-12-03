@@ -10,14 +10,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static edu.clemson.resolve.jetbrains.ResTypes.*;
 import edu.clemson.resolve.jetbrains.psi.*;
 
-public class ResMathSetRestrictionExpImpl extends ResMathExpImpl implements ResMathSetRestrictionExp {
+public class ResMathEqualsInfixApplyExpImpl extends ResMathExpImpl implements ResMathEqualsInfixApplyExp {
 
-  public ResMathSetRestrictionExpImpl(ASTNode node) {
+  public ResMathEqualsInfixApplyExpImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ResVisitor visitor) {
-    visitor.visitMathSetRestrictionExp(this);
+    visitor.visitMathEqualsInfixApplyExp(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -26,33 +26,15 @@ public class ResMathSetRestrictionExpImpl extends ResMathExpImpl implements ResM
   }
 
   @Override
-  @Nullable
-  public ResMathExp getMathExp() {
-    return findChildByClass(ResMathExp.class);
-  }
-
-  @Override
-  @Nullable
-  public ResMathVarDecl getMathVarDecl() {
-    return findChildByClass(ResMathVarDecl.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getBar() {
-    return findChildByType(BAR);
+  @NotNull
+  public List<ResMathExp> getMathExpList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResMathExp.class);
   }
 
   @Override
   @NotNull
-  public PsiElement getLbrace() {
-    return findNotNullChildByType(LBRACE);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getRbrace() {
-    return findChildByType(RBRACE);
+  public PsiElement getEquals() {
+    return findNotNullChildByType(EQUALS);
   }
 
 }

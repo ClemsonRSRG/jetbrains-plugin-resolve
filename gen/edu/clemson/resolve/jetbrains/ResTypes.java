@@ -49,6 +49,7 @@ public interface ResTypes {
   IElementType MATH_CATEGORICAL_DEFN_DECL = new ResCompositeElementType("MATH_CATEGORICAL_DEFN_DECL");
   IElementType MATH_CLSSFTN_ASSRT_EXP = new ResCompositeElementType("MATH_CLSSFTN_ASSRT_EXP");
   IElementType MATH_CLSSFTN_COROLLARY_DECL = new ResCompositeElementType("MATH_CLSSFTN_COROLLARY_DECL");
+  IElementType MATH_EQUALS_INFIX_APPLY_EXP = new ResCompositeElementType("MATH_EQUALS_INFIX_APPLY_EXP");
   IElementType MATH_EXP = new ResCompositeElementType("MATH_EXP");
   IElementType MATH_FUNCTION_APP_LIST = new ResCompositeElementType("MATH_FUNCTION_APP_LIST");
   IElementType MATH_INCOMING_EXP = new ResCompositeElementType("MATH_INCOMING_EXP");
@@ -146,7 +147,7 @@ public interface ResTypes {
   IElementType END = new ResTokenType("end");
   IElementType ENHANCEMENT = new ResTokenType("Enhancement");
   IElementType ENSURES = new ResTokenType("ensures");
-  IElementType EQUALS = new ResTokenType("=");
+  IElementType EQUALS = new ResTokenType("equals");
   IElementType EVALUATES = new ResTokenType("evaluates");
   IElementType EXEMPLAR = new ResTokenType("exemplar");
   IElementType EXISTS = new ResTokenType("Exists");
@@ -178,7 +179,7 @@ public interface ResTypes {
   IElementType LANGLE = new ResTokenType("⟨");
   IElementType LBRACE = new ResTokenType("{");
   IElementType LBRACK = new ResTokenType("[");
-  IElementType LCEIL = new ResTokenType("⎡");
+  IElementType LCEIL = new ResTokenType("⌈");
   IElementType LCUP = new ResTokenType("⎝");
   IElementType LPAREN = new ResTokenType("(");
   IElementType MAINTAINING = new ResTokenType("maintaining");
@@ -198,7 +199,7 @@ public interface ResTypes {
   IElementType RANGLE = new ResTokenType("⟩");
   IElementType RBRACE = new ResTokenType("}");
   IElementType RBRACK = new ResTokenType("]");
-  IElementType RCEIL = new ResTokenType("⎤");
+  IElementType RCEIL = new ResTokenType("⌉");
   IElementType RCUP = new ResTokenType("⎠");
   IElementType REALIZATION = new ResTokenType("Realization");
   IElementType REALIZED = new ResTokenType("realized");
@@ -335,6 +336,9 @@ public interface ResTypes {
       }
       else if (type == MATH_CLSSFTN_COROLLARY_DECL) {
         return new ResMathClssftnCorollaryDeclImpl(node);
+      }
+      else if (type == MATH_EQUALS_INFIX_APPLY_EXP) {
+        return new ResMathEqualsInfixApplyExpImpl(node);
       }
       else if (type == MATH_FUNCTION_APP_LIST) {
         return new ResMathFunctionAppListImpl(node);

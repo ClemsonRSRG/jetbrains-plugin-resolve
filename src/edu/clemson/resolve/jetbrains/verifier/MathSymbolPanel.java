@@ -320,6 +320,8 @@ public class MathSymbolPanel extends JBPanel {
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⎝", "lcup")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⎠", "rcup")));
 
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("∥", "dblbar")));
+
         //category.add(new DefaultMutableTreeNode(new SymbolInfo("⎛", "lcap")));
         //category.add(new DefaultMutableTreeNode(new SymbolInfo("⎞", "rcap")));
 

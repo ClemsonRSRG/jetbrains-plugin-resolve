@@ -10,10 +10,10 @@ public interface ResMathSetRestrictionExp extends ResMathExp {
   @Nullable
   ResMathExp getMathExp();
 
-  @NotNull
+  @Nullable
   ResMathVarDecl getMathVarDecl();
 
-  @NotNull
+  @Nullable
   PsiElement getBar();
 
   @NotNull

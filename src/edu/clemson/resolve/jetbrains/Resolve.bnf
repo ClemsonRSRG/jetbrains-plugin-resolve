@@ -29,8 +29,8 @@
         DBL_BAR                 = '∥'
         LANGLE                  = '⟨'
         RANGLE                  = '⟩'
-        LCEIL                   = '⎡'
-        RCEIL                   = '⎤'
+        LCEIL                   = '⌈'
+        RCEIL                   = '⌉'
         LCUP                    = '⎝'
         RCUP                    = '⎠'
         LBRACK                  = '['
@@ -454,7 +454,8 @@ MathAssertionExp ::= MathQuantifiedExp|MathExp
 MathQuantifiedExp ::= ('∃'|'∀'|'Exists'|'Forall') MathVarDeclGroup ',' MathAssertionExp {pin=1}
 
 MathExp ::=
-          MathInfixApplyExp
+          MathEqualsInfixApplyExp
+        | MathInfixApplyExp
         | MathPrefixApplyExp
         | MathNonStdApplyExp
         | MathNestedExp
@@ -463,17 +464,18 @@ MathExp ::=
 MathNestedExp ::= '(' MathAssertionExp ')' {pin=1}
 MathSelectorExp ::= MathExp '.' MathExp
 MathPrefixApplyExp ::= MathExp MathFunctionAppList
-MathNonStdApplyExp ::= MathExp MathBracketName MathNonStdAppList MathBracketName
+MathNonStdApplyExp ::= MathExp MathBracketName MathNonStdAppList MathBracketName {pin=2}
 MathOutfixApplyExp ::= MathBracketName MathExp MathBracketName
 MathInfixApplyExp ::= MathExp MathOpSymbolName MathExp {pin=2}
+MathEqualsInfixApplyExp ::= MathExp '=' MathExp
 MathClssftnAssrtExp ::= MathExp ':' MathExp
 MathIncomingExp ::= '#' MathSymbolExp {pin=1}
 
 MathFunctionAppList ::= '(' MathArgList ')'
 
-private MathNonStdAppList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=NonStdAppRec}
+private MathNonStdAppList ::= MathExp (',' MathExp)* {pin=1/*recoverWhile=NonStdAppRec*/}
 
-private NonStdAppRec ::= !(MathBracketName|';') //TODO: THIS IS PROBABLY A ROUGH SPOT! KEEP AN EYE ON THIS GUY...
+private NonStdAppRec ::= !('∥'|'⟨'|'⟩'|'⌈'|'⌉'|'⎝'|'⎠'|'['|']'|'|') //TODO: THIS IS PROBABLY A ROUGH SPOT! KEEP AN EYE ON THIS GUY...
 
 private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
 
@@ -485,8 +487,8 @@ private MathPrimeExp ::= MathIncomingExp | MathSymbolExp | MathSelectorExp | Mat
         | MathSetRestrictionExp
 
 private MathOpSymbolName ::= MathSymbolExp
-MathBracketName ::= ('∥'|'⟨'|'⟩'|'⎡'|'⎤'|'⎝'|'⎠'|'['|']'|'|') {elementType=MathSymbolName}
-MathSymbolName ::= (identifier|int|symbol|math_symbol|true|false|'=')
+MathBracketName ::= ('∥'|'⟨'|'⟩'|'⌈'|'⌉'|'⎝'|'⎠'|'['|']'|'|') {elementType=MathSymbolName}
+MathSymbolName ::= (identifier|int|symbol|math_symbol|true|false|equals)
 
 MathSymbolExp ::=  MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}
 left MathQualifiedReferenceExp ::= '::' MathSymbolName {elementType=MathReferenceExp}
@@ -498,4 +500,5 @@ MathLambdaExp ::= (lambda|'λ') MathVarDecl ','  MathExp {pin=1}
 MathAlternativeExp ::= '{{' MathAlternativesList '}}' {pin=1}
 MathAlternativesList ::= MathAlternativeItemExp+
 MathAlternativeItemExp ::= MathExp ('if' MathExp ';' | 'otherwise' ';')
-MathSetRestrictionExp ::= '{' MathVarDecl '|' MathExp '}'
+MathSetRestrictionExp ::= '{' MathVarDecl '|' MathExp '}' {pin=1}
+//MathSetExp ::= '{' MathExp? '}'
