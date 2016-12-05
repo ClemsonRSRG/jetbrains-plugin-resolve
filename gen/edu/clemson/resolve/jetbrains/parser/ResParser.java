@@ -2291,36 +2291,6 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !('∥'|'⟨'|'⟩'|'⌈'|'⌉'|'⎝'|'⎠'|'['|']'|'|')
-  static boolean NonStdAppRec(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "NonStdAppRec")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NOT_);
-    r = !NonStdAppRec_0(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // '∥'|'⟨'|'⟩'|'⌈'|'⌉'|'⎝'|'⎠'|'['|']'|'|'
-  private static boolean NonStdAppRec_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "NonStdAppRec_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, DBL_BAR);
-    if (!r) r = consumeToken(b, LANGLE);
-    if (!r) r = consumeToken(b, RANGLE);
-    if (!r) r = consumeToken(b, LCEIL);
-    if (!r) r = consumeToken(b, RCEIL);
-    if (!r) r = consumeToken(b, LCUP);
-    if (!r) r = consumeToken(b, RCUP);
-    if (!r) r = consumeToken(b, LBRACK);
-    if (!r) r = consumeToken(b, RBRACK);
-    if (!r) r = consumeToken(b, BAR);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  /* ********************************************************** */
   // 'Notice' MathExp ';'
   public static boolean NoticeClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NoticeClause")) return false;
@@ -3735,7 +3705,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // int|string|true|false
+  // int|string|/*char|*/true|false
   public static boolean LiteralExp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LiteralExp")) return false;
     boolean r;
