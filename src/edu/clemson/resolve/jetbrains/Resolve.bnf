@@ -464,7 +464,7 @@ MathExp ::=
 MathNestedExp ::= '(' MathAssertionExp ')' {pin=1}
 MathSelectorExp ::= MathExp '.' MathExp
 MathPrefixApplyExp ::= MathExp MathFunctionAppList
-MathNonStdApplyExp ::= MathExp MathBracketName MathNonStdAppList MathBracketName {pin=2}
+MathNonStdApplyExp ::= MathExp MathBracketName MathNonStdAppList MathBracketName
 MathOutfixApplyExp ::= MathBracketName MathExp MathBracketName
 MathInfixApplyExp ::= MathExp MathOpSymbolName MathExp {pin=2}
 MathEqualsInfixApplyExp ::= MathExp '=' MathExp
@@ -482,6 +482,7 @@ private MathPrimeExp ::= MathIncomingExp | MathSymbolExp | MathSelectorExp | Mat
         | MathClssftnAssrtExp
         | MathOutfixApplyExp
         | MathCartProdExp
+        | MathSetExp
         | MathSetRestrictionExp
 
 private MathOpSymbolName ::= MathSymbolExp
@@ -499,4 +500,4 @@ MathAlternativeExp ::= '{{' MathAlternativesList '}}' {pin=1}
 MathAlternativesList ::= MathAlternativeItemExp+
 MathAlternativeItemExp ::= MathExp ('if' MathExp ';' | 'otherwise' ';')
 MathSetRestrictionExp ::= '{' MathVarDecl '|' MathExp '}' {pin=1}
-//MathSetExp ::= '{' MathExp? '}'
+MathSetExp ::= '{' MathExp? '}'

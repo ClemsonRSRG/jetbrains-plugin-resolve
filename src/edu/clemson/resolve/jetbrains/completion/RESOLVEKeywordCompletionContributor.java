@@ -60,6 +60,7 @@ public class RESOLVEKeywordCompletionContributor extends CompletionContributor i
         extend(CompletionType.BASIC, statementPattern(),
                 new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "While", "If"));
 
+
         //extend(CompletionType.BASIC, elseStatementPattern(),
         //        new RESOLVEKeywordCompletionProvider(RESOLVECompletionUtil.KEYWORD_PRIORITY, "else"));
 

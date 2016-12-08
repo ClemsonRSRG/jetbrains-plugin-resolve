@@ -296,7 +296,7 @@ public class ResParser implements PsiParser, LightPsiParser {
       MATH_CLSSFTN_ASSRT_EXP, MATH_EQUALS_INFIX_APPLY_EXP, MATH_EXP, MATH_INCOMING_EXP,
       MATH_INFIX_APPLY_EXP, MATH_LAMBDA_EXP, MATH_NESTED_EXP, MATH_NON_STD_APPLY_EXP,
       MATH_OUTFIX_APPLY_EXP, MATH_PREFIX_APPLY_EXP, MATH_QUANTIFIED_EXP, MATH_REFERENCE_EXP,
-      MATH_SELECTOR_EXP, MATH_SET_RESTRICTION_EXP),
+      MATH_SELECTOR_EXP, MATH_SET_EXP, MATH_SET_RESTRICTION_EXP),
   };
 
   /* ********************************************************** */
@@ -3747,7 +3747,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   // 4: ATOM(MathNestedExp)
   // 5: ATOM(MathIncomingExp) ATOM(MathSymbolExp) BINARY(MathSelectorExp) ATOM(MathLambdaExp)
   //    ATOM(MathAlternativeExp) BINARY(MathClssftnAssrtExp) PREFIX(MathOutfixApplyExp) ATOM(MathCartProdExp)
-  //    ATOM(MathSetRestrictionExp)
+  //    ATOM(MathSetExp) ATOM(MathSetRestrictionExp)
   public static boolean MathExp(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "MathExp")) return false;
     addVariant(b, "<math exp>");
@@ -3760,6 +3760,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     if (!r) r = MathAlternativeExp(b, l + 1);
     if (!r) r = MathOutfixApplyExp(b, l + 1);
     if (!r) r = MathCartProdExp(b, l + 1);
+    if (!r) r = MathSetExp(b, l + 1);
     if (!r) r = MathSetRestrictionExp(b, l + 1);
     p = r;
     r = r && MathExp_0(b, l + 1, g);
@@ -3941,6 +3942,26 @@ public class ResParser implements PsiParser, LightPsiParser {
     }
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  // '{' MathExp? '}'
+  public static boolean MathSetExp(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathSetExp")) return false;
+    if (!nextTokenIsSmart(b, LBRACE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, LBRACE);
+    r = r && MathSetExp_1(b, l + 1);
+    r = r && consumeToken(b, RBRACE);
+    exit_section_(b, m, MATH_SET_EXP, r);
+    return r;
+  }
+
+  // MathExp?
+  private static boolean MathSetExp_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "MathSetExp_1")) return false;
+    MathExp(b, l + 1, -1);
+    return true;
   }
 
   // '{' MathVarDecl '|' MathExp '}'

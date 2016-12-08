@@ -239,6 +239,10 @@ public class ResVisitor extends PsiElementVisitor {
     visitMathExp(o);
   }
 
+  public void visitMathSetExp(@NotNull ResMathSetExp o) {
+    visitMathExp(o);
+  }
+
   public void visitMathSetRestrictionExp(@NotNull ResMathSetRestrictionExp o) {
     visitMathExp(o);
   }
