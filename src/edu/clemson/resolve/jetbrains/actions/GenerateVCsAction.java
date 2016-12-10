@@ -24,10 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GenerateVCsAction extends RESOLVEAction implements AnAction.TransparentUpdate {
 
@@ -60,7 +57,8 @@ public class GenerateVCsAction extends RESOLVEAction implements AnAction.Transpa
         if (vco == null) return;
         RESOLVEPluginController controller = RESOLVEPluginController.getInstance(project);
         VerifierPanel verifierPanel = controller.getVerifierPanel();
-        verifierPanel.createVerifierView(vco.getFinalVCs());//TODO: maybe make this take in a list of VCs
+        Collection<VC> x = vco.getFinalVCs();
+        verifierPanel.createVerifierView(x);//TODO: maybe make this take in a list of VCs
         addVCGutterIcons(vco, editor, project);
         RESOLVEPluginController.showVerifierWindow(project);
     }
