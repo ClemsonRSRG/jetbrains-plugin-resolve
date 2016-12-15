@@ -77,7 +77,8 @@ public class ResPsiImplUtil {
      */
     public static boolean shouldReferenceModule(ResReferenceExp o) {
         return PsiTreeUtil.getParentOfType(o, ResFacilityDecl.class) != null &&
-                PsiTreeUtil.getParentOfType(o, ResModuleArgList.class) == null;
+                PsiTreeUtil.getParentOfType(o, ResModuleSpecArgList.class) == null &&
+                PsiTreeUtil.getParentOfType(o, ResModuleRealizArgList.class) == null;
     }
 
     @Nullable

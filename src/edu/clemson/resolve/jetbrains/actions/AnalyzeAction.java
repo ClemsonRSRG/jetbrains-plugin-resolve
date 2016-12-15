@@ -64,5 +64,6 @@ public class AnalyzeAction extends RESOLVEAction {
             successful = ProgressManager.getInstance().run(gen);
         } catch (Exception e1) {
         }
+        //editor.getMarkupModel()
     }
 }

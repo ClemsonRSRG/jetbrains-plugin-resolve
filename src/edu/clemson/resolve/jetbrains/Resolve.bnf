@@ -209,8 +209,6 @@ RequiresClause?
 FacilityBlock
 'end' identifier ';' {pin(".*")=3}
 
-ShortFacilityModuleDecl ::= FacilityDecl {pin(".*")=1}
-
 // uses, imports
 
 UsesList ::= 'uses' (UsesSpecs | '(' UsesSpecs ')') ';'  {pin(".*")=1}
@@ -328,20 +326,22 @@ VarDef ::= identifier {methods=[getResTypeInner getReference]}
 
 // facility decls
 
-FacilityDecl ::= 'Facility' identifier 'is' ModuleIdentifier ModuleArgList? [FromClause]
-('externally')? 'realized' 'by' ModuleIdentifier ModuleArgList? [FromClause]
+FacilityDecl ::= 'Facility' identifier 'is' ModuleIdentifier ModuleSpecArgList? [FromClause]
+('externally')? 'realized' 'by' ModuleIdentifier ModuleRealizArgList? [FromClause]
 ExtensionList? ';' {pin=2 methods=[resolveSpecification resolveImplementation]}
 
 private ExtensionList ::= (ExtensionPairing)* {recoverWhile=ExtensionListRec}
 private ExtensionListRec ::= !(';')
 
-ExtensionPairing ::= 'extended' 'by' ModuleIdentifier ModuleArgList? [FromClause] ('externally')?
-'realized' 'by' ModuleIdentifier ModuleArgList? [FromClause]
+ExtensionPairing ::= 'extended' 'by' ModuleIdentifier ModuleSpecArgList? [FromClause] ('externally')?
+'realized' 'by' ModuleIdentifier ModuleRealizArgList? [FromClause]
 {pin=1 methods=[resolveSpecification resolveImplementation]}
 
-ModuleArgList ::= '(' ExpArgumentList ')' {pin=1}
+ModuleSpecArgList ::= '(' SpecArgumentList ')' {pin=1}
+ModuleRealizArgList ::= '(' ExpArgumentList ')' {pin=1}
 
-// operations & procedures
+private SpecArgumentList ::= SpecArg (',' SpecArg)* {pin(".*")=1}
+private SpecArg ::= (Exp|MathExp)
 
 OperationDecl ::= 'Operation' identifier OperationLikeParameters (':' Type)? ';'
 RequiresClause? EnsuresClause? {pin=2}

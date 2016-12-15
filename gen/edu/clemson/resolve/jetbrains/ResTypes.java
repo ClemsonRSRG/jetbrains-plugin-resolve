@@ -75,10 +75,11 @@ public interface ResTypes {
   IElementType MATH_VAR_DECL = new ResCompositeElementType("MATH_VAR_DECL");
   IElementType MATH_VAR_DECL_GROUP = new ResCompositeElementType("MATH_VAR_DECL_GROUP");
   IElementType MATH_VAR_DEF = new ResCompositeElementType("MATH_VAR_DEF");
-  IElementType MODULE_ARG_LIST = new ResCompositeElementType("MODULE_ARG_LIST");
   IElementType MODULE_IDENTIFIER = new ResCompositeElementType("MODULE_IDENTIFIER");
   IElementType MODULE_IDENTIFIER_SPEC = new ResCompositeElementType("MODULE_IDENTIFIER_SPEC");
   IElementType MODULE_LIBRARY_IDENTIFIER = new ResCompositeElementType("MODULE_LIBRARY_IDENTIFIER");
+  IElementType MODULE_REALIZ_ARG_LIST = new ResCompositeElementType("MODULE_REALIZ_ARG_LIST");
+  IElementType MODULE_SPEC_ARG_LIST = new ResCompositeElementType("MODULE_SPEC_ARG_LIST");
   IElementType NESTED_EXP = new ResCompositeElementType("NESTED_EXP");
   IElementType NOTICE_CLAUSE = new ResCompositeElementType("NOTICE_CLAUSE");
   IElementType OPERATION_DECL = new ResCompositeElementType("OPERATION_DECL");
@@ -97,7 +98,6 @@ public interface ResTypes {
   IElementType REFERENCE_EXP = new ResCompositeElementType("REFERENCE_EXP");
   IElementType REQUIRES_CLAUSE = new ResCompositeElementType("REQUIRES_CLAUSE");
   IElementType SELECTOR_EXP = new ResCompositeElementType("SELECTOR_EXP");
-  IElementType SHORT_FACILITY_MODULE_DECL = new ResCompositeElementType("SHORT_FACILITY_MODULE_DECL");
   IElementType SIMPLE_STATEMENT = new ResCompositeElementType("SIMPLE_STATEMENT");
   IElementType SPEC_MODULE_PARAMETERS = new ResCompositeElementType("SPEC_MODULE_PARAMETERS");
   IElementType STATEMENT = new ResCompositeElementType("STATEMENT");
@@ -211,6 +211,7 @@ public interface ResTypes {
   IElementType RESTORES = new ResTokenType("restores");
   IElementType RPAREN = new ResTokenType(")");
   IElementType SEMICOLON = new ResTokenType(";");
+  IElementType SHORTFACILITYMODULEDECL = new ResTokenType("ShortFacilityModuleDecl");
   IElementType STRING = new ResTokenType("string");
   IElementType SYMBOL = new ResTokenType("symbol");
   IElementType THEN = new ResTokenType("then");
@@ -413,9 +414,6 @@ public interface ResTypes {
       else if (type == MATH_VAR_DEF) {
         return new ResMathVarDefImpl(node);
       }
-      else if (type == MODULE_ARG_LIST) {
-        return new ResModuleArgListImpl(node);
-      }
       else if (type == MODULE_IDENTIFIER) {
         return new ResModuleIdentifierImpl(node);
       }
@@ -424,6 +422,12 @@ public interface ResTypes {
       }
       else if (type == MODULE_LIBRARY_IDENTIFIER) {
         return new ResModuleLibraryIdentifierImpl(node);
+      }
+      else if (type == MODULE_REALIZ_ARG_LIST) {
+        return new ResModuleRealizArgListImpl(node);
+      }
+      else if (type == MODULE_SPEC_ARG_LIST) {
+        return new ResModuleSpecArgListImpl(node);
       }
       else if (type == NESTED_EXP) {
         return new ResNestedExpImpl(node);
@@ -478,9 +482,6 @@ public interface ResTypes {
       }
       else if (type == SELECTOR_EXP) {
         return new ResSelectorExpImpl(node);
-      }
-      else if (type == SHORT_FACILITY_MODULE_DECL) {
-        return new ResShortFacilityModuleDeclImpl(node);
       }
       else if (type == SIMPLE_STATEMENT) {
         return new ResSimpleStatementImpl(node);
