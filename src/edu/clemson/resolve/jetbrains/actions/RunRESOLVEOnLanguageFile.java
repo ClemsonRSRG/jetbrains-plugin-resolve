@@ -19,6 +19,7 @@ import com.intellij.util.EnvironmentUtil;
 import com.intellij.util.containers.*;
 import com.intellij.util.containers.HashMap;
 import edu.clemson.resolve.RESOLVECompiler;
+import edu.clemson.resolve.compiler.RESOLVECompilerListener;
 import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
 import edu.clemson.resolve.jetbrains.sdk.RESOLVESdkService;
 import edu.clemson.resolve.misc.Utils;
@@ -50,6 +51,8 @@ public class RunRESOLVEOnLanguageFile extends Task.WithResult<Boolean, Exception
     public boolean forceGeneration;
     private final List<String> args = new ArrayList<>();
     private VCOutputFile vcOutput = null;
+    private boolean hasParseErrors = false;
+    public List<RESOLVECompilerListener> listeners = new ArrayList<>();
 
     public RunRESOLVEOnLanguageFile(VirtualFile targetFile,
                                     @Nullable final Project project,
@@ -73,6 +76,10 @@ public class RunRESOLVEOnLanguageFile extends Task.WithResult<Boolean, Exception
         this.project = project;
         this.forceGeneration = forceGeneration;
         this.args.add(targetFilePath);
+    }
+
+    public void addListener(RESOLVECompilerListener listener) {
+        listeners.add(listener);
     }
 
     public VCOutputFile getVCOutput() {
@@ -106,8 +113,14 @@ public class RunRESOLVEOnLanguageFile extends Task.WithResult<Boolean, Exception
         console.print(timeStamp + ": resolve " + Utils.join(args, " ") + "\n", ConsoleViewContentType.SYSTEM_OUTPUT);
 
         compiler.removeListeners();
-        RunRESOLVEListener listener = new RunRESOLVEListener(compiler, console);
-        compiler.addListener(listener);
+        RunRESOLVEListener defaultListener = new RunRESOLVEListener(compiler, console);
+        compiler.addListener(defaultListener);
+        //add any additional listeners specified
+        if (!listeners.isEmpty()) {
+            for (RESOLVECompilerListener l : listeners) {
+                compiler.addListener(l);
+            }
+        }
 
         try {
             compiler.processCommandLineTargets();
@@ -122,17 +135,24 @@ public class RunRESOLVEOnLanguageFile extends Task.WithResult<Boolean, Exception
                             NotificationType.INFORMATION);
             Notifications.Bus.notify(notification, project);
             console.print(timeStamp + ": resolve " + msg + "\n", ConsoleViewContentType.SYSTEM_OUTPUT);
-            listener.hasOutput = true; // show console below
+            defaultListener.hasOutput = true; // show console below
         }
         //Todo: Eventually make it a list (or map) and allow vcs to come back for any target file (in case this class
         //is ever used to compile multiple resolve files at once (not sure when, but you never know).
         if (compiler.commandlineTargets.size() == 1) {
             vcOutput = compiler.commandlineTargets.get(0).getVCOutput();
         }
-        if (listener.hasOutput) {
+        if (defaultListener.hasOutput) {
             RESOLVEPluginController.showConsoleWindow(project);
         }
+        if (compiler.commandlineTargets.size() != 0) {
+            this.hasParseErrors = compiler.commandlineTargets.get(0).hasParseErrors;
+        }
         return compiler.errMgr.getErrorCount() == 0;
+    }
+
+    public boolean hasParseErrors() {
+        return hasParseErrors;
     }
 
     public void addArgs(Map<String, String> argMap) {
@@ -167,4 +187,5 @@ public class RunRESOLVEOnLanguageFile extends Task.WithResult<Boolean, Exception
         if (root != null) return root;
         return vfile.getParent();
     }
+
 }
