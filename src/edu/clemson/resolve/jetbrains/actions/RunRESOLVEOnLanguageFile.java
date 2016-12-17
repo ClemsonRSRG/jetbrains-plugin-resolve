@@ -82,8 +82,9 @@ public class RunRESOLVEOnLanguageFile extends Task.WithResult<Boolean, Exception
         listeners.add(listener);
     }
 
+    @Nullable
     public VCOutputFile getVCOutput() {
-        return vcOutput;
+        return null;
     }
 
     @Override
@@ -144,7 +145,7 @@ public class RunRESOLVEOnLanguageFile extends Task.WithResult<Boolean, Exception
     }
 
     public RESOLVECompiler getCompiler() {
-        return compiler
+        return compiler;
     }
 
     public void addArgs(Map<String, String> argMap) {

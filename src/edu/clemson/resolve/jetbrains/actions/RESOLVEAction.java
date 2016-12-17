@@ -9,22 +9,29 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
 import edu.clemson.resolve.RESOLVECompiler;
 import edu.clemson.resolve.jetbrains.RESOLVEFileType;
 import edu.clemson.resolve.jetbrains.sdk.RESOLVESdkService;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 
 abstract class RESOLVEAction extends AnAction implements DumbAware {
 
     @Override
     public void update(AnActionEvent e) {
-        selectedFileIsRESOLVEFile(e);
+        setPresentationVisible(e);
     }
 
-    private void selectedFileIsRESOLVEFile(AnActionEvent e) {
+    private void setPresentationVisible(@NotNull AnActionEvent e) {
         VirtualFile vfile = getRESOLVEFileFromEvent(e);
         if (vfile == null || e.getProject() == null) {
             e.getPresentation().setEnabled(false);
@@ -42,7 +49,8 @@ abstract class RESOLVEAction extends AnAction implements DumbAware {
 
     }
 
-    VirtualFile getRESOLVEFileFromEvent(AnActionEvent e) {
+    @Nullable
+    protected VirtualFile getRESOLVEFileFromEvent(@NotNull AnActionEvent e) {
         VirtualFile[] files = LangDataKeys.VIRTUAL_FILE_ARRAY.getData(e.getDataContext());
         if (files == null || files.length == 0) return null;
         VirtualFile vfile = files[0];
@@ -52,10 +60,37 @@ abstract class RESOLVEAction extends AnAction implements DumbAware {
         return null;
     }
 
-    protected RESOLVECompiler getDefaultCompiler(Map<String, String> args) {
-        RESOLVECompiler = new RESOLVECompiler(args.toArray(new String[args.size()]));
-        ConsoleView console = RESOLVEPluginController.getInstance(project).getConsole();
-        RESOLVEPluginController.getInstance(project).console.clear();
+    @NotNull
+    protected RESOLVECompiler getDefaultCompiler(@NotNull Map<String, String> argMap) {
+        return getDefaultCompiler(getArgMapAsList(argMap));
+    }
+
+    @NotNull
+    protected RESOLVECompiler getDefaultCompiler(@NotNull List<String> args) {
+        return new RESOLVECompiler(args.toArray(new String[args.size()]));
+    }
+
+    @NotNull
+    protected String getTimeStamp() {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+    }
+
+    @NotNull
+    protected VirtualFile getContentRoot(@NotNull Project project, @NotNull VirtualFile vfile) {
+        VirtualFile root = ProjectRootManager.getInstance(project).getFileIndex().getContentRootForFile(vfile);
+        if (root != null) return root;
+        return vfile.getParent();
+    }
+
+    @NotNull
+    protected List<String> getArgMapAsList(@NotNull Map<String, String> argMap) {
+        List<String> result = new ArrayList<>();
+        for (String option : argMap.keySet()) {
+            if (option.length() != 0) result.add(option);
+            String value = argMap.get(option);
+            if (value.length() != 0) result.add(value);
+        }
+        return result;
     }
 
     void commitDoc(Project project, VirtualFile file) {

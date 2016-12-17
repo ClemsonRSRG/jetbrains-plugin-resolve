@@ -80,9 +80,8 @@ public class GenerateVCsAction extends RESOLVEAction implements AnAction.Transpa
             successful = ProgressManager.getInstance().run(gen); //, "Generating", canBeCancelled, e.getData(PlatformDataKeys.PROJECT));
         } catch (Exception e1) {
         }
-        RESOLVECompiler compiler = gen.getCompiler();
-        if (compiler != null && successful && !editor.isDisposed()) {
-            return compiler.;
+        if (successful && !editor.isDisposed()) {
+            return gen.getVCOutput();
         }
         return null;
     }
