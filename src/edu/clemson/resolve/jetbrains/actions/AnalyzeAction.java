@@ -2,6 +2,8 @@ package edu.clemson.resolve.jetbrains.actions;
 
 import com.intellij.codeInsight.daemon.impl.AnnotationHolderImpl;
 import com.intellij.codeInsight.daemon.impl.SeverityRegistrar;
+import com.intellij.codeInsight.hint.HintManager;
+import com.intellij.codeInsight.hint.HintManagerImpl;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.AnnotationSession;
 import com.intellij.lang.annotation.Annotator;
@@ -20,38 +22,26 @@ import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.ui.JBColor;
 import edu.clemson.resolve.RESOLVECompiler;
-import edu.clemson.resolve.compiler.AnnotatedModule;
-import edu.clemson.resolve.compiler.LanguageSemanticsMessage;
-import edu.clemson.resolve.compiler.RESOLVECompilerListener;
-import edu.clemson.resolve.compiler.RESOLVEMessage;
+import edu.clemson.resolve.compiler.*;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.tool.ANTLRMessage;
 import org.jetbrains.annotations.NotNull;
+import org.stringtemplate.v4.ST;
 
 import java.util.*;
-
-//Probably going to replace external annotator.. Simplicity is key. Also its nice to still be able to type
-//things that the compiler might not currently accept without having a bunch of errors pop up.
-//Remember: This isn't a commercial product. It's very much still a research effort.
-
-//Update:
-//TODO: Look at ProfilerPanel#selectDecisionInGrammar in the antlrv4 plugin for hints on how to annotate your tree
-//based on the results that come back from the compiler.
-//This also looks in line with what Peter Gromov (on the open api forums) suggested as well..
 
 //Update2: Antlr v4 plugin: InputPanel#annotateErrorsInPreviewInputEditor
 public class AnalyzeAction extends RESOLVEAction {
     public static final Logger LOG = Logger.getInstance("RESOLVEAnalyzeAction");
 
-    public static final int ERROR_LAYER = HighlighterLayer.ERROR;
-    public static final int WARNING_LAYER = HighlighterLayer.WARNING;
-
+    public static final Key<Issue> ISSUE_ANNOTATION = Key.create("ISSUE_ANNOTATION");
 
     @Override
     public void update(AnActionEvent e) {
@@ -77,9 +67,17 @@ public class AnalyzeAction extends RESOLVEAction {
                 new RunRESOLVEOnLanguageFile(resolveFile,
                         project,
                         "Analyzing Sources");
+        RESOLVECompiler s;
+        Task.Backgroundable x = new Task.Backgroundable() {
+            @Override
+            public void run(@NotNull ProgressIndicator indicator) {
+                s.processCommandLineTargets();
+            }
+        }
         AnnotatorToolListener issueListener = new AnnotatorToolListener();
         gen.addListener(issueListener);
         gen.addArgs(argMap);
+        ErrorManager err = gen.getErrorManager();
         boolean successful = false;
         try {
             successful = ProgressManager.getInstance().run(gen);
@@ -92,6 +90,33 @@ public class AnalyzeAction extends RESOLVEAction {
         for (Issue issue : issueListener.issues) {
             annotateIssueInEditor(resolveFile, issueRelatedHighlighters, editor, issue);
         }
+        editor.addEditorMouseMotionListener(new EditorMouseMotionListener() {
+            @Override
+            public void mouseMoved(EditorMouseEvent e) {
+                int offset = MyActionUtils.getMouseOffset(e.getMouseEvent(), editor);
+                if (offset >= editor.getDocument().getTextLength()) return;
+                List<RangeHighlighter> highlightersAtOffset =
+                        MyActionUtils.getRangeHighlightersAtOffset(editor, offset);
+                List<String> msgs = new ArrayList<String>();
+
+                for (RangeHighlighter highlighter : highlightersAtOffset) {
+                    Issue errorUnderCursor = highlighter.getUserData(ISSUE_ANNOTATION);
+                    String x =  getIssueDisplayString(errorUnderCursor);
+                    int i;
+                    i=0;
+                    /*msg = getErrorDisplayString(errorUnderCursor);
+                    if ( msg.length()>MAX_HINT_WIDTH ) {
+                        msg = msg.substring(0, MAX_HINT_WIDTH)+"...";
+                    }*/
+                }
+
+                //showTooltips()
+            }
+
+            @Override
+            public void mouseDragged(EditorMouseEvent e) {
+            }
+        });
         editor.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void beforeDocumentChange(DocumentEvent event) {
@@ -117,79 +142,18 @@ public class AnalyzeAction extends RESOLVEAction {
         });
     }
 
-    //TODO: for hoverover stuff..
-    /*public static class MyMouseListener implements EditorMouseListener, EditorMouseMotionListener {
+    public static String getIssueDisplayString(Issue e) {
+        ST msg = e.msg.getMessageTemplate(false);
+        Token t = e.msg.offendingToken;
+        String result = "line " + t.getLine() + ":" + t.getCharPositionInLine() + " " + msg.render();
+        return result;
+    }
 
-    }*/
-
-    /**
-     * Display syntax errors, hints in tooltips if under the cursor
-     */
-   /* public static void showTooltips(EditorMouseEvent event,
-                                    Editor editor,
-                                    @NotNull PreviewState previewState, int offset) {
-        if ( previewState.parsingResult==null ) return; // no results?
-
-        // Turn off any tooltips if none under the cursor
-        // find the highlighter associated with this offset
-        List<RangeHighlighter> highlightersAtOffset = MyActionUtils.getRangeHighlightersAtOffset(editor, offset);
-        if ( highlightersAtOffset.size()==0 ) {
-            return;
-        }
-
-        List<String> msgList = new ArrayList<String>();
-        boolean foundDecisionEvent = false;
-        for (int i = 0; i<highlightersAtOffset.size(); i++) {
-            RangeHighlighter r = highlightersAtOffset.get(i);
-            DecisionEventInfo eventInfo = r.getUserData(ProfilerPanel.DECISION_EVENT_INFO_KEY);
-            String msg;
-            if ( eventInfo!=null ) {
-                // TODO: move decision event stuff to profiler?
-                if ( eventInfo instanceof AmbiguityInfo ) {
-                    msg = "Ambiguous upon alts "+eventInfo.configs.getAlts().toString();
-                }
-                else if ( eventInfo instanceof ContextSensitivityInfo ) {
-                    msg = "Context-sensitive";
-                }
-                else if ( eventInfo instanceof LookaheadEventInfo ) {
-                    int k = eventInfo.stopIndex-eventInfo.startIndex+1;
-                    msg = "Deepest lookahead k="+k;
-                }
-                else if ( eventInfo instanceof PredicateEvalInfo ) {
-                    PredicateEvalInfo evalInfo = (PredicateEvalInfo) eventInfo;
-                    msg = ProfilerPanel.getSemanticContextDisplayString(evalInfo,
-                            previewState,
-                            evalInfo.semctx, evalInfo.predictedAlt,
-                            evalInfo.evalResult);
-                    msg = msg+(!evalInfo.fullCtx ? " (DFA)" : "");
-                }
-                else {
-                    msg = "Unknown decision event: "+eventInfo;
-                }
-                foundDecisionEvent = true;
-            }
-            else {
-                // error tool tips
-                SyntaxError errorUnderCursor = r.getUserData(SYNTAX_ERROR);
-                msg = getErrorDisplayString(errorUnderCursor);
-                if ( msg.length()>MAX_HINT_WIDTH ) {
-                    msg = msg.substring(0, MAX_HINT_WIDTH)+"...";
-                }
-                if ( msg.indexOf('<')>=0 ) {
-                    msg = msg.replaceAll("<", "&lt;");
-                }
-            }
-            msgList.add(msg);
-        }
-        String combinedMsg = Utils.join(msgList.iterator(), "\n");
-        HintManagerImpl hintMgr = (HintManagerImpl) HintManager.getInstance();
-        if ( foundDecisionEvent ) {
-            showDecisionEventToolTip(editor, offset, hintMgr, combinedMsg.toString());
-        }
-        else {
-            showPreviewEditorErrorToolTip(editor, offset, hintMgr, combinedMsg.toString());
-        }
-    }*/
+    public static void showErrorToolTip(Editor editor, int offset, HintManager hintMgr, String msg) {
+        int flags = HintManager.HIDE_BY_ANY_KEY | HintManager.HIDE_BY_TEXT_CHANGE | HintManager.HIDE_BY_SCROLLING;
+        int timeout = 0; // default?
+        hintMgr.showErrorHint(editor, msg, offset, offset + 1, HintManager.ABOVE, flags, timeout);
+    }
 
     public void annotateIssueInEditor(@NotNull VirtualFile file,
                                       @NotNull List<RangeHighlighter> highlighters,
@@ -211,11 +175,13 @@ public class AnalyzeAction extends RESOLVEAction {
         String sourceName = offendingToken.getTokenSource().getSourceName();
         String vFilePath = file.getPath();
         if (vFilePath.equals(sourceName)) { //only want highlights in the doc the user is looking at.
-            highlighters.add(markupModel.addRangeHighlighter(a,
+            RangeHighlighter highlighter = markupModel.addRangeHighlighter(a,
                     b,
                     layer, // layer
                     attr,
-                    HighlighterTargetArea.EXACT_RANGE));
+                    HighlighterTargetArea.EXACT_RANGE);
+            highlighters.add(highlighter);
+            highlighter.putUserData(ISSUE_ANNOTATION, issue);
         }
     }
 

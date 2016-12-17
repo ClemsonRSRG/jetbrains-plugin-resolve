@@ -13,6 +13,7 @@ import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import edu.clemson.resolve.RESOLVECompiler;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
 import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
 import edu.clemson.resolve.jetbrains.verifier.ConditionCollapsiblePanel;
@@ -79,8 +80,9 @@ public class GenerateVCsAction extends RESOLVEAction implements AnAction.Transpa
             successful = ProgressManager.getInstance().run(gen); //, "Generating", canBeCancelled, e.getData(PlatformDataKeys.PROJECT));
         } catch (Exception e1) {
         }
-        if (successful && !editor.isDisposed()) {
-            return gen.getVCOutput();
+        RESOLVECompiler compiler = gen.getCompiler();
+        if (compiler != null && successful && !editor.isDisposed()) {
+            return compiler.;
         }
         return null;
     }

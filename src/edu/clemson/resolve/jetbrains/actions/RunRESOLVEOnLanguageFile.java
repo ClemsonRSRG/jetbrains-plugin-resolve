@@ -50,8 +50,8 @@ public class RunRESOLVEOnLanguageFile extends Task.WithResult<Boolean, Exception
     public String outputDir;
     public boolean forceGeneration;
     private final List<String> args = new ArrayList<>();
-    private VCOutputFile vcOutput = null;
-    private boolean hasParseErrors = false;
+    private RESOLVECompiler compiler;
+
     public List<RESOLVECompilerListener> listeners = new ArrayList<>();
 
     public RunRESOLVEOnLanguageFile(VirtualFile targetFile,
@@ -104,7 +104,7 @@ public class RunRESOLVEOnLanguageFile extends Task.WithResult<Boolean, Exception
         // String sourcePath = ConfigRESOLVEPerLanguageFile.getParentDir(vfile);
 
         LOG.info("args: " + Utils.join(args, " "));
-        RESOLVECompiler compiler = new RESOLVECompiler(args.toArray(new String[args.size()]));
+        this.compiler = new RESOLVECompiler(args.toArray(new String[args.size()]));
         ConsoleView console = RESOLVEPluginController.getInstance(project).getConsole();
         RESOLVEPluginController.getInstance(project).console.clear(); //clear it for the current run
 
@@ -137,22 +137,14 @@ public class RunRESOLVEOnLanguageFile extends Task.WithResult<Boolean, Exception
             console.print(timeStamp + ": resolve " + msg + "\n", ConsoleViewContentType.SYSTEM_OUTPUT);
             defaultListener.hasOutput = true; // show console below
         }
-        //Todo: Eventually make it a list (or map) and allow vcs to come back for any target file (in case this class
-        //is ever used to compile multiple resolve files at once (not sure when, but you never know).
-        if (compiler.commandlineTargets.size() == 1) {
-            vcOutput = compiler.commandlineTargets.get(0).getVCOutput();
-        }
         if (defaultListener.hasOutput) {
             RESOLVEPluginController.showConsoleWindow(project);
-        }
-        if (compiler.commandlineTargets.size() != 0) {
-            this.hasParseErrors = compiler.commandlineTargets.get(0).hasParseErrors;
         }
         return compiler.errMgr.getErrorCount() == 0;
     }
 
-    public boolean hasParseErrors() {
-        return hasParseErrors;
+    public RESOLVECompiler getCompiler() {
+        return compiler
     }
 
     public void addArgs(Map<String, String> argMap) {

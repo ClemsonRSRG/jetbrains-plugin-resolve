@@ -11,8 +11,11 @@ import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDocumentManager;
+import edu.clemson.resolve.RESOLVECompiler;
 import edu.clemson.resolve.jetbrains.RESOLVEFileType;
 import edu.clemson.resolve.jetbrains.sdk.RESOLVESdkService;
+
+import java.util.Map;
 
 abstract class RESOLVEAction extends AnAction implements DumbAware {
 
@@ -47,6 +50,12 @@ abstract class RESOLVEAction extends AnAction implements DumbAware {
             return vfile;
         }
         return null;
+    }
+
+    protected RESOLVECompiler getDefaultCompiler(Map<String, String> args) {
+        RESOLVECompiler = new RESOLVECompiler(args.toArray(new String[args.size()]));
+        ConsoleView console = RESOLVEPluginController.getInstance(project).getConsole();
+        RESOLVEPluginController.getInstance(project).console.clear();
     }
 
     void commitDoc(Project project, VirtualFile file) {
