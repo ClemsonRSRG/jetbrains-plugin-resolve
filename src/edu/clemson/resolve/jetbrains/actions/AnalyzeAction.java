@@ -42,14 +42,17 @@ import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
 import edu.clemson.resolve.misc.Utils;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.tool.ANTLRMessage;
+import org.antlr.v4.tool.ErrorSeverity;
 import org.jetbrains.annotations.NotNull;
 import org.stringtemplate.v4.ST;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 
 public class AnalyzeAction extends RESOLVEAction {
 
@@ -181,21 +184,30 @@ public class AnalyzeAction extends RESOLVEAction {
         hintMgr.showErrorHint(editor, msg, offset, offset + 1, HintManager.ABOVE, flags, timeout);
     }
 
-    public void annotateIssueInEditor(@NotNull VirtualFile file,
-                                      @NotNull List<RangeHighlighter> highlighters,
-                                      @NotNull Editor editor,
-                                      @NotNull Issue issue) {
+    public static void annotateIssueInEditor(@NotNull VirtualFile file,
+                                             @NotNull List<RangeHighlighter> highlighters,
+                                             @NotNull Editor editor,
+                                             @NotNull Issue issue) {
         MarkupModel markupModel = editor.getMarkupModel();  //ref to the current editor's markup model...
         final TextAttributes attr = new TextAttributes();
-        attr.setForegroundColor(JBColor.RED);
-        attr.setEffectColor(JBColor.RED);
-        attr.setEffectType(EffectType.WAVE_UNDERSCORE);
+
         Token offendingToken = (Token) issue.msg.offendingToken;
 
         int layer = 0;
         int a = offendingToken.getStartIndex();
         int b = offendingToken.getStopIndex() + 1;
         if (issue.msg instanceof LanguageSemanticsMessage) {
+            if (issue.msg.getErrorType().severity == ErrorSeverity.ERROR) {
+                attr.setForegroundColor(JBColor.RED);
+                attr.setEffectColor(JBColor.RED);
+                attr.setEffectType(EffectType.WAVE_UNDERSCORE);
+            }
+            else {  //warning (should be yellowish or something)
+                attr.setBackgroundColor(new JBColor(new Color(246, 235, 188),
+                        new Color(246, 235, 188)));
+                //attr.setEffectColor(JBColor.RED);
+                attr.setEffectType(EffectType.BOXED);
+            }
             layer = HighlighterLayer.ERROR;
         }
         String sourceName = offendingToken.getTokenSource().getSourceName();
