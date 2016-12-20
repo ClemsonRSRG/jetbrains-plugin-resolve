@@ -61,29 +61,29 @@ abstract class RESOLVEAction extends AnAction implements DumbAware {
     }
 
     @NotNull
-    protected RESOLVECompiler getDefaultCompiler(@NotNull Map<String, String> argMap) {
+    public static RESOLVECompiler getDefaultCompiler(@NotNull Map<String, String> argMap) {
         return getDefaultCompiler(getArgMapAsList(argMap));
     }
 
     @NotNull
-    protected RESOLVECompiler getDefaultCompiler(@NotNull List<String> args) {
+    public static RESOLVECompiler getDefaultCompiler(@NotNull List<String> args) {
         return new RESOLVECompiler(args.toArray(new String[args.size()]));
     }
 
     @NotNull
-    protected String getTimeStamp() {
+    public static String getTimeStamp() {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
     }
 
     @NotNull
-    protected VirtualFile getContentRoot(@NotNull Project project, @NotNull VirtualFile vfile) {
+    public static VirtualFile getContentRoot(@NotNull Project project, @NotNull VirtualFile vfile) {
         VirtualFile root = ProjectRootManager.getInstance(project).getFileIndex().getContentRootForFile(vfile);
         if (root != null) return root;
         return vfile.getParent();
     }
 
     @NotNull
-    protected List<String> getArgMapAsList(@NotNull Map<String, String> argMap) {
+    public static List<String> getArgMapAsList(@NotNull Map<String, String> argMap) {
         List<String> result = new ArrayList<>();
         for (String option : argMap.keySet()) {
             if (option.length() != 0) result.add(option);
