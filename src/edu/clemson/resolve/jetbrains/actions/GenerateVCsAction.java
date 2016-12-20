@@ -38,28 +38,35 @@ public class GenerateVCsAction extends RESOLVEAction implements AnAction.Transpa
     }
 
     @Override
-    public void actionPerformed(AnActionEvent e) {
-        Project project = e.getData(PlatformDataKeys.PROJECT);
-        if (project == null) {
-            LOGGER.error("actionPerformed (genVCs): no project for " + e);
-            return;
-        }
-        VirtualFile resolveFile = getRESOLVEFileFromEvent(e);
-        LOGGER.info("prove actionPerformed " + (resolveFile == null ? "NONE" : resolveFile));
-        if (resolveFile == null) return;
-        String title = "RESOLVE Prove";
+    public void actionPerformed(AnActionEvent event) {
+        Project project = event.getData(PlatformDataKeys.PROJECT);
+        VirtualFile resolveFile = getRESOLVEFileFromEvent(event);
+        if (project == null || resolveFile == null) return;
 
-        boolean canBeCancelled = true;
         commitDoc(project, resolveFile);
         Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
         if (editor == null) return;
-        VCOutputFile vco = generateVCs(resolveFile, editor, project);
-        //give each action an instance of the prover listener and make Update() print the result as it comes back produce
+
+        Map<String, String> argMap = new LinkedHashMap<>();
+        argMap.put("", resolveFile.getName());
+        argMap.put("-lib", getContentRoot(project, resolveFile).getPath());
+        argMap.put("-vcs", "");
+
+        CompilerIssueListener issueListener = new CompilerIssueListener();
+
+        RESOLVECompiler compiler = AnalyzeAction.setupAndRunCompiler(project, editor, resolveFile, argMap, issueListener);
+        if (compiler.commandlineTargets.get(0).hasParseErrors) return;
+        AnalyzeAction.annotateIssues(editor, resolveFile, compiler, issueListener);
+
+        if (compiler.commandlineTargets.size() == 0) return;
+        VCOutputFile vco = compiler.commandlineTargets.get(0).getVCOutput();
         if (vco == null) return;
+
         RESOLVEPluginController controller = RESOLVEPluginController.getInstance(project);
         VerifierPanel verifierPanel = controller.getVerifierPanel();
-        Collection<VC> x = vco.getFinalVCs();
-        verifierPanel.createVerifierView(x);//TODO: maybe make this take in a list of VCs
+
+        Collection<VC> vcs = vco.getFinalVCs();
+        verifierPanel.createVerifierView(vcs);
         addVCGutterIcons(vco, editor, project);
         RESOLVEPluginController.showVerifierWindow(project);
     }
@@ -115,6 +122,9 @@ public class GenerateVCsAction extends RESOLVEAction implements AnAction.Transpa
             VerificationConditionSelectorPanel selector = verifierPanel.getVcSelectorPanel();
             ConditionCollapsiblePanel details = selector.vcTabs.get(Integer.parseInt(vcNum));
             details.setExpanded(true);
+
+            //TODO: Make it scroll to the vc selected! This is a top priority usability improvement.
+            //vcselector.scrollRectToVisible(details.get);
         }
     }
 
@@ -183,7 +193,7 @@ public class GenerateVCsAction extends RESOLVEAction implements AnAction.Transpa
                 }
                 @Override
                 public void documentChanged(DocumentEvent event) {
-                    //remove all highlighters
+                    //remove vc-related highlighters
                     for (RangeHighlighter h : vcRelatedHighlighters) {
                         markup.removeHighlighter(h);
                     }

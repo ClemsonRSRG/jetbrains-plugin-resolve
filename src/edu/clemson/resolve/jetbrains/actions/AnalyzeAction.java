@@ -47,9 +47,6 @@ public class AnalyzeAction extends RESOLVEAction {
         e.getPresentation().setIcon(RESOLVEIcons.CHECKMARK);
     }
 
-    //TODO: Maybe factor out the annotation code in this method eventually to a static method that
-    //can be invoked from other actions... For example, I would like to somehow run this same analyze
-    //action when users want to gen vcs (for example).
     @Override
     public void actionPerformed(AnActionEvent event) {
         Project project = event.getData(PlatformDataKeys.PROJECT);
@@ -63,7 +60,7 @@ public class AnalyzeAction extends RESOLVEAction {
         Map<String, String> argMap = new LinkedHashMap<>();
         argMap.put("", resolveFile.getName());
         argMap.put("-lib", getContentRoot(project, resolveFile).getPath());
-        AnnotatorToolListener issueListener = new AnnotatorToolListener();
+        CompilerIssueListener issueListener = new CompilerIssueListener();
 
         RESOLVECompiler compiler = setupAndRunCompiler(project, editor, resolveFile, argMap, issueListener);
         if (compiler.commandlineTargets.get(0).hasParseErrors) return;
@@ -128,23 +125,20 @@ public class AnalyzeAction extends RESOLVEAction {
     public static void annotateIssues(Editor editor,
                                       VirtualFile targetFile,
                                       RESOLVECompiler compiler,
-                                      AnnotatorToolListener issueListener) {
+                                      CompilerIssueListener issueListener) {
         editor.getMarkupModel().removeAllHighlighters();    //first
-        List<RangeHighlighter> issueRelatedHighlighters = new ArrayList<>();
-        for (Issue issue : issueListener.issues) {
-            annotateIssueInEditor(targetFile, issueRelatedHighlighters, editor, issue);
-        }
+
         EditorMouseMotionListener mouseListener = new EditorMouseMotionListener() {
             @Override
             public void mouseMoved(EditorMouseEvent e) {
                 int offset = MyActionUtils.getMouseOffset(e.getMouseEvent(), editor);
                 if (offset >= editor.getDocument().getTextLength()) return;
-                List<RangeHighlighter> highlightersAtOffset =
-                        MyActionUtils.getRangeHighlightersAtOffset(editor, issueRelatedHighlighters, offset);
-                if (highlightersAtOffset.size() == 0) return;
+                List<RangeHighlighter> issueHighlightersAtOffset =
+                        MyActionUtils.getRangeHighlightersAtOffset(editor, HighlighterLayer.ERROR, offset);
+                if (issueHighlightersAtOffset.size() == 0) return;
                 List<String> msgs = new ArrayList<String>();
 
-                for (RangeHighlighter highlighter : highlightersAtOffset) {
+                for (RangeHighlighter highlighter : issueHighlightersAtOffset) {
                     Issue errorUnderCursor = highlighter.getUserData(ISSUE_ANNOTATION);
                     if (errorUnderCursor == null || errorUnderCursor.msg == null) continue;
                     String errorMsg = getIssueDisplayString(compiler, errorUnderCursor);
@@ -153,11 +147,15 @@ public class AnalyzeAction extends RESOLVEAction {
                 String combinedErrorMsg = Utils.join(msgs, "\n");
                 showErrorToolTip(editor, offset, HintManager.getInstance(), combinedErrorMsg, e);
             }
-
             @Override
             public void mouseDragged(EditorMouseEvent e) {
             }
         };
+        List<RangeHighlighter> issueRelatedHighlighters = new ArrayList<>();
+        for (Issue issue : issueListener.issues) {
+            annotateIssueInEditor(targetFile, issueRelatedHighlighters, editor, issue);
+        }
+
         editor.addEditorMouseMotionListener(mouseListener);
         editor.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -168,12 +166,12 @@ public class AnalyzeAction extends RESOLVEAction {
             public void documentChanged(DocumentEvent event) {
                 //remove all current issue related highlighters
                 MarkupModel markupModel = editor.getMarkupModel();
-
                 for (RangeHighlighter h : issueRelatedHighlighters) {
                     int eventOffset = event.getOffset();
                     int highlightersOffset = h.getStartOffset();
-                    if (eventOffset > h.getStartOffset() && eventOffset < h.getEndOffset()) {
+                    if (eventOffset >= h.getStartOffset() && eventOffset < h.getEndOffset()) {
                         h.getTextAttributes().setEffectColor(JBColor.ORANGE);
+                       // editor.getMarkupModel().removeHighlighter(h);
                     }
                 }
             }
@@ -235,24 +233,6 @@ public class AnalyzeAction extends RESOLVEAction {
         String annotation;
         RESOLVEMessage msg;
         public Issue(RESOLVEMessage msg) { this.msg = msg; }
-    }
-
-    public static class AnnotatorToolListener implements RESOLVECompilerListener {
-        public final List<Issue> issues = new ArrayList<>();
-
-        @Override
-        public void info(String s) {
-        }
-
-        @Override
-        public void error(RESOLVEMessage resolveMessage) {
-            issues.add(new Issue(resolveMessage));
-        }
-
-        @Override
-        public void warning(RESOLVEMessage resolveMessage) {
-            issues.add(new Issue(resolveMessage));
-        }
     }
 
 }

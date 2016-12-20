@@ -2,6 +2,7 @@ package edu.clemson.resolve.jetbrains.actions;
 
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.LogicalPosition;
+import com.intellij.openapi.editor.markup.HighlighterLayer;
 import com.intellij.openapi.editor.markup.MarkupModel;
 import com.intellij.openapi.editor.markup.RangeHighlighter;
 import org.jetbrains.annotations.NotNull;
@@ -22,16 +23,17 @@ public class MyActionUtils {
 
     @NotNull
     public static List<RangeHighlighter> getRangeHighlightersAtOffset(@NotNull Editor editor,
-                                                                      @NotNull List<RangeHighlighter> activeHighlighters,
+                                                                      int layer,
                                                                       int offset) {
         MarkupModel markupModel = editor.getMarkupModel();
         // collect all highlighters and combine to make a single tool tip
         java.util.List<RangeHighlighter> highlightersAtOffset = new ArrayList<RangeHighlighter>();
-        for (RangeHighlighter r : activeHighlighters) {
+        RangeHighlighter[] highlighters = markupModel.getAllHighlighters();
+        for (RangeHighlighter r : highlighters) {
             int a = r.getStartOffset();
             int b = r.getEndOffset();
 //			System.out.printf("#%d: %d..%d %s\n", i, a, b, r.toString());
-            if (offset >= a && offset < b) { // cursor is over some kind of highlighting
+            if (offset >= a && offset < b && r.getLayer() == layer) { // cursor is over some kind of highlighting
                 highlightersAtOffset.add(r);
             }
         }
