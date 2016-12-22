@@ -40,7 +40,7 @@ NUM_INT = "0" | ([1-9] {INT_DIGIT}*)
 
 IDENT = {LETTER} ({LETTER} | {DIGIT} )*
 
-MSYM = ({U_ARROW} | {U_LOGIC} | {U_LETTER} | {U_OPERATOR}  | [\u0370-\u03FF])
+MSYM = ({U_ARROW} | {U_LOGIC} | {U_LETTER} | {U_OPERATOR}  | {U_RELATION} | [\u0370-\u03FF])
 
 U_ARROW     = ("←"|"⇐"|"⟵"|"⟸"|"→"|"⇒"|"⟶"|"⟹"|"↔"|"⇔"|"⟷"|
                "⟺"|"↩"|"↪"|"↽"|"⇁"|"↼"|"⇀"|"⇌"|"↝"|"⇃"|"⇂"|"↿"|"↾"|
@@ -53,7 +53,9 @@ U_OPERATOR  = ("∩"|"⋂"|"∪"|"⋃"|"⊔"|"⨆"|"⊓"|"⨅"|"∝"|"⊎"|"⨄"
                "⋅"|"⋆"|"∙"|"∘"|"⊕"|"⨁"|"⊗"|"⨂"|"⊙"|"⨀"|"⊖"|"⊘"|"⟕"|"⟖"|"⟗"|
                "∑"|"∏"|"⨿"|"∐"|"⋈"|"⋉"|"⋊"|"⊠"|"⊡"|"∎"|"⨪")
 
-
+U_RELATION  = ("⊢"|"⊨"|"⊩"|"⊫"|"⊣"|"≤"|"≥"|"≪"|"≫"|"≲"|"≳"|"⪅"|"⪆"|"∈"|
+               "∉"|"⊂"|"⊃"|"⊆"|"⊇"|"⊏"|"⊐"|"⊑"|"⊒"|"∼"|"≐"|"≃"|"≈"|"≍"|"≠"
+               "≅"|"≡"|"≼"|"≽"|"⊲"|"⊳"|"⊴"|"⊵"|"△"|"≜")
 
 //if we allow '|' in here, then math outfix exprs need to be | |x| o b| (space between the |x| and the leftmost
 SYM = ("!"|"*"|"+"|"-"|"/"|"~"|"<"|"="|">")
@@ -75,7 +77,6 @@ ESCAPES = [abfnrtv]
 "'" \n "'"                              { return CHAR; }
 "'\\" [abfnrtv\\\'] "'"                 { return CHAR; }
 
-"`" [^`]* "`"?                          { return RAW_STRING; }
 "#"                                     { return POUND; }
 "..."                                   { return TRIPLE_DOT; }
 "."                                     { return DOT; }
@@ -95,7 +96,6 @@ ESCAPES = [abfnrtv]
 "::"                                    { return COLON_COLON; }
 ";"                                     { return SEMICOLON; }
 ","                                     { return COMMA; }
-
 
 // Operators
 

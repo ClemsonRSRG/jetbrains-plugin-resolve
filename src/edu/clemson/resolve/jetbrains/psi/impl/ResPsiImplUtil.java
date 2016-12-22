@@ -43,11 +43,6 @@ public class ResPsiImplUtil {
         return moduleIdentifierSpec.getModuleLibraryIdentifier();
     }
 
-    @Nullable
-    public static PsiElement getAlias(@NotNull ResModuleIdentifierSpec moduleIdentifierSpec) {
-        return moduleIdentifierSpec.getIdentifier();
-    }
-
     @NotNull
     public static TextRange getModuleIdentiferTextRange(@NotNull ResModuleIdentifier moduleIdentifier) {
         String text = moduleIdentifier.getText();
@@ -99,10 +94,10 @@ public class ResPsiImplUtil {
         return moduleIdentifierSpec.getModuleIdentifier().getText();
     }
 
-    @NotNull
-    public static String getIdentifier(@NotNull ResModuleIdentifierSpec o) {
-        return PsiTreeUtil.findChildOfType(o, ResMathSymbolName.class);
-        return moduleIdentifierSpec.getModuleIdentifier().getText();
+    //TODO: This will come up when aliases get introduced
+    @Nullable
+    public static PsiElement getIdentifier(@NotNull ResModuleIdentifierSpec o) {
+        return null;
     }
 
     @NotNull

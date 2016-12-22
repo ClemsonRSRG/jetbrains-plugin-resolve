@@ -114,6 +114,7 @@ public interface ResTypes {
   IElementType WHILE_STATEMENT = new ResCompositeElementType("WHILE_STATEMENT");
 
   IElementType ALTERS = new ResTokenType("alters");
+  IElementType AS = new ResTokenType("as");
   IElementType BAR = new ResTokenType("|");
   IElementType BY = new ResTokenType("by");
   IElementType CART_PROD = new ResTokenType("Cart_Prod");
@@ -150,8 +151,7 @@ public interface ResTypes {
   IElementType EQUALS = new ResTokenType("=");
   IElementType EVALUATES = new ResTokenType("evaluates");
   IElementType EXEMPLAR = new ResTokenType("exemplar");
-  IElementType EXISTS = new ResTokenType("Exists");
-  IElementType EXISTS1 = new ResTokenType("∃");
+  IElementType EXISTS = new ResTokenType("∃");
   IElementType EXTENDED = new ResTokenType("extended");
   IElementType EXTENDED_BY = new ResTokenType("extended_by");
   IElementType EXTENSION = new ResTokenType("Extension");
@@ -161,8 +161,7 @@ public interface ResTypes {
   IElementType FAMILY = new ResTokenType("family");
   IElementType FAMILY_TYPE = new ResTokenType("Type");
   IElementType FOR = new ResTokenType("for");
-  IElementType FORALL = new ResTokenType("Forall");
-  IElementType FORALL1 = new ResTokenType("∀");
+  IElementType FORALL = new ResTokenType("∀");
   IElementType FROM = new ResTokenType("from");
   IElementType IDENTIFIER = new ResTokenType("identifier");
   IElementType IF = new ResTokenType("if");

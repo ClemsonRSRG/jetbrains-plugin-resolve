@@ -87,10 +87,8 @@
         MAINTAINING             = 'maintaining'
         DECREASING              = 'decreasing'
         OTHERWISE               = 'otherwise'
-        FORALL1                 = '∀'
-        FORALL                  = 'Forall'
-        EXISTS                  = 'Exists'
-        EXISTS1                 = '∃'
+        FORALL                  = '∀'
+        EXISTS                  = '∃'
         EXTERNALLY              = 'externally'
         REALIZED                = 'realized'
         INITIALIZATION          = 'initialization'
@@ -452,7 +450,7 @@ NoticeClause ::= 'Notice' MathExp ';' {pin=1}
 // mathematical expressions
 
 MathAssertionExp ::= MathQuantifiedExp|MathExp
-MathQuantifiedExp ::= ('∃'|'∀'|'Exists'|'Forall') MathVarDeclGroup ',' MathAssertionExp {pin=1}
+MathQuantifiedExp ::= ('∃'|'∀') MathVarDeclGroup ',' MathAssertionExp {pin=1}
 
 MathExp ::=
           /*MathEqualsInfixApplyExp |*/
