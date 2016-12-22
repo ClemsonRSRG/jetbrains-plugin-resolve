@@ -41,7 +41,9 @@ NUM_INT = "0" | ([1-9] {INT_DIGIT}*)
 IDENT = {LETTER} ({LETTER} | {DIGIT} )*
 
 MSYM = ([\u2190-\u21FF] | [\u2100-\u214F] | [\u2200-\u22FF] | [\u27C0-\u27EF] | [\u27F0-\u27FF] | [\u2A00-\u2AFF] | [\u2300-\u23BF] | [\u0370-\u03FF])
-SYM = ("!"|"*"|"+"|"-"|"/"|"~"|"<"|"="|">")+ //if we allow '|' in here then math outfix exprs need to be | |x| o b| (space between the |x| and the leftmost
+
+//if we allow '|' in here, then math outfix exprs need to be | |x| o b| (space between the |x| and the leftmost
+SYM = ("!"|"*"|"+"|"-"|"/"|"~"|"<"|"="|">")+
 
 STR =      "\""
 ESCAPES = [abfnrtv]
@@ -100,6 +102,7 @@ ESCAPES = [abfnrtv]
 
 "λ"                                     { return LAMBDA; }
 "="                                     { return EQUALS; }
+"≠"                                     { return NEQUALS; }
 ":="                                    { return COLON_EQUALS; }
 ":=:"                                   { return COLON_EQUALS_COLON; }
 

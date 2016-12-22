@@ -50,6 +50,7 @@
         TRUE                    = 'true'
         FALSE                   = 'false'
         EQUALS                  = '='
+        NEQUALS                 = '≠'
         COLON_EQUALS            = ':='
         COLON_EQUALS_COLON      = ':=:'
 
@@ -171,7 +172,6 @@ ModuleDecl ::=
     | ConceptModuleDecl
     | ImplModuleDecl
     | FacilityModuleDecl
-    | ShortFacilityModuleDecl
 
 PrecisModuleDecl ::= 'Precis' identifier ';'
 UsesList?
@@ -282,7 +282,7 @@ TypeModelDecl ::= 'Type' 'family' identifier TypeModelPortion ';'
 ExemplarDecl ::= 'exemplar' identifier ';' {pin=2 methods=[getResMathMetaTypeExpInner]}
 private TypeModelPortion ::= 'is' 'modeled' 'by' MathExp {pin=4}
 
-TypeReprDecl ::= 'Type' identifier '=' (RecordType|Type) ';'
+TypeReprDecl ::= 'Type' identifier 'is' (RecordType|Type) ';'
 ConventionsClause?
 CorrespondenceClause?
 TypeImplInit?
@@ -385,7 +385,7 @@ NestedExp ::= '(' Exp ')'   {pin=1 extends=Exp}
 SelectorExp ::= Exp '.' Exp {extends=BinaryExp}
 InfixExp ::= Exp ProgSymbolName Exp {extends=BinaryExp}
 CallExp ::= NameExp ArgumentList {extends=Exp}
-ProgSymbolName ::= (identifier|symbol|'=')
+ProgSymbolName ::= (identifier|symbol|)
 
 NameExp ::= ReferenceExp QualifiedReferenceExp? {elementType=ReferenceExp}
 left QualifiedReferenceExp ::= '::' identifier {elementType=ReferenceExp}
@@ -448,6 +448,7 @@ MaintainingClause ::= 'maintaining' MathAssertionExp ';' {pin=1}
 DecreasingClause ::= 'decreasing' MathAssertionExp ';' {pin=1}
 EntailsClause ::= 'which_entails' MathExp {pin=1}
 NoticeClause ::= 'Notice' MathExp ';' {pin=1}
+
 // mathematical expressions
 
 MathAssertionExp ::= MathQuantifiedExp|MathExp
@@ -457,24 +458,23 @@ MathExp ::=
           MathEqualsInfixApplyExp
         | MathInfixApplyExp
         | MathPrefixApplyExp
-        | MathNonStdApplyExp
+        | MathMixfixApplyExp
         | MathNestedExp
         | MathPrimeExp {methods=[getResMathMetaTypeExp]}
 
 MathNestedExp ::= '(' MathAssertionExp ')' {pin=1}
 MathSelectorExp ::= MathExp '.' MathExp
 MathPrefixApplyExp ::= MathExp MathFunctionAppList
-MathNonStdApplyExp ::= MathExp MathBracketName MathNonStdAppList MathBracketName
+MathMixfixApplyExp ::= MathExp MathBracketName MathNonStdAppList MathBracketName
 MathOutfixApplyExp ::= MathBracketName MathExp MathBracketName
 MathInfixApplyExp ::= MathExp MathOpSymbolName MathExp {pin=2}
-MathEqualsInfixApplyExp ::= MathExp '=' MathExp
+MathEqualsInfixApplyExp ::= MathExp ('='|'≠') MathExp
 MathClssftnAssrtExp ::= MathExp ':' MathExp
 MathIncomingExp ::= '#' MathSymbolExp {pin=1}
 
 MathFunctionAppList ::= '(' MathArgList ')'
 
-private MathNonStdAppList ::= MathExp (',' MathExp)* {pin=1/*recoverWhile=NonStdAppRec*/}
-
+private MathNonStdAppList ::= MathExp (',' MathExp)* {pin=1}
 private MathArgList ::= MathExp (',' MathExp)* {pin=1 recoverWhile=ParamListRec}
 
 private MathPrimeExp ::= MathIncomingExp | MathSymbolExp | MathSelectorExp | MathLambdaExp
@@ -486,8 +486,8 @@ private MathPrimeExp ::= MathIncomingExp | MathSymbolExp | MathSelectorExp | Mat
         | MathSetRestrictionExp
 
 private MathOpSymbolName ::= MathSymbolExp
-MathBracketName ::= ('∥'|'⟨'|'⟩'|'⌈'|'⌉'|'⎝'|'⎠'|'['|']'|'|') {elementType=MathSymbolName}
-MathSymbolName ::= (identifier|int|symbol|math_symbol|true|false|equals)
+MathBracketName ::= ('⟨'|'⟩'|'⌈'|'⌉'|'⎝'|'⎠'|'∥'|'['|']'|'|') {elementType=MathSymbolName}
+MathSymbolName  ::= (identifier|int|symbol|math_symbol|true|false)
 
 MathSymbolExp ::=  MathReferenceExp MathQualifiedReferenceExp? {elementType=MathReferenceExp}
 left MathQualifiedReferenceExp ::= '::' MathSymbolName {elementType=MathReferenceExp}

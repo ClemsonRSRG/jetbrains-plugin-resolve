@@ -299,14 +299,12 @@ public class MathSymbolPanel extends JBPanel {
 
         category.add(new DefaultMutableTreeNode(new SymbolInfo("¬", "not")));
         //category.add(new DefaultMutableTreeNode(new SymbolInfo("□", "box")));
-        //category.add(new DefaultMutableTreeNode(new SymbolInfo("◇", "diamond")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("◇", "diamond")));
         e.add(category);
     }
 
     private void addPunctuationSection(@NotNull DefaultMutableTreeNode e) {
-        DefaultMutableTreeNode category = new DefaultMutableTreeNode("Punctuation");
-
-        category.add(new DefaultMutableTreeNode(new SymbolInfo("∷", "coloncolon")));
+        DefaultMutableTreeNode category = new DefaultMutableTreeNode("Brackets and Punctuation");
 
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⟨", "langle")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("⟩", "rangle")));
