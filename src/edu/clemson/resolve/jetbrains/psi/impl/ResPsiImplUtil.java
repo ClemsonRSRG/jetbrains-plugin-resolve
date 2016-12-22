@@ -96,8 +96,13 @@ public class ResPsiImplUtil {
 
     @NotNull
     public static String getName(@NotNull ResModuleIdentifierSpec moduleIdentifierSpec) {
-        return moduleIdentifierSpec.getAlias() != null ? moduleIdentifierSpec.getAlias().getText() :
-                moduleIdentifierSpec.getModuleIdentifier().getText();
+        return moduleIdentifierSpec.getModuleIdentifier().getText();
+    }
+
+    @NotNull
+    public static String getIdentifier(@NotNull ResModuleIdentifierSpec o) {
+        return PsiTreeUtil.findChildOfType(o, ResMathSymbolName.class);
+        return moduleIdentifierSpec.getModuleIdentifier().getText();
     }
 
     @NotNull

@@ -15,9 +15,10 @@ import static edu.clemson.resolve.jetbrains.RESOLVEParserDefinition.*;
   }
 %}
 
-%unicode
 %class _ResLexer
 %implements FlexLexer, ResTypes
+%unicode
+
 %function advance
 %type IElementType
 
@@ -29,18 +30,17 @@ NL = \R             //newline
 WS = [ \t\f]        //whitespaces
 
 LINE_COMMENT = "//" [^\r\n]*
+MULTILINE_COMMENT = "/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")?
 
 LETTER = [:letter:] | "_"
 DIGIT =  [:digit:]
 
 INT_DIGIT = [0-9]
-//TODO: Octal & hex..
-
 NUM_INT = "0" | ([1-9] {INT_DIGIT}*)
 
 IDENT = {LETTER} ({LETTER} | {DIGIT} )*
 
-MSYM = ({U_ARROW} | {U_LOGIC} | {U_LETTER} | {U_OPERATOR} | {U_RELATION} | [\u0370-\u03FF])
+MSYM = ({U_ARROW} | {U_LOGIC} | {U_LETTER} | {U_OPERATOR}  | [\u0370-\u03FF])
 
 U_ARROW     = ("←"|"⇐"|"⟵"|"⟸"|"→"|"⇒"|"⟶"|"⟹"|"↔"|"⇔"|"⟷"|
                "⟺"|"↩"|"↪"|"↽"|"⇁"|"↼"|"⇀"|"⇌"|"↝"|"⇃"|"⇂"|"↿"|"↾"|
@@ -53,13 +53,12 @@ U_OPERATOR  = ("∩"|"⋂"|"∪"|"⋃"|"⊔"|"⨆"|"⊓"|"⨅"|"∝"|"⊎"|"⨄"
                "⋅"|"⋆"|"∙"|"∘"|"⊕"|"⨁"|"⊗"|"⨂"|"⊙"|"⨀"|"⊖"|"⊘"|"⟕"|"⟖"|"⟗"|
                "∑"|"∏"|"⨿"|"∐"|"⋈"|"⋉"|"⋊"|"⊠"|"⊡"|"∎"|"⨪")
 
-U_RELATION  = ("⊢"|"⊨"|"⊩"|"⊫"|"⊣"|"≤"|"≥"|"≪"|"≫"|"≲"|"≳"|"⪅"|"⪆"|"∈"|
-               "∉"|"⊂"|"⊃"|"⊆"|"⊇"|"⊏"|"⊐"|"⊑"|"⊒"|"∼"|"≐"|"≃"|"≈"|"≍"|'≠'|
-               "≅"|"≡"|"≼"|"≽"|"⊲"|"⊳"|"⊴"|"⊵"|"△"|"≜")
+
 
 //if we allow '|' in here, then math outfix exprs need to be | |x| o b| (space between the |x| and the leftmost
 SYM = ("!"|"*"|"+"|"-"|"/"|"~"|"<"|"="|">")
 STR =      "\""
+STRING = {STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}?
 ESCAPES = [abfnrtv]
 
 %%
@@ -68,38 +67,25 @@ ESCAPES = [abfnrtv]
 {WS}                                    { return WS; }
 {NL}+                                   { return NLS; }
 {LINE_COMMENT}                          { return LINE_COMMENT; }
-"/*" ( ([^"*"]|[\r\n])* ("*"+ [^"*""/"] )? )* ("*" | "*"+"/")? { return MULTILINE_COMMENT; }
+{MULTILINE_COMMENT}                     { return MULTILINE_COMMENT; }
+{STRING}                                { return STRING; }
 
-// Punctuation
+"'\\'"                                  { return BAD_CHARACTER; }
+"'" [^\\] "'"                           { return CHAR; }
+"'" \n "'"                              { return CHAR; }
+"'\\" [abfnrtv\\\'] "'"                 { return CHAR; }
 
-//TODO: Add new 'prime' symbol
+"`" [^`]* "`"?                          { return RAW_STRING; }
 "#"                                     { return POUND; }
 "..."                                   { return TRIPLE_DOT; }
 "."                                     { return DOT; }
 
-"'" [^\\] "'"                           { return CHAR; }
-"'" \n "'"                              { return CHAR; }
-"'\\" [abfnrtv\\\'] "'"                 { return CHAR; }
-"'\\'"                                  { return BAD_CHARACTER; }
-
-{STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}?
-                                        { return STRING; }
 // brackets & braces
 
 "{{"                                    { return DBL_LBRACE; }
 "{"                                     { return LBRACE; }
 "}"                                     { return RBRACE; }
 "}}"                                    { return DBL_RBRACE; }
-
-"∥"                                      { return DBL_BAR; }
-"⟨"                                     { return LANGLE; }
-"⟩"                                     { return RANGLE; }
-"⌈"                                     { return LCEIL; }
-"⌉"                                     { return RCEIL; }
-"⎝"                                     { return LCUP; }
-"⎠"                                     { return RCUP; }
-"["                                     { return LBRACK; }
-"]"                                     { return RBRACK; }
 
 "′"                                     { return PRIME; }
 "|"                                     { return BAR; }
@@ -109,8 +95,7 @@ ESCAPES = [abfnrtv]
 "::"                                    { return COLON_COLON; }
 ";"                                     { return SEMICOLON; }
 ","                                     { return COMMA; }
-"(i.)"                                  { return IND_BASE; }
-"(ii.)"                                 { return IND_HYPO; }
+
 
 // Operators
 
@@ -120,17 +105,18 @@ ESCAPES = [abfnrtv]
 ":="                                    { return COLON_EQUALS; }
 ":=:"                                   { return COLON_EQUALS_COLON; }
 
+"∃"                                     { return EXISTS; }
+"∀"                                     { return FORALL; }
+
 // Keywords
 
-"as"                                    { return AS; }
 "by"                                    { return BY; }
 "Cart_Prod"                             { return CART_PROD; }
 "Categorical"                           { return CATEGORICAL; }
 "changing"                              { return CHANGING; }
 "Chainable"                             { return CHAINABLE; }
-"Classification"                        { return CLASSIFICATION; }
 "Concept"                               { return CONCEPT;  }
-("constraints"|"Constraints")           { return CONSTRAINTS; }
+"constraints"                           { return CONSTRAINTS; }
 "conventions"                           { return CONVENTIONS; }
 "Corollary"                             { return COROLLARY; }
 "correspondence"                        { return CORRESPONDENCE; }
@@ -141,19 +127,15 @@ ESCAPES = [abfnrtv]
 "else"                                  { return ELSE; }
 "Extension"                             { return EXTENSION; }
 "Enhancement"                           { return ENHANCEMENT; }
-"extended_by"                           { return EXTENDED_BY; }
-"extended"                              { return EXTENDED; }
+"enhanced"                              { return ENHANCED; }
 "end"                                   { return END;  }
 "ensures"                               { return ENSURES; }
 "exemplar"                              { return EXEMPLAR; }
-"Exists"                                { return EXISTS; }
-"∃"                                     { return EXISTS; }
+
 "externally"                            { return EXTERNALLY; }
 "Facility"                              { return FACILITY;  }
 "false"                                 { return FALSE; }
 "family"                                { return FAMILY; }
-"Forall"                                { return FORALL; }
-"∀"                                     { return FORALL; }
 "for"                                   { return FOR; }
 "from"                                  { return FROM; }
 "if"                                    { return IF; }
@@ -164,7 +146,6 @@ ESCAPES = [abfnrtv]
 "Implicit"                              { return IMPLICIT; }
 "initialization"                        { return INITIALIZATION; }
 "Inductive"                             { return INDUCTIVE; }
-"lambda"                                { return LAMBDA; }
 "maintaining"                           { return MAINTAINING; }
 "modeled"                               { return MODELED; }
 "Notice"                                { return NOTICE; }
@@ -184,7 +165,6 @@ ESCAPES = [abfnrtv]
 "uses"                                  { return USES; }
 "Var"                                   { return VAR; }
 "While"                                 { return WHILE; }
-"with"                                  { return WITH; }
 "which_entails"                         { return WHICH_ENTAILS; }
 
 // Parameter modes

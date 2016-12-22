@@ -49,6 +49,8 @@
         IND_HYPO                = '(ii.)'
         TRUE                    = 'true'
         FALSE                   = 'false'
+
+        LAMBDA                  = 'λ'
         EQUALS                  = '='
         NEQUALS                 = '≠'
         COLON_EQUALS            = ':='
@@ -72,6 +74,7 @@
         CORRESPONDENCE          = 'correspondence'
         CLASSIFICATION          = 'Classification'
         ENHANCEMENT             = 'Enhancement'
+        ENHANCED                = 'enhanced'
         EXTENSION               = 'Extension'
         END                     = 'end'
         ELSE                    = 'else'
@@ -96,8 +99,6 @@
         IMPLICIT                = 'Implicit'
         THEOREM                 = 'Theorem'
         COROLLARY               = 'Corollary'
-        LAMBDA                  = 'lambda'
-        LAMBDA1                 = 'λ'
         FAMILY_TYPE             = 'Type'
         PARAM_TYPE              = 'type'
         FAMILY                  = 'family'
@@ -115,7 +116,6 @@
         BY                      = 'by'
         THEN                    = 'then'
         WHILE                   = 'While'
-        WITH                    = 'with'
         NOTICE                  = 'Notice'
         DO                      = 'do'
         OF                      = 'of'
@@ -136,6 +136,7 @@
         //disregard them otherwise
         space                   = "regexp:\s+"
         identifier              = 'regexp:\p{Alpha}\w*'
+        raw_string           = 'raw_string'
     ]
 
     implements("Math.*DefnDecl")="edu.clemson.resolve.jetbrains.psi.ResMathDefnDecl"
@@ -179,7 +180,7 @@ PrecisBlock
 'end' identifier ';' {pin(".*")=2}
 
 PrecisExtensionModuleDecl ::= 'Extension' identifier 'for'
-ReferenceExp ('with' ReferenceExp)? ';'
+ReferenceExp ';'
 UsesList?
 PrecisBlock
 'end' identifier ';' {pin(".*")=2}
@@ -218,10 +219,9 @@ private UsesSpecs ::= ModuleIdentifierSpec (',' ModuleIdentifierSpec)* {pin(".*"
 //there was an issue where qualifiers on math syms in say, global requires clauses, would resolve to a
 //ModuleIdentifierSpec during the delegate's "treeWalkUp" phase -- leaving us with a ModuleIdentifierSpec, not a file..
 //We don't want to resolve these until we're good and ready (i.e.: in {@link ResReference#processUsesImports})
-ModuleIdentifierSpec ::= ModuleIdentifier [FromClause] [asClause] {pin=1 methods=[getFromLibraryIdentifier getAlias getName shouldGoDeeper]}
+ModuleIdentifierSpec ::= ModuleIdentifier [FromClause] {pin=1 methods=[getFromLibraryIdentifier getName getIdentifier shouldGoDeeper]}
 
 private FromClause ::= 'from' ModuleLibraryIdentifier {pin=1}
-private asClause ::= 'as' identifier {pin=1}
 
 ModuleIdentifier ::= identifier {pin=1 methods=[getReferences getModuleIdentiferTextRange resolve]}
 ModuleLibraryIdentifier ::= identifier ('.' identifier)* {pin(".*")=1 methods=[getReferences getModuleLibraryIdentiferTextRange resolve] }
@@ -333,7 +333,7 @@ ExtensionList? ';' {pin=2 methods=[resolveSpecification resolveImplementation]}
 private ExtensionList ::= (ExtensionPairing)* {recoverWhile=ExtensionListRec}
 private ExtensionListRec ::= !(';')
 
-ExtensionPairing ::= 'extended' 'by' ModuleIdentifier ModuleSpecArgList? [FromClause] ('externally')?
+ExtensionPairing ::= 'enhanced' 'by' ModuleIdentifier ModuleSpecArgList? [FromClause] ('externally')?
 'realized' 'by' ModuleIdentifier ModuleRealizArgList? [FromClause]
 {pin=1 methods=[resolveSpecification resolveImplementation]}
 
@@ -385,7 +385,7 @@ NestedExp ::= '(' Exp ')'   {pin=1 extends=Exp}
 SelectorExp ::= Exp '.' Exp {extends=BinaryExp}
 InfixExp ::= Exp ProgSymbolName Exp {extends=BinaryExp}
 CallExp ::= NameExp ArgumentList {extends=Exp}
-ProgSymbolName ::= (identifier|symbol|)
+ProgSymbolName ::= (identifier|symbol)
 
 NameExp ::= ReferenceExp QualifiedReferenceExp? {elementType=ReferenceExp}
 left QualifiedReferenceExp ::= '::' identifier {elementType=ReferenceExp}
@@ -455,8 +455,8 @@ MathAssertionExp ::= MathQuantifiedExp|MathExp
 MathQuantifiedExp ::= ('∃'|'∀'|'Exists'|'Forall') MathVarDeclGroup ',' MathAssertionExp {pin=1}
 
 MathExp ::=
-          MathEqualsInfixApplyExp
-        | MathInfixApplyExp
+          /*MathEqualsInfixApplyExp |*/
+          MathInfixApplyExp
         | MathPrefixApplyExp
         | MathMixfixApplyExp
         | MathNestedExp
@@ -468,7 +468,7 @@ MathPrefixApplyExp ::= MathExp MathFunctionAppList
 MathMixfixApplyExp ::= MathExp MathBracketName MathNonStdAppList MathBracketName
 MathOutfixApplyExp ::= MathBracketName MathExp MathBracketName
 MathInfixApplyExp ::= MathExp MathOpSymbolName MathExp {pin=2}
-MathEqualsInfixApplyExp ::= MathExp ('='|'≠') MathExp
+//MathEqualsInfixApplyExp ::= MathExp ('='|'≠') MathExp
 MathClssftnAssrtExp ::= MathExp ':' MathExp
 MathIncomingExp ::= '#' MathSymbolExp {pin=1}
 
@@ -495,7 +495,7 @@ MathReferenceExp ::= MathSymbolName {methods=[getReference getQualifier getIdent
 
 MathCartProdExp ::= 'Cart_Prod' ResMathCartVarGroup+  'end' {pin=1}
 private ResMathCartVarGroup ::= MathVarDeclGroup ';' {pin=1}
-MathLambdaExp ::= (lambda|'λ') MathVarDecl ','  MathExp {pin=1}
+MathLambdaExp ::= 'λ' MathVarDecl ','  MathExp {pin=1}
 MathAlternativeExp ::= '{{' MathAlternativesList '}}' {pin=1}
 MathAlternativesList ::= MathAlternativeItemExp+
 MathAlternativeItemExp ::= MathExp ('if' MathExp ';' | 'otherwise' ';')
