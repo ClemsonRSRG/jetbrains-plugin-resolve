@@ -20,12 +20,12 @@ public interface ResMathCategoricalDefnDecl extends ResMathDefnDecl {
   PsiElement getDefinition();
 
   @Nullable
+  PsiElement getSemicolon();
+
+  @Nullable
   PsiElement getFor();
 
   @Nullable
   PsiElement getIs();
-
-  @Nullable
-  PsiElement getSemicolon();
 
 }

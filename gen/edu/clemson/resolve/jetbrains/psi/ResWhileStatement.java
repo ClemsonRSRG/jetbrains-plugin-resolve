@@ -23,15 +23,15 @@ public interface ResWhileStatement extends ResStatement {
   List<ResStatement> getStatementList();
 
   @Nullable
-  PsiElement getDo();
-
-  @Nullable
-  PsiElement getEnd();
-
-  @Nullable
   PsiElement getSemicolon();
 
   @NotNull
   PsiElement getWhile();
+
+  @Nullable
+  PsiElement getDo();
+
+  @Nullable
+  PsiElement getEnd();
 
 }

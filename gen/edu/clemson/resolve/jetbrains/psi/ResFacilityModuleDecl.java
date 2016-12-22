@@ -16,10 +16,10 @@ public interface ResFacilityModuleDecl extends ResModuleDecl {
   @Nullable
   ResUsesList getUsesList();
 
-  @Nullable
-  PsiElement getEnd();
-
   @NotNull
   PsiElement getFacility();
+
+  @Nullable
+  PsiElement getEnd();
 
 }

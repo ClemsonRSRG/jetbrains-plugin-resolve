@@ -32,9 +32,9 @@ public interface ResMathStandardDefnDecl extends ResMathDefnDecl {
   PsiElement getImplicit();
 
   @Nullable
-  PsiElement getIs();
+  PsiElement getSemicolon();
 
   @Nullable
-  PsiElement getSemicolon();
+  PsiElement getIs();
 
 }

@@ -56,6 +56,12 @@ public class ResImplModuleDeclImpl extends ResAbstractModuleImpl implements ResI
   }
 
   @Override
+  @NotNull
+  public PsiElement getRealization() {
+    return findNotNullChildByType(REALIZATION);
+  }
+
+  @Override
   @Nullable
   public PsiElement getEnd() {
     return findChildByType(END);
@@ -71,12 +77,6 @@ public class ResImplModuleDeclImpl extends ResAbstractModuleImpl implements ResI
   @Nullable
   public PsiElement getOf() {
     return findChildByType(OF);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getRealization() {
-    return findNotNullChildByType(REALIZATION);
   }
 
 }

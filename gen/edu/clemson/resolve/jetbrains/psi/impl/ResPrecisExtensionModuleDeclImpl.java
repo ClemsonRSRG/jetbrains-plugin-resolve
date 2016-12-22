@@ -44,15 +44,15 @@ public class ResPrecisExtensionModuleDeclImpl extends ResAbstractModuleImpl impl
   }
 
   @Override
-  @Nullable
-  public PsiElement getEnd() {
-    return findChildByType(END);
-  }
-
-  @Override
   @NotNull
   public PsiElement getExtension() {
     return findNotNullChildByType(EXTENSION);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getEnd() {
+    return findChildByType(END);
   }
 
   @Override

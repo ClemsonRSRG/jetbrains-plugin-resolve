@@ -27,15 +27,15 @@ public class ResExemplarDeclImpl extends ResNamedElementImpl implements ResExemp
   }
 
   @Override
-  @NotNull
-  public PsiElement getExemplar() {
-    return findNotNullChildByType(EXEMPLAR);
-  }
-
-  @Override
   @Nullable
   public PsiElement getSemicolon() {
     return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getExemplar() {
+    return findNotNullChildByType(EXEMPLAR);
   }
 
   @Override

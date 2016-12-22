@@ -45,6 +45,12 @@ public class ResParameterModeImpl extends ResCompositeElementImpl implements Res
 
   @Override
   @Nullable
+  public PsiElement getIdentifier() {
+    return findChildByType(IDENTIFIER);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getPreserves() {
     return findChildByType(PRESERVES);
   }
@@ -65,12 +71,6 @@ public class ResParameterModeImpl extends ResCompositeElementImpl implements Res
   @Nullable
   public PsiElement getUpdates() {
     return findChildByType(UPDATES);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
   }
 
 }

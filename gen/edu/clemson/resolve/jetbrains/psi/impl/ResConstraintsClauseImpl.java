@@ -32,15 +32,15 @@ public class ResConstraintsClauseImpl extends ResCompositeElementImpl implements
   }
 
   @Override
-  @NotNull
-  public PsiElement getConstraints() {
-    return findNotNullChildByType(CONSTRAINTS);
-  }
-
-  @Override
   @Nullable
   public PsiElement getSemicolon() {
     return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getConstraints() {
+    return findNotNullChildByType(CONSTRAINTS);
   }
 
 }

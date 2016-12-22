@@ -23,9 +23,6 @@ public interface ResProcedureDecl extends ResOperationLikeNode {
   PsiElement getColon();
 
   @Nullable
-  PsiElement getEnd();
-
-  @Nullable
   PsiElement getLparen();
 
   @NotNull
@@ -36,6 +33,9 @@ public interface ResProcedureDecl extends ResOperationLikeNode {
 
   @Nullable
   PsiElement getRparen();
+
+  @Nullable
+  PsiElement getEnd();
 
   @NotNull
   PsiElement getIdentifier();

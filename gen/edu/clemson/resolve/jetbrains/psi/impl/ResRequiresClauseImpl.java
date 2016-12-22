@@ -38,15 +38,15 @@ public class ResRequiresClauseImpl extends ResCompositeElementImpl implements Re
   }
 
   @Override
-  @NotNull
-  public PsiElement getRequires() {
-    return findNotNullChildByType(REQUIRES);
-  }
-
-  @Override
   @Nullable
   public PsiElement getSemicolon() {
     return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRequires() {
+    return findNotNullChildByType(REQUIRES);
   }
 
 }

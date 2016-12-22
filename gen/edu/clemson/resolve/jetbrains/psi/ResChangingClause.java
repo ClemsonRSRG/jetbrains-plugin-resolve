@@ -10,10 +10,10 @@ public interface ResChangingClause extends ResCompositeElement {
   @NotNull
   List<ResExp> getExpList();
 
-  @NotNull
-  PsiElement getChanging();
-
   @Nullable
   PsiElement getSemicolon();
+
+  @NotNull
+  PsiElement getChanging();
 
 }

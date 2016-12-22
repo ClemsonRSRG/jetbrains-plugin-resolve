@@ -56,15 +56,15 @@ public class ResConceptExtensionModuleDeclImpl extends ResAbstractModuleImpl imp
   }
 
   @Override
-  @Nullable
-  public PsiElement getEnd() {
-    return findChildByType(END);
-  }
-
-  @Override
   @NotNull
   public PsiElement getEnhancement() {
     return findNotNullChildByType(ENHANCEMENT);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getEnd() {
+    return findChildByType(END);
   }
 
   @Override

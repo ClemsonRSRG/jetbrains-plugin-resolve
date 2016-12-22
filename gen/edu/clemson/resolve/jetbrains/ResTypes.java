@@ -114,7 +114,6 @@ public interface ResTypes {
   IElementType WHILE_STATEMENT = new ResCompositeElementType("WHILE_STATEMENT");
 
   IElementType ALTERS = new ResTokenType("alters");
-  IElementType AS = new ResTokenType("as");
   IElementType BAR = new ResTokenType("|");
   IElementType BY = new ResTokenType("by");
   IElementType CART_PROD = new ResTokenType("Cart_Prod");
@@ -151,8 +150,6 @@ public interface ResTypes {
   IElementType EVALUATES = new ResTokenType("evaluates");
   IElementType EXEMPLAR = new ResTokenType("exemplar");
   IElementType EXISTS = new ResTokenType("∃");
-  IElementType EXTENDED = new ResTokenType("extended");
-  IElementType EXTENDED_BY = new ResTokenType("extended_by");
   IElementType EXTENSION = new ResTokenType("Extension");
   IElementType EXTERNALLY = new ResTokenType("externally");
   IElementType FACILITY = new ResTokenType("Facility");
@@ -164,7 +161,6 @@ public interface ResTypes {
   IElementType FROM = new ResTokenType("from");
   IElementType IDENTIFIER = new ResTokenType("identifier");
   IElementType IF = new ResTokenType("if");
-  IElementType IFF = new ResTokenType("iff");
   IElementType IMPLICIT = new ResTokenType("Implicit");
   IElementType INDUCTIVE = new ResTokenType("Inductive");
   IElementType IND_BASE = new ResTokenType("(i.)");
@@ -180,7 +176,7 @@ public interface ResTypes {
   IElementType LCUP = new ResTokenType("⎝");
   IElementType LPAREN = new ResTokenType("(");
   IElementType MAINTAINING = new ResTokenType("maintaining");
-  IElementType MATH_SYMBOL = new ResTokenType("math_symbol");
+  IElementType MATHSYMBOL = new ResTokenType("mathsymbol");
   IElementType MODELED = new ResTokenType("modeled");
   IElementType NOTICE = new ResTokenType("Notice");
   IElementType OF = new ResTokenType("of");

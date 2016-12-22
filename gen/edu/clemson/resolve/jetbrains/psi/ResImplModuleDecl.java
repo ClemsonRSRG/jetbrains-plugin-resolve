@@ -22,6 +22,9 @@ public interface ResImplModuleDecl extends ResModuleDecl {
   @Nullable
   ResUsesList getUsesList();
 
+  @NotNull
+  PsiElement getRealization();
+
   @Nullable
   PsiElement getEnd();
 
@@ -30,8 +33,5 @@ public interface ResImplModuleDecl extends ResModuleDecl {
 
   @Nullable
   PsiElement getOf();
-
-  @NotNull
-  PsiElement getRealization();
 
 }

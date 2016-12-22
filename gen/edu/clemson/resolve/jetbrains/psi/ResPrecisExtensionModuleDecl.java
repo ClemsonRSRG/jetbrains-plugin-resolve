@@ -16,11 +16,11 @@ public interface ResPrecisExtensionModuleDecl extends ResModuleDecl {
   @Nullable
   ResUsesList getUsesList();
 
-  @Nullable
-  PsiElement getEnd();
-
   @NotNull
   PsiElement getExtension();
+
+  @Nullable
+  PsiElement getEnd();
 
   @Nullable
   PsiElement getFor();

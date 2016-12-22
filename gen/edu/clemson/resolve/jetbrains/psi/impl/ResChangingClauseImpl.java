@@ -32,15 +32,15 @@ public class ResChangingClauseImpl extends ResCompositeElementImpl implements Re
   }
 
   @Override
-  @NotNull
-  public PsiElement getChanging() {
-    return findNotNullChildByType(CHANGING);
-  }
-
-  @Override
   @Nullable
   public PsiElement getSemicolon() {
     return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getChanging() {
+    return findNotNullChildByType(CHANGING);
   }
 
 }

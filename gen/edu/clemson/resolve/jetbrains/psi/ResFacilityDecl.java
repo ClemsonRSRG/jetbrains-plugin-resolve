@@ -22,6 +22,12 @@ public interface ResFacilityDecl extends ResNamedElement {
   @Nullable
   ResModuleSpecArgList getModuleSpecArgList();
 
+  @NotNull
+  PsiElement getFacility();
+
+  @Nullable
+  PsiElement getSemicolon();
+
   @Nullable
   PsiElement getBy();
 
@@ -29,19 +35,13 @@ public interface ResFacilityDecl extends ResNamedElement {
   PsiElement getExternally();
 
   @NotNull
-  PsiElement getFacility();
+  PsiElement getIdentifier();
 
   @Nullable
   PsiElement getIs();
 
   @Nullable
   PsiElement getRealized();
-
-  @Nullable
-  PsiElement getSemicolon();
-
-  @NotNull
-  PsiElement getIdentifier();
 
   @Nullable
   ResFile resolveSpecification();

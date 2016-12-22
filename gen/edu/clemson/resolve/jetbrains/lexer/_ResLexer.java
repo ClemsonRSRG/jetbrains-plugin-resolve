@@ -1212,7 +1212,7 @@ class _ResLexer implements FlexLexer, ResTypes {
             }
           case 110: break;
           case 7: 
-            { return MATH_SYMBOL;
+            { return MATHSYMBOL;
             }
           case 111: break;
           case 8: 

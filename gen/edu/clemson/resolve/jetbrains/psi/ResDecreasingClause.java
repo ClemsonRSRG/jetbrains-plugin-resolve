@@ -10,10 +10,10 @@ public interface ResDecreasingClause extends ResCompositeElement {
   @Nullable
   ResMathExp getMathExp();
 
-  @NotNull
-  PsiElement getDecreasing();
-
   @Nullable
   PsiElement getSemicolon();
+
+  @NotNull
+  PsiElement getDecreasing();
 
 }

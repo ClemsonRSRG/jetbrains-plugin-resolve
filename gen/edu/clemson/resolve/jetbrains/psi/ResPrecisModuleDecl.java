@@ -13,10 +13,10 @@ public interface ResPrecisModuleDecl extends ResModuleDecl {
   @Nullable
   ResUsesList getUsesList();
 
-  @Nullable
-  PsiElement getEnd();
-
   @NotNull
   PsiElement getPrecis();
+
+  @Nullable
+  PsiElement getEnd();
 
 }

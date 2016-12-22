@@ -56,6 +56,18 @@ public class ResFacilityDeclImpl extends ResNamedElementImpl implements ResFacil
   }
 
   @Override
+  @NotNull
+  public PsiElement getFacility() {
+    return findNotNullChildByType(FACILITY);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
   @Nullable
   public PsiElement getBy() {
     return findChildByType(BY);
@@ -69,8 +81,8 @@ public class ResFacilityDeclImpl extends ResNamedElementImpl implements ResFacil
 
   @Override
   @NotNull
-  public PsiElement getFacility() {
-    return findNotNullChildByType(FACILITY);
+  public PsiElement getIdentifier() {
+    return findNotNullChildByType(IDENTIFIER);
   }
 
   @Override
@@ -83,18 +95,6 @@ public class ResFacilityDeclImpl extends ResNamedElementImpl implements ResFacil
   @Nullable
   public PsiElement getRealized() {
     return findChildByType(REALIZED);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getSemicolon() {
-    return findChildByType(SEMICOLON);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
   }
 
   @Nullable

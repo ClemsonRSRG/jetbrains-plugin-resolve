@@ -10,10 +10,10 @@ public interface ResRecordType extends ResType {
   @NotNull
   List<ResRecordVarDeclGroup> getRecordVarDeclGroupList();
 
-  @Nullable
-  PsiElement getEnd();
-
   @NotNull
   PsiElement getRecord();
+
+  @Nullable
+  PsiElement getEnd();
 
 }

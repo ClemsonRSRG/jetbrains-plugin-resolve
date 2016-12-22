@@ -10,10 +10,10 @@ public interface ResConstraintsClause extends ResCompositeElement {
   @Nullable
   ResMathExp getMathExp();
 
-  @NotNull
-  PsiElement getConstraints();
-
   @Nullable
   PsiElement getSemicolon();
+
+  @NotNull
+  PsiElement getConstraints();
 
 }

@@ -17,12 +17,12 @@ public interface ResTypeImplInit extends ResCompositeElement {
   ResRequiresClause getRequiresClause();
 
   @NotNull
+  PsiElement getSemicolon();
+
+  @NotNull
   PsiElement getEnd();
 
   @NotNull
   PsiElement getInitialization();
-
-  @NotNull
-  PsiElement getSemicolon();
 
 }

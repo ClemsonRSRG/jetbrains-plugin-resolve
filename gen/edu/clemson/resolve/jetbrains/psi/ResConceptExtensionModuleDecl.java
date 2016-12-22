@@ -22,11 +22,11 @@ public interface ResConceptExtensionModuleDecl extends ResModuleDecl {
   @Nullable
   ResUsesList getUsesList();
 
-  @Nullable
-  PsiElement getEnd();
-
   @NotNull
   PsiElement getEnhancement();
+
+  @Nullable
+  PsiElement getEnd();
 
   @Nullable
   PsiElement getFor();

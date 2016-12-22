@@ -50,6 +50,18 @@ public class ResTypeModelDeclImpl extends ResAbstractTypeLikeNodeImpl implements
   }
 
   @Override
+  @NotNull
+  public PsiElement getFamilyType() {
+    return findNotNullChildByType(FAMILY_TYPE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
   @Nullable
   public PsiElement getBy() {
     return findChildByType(BY);
@@ -63,8 +75,8 @@ public class ResTypeModelDeclImpl extends ResAbstractTypeLikeNodeImpl implements
 
   @Override
   @NotNull
-  public PsiElement getFamilyType() {
-    return findNotNullChildByType(FAMILY_TYPE);
+  public PsiElement getIdentifier() {
+    return findNotNullChildByType(IDENTIFIER);
   }
 
   @Override
@@ -77,18 +89,6 @@ public class ResTypeModelDeclImpl extends ResAbstractTypeLikeNodeImpl implements
   @Nullable
   public PsiElement getModeled() {
     return findChildByType(MODELED);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getSemicolon() {
-    return findChildByType(SEMICOLON);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
   }
 
 }

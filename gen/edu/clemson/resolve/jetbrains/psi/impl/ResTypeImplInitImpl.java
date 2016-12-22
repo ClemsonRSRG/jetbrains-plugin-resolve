@@ -45,6 +45,12 @@ public class ResTypeImplInitImpl extends ResCompositeElementImpl implements ResT
 
   @Override
   @NotNull
+  public PsiElement getSemicolon() {
+    return findNotNullChildByType(SEMICOLON);
+  }
+
+  @Override
+  @NotNull
   public PsiElement getEnd() {
     return findNotNullChildByType(END);
   }
@@ -53,12 +59,6 @@ public class ResTypeImplInitImpl extends ResCompositeElementImpl implements ResT
   @NotNull
   public PsiElement getInitialization() {
     return findNotNullChildByType(INITIALIZATION);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getSemicolon() {
-    return findNotNullChildByType(SEMICOLON);
   }
 
 }

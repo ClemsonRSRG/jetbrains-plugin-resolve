@@ -32,15 +32,15 @@ public class ResMaintainingClauseImpl extends ResCompositeElementImpl implements
   }
 
   @Override
-  @NotNull
-  public PsiElement getMaintaining() {
-    return findNotNullChildByType(MAINTAINING);
-  }
-
-  @Override
   @Nullable
   public PsiElement getSemicolon() {
     return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getMaintaining() {
+    return findNotNullChildByType(MAINTAINING);
   }
 
 }

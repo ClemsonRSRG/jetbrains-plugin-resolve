@@ -32,15 +32,15 @@ public class ResDecreasingClauseImpl extends ResCompositeElementImpl implements 
   }
 
   @Override
-  @NotNull
-  public PsiElement getDecreasing() {
-    return findNotNullChildByType(DECREASING);
-  }
-
-  @Override
   @Nullable
   public PsiElement getSemicolon() {
     return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getDecreasing() {
+    return findNotNullChildByType(DECREASING);
   }
 
 }

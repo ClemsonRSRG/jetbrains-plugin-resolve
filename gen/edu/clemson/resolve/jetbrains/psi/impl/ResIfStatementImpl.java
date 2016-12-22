@@ -44,12 +44,6 @@ public class ResIfStatementImpl extends ResStatementImpl implements ResIfStateme
   }
 
   @Override
-  @Nullable
-  public PsiElement getEnd() {
-    return findChildByType(END);
-  }
-
-  @Override
   @NotNull
   public PsiElement getProgIf() {
     return findNotNullChildByType(PROG_IF);
@@ -59,6 +53,12 @@ public class ResIfStatementImpl extends ResStatementImpl implements ResIfStateme
   @Nullable
   public PsiElement getSemicolon() {
     return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getEnd() {
+    return findChildByType(END);
   }
 
   @Override

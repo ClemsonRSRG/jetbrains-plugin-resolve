@@ -69,12 +69,6 @@ public class ResOperationProcedureDeclImpl extends ResAbstractOperationLikeNode 
 
   @Override
   @Nullable
-  public PsiElement getEnd() {
-    return findChildByType(END);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getLparen() {
     return findChildByType(LPAREN);
   }
@@ -101,6 +95,12 @@ public class ResOperationProcedureDeclImpl extends ResAbstractOperationLikeNode 
   @Nullable
   public PsiElement getRparen() {
     return findChildByType(RPAREN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getEnd() {
+    return findChildByType(END);
   }
 
   @Override

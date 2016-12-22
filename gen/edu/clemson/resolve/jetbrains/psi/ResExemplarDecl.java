@@ -8,11 +8,11 @@ import com.intellij.psi.ResolveState;
 
 public interface ResExemplarDecl extends ResNamedElement {
 
-  @NotNull
-  PsiElement getExemplar();
-
   @Nullable
   PsiElement getSemicolon();
+
+  @NotNull
+  PsiElement getExemplar();
 
   @NotNull
   PsiElement getIdentifier();

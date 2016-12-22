@@ -13,10 +13,10 @@ public interface ResRequiresClause extends ResCompositeElement {
   @Nullable
   ResMathExp getMathExp();
 
-  @NotNull
-  PsiElement getRequires();
-
   @Nullable
   PsiElement getSemicolon();
+
+  @NotNull
+  PsiElement getRequires();
 
 }
