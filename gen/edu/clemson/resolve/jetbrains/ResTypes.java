@@ -148,7 +148,6 @@ public interface ResTypes {
   IElementType ENHANCED = new ResTokenType("enhanced");
   IElementType ENHANCEMENT = new ResTokenType("Enhancement");
   IElementType ENSURES = new ResTokenType("ensures");
-  IElementType EQUALS = new ResTokenType("=");
   IElementType EVALUATES = new ResTokenType("evaluates");
   IElementType EXEMPLAR = new ResTokenType("exemplar");
   IElementType EXISTS = new ResTokenType("∃");
@@ -183,7 +182,6 @@ public interface ResTypes {
   IElementType MAINTAINING = new ResTokenType("maintaining");
   IElementType MATH_SYMBOL = new ResTokenType("math_symbol");
   IElementType MODELED = new ResTokenType("modeled");
-  IElementType NEQUALS = new ResTokenType("≠");
   IElementType NOTICE = new ResTokenType("Notice");
   IElementType OF = new ResTokenType("of");
   IElementType OPERATION = new ResTokenType("Operation");

@@ -54,7 +54,7 @@ U_OPERATOR  = ("∩"|"⋂"|"∪"|"⋃"|"⊔"|"⨆"|"⊓"|"⨅"|"∝"|"⊎"|"⨄"
                "∑"|"∏"|"⨿"|"∐"|"⋈"|"⋉"|"⋊"|"⊠"|"⊡"|"∎"|"⨪")
 
 U_RELATION  = ("⊢"|"⊨"|"⊩"|"⊫"|"⊣"|"≤"|"≥"|"≪"|"≫"|"≲"|"≳"|"⪅"|"⪆"|"∈"|
-               "∉"|"⊂"|"⊃"|"⊆"|"⊇"|"⊏"|"⊐"|"⊑"|"⊒"|"∼"|"≐"|"≃"|"≈"|"≍"|"≠"
+               "∉"|"⊂"|"⊃"|"⊆"|"⊇"|"⊏"|"⊐"|"⊑"|"⊒"|"∼"|"≐"|"≃"|"≈"|"≍"|"≠"|
                "≅"|"≡"|"≼"|"≽"|"⊲"|"⊳"|"⊴"|"⊵"|"△"|"≜")
 
 //if we allow '|' in here, then math outfix exprs need to be | |x| o b| (space between the |x| and the leftmost
@@ -83,6 +83,20 @@ ESCAPES = [abfnrtv]
 
 // brackets & braces
 
+"∥"                                     { return DBL_BAR; }
+
+"⟨"                                     { return LANGLE; }
+"⟩"                                     { return RANGLE; }
+
+"⌈"                                     { return LCEIL; }
+"⌉"                                     { return RCEIL; }
+
+"⎝"                                     { return LCUP; }
+"⎠"                                     { return RCUP; }
+
+"["                                     { return LBRACK; }
+"]"                                     { return RBRACK; }
+
 "{{"                                    { return DBL_LBRACE; }
 "{"                                     { return LBRACE; }
 "}"                                     { return RBRACE; }
@@ -96,12 +110,12 @@ ESCAPES = [abfnrtv]
 "::"                                    { return COLON_COLON; }
 ";"                                     { return SEMICOLON; }
 ","                                     { return COMMA; }
+"(i.)"                                  { return IND_BASE; }
+"(ii.)"                                 { return IND_HYPO; }
 
 // Operators
 
 "λ"                                     { return LAMBDA; }
-"="                                     { return EQUALS; }
-"≠"                                     { return NEQUALS; }
 ":="                                    { return COLON_EQUALS; }
 ":=:"                                   { return COLON_EQUALS_COLON; }
 

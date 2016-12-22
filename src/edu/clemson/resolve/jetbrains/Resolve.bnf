@@ -51,8 +51,6 @@
         FALSE                   = 'false'
 
         LAMBDA                  = 'λ'
-        EQUALS                  = '='
-        NEQUALS                 = '≠'
         COLON_EQUALS            = ':='
         COLON_EQUALS_COLON      = ':=:'
 
@@ -134,7 +132,7 @@
         //disregard them otherwise
         space                   = "regexp:\s+"
         identifier              = 'regexp:\p{Alpha}\w*'
-        raw_string           = 'raw_string'
+        raw_string              = 'raw_string'
     ]
 
     implements("Math.*DefnDecl")="edu.clemson.resolve.jetbrains.psi.ResMathDefnDecl"
