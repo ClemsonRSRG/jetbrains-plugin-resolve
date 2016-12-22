@@ -297,7 +297,7 @@ public class MathSymbolPanel extends JBPanel {
         category.add(new DefaultMutableTreeNode(new SymbolInfo("∀", "forall")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("∃", "exists")));
 
-        category.add(new DefaultMutableTreeNode(new SymbolInfo("¬", "not")));
+        category.add(new DefaultMutableTreeNode(new SymbolInfo("¬", "neg")));
         //category.add(new DefaultMutableTreeNode(new SymbolInfo("□", "box")));
         category.add(new DefaultMutableTreeNode(new SymbolInfo("◇", "diamond")));
         e.add(category);
