@@ -80,6 +80,7 @@
         VAR                     = 'Var'
         WHILE                   = 'While'
         NOTICE                  = 'Notice'
+
         //these two are so grammarkit's live preview feature will work right,
         //disregard them otherwise
         space                   = "regexp:\s+"
