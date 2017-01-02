@@ -328,14 +328,15 @@ ElseStatement ::= else Statements {pin=1}
 
 // program expressions
 
-Exp ::= InfixExp | CallExp | NestedExp | PrimeExp
+Exp ::=  InfixExp | CallExp | NestedExp | PrimeExp
 {methods=[getResType] implements="edu.clemson.resolve.jetbrains.psi.ResTypeOwner"}
 fake BinaryExp ::= Exp+ { methods=[left="Exp[0]" right="Exp[1]"] extends=Exp }
 
 NestedExp ::= '(' Exp ')'   {pin=1 extends=Exp}
 SelectorExp ::= Exp '.' Exp {extends=BinaryExp}
 InfixExp ::= Exp ProgSymbolName Exp {extends=BinaryExp}
-CallExp ::= NameExp ArgumentList {extends=Exp}
+//combines unary and call...
+CallExp ::= ProgSymbolName (ArgumentList|Exp) {extends=Exp}
 ProgSymbolName ::= (identifier|symbol)
 
 NameExp ::= ReferenceExp QualifiedReferenceExp? {elementType=ReferenceExp}
@@ -415,7 +416,7 @@ MathExp ::=
 MathNestedExp ::= '(' MathAssertionExp ')' {pin=1}
 MathSelectorExp ::= MathExp '.' MathExp
 MathPrefixApplyExp ::= MathExp MathFunctionAppList
-MathMixfixApplyExp ::= MathExp MathBracketName MathNonStdAppList MathBracketName
+MathMixfixApplyExp ::= MathExp MathBracketName MathNonStdAppList MathBracketName {pin=4}
 MathOutfixApplyExp ::= MathBracketName MathExp MathBracketName
 MathInfixApplyExp ::= MathExp MathOpSymbolName MathExp {pin=2}
 //MathEqualsInfixApplyExp ::= MathExp ('='|'≠') MathExp

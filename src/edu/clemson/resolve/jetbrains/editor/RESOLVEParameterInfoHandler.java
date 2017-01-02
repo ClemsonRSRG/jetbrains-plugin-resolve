@@ -100,11 +100,14 @@ public class RESOLVEParameterInfoHandler implements ParameterInfoHandlerWithTabA
     public void showParameterInfo(@NotNull ResArgumentList argList, @NotNull CreateParameterInfoContext context) {
         PsiElement parent = argList.getParent();
         if (!(parent instanceof ResCallExp)) return;
-        LightFunctionType type = findFunctionType(((ResCallExp)parent).getReferenceExp().getResType(null));
-        if (type != null) {
-            context.setItemsToShow(new Object[]{type});
-            context.showHint(argList, argList.getTextRange().getStartOffset(), this);
-        }
+
+        //Commented out jan 2017, temporarily.. Uncomment and fix the issue with getReferenceExp and
+        //it should work again..
+        //LightFunctionType type = findFunctionType(((ResCallExp)parent).getReferenceExp().getResType(null));
+       // if (type != null) {
+        //    context.setItemsToShow(new Object[]{type});
+        //    context.showHint(argList, argList.getTextRange().getStartOffset(), this);
+       // }
     }
 
     @Nullable

@@ -3609,7 +3609,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   // Expression root: Exp
   // Operator priority table:
   // 0: BINARY(InfixExp)
-  // 1: POSTFIX(CallExp)
+  // 1: ATOM(CallExp)
   // 2: ATOM(NestedExp)
   // 3: ATOM(LiteralExp) ATOM(NameExp) BINARY(SelectorExp)
   public static boolean Exp(PsiBuilder b, int l, int g) {
@@ -3617,7 +3617,8 @@ public class ResParser implements PsiParser, LightPsiParser {
     addVariant(b, "<exp>");
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, "<exp>");
-    r = NestedExp(b, l + 1);
+    r = CallExp(b, l + 1);
+    if (!r) r = NestedExp(b, l + 1);
     if (!r) r = LiteralExp(b, l + 1);
     if (!r) r = NameExp(b, l + 1);
     p = r;
@@ -3635,10 +3636,6 @@ public class ResParser implements PsiParser, LightPsiParser {
         r = Exp(b, l, 0);
         exit_section_(b, l, m, INFIX_EXP, r, true, null);
       }
-      else if (g < 1 && leftMarkerIs(b, REFERENCE_EXP) && ArgumentList(b, l + 1)) {
-        r = true;
-        exit_section_(b, l, m, CALL_EXP, r, true, null);
-      }
       else if (g < 3 && consumeTokenSmart(b, DOT)) {
         r = Exp(b, l, 3);
         exit_section_(b, l, m, SELECTOR_EXP, r, true, null);
@@ -3648,6 +3645,29 @@ public class ResParser implements PsiParser, LightPsiParser {
         break;
       }
     }
+    return r;
+  }
+
+  // ProgSymbolName (ArgumentList|Exp)
+  public static boolean CallExp(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CallExp")) return false;
+    if (!nextTokenIsSmart(b, IDENTIFIER, SYMBOL)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, CALL_EXP, "<call exp>");
+    r = ProgSymbolName(b, l + 1);
+    r = r && CallExp_1(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // ArgumentList|Exp
+  private static boolean CallExp_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CallExp_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = ArgumentList(b, l + 1);
+    if (!r) r = Exp(b, l + 1, -1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
