@@ -3608,19 +3608,18 @@ public class ResParser implements PsiParser, LightPsiParser {
   /* ********************************************************** */
   // Expression root: Exp
   // Operator priority table:
-  // 0: BINARY(InfixExp)
-  // 1: ATOM(CallExp)
-  // 2: ATOM(NestedExp)
-  // 3: ATOM(LiteralExp) ATOM(NameExp) BINARY(SelectorExp)
+  // 0: ATOM(LiteralExp) POSTFIX(CallExp) ATOM(NameExp)
+  // 1: PREFIX(NestedExp)
+  // 2: BINARY(SelectorExp)
+  // 3: BINARY(InfixExp)
   public static boolean Exp(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "Exp")) return false;
     addVariant(b, "<exp>");
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, "<exp>");
-    r = CallExp(b, l + 1);
-    if (!r) r = NestedExp(b, l + 1);
-    if (!r) r = LiteralExp(b, l + 1);
+    r = LiteralExp(b, l + 1);
     if (!r) r = NameExp(b, l + 1);
+    if (!r) r = NestedExp(b, l + 1);
     p = r;
     r = r && Exp_0(b, l + 1, g);
     exit_section_(b, l, m, null, r, p, null);
@@ -3632,13 +3631,17 @@ public class ResParser implements PsiParser, LightPsiParser {
     boolean r = true;
     while (true) {
       Marker m = enter_section_(b, l, _LEFT_, null);
-      if (g < 0 && ProgSymbolName(b, l + 1)) {
-        r = Exp(b, l, 0);
-        exit_section_(b, l, m, INFIX_EXP, r, true, null);
+      if (g < 0 && leftMarkerIs(b, REFERENCE_EXP) && ArgumentList(b, l + 1)) {
+        r = true;
+        exit_section_(b, l, m, CALL_EXP, r, true, null);
       }
-      else if (g < 3 && consumeTokenSmart(b, DOT)) {
-        r = Exp(b, l, 3);
+      else if (g < 2 && consumeTokenSmart(b, DOT)) {
+        r = Exp(b, l, 2);
         exit_section_(b, l, m, SELECTOR_EXP, r, true, null);
+      }
+      else if (g < 3 && ProgSymbolName(b, l + 1)) {
+        r = Exp(b, l, 3);
+        exit_section_(b, l, m, INFIX_EXP, r, true, null);
       }
       else {
         exit_section_(b, l, m, null, false, false, null);
@@ -3646,43 +3649,6 @@ public class ResParser implements PsiParser, LightPsiParser {
       }
     }
     return r;
-  }
-
-  // ProgSymbolName (ArgumentList|Exp)
-  public static boolean CallExp(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "CallExp")) return false;
-    if (!nextTokenIsSmart(b, IDENTIFIER, SYMBOL)) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, CALL_EXP, "<call exp>");
-    r = ProgSymbolName(b, l + 1);
-    r = r && CallExp_1(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // ArgumentList|Exp
-  private static boolean CallExp_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "CallExp_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = ArgumentList(b, l + 1);
-    if (!r) r = Exp(b, l + 1, -1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // '(' Exp ')'
-  public static boolean NestedExp(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "NestedExp")) return false;
-    if (!nextTokenIsSmart(b, LPAREN)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, NESTED_EXP, null);
-    r = consumeTokenSmart(b, LPAREN);
-    p = r; // pin = 1
-    r = r && report_error_(b, Exp(b, l + 1, -1));
-    r = p && consumeToken(b, RPAREN) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
   }
 
   // int|string|/*char|*/true|false
@@ -3702,12 +3668,13 @@ public class ResParser implements PsiParser, LightPsiParser {
   public static boolean NameExp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NameExp")) return false;
     if (!nextTokenIsSmart(b, IDENTIFIER)) return false;
-    boolean r;
+    boolean r, p;
     Marker m = enter_section_(b, l, _COLLAPSE_, REFERENCE_EXP, null);
     r = ReferenceExp(b, l + 1);
+    p = r; // pin = 1
     r = r && NameExp_1(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // QualifiedReferenceExp?
@@ -3715,6 +3682,19 @@ public class ResParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "NameExp_1")) return false;
     QualifiedReferenceExp(b, l + 1);
     return true;
+  }
+
+  public static boolean NestedExp(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NestedExp")) return false;
+    if (!nextTokenIsSmart(b, LPAREN)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeTokenSmart(b, LPAREN);
+    p = r;
+    r = p && Exp(b, l, 1);
+    r = p && report_error_(b, consumeToken(b, RPAREN)) && r;
+    exit_section_(b, l, m, NESTED_EXP, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */

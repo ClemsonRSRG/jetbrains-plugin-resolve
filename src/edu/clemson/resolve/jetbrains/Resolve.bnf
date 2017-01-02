@@ -328,22 +328,24 @@ ElseStatement ::= else Statements {pin=1}
 
 // program expressions
 
-Exp ::=  InfixExp | CallExp | NestedExp | PrimeExp
+Exp ::= PrimeExp | NestedExp | SelectorExp | InfixExp
 {methods=[getResType] implements="edu.clemson.resolve.jetbrains.psi.ResTypeOwner"}
 fake BinaryExp ::= Exp+ { methods=[left="Exp[0]" right="Exp[1]"] extends=Exp }
 
-NestedExp ::= '(' Exp ')'   {pin=1 extends=Exp}
+NestedExp ::= '(' Exp ')'   {extends=Exp}
 SelectorExp ::= Exp '.' Exp {extends=BinaryExp}
 InfixExp ::= Exp ProgSymbolName Exp {extends=BinaryExp}
-//combines unary and call...
-CallExp ::= ProgSymbolName (ArgumentList|Exp) {extends=Exp}
+CallExp ::= NameExp ArgumentList {extends=Exp}
+//UnaryExp ::= Exp FooExp {extends=Exp}
+//private FooExp ::= Exp
+
 ProgSymbolName ::= (identifier|symbol)
 
-NameExp ::= ReferenceExp QualifiedReferenceExp? {elementType=ReferenceExp}
+NameExp ::= ReferenceExp QualifiedReferenceExp? {pin=1 elementType=ReferenceExp}
 left QualifiedReferenceExp ::= '::' identifier {elementType=ReferenceExp}
 ReferenceExp ::= identifier { methods=[getReference getQualifier resolve shouldReferenceModule] extends=Exp}
 
-private PrimeExp ::= LiteralExp | NameExp | SelectorExp
+private PrimeExp ::= LiteralExp | CallExp | NameExp
 LiteralExp ::= (int|string|/*char|*/true|false)  {extends=Exp}
 ArgumentList ::= '(' ExpArgumentList? ')' {pin=1}
 private ExpArgumentList ::= Exp (',' Exp)* {pin(".*")=1}

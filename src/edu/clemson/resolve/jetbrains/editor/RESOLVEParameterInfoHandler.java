@@ -103,11 +103,11 @@ public class RESOLVEParameterInfoHandler implements ParameterInfoHandlerWithTabA
 
         //Commented out jan 2017, temporarily.. Uncomment and fix the issue with getReferenceExp and
         //it should work again..
-        //LightFunctionType type = findFunctionType(((ResCallExp)parent).getReferenceExp().getResType(null));
-       // if (type != null) {
-        //    context.setItemsToShow(new Object[]{type});
-        //    context.showHint(argList, argList.getTextRange().getStartOffset(), this);
-       // }
+        LightFunctionType type = findFunctionType(((ResCallExp)parent).getReferenceExp().getResType(null));
+        if (type != null) {
+            context.setItemsToShow(new Object[]{type});
+            context.showHint(argList, argList.getTextRange().getStartOffset(), this);
+        }
     }
 
     @Nullable
