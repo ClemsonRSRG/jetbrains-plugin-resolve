@@ -318,6 +318,13 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
             //size 2 implies both are present and accounted for
             if (facility.getModuleIdentifierList().size() != 2) continue;
             v.add(facility.getModuleIdentifierList().get(0));
+            if (!facility.getExtensionPairingList().isEmpty()) {
+                for (ResExtensionPairing ext : facility.getExtensionPairingList()) {
+                    if (ext.getModuleIdentifierList().size() == 2) {
+                        v.add(ext.getModuleIdentifierList().get(0));
+                    }
+                }
+            }
         }
 
         //resolve through their specifications

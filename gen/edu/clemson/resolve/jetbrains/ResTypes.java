@@ -12,7 +12,6 @@ public interface ResTypes {
 
   IElementType ARGUMENT_LIST = new ResCompositeElementType("ARGUMENT_LIST");
   IElementType ASSIGN_STATEMENT = new ResCompositeElementType("ASSIGN_STATEMENT");
-  IElementType CALL_EXP = new ResCompositeElementType("CALL_EXP");
   IElementType CHANGING_CLAUSE = new ResCompositeElementType("CHANGING_CLAUSE");
   IElementType CLOSE_IDENTIFIER = new ResCompositeElementType("CLOSE_IDENTIFIER");
   IElementType CONCEPT_BLOCK = new ResCompositeElementType("CONCEPT_BLOCK");
@@ -80,13 +79,14 @@ public interface ResTypes {
   IElementType MODULE_REALIZ_ARG_LIST = new ResCompositeElementType("MODULE_REALIZ_ARG_LIST");
   IElementType MODULE_SPEC_ARG_LIST = new ResCompositeElementType("MODULE_SPEC_ARG_LIST");
   IElementType NESTED_EXP = new ResCompositeElementType("NESTED_EXP");
-  IElementType NOTICE_CLAUSE = new ResCompositeElementType("NOTICE_CLAUSE");
+  IElementType NOTICE_STATEMENT = new ResCompositeElementType("NOTICE_STATEMENT");
   IElementType OPERATION_DECL = new ResCompositeElementType("OPERATION_DECL");
   IElementType OPERATION_PROCEDURE_DECL = new ResCompositeElementType("OPERATION_PROCEDURE_DECL");
   IElementType OP_BLOCK = new ResCompositeElementType("OP_BLOCK");
   IElementType PARAMETER_MODE = new ResCompositeElementType("PARAMETER_MODE");
   IElementType PARAM_DECL = new ResCompositeElementType("PARAM_DECL");
   IElementType PARAM_DEF = new ResCompositeElementType("PARAM_DEF");
+  IElementType PARAM_EXP = new ResCompositeElementType("PARAM_EXP");
   IElementType PRECIS_BLOCK = new ResCompositeElementType("PRECIS_BLOCK");
   IElementType PRECIS_EXTENSION_MODULE_DECL = new ResCompositeElementType("PRECIS_EXTENSION_MODULE_DECL");
   IElementType PRECIS_MODULE_DECL = new ResCompositeElementType("PRECIS_MODULE_DECL");
@@ -224,9 +224,6 @@ public interface ResTypes {
       }
       else if (type == ASSIGN_STATEMENT) {
         return new ResAssignStatementImpl(node);
-      }
-      else if (type == CALL_EXP) {
-        return new ResCallExpImpl(node);
       }
       else if (type == CHANGING_CLAUSE) {
         return new ResChangingClauseImpl(node);
@@ -420,8 +417,8 @@ public interface ResTypes {
       else if (type == NESTED_EXP) {
         return new ResNestedExpImpl(node);
       }
-      else if (type == NOTICE_CLAUSE) {
-        return new ResNoticeClauseImpl(node);
+      else if (type == NOTICE_STATEMENT) {
+        return new ResNoticeStatementImpl(node);
       }
       else if (type == OPERATION_DECL) {
         return new ResOperationDeclImpl(node);
@@ -440,6 +437,9 @@ public interface ResTypes {
       }
       else if (type == PARAM_DEF) {
         return new ResParamDefImpl(node);
+      }
+      else if (type == PARAM_EXP) {
+        return new ResParamExpImpl(node);
       }
       else if (type == PRECIS_BLOCK) {
         return new ResPrecisBlockImpl(node);

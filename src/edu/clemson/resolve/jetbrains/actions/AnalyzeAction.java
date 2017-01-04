@@ -58,7 +58,7 @@ public class AnalyzeAction extends RESOLVEAction {
         if (editor == null) return;
 
         Map<String, String> argMap = new LinkedHashMap<>();
-        argMap.put("", resolveFile.getName());
+        argMap.put("", resolveFile.getCanonicalPath());
         argMap.put("-lib", getContentRoot(project, resolveFile).getPath());
         CompilerIssueListener issueListener = new CompilerIssueListener();
 

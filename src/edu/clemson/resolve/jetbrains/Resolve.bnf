@@ -307,19 +307,20 @@ ProcedureDecl ::= ('Recursive')? 'Procedure' identifier OperationLikeParameters 
 OpBlock
 end CloseIdentifier ';' {pin=3}
 
-OpBlock ::= VarDeclGroup* NoticeClause* Statements?
+OpBlock ::= VarDeclGroup* Statements?
 CloseIdentifier ::= identifier
 
 // statements
 
-Statement ::= SimpleStatement | WhileStatement | IfStatement
+Statement ::= SimpleStatement | WhileStatement | IfStatement | NoticeStatement
 SimpleStatement ::= Exp (AssignStatement|SwapStatement)? ';' {pin(".*")=1}
 private Statements ::= Statement* {recoverWhile=StatementRecover}
-private StatementRecover ::= !(end|':='|':=:'|'If'|'While'|else|identifier)
+private StatementRecover ::= !(end|':='|':=:'|'If'|'While'|else|'Notice'|identifier)
 
 left AssignStatement ::= ':=' Exp {pin=1}
 left SwapStatement ::= ':=:' Exp {pin=1}
 
+NoticeStatement ::= 'Notice' MathExp ';'
 WhileStatement ::= 'While' Exp ChangingClause? MaintainingClause? DecreasingClause?
 do Statements end ';'
 
@@ -328,25 +329,22 @@ ElseStatement ::= else Statements {pin=1}
 
 // program expressions
 
-Exp ::= PrimeExp | NestedExp | SelectorExp | InfixExp
+Exp ::= SelectorExp | ParamExp | InfixExp | NestedExp | PrimeExp
 {methods=[getResType] implements="edu.clemson.resolve.jetbrains.psi.ResTypeOwner"}
 fake BinaryExp ::= Exp+ { methods=[left="Exp[0]" right="Exp[1]"] extends=Exp }
 
-NestedExp ::= '(' Exp ')'   {extends=Exp}
+NestedExp ::= '(' Exp ')'   {pin=1 extends=Exp}
 SelectorExp ::= Exp '.' Exp {extends=BinaryExp}
 InfixExp ::= Exp ProgSymbolName Exp {extends=BinaryExp}
-CallExp ::= NameExp ArgumentList {extends=Exp}
-//UnaryExp ::= Exp FooExp {extends=Exp}
-//private FooExp ::= Exp
-
+ParamExp ::= NameExp ArgumentList {extends=Exp}
 ProgSymbolName ::= (identifier|symbol)
 
-NameExp ::= ReferenceExp QualifiedReferenceExp? {pin=1 elementType=ReferenceExp}
+NameExp ::= ReferenceExp QualifiedReferenceExp? {elementType=ReferenceExp}
 left QualifiedReferenceExp ::= '::' identifier {elementType=ReferenceExp}
 ReferenceExp ::= identifier { methods=[getReference getQualifier resolve shouldReferenceModule] extends=Exp}
 
-private PrimeExp ::= LiteralExp | CallExp | NameExp
-LiteralExp ::= (int|string|/*char|*/true|false)  {extends=Exp}
+private PrimeExp ::= LiteralExp | NameExp
+LiteralExp ::= (int|string|true|false)  {extends=Exp}
 ArgumentList ::= '(' ExpArgumentList? ')' {pin=1}
 private ExpArgumentList ::= Exp (',' Exp)* {pin(".*")=1}
 
@@ -400,7 +398,6 @@ ChangingClause ::= changing ExpArgumentList ';' {pin=1}
 MaintainingClause ::= maintaining MathAssertionExp ';' {pin=1}
 DecreasingClause ::= decreasing MathAssertionExp ';' {pin=1}
 EntailsClause ::= which_entails MathExp {pin=1}
-NoticeClause ::= 'Notice' MathExp ';' {pin=1}
 
 // mathematical expressions
 

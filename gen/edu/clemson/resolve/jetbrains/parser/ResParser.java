@@ -182,8 +182,8 @@ public class ResParser implements PsiParser, LightPsiParser {
     else if (t == MODULE_SPEC_ARG_LIST) {
       r = ModuleSpecArgList(b, 0);
     }
-    else if (t == NOTICE_CLAUSE) {
-      r = NoticeClause(b, 0);
+    else if (t == NOTICE_STATEMENT) {
+      r = NoticeStatement(b, 0);
     }
     else if (t == OP_BLOCK) {
       r = OpBlock(b, 0);
@@ -288,10 +288,10 @@ public class ResParser implements PsiParser, LightPsiParser {
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
     create_token_set_(RECORD_TYPE, TYPE),
     create_token_set_(MATH_VAR_DECL, MATH_VAR_DECL_GROUP),
-    create_token_set_(ASSIGN_STATEMENT, ELSE_STATEMENT, IF_STATEMENT, SIMPLE_STATEMENT,
-      STATEMENT, SWAP_STATEMENT, WHILE_STATEMENT),
-    create_token_set_(CALL_EXP, EXP, INFIX_EXP, LITERAL_EXP,
-      NESTED_EXP, REFERENCE_EXP, SELECTOR_EXP),
+    create_token_set_(EXP, INFIX_EXP, LITERAL_EXP, NESTED_EXP,
+      PARAM_EXP, REFERENCE_EXP, SELECTOR_EXP),
+    create_token_set_(ASSIGN_STATEMENT, ELSE_STATEMENT, IF_STATEMENT, NOTICE_STATEMENT,
+      SIMPLE_STATEMENT, STATEMENT, SWAP_STATEMENT, WHILE_STATEMENT),
     create_token_set_(MATH_ALTERNATIVE_EXP, MATH_ALTERNATIVE_ITEM_EXP, MATH_ASSERTION_EXP, MATH_CART_PROD_EXP,
       MATH_CLSSFTN_ASSRT_EXP, MATH_EXP, MATH_INCOMING_EXP, MATH_INFIX_APPLY_EXP,
       MATH_LAMBDA_EXP, MATH_MIXFIX_APPLY_EXP, MATH_NESTED_EXP, MATH_OUTFIX_APPLY_EXP,
@@ -2255,11 +2255,11 @@ public class ResParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // 'Notice' MathExp ';'
-  public static boolean NoticeClause(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "NoticeClause")) return false;
+  public static boolean NoticeStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NoticeStatement")) return false;
     if (!nextTokenIs(b, NOTICE)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, NOTICE_CLAUSE, null);
+    Marker m = enter_section_(b, l, _NONE_, NOTICE_STATEMENT, null);
     r = consumeToken(b, NOTICE);
     p = r; // pin = 1
     r = r && report_error_(b, MathExp(b, l + 1, -1));
@@ -2269,14 +2269,13 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // VarDeclGroup* NoticeClause* Statements?
+  // VarDeclGroup* Statements?
   public static boolean OpBlock(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "OpBlock")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, OP_BLOCK, "<op block>");
     r = OpBlock_0(b, l + 1);
     r = r && OpBlock_1(b, l + 1);
-    r = r && OpBlock_2(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -2293,21 +2292,9 @@ public class ResParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // NoticeClause*
+  // Statements?
   private static boolean OpBlock_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "OpBlock_1")) return false;
-    int c = current_position_(b);
-    while (true) {
-      if (!NoticeClause(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "OpBlock_1", c)) break;
-      c = current_position_(b);
-    }
-    return true;
-  }
-
-  // Statements?
-  private static boolean OpBlock_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "OpBlock_2")) return false;
     Statements(b, l + 1);
     return true;
   }
@@ -3115,7 +3102,7 @@ public class ResParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // SimpleStatement | WhileStatement | IfStatement
+  // SimpleStatement | WhileStatement | IfStatement | NoticeStatement
   public static boolean Statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Statement")) return false;
     boolean r;
@@ -3123,12 +3110,13 @@ public class ResParser implements PsiParser, LightPsiParser {
     r = SimpleStatement(b, l + 1);
     if (!r) r = WhileStatement(b, l + 1);
     if (!r) r = IfStatement(b, l + 1);
+    if (!r) r = NoticeStatement(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   /* ********************************************************** */
-  // !(end|':='|':=:'|'If'|'While'|else|identifier)
+  // !(end|':='|':=:'|'If'|'While'|else|'Notice'|identifier)
   static boolean StatementRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StatementRecover")) return false;
     boolean r;
@@ -3138,7 +3126,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // end|':='|':=:'|'If'|'While'|else|identifier
+  // end|':='|':=:'|'If'|'While'|else|'Notice'|identifier
   private static boolean StatementRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StatementRecover_0")) return false;
     boolean r;
@@ -3149,6 +3137,7 @@ public class ResParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, PROG_IF);
     if (!r) r = consumeToken(b, WHILE);
     if (!r) r = consumeToken(b, ELSE);
+    if (!r) r = consumeToken(b, NOTICE);
     if (!r) r = consumeToken(b, IDENTIFIER);
     exit_section_(b, m, null, r);
     return r;
@@ -3608,18 +3597,19 @@ public class ResParser implements PsiParser, LightPsiParser {
   /* ********************************************************** */
   // Expression root: Exp
   // Operator priority table:
-  // 0: ATOM(LiteralExp) POSTFIX(CallExp) ATOM(NameExp)
-  // 1: PREFIX(NestedExp)
-  // 2: BINARY(SelectorExp)
-  // 3: BINARY(InfixExp)
+  // 0: BINARY(SelectorExp)
+  // 1: POSTFIX(ParamExp)
+  // 2: BINARY(InfixExp)
+  // 3: ATOM(NestedExp)
+  // 4: ATOM(LiteralExp) ATOM(NameExp)
   public static boolean Exp(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "Exp")) return false;
     addVariant(b, "<exp>");
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, "<exp>");
-    r = LiteralExp(b, l + 1);
+    r = NestedExp(b, l + 1);
+    if (!r) r = LiteralExp(b, l + 1);
     if (!r) r = NameExp(b, l + 1);
-    if (!r) r = NestedExp(b, l + 1);
     p = r;
     r = r && Exp_0(b, l + 1, g);
     exit_section_(b, l, m, null, r, p, null);
@@ -3631,16 +3621,16 @@ public class ResParser implements PsiParser, LightPsiParser {
     boolean r = true;
     while (true) {
       Marker m = enter_section_(b, l, _LEFT_, null);
-      if (g < 0 && leftMarkerIs(b, REFERENCE_EXP) && ArgumentList(b, l + 1)) {
-        r = true;
-        exit_section_(b, l, m, CALL_EXP, r, true, null);
-      }
-      else if (g < 2 && consumeTokenSmart(b, DOT)) {
-        r = Exp(b, l, 2);
+      if (g < 0 && consumeTokenSmart(b, DOT)) {
+        r = Exp(b, l, 0);
         exit_section_(b, l, m, SELECTOR_EXP, r, true, null);
       }
-      else if (g < 3 && ProgSymbolName(b, l + 1)) {
-        r = Exp(b, l, 3);
+      else if (g < 1 && leftMarkerIs(b, REFERENCE_EXP) && ArgumentList(b, l + 1)) {
+        r = true;
+        exit_section_(b, l, m, PARAM_EXP, r, true, null);
+      }
+      else if (g < 2 && ProgSymbolName(b, l + 1)) {
+        r = Exp(b, l, 2);
         exit_section_(b, l, m, INFIX_EXP, r, true, null);
       }
       else {
@@ -3651,7 +3641,21 @@ public class ResParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // int|string|/*char|*/true|false
+  // '(' Exp ')'
+  public static boolean NestedExp(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NestedExp")) return false;
+    if (!nextTokenIsSmart(b, LPAREN)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, NESTED_EXP, null);
+    r = consumeTokenSmart(b, LPAREN);
+    p = r; // pin = 1
+    r = r && report_error_(b, Exp(b, l + 1, -1));
+    r = p && consumeToken(b, RPAREN) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // int|string|true|false
   public static boolean LiteralExp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LiteralExp")) return false;
     boolean r;
@@ -3668,13 +3672,12 @@ public class ResParser implements PsiParser, LightPsiParser {
   public static boolean NameExp(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NameExp")) return false;
     if (!nextTokenIsSmart(b, IDENTIFIER)) return false;
-    boolean r, p;
+    boolean r;
     Marker m = enter_section_(b, l, _COLLAPSE_, REFERENCE_EXP, null);
     r = ReferenceExp(b, l + 1);
-    p = r; // pin = 1
     r = r && NameExp_1(b, l + 1);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+    exit_section_(b, l, m, r, false, null);
+    return r;
   }
 
   // QualifiedReferenceExp?
@@ -3682,19 +3685,6 @@ public class ResParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "NameExp_1")) return false;
     QualifiedReferenceExp(b, l + 1);
     return true;
-  }
-
-  public static boolean NestedExp(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "NestedExp")) return false;
-    if (!nextTokenIsSmart(b, LPAREN)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, null);
-    r = consumeTokenSmart(b, LPAREN);
-    p = r;
-    r = p && Exp(b, l, 1);
-    r = p && report_error_(b, consumeToken(b, RPAREN)) && r;
-    exit_section_(b, l, m, NESTED_EXP, r, p, null);
-    return r || p;
   }
 
   /* ********************************************************** */

@@ -58,7 +58,7 @@ U_RELATION  = ("⊢"|"⊨"|"⊩"|"⊫"|"⊣"|"≤"|"≥"|"≪"|"≫"|"≲"|"≳"
                "≅"|"≡"|"≼"|"≽"|"⊲"|"⊳"|"⊴"|"⊵"|"△"|"≜")
 
 //if we allow '|' in here, then math outfix exprs need to be | |x| o b| (space between the |x| and the leftmost
-SYM = ("!"|"*"|"+"|"-"|"/"|"~"|"<"|"="|">")
+SYM = ("!"|"*"|"+"|"-"|"/"|"~"|"<"|"="|"/="|">")
 STR =      "\""
 
 STRING = {STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}?
