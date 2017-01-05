@@ -329,7 +329,7 @@ ElseStatement ::= else Statements {pin=1}
 
 // program expressions
 
-Exp ::= SelectorExp | ParamExp | InfixExp | NestedExp | PrimeExp
+Exp ::= SelectorExp | InfixExp | ParamExp | NestedExp | PrimeExp
 {methods=[getResType] implements="edu.clemson.resolve.jetbrains.psi.ResTypeOwner"}
 fake BinaryExp ::= Exp+ { methods=[left="Exp[0]" right="Exp[1]"] extends=Exp }
 
