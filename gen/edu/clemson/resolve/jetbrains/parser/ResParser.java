@@ -3479,11 +3479,10 @@ public class ResParser implements PsiParser, LightPsiParser {
   /* ********************************************************** */
   // Expression root: Exp
   // Operator priority table:
-  // 0: BINARY(SelectorExp)
-  // 1: BINARY(InfixExp)
-  // 2: POSTFIX(ParamExp)
-  // 3: ATOM(NestedExp)
-  // 4: ATOM(LiteralExp) ATOM(NameExp)
+  // 0: BINARY(InfixExp)
+  // 1: POSTFIX(ParamExp)
+  // 2: ATOM(NestedExp)
+  // 3: ATOM(LiteralExp) BINARY(SelectorExp) ATOM(NameExp)
   public static boolean Exp(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "Exp")) return false;
     addVariant(b, "<exp>");
@@ -3503,17 +3502,17 @@ public class ResParser implements PsiParser, LightPsiParser {
     boolean r = true;
     while (true) {
       Marker m = enter_section_(b, l, _LEFT_, null);
-      if (g < 0 && consumeTokenSmart(b, DOT)) {
+      if (g < 0 && ProgSymbolName(b, l + 1)) {
         r = Exp(b, l, 0);
-        exit_section_(b, l, m, SELECTOR_EXP, r, true, null);
-      }
-      else if (g < 1 && ProgSymbolName(b, l + 1)) {
-        r = Exp(b, l, 1);
         exit_section_(b, l, m, INFIX_EXP, r, true, null);
       }
-      else if (g < 2 && leftMarkerIs(b, REFERENCE_EXP) && ArgumentList(b, l + 1)) {
+      else if (g < 1 && leftMarkerIs(b, REFERENCE_EXP) && ArgumentList(b, l + 1)) {
         r = true;
         exit_section_(b, l, m, PARAM_EXP, r, true, null);
+      }
+      else if (g < 3 && consumeTokenSmart(b, DOT)) {
+        r = Exp(b, l, 3);
+        exit_section_(b, l, m, SELECTOR_EXP, r, true, null);
       }
       else {
         exit_section_(b, l, m, null, false, false, null);

@@ -137,7 +137,7 @@ public class RESOLVECompletionUtil {
                                     typeText += grp.getMathExp().getText();
                                 }
                                 else {
-                                    typeText += " ⨯ " + grp.getMathExp().getText();
+                                    typeText += " × " + grp.getMathExp().getText();
                                 }
                             }
                         }
