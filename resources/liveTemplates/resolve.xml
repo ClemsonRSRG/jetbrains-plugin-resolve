@@ -139,7 +139,7 @@
         </context>
     </template>
 
-    <template description='⇐' name='_CLeftarrow' toReformat='true' toShortenFQNames='true'
+    <template description='⇐' name='_bigleftarrow' toReformat='true' toShortenFQNames='true'
               value='⇐ '>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -155,7 +155,7 @@
         </context>
     </template>
 
-    <template description='⇒' name='_CRightarrow' toReformat='true' toShortenFQNames='true'
+    <template description='⇒' name='_bigrightarrow' toReformat='true' toShortenFQNames='true'
               value='⇒ '>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -167,10 +167,11 @@
               value='⟶ '>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
         </context>
     </template>
 
-    <template description='⟹' name='_CLongrightarrow' toReformat='true' toShortenFQNames='true'
+    <template description='⟹' name='_biglongrightarrow' toReformat='true' toShortenFQNames='true'
               value='⟹ '>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -185,7 +186,7 @@
         </context>
     </template>
 
-    <template description='⇔' name='_CLeftrightarrow' toReformat='true' toShortenFQNames='true'
+    <template description='⇔' name='_bigleftrightarrow' toReformat='true' toShortenFQNames='true'
               value='⇔'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -201,7 +202,7 @@
         </context>
     </template>
 
-    <template description='⟺' name='_Clongleftrightarrow' toReformat='true' toShortenFQNames='true'
+    <template description='⟺' name='_biglongleftrightarrow' toReformat='true' toShortenFQNames='true'
               value='⟺'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -312,7 +313,7 @@
         </context>
     </template>
 
-    <template description='⇓' name='_CDown' toReformat='true' toShortenFQNames='true'
+    <template description='⇓' name='_bigdown' toReformat='true' toShortenFQNames='true'
               value='⇓'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -328,7 +329,7 @@
         </context>
     </template>
 
-    <template description='⇕' name='_CUpdown' toReformat='true' toShortenFQNames='true'
+    <template description='⇕' name='_bigupdown' toReformat='true' toShortenFQNames='true'
               value='⇕'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -537,7 +538,7 @@
         </context>
     </template>
 
-    <template description='Γ' name='_CGamma' toReformat='true' toShortenFQNames='true'
+    <template description='Γ' name='_biggamma' toReformat='true' toShortenFQNames='true'
               value='Γ'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -545,7 +546,7 @@
         </context>
     </template>
 
-    <template description='Δ' name='_CDelta' toReformat='true' toShortenFQNames='true'
+    <template description='Δ' name='_bigdelta' toReformat='true' toShortenFQNames='true'
               value='Δ'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -553,7 +554,7 @@
         </context>
     </template>
 
-    <template description='Λ' name='_CLambda' toReformat='true' toShortenFQNames='true'
+    <template description='Λ' name='_biglambda' toReformat='true' toShortenFQNames='true'
               value='Λ'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -561,7 +562,7 @@
         </context>
     </template>
 
-    <template description='Ξ' name='_CXi' toReformat='true' toShortenFQNames='true'
+    <template description='Ξ' name='_bigxi' toReformat='true' toShortenFQNames='true'
               value='Ξ'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -571,7 +572,7 @@
 
     ΔΛΞΠΣΥΦΩ
 
-    <template description='Σ' name='_CSigma' toReformat='true' toShortenFQNames='true'
+    <template description='Σ' name='_bigsigma' toReformat='true' toShortenFQNames='true'
               value='Σ'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -579,7 +580,7 @@
         </context>
     </template>
 
-    <template description='Υ' name='_CUpsilon' toReformat='true' toShortenFQNames='true'
+    <template description='Υ' name='_bigupsilon' toReformat='true' toShortenFQNames='true'
               value='Υ'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -587,7 +588,7 @@
         </context>
     </template>
 
-    <template description='Φ' name='_CPhi' toReformat='true' toShortenFQNames='true'
+    <template description='Φ' name='_bigphi' toReformat='true' toShortenFQNames='true'
               value='Φ'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -595,7 +596,7 @@
         </context>
     </template>
 
-    <template description='Ψ' name='_CPsi' toReformat='true' toShortenFQNames='true'
+    <template description='Ψ' name='_bigpsi' toReformat='true' toShortenFQNames='true'
               value='Ψ'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -603,7 +604,7 @@
         </context>
     </template>
 
-    <template description='Ω' name='_COmega' toReformat='true' toShortenFQNames='true'
+    <template description='Ω' name='_bigomega' toReformat='true' toShortenFQNames='true'
               value='Ω'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -613,7 +614,7 @@
 
     <!-- LETTERS -->
 
-    <template description='ℂ' name='_Complex' toReformat='true' toShortenFQNames='true'
+    <template description='ℂ' name='_complex' toReformat='true' toShortenFQNames='true'
               value='ℂ'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -621,7 +622,7 @@
         </context>
     </template>
 
-    <template description='ℕ' name='_Nat' toReformat='true' toShortenFQNames='true'
+    <template description='ℕ' name='_nat' toReformat='true' toShortenFQNames='true'
               value='ℕ'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -637,7 +638,7 @@
         </context>
     </template>
 
-    <template description='ℝ' name='_Real' toReformat='true' toShortenFQNames='true'
+    <template description='ℝ' name='_real' toReformat='true' toShortenFQNames='true'
               value='ℝ'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -645,7 +646,7 @@
         </context>
     </template>
 
-    <template description='ℤ' name='_Int' toReformat='true' toShortenFQNames='true'
+    <template description='ℤ' name='_int' toReformat='true' toShortenFQNames='true'
               value='ℤ'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -653,7 +654,7 @@
         </context>
     </template>
 
-    <template description='℘' name='_Powerset' toReformat='true' toShortenFQNames='true'
+    <template description='℘' name='_powerset' toReformat='true' toShortenFQNames='true'
               value='℘'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -683,28 +684,28 @@
         </context>
     </template>
 
-    <template description='∧' name='_and' toReformat='true' toShortenFQNames='true'
+    <template description='∧' name='_wedge' toReformat='true' toShortenFQNames='true'
               value='∧ '>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
         </context>
     </template>
 
-    <template description='⋀' name='_And' toReformat='true' toShortenFQNames='true'
+    <template description='⋀' name='_bigwedge' toReformat='true' toShortenFQNames='true'
               value='⋀'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
         </context>
     </template>
 
-    <template description='∨' name='_or' toReformat='true' toShortenFQNames='true'
+    <template description='∨' name='_vee' toReformat='true' toShortenFQNames='true'
               value='∨ '>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
         </context>
     </template>
 
-    <template description='⋁' name='_Or' toReformat='true' toShortenFQNames='true'
+    <template description='⋁' name='_bigvee' toReformat='true' toShortenFQNames='true'
               value='⋁'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -763,7 +764,7 @@
         </context>
     </template>
 
-    <template description='⋂' name='_CCap' toReformat='true' toShortenFQNames='true'
+    <template description='⋂' name='_bigcap' toReformat='true' toShortenFQNames='true'
               value='⋂'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -779,7 +780,7 @@
         </context>
     </template>
 
-    <template description='⋃' name='_CCup' toReformat='true' toShortenFQNames='true'
+    <template description='⋃' name='_bigcup' toReformat='true' toShortenFQNames='true'
               value='⋃'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -795,7 +796,7 @@
         </context>
     </template>
 
-    <template description='⨆' name='_CSqcup' toReformat='true' toShortenFQNames='true'
+    <template description='⨆' name='_bigsqcup' toReformat='true' toShortenFQNames='true'
               value='⨆'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -811,7 +812,7 @@
         </context>
     </template>
 
-    <template description='⨅' name='_CSqcap' toReformat='true' toShortenFQNames='true'
+    <template description='⨅' name='_bigsqcap' toReformat='true' toShortenFQNames='true'
               value='⨅'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -835,7 +836,7 @@
         </context>
     </template>
 
-    <template description='⨄' name='_CCupplus' toReformat='true' toShortenFQNames='true'
+    <template description='⨄' name='_bigcupplus' toReformat='true' toShortenFQNames='true'
               value='⨄'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -914,7 +915,7 @@
         </context>
     </template>
 
-    <template description='⨁' name='_COplus' toReformat='true' toShortenFQNames='true'
+    <template description='⨁' name='_bigoplus' toReformat='true' toShortenFQNames='true'
               value='⨁'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -930,7 +931,7 @@
         </context>
     </template>
 
-    <template description='⨂' name='_COtimes' toReformat='true' toShortenFQNames='true'
+    <template description='⨂' name='_bigotimes' toReformat='true' toShortenFQNames='true'
               value='⨂'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -946,7 +947,7 @@
         </context>
     </template>
 
-    <template description='⨀' name='_COdot' toReformat='true' toShortenFQNames='true'
+    <template description='⨀' name='_bigodot' toReformat='true' toShortenFQNames='true'
               value='⨀'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -986,7 +987,7 @@
         </context>
     </template>
 
-    <template description='∑' name='_CSum' toReformat='true' toShortenFQNames='true'
+    <template description='∑' name='_bigsum' toReformat='true' toShortenFQNames='true'
               value='∑'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -994,7 +995,7 @@
         </context>
     </template>
 
-    <template description='∏' name='_CProd' toReformat='true' toShortenFQNames='true'
+    <template description='∏' name='_bigprod' toReformat='true' toShortenFQNames='true'
               value='∏'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -1010,7 +1011,7 @@
         </context>
     </template>
 
-    <template description='∐' name='_CCoprod' toReformat='true' toShortenFQNames='true'
+    <template description='∐' name='_bigcoprod' toReformat='true' toShortenFQNames='true'
               value='∐'>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
@@ -1074,6 +1075,14 @@
         </context>
     </template>
 
+    <template description='∸' name='_dotminus' toReformat='true' toShortenFQNames='true'
+              value='∸'>
+        <context>
+            <option name='RESOLVE_MATH_REF' value='true'/>
+            <option name='RESOLVE_MATH_DEF' value='true'/>
+        </context>
+    </template>
+
     <!-- RELATIONS -->
 
     <template description='≤' name='_leq' toReformat='true' toShortenFQNames='true'
@@ -1085,7 +1094,7 @@
     </template>
 
     <template description='≥' name='_geq' toReformat='true' toShortenFQNames='true'
-              value='≥'>
+              value='≥ '>
         <context>
             <option name='RESOLVE_MATH_REF' value='true'/>
             <option name='RESOLVE_MATH_DEF' value='true'/>

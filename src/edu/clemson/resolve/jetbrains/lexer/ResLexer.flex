@@ -52,11 +52,19 @@ U_LETTER    = ("𝔹"|"ℂ"|"ℕ"|"ℚ"|"ℝ"|"ℤ"|"℘")
 
 U_OPERATOR  = ("∩"|"⋂"|"∪"|"⋃"|"⊔"|"⨆"|"⊓"|"⨅"|"∝"|"⊎"|"⨄"|"±"|"∓"|"×"|"÷"|
                "⋅"|"⋆"|"∙"|"∘"|"⊕"|"⨁"|"⊗"|"⨂"|"⊙"|"⨀"|"⊖"|"⊘"|"⟕"|"⟖"|"⟗"|
-               "∑"|"∏"|"⨿"|"∐"|"⋈"|"⋉"|"⋊"|"⊠"|"⊡"|"∎"|"⨪")
+               "∑"|"∏"|"⨿"|"∐"|"⋈"|"⋉"|"⋊"|"⊠"|"⊡"|"∎"|"⨪"|"∸")
 
 U_RELATION  = ("⊢"|"⊨"|"⊩"|"⊫"|"⊣"|"≤"|"≥"|"≪"|"≫"|"≲"|"≳"|"⪅"|"⪆"|"∈"|
                "∉"|"⊂"|"⊃"|"⊆"|"⊇"|"⊏"|"⊐"|"⊑"|"⊒"|"∼"|"≐"|"≃"|"≈"|"≍"|"≠"|
                "≅"|"≡"|"≼"|"≽"|"⊲"|"⊳"|"⊴"|"⊵"|"△"|"≜")
+
+//Used to be this... this is more flexible, but harder to test in practice... And right now I want
+//a firm grip on the parser. So this will have to wait. Overall though, this would be necessary if
+//we ever add a feature to the language that lets people specify aliases for operations... like:
+//Infix + Operation Add(evaluates i, j : Integer) : Integer;
+//Infix /= Operation Not_Equals(evaluates i, j : Integer) : Boolean;
+//  etc...
+//SYM = ("!"|"*"|"+"|"-"|"/"|"~"|"<"|"=")+
 
 //if we allow '|' in here, then math outfix exprs need to be | |x| o b| (space between the |x| and the leftmost
 SYM = ("!"|"*"|"+"|"-"|"/"|"~"|"<"|"="|"/="|">"|">="|"<=")
