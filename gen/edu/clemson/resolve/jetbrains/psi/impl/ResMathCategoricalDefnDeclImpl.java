@@ -51,6 +51,12 @@ public class ResMathCategoricalDefnDeclImpl extends ResAbstractMathDefnImpl impl
 
   @Override
   @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getFor() {
     return findChildByType(FOR);
   }
@@ -59,12 +65,6 @@ public class ResMathCategoricalDefnDeclImpl extends ResAbstractMathDefnImpl impl
   @Nullable
   public PsiElement getIs() {
     return findChildByType(IS);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getSemicolon() {
-    return findChildByType(SEMICOLON);
   }
 
 }

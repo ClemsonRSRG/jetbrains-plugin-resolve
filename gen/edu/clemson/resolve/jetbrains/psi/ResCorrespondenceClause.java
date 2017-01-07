@@ -10,10 +10,10 @@ public interface ResCorrespondenceClause extends ResCompositeElement {
   @Nullable
   ResMathExp getMathExp();
 
-  @NotNull
-  PsiElement getCorrespondence();
-
   @Nullable
   PsiElement getSemicolon();
+
+  @NotNull
+  PsiElement getCorrespondence();
 
 }

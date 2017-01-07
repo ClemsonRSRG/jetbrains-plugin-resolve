@@ -13,13 +13,13 @@ public interface ResMathSetRestrictionExp extends ResMathExp {
   @Nullable
   ResMathVarDecl getMathVarDecl();
 
+  @Nullable
+  PsiElement getBar();
+
   @NotNull
   PsiElement getLbrace();
 
   @Nullable
   PsiElement getRbrace();
-
-  @Nullable
-  PsiElement getRestrictionBar();
 
 }

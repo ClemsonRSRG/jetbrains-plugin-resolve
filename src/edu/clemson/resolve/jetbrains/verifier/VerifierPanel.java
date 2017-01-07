@@ -4,9 +4,9 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.keymap.KeymapUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.components.JBLabel;
+import com.intellij.ui.components.JBPanel;
 import com.intellij.util.ui.JBFont;
 import com.intellij.util.ui.UIUtil;
-import edu.clemson.resolve.jetbrains.actions.ProveAction;
 import edu.clemson.resolve.vcgen.VC;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,9 +14,11 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 
-public class VerifierPanel extends JPanel {
+public class VerifierPanel extends JBPanel {
 
     public static final Logger LOG = Logger.getInstance("RESOLVE VerifierPanel");
 
@@ -47,15 +49,15 @@ public class VerifierPanel extends JPanel {
         startingPanel.setLayout(new BoxLayout(startingPanel, BoxLayout.Y_AXIS));
         startingPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-        String proverShortcut = KeymapUtil.getFirstKeyboardShortcutText("resolve.ProveVCs");
+        String proverShortcut = KeymapUtil.getFirstKeyboardShortcutText("resolve.GenVCs");
         JBLabel startingLabel = new JBLabel(
                 "<html>" +
                 "<div style='text-align: center;'>" +
                 "<font color='#7E7C7B'>" +
-                "<b>Program has not yet been verified</b>" +
+                "<b>No VCs generated</b>" +
                 "<br><br>" +
                 "Right-click an open editor and select<br>" +
-                "\"RESOLVE Prove Program\"" +
+                "\"RESOLVE Generate VCs\"" +
                 "<br>" +
                 "(shortcut: <span style=\"color: #7CB5FA\">" + proverShortcut + "</span>)" +
                 "<br><br>" +
@@ -68,21 +70,17 @@ public class VerifierPanel extends JPanel {
         add(startingPanel);
     }
 
-    public void createVerifierView2(List<VC> vcs, ProveAction.MyProverListener pl) {
+    public void createVerifierView(Collection<VC> vcs) {
         this.removeAll();
-        vcSelectorPanel = new VerificationConditionSelectorPanel(project, vcs, pl);
+        vcSelectorPanel = new VerificationConditionSelectorPanel(project, vcs);
         add(vcSelectorPanel, BorderLayout.CENTER);
         revalidate();
     }
 
     public void revertToBaseGUI() {
-       // if (activeVCSideBar != null) {
-            //we're going back to the default screen, so if there were active editors (before say the user messed
-            //with the doc) remove em' here.
-           // for (VCSection s : activeVCSideBar.getSections()) {
-           //     s.previewEditor.removeNotify();
-           // }
-      //  }
+        for (VerificationPreviewEditor e : getActivePreviewEditors()) {
+            e.removeNotify();
+        }
         this.removeAll();
         this.vcSelectorPanel = null;
         createStartingGUI();

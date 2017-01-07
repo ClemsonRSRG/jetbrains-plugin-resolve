@@ -17,6 +17,9 @@ public interface ResParameterMode extends ResCompositeElement {
   PsiElement getEvaluates();
 
   @Nullable
+  PsiElement getIdentifier();
+
+  @Nullable
   PsiElement getPreserves();
 
   @Nullable
@@ -27,8 +30,5 @@ public interface ResParameterMode extends ResCompositeElement {
 
   @Nullable
   PsiElement getUpdates();
-
-  @Nullable
-  PsiElement getIdentifier();
 
 }

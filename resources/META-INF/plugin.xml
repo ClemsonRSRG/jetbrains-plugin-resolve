@@ -58,7 +58,6 @@
         <colorSettingsPage implementation="edu.clemson.resolve.jetbrains.highlighting.RESOLVEColorsAndFontsPage"/>
         <lang.braceMatcher language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.editor.RESOLVEBraceMatcher"/>
         <quoteHandler fileType="RESOLVE" className="edu.clemson.resolve.jetbrains.editor.RESOLVEQuoteHandler"/>
-        <externalAnnotator language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.annotation.RESOLVEExternalAnnotator"/>
         <fileIconPatcher implementation="edu.clemson.resolve.jetbrains.RESOLVEFileIconPatcher"/>
         <codeInsight.parameterInfo language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.editor.RESOLVEParameterInfoHandler"/>
         <lang.documentationProvider language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.RESOLVEDocumentationProvider"/>
@@ -104,16 +103,16 @@
                 text="RESOLVE File" description="Create a new RESOLVE file">
             <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
         </action>
-        <!--<action id="resolve.GenVCs" class="edu.clemson.resolve.jetbrains.actions.GenerateVCsAction"
+            <action id="resolve.GenVCs" class="edu.clemson.resolve.jetbrains.actions.GenerateVCsAction"
                                  text="RESOLVE Generate VCs">
-        <keyboard-shortcut keymap="$default" first-keystroke="control shift H"/>
-        <add-to-group group-id="ToolsMenu" anchor="before" relative-to-action="com.intellij.tools.ExternalToolsGroup"/>
-        <add-to-group group-id="EditorPopupMenu" anchor="last"/>
-        <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
-    </action>-->
-        <action id="resolve.ProveVCs" class="edu.clemson.resolve.jetbrains.actions.ProveAction"
-                text="RESOLVE Prove Program">
-            <keyboard-shortcut keymap="$default" first-keystroke="control shift P"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="control shift H"/>
+            <add-to-group group-id="ToolsMenu" anchor="before" relative-to-action="com.intellij.tools.ExternalToolsGroup"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+        </action>
+        <action id="resolve.Analyze" class="edu.clemson.resolve.jetbrains.actions.AnalyzeAction"
+                text="RESOLVE Analyze Current Source">
+            <keyboard-shortcut keymap="$default" first-keystroke="control shift G"/>
             <add-to-group group-id="ToolsMenu" anchor="before" relative-to-action="com.intellij.tools.ExternalToolsGroup"/>
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
             <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>

@@ -16,7 +16,4 @@ public interface ResMathVarDeclGroup extends ResCompositeElement {
   @Nullable
   PsiElement getColon();
 
-  @Nullable
-  PsiElement getHyperColon();
-
 }

@@ -44,15 +44,9 @@ public class ResMathPostfixDefnSigImpl extends ResAbstractMathSigImpl implements
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getColon() {
-    return findChildByType(COLON);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getHyperColon() {
-    return findChildByType(HYPER_COLON);
+    return findNotNullChildByType(COLON);
   }
 
 }

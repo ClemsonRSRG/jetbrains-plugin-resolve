@@ -45,8 +45,8 @@ public class ResMathSymbolNameImpl extends ResCompositeElementImpl implements Re
 
   @Override
   @Nullable
-  public PsiElement getMathSymbol() {
-    return findChildByType(MATH_SYMBOL);
+  public PsiElement getMathsymbol() {
+    return findChildByType(MATHSYMBOL);
   }
 
   @Override

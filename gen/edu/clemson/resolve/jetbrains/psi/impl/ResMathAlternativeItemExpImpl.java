@@ -32,6 +32,12 @@ public class ResMathAlternativeItemExpImpl extends ResMathExpImpl implements Res
   }
 
   @Override
+  @NotNull
+  public PsiElement getSemicolon() {
+    return findNotNullChildByType(SEMICOLON);
+  }
+
+  @Override
   @Nullable
   public PsiElement getIf() {
     return findChildByType(IF);
@@ -41,12 +47,6 @@ public class ResMathAlternativeItemExpImpl extends ResMathExpImpl implements Res
   @Nullable
   public PsiElement getOtherwise() {
     return findChildByType(OTHERWISE);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getSemicolon() {
-    return findNotNullChildByType(SEMICOLON);
   }
 
 }

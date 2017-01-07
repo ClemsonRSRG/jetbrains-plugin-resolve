@@ -27,12 +27,6 @@ public class ResExtensionPairingImpl extends ResCompositeElementImpl implements 
 
   @Override
   @NotNull
-  public List<ResModuleArgList> getModuleArgListList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleArgList.class);
-  }
-
-  @Override
-  @NotNull
   public List<ResModuleIdentifier> getModuleIdentifierList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleIdentifier.class);
   }
@@ -44,9 +38,21 @@ public class ResExtensionPairingImpl extends ResCompositeElementImpl implements 
   }
 
   @Override
+  @Nullable
+  public ResModuleRealizArgList getModuleRealizArgList() {
+    return findChildByClass(ResModuleRealizArgList.class);
+  }
+
+  @Override
+  @Nullable
+  public ResModuleSpecArgList getModuleSpecArgList() {
+    return findChildByClass(ResModuleSpecArgList.class);
+  }
+
+  @Override
   @NotNull
-  public PsiElement getExtended() {
-    return findNotNullChildByType(EXTENDED);
+  public PsiElement getEnhanced() {
+    return findNotNullChildByType(ENHANCED);
   }
 
   @Override
@@ -57,8 +63,8 @@ public class ResExtensionPairingImpl extends ResCompositeElementImpl implements 
 
   @Override
   @Nullable
-  public PsiElement getImplemented() {
-    return findChildByType(IMPLEMENTED);
+  public PsiElement getRealized() {
+    return findChildByType(REALIZED);
   }
 
   @Nullable

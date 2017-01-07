@@ -58,12 +58,6 @@ public class ResTypeReprDeclImpl extends ResAbstractTypeLikeNodeImpl implements 
 
   @Override
   @Nullable
-  public PsiElement getIs() {
-    return findChildByType(IS);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getSemicolon() {
     return findChildByType(SEMICOLON);
   }
@@ -72,6 +66,12 @@ public class ResTypeReprDeclImpl extends ResAbstractTypeLikeNodeImpl implements 
   @NotNull
   public PsiElement getIdentifier() {
     return findNotNullChildByType(IDENTIFIER);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getIs() {
+    return findChildByType(IS);
   }
 
   @Nullable

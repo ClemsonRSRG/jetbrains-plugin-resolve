@@ -22,14 +22,14 @@ public interface ResImplModuleDecl extends ResModuleDecl {
   @Nullable
   ResUsesList getUsesList();
 
+  @NotNull
+  PsiElement getRealization();
+
   @Nullable
   PsiElement getEnd();
 
   @Nullable
   PsiElement getFor();
-
-  @NotNull
-  PsiElement getImplementation();
 
   @Nullable
   PsiElement getOf();

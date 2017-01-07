@@ -43,11 +43,6 @@ public class ResPsiImplUtil {
         return moduleIdentifierSpec.getModuleLibraryIdentifier();
     }
 
-    @Nullable
-    public static PsiElement getAlias(@NotNull ResModuleIdentifierSpec moduleIdentifierSpec) {
-        return moduleIdentifierSpec.getIdentifier();
-    }
-
     @NotNull
     public static TextRange getModuleIdentiferTextRange(@NotNull ResModuleIdentifier moduleIdentifier) {
         String text = moduleIdentifier.getText();
@@ -77,7 +72,8 @@ public class ResPsiImplUtil {
      */
     public static boolean shouldReferenceModule(ResReferenceExp o) {
         return PsiTreeUtil.getParentOfType(o, ResFacilityDecl.class) != null &&
-                PsiTreeUtil.getParentOfType(o, ResModuleArgList.class) == null;
+                PsiTreeUtil.getParentOfType(o, ResModuleSpecArgList.class) == null &&
+                PsiTreeUtil.getParentOfType(o, ResModuleRealizArgList.class) == null;
     }
 
     @Nullable
@@ -95,8 +91,13 @@ public class ResPsiImplUtil {
 
     @NotNull
     public static String getName(@NotNull ResModuleIdentifierSpec moduleIdentifierSpec) {
-        return moduleIdentifierSpec.getAlias() != null ? moduleIdentifierSpec.getAlias().getText() :
-                moduleIdentifierSpec.getModuleIdentifier().getText();
+        return moduleIdentifierSpec.getModuleIdentifier().getText();
+    }
+
+    //TODO: This will come up when aliases get introduced
+    @Nullable
+    public static PsiElement getIdentifier(@NotNull ResModuleIdentifierSpec o) {
+        return null;
     }
 
     @NotNull

@@ -32,15 +32,15 @@ public class ResEnsuresClauseImpl extends ResCompositeElementImpl implements Res
   }
 
   @Override
-  @NotNull
-  public PsiElement getEnsures() {
-    return findNotNullChildByType(ENSURES);
-  }
-
-  @Override
   @Nullable
   public PsiElement getSemicolon() {
     return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getEnsures() {
+    return findNotNullChildByType(ENSURES);
   }
 
 }

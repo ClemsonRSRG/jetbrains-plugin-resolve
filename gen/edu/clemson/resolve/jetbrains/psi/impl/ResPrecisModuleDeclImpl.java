@@ -38,15 +38,15 @@ public class ResPrecisModuleDeclImpl extends ResAbstractModuleImpl implements Re
   }
 
   @Override
-  @Nullable
-  public PsiElement getEnd() {
-    return findChildByType(END);
-  }
-
-  @Override
   @NotNull
   public PsiElement getPrecis() {
     return findNotNullChildByType(PRECIS);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getEnd() {
+    return findChildByType(END);
   }
 
 }

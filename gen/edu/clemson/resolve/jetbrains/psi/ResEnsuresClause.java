@@ -10,10 +10,10 @@ public interface ResEnsuresClause extends ResCompositeElement {
   @Nullable
   ResMathExp getMathExp();
 
-  @NotNull
-  PsiElement getEnsures();
-
   @Nullable
   PsiElement getSemicolon();
+
+  @NotNull
+  PsiElement getEnsures();
 
 }

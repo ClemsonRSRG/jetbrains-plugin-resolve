@@ -32,15 +32,15 @@ public class ResCorrespondenceClauseImpl extends ResCompositeElementImpl impleme
   }
 
   @Override
-  @NotNull
-  public PsiElement getCorrespondence() {
-    return findNotNullChildByType(CORRESPONDENCE);
-  }
-
-  @Override
   @Nullable
   public PsiElement getSemicolon() {
     return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getCorrespondence() {
+    return findNotNullChildByType(CORRESPONDENCE);
   }
 
 }

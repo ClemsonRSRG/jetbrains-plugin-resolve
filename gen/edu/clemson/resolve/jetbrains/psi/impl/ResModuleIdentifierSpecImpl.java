@@ -39,20 +39,8 @@ public class ResModuleIdentifierSpecImpl extends ResNamedElementImpl implements 
 
   @Override
   @Nullable
-  public PsiElement getAs() {
-    return findChildByType(AS);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getFrom() {
     return findChildByType(FROM);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
   }
 
   @Nullable
@@ -60,14 +48,14 @@ public class ResModuleIdentifierSpecImpl extends ResNamedElementImpl implements 
     return ResPsiImplUtil.getFromLibraryIdentifier(this);
   }
 
-  @Nullable
-  public PsiElement getAlias() {
-    return ResPsiImplUtil.getAlias(this);
-  }
-
   @NotNull
   public String getName() {
     return ResPsiImplUtil.getName(this);
+  }
+
+  @Nullable
+  public PsiElement getIdentifier() {
+    return ResPsiImplUtil.getIdentifier(this);
   }
 
   public boolean shouldGoDeeper() {

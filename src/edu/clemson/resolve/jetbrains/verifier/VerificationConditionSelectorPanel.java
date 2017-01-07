@@ -7,7 +7,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.components.JBScrollPane;
 import edu.clemson.resolve.jetbrains.RESOLVEIcons;
-import edu.clemson.resolve.jetbrains.actions.ProveAction;
+import edu.clemson.resolve.jetbrains.RESOLVEPluginController;
 import edu.clemson.resolve.proving.absyn.PExp;
 import edu.clemson.resolve.vcgen.VC;
 import org.jetbrains.annotations.NotNull;
@@ -17,10 +17,8 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class VerificationConditionSelectorPanel extends JPanel {
 
@@ -40,25 +38,29 @@ public class VerificationConditionSelectorPanel extends JPanel {
     private JBScrollPane scrollPane;
     public final Map<Integer, ConditionCollapsiblePanel> vcTabs = new HashMap<>();
     public final List<VerificationPreviewEditor> previewEditors = new ArrayList<>();
-    private final ProveAction.MyProverListener listener;
 
     public VerificationConditionSelectorPanel(@NotNull Project project,
-                                              @NotNull List<VC> vcs,
-                                              @NotNull ProveAction.MyProverListener listener) {
+                                              @NotNull Collection<VC> vcs) {
         super(new BorderLayout());
         JComponent selector = createVerificationConditionSelector(vcs);
 
         this.project = project;
-        this.listener = listener;
+
+        JPanel x = new JPanel();
+        x.setLayout(new BorderLayout());
 
         this.scrollPane = new JBScrollPane(selector);
         this.scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         this.scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        this.scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        x.add(createButtonBar());
+        x.add(scrollPane);
+        add(createButtonBar(), BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
+
     }
 
-    protected JComponent createVerificationConditionSelector(@NotNull List<VC> vcs) {
-
+    private JComponent createButtonBar() {
         ActionManager actionManager = ActionManager.getInstance();
 
         DefaultActionGroup actionGroup = new DefaultActionGroup(ID_ACTION_GROUP, false);
@@ -69,13 +71,15 @@ public class VerificationConditionSelectorPanel extends JPanel {
                 ProgressManager.getInstance().run(proverTask);
             }
         });*/
-        actionGroup.add(new AnAction("Cancel", "Stop the prover", RESOLVEIcons.STOP) {
+
+        //TODO: Need an export option...
+        /*actionGroup.add(new AnAction("Cancel", "Stop the prover", RESOLVEIcons.STOP) {
             @Override
             public void actionPerformed(AnActionEvent e) {
                 listener.cancelled = true;
             }
-        });
-        actionGroup.addSeparator();
+        });*/
+        //actionGroup.addSeparator();
 
         actionGroup.add(new AnAction("Collapse all VCs", "Collapse all", RESOLVEIcons.COLLAPSE) {
             @Override
@@ -95,9 +99,13 @@ public class VerificationConditionSelectorPanel extends JPanel {
         });
         ActionToolbar toolBar = actionManager.createActionToolbar(ID_ACTION_TOOLBAR, actionGroup, true);
 
-        JPanel selectorPanel = new JPanel();
         JComponent buttonBar = toolBar.getComponent();
         buttonBar.setBorder(TOOLBAR_BORDER);
+        return buttonBar;
+    }
+
+    protected JComponent createVerificationConditionSelector(@NotNull Collection<VC> vcs) {
+        JPanel selectorPanel = new JPanel();
 
         GridBagLayout gridbag = new GridBagLayout();
         selectorPanel.setLayout(gridbag);
@@ -106,28 +114,12 @@ public class VerificationConditionSelectorPanel extends JPanel {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1;
 
-        gridbag.addLayoutComponent(buttonBar, c);
-        selectorPanel.add(buttonBar);
-        c.gridy++;
-
-        //Component x = Box.createVerticalStrut(2);
-        //gridbag.addLayoutComponent(x, c);
-        //selectorPanel.add(x);
-       // c.gridy++;
-
-        GridBagLayout categoryGridbag = null;
-        GridBagConstraints cc = new GridBagConstraints();
-        cc.gridx = cc.gridy = 0;
-        cc.weightx = 1;
-        cc.fill = GridBagConstraints.HORIZONTAL;
-
         for (VC vc : vcs) {
             JPanel categoryPanel = new JPanel();
-            categoryGridbag = new GridBagLayout();
-            categoryPanel.setLayout(categoryGridbag);
+            categoryPanel.setLayout(new BorderLayout());
 
             ConditionCollapsiblePanel collapsePanel =
-                    new ConditionCollapsiblePanel(categoryPanel, ConditionCollapsiblePanel.Orientation.VERTICAL,
+                    new ConditionCollapsiblePanel(categoryPanel,
                             "<html><font color='#404040'><b>VC #" + vc.getNumber() + "</b></html>",
                             "click to expand and view VC information");
             vcTabs.put(vc.getNumber(), collapsePanel);
@@ -140,8 +132,6 @@ public class VerificationConditionSelectorPanel extends JPanel {
             c.gridy++;
             VerificationPreviewEditor preview = getVCPreview(vc);
             previewEditors.add(preview);
-            categoryGridbag.addLayoutComponent(preview, cc);
-            cc.gridy++;
             categoryPanel.add(preview);
         }
         // add empty component to take up any extra room on bottom
@@ -150,7 +140,6 @@ public class VerificationConditionSelectorPanel extends JPanel {
         gridbag.addLayoutComponent(trailer, c);
         selectorPanel.add(trailer);
 
-        //applyDefaults();
         return selectorPanel;
     }
 
@@ -172,7 +161,7 @@ public class VerificationConditionSelectorPanel extends JPanel {
             Graphics2D g2d = (Graphics2D) g.create();
             g2d.setStroke(new BasicStroke(3));
             g2d.setColor(JBColor.LIGHT_GRAY);
-            g2d.drawLine(x, y + height - 1, x + width, y + height - 1);
+            g2d.drawLine(x, y+(height), x + width, y+(height));
         }
     }
 
@@ -180,23 +169,16 @@ public class VerificationConditionSelectorPanel extends JPanel {
 
         public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
             Graphics2D g2d = (Graphics2D) g.create();
-            g2d.setStroke(new BasicStroke(3));
+            g2d.setStroke(new BasicStroke(2));
             g2d.setColor(JBColor.LIGHT_GRAY);
             g2d.drawLine(x, y+(height-6), x + width, y+(height-6));
         }
     }
 
     public VerificationPreviewEditor getVCPreview(VC vc) {
-        List<PExp> antecedents = vc.getAntecedent().splitIntoConjuncts();
-        String vcText = "";
-        for (int i = 0; i < antecedents.size(); i++) {
-            vcText += i + 1 + ". " + antecedents.get(i) + "\n";
-        }
-        vcText += "⊢\n";
-        vcText += vc.getConsequent();
+        String vcText = vc.toString();
         VerificationPreviewEditor preview = new VerificationPreviewEditor(project, vcText);
         preview.setBackground(JBColor.WHITE);
-        preview.addNotify();
         return preview;
     }
 }

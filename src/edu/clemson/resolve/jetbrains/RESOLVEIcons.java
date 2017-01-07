@@ -49,6 +49,8 @@ public interface RESOLVEIcons {
 
     public static final Icon TIMED_OUT = IconLoader.getIcon("/edu/clemson/resolve/icons/timeout.png");  //TODO: Make this exlamation point (with triangle, etc)
 
+    public static final Icon SYMBOL_ICON = IconLoader.getIcon("/edu/clemson/resolve/icons/symbols_icon.png");
+
     public static final Icon PROCESSING1 = IconLoader.getIcon("/runConfigurations/testInProgress1.png");
     public static final Icon PROCESSING2 = IconLoader.getIcon("/runConfigurations/testInProgress2.png");
     public static final Icon PROCESSING3 = IconLoader.getIcon("/runConfigurations/testInProgress3.png");

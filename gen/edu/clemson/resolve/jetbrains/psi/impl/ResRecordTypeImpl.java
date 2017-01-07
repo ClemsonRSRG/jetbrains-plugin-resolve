@@ -32,15 +32,15 @@ public class ResRecordTypeImpl extends ResTypeImpl implements ResRecordType {
   }
 
   @Override
-  @Nullable
-  public PsiElement getEnd() {
-    return findChildByType(END);
-  }
-
-  @Override
   @NotNull
   public PsiElement getRecord() {
     return findNotNullChildByType(RECORD);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getEnd() {
+    return findChildByType(END);
   }
 
 }

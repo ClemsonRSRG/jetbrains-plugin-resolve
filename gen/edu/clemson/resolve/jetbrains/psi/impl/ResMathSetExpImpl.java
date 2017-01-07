@@ -10,14 +10,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static edu.clemson.resolve.jetbrains.ResTypes.*;
 import edu.clemson.resolve.jetbrains.psi.*;
 
-public class ResShortFacilityModuleDeclImpl extends ResAbstractModuleImpl implements ResShortFacilityModuleDecl {
+public class ResMathSetExpImpl extends ResMathExpImpl implements ResMathSetExp {
 
-  public ResShortFacilityModuleDeclImpl(ASTNode node) {
+  public ResMathSetExpImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ResVisitor visitor) {
-    visitor.visitShortFacilityModuleDecl(this);
+    visitor.visitMathSetExp(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -26,9 +26,21 @@ public class ResShortFacilityModuleDeclImpl extends ResAbstractModuleImpl implem
   }
 
   @Override
+  @Nullable
+  public ResMathExp getMathExp() {
+    return findChildByClass(ResMathExp.class);
+  }
+
+  @Override
   @NotNull
-  public ResFacilityDecl getFacilityDecl() {
-    return findNotNullChildByClass(ResFacilityDecl.class);
+  public PsiElement getLbrace() {
+    return findNotNullChildByType(LBRACE);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRbrace() {
+    return findNotNullChildByType(RBRACE);
   }
 
 }

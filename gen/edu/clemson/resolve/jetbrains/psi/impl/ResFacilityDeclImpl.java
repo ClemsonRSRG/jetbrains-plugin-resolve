@@ -33,12 +33,6 @@ public class ResFacilityDeclImpl extends ResNamedElementImpl implements ResFacil
 
   @Override
   @NotNull
-  public List<ResModuleArgList> getModuleArgListList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleArgList.class);
-  }
-
-  @Override
-  @NotNull
   public List<ResModuleIdentifier> getModuleIdentifierList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleIdentifier.class);
   }
@@ -47,6 +41,30 @@ public class ResFacilityDeclImpl extends ResNamedElementImpl implements ResFacil
   @NotNull
   public List<ResModuleLibraryIdentifier> getModuleLibraryIdentifierList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, ResModuleLibraryIdentifier.class);
+  }
+
+  @Override
+  @Nullable
+  public ResModuleRealizArgList getModuleRealizArgList() {
+    return findChildByClass(ResModuleRealizArgList.class);
+  }
+
+  @Override
+  @Nullable
+  public ResModuleSpecArgList getModuleSpecArgList() {
+    return findChildByClass(ResModuleSpecArgList.class);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getFacility() {
+    return findNotNullChildByType(FACILITY);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
   }
 
   @Override
@@ -63,14 +81,8 @@ public class ResFacilityDeclImpl extends ResNamedElementImpl implements ResFacil
 
   @Override
   @NotNull
-  public PsiElement getFacility() {
-    return findNotNullChildByType(FACILITY);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getImplemented() {
-    return findChildByType(IMPLEMENTED);
+  public PsiElement getIdentifier() {
+    return findNotNullChildByType(IDENTIFIER);
   }
 
   @Override
@@ -81,14 +93,8 @@ public class ResFacilityDeclImpl extends ResNamedElementImpl implements ResFacil
 
   @Override
   @Nullable
-  public PsiElement getSemicolon() {
-    return findChildByType(SEMICOLON);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
+  public PsiElement getRealized() {
+    return findChildByType(REALIZED);
   }
 
   @Nullable

@@ -24,13 +24,13 @@ public interface ResTypeReprDecl extends ResTypeLikeNodeDecl {
   PsiElement getFamilyType();
 
   @Nullable
-  PsiElement getIs();
-
-  @Nullable
   PsiElement getSemicolon();
 
   @NotNull
   PsiElement getIdentifier();
+
+  @Nullable
+  PsiElement getIs();
 
   @Nullable
   ResType getResTypeInner(ResolveState context);

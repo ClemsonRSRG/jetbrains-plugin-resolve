@@ -32,15 +32,9 @@ public class ResMathClssftnAssrtExpImpl extends ResMathExpImpl implements ResMat
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getColon() {
-    return findChildByType(COLON);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getHyperColon() {
-    return findChildByType(HYPER_COLON);
+    return findNotNullChildByType(COLON);
   }
 
 }

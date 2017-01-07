@@ -193,7 +193,8 @@ public class ResModuleReference extends FileReference {
             if (desiredLib != null) {
                 PsiElement ele = desiredLib.resolve();
                 if (ele != null && ele instanceof PsiDirectory) {
-                    sourceRoots.add(((PsiDirectory) ele).getVirtualFile());
+                    addContexts(sourceRoots, ((PsiDirectory) ele).getVirtualFile());
+                    //sourceRoots.add(((PsiDirectory) ele).getVirtualFile());
                 }
             }
             else {

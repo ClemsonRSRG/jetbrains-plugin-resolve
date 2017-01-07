@@ -11,6 +11,6 @@ public interface ResMathIncomingExp extends ResMathExp {
   ResMathReferenceExp getMathReferenceExp();
 
   @NotNull
-  PsiElement getAt();
+  PsiElement getPound();
 
 }

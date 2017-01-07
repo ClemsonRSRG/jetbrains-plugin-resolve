@@ -44,15 +44,9 @@ public class ResMathLambdaExpImpl extends ResMathExpImpl implements ResMathLambd
   }
 
   @Override
-  @Nullable
-  public PsiElement getLAMBDA1() {
-    return findChildByType(LAMBDA1);
-  }
-
-  @Override
-  @Nullable
+  @NotNull
   public PsiElement getLambda() {
-    return findChildByType(LAMBDA);
+    return findNotNullChildByType(LAMBDA);
   }
 
 }

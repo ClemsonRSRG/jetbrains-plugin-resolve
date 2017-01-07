@@ -19,6 +19,12 @@ public interface ResTypeModelDecl extends ResTypeLikeNodeDecl {
   @Nullable
   ResMathExp getMathExp();
 
+  @NotNull
+  PsiElement getFamilyType();
+
+  @Nullable
+  PsiElement getSemicolon();
+
   @Nullable
   PsiElement getBy();
 
@@ -26,18 +32,12 @@ public interface ResTypeModelDecl extends ResTypeLikeNodeDecl {
   PsiElement getFamily();
 
   @NotNull
-  PsiElement getFamilyType();
+  PsiElement getIdentifier();
 
   @Nullable
   PsiElement getIs();
 
   @Nullable
   PsiElement getModeled();
-
-  @Nullable
-  PsiElement getSemicolon();
-
-  @NotNull
-  PsiElement getIdentifier();
 
 }

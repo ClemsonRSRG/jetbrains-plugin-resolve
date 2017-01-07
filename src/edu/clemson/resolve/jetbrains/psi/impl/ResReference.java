@@ -318,6 +318,13 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
             //size 2 implies both are present and accounted for
             if (facility.getModuleIdentifierList().size() != 2) continue;
             v.add(facility.getModuleIdentifierList().get(0));
+            if (!facility.getExtensionPairingList().isEmpty()) {
+                for (ResExtensionPairing ext : facility.getExtensionPairingList()) {
+                    if (ext.getModuleIdentifierList().size() == 2) {
+                        v.add(ext.getModuleIdentifierList().get(0));
+                    }
+                }
+            }
         }
 
         //resolve through their specifications
@@ -346,10 +353,10 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
 
         List<ResReferenceExp> headerModules = moduleDecl.getModuleHeaderReferences();
         for (ResModuleIdentifierSpec o : usesItems) {
-            if (o.getAlias() != null) {
-                if (!processor.execute(o, state.put(ACTUAL_NAME, o.getAlias().getText()))) return false;
-            }
-            else {
+            //if (o.getAlias() != null) {
+            //    if (!processor.execute(o, state.put(ACTUAL_NAME, o.getAlias().getText()))) return false;
+            //}
+            //else {
                 PsiElement resolve = o.getModuleIdentifier().resolve();
                 if (resolve != null && resolve instanceof ResFile) {
                     for (ResReferenceExp e : headerModules) {
@@ -367,7 +374,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
                     boolean forSuperModule = forSuperModule(moduleDecl, o.getName());
                     if (!processModuleLevelEntities((ResFile) resolve, processor, state, forSuperModule)) return false;
                 }
-            }
+            //}
         }
         return true;
     }

@@ -16,14 +16,14 @@ public interface ResIfStatement extends ResStatement {
   @NotNull
   List<ResStatement> getStatementList();
 
-  @Nullable
-  PsiElement getEnd();
-
   @NotNull
   PsiElement getProgIf();
 
   @Nullable
   PsiElement getSemicolon();
+
+  @Nullable
+  PsiElement getEnd();
 
   @Nullable
   PsiElement getThen();

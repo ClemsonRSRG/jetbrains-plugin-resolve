@@ -8,22 +8,25 @@ import com.intellij.psi.PsiElement;
 public interface ResExtensionPairing extends ResCompositeElement {
 
   @NotNull
-  List<ResModuleArgList> getModuleArgListList();
-
-  @NotNull
   List<ResModuleIdentifier> getModuleIdentifierList();
 
   @NotNull
   List<ResModuleLibraryIdentifier> getModuleLibraryIdentifierList();
 
+  @Nullable
+  ResModuleRealizArgList getModuleRealizArgList();
+
+  @Nullable
+  ResModuleSpecArgList getModuleSpecArgList();
+
   @NotNull
-  PsiElement getExtended();
+  PsiElement getEnhanced();
 
   @Nullable
   PsiElement getExternally();
 
   @Nullable
-  PsiElement getImplemented();
+  PsiElement getRealized();
 
   @Nullable
   ResFile resolveSpecification();

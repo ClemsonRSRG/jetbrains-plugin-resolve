@@ -76,9 +76,9 @@ public abstract class ResAbstractModuleImpl extends ResNamedElementImpl implemen
                 Map<String, ResModuleIdentifierSpec> result = new HashMap<>();
                 for (ResModuleIdentifierSpec spec : getImports()) {
                     result.put(spec.getName(), spec);
-                    if (spec.getAlias() != null) {
-                        result.put(spec.getAlias().getText(), spec);
-                    }
+                    //if (spec.getAlias() != null) {
+                    //    result.put(spec.getAlias().getText(), spec);
+                    //}
                 }
                 return Result.create(result, ResAbstractModuleImpl.this);
             }

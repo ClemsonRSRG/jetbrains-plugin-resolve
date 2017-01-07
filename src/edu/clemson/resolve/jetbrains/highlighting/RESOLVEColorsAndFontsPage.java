@@ -67,32 +67,46 @@ public class RESOLVEColorsAndFontsPage implements ColorSettingsPage {
         return new RESOLVESyntaxHighlighter();
     }
 
+    /*
+
+
+
+    Facility Do_Nothing_Fac;
+        uses Standard_Integers, Standard_Char_Strs;
+
+    Operation Needlessly_Complicated_Do_Nothing (restores I : Integer);
+    Procedure
+    Var X : Integer;
+    X := 1;
+    X :=: I;
+
+    //tell user what we're doing
+    Write_Line("Doing nothing to X");
+    Increment(X);
+    Decrement(X);
+    I :=: X;
+    end Do_Nothing;
+    end Do_Nothing_Fac;
+     */
     @NotNull
     @Override
     public String getDemoText() {
         return
-                "Facility Foo;\n" +
-                        "        uses Far, Fizz;\n\n" +
-                        "    /*\n" +
-                        "     * A doc-style comment.\n" +
-                        "     */\n" +
-                        "     Facility F is T(G, 5, 10) implemented by T_I;\n\n" +
-                        "     // a line comment\n" +
-                        "     Operation Boo (evaluates I : Integer);\n" +
-                        "         Procedure\n" +
-                        "             Var x : Integer;\n" +
-                        "             Var y, z : Std_String_Fac.String;\n" +
-                        "             y:=\"cat\"; z:=\"dog\";\n" +
-                        "             z:= y++z;\n" +
-                        "             Zoo(x, true);\n" +
-                        "     end Boo;\n" +
-                        "     /* a block-style comment */\n" +
-                        "     Operation Zoo (alters p : Integer; " +
-                        "                    updates z : Boolean);\n" +
-                        "         Procedure\n" +
-                        "             p++;p--;\n" +
-                        "     end Zoo;\n" +
-                        "end Foo;\n";
+            "Facility Do_Nothing_Fac;\n" +
+                    "        uses Standard_Integers, Standard_Char_Strs;\n\n" +
+                    "    /* A needlessly complicated operation that does nothing */\n" +
+                    "     Operation Do_Nothing (restores I : Integer);\n" +
+                    "         Procedure\n" +
+                    "             Var X : Std_Ints::Integer;\n" +
+                    "             X := 1;\n" +
+                    "             X :=: I;\n" +
+                    "             //tell user what we're doing" +
+                    "             Write_Line(\"Doing nothing to X\");\n" +
+                    "             Increment(X);\n" +
+                    "             Decrement(X);\n" +
+                    "             I :=: X;\n" +
+                    "     end Do_Nothing;\n" +
+                    "end Do_Nothing_Fac;\n";
 
     }
 

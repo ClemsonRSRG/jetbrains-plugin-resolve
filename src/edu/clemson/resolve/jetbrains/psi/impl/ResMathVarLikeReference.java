@@ -90,7 +90,7 @@ public class ResMathVarLikeReference
         if (!processBlock(processor, state, true)) return false;
         if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
         if (!ResReference.processUsesImports(file, processor, state)) return false;
-        if (!processBuiltin(processor, state, myElement)) return false;
+        //if (!processBuiltin(processor, state, myElement)) return false;
         return true;
     }
 

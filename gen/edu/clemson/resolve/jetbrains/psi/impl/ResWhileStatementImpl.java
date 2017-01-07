@@ -57,18 +57,6 @@ public class ResWhileStatementImpl extends ResStatementImpl implements ResWhileS
 
   @Override
   @Nullable
-  public PsiElement getDo() {
-    return findChildByType(DO);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getEnd() {
-    return findChildByType(END);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getSemicolon() {
     return findChildByType(SEMICOLON);
   }
@@ -77,6 +65,18 @@ public class ResWhileStatementImpl extends ResStatementImpl implements ResWhileS
   @NotNull
   public PsiElement getWhile() {
     return findNotNullChildByType(WHILE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getDo() {
+    return findChildByType(DO);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getEnd() {
+    return findChildByType(END);
   }
 
 }

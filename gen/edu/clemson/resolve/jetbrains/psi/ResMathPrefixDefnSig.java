@@ -20,9 +20,6 @@ public interface ResMathPrefixDefnSig extends ResMathDefnSig {
   PsiElement getColon();
 
   @Nullable
-  PsiElement getHyperColon();
-
-  @Nullable
   PsiElement getLparen();
 
   @Nullable

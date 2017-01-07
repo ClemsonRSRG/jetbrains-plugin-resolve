@@ -13,10 +13,10 @@ public interface ResConventionsClause extends ResCompositeElement {
   @Nullable
   ResMathExp getMathExp();
 
-  @NotNull
-  PsiElement getConventions();
-
   @Nullable
   PsiElement getSemicolon();
+
+  @NotNull
+  PsiElement getConventions();
 
 }

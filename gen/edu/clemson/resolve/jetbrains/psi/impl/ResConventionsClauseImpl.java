@@ -38,15 +38,15 @@ public class ResConventionsClauseImpl extends ResCompositeElementImpl implements
   }
 
   @Override
-  @NotNull
-  public PsiElement getConventions() {
-    return findNotNullChildByType(CONVENTIONS);
-  }
-
-  @Override
   @Nullable
   public PsiElement getSemicolon() {
     return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getConventions() {
+    return findNotNullChildByType(CONVENTIONS);
   }
 
 }

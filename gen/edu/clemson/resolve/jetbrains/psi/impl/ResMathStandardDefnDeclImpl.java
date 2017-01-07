@@ -75,14 +75,14 @@ public class ResMathStandardDefnDeclImpl extends ResAbstractMathDefnImpl impleme
 
   @Override
   @Nullable
-  public PsiElement getIs() {
-    return findChildByType(IS);
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
   }
 
   @Override
   @Nullable
-  public PsiElement getSemicolon() {
-    return findChildByType(SEMICOLON);
+  public PsiElement getIs() {
+    return findChildByType(IS);
   }
 
 }

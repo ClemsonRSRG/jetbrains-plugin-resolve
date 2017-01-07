@@ -12,7 +12,6 @@ public interface ResTypes {
 
   IElementType ARGUMENT_LIST = new ResCompositeElementType("ARGUMENT_LIST");
   IElementType ASSIGN_STATEMENT = new ResCompositeElementType("ASSIGN_STATEMENT");
-  IElementType CALL_EXP = new ResCompositeElementType("CALL_EXP");
   IElementType CHANGING_CLAUSE = new ResCompositeElementType("CHANGING_CLAUSE");
   IElementType CLOSE_IDENTIFIER = new ResCompositeElementType("CLOSE_IDENTIFIER");
   IElementType CONCEPT_BLOCK = new ResCompositeElementType("CONCEPT_BLOCK");
@@ -56,8 +55,8 @@ public interface ResTypes {
   IElementType MATH_INFIX_APPLY_EXP = new ResCompositeElementType("MATH_INFIX_APPLY_EXP");
   IElementType MATH_INFIX_DEFN_SIG = new ResCompositeElementType("MATH_INFIX_DEFN_SIG");
   IElementType MATH_LAMBDA_EXP = new ResCompositeElementType("MATH_LAMBDA_EXP");
+  IElementType MATH_MIXFIX_APPLY_EXP = new ResCompositeElementType("MATH_MIXFIX_APPLY_EXP");
   IElementType MATH_NESTED_EXP = new ResCompositeElementType("MATH_NESTED_EXP");
-  IElementType MATH_NON_STD_APPLY_EXP = new ResCompositeElementType("MATH_NON_STD_APPLY_EXP");
   IElementType MATH_OUTFIX_APPLY_EXP = new ResCompositeElementType("MATH_OUTFIX_APPLY_EXP");
   IElementType MATH_OUTFIX_DEFN_SIG = new ResCompositeElementType("MATH_OUTFIX_DEFN_SIG");
   IElementType MATH_POSTFIX_DEFN_SIG = new ResCompositeElementType("MATH_POSTFIX_DEFN_SIG");
@@ -66,6 +65,7 @@ public interface ResTypes {
   IElementType MATH_QUANTIFIED_EXP = new ResCompositeElementType("MATH_QUANTIFIED_EXP");
   IElementType MATH_REFERENCE_EXP = new ResCompositeElementType("MATH_REFERENCE_EXP");
   IElementType MATH_SELECTOR_EXP = new ResCompositeElementType("MATH_SELECTOR_EXP");
+  IElementType MATH_SET_EXP = new ResCompositeElementType("MATH_SET_EXP");
   IElementType MATH_SET_RESTRICTION_EXP = new ResCompositeElementType("MATH_SET_RESTRICTION_EXP");
   IElementType MATH_STANDARD_DEFN_DECL = new ResCompositeElementType("MATH_STANDARD_DEFN_DECL");
   IElementType MATH_SYMBOL_NAME = new ResCompositeElementType("MATH_SYMBOL_NAME");
@@ -73,17 +73,20 @@ public interface ResTypes {
   IElementType MATH_VAR_DECL = new ResCompositeElementType("MATH_VAR_DECL");
   IElementType MATH_VAR_DECL_GROUP = new ResCompositeElementType("MATH_VAR_DECL_GROUP");
   IElementType MATH_VAR_DEF = new ResCompositeElementType("MATH_VAR_DEF");
-  IElementType MODULE_ARG_LIST = new ResCompositeElementType("MODULE_ARG_LIST");
   IElementType MODULE_IDENTIFIER = new ResCompositeElementType("MODULE_IDENTIFIER");
   IElementType MODULE_IDENTIFIER_SPEC = new ResCompositeElementType("MODULE_IDENTIFIER_SPEC");
   IElementType MODULE_LIBRARY_IDENTIFIER = new ResCompositeElementType("MODULE_LIBRARY_IDENTIFIER");
+  IElementType MODULE_REALIZ_ARG_LIST = new ResCompositeElementType("MODULE_REALIZ_ARG_LIST");
+  IElementType MODULE_SPEC_ARG_LIST = new ResCompositeElementType("MODULE_SPEC_ARG_LIST");
   IElementType NESTED_EXP = new ResCompositeElementType("NESTED_EXP");
+  IElementType NOTICE_STATEMENT = new ResCompositeElementType("NOTICE_STATEMENT");
   IElementType OPERATION_DECL = new ResCompositeElementType("OPERATION_DECL");
   IElementType OPERATION_PROCEDURE_DECL = new ResCompositeElementType("OPERATION_PROCEDURE_DECL");
   IElementType OP_BLOCK = new ResCompositeElementType("OP_BLOCK");
   IElementType PARAMETER_MODE = new ResCompositeElementType("PARAMETER_MODE");
   IElementType PARAM_DECL = new ResCompositeElementType("PARAM_DECL");
   IElementType PARAM_DEF = new ResCompositeElementType("PARAM_DEF");
+  IElementType PARAM_EXP = new ResCompositeElementType("PARAM_EXP");
   IElementType PRECIS_BLOCK = new ResCompositeElementType("PRECIS_BLOCK");
   IElementType PRECIS_EXTENSION_MODULE_DECL = new ResCompositeElementType("PRECIS_EXTENSION_MODULE_DECL");
   IElementType PRECIS_MODULE_DECL = new ResCompositeElementType("PRECIS_MODULE_DECL");
@@ -94,7 +97,6 @@ public interface ResTypes {
   IElementType REFERENCE_EXP = new ResCompositeElementType("REFERENCE_EXP");
   IElementType REQUIRES_CLAUSE = new ResCompositeElementType("REQUIRES_CLAUSE");
   IElementType SELECTOR_EXP = new ResCompositeElementType("SELECTOR_EXP");
-  IElementType SHORT_FACILITY_MODULE_DECL = new ResCompositeElementType("SHORT_FACILITY_MODULE_DECL");
   IElementType SIMPLE_STATEMENT = new ResCompositeElementType("SIMPLE_STATEMENT");
   IElementType SPEC_MODULE_PARAMETERS = new ResCompositeElementType("SPEC_MODULE_PARAMETERS");
   IElementType STATEMENT = new ResCompositeElementType("STATEMENT");
@@ -112,10 +114,7 @@ public interface ResTypes {
   IElementType WHILE_STATEMENT = new ResCompositeElementType("WHILE_STATEMENT");
 
   IElementType ALTERS = new ResTokenType("alters");
-  IElementType AS = new ResTokenType("as");
-  IElementType AT = new ResTokenType("@");
-  IElementType BACKTICK = new ResTokenType("`");
-  IElementType BASE = new ResTokenType("base");
+  IElementType BAR = new ResTokenType("|");
   IElementType BY = new ResTokenType("by");
   IElementType CART_PROD = new ResTokenType("Cart_Prod");
   IElementType CATEGORICAL = new ResTokenType("Categorical");
@@ -134,6 +133,7 @@ public interface ResTypes {
   IElementType CONVENTIONS = new ResTokenType("conventions");
   IElementType COROLLARY = new ResTokenType("Corollary");
   IElementType CORRESPONDENCE = new ResTokenType("correspondence");
+  IElementType DBL_BAR = new ResTokenType("∥");
   IElementType DBL_LBRACE = new ResTokenType("{{");
   IElementType DBL_RBRACE = new ResTokenType("}}");
   IElementType DECREASING = new ResTokenType("decreasing");
@@ -144,13 +144,12 @@ public interface ResTypes {
   IElementType DOT_DOT = new ResTokenType("..");
   IElementType ELSE = new ResTokenType("else");
   IElementType END = new ResTokenType("end");
+  IElementType ENHANCED = new ResTokenType("enhanced");
+  IElementType ENHANCEMENT = new ResTokenType("Enhancement");
   IElementType ENSURES = new ResTokenType("ensures");
   IElementType EVALUATES = new ResTokenType("evaluates");
   IElementType EXEMPLAR = new ResTokenType("exemplar");
-  IElementType EXISTS = new ResTokenType("Exists");
-  IElementType EXISTS1 = new ResTokenType("∃");
-  IElementType EXTENDED = new ResTokenType("extended");
-  IElementType EXTENDED_BY = new ResTokenType("extended_by");
+  IElementType EXISTS = new ResTokenType("∃");
   IElementType EXTENSION = new ResTokenType("Extension");
   IElementType EXTERNALLY = new ResTokenType("externally");
   IElementType FACILITY = new ResTokenType("Facility");
@@ -158,16 +157,10 @@ public interface ResTypes {
   IElementType FAMILY = new ResTokenType("family");
   IElementType FAMILY_TYPE = new ResTokenType("Type");
   IElementType FOR = new ResTokenType("for");
-  IElementType FORALL = new ResTokenType("Forall");
-  IElementType FORALL1 = new ResTokenType("∀");
+  IElementType FORALL = new ResTokenType("∀");
   IElementType FROM = new ResTokenType("from");
-  IElementType HYPER_COLON = new ResTokenType("⦂");
-  IElementType HYPO = new ResTokenType("hypo");
   IElementType IDENTIFIER = new ResTokenType("identifier");
   IElementType IF = new ResTokenType("if");
-  IElementType IFF = new ResTokenType("iff");
-  IElementType IMPLEMENTATION = new ResTokenType("Implementation");
-  IElementType IMPLEMENTED = new ResTokenType("implemented");
   IElementType IMPLICIT = new ResTokenType("Implicit");
   IElementType INDUCTIVE = new ResTokenType("Inductive");
   IElementType IND_BASE = new ResTokenType("(i.)");
@@ -175,34 +168,43 @@ public interface ResTypes {
   IElementType INITIALIZATION = new ResTokenType("initialization");
   IElementType INT = new ResTokenType("int");
   IElementType IS = new ResTokenType("is");
-  IElementType LAMBDA = new ResTokenType("lambda");
-  IElementType LAMBDA1 = new ResTokenType("λ");
+  IElementType LAMBDA = new ResTokenType("λ");
+  IElementType LANGLE = new ResTokenType("⟨");
   IElementType LBRACE = new ResTokenType("{");
+  IElementType LBRACK = new ResTokenType("[");
+  IElementType LCEIL = new ResTokenType("⌈");
+  IElementType LCUP = new ResTokenType("⎝");
   IElementType LPAREN = new ResTokenType("(");
   IElementType MAINTAINING = new ResTokenType("maintaining");
-  IElementType MATH_SYMBOL = new ResTokenType("math_symbol");
+  IElementType MATHSYMBOL = new ResTokenType("mathsymbol");
   IElementType MODELED = new ResTokenType("modeled");
+  IElementType NOTICE = new ResTokenType("Notice");
   IElementType OF = new ResTokenType("of");
   IElementType OPERATION = new ResTokenType("Operation");
   IElementType OTHERWISE = new ResTokenType("otherwise");
   IElementType PARAM_TYPE = new ResTokenType("type");
+  IElementType POUND = new ResTokenType("#");
   IElementType PRECIS = new ResTokenType("Precis");
   IElementType PRESERVES = new ResTokenType("preserves");
   IElementType PRIME = new ResTokenType("′");
   IElementType PROCEDURE = new ResTokenType("Procedure");
   IElementType PROG_IF = new ResTokenType("If");
-  IElementType QV = new ResTokenType("?");
+  IElementType RANGLE = new ResTokenType("⟩");
+  IElementType RAW_STRING = new ResTokenType("raw_string");
   IElementType RBRACE = new ResTokenType("}");
+  IElementType RBRACK = new ResTokenType("]");
+  IElementType RCEIL = new ResTokenType("⌉");
+  IElementType RCUP = new ResTokenType("⎠");
+  IElementType REALIZATION = new ResTokenType("Realization");
+  IElementType REALIZED = new ResTokenType("realized");
   IElementType RECORD = new ResTokenType("Record");
   IElementType RECURSIVE = new ResTokenType("Recursive");
   IElementType REPLACES = new ResTokenType("replaces");
   IElementType REQUIRES = new ResTokenType("requires");
   IElementType RESTORES = new ResTokenType("restores");
-  IElementType RESTRICTION_BAR = new ResTokenType("∣");
   IElementType RPAREN = new ResTokenType(")");
   IElementType SEMICOLON = new ResTokenType(";");
   IElementType STRING = new ResTokenType("string");
-  IElementType SUCH_THAT = new ResTokenType("∋");
   IElementType SYMBOL = new ResTokenType("symbol");
   IElementType THEN = new ResTokenType("then");
   IElementType THEOREM = new ResTokenType("Theorem");
@@ -213,7 +215,6 @@ public interface ResTypes {
   IElementType VAR = new ResTokenType("Var");
   IElementType WHICH_ENTAILS = new ResTokenType("which_entails");
   IElementType WHILE = new ResTokenType("While");
-  IElementType WITH = new ResTokenType("with");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {
@@ -223,9 +224,6 @@ public interface ResTypes {
       }
       else if (type == ASSIGN_STATEMENT) {
         return new ResAssignStatementImpl(node);
-      }
-      else if (type == CALL_EXP) {
-        return new ResCallExpImpl(node);
       }
       else if (type == CHANGING_CLAUSE) {
         return new ResChangingClauseImpl(node);
@@ -265,9 +263,6 @@ public interface ResTypes {
       }
       else if (type == EXEMPLAR_DECL) {
         return new ResExemplarDeclImpl(node);
-      }
-      else if (type == EXP) {
-        return new ResExpImpl(node);
       }
       else if (type == EXTENSION_PAIRING) {
         return new ResExtensionPairingImpl(node);
@@ -320,9 +315,6 @@ public interface ResTypes {
       else if (type == MATH_ALTERNATIVE_ITEM_EXP) {
         return new ResMathAlternativeItemExpImpl(node);
       }
-      else if (type == MATH_ASSERTION_EXP) {
-        return new ResMathAssertionExpImpl(node);
-      }
       else if (type == MATH_CART_PROD_EXP) {
         return new ResMathCartProdExpImpl(node);
       }
@@ -334,9 +326,6 @@ public interface ResTypes {
       }
       else if (type == MATH_CLSSFTN_COROLLARY_DECL) {
         return new ResMathClssftnCorollaryDeclImpl(node);
-      }
-      else if (type == MATH_EXP) {
-        return new ResMathExpImpl(node);
       }
       else if (type == MATH_FUNCTION_APP_LIST) {
         return new ResMathFunctionAppListImpl(node);
@@ -356,11 +345,11 @@ public interface ResTypes {
       else if (type == MATH_LAMBDA_EXP) {
         return new ResMathLambdaExpImpl(node);
       }
+      else if (type == MATH_MIXFIX_APPLY_EXP) {
+        return new ResMathMixfixApplyExpImpl(node);
+      }
       else if (type == MATH_NESTED_EXP) {
         return new ResMathNestedExpImpl(node);
-      }
-      else if (type == MATH_NON_STD_APPLY_EXP) {
-        return new ResMathNonStdApplyExpImpl(node);
       }
       else if (type == MATH_OUTFIX_APPLY_EXP) {
         return new ResMathOutfixApplyExpImpl(node);
@@ -386,6 +375,9 @@ public interface ResTypes {
       else if (type == MATH_SELECTOR_EXP) {
         return new ResMathSelectorExpImpl(node);
       }
+      else if (type == MATH_SET_EXP) {
+        return new ResMathSetExpImpl(node);
+      }
       else if (type == MATH_SET_RESTRICTION_EXP) {
         return new ResMathSetRestrictionExpImpl(node);
       }
@@ -407,9 +399,6 @@ public interface ResTypes {
       else if (type == MATH_VAR_DEF) {
         return new ResMathVarDefImpl(node);
       }
-      else if (type == MODULE_ARG_LIST) {
-        return new ResModuleArgListImpl(node);
-      }
       else if (type == MODULE_IDENTIFIER) {
         return new ResModuleIdentifierImpl(node);
       }
@@ -419,8 +408,17 @@ public interface ResTypes {
       else if (type == MODULE_LIBRARY_IDENTIFIER) {
         return new ResModuleLibraryIdentifierImpl(node);
       }
+      else if (type == MODULE_REALIZ_ARG_LIST) {
+        return new ResModuleRealizArgListImpl(node);
+      }
+      else if (type == MODULE_SPEC_ARG_LIST) {
+        return new ResModuleSpecArgListImpl(node);
+      }
       else if (type == NESTED_EXP) {
         return new ResNestedExpImpl(node);
+      }
+      else if (type == NOTICE_STATEMENT) {
+        return new ResNoticeStatementImpl(node);
       }
       else if (type == OPERATION_DECL) {
         return new ResOperationDeclImpl(node);
@@ -439,6 +437,9 @@ public interface ResTypes {
       }
       else if (type == PARAM_DEF) {
         return new ResParamDefImpl(node);
+      }
+      else if (type == PARAM_EXP) {
+        return new ResParamExpImpl(node);
       }
       else if (type == PRECIS_BLOCK) {
         return new ResPrecisBlockImpl(node);
@@ -470,17 +471,11 @@ public interface ResTypes {
       else if (type == SELECTOR_EXP) {
         return new ResSelectorExpImpl(node);
       }
-      else if (type == SHORT_FACILITY_MODULE_DECL) {
-        return new ResShortFacilityModuleDeclImpl(node);
-      }
       else if (type == SIMPLE_STATEMENT) {
         return new ResSimpleStatementImpl(node);
       }
       else if (type == SPEC_MODULE_PARAMETERS) {
         return new ResSpecModuleParametersImpl(node);
-      }
-      else if (type == STATEMENT) {
-        return new ResStatementImpl(node);
       }
       else if (type == SWAP_STATEMENT) {
         return new ResSwapStatementImpl(node);

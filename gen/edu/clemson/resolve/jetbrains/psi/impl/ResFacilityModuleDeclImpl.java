@@ -44,15 +44,15 @@ public class ResFacilityModuleDeclImpl extends ResAbstractModuleImpl implements 
   }
 
   @Override
-  @Nullable
-  public PsiElement getEnd() {
-    return findChildByType(END);
-  }
-
-  @Override
   @NotNull
   public PsiElement getFacility() {
     return findNotNullChildByType(FACILITY);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getEnd() {
+    return findChildByType(END);
   }
 
 }

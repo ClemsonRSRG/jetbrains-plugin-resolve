@@ -10,10 +10,10 @@ public interface ResMaintainingClause extends ResCompositeElement {
   @Nullable
   ResMathExp getMathExp();
 
-  @NotNull
-  PsiElement getMaintaining();
-
   @Nullable
   PsiElement getSemicolon();
+
+  @NotNull
+  PsiElement getMaintaining();
 
 }

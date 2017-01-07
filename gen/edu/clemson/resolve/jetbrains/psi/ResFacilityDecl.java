@@ -11,13 +11,22 @@ public interface ResFacilityDecl extends ResNamedElement {
   List<ResExtensionPairing> getExtensionPairingList();
 
   @NotNull
-  List<ResModuleArgList> getModuleArgListList();
-
-  @NotNull
   List<ResModuleIdentifier> getModuleIdentifierList();
 
   @NotNull
   List<ResModuleLibraryIdentifier> getModuleLibraryIdentifierList();
+
+  @Nullable
+  ResModuleRealizArgList getModuleRealizArgList();
+
+  @Nullable
+  ResModuleSpecArgList getModuleSpecArgList();
+
+  @NotNull
+  PsiElement getFacility();
+
+  @Nullable
+  PsiElement getSemicolon();
 
   @Nullable
   PsiElement getBy();
@@ -26,19 +35,13 @@ public interface ResFacilityDecl extends ResNamedElement {
   PsiElement getExternally();
 
   @NotNull
-  PsiElement getFacility();
-
-  @Nullable
-  PsiElement getImplemented();
+  PsiElement getIdentifier();
 
   @Nullable
   PsiElement getIs();
 
   @Nullable
-  PsiElement getSemicolon();
-
-  @NotNull
-  PsiElement getIdentifier();
+  PsiElement getRealized();
 
   @Nullable
   ResFile resolveSpecification();

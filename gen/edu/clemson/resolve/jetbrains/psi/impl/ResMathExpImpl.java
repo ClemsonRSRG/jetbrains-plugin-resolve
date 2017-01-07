@@ -11,7 +11,7 @@ import static edu.clemson.resolve.jetbrains.ResTypes.*;
 import edu.clemson.resolve.jetbrains.psi.*;
 import com.intellij.psi.ResolveState;
 
-public class ResMathExpImpl extends ResCompositeElementImpl implements ResMathExp {
+public abstract class ResMathExpImpl extends ResCompositeElementImpl implements ResMathExp {
 
   public ResMathExpImpl(ASTNode node) {
     super(node);

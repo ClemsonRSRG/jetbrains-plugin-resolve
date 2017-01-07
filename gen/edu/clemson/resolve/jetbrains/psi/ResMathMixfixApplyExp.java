@@ -5,9 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ResShortFacilityModuleDecl extends ResModuleDecl {
+public interface ResMathMixfixApplyExp extends ResMathExp {
 
   @NotNull
-  ResFacilityDecl getFacilityDecl();
+  List<ResMathExp> getMathExpList();
+
+  @NotNull
+  List<ResMathSymbolName> getMathSymbolNameList();
 
 }

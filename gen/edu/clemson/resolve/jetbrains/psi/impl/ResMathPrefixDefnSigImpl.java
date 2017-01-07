@@ -51,12 +51,6 @@ public class ResMathPrefixDefnSigImpl extends ResAbstractMathSigImpl implements 
 
   @Override
   @Nullable
-  public PsiElement getHyperColon() {
-    return findChildByType(HYPER_COLON);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getLparen() {
     return findChildByType(LPAREN);
   }

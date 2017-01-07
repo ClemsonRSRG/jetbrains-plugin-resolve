@@ -8,14 +8,20 @@ import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.editor.colors.EditorColorsListener;
+import com.intellij.openapi.editor.colors.EditorColorsManager;
+import com.intellij.openapi.editor.colors.EditorColorsScheme;
 import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.startup.StartupActivity;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
+import com.intellij.util.messages.Topic;
+import edu.clemson.resolve.jetbrains.verifier.MathSymbolPanel;
 import edu.clemson.resolve.jetbrains.verifier.VerificationPreviewEditor;
 import edu.clemson.resolve.jetbrains.verifier.VerifierPanel;
 import org.jetbrains.annotations.NotNull;
@@ -34,6 +40,7 @@ public class RESOLVEPluginController implements ProjectComponent {
 
     public static final String CONSOLE_WINDOW_ID = "RESOLVE Output";
     public static final String VERIFIER_WINDOW_ID = "RESOLVE Verifier";
+    public static final String SYMBOL_WINDOW_ID = "Symbols";
 
     public boolean projectIsClosed = false;
 
@@ -42,8 +49,11 @@ public class RESOLVEPluginController implements ProjectComponent {
     public ConsoleView console;
     public ToolWindow consoleWindow;
 
-    public ToolWindow verifierWindow;
     public VerifierPanel verifierPanel;
+    public ToolWindow verifierWindow;
+
+    public MathSymbolPanel mathSymbolPanel;
+    public ToolWindow mathSymbolWindow;
 
     public RESOLVEPluginController(@NotNull Project project) {
         this.project = project;
@@ -63,6 +73,7 @@ public class RESOLVEPluginController implements ProjectComponent {
 
     @Override
     public void projectOpened() {
+
         IdeaPluginDescriptor plugin = PluginManager.getPlugin(PluginId.getId(PLUGIN_ID));
         String version = "unknown";
         if (plugin != null) {
@@ -79,23 +90,28 @@ public class RESOLVEPluginController implements ProjectComponent {
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
 
         verifierPanel = new VerifierPanel(project);
+        mathSymbolPanel = new MathSymbolPanel(project);
 
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
-        Content content = contentFactory.createContent(verifierPanel, "", false);
 
+        //init verifier window
         verifierWindow = toolWindowManager.registerToolWindow(VERIFIER_WINDOW_ID, true, ToolWindowAnchor.RIGHT);
-        verifierWindow.getContentManager().addContent(content);
+        verifierWindow.getContentManager().addContent(contentFactory.createContent(verifierPanel, "", false));
         verifierWindow.setIcon(RESOLVEIcons.TOOL_ICON);
 
+        //init math symbol browser window
+        mathSymbolWindow = toolWindowManager.registerToolWindow(SYMBOL_WINDOW_ID, true, ToolWindowAnchor.RIGHT);
+        mathSymbolWindow.getContentManager().addContent(contentFactory.createContent(mathSymbolPanel, "", false));
+        mathSymbolWindow.setIcon(RESOLVEIcons.SYMBOL_ICON);
+
+        //init console window
         TextConsoleBuilderFactory factory = TextConsoleBuilderFactory.getInstance();
         TextConsoleBuilder consoleBuilder = factory.createBuilder(project);
         console = consoleBuilder.getConsole();
 
         JComponent consoleComponent = console.getComponent();
-        content = contentFactory.createContent(consoleComponent, "", false);
-
         consoleWindow = toolWindowManager.registerToolWindow(CONSOLE_WINDOW_ID, true, ToolWindowAnchor.BOTTOM);
-        consoleWindow.getContentManager().addContent(content);
+        consoleWindow.getContentManager().addContent(contentFactory.createContent(consoleComponent, "", false));
         consoleWindow.setIcon(RESOLVEIcons.TOOL_ICON);
     }
 
@@ -104,16 +120,21 @@ public class RESOLVEPluginController implements ProjectComponent {
         LOG.info("projectClosed " + project.getName());
         projectIsClosed = true;
         //uninstallListeners();
-
         console.dispose();
-        List<VerificationPreviewEditor> lingeringEditors = verifierPanel.getActivePreviewEditors();
-        //Really, due to the way we create (and destory vcPanel's on calls to setXXX) I think there should only
-        //every really be one activePreview to destroy -- if the user sudddenly decides to close IntelliJ.
-        for (VerificationPreviewEditor e : lingeringEditors) {
-          //  e.rel
-        }
+
+        unregisterWindow(VERIFIER_WINDOW_ID);
+        unregisterWindow(SYMBOL_WINDOW_ID);
+        unregisterWindow(CONSOLE_WINDOW_ID);
+
+        verifierPanel = null;
         consoleWindow = null;
+        verifierWindow = null;
         project = null;
+    }
+
+    public void unregisterWindow(String id) {
+        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
+        toolWindowManager.unregisterToolWindow(id);
     }
 
     public ConsoleView getConsole() {
@@ -140,6 +161,20 @@ public class RESOLVEPluginController implements ProjectComponent {
                         RESOLVEPluginController
                                 .getInstance(project)
                                 .getConsoleWindow()
+                                .show(null);
+                    }
+                }
+        );
+    }
+
+    public static void showVerifierWindow(final Project project) {
+        ApplicationManager.getApplication().invokeLater(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        RESOLVEPluginController
+                                .getInstance(project)
+                                .getVerifierWindow()
                                 .show(null);
                     }
                 }

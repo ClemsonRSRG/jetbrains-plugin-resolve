@@ -10,14 +10,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static edu.clemson.resolve.jetbrains.ResTypes.*;
 import edu.clemson.resolve.jetbrains.psi.*;
 
-public class ResMathNonStdApplyExpImpl extends ResMathExpImpl implements ResMathNonStdApplyExp {
+public class ResNoticeStatementImpl extends ResStatementImpl implements ResNoticeStatement {
 
-  public ResMathNonStdApplyExpImpl(ASTNode node) {
+  public ResNoticeStatementImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ResVisitor visitor) {
-    visitor.visitMathNonStdApplyExp(this);
+    visitor.visitNoticeStatement(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -26,21 +26,21 @@ public class ResMathNonStdApplyExpImpl extends ResMathExpImpl implements ResMath
   }
 
   @Override
-  @NotNull
+  @Nullable
   public ResMathExp getMathExp() {
-    return findNotNullChildByClass(ResMathExp.class);
+    return findChildByClass(ResMathExp.class);
   }
 
   @Override
   @NotNull
-  public ResMathFunctionAppList getMathFunctionAppList() {
-    return findNotNullChildByClass(ResMathFunctionAppList.class);
+  public PsiElement getNotice() {
+    return findNotNullChildByType(NOTICE);
   }
 
   @Override
-  @NotNull
-  public List<ResMathSymbolName> getMathSymbolNameList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResMathSymbolName.class);
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
   }
 
 }

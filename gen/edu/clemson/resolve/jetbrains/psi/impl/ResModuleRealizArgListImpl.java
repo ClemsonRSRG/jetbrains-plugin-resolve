@@ -10,14 +10,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static edu.clemson.resolve.jetbrains.ResTypes.*;
 import edu.clemson.resolve.jetbrains.psi.*;
 
-public class ResModuleArgListImpl extends ResCompositeElementImpl implements ResModuleArgList {
+public class ResModuleRealizArgListImpl extends ResCompositeElementImpl implements ResModuleRealizArgList {
 
-  public ResModuleArgListImpl(ASTNode node) {
+  public ResModuleRealizArgListImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ResVisitor visitor) {
-    visitor.visitModuleArgList(this);
+    visitor.visitModuleRealizArgList(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

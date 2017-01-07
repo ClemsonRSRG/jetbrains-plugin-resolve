@@ -5,15 +5,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface ResMathNonStdApplyExp extends ResMathExp {
+public interface ResMathSetExp extends ResMathExp {
 
-  @NotNull
+  @Nullable
   ResMathExp getMathExp();
 
   @NotNull
-  ResMathFunctionAppList getMathFunctionAppList();
+  PsiElement getLbrace();
 
   @NotNull
-  List<ResMathSymbolName> getMathSymbolNameList();
+  PsiElement getRbrace();
 
 }

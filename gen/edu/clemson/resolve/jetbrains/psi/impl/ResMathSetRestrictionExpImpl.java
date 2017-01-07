@@ -38,6 +38,12 @@ public class ResMathSetRestrictionExpImpl extends ResMathExpImpl implements ResM
   }
 
   @Override
+  @Nullable
+  public PsiElement getBar() {
+    return findChildByType(BAR);
+  }
+
+  @Override
   @NotNull
   public PsiElement getLbrace() {
     return findNotNullChildByType(LBRACE);
@@ -47,12 +53,6 @@ public class ResMathSetRestrictionExpImpl extends ResMathExpImpl implements ResM
   @Nullable
   public PsiElement getRbrace() {
     return findChildByType(RBRACE);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getRestrictionBar() {
-    return findChildByType(RESTRICTION_BAR);
   }
 
 }

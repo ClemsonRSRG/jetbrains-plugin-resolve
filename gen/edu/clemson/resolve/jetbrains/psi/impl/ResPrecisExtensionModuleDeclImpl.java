@@ -32,21 +32,15 @@ public class ResPrecisExtensionModuleDeclImpl extends ResAbstractModuleImpl impl
   }
 
   @Override
-  @NotNull
-  public List<ResReferenceExp> getReferenceExpList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, ResReferenceExp.class);
+  @Nullable
+  public ResReferenceExp getReferenceExp() {
+    return findChildByClass(ResReferenceExp.class);
   }
 
   @Override
   @Nullable
   public ResUsesList getUsesList() {
     return findChildByClass(ResUsesList.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getEnd() {
-    return findChildByType(END);
   }
 
   @Override
@@ -57,20 +51,14 @@ public class ResPrecisExtensionModuleDeclImpl extends ResAbstractModuleImpl impl
 
   @Override
   @Nullable
-  public PsiElement getFor() {
-    return findChildByType(FOR);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getPrecis() {
-    return findNotNullChildByType(PRECIS);
+  public PsiElement getEnd() {
+    return findChildByType(END);
   }
 
   @Override
   @Nullable
-  public PsiElement getWith() {
-    return findChildByType(WITH);
+  public PsiElement getFor() {
+    return findChildByType(FOR);
   }
 
 }

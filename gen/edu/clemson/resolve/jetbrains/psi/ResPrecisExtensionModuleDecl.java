@@ -10,25 +10,19 @@ public interface ResPrecisExtensionModuleDecl extends ResModuleDecl {
   @Nullable
   ResPrecisBlock getPrecisBlock();
 
-  @NotNull
-  List<ResReferenceExp> getReferenceExpList();
+  @Nullable
+  ResReferenceExp getReferenceExp();
 
   @Nullable
   ResUsesList getUsesList();
-
-  @Nullable
-  PsiElement getEnd();
 
   @NotNull
   PsiElement getExtension();
 
   @Nullable
-  PsiElement getFor();
-
-  @NotNull
-  PsiElement getPrecis();
+  PsiElement getEnd();
 
   @Nullable
-  PsiElement getWith();
+  PsiElement getFor();
 
 }

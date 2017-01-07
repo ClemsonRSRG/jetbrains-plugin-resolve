@@ -10,14 +10,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static edu.clemson.resolve.jetbrains.ResTypes.*;
 import edu.clemson.resolve.jetbrains.psi.*;
 
-public class ResCallExpImpl extends ResExpImpl implements ResCallExp {
+public class ResParamExpImpl extends ResExpImpl implements ResParamExp {
 
-  public ResCallExpImpl(ASTNode node) {
+  public ResParamExpImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull ResVisitor visitor) {
-    visitor.visitCallExp(this);
+    visitor.visitParamExp(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

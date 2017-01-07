@@ -16,10 +16,7 @@ public interface ResMathPostfixDefnSig extends ResMathDefnSig {
   @NotNull
   List<ResMathVarDecl> getMathVarDeclList();
 
-  @Nullable
+  @NotNull
   PsiElement getColon();
-
-  @Nullable
-  PsiElement getHyperColon();
 
 }

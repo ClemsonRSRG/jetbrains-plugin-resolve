@@ -137,7 +137,7 @@ public class RESOLVECompletionUtil {
                                     typeText += grp.getMathExp().getText();
                                 }
                                 else {
-                                    typeText += " ⨯ " + grp.getMathExp().getText();
+                                    typeText += " × " + grp.getMathExp().getText();
                                 }
                             }
                         }
@@ -149,10 +149,9 @@ public class RESOLVECompletionUtil {
                     p.setTypeText(rangeTypeText);
                     p.setTypeGrayed(true);
                     // p.setTailText(calcTailText(f), true);
-                    String correctColon = typeText.equals("Cls") ? " ⦂ " : " : ";
                     String name = signature instanceof ResMathOutfixDefnSig ? signature.getCanonicalName() :
                             element.getLookupString();
-                    p.setItemText(name + correctColon + typeText);
+                    p.setItemText(name + " : " + typeText);
                 }
             };
 
@@ -163,7 +162,7 @@ public class RESOLVECompletionUtil {
 
     @NotNull
     static CamelHumpMatcher createPrefixMatcher(@NotNull String prefix) {
-        return new CamelHumpMatcher(prefix, false);
+        return new CamelHumpMatcher(prefix, true);
     }
 
     @NotNull

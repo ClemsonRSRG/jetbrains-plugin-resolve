@@ -33,8 +33,8 @@ public class ResMathIncomingExpImpl extends ResMathExpImpl implements ResMathInc
 
   @Override
   @NotNull
-  public PsiElement getAt() {
-    return findNotNullChildByType(AT);
+  public PsiElement getPound() {
+    return findNotNullChildByType(POUND);
   }
 
 }
