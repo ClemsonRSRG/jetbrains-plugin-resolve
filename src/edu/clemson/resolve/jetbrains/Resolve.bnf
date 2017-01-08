@@ -163,7 +163,7 @@ end identifier ';' {pin(".*")=3}
 
 // uses, imports
 
-UsesList ::= uses (UsesSpecs | '(' UsesSpecs ')') ';'  {pin(".*")=1}
+UsesList ::= uses UsesSpecs ';'  {pin(".*")=1}
 private UsesSpecs ::= ModuleIdentifierSpec (',' ModuleIdentifierSpec)* {pin(".*")=1}
 
 //shouldGoDeeper (impl sets to false) here allows us to avoid adding completions for ResModuleIdentifierSpec's

@@ -28,13 +28,13 @@ public class MathSymbolInsertHandler extends BasicInsertHandler<LookupElement> {
         if (signature instanceof ResMathPrefixDefnSig && paramsCount != 0) {
             handler = ParenthesesInsertHandler.WITH_PARAMETERS;
         }
-        else if (signature instanceof ResMathOutfixDefnSig) {
+        /*else if (signature instanceof ResMathOutfixDefnSig) {
             List<ResMathSymbolName> pieces = ((ResMathOutfixDefnSig) signature).getMathSymbolNameList();
             if (pieces.size() == 2) { //if we actually have a left and right..
                 context.getDocument().insertString(context.getStartOffset(), "`");
                 context.getDocument().insertString(context.getTailOffset(), pieces.get(1).getText() + "`");
             }
-        }
+        }*/
         handler.handleInsert(context, item);
     }
 }
