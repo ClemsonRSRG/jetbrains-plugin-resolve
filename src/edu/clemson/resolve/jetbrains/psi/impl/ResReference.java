@@ -262,8 +262,7 @@ public class ResReference extends PsiPolyVariantReferenceBase<ResReferenceExpBas
         return true;
     }
 
-    //
-
+    // TODO: Not sure why the logic here needs to be so complicated.. clean it up.
     /** Searches the specifications of any facility modules accessible from {@code file}. */
     public static boolean processFacilityImports(@NotNull ResFile file,
                                                  @NotNull ResScopeProcessor processor,

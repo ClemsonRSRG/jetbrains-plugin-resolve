@@ -40,6 +40,12 @@ public class ResTypeReprDeclImpl extends ResAbstractTypeLikeNodeImpl implements 
 
   @Override
   @Nullable
+  public ResExemplarDecl getExemplarDecl() {
+    return findChildByClass(ResExemplarDecl.class);
+  }
+
+  @Override
+  @Nullable
   public ResType getType() {
     return findChildByClass(ResType.class);
   }

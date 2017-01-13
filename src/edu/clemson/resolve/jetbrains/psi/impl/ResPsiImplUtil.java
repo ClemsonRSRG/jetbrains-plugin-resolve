@@ -343,8 +343,12 @@ public class ResPsiImplUtil {
     public static ResMathExp getResMathMetaTypeExpInner(@NotNull ResExemplarDecl o,
                                                         @SuppressWarnings("UnusedParameters")
                                                         @Nullable ResolveState context) {
+        ResTypeLikeNodeDecl typeLikeThing = PsiTreeUtil.getParentOfType(o, ResTypeLikeNodeDecl.class);
+        return typeLikeThing == null ? null : typeLikeThing.getMathMetaTypeExp();
+        /*
         ResTypeModelDecl model = PsiTreeUtil.getParentOfType(o, ResTypeModelDecl.class);
         return model == null ? null : model.getMathExp();
+        */
     }
 
     @Nullable

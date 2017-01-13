@@ -15,6 +15,9 @@ public interface ResTypeReprDecl extends ResTypeLikeNodeDecl {
   ResCorrespondenceClause getCorrespondenceClause();
 
   @Nullable
+  ResExemplarDecl getExemplarDecl();
+
+  @Nullable
   ResType getType();
 
   @Nullable
