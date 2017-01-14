@@ -360,10 +360,10 @@ public class ResPsiImplUtil {
                 return ((ResMathMetaTypeExpOwner) resolve).getResMathMetaTypeExp(context);
             }
         }
-        /*else if (o instanceof ResMathSelectorExp) {
+        else if (o instanceof ResMathSelectorExp) {
             ResMathExp item = ContainerUtil.getLastItem(((ResMathSelectorExp) o).getMathExpList());
             return item != null ? item.getResMathMetaTypeExp(context) : null;
-        }*/
+        }
         return null;
     }
 }

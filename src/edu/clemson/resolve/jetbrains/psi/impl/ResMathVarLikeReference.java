@@ -142,7 +142,9 @@ public class ResMathVarLikeReference
         //TODO: Keep track of ResAbstractTypeDeclLikeNodeImpl
         List<ResMathExp> list = parent.getMathExpList();
         if (list.size() > 1) {
-            ResMathExp type = list.get(0).getResMathMetaTypeExp(createContext());
+            ResolveState context = createContext();
+            ResMathExp ele0 = list.get(0);
+            ResMathExp type = ele0.getResMathMetaTypeExp(context);
             if (type != null && !processCartProdOrRecordFields(type, processor, state)) return false;
         }
         return true;
