@@ -5,6 +5,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.OrderedSet;
@@ -88,7 +89,8 @@ public class ResMathVarLikeReference
         if (grandPa instanceof ResMathSelectorExp && !processMathSelector((ResMathSelectorExp) grandPa, processor, state, parent)) return false;
         if (ResPsiImplUtil.prevDot(parent)) return false;
 
-        //if (!processTypeRepr(processor, state, true)) return false;
+        //if (!processConceptualAccessor(processor, state, true)) return false;
+
         if (!processBlock(processor, state, true)) return false;
         if (!processModuleLevelEntities(file, processor, state, localResolve)) return false;
         if (!ResReference.processUsesImports(file, processor, state)) return false;
@@ -96,31 +98,25 @@ public class ResMathVarLikeReference
         return true;
     }
 
-    private boolean processTypeRepr(@NotNull ResScopeProcessor processor,
-                                    @NotNull ResolveState state,
-                                    boolean localResolve) {
-        int i;
-        /*PsiElement rep = PsiTreeUtil.findFirstParent(myElement, e -> e instanceof ResTypeReprDecl);
+    @Nullable
+    private ResTypeModelDecl getCorrespondingModel() {
+        PsiElement rep = PsiTreeUtil.findFirstParent(myElement, e -> e instanceof ResTypeReprDecl);
         PsiElement module = PsiTreeUtil.findFirstParent(myElement, e -> e instanceof ResImplModuleDecl);
-        if (rep == null || module == null) return true;
+        if (rep == null || module == null) return null;
 
         ResTypeReprDecl repr = (ResTypeReprDecl) rep;
         ResImplModuleDecl implModule = (ResImplModuleDecl) module;
-
-        //see if we can resolve the type model corresponding to this representation...
-        //the referenceExpList for an impl module like this refers to the concept or enhancement (or both, hence the list) --
-        //we'll resolve both and search...
         List<ResTypeModelDecl> models = new ArrayList<>();
         for (ResReferenceExp moduleRef : implModule.getReferenceExpList()) {
             PsiElement resolvedModule = moduleRef.resolve();
             if (resolvedModule == null) continue;
-            ResConceptBlock block = PsiTreeUtil.getChildOfType(resolvedModule, ResConceptBlock.class);
+            ResConceptBlock block = PsiTreeUtil.findChildOfType(resolvedModule, ResConceptBlock.class);
             if (block == null) continue;
             for (ResTypeModelDecl model : block.getTypeModelDeclList()) {
-
+                if (model.getName() != null && model.getName().equals(repr.getName())) return model;
             }
-        }*/
-        return true;
+        }
+        return null;
     }
 
     //TODO: Keep eye on ResScopeProcessorBase!! #execute method added ResTypeReprDecl...
@@ -140,8 +136,13 @@ public class ResMathVarLikeReference
                                         @NotNull ResolveState state,
                                         @Nullable PsiElement another) {
         //TODO: Keep track of ResAbstractTypeDeclLikeNodeImpl
+
         List<ResMathExp> list = parent.getMathExpList();
+
         if (list.size() > 1) {
+            //if (list.get(0).getText().equals("conc")) {
+            //    ResTypeModelDecl model = getCorrespondingModel();
+            //}
             ResolveState context = createContext();
             ResMathExp ele0 = list.get(0);
             ResMathExp type = ele0.getResMathMetaTypeExp(context);

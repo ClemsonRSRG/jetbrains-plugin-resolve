@@ -98,7 +98,7 @@
     </template>
 
     <template description='Type representation declaration' name='Type representation' toReformat='true' toShortenFQNames='true'
-              value='Type $NAME$ = $END$;'>
+              value='Type $NAME$ is $END$;'>
         <variable alwaysStopAt='true' defaultValue='&quot;name&quot;' expression='' name='NAME'/>
         <context>
             <option name='RESOLVE_FACILITY_MODULE' value='true'/>
