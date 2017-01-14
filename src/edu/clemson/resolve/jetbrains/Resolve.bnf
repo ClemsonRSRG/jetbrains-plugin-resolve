@@ -109,7 +109,7 @@
 
     extends("(Operation|Procedure|OperationProcedure)Decl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractOperationLikeNode"
     extends("((Var|Param|Field)Def|(MathTheorem|TypeParam|Exemplar|Facility)Decl)|ModuleIdentifierSpec")="edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl"
-    extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractTypeLikeNodeImpl"
+    extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractTypeDeclLikeNodeImpl"
 
     pin(".*Statement")=1
     extends(".*Statement")=Statement

@@ -1,14 +1,14 @@
 package edu.clemson.resolve.jetbrains.psi;
 
 import com.intellij.psi.PsiElement;
-import edu.clemson.resolve.jetbrains.psi.impl.ResAbstractTypeLikeNodeImpl;
+import edu.clemson.resolve.jetbrains.psi.impl.ResAbstractTypeDeclLikeNodeImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Encompasses type model and representation declarations.
  * Implementations of common methods between the two constructs can be found
- * in {@link ResAbstractTypeLikeNodeImpl}.
+ * in {@link ResAbstractTypeDeclLikeNodeImpl}.
  */
 public interface ResTypeLikeNodeDecl extends ResNamedElement {
 
