@@ -135,18 +135,20 @@ public class ResMathVarLikeReference
                                         @NotNull ResScopeProcessor processor,
                                         @NotNull ResolveState state,
                                         @Nullable PsiElement another) {
-        //TODO: Keep track of ResAbstractTypeDeclLikeNodeImpl
-
         List<ResMathExp> list = parent.getMathExpList();
-
         if (list.size() > 1) {
-            //if (list.get(0).getText().equals("conc")) {
-            //    ResTypeModelDecl model = getCorrespondingModel();
-            //}
-            ResolveState context = createContext();
-            ResMathExp ele0 = list.get(0);
-            ResMathExp type = ele0.getResMathMetaTypeExp(context);
-            if (type != null && !processCartProdOrRecordFields(type, processor, state)) return false;
+            //Handling for conc, not sure if its totally right yet. But, better than nothing.
+            if (list.get(0).getText().equals("conc")) {
+                ResTypeModelDecl model = getCorrespondingModel();
+                if (model == null || model.getExemplarDecl() == null) return true;
+                if (!processor.execute(model.getExemplarDecl(), state)) return false;
+            }
+            else {
+                ResolveState context = createContext();
+                ResMathExp ele0 = list.get(0);
+                ResMathExp type = ele0.getResMathMetaTypeExp(context);
+                if (type != null && !processCartProdOrRecordFields(type, processor, state)) return false;
+            }
         }
         return true;
     }

@@ -49,7 +49,7 @@
     </template>
 
     <template description='conceptual space access selector' id='resolve_lang_conc' name='resolve_lang_conc' toReformat='true' toShortenFQNames='true'
-              value='conc.$END$'>
+              value='conc$END$'>
         <context>
             <option name='RESOLVE' value='true'/>
         </context>
