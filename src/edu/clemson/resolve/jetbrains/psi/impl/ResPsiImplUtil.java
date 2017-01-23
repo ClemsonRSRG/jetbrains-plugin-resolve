@@ -343,8 +343,12 @@ public class ResPsiImplUtil {
     public static ResMathExp getResMathMetaTypeExpInner(@NotNull ResExemplarDecl o,
                                                         @SuppressWarnings("UnusedParameters")
                                                         @Nullable ResolveState context) {
+        ResTypeLikeNodeDecl typeLikeThing = PsiTreeUtil.getParentOfType(o, ResTypeLikeNodeDecl.class);
+        return typeLikeThing == null ? null : typeLikeThing.getMathMetaTypeExp();
+        /*
         ResTypeModelDecl model = PsiTreeUtil.getParentOfType(o, ResTypeModelDecl.class);
         return model == null ? null : model.getMathExp();
+        */
     }
 
     @Nullable
@@ -356,10 +360,10 @@ public class ResPsiImplUtil {
                 return ((ResMathMetaTypeExpOwner) resolve).getResMathMetaTypeExp(context);
             }
         }
-        /*else if (o instanceof ResMathSelectorExp) {
+        else if (o instanceof ResMathSelectorExp) {
             ResMathExp item = ContainerUtil.getLastItem(((ResMathSelectorExp) o).getMathExpList());
             return item != null ? item.getResMathMetaTypeExp(context) : null;
-        }*/
+        }
         return null;
     }
 }

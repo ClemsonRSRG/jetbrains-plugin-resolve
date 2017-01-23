@@ -2,6 +2,8 @@
 package edu.clemson.resolve.jetbrains.psi.impl;
 
 import java.util.List;
+
+import com.intellij.psi.ResolveState;
 import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
@@ -43,4 +45,9 @@ public class ResRecordTypeImpl extends ResTypeImpl implements ResRecordType {
     return findChildByType(END);
   }
 
+  @Nullable
+  @Override
+  public ResMathExp getResMathMetaTypeExp(ResolveState context) {
+    return null;
+  }
 }

@@ -41,6 +41,8 @@ public abstract class ResScopeProcessorBase extends ResScopeProcessor {
         if (psiElement instanceof ResOperationLikeNode) return false;
         if (psiElement instanceof ResUsesList) return false;
         if (psiElement instanceof ResMathCartProdExp) return false;
+        if (psiElement instanceof ResRecordType) return false;
+
         if (!(psiElement instanceof ResNamedElement)) return true;
 
         String name = ((ResNamedElement) psiElement).getName();

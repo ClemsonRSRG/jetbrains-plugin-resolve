@@ -109,7 +109,7 @@
 
     extends("(Operation|Procedure|OperationProcedure)Decl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractOperationLikeNode"
     extends("((Var|Param|Field)Def|(MathTheorem|TypeParam|Exemplar|Facility)Decl)|ModuleIdentifierSpec")="edu.clemson.resolve.jetbrains.psi.impl.ResNamedElementImpl"
-    extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractTypeLikeNodeImpl"
+    extends("(TypeModel|TypeRepr)Decl")="edu.clemson.resolve.jetbrains.psi.impl.ResAbstractTypeDeclLikeNodeImpl"
 
     pin(".*Statement")=1
     extends(".*Statement")=Statement
@@ -163,7 +163,7 @@ end identifier ';' {pin(".*")=3}
 
 // uses, imports
 
-UsesList ::= uses (UsesSpecs | '(' UsesSpecs ')') ';'  {pin(".*")=1}
+UsesList ::= uses UsesSpecs ';'  {pin(".*")=1}
 private UsesSpecs ::= ModuleIdentifierSpec (',' ModuleIdentifierSpec)* {pin(".*")=1}
 
 //shouldGoDeeper (impl sets to false) here allows us to avoid adding completions for ResModuleIdentifierSpec's
@@ -234,10 +234,11 @@ ExemplarDecl ::= exemplar identifier ';' {pin=2 methods=[getResMathMetaTypeExpIn
 private TypeModelPortion ::= is modeled by MathExp {pin=4}
 
 TypeReprDecl ::= 'Type' identifier is (RecordType|Type) ';'
+ExemplarDecl
 ConventionsClause?
 CorrespondenceClause?
 TypeImplInit?
-{pin=2 methods=[getResTypeInner]}
+{pin=2 methods=[getResTypeInner getResMathMetaTypeExpInner]}
 
 // type initialization rules
 

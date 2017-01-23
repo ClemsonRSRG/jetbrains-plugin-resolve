@@ -1,17 +1,16 @@
 package edu.clemson.resolve.jetbrains.psi.impl;
 
 import com.intellij.lang.ASTNode;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.psi.PsiElement;
 import edu.clemson.resolve.jetbrains.ResTypes;
-import edu.clemson.resolve.jetbrains.psi.ResMathExp;
-import edu.clemson.resolve.jetbrains.psi.ResTypeLikeNodeDecl;
-import edu.clemson.resolve.jetbrains.psi.ResTypeModelDecl;
+import edu.clemson.resolve.jetbrains.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class ResAbstractTypeLikeNodeImpl extends ResNamedElementImpl implements ResTypeLikeNodeDecl {
+public abstract class ResAbstractTypeDeclLikeNodeImpl extends ResNamedElementImpl implements ResTypeLikeNodeDecl {
 
-    public ResAbstractTypeLikeNodeImpl(@NotNull ASTNode node) {
+    public ResAbstractTypeDeclLikeNodeImpl(@NotNull ASTNode node) {
         super(node);
     }
 
@@ -27,8 +26,11 @@ public abstract class ResAbstractTypeLikeNodeImpl extends ResNamedElementImpl im
         if (this instanceof ResTypeModelDecl) {
             return ((ResTypeModelDecl) this).getMathExp();
         }
-        else { //we must be a representation
-            return null;
+        else {
+            ResTypeReprDecl x = (ResTypeReprDecl) this;
+            ResType type = x.getType();
+            if (type == null || !(type instanceof ResRecordType)) return null;
+            return (ResRecordType) type;
         }
     }
 

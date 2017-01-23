@@ -7,7 +7,7 @@ import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import edu.clemson.resolve.jetbrains.RESOLVELanguage;
-import edu.clemson.resolve.jetbrains.psi.ResFile;
+import edu.clemson.resolve.jetbrains.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,32 +23,6 @@ public class ResElementFactory {
                 .createFileFromText("a.resolve", RESOLVELanguage.INSTANCE, text);
     }
 
-    //if we do implicit imports the odd way we'll have to do something behind the scenes like construct the nodes
-    //manually.. ugh.
-/*
-    @NotNull
-    public static ResUsesSpecGroup createUsesSpecGroup(@NotNull Project project, @NotNull String importString,
-                                                       @Nullable String alias, boolean withParens) {
-        importString = GoPsiImplUtil.isQuotedImportString(importString) ? importString : StringUtil.wrapWithDoubleQuote(importString);
-        alias = alias != null ? alias + " " : "";
-        GoFile file = createFileFromText(project, withParens
-                ? "package main\nimport (\n" + alias + importString + "\n)"
-                : "package main\nimport " + alias + importString);
-        return PsiTreeUtil.findChildOfType(file, GoImportDeclaration.class);
-    }
-
-    @NotNull
-    public static GoImportSpec createImportSpec(@NotNull Project project, @NotNull String importString, @Nullable String alias) {
-        GoImportDeclaration importDeclaration = createImportDeclaration(project, importString, alias, true);
-        return ContainerUtil.getFirstItem(importDeclaration.getImportSpecList());
-    }
-
-    @NotNull
-    public static GoImportString createImportString(@NotNull Project project, @NotNull String importString) {
-        GoImportSpec importSpec = createImportSpec(project, importString, null);
-        return importSpec.getImportString();
-    }
-*/
     @NotNull
     public static PsiElement createIdentifierFromText(@NotNull Project project, String text) {
         ResFile file = createFileFromText(project, "Precis " + text + ";end " + text + ";");
@@ -60,21 +34,21 @@ public class ResElementFactory {
     @NotNull
     public static ResFile getHardCodedMathFile(@NotNull Project project) {
         final String hardcoded =
-                "Precis HardCoded;\n " +
-                        "Definition Cls : HypCls;\n" +
-                        "Definition El : Cls;\n" +
-                        "Definition Entity : Cls;\n" +
-                        "Definition SSet : Cls;\n" +
-                        "Definition B : SSet;\n" +
-                        "Definition true : B;\n" +
-                        "Definition false : B;\n" +
-                        "Definition Powerset(S : Cls) : Cls;\n" +
-                        "Definition and(a, b : B) : B;\n" +
-                        "Definition or(a, b : B) : B;\n" +
-                        "Definition not(a : B) : B;\n" +
-                        "Definition implies(a, b : B) : B;\n" +
-                        "Definition iff(a, b : B) : B;\n" +
-                        "end HardCoded;";
+                "Precis Builtin_Class_Theory;\n " +
+                    "Definition Cls : HypCls;\n\n" +
+                    "Definition El : Cls;\n\n" +
+                    "Definition Entity : Cls;\n\n" +
+                    "Definition SSet : Cls;\n\n" +
+                    "Definition B : SSet;\n\n" +
+                    "Definition true : B;\n\n" +
+                    "Definition false : B;\n\n" +
+                    "Definition Powerset(S : Cls) : Cls;\n\n" +
+                    "Definition ∧(a, b : B) : B;\n\n" +
+                    "Definition ∨(a, b : B) : B;\n\n" +
+                    "Definition ¬(a : B) : B;\n\n" +
+                    "Definition ⟹(a, b : B) : B;\n\n" +
+                    //"Definition iff(a, b : B) : B;\n" +
+                "end Builtin_Class_Theory;";
         return createFileFromText(project, hardcoded);
     }
 }

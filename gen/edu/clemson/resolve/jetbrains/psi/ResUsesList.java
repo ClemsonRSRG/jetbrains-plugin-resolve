@@ -11,12 +11,6 @@ public interface ResUsesList extends ResCompositeElement {
   List<ResModuleIdentifierSpec> getModuleIdentifierSpecList();
 
   @Nullable
-  PsiElement getLparen();
-
-  @Nullable
-  PsiElement getRparen();
-
-  @Nullable
   PsiElement getSemicolon();
 
   @NotNull

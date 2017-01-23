@@ -73,6 +73,7 @@ public class RESOLVEReferenceCompletionProvider extends CompletionProvider<Compl
                 protected boolean accept(@NotNull PsiElement e) {
                     return e instanceof ResMathDefnSig ||
                             e instanceof ResMathVarDef ||
+                            e instanceof ResFieldDef ||
                             e instanceof ResParamDef ||
                             e instanceof ResTypeParamDecl ||
                             e instanceof ResExemplarDecl ||

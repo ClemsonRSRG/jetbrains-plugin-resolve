@@ -1,6 +1,7 @@
 package edu.clemson.resolve.jetbrains.completion;
 
 import com.intellij.codeInsight.completion.*;
+import com.intellij.codeInsight.completion.impl.BetterPrefixMatcher;
 import com.intellij.codeInsight.completion.impl.CamelHumpMatcher;
 import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler;
 import com.intellij.codeInsight.lookup.LookupElement;
@@ -156,13 +157,8 @@ public class RESOLVECompletionUtil {
             };
 
     @NotNull
-    static CamelHumpMatcher createPrefixMatcher(@NotNull PrefixMatcher original) {
-        return createPrefixMatcher(original.getPrefix());
-    }
-
-    @NotNull
-    static CamelHumpMatcher createPrefixMatcher(@NotNull String prefix) {
-        return new CamelHumpMatcher(prefix, true);
+    static PrefixMatcher createPrefixMatcher(@NotNull PrefixMatcher original) {
+        return new CamelHumpMatcher(original.getPrefix(), true);
     }
 
     @NotNull
