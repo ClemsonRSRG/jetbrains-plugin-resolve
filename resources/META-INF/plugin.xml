@@ -51,20 +51,16 @@
 
         <!-- misc
         <lang.findUsagesProvider language="RESOLVE" implementationClass="com.goide.usages.GoFindUsagesProvider"/>-->
-        <lang.parserDefinition language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.RESOLVEParserDefinition"/>
-        <fileTypeFactory implementation="edu.clemson.resolve.jetbrains.RESOLVEFileTypeFactory"/>
-        <lang.syntaxHighlighterFactory key="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.highlighting.RESOLVESyntaxHighlighterFactory"/>
-        <lang.psiStructureViewFactory language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.editor.RESOLVEStructureViewFactory"/>
+        <lang.parserDefinition language="Resolve" implementationClass="edu.clemson.resolve.jetbrains.RESOLVEParserDefinition"/>
+        <fileTypeFactory implementation="edu.clemson.resolve.jetbrains.ResolveFileTypeFactory"/>
+        <lang.syntaxHighlighterFactory language="Resolve" implementationClass="edu.clemson.resolve.jetbrains.highlighting.RESOLVESyntaxHighlighterFactory"/>
         <colorSettingsPage implementation="edu.clemson.resolve.jetbrains.highlighting.RESOLVEColorsAndFontsPage"/>
-        <lang.braceMatcher language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.editor.RESOLVEBraceMatcher"/>
-        <quoteHandler fileType="RESOLVE" className="edu.clemson.resolve.jetbrains.editor.RESOLVEQuoteHandler"/>
-        <fileIconPatcher implementation="edu.clemson.resolve.jetbrains.RESOLVEFileIconPatcher"/>
-        <codeInsight.parameterInfo language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.editor.RESOLVEParameterInfoHandler"/>
-        <lang.documentationProvider language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.RESOLVEDocumentationProvider"/>
+        <fileIconPatcher implementation="edu.clemson.resolve.jetbrains.ResolveFileIconPatcher"/>
 
         <!-- completions -->
-        <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.completion.RESOLVECompletionContributor"/>
-        <completion.contributor language="RESOLVE" implementationClass="edu.clemson.resolve.jetbrains.completion.RESOLVEKeywordCompletionContributor"/>
+        <completion.contributor language="Resolve" implementationClass="edu.clemson.resolve.jetbrains.completion.RESOLVECompletionContributor"/>
+        <completion.contributor language="Resolve" implementationClass="edu.clemson.resolve.jetbrains.completion.RESOLVEKeywordCompletionContributor"/>
+        <completion.contributor language="Resolve" implementationClass="com.jetbrains.resolve.completion.MathSymbolCompletionContributor"/>
 
         <!-- formatter -->
 
